@@ -80,6 +80,11 @@ public class RenderService implements Service {
     }
 
     @Override
+    public boolean isPaused() {
+        return paused;
+    }
+
+    @Override
     public void run() {
         try {
             Display.setDisplayMode(new DisplayMode(Game.GAME_WIDTH, Game.GAME_HEIGHT));
@@ -100,7 +105,11 @@ public class RenderService implements Service {
                 Iterator<Runnable> runs = toRun.iterator();
                 while (runs.hasNext()) {
                     Runnable r = runs.next();
-                    r.run();
+                    try {
+                        r.run();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
                     runs.remove();
                 }
                 //TEMP CODE BEGIN
@@ -149,12 +158,13 @@ public class RenderService implements Service {
                     final Iterator<Sprite> sprites = current_world.getSprites();
                     while (sprites.hasNext()) {
                         Sprite s = sprites.next();
+                        if (s.getTexture() == null)
+                            continue;
                         s.getTexture().bind();
                         float cx = s.getTexture().getWidth();
                         float cy = s.getTexture().getHeight();
                         float bx = s.getTexture().getImageWidth();
                         float by = s.getTexture().getImageHeight();
-                        System.out.println(cx + ":" + cy);
                         glColor3f(1f, 1f, 1f);
                         glBegin(GL_QUADS);
                         glTexCoord3f(s.getX() + cx, s.getY(), 0f); glVertex3f(s.getX() - bx, s.getY() + by, 0f);

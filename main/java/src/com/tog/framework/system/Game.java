@@ -2,6 +2,7 @@ package com.tog.framework.system;
 
 import com.tog.framework.game.world.World;
 import com.tog.framework.render.RenderService;
+import com.tog.framework.system.exceptions.WorldLoadFailedException;
 
 import java.io.File;
 import java.util.Locale;
@@ -26,11 +27,13 @@ public class Game {
 
     public static void main(String[] args) {
         System.out.println("Using libs folder " + System.getProperty("org.lwjgl.librarypath"));
-        System.out.println("Starting RenderService.");
-        Service s = ServiceManager.createService(RenderService.class);
-        System.out.println("Passing dummy world.");
         World w = new World();
-        s.provideData(w, RenderService.WORLD_DATA_TYPE);
-        w.uwotm8();
+        w.init();
+        try {
+            w.load("test");
+        } catch (WorldLoadFailedException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 }
