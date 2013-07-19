@@ -10,4 +10,6 @@ public interface Service extends Runnable {
     public void terminate();
 
     public void provideData(Object obj, int type);
+
+    public void runOnServiceThread(Runnable runnable);
 }

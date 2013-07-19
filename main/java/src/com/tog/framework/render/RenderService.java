@@ -13,11 +13,12 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class RenderService implements Service {
     public static final int WORLD_DATA_TYPE = 0;
-
+    private ArrayList<Runnable> toRun = new ArrayList<>();
     private Thread service_thread;
     private World current_world;
     private boolean drawing;
@@ -68,6 +69,13 @@ public class RenderService implements Service {
     }
 
     @Override
+    public void runOnServiceThread(Runnable runnable) {
+        synchronized (toRun) {
+            toRun.add(runnable);
+        }
+    }
+
+    @Override
     public void run() {
         try {
             Display.setDisplayMode(new DisplayMode(Game.GAME_WIDTH, Game.GAME_HEIGHT));
@@ -85,19 +93,38 @@ public class RenderService implements Service {
             glLoadIdentity();
 
             while (drawing) {
+                Iterator<Runnable> runs = toRun.iterator();
+                while (runs.hasNext()) {
+                    Runnable r = runs.next();
+                    r.run();
+                    runs.remove();
+                }
                 if (current_world != null && !paused) {
+                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                    glClearColor(0f, 0f, 0f, 1f);
+                    glMatrixMode(GL_MODELVIEW);
+                    glLoadIdentity();
+
+
                     final Iterator<Sprite> sprites = current_world.getSprites();
                     while (sprites.hasNext()) {
                         Sprite s = sprites.next();
-                        glTranslatef(s.getX(), s.getY(), 0f);
                         s.getTexture().bind();
-                        float cx = s.getTexture().getCx();
-                        float cy = s.getTexture().getCy();
+                        float cx = 10;
+                        float cy = 10;
                         glBegin(GL_QUADS);
                         glTexCoord2f(0f, 0f); glVertex3f(-cx, -cy, 0f);
                         glTexCoord2f(0f, cy); glVertex3f(-cx, cy, 0f);
                         glTexCoord2f(cx, cy); glVertex3f(cx, cy, 0f);
                         glTexCoord2f(cx, 0f); glVertex3f(cx, -cy, 0f);
+                        glEnd();
+
+                        glColor4f(1f, 1f, 1f, 1f);
+                        glBegin(GL_QUADS);
+                        glVertex3f(-cx, -cy, 0f);
+                        glVertex3f(-cx, cy, 0f);
+                        glVertex3f(cx, cy, 0f);
+                        glVertex3f(cx, -cy, 0f);
                         glEnd();
                     }
 
@@ -110,10 +137,9 @@ public class RenderService implements Service {
                     }
                 }
             }
+            Display.destroy();
         } catch (LWJGLException e) {
             e.printStackTrace();
-        } finally {
-            Display.destroy();
         }
     }
 }
