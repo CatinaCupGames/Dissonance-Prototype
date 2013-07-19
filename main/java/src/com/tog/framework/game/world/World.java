@@ -7,6 +7,7 @@ import com.tog.framework.system.Service;
 import com.tog.framework.system.ServiceManager;
 import com.tog.framework.system.exceptions.WorldLoadFailedException;
 import com.tog.framework.system.utils.Validator;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class World implements Sprite {
 
     public void load(String world) throws WorldLoadFailedException {
         if (renderingService == null)
-            throw new WorldLoadFailedException("The RenderService was not created! Try calling World.init before loading a world.");
+            throw new WorldLoadFailedException("The RenderService was not created! Try calling World.init() before loading a world.");
 
         //TODO Load world data
 
@@ -97,6 +98,12 @@ public class World implements Sprite {
     }
 
     @Override
+    public void setX(float x) { }
+
+    @Override
+    public void setY(float y) { }
+
+    @Override
     public float getX() {
         return 0;
     }
@@ -104,5 +111,10 @@ public class World implements Sprite {
     @Override
     public float getY() {
         return 0;
+    }
+
+    @Override
+    public Vector2f getVector() {
+        return new Vector2f(0, 0);
     }
 }
