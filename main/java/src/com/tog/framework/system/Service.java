@@ -8,4 +8,6 @@ public interface Service extends Runnable {
     public void resume();
 
     public void terminate();
+
+    public void provideData(Object obj, int type);
 }
