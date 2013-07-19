@@ -9,6 +9,7 @@ public final class Sound {
 
     private float speed;
     private float volume;
+    private boolean looping;
 
     private SoundState state;
 
@@ -40,10 +41,18 @@ public final class Sound {
         }
     }
 
+    public void setLooping(boolean looping) {
+        this.looping = looping;
+
+        AL10.alSourcei(source, AL10.AL_LOOPING, (looping ? AL10.AL_TRUE : AL10.AL_FALSE));
+    }
+
+    public boolean isLooping() {
+        return looping;
+    }
+
     public void pause() {
-        if (state == SoundState.STOPPED) {
-            return;
-        } else if (state == SoundState.PLAYING) {
+        if (state == SoundState.PLAYING) {
             AL10.alSourcePause(source);
             state = SoundState.PAUSED;
         } else if (state == SoundState.PAUSED) {
