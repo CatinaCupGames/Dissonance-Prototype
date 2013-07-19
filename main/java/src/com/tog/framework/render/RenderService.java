@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
 
+import com.tog.framework.game.sprites.Sprite;
 import com.tog.framework.game.world.World;
 import com.tog.framework.system.Game;
 import com.tog.framework.system.Service;
@@ -11,6 +12,8 @@ import com.tog.framework.system.utils.Validator;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
+import java.util.Iterator;
 
 public class RenderService implements Service {
     public static final int WORLD_DATA_TYPE = 0;
@@ -83,20 +86,34 @@ public class RenderService implements Service {
 
             while (drawing) {
                 if (current_world != null && !paused) {
-                    //TODO Draw textures and stuff!
+                    final Iterator<Sprite> sprites = current_world.getSprites();
+                    while (sprites.hasNext()) {
+                        Sprite s = sprites.next();
+                        glTranslatef(s.getX(), s.getY(), 0f);
+                        s.getTexture().bind();
+                        float cx = s.getTexture().getCx();
+                        float cy = s.getTexture().getCy();
+                        glBegin(GL_QUADS);
+                        glTexCoord2f(0f, 0f); glVertex3f(-cx, -cy, 0f);
+                        glTexCoord2f(0f, cy); glVertex3f(-cx, cy, 0f);
+                        glTexCoord2f(cx, cy); glVertex3f(cx, cy, 0f);
+                        glTexCoord2f(cx, 0f); glVertex3f(cx, -cy, 0f);
+                        glEnd();
+                    }
 
                     Display.update();
-                }
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } else {
+                    try {
+                        Thread.sleep(15); //Keep the thread busy
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-
-            Display.destroy();
         } catch (LWJGLException e) {
             e.printStackTrace();
+        } finally {
+            Display.destroy();
         }
     }
 }
