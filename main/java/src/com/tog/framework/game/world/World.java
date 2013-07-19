@@ -23,7 +23,7 @@ public class World {
             @Override
             public void run() {
                 try {
-                    temp = Texture.retriveTexture("test.jpg");
+                    temp = Texture.retriveTexture("test.png");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -36,12 +36,12 @@ public class World {
 
                     @Override
                     public float getX() {
-                        return 50;
+                        return 0;
                     }
 
                     @Override
                     public float getY() {
-                        return 50;
+                        return 0;
                     }
                 });
             }

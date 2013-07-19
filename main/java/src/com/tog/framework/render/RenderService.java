@@ -10,6 +10,7 @@ import com.tog.framework.system.Game;
 import com.tog.framework.system.Service;
 import com.tog.framework.system.utils.Validator;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
@@ -23,6 +24,9 @@ public class RenderService implements Service {
     private World current_world;
     private boolean drawing;
     private boolean paused;
+
+    private float rotx, roty, rotz;
+    private float posx, posy, posz = 30f;
     @Override
     public Thread start() {
         service_thread = new Thread(this);
@@ -87,7 +91,7 @@ public class RenderService implements Service {
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
 
-            gluPerspective(90, Game.GAME_WIDTH/Game.GAME_HEIGHT, 0.1f, 100);
+            gluPerspective(90, Game.GAME_WIDTH/Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
             glLoadIdentity();
@@ -99,34 +103,68 @@ public class RenderService implements Service {
                     r.run();
                     runs.remove();
                 }
+                //TEMP CODE BEGIN
+                while (Keyboard.next()) {
+                    if (!Keyboard.getEventKeyState()) continue;
+
+                    switch (Keyboard.getEventKey()) {
+                        case Keyboard.KEY_E:
+                            posz += 5;
+                            break;
+                        case Keyboard.KEY_D:
+                            posz -= 5;
+                            break;
+                        case Keyboard.KEY_A:
+                            roty += 5;
+                            break;
+                        case Keyboard.KEY_S:
+                            roty -= 5;
+                            break;
+                        case Keyboard.KEY_Q:
+                            rotx += 5;
+                            break;
+                        case Keyboard.KEY_W:
+                            rotx -= 5;
+                            break;
+                        case Keyboard.KEY_Z:
+                            rotz += 5;
+                            break;
+                        case Keyboard.KEY_X:
+                            rotz -= 5;
+                            break;
+                    }
+                }
+                //END TEMP CODE
                 if (current_world != null && !paused) {
                     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                     glClearColor(0f, 0f, 0f, 1f);
                     glMatrixMode(GL_MODELVIEW);
                     glLoadIdentity();
 
+                    glRotatef(-rotx, 1, 0, 0);
+                    glRotatef(-roty, 0, 1, 0);
+                    glRotatef(-rotz, 0, 0, 1);
+                    glTranslatef(-posx, -posy, -posz);
 
                     final Iterator<Sprite> sprites = current_world.getSprites();
                     while (sprites.hasNext()) {
                         Sprite s = sprites.next();
                         s.getTexture().bind();
-                        float cx = 10;
-                        float cy = 10;
+                        float cx = s.getTexture().getWidth();
+                        float cy = s.getTexture().getHeight();
+                        float bx = s.getTexture().getImageWidth();
+                        float by = s.getTexture().getImageHeight();
+                        System.out.println(cx + ":" + cy);
+                        glColor3f(1f, 1f, 1f);
                         glBegin(GL_QUADS);
-                        glTexCoord2f(0f, 0f); glVertex3f(-cx, -cy, 0f);
-                        glTexCoord2f(0f, cy); glVertex3f(-cx, cy, 0f);
-                        glTexCoord2f(cx, cy); glVertex3f(cx, cy, 0f);
-                        glTexCoord2f(cx, 0f); glVertex3f(cx, -cy, 0f);
-                        glEnd();
-
-                        glColor4f(1f, 1f, 1f, 1f);
-                        glBegin(GL_QUADS);
-                        glVertex3f(-cx, -cy, 0f);
-                        glVertex3f(-cx, cy, 0f);
-                        glVertex3f(cx, cy, 0f);
-                        glVertex3f(cx, -cy, 0f);
+                        glTexCoord3f(s.getX() + cx, s.getY(), 0f); glVertex3f(s.getX() - bx, s.getY() + by, 0f);
+                        glTexCoord3f(s.getX(), s.getY(), 0f); glVertex3f(s.getX() + bx, s.getY() + by, 0f);
+                        glTexCoord3f(s.getX(), s.getY() + cy, 0f); glVertex3f(s.getX() + bx, s.getY() - by, 0f);
+                        glTexCoord3f(s.getX() + cx, s.getY() + cy, 0f); glVertex3f(s.getX() - bx, s.getY() - by, 0f);
                         glEnd();
                     }
+
+                    exitOnGLError("RenderService.renderSprites");
 
                     Display.update();
                 } else {
@@ -140,6 +178,18 @@ public class RenderService implements Service {
             Display.destroy();
         } catch (LWJGLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void exitOnGLError(String errorMessage) {
+        int errorValue = glGetError();
+
+        if (errorValue != GL_NO_ERROR) {
+            String errorString = gluErrorString(errorValue);
+            System.err.println("ERROR AT: " + errorMessage + " - " + errorString);
+
+            if (Display.isCreated()) Display.destroy();
+            System.exit(-1);
         }
     }
 }

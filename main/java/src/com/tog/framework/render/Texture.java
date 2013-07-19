@@ -11,7 +11,6 @@ public class Texture {
     private int image_width, image_height;
     private int texture_width, texture_height;
     private float width, height;
-    private float cx = -1, cy = -1;
     private static final HashMap<String, Texture> cache = new HashMap<String, Texture>();
 
     public static Texture retriveTexture(String resource) throws IOException {
@@ -82,16 +81,11 @@ public class Texture {
         return image_height;
     }
 
-    float getCx() {
-        if (cx == -1)
-            cx = width / 2;
-        return cx;
+    public int getTextureWidth() {
+        return texture_width;
     }
 
-    float getCy() {
-        if (cy == -1)
-            cy = height / 2;
-        return cy;
+    public int getTextureHeight() {
+        return texture_height;
     }
-
 }
