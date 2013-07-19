@@ -3,9 +3,9 @@ package com.tog.framework.sound;
 import org.lwjgl.openal.AL10;
 
 public final class Sound {
-    private String name;
-    private int source;
-    private int buffer;
+    private final String name;
+    private final int source;
+    private final int buffer;
 
     private float speed;
     private float volume;
@@ -52,6 +52,18 @@ public final class Sound {
         }
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getSource() {
+        return source;
+    }
+
+    public int getBuffer() {
+        return buffer;
+    }
+
     public float getSpeed() {
         return speed;
     }
@@ -77,15 +89,7 @@ public final class Sound {
         this.volume = volume;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getSource() {
-        return source;
-    }
-
-    public int getBuffer() {
-        return buffer;
+    public SoundState getState() {
+        return state;
     }
 }

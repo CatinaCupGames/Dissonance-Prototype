@@ -7,6 +7,8 @@ import java.io.File;
 import java.util.Locale;
 
 public class Game {
+    public static int GAME_WIDTH = 1280, GAME_HEIGHT = 720;
+
     static {
         String lwjgl_folder = "libs" + File.separator + "lwjgl_native" + File.separator;
         final String OS = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
