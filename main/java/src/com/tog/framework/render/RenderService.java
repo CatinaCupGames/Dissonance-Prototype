@@ -115,12 +115,13 @@ public class RenderService implements Service {
 
             //TEMP CODE BEGIN
             final SoundSystem soundSystem = new SoundSystem();
-            final Sound shot, song, town;
+            final Sound shot, song, town, bump;
 
             try {
                 shot = soundSystem.loadSound("shot", "shotproto.wav");
                 song = soundSystem.loadSound("song", "song1.wav");
                 town = soundSystem.loadSound("town", "town.wav");
+                bump = soundSystem.loadSound("bump", "bump.wav");
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
@@ -196,26 +197,31 @@ public class RenderService implements Service {
                             town.setVolume(town.getVolume() + 0.1F);
                             song.setVolume(song.getVolume() + 0.1F);
                             shot.setVolume(shot.getVolume() + 0.1F);
+                            bump.setVolume(bump.getVolume() + 0.1F);
                             break;
                         case Keyboard.KEY_SUBTRACT:
                             town.setVolume(town.getVolume() - 0.1F);
                             song.setVolume(song.getVolume() - 0.1F);
                             shot.setVolume(shot.getVolume() - 0.1F);
+                            bump.setVolume(bump.getVolume() - 0.1F);
                             break;
                         case Keyboard.KEY_MULTIPLY:
                             town.setSpeed(town.getSpeed() + 0.1F);
                             song.setSpeed(song.getSpeed() + 0.1F);
                             shot.setSpeed(shot.getSpeed() + 0.1F);
+                            bump.setSpeed(bump.getSpeed() + 0.1F);
                             break;
                         case Keyboard.KEY_DIVIDE:
                             town.setSpeed(town.getSpeed() - 0.1F);
                             song.setSpeed(song.getSpeed() - 0.1F);
                             shot.setSpeed(shot.getSpeed() - 0.1F);
+                            bump.setSpeed(bump.getSpeed() - 0.1F);
                             break;
                         case Keyboard.KEY_LCONTROL:
                             town.stop();
                             song.stop();
                             shot.stop();
+                            bump.stop();
                             break;
                     }
                 }
@@ -224,6 +230,8 @@ public class RenderService implements Service {
                 public void inputClicked(Integer button) {
                     if (button == 0) {  //LMB
                         soundSystem.getSound("shot").play();
+                    } else if (button == 1) { //RMB
+                        soundSystem.getSound("bump").play();
                     }
                 }
             };
@@ -234,6 +242,7 @@ public class RenderService implements Service {
             listener.getKeys().add(Keyboard.KEY_E);
 
             listener.getButtons().add(0);
+            listener.getButtons().add(1);
 
             inputService.provideData(listener, InputService.ADD_LISTENER);
             //TEMP CODE END
