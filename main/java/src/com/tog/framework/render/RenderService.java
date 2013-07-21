@@ -143,7 +143,7 @@ public class RenderService implements Service {
                 }
 
                 @Override
-                public void inputPressed(Integer key) {
+                public void inputPressed(int key) {
                     switch (key) {
                         case Keyboard.KEY_E:
                             posz += 5;
@@ -227,7 +227,7 @@ public class RenderService implements Service {
                 }
 
                 @Override
-                public void inputClicked(Integer button) {
+                public void inputClicked(int button, int x, int y) {
                     if (button == 0) {  //LMB
                         soundSystem.getSound("shot").play();
                     } else if (button == 1) { //RMB

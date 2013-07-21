@@ -10,12 +10,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The InputService class manages the game's input. <br />
+ * The InputService class manages the game's input.<br />
  * Classes listening for input should pass in a {@link InputListener} to
  * this class in order to listen for specific mouse and keyboard input.
  */
 public final class InputService implements Service {
+    /**
+     * A type for the {@link #provideData(Object, int)} method.<br />
+     * The object passed in should be an {@link InputListener}. The
+     * specified listener will be added to the list of input listeners.
+     */
     public static final int ADD_LISTENER = 0;
+
+    /**
+     * A type for the {@link #provideData(Object, int)} method.<br />
+     * The object passed in should be an {@link InputListener}. The
+     * specified listener will be removed from the list of input listeners.
+     */
     public static final int REMOVE_LISTENER = 1;
 
     private List<Runnable> runnables = new ArrayList<>();
@@ -74,7 +85,7 @@ public final class InputService implements Service {
                 }
 
                 try {
-                    Thread.sleep(20);
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -96,12 +107,12 @@ public final class InputService implements Service {
 
                 for (InputListener listener : listeners) {
                     if (listener.getButtons().contains(button)) {
-                        listener.inputClicked(button);
+                        listener.inputClicked(button, Mouse.getX(), Mouse.getY());
                     }
                 }
 
                 try {
-                    Thread.sleep(20);
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -136,13 +147,19 @@ public final class InputService implements Service {
     @Override
     public void terminate() {
         serviceThread.interrupt();
+        mouseThread.interrupt();
+        keyboardThread.interrupt();
         try {
             serviceThread.join();
+            mouseThread.join();
+            keyboardThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         serviceThread = null;
+        mouseThread = null;
+        keyboardThread = null;
         listeners = null;
     }
 
