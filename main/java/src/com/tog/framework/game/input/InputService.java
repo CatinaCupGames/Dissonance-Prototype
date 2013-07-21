@@ -1,11 +1,14 @@
 package com.tog.framework.game.input;
 
+import com.tog.framework.render.RenderService;
 import com.tog.framework.system.Service;
+import com.tog.framework.system.ServiceManager;
 import com.tog.framework.system.utils.Validator;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import javax.swing.plaf.TableHeaderUI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +32,9 @@ public final class InputService implements Service {
      */
     public static final int REMOVE_LISTENER = 1;
 
-    private List<Runnable> runnables = new ArrayList<>();
+    private boolean[] PRESSED = new boolean[255];
+    private RenderService renderService;
+    private final List<Runnable> runnables = new ArrayList<>();
 
     private Thread serviceThread;
     private List<InputListener> listeners = new ArrayList<>();
@@ -56,6 +61,7 @@ public final class InputService implements Service {
 
         keyboardThread = new Thread(keyboardRunnable);
         mouseThread = new Thread(mouseRunnable);
+        renderService = (RenderService)ServiceManager.getService(RenderService.class);
 
         serviceThread = new Thread(this);
         serviceThread.start();
@@ -70,22 +76,15 @@ public final class InputService implements Service {
         public void run() {
 
             while (!paused) {
-                Keyboard.next();
-
-                if (!Keyboard.getEventKeyState()) {
-                    continue;
-                }
-
-                int key = Keyboard.getEventKey();
-
                 for (InputListener listener : listeners) {
-                    if (listener.getKeys().contains(key)) {
-                        listener.inputPressed(key);
+                    for (Integer i : listener.getKeys()) {
+                        boolean keyDown = Keyboard.isKeyDown(i);
+                        PRESSED[i - 1] = keyDown;
                     }
                 }
 
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -142,10 +141,12 @@ public final class InputService implements Service {
 
         mouseThread.start();
         keyboardThread.start();
+        serviceThread.start();
     }
 
     @Override
     public void terminate() {
+        paused = true;
         serviceThread.interrupt();
         mouseThread.interrupt();
         keyboardThread.interrupt();
@@ -210,8 +211,26 @@ public final class InputService implements Service {
         mouseThread.start();
         keyboardThread.start();
 
-        for (Runnable runnable : runnables) {
-            runnable.run();
+
+        while (!paused) {
+            for (Runnable runnable : runnables) {
+                runnable.run();
+            }
+
+            if (listeners.size() > 0) {
+                for (InputListener listener : listeners) {
+                    for (Integer i : listener.getKeys()) {
+                        if (PRESSED[i - 1])
+                            listener.inputPressed(i);
+                    }
+                }
+            }
+
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

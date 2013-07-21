@@ -3,10 +3,8 @@ package com.tog.framework.sound;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.util.WaveData;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +16,8 @@ public final class SoundSystem {
             throw new IllegalArgumentException("The specified sound name is already registered!");
         }
 
-        filePath = "resources" + File.separator + "sound" + File.separator + filePath;
-
-        BufferedInputStream stream = new BufferedInputStream(new FileInputStream(filePath));
+        filePath = "sound" + File.separator + filePath;
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(filePath);
         WaveData wavFile = WaveData.create(stream);
         int buffer = AL10.alGenBuffers();
         AL10.alBufferData(buffer, wavFile.format, wavFile.data, wavFile.samplerate);

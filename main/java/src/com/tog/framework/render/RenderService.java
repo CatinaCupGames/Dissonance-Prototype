@@ -29,7 +29,8 @@ import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 public class RenderService implements Service {
     public static final int WORLD_DATA_TYPE = 0;
-    private ArrayList<Runnable> toRun = new ArrayList<>();
+    public static long TIME_DELTA;
+    private final ArrayList<Runnable> toRun = new ArrayList<>();
     private Thread service_thread;
     private World current_world;
     private boolean drawing;
@@ -246,8 +247,11 @@ public class RenderService implements Service {
 
             inputService.provideData(listener, InputService.ADD_LISTENER);
             //TEMP CODE END
-
+            long cur = System.currentTimeMillis();
+            long now;
             while (drawing) {
+                now = System.currentTimeMillis();
+                TIME_DELTA = (long) ((now - cur)/100.0f);
                 Iterator<Runnable> runs = toRun.iterator();
                 while (runs.hasNext()) {
                     Runnable r = runs.next();
@@ -267,7 +271,7 @@ public class RenderService implements Service {
                     glRotatef(-rotx, 1, 0, 0);
                     glRotatef(-roty, 0, 1, 0);
                     glRotatef(-rotz, 0, 0, 1);
-                    glTranslatef(-posx, -posy, -posz);
+                    glTranslatef(-Camera.getX(), -Camera.getY(), -posz);
 
                     final Iterator<Sprite> sprites = current_world.getSprites();
                     while (sprites.hasNext()) {
@@ -295,6 +299,7 @@ public class RenderService implements Service {
                     exitOnGLError("RenderService.renderSprites");
 
                     Display.update();
+                    cur = now;
                 } else {
                     try {
                         Thread.sleep(15); //Keep the thread busy
