@@ -1,5 +1,7 @@
 package com.tog.framework.render;
 
+import com.tog.framework.game.input.InputListener;
+import com.tog.framework.game.input.InputService;
 import com.tog.framework.game.sprites.Sprite;
 import com.tog.framework.game.world.World;
 import com.tog.framework.sound.Sound;
@@ -7,6 +9,7 @@ import com.tog.framework.sound.SoundState;
 import com.tog.framework.sound.SoundSystem;
 import com.tog.framework.system.Game;
 import com.tog.framework.system.Service;
+import com.tog.framework.system.ServiceManager;
 import com.tog.framework.system.utils.Validator;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -16,7 +19,9 @@ import org.lwjgl.opengl.DisplayMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
@@ -108,9 +113,9 @@ public class RenderService implements Service {
             glEnable(GL_TEXTURE_2D);
             glLoadIdentity();
 
-            //TEMP SOUND CODE BEGIN
-            SoundSystem soundSystem = new SoundSystem();
-            Sound shot, song, town;
+            //TEMP CODE BEGIN
+            final SoundSystem soundSystem = new SoundSystem();
+            final Sound shot, song, town;
 
             try {
                 shot = soundSystem.loadSound("shot", "shotproto.wav");
@@ -120,25 +125,25 @@ public class RenderService implements Service {
                 e.printStackTrace();
                 return;
             }
-            //TEMP SOUND CODE END
+            Service inputService = ServiceManager.createService(InputService.class);
 
-            while (drawing) {
-                Iterator<Runnable> runs = toRun.iterator();
-                while (runs.hasNext()) {
-                    Runnable r = runs.next();
-                    try {
-                        r.run();
-                    } catch (Throwable t) {
-                        t.printStackTrace();
-                    }
-                    runs.remove();
+            InputListener listener = new InputListener() {
+                private List<Integer> keys = new ArrayList<>();
+                private List<Integer> buttons = new ArrayList<>();
+
+                @Override
+                public List<Integer> getKeys() {
+                    return keys;
                 }
-                //TEMP CODE BEGIN
 
-                while (Keyboard.next()) {
-                    if (!Keyboard.getEventKeyState()) continue;
+                @Override
+                public List<Integer> getButtons() {
+                    return buttons;
+                }
 
-                    switch (Keyboard.getEventKey()) {
+                @Override
+                public void inputPressed(Integer key) {
+                    switch (key) {
                         case Keyboard.KEY_E:
                             posz += 5;
                             break;
@@ -214,7 +219,36 @@ public class RenderService implements Service {
                             break;
                     }
                 }
-                //END TEMP CODE
+
+                @Override
+                public void inputClicked(Integer button) {
+                    if (button == 0) {  //LMB
+                        soundSystem.getSound("shot").play();
+                    }
+                }
+            };
+            listener.getKeys().addAll(Arrays.asList(Keyboard.KEY_E, Keyboard.KEY_D, Keyboard.KEY_A,
+                    Keyboard.KEY_S, Keyboard.KEY_Q, Keyboard.KEY_W, Keyboard.KEY_Z, Keyboard.KEY_X, Keyboard.KEY_T,
+                    Keyboard.KEY_M, Keyboard.KEY_G, Keyboard.KEY_L, Keyboard.KEY_ADD, Keyboard.KEY_SUBTRACT,
+                    Keyboard.KEY_MULTIPLY, Keyboard.KEY_DIVIDE, Keyboard.KEY_LCONTROL));
+            listener.getKeys().add(Keyboard.KEY_E);
+
+            listener.getButtons().add(0);
+
+            inputService.provideData(listener, InputService.ADD_LISTENER);
+            //TEMP CODE END
+
+            while (drawing) {
+                Iterator<Runnable> runs = toRun.iterator();
+                while (runs.hasNext()) {
+                    Runnable r = runs.next();
+                    try {
+                        r.run();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
+                    runs.remove();
+                }
                 if (current_world != null && !paused) {
                     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                     glClearColor(0f, 0f, 0f, 1f);
