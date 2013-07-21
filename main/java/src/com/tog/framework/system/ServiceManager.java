@@ -7,7 +7,7 @@ public class ServiceManager {
 
     public static Service createService(Class<?> class_) {
         Service s;
-        if ((s = getService(class_.getCanonicalName())) != null)
+        if ((s = getService(class_.getName())) != null)
             return s;
         try {
             s = (Service) class_.newInstance();
@@ -28,10 +28,6 @@ public class ServiceManager {
     }
 
     public static Service getService(Class<?> class_) {
-        for (Service s : services) {
-            if (s.getClass().equals(class_))
-                return s;
-        }
-        return null;
+        return getService(class_.getName());
     }
 }
