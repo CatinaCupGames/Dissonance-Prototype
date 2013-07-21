@@ -4,6 +4,7 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.util.WaveData;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ public final class SoundSystem {
         if (exists(name)) {
             throw new IllegalArgumentException("The specified sound name is already registered!");
         }
+
+        filePath = "resources" + File.separator + "sound" + File.separator + filePath;
 
         BufferedInputStream stream = new BufferedInputStream(new FileInputStream(filePath));
         WaveData wavFile = WaveData.create(stream);

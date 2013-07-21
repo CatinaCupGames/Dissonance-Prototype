@@ -1,7 +1,6 @@
 package com.tog.framework.system;
 
 import com.tog.framework.game.world.World;
-import com.tog.framework.render.RenderService;
 import com.tog.framework.system.exceptions.WorldLoadFailedException;
 
 import java.io.File;
