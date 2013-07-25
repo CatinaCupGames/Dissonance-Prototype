@@ -1,6 +1,7 @@
 package com.tog.framework.game;
 
 import com.tog.framework.game.world.World;
+import com.tog.framework.system.exceptions.QuestNotFoundException;
 
 public abstract class AbstractQuest {
     private AbstractQuest next;
@@ -22,20 +23,24 @@ public abstract class AbstractQuest {
     }
 
     void setWorld(World world) {
-
+          this.world = world;
     }
 
     public void setNextQuest(AbstractQuest quest) {
         this.next = quest;
     }
 
-    public void setNextQuest(String packageName) {
+    public void setNextQuest(String packageName) throws QuestNotFoundException {
         try {
             Class<? extends AbstractQuest> class_ = (Class<? extends AbstractQuest>) Class.forName(packageName);
             AbstractQuest q = class_.newInstance();
             setNextQuest(q);
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new QuestNotFoundException("The quest \"" + packageName + "\" was not found!", e);
+        } catch (InstantiationException e) {
+            throw new QuestNotFoundException("The quest \"" + packageName + "\" does not have a default constructor!", e);
+        } catch (IllegalAccessException e) {
+            throw new QuestNotFoundException("The quest \"" + packageName + "\" does not have a public default constructor!", e);
         }
     }
 

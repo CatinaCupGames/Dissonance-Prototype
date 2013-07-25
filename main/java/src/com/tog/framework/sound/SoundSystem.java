@@ -15,10 +15,22 @@ public final class SoundSystem {
         if (exists(name)) {
             throw new IllegalArgumentException("The specified sound name is already registered!");
         }
-
-        filePath = "sound" + File.separator + filePath;
-        InputStream stream = getClass().getClassLoader().getResourceAsStream(filePath);
-        WaveData wavFile = WaveData.create(stream);
+        WaveData wavFile;
+        String resource = "sound" + File.separator + filePath;
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(resource);
+        if (stream == null) {
+            resource = "sound/" + filePath;
+            stream = getClass().getClassLoader().getResourceAsStream(resource);
+            if (stream == null)
+                throw new IOException("Can't find sound \"" + resource + "\"!");
+        }
+        wavFile = WaveData.create(stream);
+        if (wavFile == null) {
+            URL url = getClass().getClassLoader().getResource(resource);
+            wavFile = WaveData.create(url);
+            if (wavFile == null)
+                throw new IOException("Failed to create WaveData for \"" + resource + "\"!");
+        }
         int buffer = AL10.alGenBuffers();
         AL10.alBufferData(buffer, wavFile.format, wavFile.data, wavFile.samplerate);
         stream.close();

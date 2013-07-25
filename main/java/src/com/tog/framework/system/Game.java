@@ -35,4 +35,11 @@ public class Game {
             System.exit(-1);
         }
     }
+
+    private static boolean started;
+    public static void startGame() {
+        if (started)
+            return;
+        started = true;
+    }
 }

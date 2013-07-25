@@ -273,27 +273,16 @@ public class RenderService implements Service {
                     glRotatef(-rotz, 0, 0, 1);
                     glTranslatef(-Camera.getX(), -Camera.getY(), -posz);
 
-                    final Iterator<Sprite> sprites = current_world.getSprites();
+                    final Iterator<Drawable> sprites = current_world.getDrawable();
                     while (sprites.hasNext()) {
-                        Sprite s = sprites.next();
-                        if (s.getTexture() == null)
+                        Drawable s = sprites.next();
+                        if (s == null)
                             continue;
-                        s.getTexture().bind();
-                        float cx = s.getTexture().getWidth();
-                        float cy = s.getTexture().getHeight();
-                        float bx = s.getTexture().getImageWidth();
-                        float by = s.getTexture().getImageHeight();
-                        glColor3f(1f, 1f, 1f);
-                        glBegin(GL_QUADS);
-                        glTexCoord3f(s.getX() + cx, s.getY(), 0f);
-                        glVertex3f(s.getX() - bx, s.getY() + by, 0f);
-                        glTexCoord3f(s.getX(), s.getY(), 0f);
-                        glVertex3f(s.getX() + bx, s.getY() + by, 0f);
-                        glTexCoord3f(s.getX(), s.getY() + cy, 0f);
-                        glVertex3f(s.getX() + bx, s.getY() - by, 0f);
-                        glTexCoord3f(s.getX() + cx, s.getY() + cy, 0f);
-                        glVertex3f(s.getX() - bx, s.getY() - by, 0f);
-                        glEnd();
+                        try {
+                            s.render();
+                        } catch (Throwable t) {
+                            t.printStackTrace();
+                        }
                     }
 
                     exitOnGLError("RenderService.renderSprites");

@@ -1,6 +1,7 @@
 package com.tog.framework.game.world;
 
 import com.tog.framework.game.sprites.Sprite;
+import com.tog.framework.render.Drawable;
 import com.tog.framework.render.RenderService;
 import com.tog.framework.render.Texture;
 import com.tog.framework.system.Service;
@@ -13,8 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class World implements Sprite {
-    private final ArrayList<Sprite> sprites = new ArrayList<>();
+public class World extends Sprite {
+    private final ArrayList<Drawable> drawable = new ArrayList<>();
     private Service renderingService;
     private Texture texture;
 
@@ -40,21 +41,35 @@ public class World implements Sprite {
             renderingService.resume();
     }
 
-    public Iterator<Sprite> getSprites() {
-        return sprites.iterator();
+    public Iterator<Drawable> getDrawable() {
+        return drawable.iterator();
     }
 
-    public void addSprite(final Sprite sprite) {
+    private void addDrawable(final Drawable draw, final Runnable run) {
         if (renderingService == null)
             throw new IllegalStateException("init() has not been called on this world!");
-        Validator.validateNotNull(sprite, "sprite");
+        Validator.validateNotNull(draw, "sprite");
 
         renderingService.runOnServiceThread(new Runnable() {
 
             @Override
             public void run() {
+                drawable.add(draw);
+                if (run != null)
+                    run.run();
+            }
+        });
+    }
+
+    public void addDrawable(final Drawable draw) {
+        addDrawable(draw, null);
+    }
+
+    public void addSprite(final Sprite sprite) {
+        addDrawable(sprite, new Runnable() {
+            @Override
+            public void run() {
                 sprite.setWorld(World.this);
-                sprites.add(sprite);
             }
         });
     }
