@@ -1,7 +1,6 @@
 package com.tog.framework.system;
 
 import com.tog.framework.game.world.World;
-import com.tog.framework.render.RenderService;
 import com.tog.framework.system.exceptions.WorldLoadFailedException;
 
 import java.io.File;
@@ -35,5 +34,12 @@ public class Game {
             e.printStackTrace();
             System.exit(-1);
         }
+    }
+
+    private static boolean started;
+    public static void startGame() {
+        if (started)
+            return;
+        started = true;
     }
 }

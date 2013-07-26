@@ -1,19 +1,21 @@
 package com.tog.framework.game.world;
 
 import com.tog.framework.game.sprites.Sprite;
+import com.tog.framework.render.Drawable;
 import com.tog.framework.render.RenderService;
 import com.tog.framework.render.Texture;
 import com.tog.framework.system.Service;
 import com.tog.framework.system.ServiceManager;
 import com.tog.framework.system.exceptions.WorldLoadFailedException;
 import com.tog.framework.system.utils.Validator;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class World implements Sprite {
-    private final ArrayList<Sprite> sprites = new ArrayList<>();
+public class World extends Sprite {
+    private final ArrayList<Drawable> drawable = new ArrayList<>();
     private Service renderingService;
     private Texture texture;
 
@@ -28,7 +30,7 @@ public class World implements Sprite {
 
     public void load(String world) throws WorldLoadFailedException {
         if (renderingService == null)
-            throw new WorldLoadFailedException("The RenderService was not created! Try calling World.init before loading a world.");
+            throw new WorldLoadFailedException("The RenderService was not created! Try calling World.init() before loading a world.");
 
         //TODO Load world data
 
@@ -39,21 +41,35 @@ public class World implements Sprite {
             renderingService.resume();
     }
 
-    public Iterator<Sprite> getSprites() {
-        return sprites.iterator();
+    public Iterator<Drawable> getDrawable() {
+        return drawable.iterator();
     }
 
-    public void addSprite(final Sprite sprite) {
+    private void addDrawable(final Drawable draw, final Runnable run) {
         if (renderingService == null)
             throw new IllegalStateException("init() has not been called on this world!");
-        Validator.validateNotNull(sprite, "sprite");
+        Validator.validateNotNull(draw, "sprite");
 
         renderingService.runOnServiceThread(new Runnable() {
 
             @Override
             public void run() {
+                drawable.add(draw);
+                if (run != null)
+                    run.run();
+            }
+        });
+    }
+
+    public void addDrawable(final Drawable draw) {
+        addDrawable(draw, null);
+    }
+
+    public void addSprite(final Sprite sprite) {
+        addDrawable(sprite, new Runnable() {
+            @Override
+            public void run() {
                 sprite.setWorld(World.this);
-                sprites.add(sprite);
             }
         });
     }
@@ -97,6 +113,12 @@ public class World implements Sprite {
     }
 
     @Override
+    public void setX(float x) { }
+
+    @Override
+    public void setY(float y) { }
+
+    @Override
     public float getX() {
         return 0;
     }
@@ -104,5 +126,10 @@ public class World implements Sprite {
     @Override
     public float getY() {
         return 0;
+    }
+
+    @Override
+    public Vector2f getVector() {
+        return new Vector2f(0, 0);
     }
 }

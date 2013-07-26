@@ -3,9 +3,8 @@ package com.tog.framework.sound;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.util.WaveData;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +15,22 @@ public final class SoundSystem {
         if (exists(name)) {
             throw new IllegalArgumentException("The specified sound name is already registered!");
         }
-
-        BufferedInputStream stream = new BufferedInputStream(new FileInputStream(filePath));
-        WaveData wavFile = WaveData.create(stream);
+        WaveData wavFile;
+        String resource = "sound" + File.separator + filePath;
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(resource);
+        if (stream == null) {
+            resource = "sound/" + filePath;
+            stream = getClass().getClassLoader().getResourceAsStream(resource);
+            if (stream == null)
+                throw new IOException("Can't find sound \"" + resource + "\"!");
+        }
+        wavFile = WaveData.create(stream);
+        if (wavFile == null) {
+            URL url = getClass().getClassLoader().getResource(resource);
+            wavFile = WaveData.create(url);
+            if (wavFile == null)
+                throw new IOException("Failed to create WaveData for \"" + resource + "\"!");
+        }
         int buffer = AL10.alGenBuffers();
         AL10.alBufferData(buffer, wavFile.format, wavFile.data, wavFile.samplerate);
         stream.close();

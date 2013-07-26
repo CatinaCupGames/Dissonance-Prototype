@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 public class ServiceManager {
     private static final ArrayList<Service> services = new ArrayList<>();
+
     public static Service createService(Class<?> class_) {
         Service s;
-        if ((s = getService(class_.getCanonicalName())) != null)
+        if ((s = getService(class_.getName())) != null)
             return s;
         try {
             s = (Service) class_.newInstance();
@@ -24,5 +25,9 @@ public class ServiceManager {
                 return s;
         }
         return null;
+    }
+
+    public static Service getService(Class<?> class_) {
+        return getService(class_.getName());
     }
 }
