@@ -36,8 +36,8 @@ public class RenderService implements Service {
     private boolean drawing;
     private boolean paused;
 
-    private float rotx, roty, rotz;
-    private float posx, posy, posz = 30f;
+    private float rotx, roty;
+    private float posx, posy;
 
     @Override
     public Thread start() {
@@ -108,8 +108,8 @@ public class RenderService implements Service {
             glViewport(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-
-            gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
+            glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0.0f, 1.0f);
+            //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
             glLoadIdentity();
@@ -146,29 +146,17 @@ public class RenderService implements Service {
                 @Override
                 public void inputPressed(int key) {
                     switch (key) {
-                        case Keyboard.KEY_E:
-                            posz += 5;
-                            break;
-                        case Keyboard.KEY_D:
-                            posz -= 5;
-                            break;
                         case Keyboard.KEY_A:
-                            roty += 5;
+                            Camera.setY(Camera.getY() + 5);
                             break;
                         case Keyboard.KEY_S:
-                            roty -= 5;
+                            Camera.setY(Camera.getY() - 5);
                             break;
                         case Keyboard.KEY_Q:
-                            rotx += 5;
+                            Camera.setX(Camera.getX() + 5);
                             break;
                         case Keyboard.KEY_W:
-                            rotx -= 5;
-                            break;
-                        case Keyboard.KEY_Z:
-                            rotz += 5;
-                            break;
-                        case Keyboard.KEY_X:
-                            rotz -= 5;
+                            Camera.setX(Camera.getX() - 5);
                             break;
                         case Keyboard.KEY_T:
                             if (town.getState() == SoundState.PLAYING) {
@@ -270,8 +258,8 @@ public class RenderService implements Service {
 
                     glRotatef(-rotx, 1, 0, 0);
                     glRotatef(-roty, 0, 1, 0);
-                    glRotatef(-rotz, 0, 0, 1);
-                    glTranslatef(-Camera.getX(), -Camera.getY(), -posz);
+                    glRotatef(0, 0, 0, 1);
+                    glTranslatef(-Camera.getX(), -Camera.getY(), 0);
 
                     final Iterator<Drawable> sprites = current_world.getDrawable();
                     while (sprites.hasNext()) {

@@ -3,7 +3,7 @@ package com.tog.framework.game.world;
 import com.tog.framework.game.sprites.Sprite;
 import com.tog.framework.render.Drawable;
 import com.tog.framework.render.RenderService;
-import com.tog.framework.render.Texture;
+import com.tog.framework.render.texture.Texture;
 import com.tog.framework.system.Service;
 import com.tog.framework.system.ServiceManager;
 import com.tog.framework.system.exceptions.WorldLoadFailedException;

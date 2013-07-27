@@ -2,21 +2,27 @@ package com.tog.framework.game.sprites;
 
 import com.tog.framework.game.world.World;
 import com.tog.framework.render.Drawable;
-import com.tog.framework.render.Texture;
+import com.tog.framework.render.texture.sprite.SpriteTexture;
+import com.tog.framework.render.texture.Texture;
 import org.lwjgl.util.vector.Vector2f;
+
+import java.security.InvalidParameterException;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class Sprite implements Drawable {
-    private Texture texture;
+    private SpriteTexture texture;
     private World world;
     private float x, y;
+
     public Texture getTexture() {
         return texture;
     }
 
     public void setTexture(Texture texture) {
-        this.texture = texture;
+        if (!(texture instanceof SpriteTexture))
+            throw new InvalidParameterException("A sprite object can only have a sprite texture!");
+        this.texture = (SpriteTexture)texture;
     }
 
     public void setWorld(World w) {
@@ -50,21 +56,19 @@ public abstract class Sprite implements Drawable {
     @Override
     public void render() {
         getTexture().bind();
-        float cx = getTexture().getWidth();
-        float cy = getTexture().getHeight();
-        float bx = getTexture().getImageWidth();
-        float by = getTexture().getImageHeight();
+        float bx = getTexture().getTextureWidth();
+        float by = getTexture().getTextureHeight();
         final float x = getX(), y = getY();
-        glColor3f(1f, 1f, 1f);
+        //glColor3f(1f, .5f, .5f); DEBUG LINE FOR TEXTURES
         glBegin(GL_QUADS);
-        glTexCoord3f(x + cx, y, 0f);
-        glVertex3f(x - bx, y + by, 0f);
-        glTexCoord3f(x, y, 0f);
-        glVertex3f(x + bx, y + by, 0f);
-        glTexCoord3f(x, y + cy, 0f);
-        glVertex3f(x + bx, y - by, 0f);
-        glTexCoord3f(x + cx, y + cy, 0f);
+        glTexCoord2f(0f, 0f);
         glVertex3f(x - bx, y - by, 0f);
+        glTexCoord2f(1f, 0f);
+        glVertex3f(x + bx, y - by, 0f);
+        glTexCoord2f(1f, 1f);
+        glVertex3f(x + bx, y + by, 0f);
+        glTexCoord2f(0f, 1f);
+        glVertex3f(x - bx, y + by, 0f);
         glEnd();
     }
 }

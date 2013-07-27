@@ -1,4 +1,4 @@
-package com.tog.framework.render;
+package com.tog.framework.render.texture;
 
 import org.lwjgl.BufferUtils;
 
