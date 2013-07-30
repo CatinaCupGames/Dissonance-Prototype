@@ -1,1 +1,1 @@
-<animations     width="256"     height="256" >    <animation	     name="walk"		 loop="true"		 frames="4"		 row="0"		 default_speed="100ms" /></animations>		
+<animationswidth="256"     height="256"     max_frames="4"	 >     <animation	     name="walk"         loop="true"         frames="3"         row="0"         default_speed="100ms" /></animations>		

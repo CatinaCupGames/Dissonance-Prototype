@@ -24,6 +24,7 @@ public class SpriteTexture extends Texture {
     private int step;
     private int width;
     private int height;
+    private int max_frames;
 
 
     public static SpriteTexture retriveSpriteTexture(String sprite_name) throws IOException {
@@ -49,6 +50,13 @@ public class SpriteTexture extends Texture {
                         try {
                             texture.height = Integer.parseInt(elm.getAttribute("height"));
                             //texture.setTextureSize();
+                        } catch (Throwable t) {
+                            t.printStackTrace();
+                        }
+                    }
+                    if (elm.hasAttribute("max_frames")) {
+                        try {
+                            texture.max_frames = Integer.parseInt(elm.getAttribute("max_frames"));
                         } catch (Throwable t) {
                             t.printStackTrace();
                         }
@@ -190,9 +198,9 @@ public class SpriteTexture extends Texture {
     public static final int TOP_RIGHT = 2;
     public static final int TOP_LEFT = 3;
     public Vector2f getTextureCord(int type) {
-        float st = 1.0f/(float)animations[row].size();
+        float st = 1.0f/max_frames;
         float rt = 1.0f/(float)animations.length;
-        float cx = (float)(step % animations[row].size()) / animations[row].size();
+        float cx = (float)(step % animations[row].size()) / max_frames;
         float cy = (float)(row / animations.length) / height;
         if (type == 0) {
             return new Vector2f(cx, cy);
