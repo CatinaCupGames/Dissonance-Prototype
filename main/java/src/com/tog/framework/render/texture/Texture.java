@@ -32,6 +32,7 @@ public class Texture {
         this.targetId = texture.targetId;
         this.image_height = texture.image_height;
         this.image_width = texture.image_width;
+        this.texture_width = texture.texture_width;
         this.texture_height = texture.texture_height;
         this.width = texture.width;
         this.height = texture.height;
@@ -45,6 +46,11 @@ public class Texture {
     public void bind() {
         glBindTexture(targetId, textureId);
     }
+
+    public void unbind() {
+        glBindTexture(targetId, 0);
+    }
+
 
     public void setWidth(int width) {
         this.image_width = width;

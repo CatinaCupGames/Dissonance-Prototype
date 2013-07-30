@@ -11,18 +11,16 @@ import java.security.InvalidParameterException;
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class Sprite implements Drawable {
-    private SpriteTexture texture;
-    private World world;
-    private float x, y;
+    protected Texture texture;
+    protected World world;
+    protected float x, y;
 
     public Texture getTexture() {
         return texture;
     }
 
     public void setTexture(Texture texture) {
-        if (!(texture instanceof SpriteTexture))
-            throw new InvalidParameterException("A sprite object can only have a sprite texture!");
-        this.texture = (SpriteTexture)texture;
+        this.texture = texture;
     }
 
     public void setWorld(World w) {
@@ -53,6 +51,8 @@ public abstract class Sprite implements Drawable {
         return new Vector2f(x, y);
     }
 
+    public void onLoad() { }
+
     @Override
     public void render() {
         getTexture().bind();
@@ -61,14 +61,15 @@ public abstract class Sprite implements Drawable {
         final float x = getX(), y = getY();
         //glColor3f(1f, .5f, .5f); DEBUG LINE FOR TEXTURES
         glBegin(GL_QUADS);
-        glTexCoord2f(0f, 0f);
+        glTexCoord2f(0f, 0f); //bottom left
         glVertex3f(x - bx, y - by, 0f);
-        glTexCoord2f(1f, 0f);
+        glTexCoord2f(1f, 0f); //bottom right
         glVertex3f(x + bx, y - by, 0f);
-        glTexCoord2f(1f, 1f);
+        glTexCoord2f(1f, 1f); //top right
         glVertex3f(x + bx, y + by, 0f);
-        glTexCoord2f(0f, 1f);
+        glTexCoord2f(0f, 1f); //top left
         glVertex3f(x - bx, y + by, 0f);
         glEnd();
+        getTexture().unbind();
     }
 }

@@ -1,1 +1,1 @@
-<animations     width="16"     height="16" >    <animation	     name="walk"		 loop="true"		 frames="3"		 row="0"		 default_speed="100ms" />	<animation	     name="idle"		 loop="true"		 frames="1"		 row="1"		 default_speed="1sc" /></animations>		
+<animations     width="256"     height="256" >    <animation	     name="walk"		 loop="true"		 frames="4"		 row="0"		 default_speed="100ms" /></animations>		

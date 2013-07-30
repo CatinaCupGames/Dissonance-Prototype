@@ -76,11 +76,13 @@ public final class InputService implements Service {
         public void run() {
 
             while (!paused) {
+                if (renderService.isRunning()) {
                 for (InputListener listener : listeners) {
                     for (Integer i : listener.getKeys()) {
                         boolean keyDown = Keyboard.isKeyDown(i);
                         PRESSED[i - 1] = keyDown;
                     }
+                }
                 }
 
                 try {
@@ -96,6 +98,7 @@ public final class InputService implements Service {
         @Override
         public void run() {
             while (!paused) {
+                if (renderService.isRunning()) {
                 Mouse.next();
 
                 if (!Mouse.getEventButtonState()) {
@@ -108,6 +111,7 @@ public final class InputService implements Service {
                     if (listener.getButtons().contains(button)) {
                         listener.inputClicked(button, Mouse.getX(), Mouse.getY());
                     }
+                }
                 }
 
                 try {
@@ -206,6 +210,12 @@ public final class InputService implements Service {
         return paused;
     }
 
+    private boolean looping;
+    @Override
+    public boolean isRunning() {
+        return looping;
+    }
+
     @Override
     public void run() {
         mouseThread.start();
@@ -213,6 +223,7 @@ public final class InputService implements Service {
 
 
         while (!paused) {
+            looping = true;
             for (Runnable runnable : runnables) {
                 runnable.run();
             }
@@ -232,5 +243,6 @@ public final class InputService implements Service {
                 e.printStackTrace();
             }
         }
+        looping = false;
     }
 }

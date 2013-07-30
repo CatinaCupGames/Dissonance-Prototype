@@ -13,6 +13,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.InvalidParameterException;
 
 public class SpriteTexture extends Texture {
@@ -27,11 +28,11 @@ public class SpriteTexture extends Texture {
 
     public static SpriteTexture retriveSpriteTexture(String sprite_name) throws IOException {
         SpriteTexture texture = new SpriteTexture(Texture.retriveTexture("sprite/" + sprite_name + "/" + sprite_name + "_sheet.png"));
-        File f = new File("sprites/" + sprite_name + "/" + sprite_name + ".xml");
-        if (f.exists()) {
+        InputStream in = texture.getClass().getClassLoader().getResourceAsStream("sprite/" + sprite_name + "/" + sprite_name + ".xml");
+        if (in != null) {
             try {
                 DocumentBuilder db = DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
-                Document dom = db.parse(f);
+                Document dom = db.parse(in);
                 Element elm = dom.getDocumentElement();
                 NodeList nl = elm.getElementsByTagName("animation");
                 if (nl != null && nl.getLength() > 0) {
@@ -39,6 +40,7 @@ public class SpriteTexture extends Texture {
                     if (elm.hasAttribute("width")) {
                         try {
                             texture.width = Integer.parseInt(elm.getAttribute("width"));
+                            //texture.setTextureSize();
                         } catch (Throwable t) {
                             t.printStackTrace();
                         }
@@ -46,6 +48,7 @@ public class SpriteTexture extends Texture {
                     if (elm.hasAttribute("height")) {
                         try {
                             texture.height = Integer.parseInt(elm.getAttribute("height"));
+                            //texture.setTextureSize();
                         } catch (Throwable t) {
                             t.printStackTrace();
                         }
@@ -82,13 +85,13 @@ public class SpriteTexture extends Texture {
                                 String temp = el.getAttribute("default_speed");
                                 String type = temp.substring(temp.length() - 2);
                                 if (type.equals("ms")) {
-                                    default_speed = Long.parseLong(temp);
+                                    default_speed = Long.parseLong(temp.substring(0, temp.length() - 2));
                                 } else if (type.equals("sc")) {
-                                    default_speed = Long.parseLong(temp) * 1000;
+                                    default_speed = Long.parseLong(temp.substring(0, temp.length() - 2)) * 1000;
                                 } else if (type.equals("mn")) {
-                                    default_speed = (Long.parseLong(temp) * 1000) * 60000;
+                                    default_speed = (Long.parseLong(temp.substring(0, temp.length() - 2)) * 1000) * 60000;
                                 } else {
-                                    default_speed = Long.parseLong(temp);
+                                    default_speed = Long.parseLong(temp.substring(0, temp.length() - 2));
                                 }
                             } catch (Throwable t) {
                                 t.printStackTrace();
@@ -115,6 +118,24 @@ public class SpriteTexture extends Texture {
     protected SpriteTexture(Texture texture) {
         super(texture);
     }
+
+    protected void setTextureSize() {
+        int texWidth = 2;
+        int texHeight = 2;
+
+        // find the closest power of 2 for the width and height
+        // of the produced texture
+        while (texWidth < width) {
+            texWidth *= 2;
+        }
+        while (texHeight < height) {
+            texHeight *= 2;
+        }
+
+        super.setTextureWidth(texWidth);
+        super.setTextureHeight(texHeight);
+    }
+
 
     public void step() {
         if (step + 1 < animations[row].size() || animations[row].doesLoop()) {
@@ -154,24 +175,33 @@ public class SpriteTexture extends Texture {
         return -1;
     }
 
+    @Override
+    public float getWidth() {
+        return width;
+    }
+
+    @Override
+    public float getHeight() {
+        return height;
+    }
 
     public static final int BOTTOM_LEFT = 0;
     public static final int BOTTOM_RIGHT = 1;
     public static final int TOP_RIGHT = 2;
     public static final int TOP_LEFT = 3;
     public Vector2f getTextureCord(int type) {
-        float st = 1.0f/(float)width;
-        float rt = 1.0f/(float)height;
-        float cx = (float)(step % animations[row].size()) / width;
-        float cy = (float)(row % animations.length) / height;
+        float st = 1.0f/(float)animations[row].size();
+        float rt = 1.0f/(float)animations.length;
+        float cx = (float)(step % animations[row].size()) / animations[row].size();
+        float cy = (float)(row / animations.length) / height;
         if (type == 0) {
-            return new Vector2f(cx, 1-cy-rt);
+            return new Vector2f(cx, cy);
         }  else if (type == 1) {
-            return new Vector2f(cx + st, 1-cy-rt);
+            return new Vector2f(cx + st, cy);
         }  else if (type == 2) {
-            return new Vector2f(cx + st, 1-cy);
+            return new Vector2f(cx + st, cy + rt);
         }  else if (type == 3) {
-            return new Vector2f(cx, 1-cy);
+            return new Vector2f(cx, cy + rt);
         } else {
             throw new InvalidParameterException("The parameter \"type\"'s value can only be 0, 1, 2, or 3");
         }

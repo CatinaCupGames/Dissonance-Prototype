@@ -1,9 +1,11 @@
 package com.tog.framework.game.world;
 
 import com.tog.framework.game.sprites.Sprite;
+import com.tog.framework.game.sprites.impl.AnimatedSprite;
 import com.tog.framework.render.Drawable;
 import com.tog.framework.render.RenderService;
 import com.tog.framework.render.texture.Texture;
+import com.tog.framework.render.texture.sprite.SpriteTexture;
 import com.tog.framework.system.Service;
 import com.tog.framework.system.ServiceManager;
 import com.tog.framework.system.exceptions.WorldLoadFailedException;
@@ -70,6 +72,7 @@ public class World extends Sprite {
             @Override
             public void run() {
                 sprite.setWorld(World.this);
+                sprite.onLoad();
             }
         });
     }
@@ -86,6 +89,25 @@ public class World extends Sprite {
             public void run() {
                 try {
                     Texture t = Texture.retriveTexture(resource);
+                    sprite.setTexture(t);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void loadAnimatedTextureForSprite(final AnimatedSprite sprite) {
+        if (renderingService == null)
+            throw new IllegalStateException("init() has not been called on this world!");
+        Validator.validateNotNull(sprite, "sprite");
+
+        renderingService.runOnServiceThread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    SpriteTexture t = SpriteTexture.retriveSpriteTexture(sprite.getSpriteName());
                     sprite.setTexture(t);
                 } catch (IOException e) {
                     e.printStackTrace();

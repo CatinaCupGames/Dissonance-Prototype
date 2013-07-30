@@ -96,6 +96,12 @@ public class RenderService implements Service {
         return paused;
     }
 
+    private boolean looping;
+    @Override
+    public boolean isRunning() {
+        return looping;
+    }
+
     @Override
     public void run() {
         try {
@@ -222,6 +228,7 @@ public class RenderService implements Service {
                     } else if (button == 1) { //RMB
                         soundSystem.getSound("bump").play();
                     }
+                    System.out.println(Camera.getX() + ":" + Camera.getY());
                 }
             };
             listener.getKeys().addAll(Arrays.asList(Keyboard.KEY_E, Keyboard.KEY_D, Keyboard.KEY_A,
@@ -238,6 +245,7 @@ public class RenderService implements Service {
             long cur = System.currentTimeMillis();
             long now;
             while (drawing) {
+                looping = true;
                 now = System.currentTimeMillis();
                 TIME_DELTA = (long) ((now - cur)/100.0f);
                 Iterator<Runnable> runs = toRun.iterator();
@@ -252,7 +260,7 @@ public class RenderService implements Service {
                 }
                 if (current_world != null && !paused) {
                     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                    glClearColor(0f, 0f, 0f, 1f);
+                    glClearColor(1f, 1f, 1f, 1f);
                     glMatrixMode(GL_MODELVIEW);
                     glLoadIdentity();
 
@@ -285,9 +293,13 @@ public class RenderService implements Service {
                     }
                 }
             }
-            Display.destroy();
         } catch (LWJGLException e) {
             e.printStackTrace();
+        }  finally {
+            if (looping) {
+                looping = false;
+                Display.destroy();
+            }
         }
     }
 

@@ -14,4 +14,6 @@ public interface Service extends Runnable {
     public void runOnServiceThread(Runnable runnable);
 
     public boolean isPaused();
+
+    public boolean isRunning();
 }
