@@ -1,13 +1,17 @@
 package com.tog.framework.system;
 
+import com.tog.framework.game.sprites.impl.AnimatedSprite;
 import com.tog.framework.game.world.World;
 import com.tog.framework.system.exceptions.WorldLoadFailedException;
+import com.tog.framework.system.ticker.Ticker;
 
 import java.io.File;
 import java.util.Locale;
 
 public class Game {
     public static int GAME_WIDTH = 1280, GAME_HEIGHT = 720;
+    public static TestSprite TEST = new TestSprite();
+    private static final Ticker TICKER = new Ticker();
 
     static {
         String lwjgl_folder = "libs" + File.separator + "lwjgl_native" + File.separator;
@@ -26,6 +30,8 @@ public class Game {
 
     public static void main(String[] args) {
         System.out.println("Using libs folder " + System.getProperty("org.lwjgl.librarypath"));
+        System.out.println("Starting Ticker");
+        TICKER.startTick();
         World w = new World();
         w.init();
         try {
@@ -33,6 +39,29 @@ public class Game {
         } catch (WorldLoadFailedException e) {
             e.printStackTrace();
             System.exit(-1);
+        }
+        w.loadAnimatedTextureForSprite(TEST);
+        w.addSprite(TEST);
+        TEST.setX(-75);
+        TEST.setY(-50);
+    }
+
+    private static boolean started;
+    public static void startGame() {
+        if (started)
+            return;
+        started = true;
+    }
+
+    public static Ticker getSystemTicker() {
+        return TICKER;
+    }
+
+    public static class TestSprite extends AnimatedSprite {
+
+        @Override
+        public String getSpriteName() {
+            return "sprite_test";
         }
     }
 }

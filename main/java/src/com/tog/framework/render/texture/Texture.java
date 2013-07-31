@@ -1,4 +1,4 @@
-package com.tog.framework.render;
+package com.tog.framework.render.texture;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -18,13 +18,27 @@ public class Texture {
             return cache.get(resource);
 
         Texture t = TextureLoader.getTexture(resource, GL_TEXTURE_2D, GL_RGBA, GL_LINEAR, GL_LINEAR);
+        t.onLoad();
         cache.put(resource, t);
         return t;
     }
 
+    public void onLoad() { }
+
     private Texture() { }
 
-    Texture(int targetId, int textureId) {
+    protected Texture(Texture texture) {
+        this.textureId = texture.textureId;
+        this.targetId = texture.targetId;
+        this.image_height = texture.image_height;
+        this.image_width = texture.image_width;
+        this.texture_width = texture.texture_width;
+        this.texture_height = texture.texture_height;
+        this.width = texture.width;
+        this.height = texture.height;
+    }
+
+    protected Texture(int targetId, int textureId) {
         this.targetId = targetId;
         this.textureId = textureId;
     }
@@ -32,6 +46,11 @@ public class Texture {
     public void bind() {
         glBindTexture(targetId, textureId);
     }
+
+    public void unbind() {
+        glBindTexture(targetId, 0);
+    }
+
 
     public void setWidth(int width) {
         this.image_width = width;

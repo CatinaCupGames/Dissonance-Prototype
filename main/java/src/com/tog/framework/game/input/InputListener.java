@@ -27,13 +27,15 @@ public interface InputListener {
      *
      * @param key The LWJLG key code of the key that was pressed.
      */
-    public void inputPressed(Integer key);
+    public void inputPressed(int key);
 
     /**
      * The {@link InputService} calls this method whenever a button that
      * this listener is listening for is pressed.
      *
      * @param button The LWJGL button code of the button that was pressed.
+     * @param x      The X location of the cursor on the screen.
+     * @param y      The Y location of the mouse on the screen.
      */
-    public void inputClicked(Integer button);
+    public void inputClicked(int button, int x, int y);
 }

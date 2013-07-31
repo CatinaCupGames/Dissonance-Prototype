@@ -29,14 +29,15 @@ import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 public class RenderService implements Service {
     public static final int WORLD_DATA_TYPE = 0;
-    private ArrayList<Runnable> toRun = new ArrayList<>();
+    public static long TIME_DELTA;
+    private final ArrayList<Runnable> toRun = new ArrayList<>();
     private Thread service_thread;
     private World current_world;
     private boolean drawing;
     private boolean paused;
 
-    private float rotx, roty, rotz;
-    private float posx, posy, posz = 30f;
+    private float rotx, roty;
+    private float posx, posy;
 
     @Override
     public Thread start() {
@@ -95,6 +96,12 @@ public class RenderService implements Service {
         return paused;
     }
 
+    private boolean looping;
+    @Override
+    public boolean isRunning() {
+        return looping;
+    }
+
     @Override
     public void run() {
         try {
@@ -107,20 +114,21 @@ public class RenderService implements Service {
             glViewport(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-
-            gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
+            glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0.0f, 1.0f);
+            //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
             glLoadIdentity();
 
             //TEMP CODE BEGIN
             final SoundSystem soundSystem = new SoundSystem();
-            final Sound shot, song, town;
+            final Sound shot, song, town, bump;
 
             try {
                 shot = soundSystem.loadSound("shot", "shotproto.wav");
                 song = soundSystem.loadSound("song", "song1.wav");
                 town = soundSystem.loadSound("town", "town.wav");
+                bump = soundSystem.loadSound("bump", "bump.wav");
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
@@ -142,31 +150,19 @@ public class RenderService implements Service {
                 }
 
                 @Override
-                public void inputPressed(Integer key) {
+                public void inputPressed(int key) {
                     switch (key) {
-                        case Keyboard.KEY_E:
-                            posz += 5;
-                            break;
-                        case Keyboard.KEY_D:
-                            posz -= 5;
-                            break;
                         case Keyboard.KEY_A:
-                            roty += 5;
+                            Camera.setY(Camera.getY() + 5);
                             break;
                         case Keyboard.KEY_S:
-                            roty -= 5;
+                            Camera.setY(Camera.getY() - 5);
                             break;
                         case Keyboard.KEY_Q:
-                            rotx += 5;
+                            Camera.setX(Camera.getX() + 5);
                             break;
                         case Keyboard.KEY_W:
-                            rotx -= 5;
-                            break;
-                        case Keyboard.KEY_Z:
-                            rotz += 5;
-                            break;
-                        case Keyboard.KEY_X:
-                            rotz -= 5;
+                            Camera.setX(Camera.getX() - 5);
                             break;
                         case Keyboard.KEY_T:
                             if (town.getState() == SoundState.PLAYING) {
@@ -196,35 +192,43 @@ public class RenderService implements Service {
                             town.setVolume(town.getVolume() + 0.1F);
                             song.setVolume(song.getVolume() + 0.1F);
                             shot.setVolume(shot.getVolume() + 0.1F);
+                            bump.setVolume(bump.getVolume() + 0.1F);
                             break;
                         case Keyboard.KEY_SUBTRACT:
                             town.setVolume(town.getVolume() - 0.1F);
                             song.setVolume(song.getVolume() - 0.1F);
                             shot.setVolume(shot.getVolume() - 0.1F);
+                            bump.setVolume(bump.getVolume() - 0.1F);
                             break;
                         case Keyboard.KEY_MULTIPLY:
                             town.setSpeed(town.getSpeed() + 0.1F);
                             song.setSpeed(song.getSpeed() + 0.1F);
                             shot.setSpeed(shot.getSpeed() + 0.1F);
+                            bump.setSpeed(bump.getSpeed() + 0.1F);
                             break;
                         case Keyboard.KEY_DIVIDE:
                             town.setSpeed(town.getSpeed() - 0.1F);
                             song.setSpeed(song.getSpeed() - 0.1F);
                             shot.setSpeed(shot.getSpeed() - 0.1F);
+                            bump.setSpeed(bump.getSpeed() - 0.1F);
                             break;
                         case Keyboard.KEY_LCONTROL:
                             town.stop();
                             song.stop();
                             shot.stop();
+                            bump.stop();
                             break;
                     }
                 }
 
                 @Override
-                public void inputClicked(Integer button) {
+                public void inputClicked(int button, int x, int y) {
                     if (button == 0) {  //LMB
                         soundSystem.getSound("shot").play();
+                    } else if (button == 1) { //RMB
+                        soundSystem.getSound("bump").play();
                     }
+                    System.out.println(Camera.getX() + ":" + Camera.getY());
                 }
             };
             listener.getKeys().addAll(Arrays.asList(Keyboard.KEY_E, Keyboard.KEY_D, Keyboard.KEY_A,
@@ -234,11 +238,16 @@ public class RenderService implements Service {
             listener.getKeys().add(Keyboard.KEY_E);
 
             listener.getButtons().add(0);
+            listener.getButtons().add(1);
 
             inputService.provideData(listener, InputService.ADD_LISTENER);
             //TEMP CODE END
-
+            long cur = System.currentTimeMillis();
+            long now;
             while (drawing) {
+                looping = true;
+                now = System.currentTimeMillis();
+                TIME_DELTA = (long) ((now - cur)/100.0f);
                 Iterator<Runnable> runs = toRun.iterator();
                 while (runs.hasNext()) {
                     Runnable r = runs.next();
@@ -251,41 +260,31 @@ public class RenderService implements Service {
                 }
                 if (current_world != null && !paused) {
                     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                    glClearColor(0f, 0f, 0f, 1f);
+                    glClearColor(1f, 1f, 1f, 1f);
                     glMatrixMode(GL_MODELVIEW);
                     glLoadIdentity();
 
                     glRotatef(-rotx, 1, 0, 0);
                     glRotatef(-roty, 0, 1, 0);
-                    glRotatef(-rotz, 0, 0, 1);
-                    glTranslatef(-posx, -posy, -posz);
+                    glRotatef(0, 0, 0, 1);
+                    glTranslatef(-Camera.getX(), -Camera.getY(), 0);
 
-                    final Iterator<Sprite> sprites = current_world.getSprites();
+                    final Iterator<Drawable> sprites = current_world.getDrawable();
                     while (sprites.hasNext()) {
-                        Sprite s = sprites.next();
-                        if (s.getTexture() == null)
+                        Drawable s = sprites.next();
+                        if (s == null)
                             continue;
-                        s.getTexture().bind();
-                        float cx = s.getTexture().getWidth();
-                        float cy = s.getTexture().getHeight();
-                        float bx = s.getTexture().getImageWidth();
-                        float by = s.getTexture().getImageHeight();
-                        glColor3f(1f, 1f, 1f);
-                        glBegin(GL_QUADS);
-                        glTexCoord3f(s.getX() + cx, s.getY(), 0f);
-                        glVertex3f(s.getX() - bx, s.getY() + by, 0f);
-                        glTexCoord3f(s.getX(), s.getY(), 0f);
-                        glVertex3f(s.getX() + bx, s.getY() + by, 0f);
-                        glTexCoord3f(s.getX(), s.getY() + cy, 0f);
-                        glVertex3f(s.getX() + bx, s.getY() - by, 0f);
-                        glTexCoord3f(s.getX() + cx, s.getY() + cy, 0f);
-                        glVertex3f(s.getX() - bx, s.getY() - by, 0f);
-                        glEnd();
+                        try {
+                            s.render();
+                        } catch (Throwable t) {
+                            t.printStackTrace();
+                        }
                     }
 
                     exitOnGLError("RenderService.renderSprites");
 
                     Display.update();
+                    cur = now;
                 } else {
                     try {
                         Thread.sleep(15); //Keep the thread busy
@@ -294,9 +293,13 @@ public class RenderService implements Service {
                     }
                 }
             }
-            Display.destroy();
         } catch (LWJGLException e) {
             e.printStackTrace();
+        }  finally {
+            if (looping) {
+                looping = false;
+                Display.destroy();
+            }
         }
     }
 

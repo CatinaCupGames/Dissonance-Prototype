@@ -1,4 +1,4 @@
-package com.tog.framework.render;
+package com.tog.framework.render.texture;
 
 import org.lwjgl.BufferUtils;
 
@@ -128,17 +128,15 @@ public class TextureLoader {
         WritableRaster raster;
         BufferedImage texImage;
 
-        int texWidth = 2;
-        int texHeight = 2;
+        int texWidth = bufferedImage.getWidth();
+        int texHeight = bufferedImage.getHeight();
 
-        // find the closest power of 2 for the width and height
-        // of the produced texture
-        while (texWidth < bufferedImage.getWidth()) {
+        /*while (texWidth < bufferedImage.getWidth()) {
             texWidth *= 2;
         }
         while (texHeight < bufferedImage.getHeight()) {
             texHeight *= 2;
-        }
+        }*/
 
         texture.setTextureHeight(texHeight);
         texture.setTextureWidth(texWidth);
