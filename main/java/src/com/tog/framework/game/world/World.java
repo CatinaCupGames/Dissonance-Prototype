@@ -134,20 +134,25 @@ public class World extends Sprite {
         return this;
     }
 
+    float x, y;
     @Override
-    public void setX(float x) { }
+    public void setX(float x) {
+        this.x = x;
+    }
 
     @Override
-    public void setY(float y) { }
+    public void setY(float y) {
+        this.y = y;
+    }
 
     @Override
     public float getX() {
-        return 0;
+        return x;
     }
 
     @Override
     public float getY() {
-        return 0;
+        return y;
     }
 
     @Override

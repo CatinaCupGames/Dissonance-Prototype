@@ -77,18 +77,17 @@ public final class InputService implements Service {
 
             while (!paused) {
                 if (renderService.isRunning()) {
-                for (InputListener listener : listeners) {
-                    for (Integer i : listener.getKeys()) {
-                        boolean keyDown = Keyboard.isKeyDown(i);
-                        PRESSED[i - 1] = keyDown;
+                    for (InputListener listener : listeners) {
+                        for (Integer i : listener.getKeys()) {
+                            boolean keyDown = Keyboard.isKeyDown(i);
+                            PRESSED[i - 1] = keyDown;
+                        }
                     }
-                }
                 }
 
                 try {
                     Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (InterruptedException ignored) {
                 }
             }
         }
@@ -99,19 +98,19 @@ public final class InputService implements Service {
         public void run() {
             while (!paused) {
                 if (renderService.isRunning()) {
-                Mouse.next();
+                    Mouse.next();
 
-                if (!Mouse.getEventButtonState()) {
-                    continue;
-                }
-
-                int button = Mouse.getEventButton();
-
-                for (InputListener listener : listeners) {
-                    if (listener.getButtons().contains(button)) {
-                        listener.inputClicked(button, Mouse.getX(), Mouse.getY());
+                    if (!Mouse.getEventButtonState()) {
+                        continue;
                     }
-                }
+
+                    int button = Mouse.getEventButton();
+
+                    for (InputListener listener : listeners) {
+                        if (listener.getButtons().contains(button)) {
+                            listener.inputClicked(button, Mouse.getX(), Mouse.getY());
+                        }
+                    }
                 }
 
                 try {
@@ -239,8 +238,7 @@ public final class InputService implements Service {
 
             try {
                 Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (InterruptedException ignored) {
             }
         }
         looping = false;

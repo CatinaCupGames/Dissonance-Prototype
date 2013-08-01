@@ -1,7 +1,10 @@
 package com.tog.framework.game.sprites.impl;
 
 import com.tog.framework.game.sprites.Sprite;
+import com.tog.framework.game.sprites.animation.AnimationFactory;
+import com.tog.framework.game.sprites.animation.Animator;
 import com.tog.framework.render.texture.Texture;
+import com.tog.framework.render.texture.sprite.SpriteAnimationInfo;
 import com.tog.framework.render.texture.sprite.SpriteTexture;
 import com.tog.framework.system.Game;
 import com.tog.framework.system.ticker.Tick;
@@ -11,7 +14,11 @@ import java.security.InvalidParameterException;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public abstract class AnimatedSprite extends Sprite implements Tick {
+public abstract class AnimatedSprite extends Sprite implements Animator {
+    protected int ANIMATION_FACTORY_ID;
+    private SpriteAnimationInfo animation;
+    private int speed;
+
 
     @Override
     public void setTexture(Texture texture) {
@@ -23,10 +30,34 @@ public abstract class AnimatedSprite extends Sprite implements Tick {
 
     @Override
     public void onLoad() {
-        Game.getSystemTicker().addTick(this);
+        ANIMATION_FACTORY_ID = AnimationFactory.queueAnimator(this);
+        if (getTexture() != null && ((SpriteTexture)getTexture()).getCurrentAnimation() != null) {
+            animation = ((SpriteTexture)getTexture()).getCurrentAnimation();
+            speed = (int)animation.getDefaultSpeed();
+        }
+    }
+
+    @Override
+    public void onUnload() {
+        AnimationFactory.removeAnimator(ANIMATION_FACTORY_ID);
     }
 
     public abstract String getSpriteName();
+
+    public void setAnimation(String name) {
+        if (getTexture() != null) {
+            final SpriteTexture texture = (SpriteTexture)getTexture();
+            SpriteAnimationInfo ani;
+            if ((ani = texture.setCurrentAnimation(name)) != null) {
+                this.animation = ani;
+                speed = (int)ani.getDefaultSpeed();
+            }
+        }
+    }
+
+    public SpriteAnimationInfo getCurrentAnimation() {
+        return animation;
+    }
 
     @Override
     public void render() {
@@ -34,8 +65,8 @@ public abstract class AnimatedSprite extends Sprite implements Tick {
             return;
         final SpriteTexture texture = (SpriteTexture)getTexture();
         texture.bind();
-        float bx = texture.getWidth();
-        float by = texture.getHeight();
+        float bx = texture.getWidth() / 2;
+        float by = texture.getHeight() / 2;
         final float x = getX(), y = getY();
         //glColor4f(0f, 0f, 0f, 1f); //DEBUG LINE FOR TEXTURES
         glEnable(GL_BLEND);
@@ -44,7 +75,6 @@ public abstract class AnimatedSprite extends Sprite implements Tick {
         Vector2f br = texture.getTextureCord(SpriteTexture.BOTTOM_RIGHT);
         Vector2f ur = texture.getTextureCord(SpriteTexture.TOP_RIGHT);
         Vector2f ul = texture.getTextureCord(SpriteTexture.TOP_LEFT);
-        System.out.println("(" + bx + ":" + by + ") " + bl + " " + br + " " + ur + " " + ul);
         glBegin(GL_QUADS);
         glTexCoord2f(bl.getX(), bl.getY()); //bottom left
         glVertex3f(x - bx, y - by, 0f);
@@ -61,19 +91,39 @@ public abstract class AnimatedSprite extends Sprite implements Tick {
     }
 
     @Override
-    public void tick() {
-        if (getTexture() != null && getTexture() instanceof SpriteTexture) {
+    public void onAnimate() {
+        if (getTexture() != null)
             ((SpriteTexture)getTexture()).step();
+    }
+
+    @Override
+    public synchronized final void waitForAnimationEnd() {
+        try {
+            super.wait(0L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public boolean inSeparateThread() {
-        return false;
+    public synchronized final void wakeUp() {
+        super.notify();
     }
 
     @Override
-    public int getTimeout() {
-        return 1000;
+    public int getSpeed() {
+         return speed;
     }
+
+    @Override
+    public int getFrameCount() {
+        if (animation != null)
+            return animation.size();
+        return -1;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
 }

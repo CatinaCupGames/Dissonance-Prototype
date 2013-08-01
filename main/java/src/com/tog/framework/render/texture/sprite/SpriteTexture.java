@@ -175,6 +175,10 @@ public class SpriteTexture extends Texture {
         return animations[index];
     }
 
+    public SpriteAnimationInfo getCurrentAnimation() {
+        return animations[row];
+    }
+
     public int indexOfAnimation(String name) {
         for (int i = 0; i < animations.length; i++) {
             if (animations[i].getName().equals(name))

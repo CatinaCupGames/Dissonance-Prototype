@@ -3,6 +3,7 @@ package com.tog.framework.render;
 import com.tog.framework.game.input.InputListener;
 import com.tog.framework.game.input.InputService;
 import com.tog.framework.game.sprites.Sprite;
+import com.tog.framework.game.sprites.animation.AnimationFactory;
 import com.tog.framework.game.world.World;
 import com.tog.framework.sound.Sound;
 import com.tog.framework.sound.SoundState;
@@ -30,6 +31,7 @@ import static org.lwjgl.util.glu.GLU.gluPerspective;
 public class RenderService implements Service {
     public static final int WORLD_DATA_TYPE = 0;
     public static long TIME_DELTA;
+    public static long RENDER_THREAD_ID;
     private final ArrayList<Runnable> toRun = new ArrayList<>();
     private Thread service_thread;
     private World current_world;
@@ -104,6 +106,7 @@ public class RenderService implements Service {
 
     @Override
     public void run() {
+        RENDER_THREAD_ID = Thread.currentThread().getId();
         try {
             Display.setDisplayMode(new DisplayMode(Game.GAME_WIDTH, Game.GAME_HEIGHT));
             Display.create();
@@ -280,11 +283,23 @@ public class RenderService implements Service {
                             t.printStackTrace();
                         }
                     }
+                    try {
+                        AnimationFactory.executeTick(); //Execute any animation
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+
+                    Camera.executeEase(); //Execute any interlop
 
                     exitOnGLError("RenderService.renderSprites");
 
                     Display.update();
                     cur = now;
+                    if (Display.isCloseRequested()) {
+                        ServiceManager.getService(InputService.class).terminate();
+                        Game.getSystemTicker().stopTick();
+                        break;
+                    }
                 } else {
                     try {
                         Thread.sleep(15); //Keep the thread busy

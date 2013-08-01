@@ -53,11 +53,13 @@ public abstract class Sprite implements Drawable {
 
     public void onLoad() { }
 
+    public void onUnload() { }
+
     @Override
     public void render() {
         getTexture().bind();
-        float bx = getTexture().getTextureWidth();
-        float by = getTexture().getTextureHeight();
+        float bx = getTexture().getTextureWidth() / 2;
+        float by = getTexture().getTextureHeight() / 2;
         final float x = getX(), y = getY();
         //glColor3f(1f, .5f, .5f); DEBUG LINE FOR TEXTURES
         glBegin(GL_QUADS);
