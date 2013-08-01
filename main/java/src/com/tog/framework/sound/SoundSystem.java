@@ -3,7 +3,9 @@ package com.tog.framework.sound;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.util.WaveData;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,7 @@ public final class SoundSystem {
         int source = AL10.alGenSources();
         AL10.alSourcei(source, AL10.AL_BUFFER, buffer);
 
-        Sound sound = new Sound(name, source, buffer);
+        Sound sound = new Sound(name, filePath.substring(0, filePath.length() - 4), source, buffer);
         loadedSounds.add(sound);
 
         return sound;

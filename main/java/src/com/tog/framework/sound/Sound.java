@@ -1,54 +1,139 @@
 package com.tog.framework.sound;
 
 import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public final class Sound {
+    private final static DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
     private final String name;
+    private final String fileName;
     private final int source;
     private final int buffer;
 
     private float speed;
     private float volume;
-    private boolean looping;
 
     private SoundState state;
 
-    protected Sound(String name, int source, int buffer) {
+    private boolean alLoop = false;
+    private long startTime = -1;
+    private long endTime = -1;
+    private int loopCount = -1;
+    private int currentLoop = 0;
+
+    private Timer timer;
+    private TimerTask task;
+
+    private void readSoundInfo() throws IOException {
+        InputStream in = getClass().getClassLoader().getResourceAsStream("sound/" + fileName + ".xml");
+
+        if (in == null) {
+            return;
+        }
+
+        try {
+            DocumentBuilder builder = DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
+            Document document = builder.parse(in);
+
+            Element element = document.getDocumentElement();
+
+            if (element.hasAttribute("alloop")) {
+                alLoop = element.getAttribute("alloop").toLowerCase(Locale.ENGLISH).equals("true");
+                AL10.alSourcei(source, AL10.AL_LOOPING, alLoop ? AL10.AL_TRUE : AL10.AL_FALSE);
+            }
+
+            if (element.hasAttribute("start")) {
+                startTime = (long) Double.parseDouble(element.getAttribute("start"));
+            }
+
+            if (element.hasAttribute("end")) {
+                endTime = (long) Double.parseDouble(element.getAttribute("end"));
+            }
+
+            if (element.hasAttribute("count")) {
+                loopCount = Integer.parseInt(element.getAttribute("count"));
+            }
+
+            in.close();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    protected Sound(String name, String fileName, int source, int buffer) {
         this.name = name;
+        this.fileName = fileName;
         this.source = source;
         this.buffer = buffer;
 
         speed = 1F;
         volume = 1F;
         state = SoundState.STOPPED;
+        timer = new Timer(name + "_timer");
+
+        try {
+            readSoundInfo();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void play() {
+        if (state == SoundState.PLAYING) {
+            stop();
+        }
+
         AL10.alSourcePlay(source);
+
+        if (alLoop) {
+            AL10.alSourcei(source, AL10.AL_LOOPING, AL10.AL_TRUE);
+        } else if (startTime != -1 && endTime != -1) {
+            AL10.alSourcef(source, AL11.AL_SEC_OFFSET, startTime);
+
+            task = new TimerTask() {
+                @Override
+                public void run() {
+                    currentLoop++;
+                    if (currentLoop <= loopCount) {
+                        AL10.alSourcef(source, AL11.AL_SEC_OFFSET, startTime);
+                    } else {
+                        stop();
+                    }
+                }
+            };
+
+            timer.scheduleAtFixedRate(task, 0L, (endTime - startTime) * 1000L);
+        }
+
         state = SoundState.PLAYING;
     }
 
     public void stop() {
         AL10.alSourceStop(source);
-        state = SoundState.STOPPED;
-    }
 
-    public void rewind(boolean play) {
-        AL10.alSourceRewind(source);
-
-        if (play) {
-            play();
+        if (startTime != -1 && endTime != -1) {
+            task.cancel();
+            timer.purge();
+            currentLoop = 0;
         }
-    }
 
-    public void setLooping(boolean looping) {
-        this.looping = looping;
-
-        AL10.alSourcei(source, AL10.AL_LOOPING, (looping ? AL10.AL_TRUE : AL10.AL_FALSE));
-    }
-
-    public boolean isLooping() {
-        return looping;
+        state = SoundState.STOPPED;
     }
 
     public void pause() {
