@@ -2,7 +2,6 @@ package com.tog.framework.render;
 
 import com.tog.framework.game.input.InputListener;
 import com.tog.framework.game.input.InputService;
-import com.tog.framework.game.sprites.Sprite;
 import com.tog.framework.game.sprites.animation.AnimationFactory;
 import com.tog.framework.game.world.World;
 import com.tog.framework.sound.Sound;
@@ -26,7 +25,6 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
-import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 public class RenderService implements Service {
     public static final int WORLD_DATA_TYPE = 0;
@@ -99,6 +97,7 @@ public class RenderService implements Service {
     }
 
     private boolean looping;
+
     @Override
     public boolean isRunning() {
         return looping;
@@ -168,11 +167,10 @@ public class RenderService implements Service {
                             Camera.setX(Camera.getX() - 5);
                             break;
                         case Keyboard.KEY_T:
-                            if (town.getState() == SoundState.PLAYING) {
-                                town.stop();
-                            } else {
-                                town.play();
-                            }
+                            town.play();
+                            break;
+                        case Keyboard.KEY_R:
+                            town.stop();
                             break;
                         case Keyboard.KEY_M:
                             if (song.getState() == SoundState.PLAYING) {
@@ -188,9 +186,6 @@ public class RenderService implements Service {
                                 shot.play();
                             }
                             break;
-                        case Keyboard.KEY_L: {
-                            shot.setLooping(!shot.isLooping());
-                        }
                         case Keyboard.KEY_ADD:
                             town.setVolume(town.getVolume() + 0.1F);
                             song.setVolume(song.getVolume() + 0.1F);
@@ -237,7 +232,7 @@ public class RenderService implements Service {
             listener.getKeys().addAll(Arrays.asList(Keyboard.KEY_E, Keyboard.KEY_D, Keyboard.KEY_A,
                     Keyboard.KEY_S, Keyboard.KEY_Q, Keyboard.KEY_W, Keyboard.KEY_Z, Keyboard.KEY_X, Keyboard.KEY_T,
                     Keyboard.KEY_M, Keyboard.KEY_G, Keyboard.KEY_L, Keyboard.KEY_ADD, Keyboard.KEY_SUBTRACT,
-                    Keyboard.KEY_MULTIPLY, Keyboard.KEY_DIVIDE, Keyboard.KEY_LCONTROL));
+                    Keyboard.KEY_MULTIPLY, Keyboard.KEY_DIVIDE, Keyboard.KEY_LCONTROL, Keyboard.KEY_R));
             listener.getKeys().add(Keyboard.KEY_E);
 
             listener.getButtons().add(0);
@@ -250,7 +245,7 @@ public class RenderService implements Service {
             while (drawing) {
                 looping = true;
                 now = System.currentTimeMillis();
-                TIME_DELTA = (long) ((now - cur)/100.0f);
+                TIME_DELTA = (long) ((now - cur) / 100.0f);
                 Iterator<Runnable> runs = toRun.iterator();
                 while (runs.hasNext()) {
                     Runnable r = runs.next();
@@ -310,7 +305,7 @@ public class RenderService implements Service {
             }
         } catch (LWJGLException e) {
             e.printStackTrace();
-        }  finally {
+        } finally {
             if (looping) {
                 looping = false;
                 Display.destroy();
