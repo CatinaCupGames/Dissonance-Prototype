@@ -11,7 +11,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidParameterException;
@@ -62,7 +61,7 @@ public class SpriteTexture extends Texture {
                         }
                     }
                     for (int i = 0; i < nl.getLength(); i++) {
-                        Element el = (Element)nl.item(i);
+                        Element el = (Element) nl.item(i);
                         String name = "";
                         int row = 0;
                         long default_speed = 1;
@@ -201,18 +200,19 @@ public class SpriteTexture extends Texture {
     public static final int BOTTOM_RIGHT = 1;
     public static final int TOP_RIGHT = 2;
     public static final int TOP_LEFT = 3;
+
     public Vector2f getTextureCord(int type) {
-        float st = 1.0f/max_frames;
-        float rt = 1.0f/(float)animations.length;
-        float cx = (float)(step % animations[row].size()) / max_frames;
-        float cy = (float)(row / animations.length) / height;
+        float st = 1.0f / max_frames;
+        float rt = 1.0f / (float) animations.length;
+        float cx = (float) (step % animations[row].size()) / max_frames;
+        float cy = (float) (row / animations.length) / height;
         if (type == 0) {
             return new Vector2f(cx, cy);
-        }  else if (type == 1) {
+        } else if (type == 1) {
             return new Vector2f(cx + st, cy);
-        }  else if (type == 2) {
+        } else if (type == 2) {
             return new Vector2f(cx + st, cy + rt);
-        }  else if (type == 3) {
+        } else if (type == 3) {
             return new Vector2f(cx, cy + rt);
         } else {
             throw new InvalidParameterException("The parameter \"type\"'s value can only be 0, 1, 2, or 3");
