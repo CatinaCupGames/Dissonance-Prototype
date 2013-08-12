@@ -19,11 +19,11 @@ public abstract class UIElement implements Drawable {
     private String name;
 
     public UIElement(String name) {
-	this.name = name;
+        this.name = name;
     }
 
     public String getName() {
-	return name;
+        return name;
     }
 
     /**
@@ -35,31 +35,31 @@ public abstract class UIElement implements Drawable {
      *            The name for this UIElement
      */
     public void setName(String name) {
-	this.name = name;
+        this.name = name;
     }
 
     public float getWidth() {
-	return width;
+        return width;
     }
 
     public float getHeight() {
-	return height;
+        return height;
     }
 
     public float getX() {
-	return x;
+        return x;
     }
 
     public float getY() {
-	return y;
+        return y;
     }
 
     public void setX(float x) {
-	this.x = x;
+        this.x = x;
     }
 
     public void setY(float y) {
-	this.y = y;
+        this.y = y;
     }
 
     /**
@@ -70,11 +70,11 @@ public abstract class UIElement implements Drawable {
      *             The width to set UIElement to
      */
     public void setWidth(float width) {
-	this.width = 2;
-	while (this.width < width) {
-	    this.width *= 2;
-	}
-	invalidateView();
+        this.width = 2;
+        while (this.width < width) {
+            this.width *= 2;
+        }
+        invalidateView();
     }
 
     /**
@@ -85,56 +85,56 @@ public abstract class UIElement implements Drawable {
      *             The height to set UIElement to
      */
     public void setHeight(float height) {
-	this.height = 2;
-	while (this.height < height) {
-	    this.height *= 2;
-	}
-	invalidateView();
+        this.height = 2;
+        while (this.height < height) {
+            this.height *= 2;
+        }
+        invalidateView();
     }
 
     public void invalidateView() {
-	valid = false;
+        valid = false;
     }
 
     private void redrawTexture() {
-	if (valid)
-	    return;
-	if (UI_IMAGE.getWidth() != width || UI_IMAGE.getHeight() != height) {
-	    UI.dispose();
-	    UI = null;
-	    UI_IMAGE = new BufferedImage((int)width, (int)height, BufferedImage.TYPE_INT_ARGB);
-	}
-	Graphics2D graphics2D = UI_IMAGE.createGraphics();
-	graphics2D.setColor(Color.WHITE);
-	graphics2D.drawRect(0, 0, (int) width, (int) height);
-	draw(graphics2D);
-	graphics2D.dispose();
+        if (valid)
+            return;
+        if (UI_IMAGE.getWidth() != width || UI_IMAGE.getHeight() != height) {
+            UI.dispose();
+            UI = null;
+            UI_IMAGE = new BufferedImage((int)width, (int)height, BufferedImage.TYPE_INT_ARGB);
+        }
+        Graphics2D graphics2D = UI_IMAGE.createGraphics();
+        graphics2D.setColor(Color.WHITE);
+        graphics2D.drawRect(0, 0, (int) width, (int) height);
+        draw(graphics2D);
+        graphics2D.dispose();
 
-	UI = Texture.convertToTexture(name, UI_IMAGE);
-	valid = true;
+        UI = Texture.convertToTexture(name, UI_IMAGE);
+        valid = true;
     }
 
     @Override
     public void render() {
-	if (UI == null && valid)
-	    return;
-	else if (!valid)
-	    redrawTexture();
-	UI.bind();
-	float bx = UI.getTextureWidth() / 2;
-	float by = UI.getTextureHeight() / 2;
-	final float x = getX(), y = getY();
-	glBegin(GL_QUADS);
-	glTexCoord2f(0f, 0f); //bottom left
-	glVertex3f(x - bx, y - by, 0f);
-	glTexCoord2f(1f, 0f); //bottom right
-	glVertex3f(x + bx, y - by, 0f);
-	glTexCoord2f(1f, 1f); //top right
-	glVertex3f(x + bx, y + by, 0f);
-	glTexCoord2f(0f, 1f); //top left
-	glVertex3f(x - bx, y + by, 0f);
-	glEnd();
-	UI.unbind();
+        if (UI == null && valid)
+            return;
+        else if (!valid)
+            redrawTexture();
+        UI.bind();
+        float bx = UI.getTextureWidth() / 2;
+        float by = UI.getTextureHeight() / 2;
+        final float x = getX(), y = getY();
+        glBegin(GL_QUADS);
+        glTexCoord2f(0f, 0f); //bottom left
+        glVertex3f(x - bx, y - by, 0f);
+        glTexCoord2f(1f, 0f); //bottom right
+        glVertex3f(x + bx, y - by, 0f);
+        glTexCoord2f(1f, 1f); //top right
+        glVertex3f(x + bx, y + by, 0f);
+        glTexCoord2f(0f, 1f); //top left
+        glVertex3f(x - bx, y + by, 0f);
+        glEnd();
+        UI.unbind();
     }
 
     public abstract void draw(Graphics2D graphics2D);

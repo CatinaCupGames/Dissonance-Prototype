@@ -45,7 +45,7 @@ public class RenderService implements Service {
         service_thread = new Thread(this);
         drawing = true;
         service_thread.start();
-	INSTANCE = this;
+        INSTANCE = this;
         return service_thread;
     }
 
@@ -74,7 +74,7 @@ public class RenderService implements Service {
         }
         service_thread = null;
         current_world = null;
-	INSTANCE = null;
+        INSTANCE = null;
     }
 
     @Override

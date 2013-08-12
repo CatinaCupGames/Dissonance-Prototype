@@ -8,6 +8,6 @@ public class Player extends AnimatedSprite {
 
     @Override
     public String getSpriteName() {
-	return "player";
+        return "player";
     }
 }

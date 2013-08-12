@@ -10,33 +10,33 @@ public abstract class Person extends AnimatedSprite {
     private Dialog current_dialog;
 
     public Person(World w, String sprite_name) {
-	setWorld(w);
-	this.name = name;
-	w.loadAnimatedTextureForSprite(this);
+        setWorld(w);
+        this.name = name;
+        w.loadAnimatedTextureForSprite(this);
     }
 
     @Override
     public String getSpriteName() {
-	return name;
+        return name;
     }
 
     public abstract String getPersonName();
 
     public Dialog getDialog() {
-	return current_dialog;
+        return current_dialog;
     }
 
     public void setDialog(String ID) {
-	current_dialog = DialogFactory.getDialog(ID);
+        current_dialog = DialogFactory.getDialog(ID);
     }
 
     public void displayDialog() {
-	if (current_dialog == null)
-	    return;
-	//TODO Show dialog
+        if (current_dialog == null)
+            return;
+        //TODO Show dialog
     }
 
     public void onShowDialog() {
-	//TODO idk
+        //TODO idk
     }
 }

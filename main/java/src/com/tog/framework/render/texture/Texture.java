@@ -22,21 +22,21 @@ public class Texture {
             return cache.get(resource);
 
         Texture t = TextureLoader.getTexture(resource, GL_TEXTURE_2D, GL_RGBA, GL_LINEAR, GL_LINEAR);
-	t.resource = resource;
+        t.resource = resource;
         t.onLoad();
         cache.put(resource, t);
         return t;
     }
 
     public static Texture convertToTexture(String name, BufferedImage image) {
-	if (cache.containsKey(name))
-	    return cache.get(name);
+        if (cache.containsKey(name))
+            return cache.get(name);
 
-	Texture t = TextureLoader.convertToTexture(image, GL_TEXTURE_2D, GL_RGBA, GL_LINEAR, GL_LINEAR);
-	t.resource = name;
-	t.onLoad();
-	cache.put(name, t);
-	return t;
+        Texture t = TextureLoader.convertToTexture(image, GL_TEXTURE_2D, GL_RGBA, GL_LINEAR, GL_LINEAR);
+        t.resource = name;
+        t.onLoad();
+        cache.put(name, t);
+        return t;
     }
 
     public void onLoad() { }
@@ -125,15 +125,15 @@ public class Texture {
     }
 
     public void dispose() {
-	if (cache.containsKey(resource))
-	    cache.remove(resource);
+        if (cache.containsKey(resource))
+            cache.remove(resource);
 
-	RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+        RenderService.INSTANCE.runOnServiceThread(new Runnable() {
 
-	    @Override
-	    public void run() {
-		TextureLoader.disposeTexture(Texture.this);
-	    }
-	});
+            @Override
+            public void run() {
+                TextureLoader.disposeTexture(Texture.this);
+            }
+        });
     }
 }
