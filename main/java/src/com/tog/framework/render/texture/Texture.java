@@ -1,16 +1,20 @@
 package com.tog.framework.render.texture;
 
-import static org.lwjgl.opengl.GL11.*;
+import com.tog.framework.render.RenderService;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 
+import static org.lwjgl.opengl.GL11.*;
+
 public class Texture {
-    private int textureId;
+    int textureId;
     private int targetId;
     private int image_width, image_height;
     private int texture_width, texture_height;
     private float width, height;
+    private String resource;
     private static final HashMap<String, Texture> cache = new HashMap<String, Texture>();
 
     public static Texture retriveTexture(String resource) throws IOException {
@@ -18,9 +22,21 @@ public class Texture {
             return cache.get(resource);
 
         Texture t = TextureLoader.getTexture(resource, GL_TEXTURE_2D, GL_RGBA, GL_LINEAR, GL_LINEAR);
+	t.resource = resource;
         t.onLoad();
         cache.put(resource, t);
         return t;
+    }
+
+    public static Texture convertToTexture(String name, BufferedImage image) {
+	if (cache.containsKey(name))
+	    return cache.get(name);
+
+	Texture t = TextureLoader.convertToTexture(image, GL_TEXTURE_2D, GL_RGBA, GL_LINEAR, GL_LINEAR);
+	t.resource = name;
+	t.onLoad();
+	cache.put(name, t);
+	return t;
     }
 
     public void onLoad() { }
@@ -106,5 +122,18 @@ public class Texture {
 
     public int getTextureHeight() {
         return texture_height;
+    }
+
+    public void dispose() {
+	if (cache.containsKey(resource))
+	    cache.remove(resource);
+
+	RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+
+	    @Override
+	    public void run() {
+		TextureLoader.disposeTexture(Texture.this);
+	    }
+	});
     }
 }

@@ -1,7 +1,7 @@
 package com.tog.framework.game.world;
 
 import com.tog.framework.game.sprites.Sprite;
-import com.tog.framework.game.sprites.impl.AnimatedSprite;
+import com.tog.framework.game.sprites.AnimatedSprite;
 import com.tog.framework.render.Drawable;
 import com.tog.framework.render.RenderService;
 import com.tog.framework.render.texture.Texture;

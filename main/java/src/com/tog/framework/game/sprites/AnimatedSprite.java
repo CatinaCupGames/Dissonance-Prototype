@@ -1,13 +1,10 @@
-package com.tog.framework.game.sprites.impl;
+package com.tog.framework.game.sprites;
 
-import com.tog.framework.game.sprites.Sprite;
 import com.tog.framework.game.sprites.animation.AnimationFactory;
 import com.tog.framework.game.sprites.animation.Animator;
 import com.tog.framework.render.texture.Texture;
 import com.tog.framework.render.texture.sprite.SpriteAnimationInfo;
 import com.tog.framework.render.texture.sprite.SpriteTexture;
-import com.tog.framework.system.Game;
-import com.tog.framework.system.ticker.Tick;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.security.InvalidParameterException;

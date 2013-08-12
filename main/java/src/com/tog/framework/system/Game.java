@@ -1,11 +1,10 @@
 package com.tog.framework.system;
 
-import com.tog.framework.game.sprites.impl.AnimatedSprite;
+import com.tog.framework.game.sprites.AnimatedSprite;
 import com.tog.framework.game.world.World;
 import com.tog.framework.render.Camera;
 import com.tog.framework.system.exceptions.WorldLoadFailedException;
 import com.tog.framework.system.ticker.Ticker;
-import org.lwjgl.util.vector.Vector2f;
 
 import java.io.File;
 import java.util.Locale;
@@ -48,7 +47,7 @@ public class Game {
         TEST.setY(50);
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

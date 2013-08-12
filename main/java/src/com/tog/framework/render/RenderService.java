@@ -2,7 +2,6 @@ package com.tog.framework.render;
 
 import com.tog.framework.game.input.InputListener;
 import com.tog.framework.game.input.InputService;
-import com.tog.framework.game.sprites.Sprite;
 import com.tog.framework.game.sprites.animation.AnimationFactory;
 import com.tog.framework.game.world.World;
 import com.tog.framework.sound.Sound;
@@ -26,10 +25,10 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
-import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 public class RenderService implements Service {
     public static final int WORLD_DATA_TYPE = 0;
+    public static RenderService INSTANCE;
     public static long TIME_DELTA;
     public static long RENDER_THREAD_ID;
     private final ArrayList<Runnable> toRun = new ArrayList<>();
@@ -46,6 +45,7 @@ public class RenderService implements Service {
         service_thread = new Thread(this);
         drawing = true;
         service_thread.start();
+	INSTANCE = this;
         return service_thread;
     }
 
@@ -74,6 +74,7 @@ public class RenderService implements Service {
         }
         service_thread = null;
         current_world = null;
+	INSTANCE = null;
     }
 
     @Override

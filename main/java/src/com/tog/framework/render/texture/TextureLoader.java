@@ -96,6 +96,55 @@ public class TextureLoader {
         return texture;
     }
 
+    static void disposeTexture(Texture t) {
+	glDeleteTextures(t.textureId);
+    }
+
+    static Texture convertToTexture(BufferedImage bufferedImage,
+		   int target,
+		   int dstPixelFormat,
+		   int minFilter,
+		   int magFilter) {
+	int srcPixelFormat;
+
+	// create the texture ID for this texture
+	int textureID = createTextureID();
+	Texture texture = new Texture(target,textureID);
+
+	// bind this texture
+	glBindTexture(target, textureID);
+
+	texture.setWidth(bufferedImage.getWidth());
+	texture.setHeight(bufferedImage.getHeight());
+
+	if (bufferedImage.getColorModel().hasAlpha()) {
+	    srcPixelFormat = GL_RGBA;
+	} else {
+	    srcPixelFormat = GL_RGB;
+	}
+
+	// convert that image into a byte buffer of texture data
+	ByteBuffer textureBuffer = convertImageData(bufferedImage,texture);
+
+	if (target == GL_TEXTURE_2D) {
+	    glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter);
+	    glTexParameteri(target, GL_TEXTURE_MAG_FILTER, magFilter);
+	}
+
+	// produce a texture from the byte buffer
+	glTexImage2D(target,
+		0,
+		dstPixelFormat,
+		get2Fold(bufferedImage.getWidth()),
+		get2Fold(bufferedImage.getHeight()),
+		0,
+		srcPixelFormat,
+		GL_UNSIGNED_BYTE,
+		textureBuffer );
+
+	return texture;
+    }
+
     private static int createTextureID() {
         glGenTextures(textureIDBuffer);
         return textureIDBuffer.get(0);

@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.security.InvalidParameterException;
 
 public class SpriteTexture extends Texture {
-    private static final DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
+    public static final DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
 
     private SpriteAnimationInfo[] animations;
     private int row;
