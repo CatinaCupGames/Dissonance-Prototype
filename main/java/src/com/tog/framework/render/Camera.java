@@ -52,23 +52,11 @@ public final class Camera {
     }
 
     public static void easeMovementY(float newPos, float duration) {
-        nextPos = new Vector2f(getX(), newPos);
-        oldPos = new Vector2f(getX(), getY());
-        startTime = System.currentTimeMillis();
-        if (isEasing)
-            startTime -= 10;
-        Camera.duration = duration;
-        isEasing = true;
+        easeMovement(new Vector2f(getX(), newPos), duration);
     }
 
     public static void easeMovementX(float newPos, float duration) {
-        nextPos = new Vector2f(newPos, getY());
-        oldPos = new Vector2f(getX(), getY());
-        startTime = System.currentTimeMillis();
-        if (isEasing)
-            startTime -= 10;
-        Camera.duration = duration;
-        isEasing = true;
+        easeMovement(new Vector2f(newPos, getY()), duration);
     }
 
     static void executeEase() {
