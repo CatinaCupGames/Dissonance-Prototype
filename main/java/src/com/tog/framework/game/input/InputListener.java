@@ -24,6 +24,7 @@ public interface InputListener {
     /**
      * The {@link InputService} calls this method whenever a key that
      * this listener is listening for is pressed.
+     * <strong>Not recommended for consistent input such as player movement.</strong>
      *
      * @param key The LWJLG key code of the key that was pressed.
      */

@@ -76,4 +76,11 @@ public final class SoundSystem {
         AL10.alDeleteBuffers(sound.getBuffer());
         loadedSounds.remove(sound);
     }
+
+    public void unloadAllSounds() {
+        for (Sound sound : loadedSounds) {
+            AL10.alDeleteBuffers(sound.getBuffer());
+        }
+        loadedSounds.clear();
+    }
 }

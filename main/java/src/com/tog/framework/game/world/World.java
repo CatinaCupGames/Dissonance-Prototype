@@ -159,4 +159,9 @@ public class World extends Sprite {
     public Vector2f getVector() {
         return new Vector2f(0, 0);
     }
+
+    @Override
+    public void update() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

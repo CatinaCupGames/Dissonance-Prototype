@@ -143,7 +143,8 @@ public final class Sound {
 
         if (startTime != -1 && endTime != -1) {
             task.cancel();
-            timer.purge();
+            timer.cancel();
+            timer.notify();
             currentLoop = 0;
         }
 

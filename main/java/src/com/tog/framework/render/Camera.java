@@ -4,7 +4,7 @@ import com.tog.framework.game.sprites.Sprite;
 import com.tog.framework.system.Game;
 import org.lwjgl.util.vector.Vector2f;
 
-public class Camera {
+public final class Camera {
     private static float posX;
     private static float posY;
 
@@ -37,11 +37,33 @@ public class Camera {
     private static Vector2f oldPos;
     private static long startTime;
     private static float duration;
+
     public static void lerp(float newx, float newy, float duration) {
         easeMovement(new Vector2f(newx, newy), duration);
     }
+
     public static void easeMovement(Vector2f newPos, float duration) {
         nextPos = newPos;
+        oldPos = new Vector2f(getX(), getY());
+        startTime = System.currentTimeMillis();
+        if (isEasing)
+            startTime -= 10;
+        Camera.duration = duration;
+        isEasing = true;
+    }
+
+    public static void easeMovementY(float newPos, float duration) {
+        nextPos = new Vector2f(getX(), newPos);
+        oldPos = new Vector2f(getX(), getY());
+        startTime = System.currentTimeMillis();
+        if (isEasing)
+            startTime -= 10;
+        Camera.duration = duration;
+        isEasing = true;
+    }
+
+    public static void easeMovementX(float newPos, float duration) {
+        nextPos = new Vector2f(newPos, getY());
         oldPos = new Vector2f(getX(), getY());
         startTime = System.currentTimeMillis();
         if (isEasing)
