@@ -65,6 +65,7 @@ public abstract class AnimatedSprite extends Sprite implements Animator {
         float bx = texture.getWidth() / 2;
         float by = texture.getHeight() / 2;
         final float x = getX(), y = getY();
+
         //glColor4f(0f, 0f, 0f, 1f); //DEBUG LINE FOR TEXTURES
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -86,6 +87,13 @@ public abstract class AnimatedSprite extends Sprite implements Animator {
         glDisable(GL_BLEND);
         //glColor3f(1f, 1f, 1f);
     }
+
+    @Override
+    public void update() {
+    }
+
+    @Override
+    public void init() {}
 
     @Override
     public void onAnimate() {

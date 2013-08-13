@@ -17,7 +17,7 @@ import java.util.List;
  * Classes listening for input should pass in a {@link InputListener} to
  * this class in order to listen for specific mouse and keyboard input.
  */
-public final class InputService implements Service {
+public final class InputService extends Service {
     /**
      * A type for the {@link #provideData(Object, int)} method.<br />
      * The object passed in should be an {@link InputListener}. The
@@ -40,8 +40,67 @@ public final class InputService implements Service {
     private List<InputListener> listeners = new ArrayList<>();
     private boolean paused = false;
 
+    private Thread keyboardThread;
+    private Thread mouseThread;
+    private Runnable keyboardRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            while (!paused) {
+                if (!renderService.isTerminated() && listeners != null) {
+                    for (InputListener listener : listeners) {
+                        for (Integer i : listener.getKeys()) {
+                            boolean keyDown = Keyboard.isKeyDown(i);
+                            PRESSED[i - 1] = keyDown;
+                        }
+                    }
+                }
+                else {
+                    return;
+                }
+
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException ignored) {
+                }
+            }
+        }
+    };
+
+    private Runnable mouseRunnable = new Runnable() {
+        @Override
+        public void run() {
+            while (!paused) {
+                if (!renderService.isTerminated()  && listeners != null) {
+                    Mouse.next();
+
+                    if (!Mouse.getEventButtonState()) {
+                        continue;
+                    }
+
+                    int button = Mouse.getEventButton();
+
+                    for (InputListener listener : listeners) {
+                        if (listener.getButtons().contains(button)) {
+                            listener.inputClicked(button, Mouse.getX(), Mouse.getY());
+                        }
+                    }
+                }
+                else {
+                    return;
+                }
+
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+
     @Override
-    public Thread start() {
+    protected void onStart() {
         try {
             if (!Keyboard.isCreated()) {
                 Keyboard.create();
@@ -59,112 +118,58 @@ public final class InputService implements Service {
             e.printStackTrace();
         }
 
+        renderService = (RenderService)ServiceManager.getService(RenderService.class);
         keyboardThread = new Thread(keyboardRunnable);
         mouseThread = new Thread(mouseRunnable);
-        renderService = (RenderService)ServiceManager.getService(RenderService.class);
 
-        serviceThread = new Thread(this);
-        serviceThread.start();
 
-        return serviceThread;
+        mouseThread.start();
+        keyboardThread.start();
     }
 
-    private Thread keyboardThread;
-    private Thread mouseThread;
-    private Runnable keyboardRunnable = new Runnable() {
-        @Override
-        public void run() {
-
-            while (!paused) {
-                if (renderService.isRunning()) {
-                    for (InputListener listener : listeners) {
-                        for (Integer i : listener.getKeys()) {
-                            boolean keyDown = Keyboard.isKeyDown(i);
-                            PRESSED[i - 1] = keyDown;
-                        }
-                    }
-                }
-
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException ignored) {
-                }
-            }
-        }
-    };
-
-    private Runnable mouseRunnable = new Runnable() {
-        @Override
-        public void run() {
-            while (!paused) {
-                if (renderService.isRunning()) {
-                    Mouse.next();
-
-                    if (!Mouse.getEventButtonState()) {
-                        continue;
-                    }
-
-                    int button = Mouse.getEventButton();
-
-                    for (InputListener listener : listeners) {
-                        if (listener.getButtons().contains(button)) {
-                            listener.inputClicked(button, Mouse.getX(), Mouse.getY());
-                        }
-                    }
-                }
-
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
-
     @Override
-    public void pause() {
-        if (paused) {
-            throw new IllegalStateException("This service is already paused!");
-        }
-
-        paused = true;
-
+    protected void onPause() {
         mouseThread.interrupt();
         keyboardThread.interrupt();
     }
 
     @Override
-    public void resume() {
-        if (!paused) {
-            throw new IllegalStateException("This service isn't paused!");
-        }
-
-        paused = false;
-
+    protected void onResume() {
         mouseThread.start();
         keyboardThread.start();
         serviceThread.start();
     }
 
     @Override
-    public void terminate() {
-        paused = true;
-        serviceThread.interrupt();
-        mouseThread.interrupt();
-        keyboardThread.interrupt();
-        try {
-            serviceThread.join();
-            mouseThread.join();
-            keyboardThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+    protected void onTerminated() {
+        if(serviceThread != null) serviceThread.interrupt();
+        if(mouseThread != null) mouseThread.interrupt();
+        if(keyboardThread != null) keyboardThread.interrupt();
         serviceThread = null;
         mouseThread = null;
         keyboardThread = null;
         listeners = null;
+    }
+
+    @Override
+    protected void onUpdate() {
+        for (Runnable runnable : runnables) {
+            runnable.run();
+        }
+
+        if (listeners.size() > 0) {
+            for (InputListener listener : listeners) {
+                for (Integer i : listener.getKeys()) {
+                    if (PRESSED[i - 1])
+                        listener.inputPressed(i);
+                }
+            }
+        }
+
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException ignored) {
+        }
     }
 
     @Override
@@ -209,38 +214,5 @@ public final class InputService implements Service {
         return paused;
     }
 
-    private boolean looping;
-    @Override
-    public boolean isRunning() {
-        return looping;
-    }
 
-    @Override
-    public void run() {
-        mouseThread.start();
-        keyboardThread.start();
-
-
-        while (!paused) {
-            looping = true;
-            for (Runnable runnable : runnables) {
-                runnable.run();
-            }
-
-            if (listeners.size() > 0) {
-                for (InputListener listener : listeners) {
-                    for (Integer i : listener.getKeys()) {
-                        if (PRESSED[i - 1])
-                            listener.inputPressed(i);
-                    }
-                }
-            }
-
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException ignored) {
-            }
-        }
-        looping = false;
-    }
 }

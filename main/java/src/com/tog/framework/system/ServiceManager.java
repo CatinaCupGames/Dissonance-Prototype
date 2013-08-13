@@ -11,8 +11,9 @@ public class ServiceManager {
             return s;
         try {
             s = (Service) class_.newInstance();
-            s.start();
+
             services.add(s);
+            s.start();
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
