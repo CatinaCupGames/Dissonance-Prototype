@@ -172,11 +172,10 @@ public class RenderService extends Service {
         };
 
         Service inputService = ServiceManager.createService(InputService.class);
-        inputListener.getKeys().addAll(Arrays.asList(Keyboard.KEY_E, Keyboard.KEY_D, Keyboard.KEY_A,
-                Keyboard.KEY_S, Keyboard.KEY_Q, Keyboard.KEY_W, Keyboard.KEY_Z, Keyboard.KEY_X, Keyboard.KEY_T,
+        inputListener.getKeys().addAll(Arrays.asList(
+                Keyboard.KEY_E, Keyboard.KEY_Q, Keyboard.KEY_Z, Keyboard.KEY_X, Keyboard.KEY_T,
                 Keyboard.KEY_M, Keyboard.KEY_G, Keyboard.KEY_L, Keyboard.KEY_ADD, Keyboard.KEY_SUBTRACT,
                 Keyboard.KEY_MULTIPLY, Keyboard.KEY_DIVIDE, Keyboard.KEY_LCONTROL, Keyboard.KEY_R));
-        inputListener.getKeys().add(Keyboard.KEY_E);
 
         inputListener.getButtons().add(0);
         inputListener.getButtons().add(1);
@@ -268,14 +267,16 @@ public class RenderService extends Service {
     }
 
     private void updateInput() {
+        int multi = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? 2 : 1;
+
         if (Keyboard.isKeyDown(Keyboard.KEY_W))
-            Camera.setY(Camera.getY() + 5f);
-         if (Keyboard.isKeyDown(Keyboard.KEY_S))
-            Camera.setY(Camera.getY() - 5f);
-         if (Keyboard.isKeyDown(Keyboard.KEY_A))
-            Camera.setX(Camera.getX() + 5f);
-         if (Keyboard.isKeyDown(Keyboard.KEY_D))
-            Camera.setX(Camera.getX() - 5f);
+            Camera.setY(Camera.getY() + (1.5f * multi));
+        if (Keyboard.isKeyDown(Keyboard.KEY_S))
+            Camera.setY(Camera.getY() - (1.5f * multi));
+        if (Keyboard.isKeyDown(Keyboard.KEY_A))
+            Camera.setX(Camera.getX() + (1.5f * multi));
+        if (Keyboard.isKeyDown(Keyboard.KEY_D))
+            Camera.setX(Camera.getX() - (1.5f * multi));
     }
 
 
