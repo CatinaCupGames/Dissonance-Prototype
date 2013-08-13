@@ -6,6 +6,8 @@ public abstract class Service {
 
     private boolean paused;
 
+    private long serviceThreadID;
+
     private Runnable runnable;
 
     private boolean terminated;
@@ -16,6 +18,7 @@ public abstract class Service {
         runnable = new Runnable() {
             @Override
             public void run() {
+                serviceThreadID = Thread.currentThread().getId();
                 listToRun = new LinkedList<>();
                 onStart();
                 while (!terminated) {
@@ -101,8 +104,12 @@ public abstract class Service {
     public abstract void provideData(Object obj, int type);
 
     public void runOnServiceThread(Runnable runnable) {
-        synchronized (listToRun) {
-            listToRun.offer(runnable);
+        if (Thread.currentThread().getId() == serviceThreadID) //Run the runnable if were already on the service thread
+            runnable.run();
+        else { //Otherwise queue it
+            synchronized (listToRun) {
+                listToRun.offer(runnable);
+            }
         }
     }
 
