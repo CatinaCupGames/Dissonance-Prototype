@@ -65,7 +65,7 @@ public class RenderService extends Service {
             glViewport(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0.0f, 1.0f);
+            glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0.1f, -10f);
             //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
@@ -223,7 +223,8 @@ public class RenderService extends Service {
             glRotatef(-rotx, 1, 0, 0);
             glRotatef(-roty, 0, 1, 0);
             glRotatef(0, 0, 0, 1);
-            glTranslatef(-Camera.getX(), -Camera.getY(), 0);
+            glScalef(2.5f, 2.5f, 1f);
+            glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
 
             final Iterator<Drawable> sprites = current_world.getDrawable();
             while (sprites.hasNext()) {
