@@ -26,6 +26,7 @@ public final class Sound {
     private float volume;
 
     private SoundState state;
+    private OnSoundFinishedListener mSoundFinishedListener;
 
     private boolean alLoop = false;
     private long startTime = -1;
@@ -67,9 +68,7 @@ public final class Sound {
             }
 
             in.close();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
+        } catch (ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }
 
@@ -110,6 +109,7 @@ public final class Sound {
                 @Override
                 public void run() {
                     currentLoop++;
+                    onFinished();
                     if (currentLoop <= loopCount) {
                         AL10.alSourcef(source, AL11.AL_SEC_OFFSET, startTime);
                     } else {
@@ -122,6 +122,20 @@ public final class Sound {
         }
 
         state = SoundState.PLAYING;
+    }
+
+    private void onFinished() {
+        if (mSoundFinishedListener != null) {
+            mSoundFinishedListener.onFinished(this, currentLoop <= loopCount);
+        }
+    }
+
+    public void setSoundFinishedListener(OnSoundFinishedListener event) {
+        this.mSoundFinishedListener = event;
+    }
+
+    public OnSoundFinishedListener getSoundFinishedListener() {
+        return mSoundFinishedListener;
     }
 
     public void stop() {
@@ -185,5 +199,14 @@ public final class Sound {
 
     public SoundState getState() {
         return state;
+    }
+
+    public interface OnSoundFinishedListener {
+        /**
+         * This method is invoked when a Sound has finished
+         * @param sound The sound that finished
+         * @param willLoop Whether the sound will loop
+         */
+        public void onFinished(Sound sound, boolean willLoop);
     }
 }
