@@ -1,5 +1,7 @@
 package com.tog.framework.system;
 
+import com.tog.framework.system.utils.Validator;
+
 import java.util.*;
 
 public abstract class Service {
@@ -104,6 +106,7 @@ public abstract class Service {
     public abstract void provideData(Object obj, int type);
 
     public void runOnServiceThread(Runnable runnable) {
+        Validator.validateNotNull(runnable, "runnable");
         if (Thread.currentThread().getId() == serviceThreadID) //Run the runnable if were already on the service thread
             runnable.run();
         else { //Otherwise queue it

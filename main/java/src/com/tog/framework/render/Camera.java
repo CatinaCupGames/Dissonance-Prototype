@@ -1,6 +1,5 @@
 package com.tog.framework.render;
 
-import com.tog.framework.game.sprites.Sprite;
 import com.tog.framework.system.Game;
 import org.lwjgl.util.vector.Vector2f;
 

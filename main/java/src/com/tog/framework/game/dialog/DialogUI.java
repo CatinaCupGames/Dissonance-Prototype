@@ -16,4 +16,14 @@ public class DialogUI extends UIElement {
     public void draw(Graphics2D graphics2D) {
 
     }
+
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void update() {
+
+    }
 }

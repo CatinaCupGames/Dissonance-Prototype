@@ -1,11 +1,14 @@
 package com.tog.framework.system;
 
+import com.tog.framework.system.utils.Validator;
+
 import java.util.ArrayList;
 
 public class ServiceManager {
     private static final ArrayList<Service> services = new ArrayList<>();
 
     public static Service createService(Class<?> class_) {
+        Validator.validateNotNull(class_, "class_");
         Service s;
         if ((s = getService(class_.getName())) != null)
             return s;
