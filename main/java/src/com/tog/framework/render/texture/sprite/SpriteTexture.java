@@ -91,14 +91,19 @@ public class SpriteTexture extends Texture {
                             try {
                                 String temp = el.getAttribute("default_speed");
                                 String type = temp.substring(temp.length() - 2);
-                                if (type.equals("ms")) {
-                                    default_speed = Long.parseLong(temp.substring(0, temp.length() - 2));
-                                } else if (type.equals("sc")) {
-                                    default_speed = Long.parseLong(temp.substring(0, temp.length() - 2)) * 1000;
-                                } else if (type.equals("mn")) {
-                                    default_speed = (Long.parseLong(temp.substring(0, temp.length() - 2)) * 1000) * 60000;
-                                } else {
-                                    default_speed = Long.parseLong(temp.substring(0, temp.length() - 2));
+                                switch (type) {
+                                    case "ms":
+                                        default_speed = Long.parseLong(temp.substring(0, temp.length() - 2));
+                                        break;
+                                    case "sc":
+                                        default_speed = Long.parseLong(temp.substring(0, temp.length() - 2)) * 1000;
+                                        break;
+                                    case "mn":
+                                        default_speed = (Long.parseLong(temp.substring(0, temp.length() - 2)) * 1000) * 60000;
+                                        break;
+                                    default:
+                                        default_speed = Long.parseLong(temp.substring(0, temp.length() - 2));
+                                        break;
                                 }
                             } catch (Throwable t) {
                                 t.printStackTrace();

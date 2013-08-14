@@ -205,6 +205,7 @@ public class TextureLoader {
         g.setColor(new Color(0f,0f,0f,0f));
         g.fillRect(0,0,texWidth,texHeight);
         g.drawImage(bufferedImage,0,0,null);
+        g.dispose();
 
         // build a byte buffer from the temporary image
         // that be used by OpenGL to produce a texture.

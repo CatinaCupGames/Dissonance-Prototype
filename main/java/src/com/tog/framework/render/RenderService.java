@@ -65,7 +65,7 @@ public class RenderService extends Service {
             glViewport(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0.1f, -10f);
+            glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0f, 1f);
             //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
@@ -270,14 +270,14 @@ public class RenderService extends Service {
     private void updateInput() {
         int multi = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? 2 : 1;
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_W))
+        /*if (Keyboard.isKeyDown(Keyboard.KEY_W))
             Camera.setY(Camera.getY() + (1.5f * multi));
         if (Keyboard.isKeyDown(Keyboard.KEY_S))
             Camera.setY(Camera.getY() - (1.5f * multi));
         if (Keyboard.isKeyDown(Keyboard.KEY_A))
             Camera.setX(Camera.getX() + (1.5f * multi));
         if (Keyboard.isKeyDown(Keyboard.KEY_D))
-            Camera.setX(Camera.getX() - (1.5f * multi));
+            Camera.setX(Camera.getX() - (1.5f * multi));*/
     }
 
 
