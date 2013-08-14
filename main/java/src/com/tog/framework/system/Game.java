@@ -5,13 +5,13 @@ import com.tog.framework.game.world.World;
 import com.tog.framework.render.Camera;
 import com.tog.framework.system.exceptions.WorldLoadFailedException;
 import com.tog.framework.system.ticker.Ticker;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.io.File;
 import java.util.Locale;
 
 public class Game {
     public static int GAME_WIDTH = 1280, GAME_HEIGHT = 720;
-    public static TestSprite TEST = new TestSprite();
     private static final Ticker TICKER = new Ticker();
 
     static {
@@ -36,23 +36,18 @@ public class Game {
         World w = new World();
         w.init();
         try {
-            w.load("test");
+            w.load("test_world");
         } catch (WorldLoadFailedException e) {
             e.printStackTrace();
             System.exit(-1);
         }
-        w.loadAnimatedTextureForSprite(TEST);
-        w.addSprite(TEST);
-        TEST.setX(75);
-        TEST.setY(50);
-
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        Camera.easeMovement(Camera.translateToCamera(TEST.getVector()), 2500);
+        Camera.easeMovement(Camera.translateToCamera(new Vector2f(75, 50)), 2500);
 
     }
 

@@ -18,10 +18,10 @@ public final class SoundSystem {
             throw new IllegalArgumentException("The specified sound name is already registered!");
         }
         WaveData wavFile;
-        String resource = "sound" + File.separator + filePath;
+        String resource = "sounds" + File.separator + filePath;
         InputStream stream = getClass().getClassLoader().getResourceAsStream(resource);
         if (stream == null) {
-            resource = "sound/" + filePath;
+            resource = "sounds/" + filePath;
             stream = getClass().getClassLoader().getResourceAsStream(resource);
             if (stream == null)
                 throw new IOException("Can't find sound \"" + resource + "\"!");

@@ -14,14 +14,13 @@ public abstract class Service {
 
     private boolean terminated;
 
-    private Queue<Runnable> listToRun;
+    private final Queue<Runnable> listToRun = new LinkedList<>();
 
     public void start() {
         runnable = new Runnable() {
             @Override
             public void run() {
                 serviceThreadID = Thread.currentThread().getId();
-                listToRun = new LinkedList<>();
                 onStart();
                 while (!terminated) {
 

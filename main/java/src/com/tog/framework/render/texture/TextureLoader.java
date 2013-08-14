@@ -177,15 +177,15 @@ public class TextureLoader {
         WritableRaster raster;
         BufferedImage texImage;
 
-        int texWidth = bufferedImage.getWidth();
-        int texHeight = bufferedImage.getHeight();
+        int texWidth = 2;
+        int texHeight = 2;
 
-        /*while (texWidth < bufferedImage.getWidth()) {
+        while (texWidth < bufferedImage.getWidth()) {
             texWidth *= 2;
         }
         while (texHeight < bufferedImage.getHeight()) {
             texHeight *= 2;
-        }*/
+        }
 
         texture.setTextureHeight(texHeight);
         texture.setTextureWidth(texWidth);

@@ -36,7 +36,7 @@ public class World extends Sprite {
 
         //TODO Load world data
 
-        loadTextureForSprite("world/tex/" + world + ".png", this);
+        loadTextureForSprite("worlds/" + world + "/" + world + ".png", this);
         addSprite(this);
 
         if (renderingService.isPaused())
