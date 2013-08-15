@@ -95,8 +95,27 @@ public abstract class AnimatedSprite extends Sprite implements Animator {
     @Override
     public void init() {}
 
+    private boolean paused;
+    public void pauseAnimation() {
+        paused = true;
+    }
+
+    public void playAnimation() {
+        paused = false;
+    }
+
+    public boolean isAnimationPaused() {
+        return paused;
+    }
+
+    public void setFrame(int frame_num) {
+        ((SpriteTexture)getTexture()).setCurrentFrame(frame_num);
+    }
+
     @Override
     public void onAnimate() {
+        if (paused)
+            return;
         if (getTexture() != null)
             ((SpriteTexture)getTexture()).step();
     }

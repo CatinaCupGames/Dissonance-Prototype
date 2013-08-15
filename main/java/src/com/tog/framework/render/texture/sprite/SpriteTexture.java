@@ -223,4 +223,9 @@ public class SpriteTexture extends Texture {
             throw new InvalidParameterException("The parameter \"type\"'s value can only be 0, 1, 2, or 3");
         }
     }
+
+    public void setCurrentFrame(int frame_num) {
+        Validator.validateInRange(frame_num, 0, animations[row].size() - 1, "frame_num");
+        step = frame_num;
+    }
 }
