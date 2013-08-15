@@ -39,7 +39,8 @@ public final class JoystickHandler
 		for(final Controller controller2 : controllers1)
 		{
 			if(!(controller2.getName().contains("mous")) && !(controller2.getName().contains("keyboar"))
-					&& !(controller2.getName().contains("Mous")) && !(controller2.getName().contains("Keyboar")))
+					&& !(controller2.getName().contains("Mous")) && !(controller2.getName().contains("Keyboar"))
+					&& !(controller2.getName().contains("HID")))
 			{
 				controllers.put(controller2.getName(), controller2);
 			}
