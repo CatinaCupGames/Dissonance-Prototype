@@ -1,27 +1,15 @@
 package com.tog.framework.game.sprites.impl;
 
-import com.tog.framework.game.input.InputListener;
-import com.tog.framework.game.input.InputService;
 import com.tog.framework.game.sprites.AnimatedSprite;
 import com.tog.framework.render.Camera;
-import com.tog.framework.system.ServiceManager;
+import com.tog.framework.render.RenderService;
 import org.lwjgl.input.Keyboard;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-public class Player extends AnimatedSprite implements InputListener {
-    private List<Integer> keys = new ArrayList<Integer>();
-    private List<Integer> mouse = new ArrayList<Integer>();
+public class Player extends AnimatedSprite {
 
     @Override
     public void onLoad() {
         super.onLoad();
-        ServiceManager.getService(InputService.class).provideData(this, InputService.ADD_LISTENER);
-        keys.addAll(Arrays.asList(
-                Keyboard.KEY_W, Keyboard.KEY_A, Keyboard.KEY_S, Keyboard.KEY_D
-        ));
     }
 
     @Override
@@ -42,33 +30,33 @@ public class Player extends AnimatedSprite implements InputListener {
     }
 
     @Override
-    public List<Integer> getKeys() {
-        return keys;
-    }
+    public void update() {
+        updateInput();
 
-    @Override
-    public List<Integer> getButtons() {
-        return mouse;
-    }
-
-    @Override
-    public void inputPressed(int key) {
-        switch (key) {
-            case Keyboard.KEY_W:
-                setY(getY() + 5);
-                break;
-            case Keyboard.KEY_S:
-                setY(getY() - 5);
-                break;
-            case Keyboard.KEY_A:
-                setX(getX() - 5);
-                break;
-            case Keyboard.KEY_D:
-                setX(getX() + 5);
-                break;
+        if (isAnimationPaused() && (w || a || s || d))
+            playAnimation();
+        else if (!w && !a && !s && !d) {
+            setFrame(0);
+            pauseAnimation();
         }
     }
 
-    @Override
-    public void inputClicked(int button, int x, int y) { }
+    boolean w, a, s, d;
+    public void updateInput() {
+        w = Keyboard.isKeyDown(Keyboard.KEY_W);
+        d = Keyboard.isKeyDown(Keyboard.KEY_D);
+        s = Keyboard.isKeyDown(Keyboard.KEY_S);
+        a = Keyboard.isKeyDown(Keyboard.KEY_A);
+
+        if (w)
+            setY(getY() - (10 * RenderService.TIME_DELTA));
+        if (s)
+            setY(getY() + (10 * RenderService.TIME_DELTA));
+        if (a)
+            setX(getX() - (10 * RenderService.TIME_DELTA));
+        if (d)
+            setX(getX() + (10 * RenderService.TIME_DELTA));
+    }
+
+
 }
