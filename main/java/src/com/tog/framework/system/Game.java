@@ -1,5 +1,6 @@
 package com.tog.framework.system;
 
+import com.tog.framework.game.input.InputService;
 import com.tog.framework.game.sprites.AnimatedSprite;
 import com.tog.framework.game.sprites.impl.Player;
 import com.tog.framework.game.world.World;

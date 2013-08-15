@@ -52,6 +52,7 @@ public final class InputService extends Service {
                         for (Integer i : listener.getKeys()) {
                             boolean keyDown = Keyboard.isKeyDown(i);
                             PRESSED[i - 1] = keyDown;
+							//System.out.println(PRESSED);
                         }
                     }
                 }
