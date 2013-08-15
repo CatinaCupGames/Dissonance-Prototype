@@ -183,12 +183,12 @@ public class RenderService extends Service {
 
         inputService.provideData(inputListener, InputService.ADD_LISTENER);
 
-		// Initiate the controllers array.
-		JoystickHandler.getEnabledControllers();
-		// Create a thread for a controller.
-		JoystickHandler.JoystickThread firstJoystickThread = JoystickHandler.createControllerThread(0);
-		// Now start the thread.
-		new Thread(firstJoystickThread).start();
+        // Initiate the controllers array.
+        JoystickHandler.getEnabledControllers();
+        // Create a thread for a controller.
+        JoystickHandler.JoystickThread firstJoystickThread = JoystickHandler.createControllerThread(0);
+        // Now start the thread.
+        new Thread(firstJoystickThread).start();
     }
 
     @Override
