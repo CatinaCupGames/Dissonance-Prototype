@@ -11,9 +11,9 @@ abyss of inky blackness
 -Characters will level up independently from each other(each character will
 require different amounts of EXP to level up, and each level up will grant
 different amounts of stat gains)
--There are nine variable stats in the game, five of which(attack, defense,
-speed, vigor, and stamina) are accessible to every character. Each character
-will possess seven variable stats.
+-There are nine level-variable stats in the game, five of which(attack, 
+defense,speed, vigor, and stamina) are accessible to every character. Each 
+character will possess seven level-variable stats.
 
 The stats are as follows:
   -Attack: determines the damage a physical attack by the player will deal,
@@ -35,6 +35,13 @@ effectiveness of buff/debuff spells
 using guns
   -Magic resistance: For non-magic users, determines damage dealt by
 incoming magic attacks
+
+There are two non-level-variable stats in the game, one of which is
+available to all characters. They are:
+  -HP: a value that falls when the player takes damage, killing the player
+when it reaches zero. Fixed at 100 for all characters
+  -MP: used to cast spells for magic users. Upgradeable through the use of
+items
 
 
 Movement+Camera:
