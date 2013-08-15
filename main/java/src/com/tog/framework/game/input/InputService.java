@@ -4,13 +4,17 @@ import com.tog.framework.render.RenderService;
 import com.tog.framework.system.Service;
 import com.tog.framework.system.ServiceManager;
 import com.tog.framework.system.utils.Validator;
+import net.java.games.input.Controller;
+import net.java.games.input.ControllerEnvironment;
+import net.java.games.input.Rumbler;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import javax.swing.plaf.TableHeaderUI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The InputService class manages the game's input.<br />
@@ -35,6 +39,9 @@ public final class InputService extends Service {
     private boolean[] PRESSED = new boolean[255];
     private RenderService renderService;
     private final List<Runnable> runnables = new ArrayList<>();
+
+    private static Map<String, Controller> controllers = new HashMap<String, Controller>();
+    private static Map<Controller, Rumbler[]> rumblers = new HashMap<Controller, Rumbler[]>();
 
     private Thread serviceThread;
     private List<InputListener> listeners = new ArrayList<>();
@@ -115,6 +122,8 @@ public final class InputService extends Service {
                 Keyboard.enableRepeatEvents(true);
             }
 
+            loadControllers();
+
         } catch (LWJGLException e) {
             e.printStackTrace();
         }
@@ -126,6 +135,24 @@ public final class InputService extends Service {
 
         mouseThread.start();
         keyboardThread.start();
+    }
+
+    private void loadControllers() {
+        Controller[] controllers1 = ControllerEnvironment.getDefaultEnvironment().getControllers();
+
+        for(final Controller controller2 : controllers1) {
+            if(!(controller2.getName().toLowerCase().contains("mous")) && !(controller2.getName().toLowerCase().contains("keyboar"))
+                    && !(controller2.getName().toLowerCase().contains("hid"))) {
+                controllers.put(controller2.getName(), controller2);
+                rumblers.put(controller2, controller2.getRumblers());
+
+                //TEMP CODE
+                System.out.println(controller2.getName() + " : " + controller2.getPortNumber() + " : " + controller2.getPortType() + " : " + controller2.getType());
+                for(final Rumbler rumbler : controller2.getRumblers()) {
+                    System.out.println("  - " + rumbler.getAxisName() + " : " + rumbler.getAxisIdentifier());
+                }
+            }
+        }
     }
 
     @Override

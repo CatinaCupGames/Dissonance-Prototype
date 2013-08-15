@@ -1,6 +1,5 @@
 package com.tog.framework.system;
 
-import com.tog.framework.game.input.InputService;
 import com.tog.framework.game.sprites.AnimatedSprite;
 import com.tog.framework.game.sprites.impl.Player;
 import com.tog.framework.game.world.World;
@@ -29,6 +28,7 @@ public class Game {
         else if (OS.contains("sunos"))
             lwjgl_folder += "solaris";
         System.setProperty("org.lwjgl.librarypath", new File(lwjgl_folder).getAbsolutePath());
+        System.setProperty("net.java.games.input.librarypath", System.getProperty("org.lwjgl.librarypath"));
     }
 
     public static void main(String[] args) {

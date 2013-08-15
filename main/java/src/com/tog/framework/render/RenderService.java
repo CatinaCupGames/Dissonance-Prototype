@@ -2,7 +2,6 @@ package com.tog.framework.render;
 
 import com.tog.framework.game.input.InputListener;
 import com.tog.framework.game.input.InputService;
-import com.tog.framework.game.input.JoystickHandler;
 import com.tog.framework.game.sprites.animation.AnimationFactory;
 import com.tog.framework.game.world.World;
 import com.tog.framework.sound.Sound;
@@ -182,13 +181,6 @@ public class RenderService extends Service {
         inputListener.getButtons().add(1);
 
         inputService.provideData(inputListener, InputService.ADD_LISTENER);
-
-        // Initiate the controllers array.
-        JoystickHandler.getEnabledControllers();
-        // Create a thread for a controller.
-        JoystickHandler.JoystickThread firstJoystickThread = JoystickHandler.createControllerThread(0);
-        // Now start the thread.
-        new Thread(firstJoystickThread).start();
     }
 
     @Override
