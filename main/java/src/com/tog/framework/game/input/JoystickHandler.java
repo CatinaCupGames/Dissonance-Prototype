@@ -24,7 +24,7 @@ public final class JoystickHandler
 	{
 	}
 
-	private static Map<String, JoystickThread> threads = new HashMap<String, JoystickThread>();
+	private static Map<Controller, JoystickThread> threads = new HashMap<Controller, JoystickThread>();
 
 	private static Map<String, Controller> controllers = new HashMap<String, Controller>();
 	private static Map<Controller, Rumbler[]> rumblers = new HashMap<Controller, Rumbler[]>();
@@ -64,6 +64,8 @@ public final class JoystickHandler
 	{
 		Controller controller = (Controller)controllers.values().toArray()[id];
 		JoystickThread thread = new JoystickThread(controller);
+
+		threads.put(controller, thread);
 
 		return thread;
 	}
