@@ -23,10 +23,14 @@ public final class Camera {
         posY = y;
     }
 
-    public static Vector2f translateToCamera(Vector2f vec) {
-        vec.setX(vec.getX() - (Game.GAME_WIDTH / 2.0f));
-        vec.setY(vec.getY() - (Game.GAME_HEIGHT / 2.0f));
+    public static Vector2f translateToCameraCenter(Vector2f vec, float width, float height) {
+        vec.setX(vec.getX() - (Game.GAME_WIDTH / 4.5f) + width);
+        vec.setY(vec.getY() - (Game.GAME_HEIGHT / 4.5f) + height);
         return vec;
+    }
+
+    public static Vector2f translateToCameraCenter(Vector2f vec) {
+        return translateToCameraCenter(vec, 0f, 0f);
     }
 
 

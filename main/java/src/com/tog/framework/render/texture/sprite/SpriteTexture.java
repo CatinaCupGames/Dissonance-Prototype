@@ -27,8 +27,8 @@ public class SpriteTexture extends Texture {
 
 
     public static SpriteTexture retriveSpriteTexture(String sprite_name) throws IOException {
-        SpriteTexture texture = new SpriteTexture(Texture.retriveTexture("sprite/" + sprite_name + "/" + sprite_name + "_sheet.png"));
-        InputStream in = texture.getClass().getClassLoader().getResourceAsStream("sprite/" + sprite_name + "/" + sprite_name + ".xml");
+        SpriteTexture texture = new SpriteTexture(Texture.retriveTexture("sprites/" + sprite_name + "/" + sprite_name + "_sheet.png"));
+        InputStream in = texture.getClass().getClassLoader().getResourceAsStream("sprites/" + sprite_name + "/" + sprite_name + ".xml");
         if (in != null) {
             try {
                 DocumentBuilder db = DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
@@ -91,14 +91,19 @@ public class SpriteTexture extends Texture {
                             try {
                                 String temp = el.getAttribute("default_speed");
                                 String type = temp.substring(temp.length() - 2);
-                                if (type.equals("ms")) {
-                                    default_speed = Long.parseLong(temp.substring(0, temp.length() - 2));
-                                } else if (type.equals("sc")) {
-                                    default_speed = Long.parseLong(temp.substring(0, temp.length() - 2)) * 1000;
-                                } else if (type.equals("mn")) {
-                                    default_speed = (Long.parseLong(temp.substring(0, temp.length() - 2)) * 1000) * 60000;
-                                } else {
-                                    default_speed = Long.parseLong(temp.substring(0, temp.length() - 2));
+                                switch (type) {
+                                    case "ms":
+                                        default_speed = Long.parseLong(temp.substring(0, temp.length() - 2));
+                                        break;
+                                    case "sc":
+                                        default_speed = Long.parseLong(temp.substring(0, temp.length() - 2)) * 1000;
+                                        break;
+                                    case "mn":
+                                        default_speed = (Long.parseLong(temp.substring(0, temp.length() - 2)) * 1000) * 60000;
+                                        break;
+                                    default:
+                                        default_speed = Long.parseLong(temp.substring(0, temp.length() - 2));
+                                        break;
                                 }
                             } catch (Throwable t) {
                                 t.printStackTrace();
@@ -217,5 +222,10 @@ public class SpriteTexture extends Texture {
         } else {
             throw new InvalidParameterException("The parameter \"type\"'s value can only be 0, 1, 2, or 3");
         }
+    }
+
+    public void setCurrentFrame(int frame_num) {
+        Validator.validateInRange(frame_num, 0, animations[row].size() - 1, "frame_num");
+        step = frame_num;
     }
 }

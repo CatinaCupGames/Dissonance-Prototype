@@ -2,6 +2,7 @@ package com.tog.framework.render;
 
 import com.tog.framework.game.input.InputListener;
 import com.tog.framework.game.input.InputService;
+import com.tog.framework.game.input.JoystickHandler;
 import com.tog.framework.game.sprites.animation.AnimationFactory;
 import com.tog.framework.game.world.World;
 import com.tog.framework.sound.Sound;
@@ -30,7 +31,7 @@ public class RenderService extends Service {
 
     public static final int WORLD_DATA_TYPE = 0;
     public static RenderService INSTANCE;
-    public static long TIME_DELTA;
+    public static float TIME_DELTA;
     public static long RENDER_THREAD_ID;
     private final ArrayList<Runnable> toRun = new ArrayList<>();
     private World current_world;
@@ -65,7 +66,7 @@ public class RenderService extends Service {
             glViewport(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0.1f, -10f);
+            glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0f, 1f);
             //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
@@ -181,6 +182,13 @@ public class RenderService extends Service {
         inputListener.getButtons().add(1);
 
         inputService.provideData(inputListener, InputService.ADD_LISTENER);
+
+		// Initiate the controllers array.
+		JoystickHandler.getEnabledControllers();
+		// Create a thread for a controller.
+		JoystickHandler.JoystickThread firstJoystickThread = JoystickHandler.createControllerThread(0);
+		// Now start the thread.
+		new Thread(firstJoystickThread).start();
     }
 
     @Override
@@ -213,7 +221,7 @@ public class RenderService extends Service {
     @Override
     public void onUpdate() {
         now = System.currentTimeMillis();
-        TIME_DELTA = (long) ((now - cur) / 100.0f);
+        TIME_DELTA = ((now - cur) / 100.0f);
         if (current_world != null && !isPaused()) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glClearColor(1f, 1f, 1f, 1f);
@@ -226,7 +234,19 @@ public class RenderService extends Service {
             glScalef(2.5f, 2.5f, 1f);
             glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
 
-            final Iterator<Drawable> sprites = current_world.getDrawable();
+            Iterator<Drawable> sprites = current_world.getDrawable();
+            while (sprites.hasNext()) {
+                Drawable s = sprites.next();
+                if (s == null)
+                    continue;
+                try {
+                    s.update();
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            }
+
+            sprites = current_world.getDrawable();
             while (sprites.hasNext()) {
                 Drawable s = sprites.next();
                 if (s == null)
@@ -270,14 +290,14 @@ public class RenderService extends Service {
     private void updateInput() {
         int multi = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? 2 : 1;
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_W))
+        /*if (Keyboard.isKeyDown(Keyboard.KEY_W))
             Camera.setY(Camera.getY() + (1.5f * multi));
         if (Keyboard.isKeyDown(Keyboard.KEY_S))
             Camera.setY(Camera.getY() - (1.5f * multi));
         if (Keyboard.isKeyDown(Keyboard.KEY_A))
             Camera.setX(Camera.getX() + (1.5f * multi));
         if (Keyboard.isKeyDown(Keyboard.KEY_D))
-            Camera.setX(Camera.getX() - (1.5f * multi));
+            Camera.setX(Camera.getX() - (1.5f * multi));*/
     }
 
 
