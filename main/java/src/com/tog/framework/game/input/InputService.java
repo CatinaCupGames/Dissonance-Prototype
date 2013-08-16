@@ -4,6 +4,7 @@ import com.tog.framework.render.RenderService;
 import com.tog.framework.system.Service;
 import com.tog.framework.system.ServiceManager;
 import com.tog.framework.system.utils.Validator;
+import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import net.java.games.input.Rumbler;
@@ -137,18 +138,19 @@ public final class InputService extends Service {
         keyboardThread.start();
 
         // Start getting data.
-        for(int i = 0; i < controllers.size(); i++)
-        {
-            controllers.values().toArray(new Controller[controllers.size()])[i].poll();
-        }
+        //for(int i = 0; i < controllers.size(); i++)
+        //{
+        //    controllers.values().toArray(new Controller[controllers.size()])[i].poll();
+        //}
     }
 
     private void loadControllers() {
         Controller[] controllers1 = ControllerEnvironment.getDefaultEnvironment().getControllers();
 
         for(final Controller controller2 : controllers1) {
-            if(!(controller2.getName().toLowerCase().contains("mous")) && !(controller2.getName().toLowerCase().contains("keyboar"))
-                    && !(controller2.getName().toLowerCase().contains("hid"))) {
+            if(controller2.getType() == Controller.Type.GAMEPAD
+                    // This is just for testing due to the fact that I only have a wheel.
+                    || controller2.getType() == Controller.Type.WHEEL) {
                 controllers.put(controller2.getName(), controller2);
                 rumblers.put(controller2, controller2.getRumblers());
 
@@ -159,6 +161,103 @@ public final class InputService extends Service {
                 }
             }
         }
+    }
+
+    private static Object getValue(Component component)
+    {
+        float data = component.getPollData();
+
+        Object returnValue = null;
+
+        if(component.getIdentifier() instanceof Component.Identifier.Axis)
+        {
+            returnValue = component.getPollData();
+        } else if(component.getIdentifier() instanceof Component.Identifier.Button) {
+            returnValue = false;
+            if(component.getPollData() == 1.0f)
+            {
+                returnValue = true;
+            }
+        } else if(component.getIdentifier() instanceof Component.Identifier.Key) {
+            // Just in case. For example the Xbox controller keypad plug-in.
+            returnValue = false;
+            if(component.getPollData() == 1.0f)
+            {
+                returnValue = true;
+            }
+        }
+
+        return returnValue;
+    }
+
+    public static float getAxisValue(String controller, String component)
+    {
+        Controller controller1 = controllers.get(controller);
+        controller1.poll();
+        Component[] components = controller1.getComponents();
+
+        float returnValue = 0.0f;
+        for(final Component component1 : components)
+        {
+            if(component1.getName().equalsIgnoreCase(component))
+            {
+                returnValue = (float)getValue(component1);
+            }
+        }
+
+        return returnValue;
+    }
+
+    public static float getAxisValue(String controller, Component.Identifier componentId)
+    {
+        Controller controller1 = controllers.get(controller);
+        controller1.poll();
+        Component component = controller1.getComponent(componentId);
+
+        float returnValue = (float)getValue(component);
+
+        return returnValue;
+    }
+
+    public static boolean getButtonState(String controller, String component)
+    {
+        Controller controller1 = controllers.get(controller);
+        controller1.poll();
+        Component[] components = controller1.getComponents();
+
+        boolean returnValue = false;
+        for(final Component component1 : components)
+        {
+            if(component1.getName().equalsIgnoreCase(component))
+            {
+                returnValue = (boolean)getValue(component1);
+            }
+        }
+
+        return returnValue;
+    }
+
+    public static boolean getButtonState(String controller, Component.Identifier componentId)
+    {
+        Controller controller1 = controllers.get(controller);
+        controller1.poll();
+        Component component = controller1.getComponent(componentId);
+
+        boolean returnValue = (boolean)getValue(component);
+
+        return returnValue;
+    }
+
+    public static boolean getKeyState(String controller, String component)
+    {
+        return getButtonState(controller, component);
+    }
+
+    public static boolean getKeyState(String controller, Component.Identifier componentId)
+    {
+        Controller controller1 = controllers.get(controller);
+
+        return getButtonState(controller, componentId);
     }
 
     @Override
