@@ -135,6 +135,12 @@ public final class InputService extends Service {
 
         mouseThread.start();
         keyboardThread.start();
+
+		// Start getting data.
+		for(int i = 0; i < controllers.size(); i++)
+		{
+			controllers.values().toArray(new Controller[controllers.size()])[i].poll();
+		}
     }
 
     private void loadControllers() {
