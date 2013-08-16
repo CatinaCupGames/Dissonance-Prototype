@@ -4,7 +4,7 @@ public abstract class AbstractAnimator implements Animator {
     private int speed;
 
     @Override
-    public int getSpeed() {
+    public int getAnimationSpeed() {
         return speed;
     }
 

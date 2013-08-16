@@ -1,12 +1,10 @@
 package com.tog.framework.system;
 
 import com.tog.framework.game.sprites.AnimatedSprite;
-import com.tog.framework.game.sprites.impl.Player;
+import com.tog.framework.game.sprites.impl.TestPlayer;
 import com.tog.framework.game.world.World;
-import com.tog.framework.render.Camera;
 import com.tog.framework.system.exceptions.WorldLoadFailedException;
 import com.tog.framework.system.ticker.Ticker;
-import org.lwjgl.util.vector.Vector2f;
 
 import java.io.File;
 import java.util.Locale;
@@ -35,7 +33,7 @@ public class Game {
         System.out.println("Using libs folder " + System.getProperty("org.lwjgl.librarypath"));
         System.out.println("Starting Ticker");
         TICKER.startTick();
-        Player p = new Player();
+        TestPlayer p = new TestPlayer();
         World w = new World();
         w.init();
         try {
@@ -51,10 +49,17 @@ public class Game {
         }
         w.loadAnimatedTextureForSprite(p);
         w.addSprite(p);
-        p.setX(75);
-        p.setY(50);
+        p.setX(100);
+        p.setY(-100);
 
-        Camera.easeMovement(Camera.translateToCameraCenter(new Vector2f(75, 50)), 2500);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Select player sprite!");
+        p.select();
+        //Camera.easeMovement(Camera.translateToCameraCenter(new Vector2f(75, 50)), 2500);
 
     }
 

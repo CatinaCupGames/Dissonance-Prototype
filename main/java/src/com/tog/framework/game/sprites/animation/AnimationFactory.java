@@ -48,7 +48,7 @@ public class AnimationFactory {
         synchronized (animate) {
             for (AnimatorData ad : animate) {
                 ad.ticks++;
-                if (ad.ticks >= ad.animator.getSpeed()) {
+                if (ad.ticks >= ad.animator.getAnimationSpeed()) {
                     ad.animator.onAnimate();
                     ad.current_frame_number++;
                     if (ad.current_frame_number >= ad.animator.getFrameCount()) {

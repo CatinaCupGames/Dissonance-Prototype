@@ -135,7 +135,7 @@ public abstract class AnimatedSprite extends Sprite implements Animator {
     }
 
     @Override
-    public int getSpeed() {
+    public int getAnimationSpeed() {
         return speed;
     }
 

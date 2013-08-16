@@ -23,6 +23,11 @@ public final class Camera {
         posY = y;
     }
 
+    public static void setPos(Vector2f pos) {
+        posX = pos.getX();
+        posY = pos.getY();
+    }
+
     public static Vector2f translateToCameraCenter(Vector2f vec, float width, float height) {
         vec.setX(vec.getX() - (Game.GAME_WIDTH / 4.5f) + width);
         vec.setY(vec.getY() - (Game.GAME_HEIGHT / 4.5f) + height);
@@ -40,6 +45,11 @@ public final class Camera {
     private static Vector2f oldPos;
     private static long startTime;
     private static float duration;
+    private static CameraEaseListener listener;
+
+    public static void setCameraEaseListener(CameraEaseListener listener) {
+        Camera.listener = listener;
+    }
 
     public static void lerp(float newx, float newy, float duration) {
         easeMovement(new Vector2f(newx, newy), duration);
@@ -71,8 +81,12 @@ public final class Camera {
         float y = ease(oldPos.getY(), nextPos.getY(), duration, time);
         setX(x);
         setY(y);
+        if (listener != null)
+            listener.onEase(x, y, time);
         if (x == nextPos.getX() && y == nextPos.getY()) {
             isEasing = false;
+            if (listener != null)
+                listener.onEaseFinished();
         }
     }
 
@@ -94,5 +108,11 @@ public final class Camera {
             value = target;
         }
         return value;
+    }
+
+    public interface CameraEaseListener {
+        public void onEase(float x, float y, long time);
+
+        public void onEaseFinished();
     }
 }
