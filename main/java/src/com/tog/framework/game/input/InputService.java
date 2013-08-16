@@ -165,23 +165,24 @@ public final class InputService extends Service {
 
     private static Object getValue(Component component)
     {
+        Component.Identifier identifier = component.getIdentifier();
         float data = component.getPollData();
 
         Object returnValue = null;
 
-        if(component.getIdentifier() instanceof Component.Identifier.Axis)
+        if(identifier instanceof Component.Identifier.Axis)
         {
             returnValue = component.getPollData();
-        } else if(component.getIdentifier() instanceof Component.Identifier.Button) {
+        } else if(identifier instanceof Component.Identifier.Button) {
             returnValue = false;
-            if(component.getPollData() == 1.0f)
+            if(data == 1.0f)
             {
                 returnValue = true;
             }
-        } else if(component.getIdentifier() instanceof Component.Identifier.Key) {
+        } else if(identifier instanceof Component.Identifier.Key) {
             // Just in case. For example the Xbox controller keypad plug-in.
             returnValue = false;
-            if(component.getPollData() == 1.0f)
+            if(data == 1.0f)
             {
                 returnValue = true;
             }
@@ -258,6 +259,37 @@ public final class InputService extends Service {
         Controller controller1 = controllers.get(controller);
 
         return getButtonState(controller, componentId);
+    }
+
+    public static void debugController(String controller)
+    {
+        Controller controller1 = controllers.get(controller);
+        StringBuffer buffer = new StringBuffer();
+
+        Component component;
+        for(int i = 0; i < controller1.getComponents().length; i++)
+        {
+            component = controller1.getComponents()[i];
+
+            buffer.append(component.getName());
+            buffer.append(":");
+            buffer.append(component.getIdentifier());
+            buffer.append(":");
+            if(component.isAnalog())
+            {
+                buffer.append(component.getPollData());
+            } else {
+                if(component.getPollData() == 1.0f)
+                {
+                    buffer.append("true");
+                } else {
+                    buffer.append("false");
+                }
+            }
+            buffer.append("\n");
+        }
+
+        System.out.println(buffer.toString());
     }
 
     @Override

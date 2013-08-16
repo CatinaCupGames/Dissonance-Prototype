@@ -196,6 +196,9 @@ public class RenderService extends Service {
 
                 while(true)
                 {
+                    // Debug.
+                    //InputService.debugController("Logitech Driving Force USB");
+
                     // Example with name.
                     //System.out.println(InputService.getButtonState("Logitech Driving Force USB", "Cross"));
                     // Example with identifier.
