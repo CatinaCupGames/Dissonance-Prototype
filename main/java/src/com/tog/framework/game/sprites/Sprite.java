@@ -2,11 +2,8 @@ package com.tog.framework.game.sprites;
 
 import com.tog.framework.game.world.World;
 import com.tog.framework.render.Drawable;
-import com.tog.framework.render.texture.sprite.SpriteTexture;
 import com.tog.framework.render.texture.Texture;
 import org.lwjgl.util.vector.Vector2f;
-
-import java.security.InvalidParameterException;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -36,6 +33,8 @@ public abstract class Sprite implements Drawable {
     }
 
     public void setY(float y) {
+        if (y != this.y && getWorld() != null)
+            getWorld().invalidateList();
         this.y = y;
     }
 
@@ -73,5 +72,19 @@ public abstract class Sprite implements Drawable {
         glVertex3f(x - bx, y + by, 0f);
         glEnd();
         getTexture().unbind();
+    }
+
+    @Override
+    public int compareTo(Drawable o) {
+        if (o instanceof Sprite) {
+            Sprite s = (Sprite)o;
+            float by = (getTexture() != null ? getTexture().getTextureHeight() / 4 : 0);
+            float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / 4 : 0);
+
+            if (getY() - by < s.getY() - sy) return Drawable.BEFORE;
+            else if (getY() - by > s.getY() - sy) return Drawable.AFTER;
+            else return Drawable.EQUAL;
+        } else
+            return Drawable.AFTER;
     }
 }

@@ -7,7 +7,10 @@ import com.tog.framework.system.exceptions.WorldLoadFailedException;
 import com.tog.framework.system.ticker.Ticker;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class Game {
     public static int GAME_WIDTH = 1280, GAME_HEIGHT = 720;
@@ -33,7 +36,6 @@ public class Game {
         System.out.println("Using libs folder " + System.getProperty("org.lwjgl.librarypath"));
         System.out.println("Starting Ticker");
         TICKER.startTick();
-        TestPlayer p = new TestPlayer();
         World w = new World();
         w.init();
         try {
@@ -47,19 +49,42 @@ public class Game {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        w.loadAnimatedTextureForSprite(p);
-        w.addSprite(p);
-        p.setX(100);
-        p.setY(-100);
 
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("Select player sprite!");
-        p.select();
-        //Camera.easeMovement(Camera.translateToCameraCenter(new Vector2f(75, 50)), 2500);
+
+        /**
+         * This is a stress test for sprite sorting.
+         * In this test, x amount of TestPlayer objects are created and drawn on the screen.
+         * Every 20 seconds, the player you play as is changed.
+         *
+         * It seems the current sorting method is perfectly fine. Feel free to play
+         * around with the STRESS_COUNT value.
+         */
+        final int STRESS_COUNT = 10;
+        final Random random = new Random();
+        List<TestPlayer> testPlayers = new ArrayList<TestPlayer>();
+        for (int i = 0; i < STRESS_COUNT; i++) {
+            TestPlayer p = new TestPlayer();
+            w.loadAnimatedTextureForSprite(p);
+            w.addSprite(p);
+            p.setX(random.nextInt(300));
+            p.setY(random.nextInt(300));
+            testPlayers.add(p);
+        }
+
+        w.invalidateList();
+        for (TestPlayer testPlayer : testPlayers) {
+            testPlayer.select();
+            try {
+                Thread.sleep(20000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

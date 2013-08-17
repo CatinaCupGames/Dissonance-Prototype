@@ -89,6 +89,6 @@ public class TestPlayer extends PlayableSprite {
 
     @Override
     public CombatType getCombatType() {
-        return null;
+        return CombatType.ALLY;
     }
 }

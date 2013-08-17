@@ -65,7 +65,7 @@ public class RenderService extends Service {
             glViewport(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0f, 1f);
+            glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0f, -1000f);
             //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
