@@ -11,6 +11,7 @@ import com.tog.framework.system.Game;
 import com.tog.framework.system.Service;
 import com.tog.framework.system.ServiceManager;
 import com.tog.framework.system.utils.Validator;
+import net.java.games.input.Component;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL;
@@ -181,6 +182,35 @@ public class RenderService extends Service {
         inputListener.getButtons().add(1);
 
         inputService.provideData(inputListener, InputService.ADD_LISTENER);
+
+        // Just a simple test for you guys!!!
+        new Thread(new Runnable() {
+            @Override
+            public void run()
+            {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                while(true)
+                {
+                    // Debug.
+                    //InputService.debugController("Logitech Driving Force USB");
+
+                    // Example with name.
+                    //System.out.println(InputService.getButtonState("Logitech Driving Force USB", "Cross"));
+                    // Example with identifier.
+                    //System.out.println(InputService.getButtonState("Logitech Driving Force USB", Component.Identifier.Button._0));
+
+                    // Example with name.
+                    //System.out.println(InputService.getAxisValue("Logitech Driving Force USB", "Wheel axis"));
+                    // Example with identifier.
+                    System.out.println(InputService.getAxisValue("Logitech Driving Force USB", Component.Identifier.Axis.X));
+                }
+            }
+        }).start();
     }
 
     @Override
