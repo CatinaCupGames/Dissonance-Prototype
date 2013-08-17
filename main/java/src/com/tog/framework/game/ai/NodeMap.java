@@ -5,6 +5,9 @@ import com.tog.framework.system.utils.Validator;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * A NodeMap contains the nodes that are being searched and provides pathfinding methods.
+ */
 public final class NodeMap {
 
     private Node[][] nodes;
@@ -15,6 +18,12 @@ public final class NodeMap {
     private List<Node> openList;
     private List<Node> closedList;
 
+    /**
+     * Creates a new NodeMap with the specified width and height.
+     *
+     * @param width  The width of the map
+     * @param height The height of the map
+     */
     public NodeMap(int width, int height) {
         Validator.validateNotBelow(width, 1, "width");
         Validator.validateNotBelow(height, 1, "height");
@@ -24,25 +33,30 @@ public final class NodeMap {
         this.width = width - 1;
         this.height = height - 1;
 
-        initializeNodes();
-    }
-
-    private void initializeNodes() {
-        for (int x = 0; x <= width; x++) {
-            for (int y = 0; y <= height; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 nodes[x][y] = new Node(new Position(x, y));
             }
         }
     }
 
+    /**
+     * Sets the reachability of the node at the specified position.
+     */
     public void setReachable(int x, int y, boolean reachable) {
         getNode(x, y).setReachable(reachable);
     }
 
+    /**
+     * Sets the reachability of the node at the specified position.
+     */
     public void setReachable(Position position, boolean reachable) {
         getNode(position).setReachable(reachable);
     }
 
+    /**
+     * Gets the node at the specified position.
+     */
     public Node getNode(int x, int y) {
         Validator.validateInRange(x, 0, width + 1, "x");
         Validator.validateInRange(y, 0, height + 1, "y");
@@ -50,14 +64,26 @@ public final class NodeMap {
         return nodes[x][y];
     }
 
+    /**
+     * Gets the node at the specified position.
+     */
     public Node getNode(Position position) {
         return getNode(position.getX(), position.getY());
     }
 
+    /**
+     * Gets all the nodes in this NodeMap.
+     */
     public Node[][] getNodes() {
         return nodes;
     }
 
+    /**
+     * Finds the optimal path from the start position to the end position.
+     *
+     * @param start The position to start from.
+     * @param goal  The final position.
+     */
     public final List<Position> findPath(Position start, Position goal) {
         Validator.validateInRange(start.getX(), 0, width + 1, "start x");
         Validator.validateInRange(start.getY(), 0, height + 1, "start y");
@@ -67,10 +93,9 @@ public final class NodeMap {
         closedList = new LinkedList<>();
         openList.add(nodes[start.getX()][start.getY()]);
 
-        boolean found = false;
         Node currentNode;
 
-        while (!found) {
+        while (true) {
             currentNode = lowestFInOpen();
             closedList.add(currentNode);
             openList.remove(currentNode);
@@ -98,7 +123,6 @@ public final class NodeMap {
                 return new LinkedList<>();
             }
         }
-        return null;
     }
 
     private List<Position> calcPath(Node start, Node goal) {
