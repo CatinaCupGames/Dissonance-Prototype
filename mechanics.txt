@@ -102,6 +102,9 @@ the screen for MASSIVE DAMAGE
 a distant enemy to perform an execution(also useful for traversing 
 obstacles)
 
+Magic:
+-
+
 Control scheme:
 -The game will be able to support a keyboard or gamepad
 -Spells can be mapped to the magic 1 and magic 2 buttons from the magic menu
