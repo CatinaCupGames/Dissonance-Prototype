@@ -2,7 +2,7 @@ package com.tog.framework.game.sprites.animation;
 
 public interface Animator {
     /**
-     * This method is called after {@link com.tog.framework.game.sprites.animation.Animator#getSpeed()} frame(s) is
+     * This method is called after {@link com.tog.framework.game.sprites.animation.Animator#getAnimationSpeed()} frame(s) is
      * called. </br>
      * This method should advance the animation by 1 frame.
      */
@@ -12,7 +12,7 @@ public interface Animator {
      * The number of frames needed to pass in order for the next frame of the animation to play.
      * @return The number of frames
      */
-    public int getSpeed();
+    public int getAnimationSpeed();
 
     public void waitForAnimationEnd();
 

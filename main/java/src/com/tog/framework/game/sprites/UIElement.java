@@ -138,4 +138,9 @@ public abstract class UIElement implements Drawable {
     }
 
     public abstract void draw(Graphics2D graphics2D);
+
+    @Override
+    public int compareTo(Drawable o) {
+        return Drawable.AFTER;
+    }
 }

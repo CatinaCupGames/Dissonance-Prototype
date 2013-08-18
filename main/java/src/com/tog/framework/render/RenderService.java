@@ -2,7 +2,6 @@ package com.tog.framework.render;
 
 import com.tog.framework.game.input.InputListener;
 import com.tog.framework.game.input.InputService;
-import com.tog.framework.game.input.JoystickHandler;
 import com.tog.framework.game.sprites.animation.AnimationFactory;
 import com.tog.framework.game.world.World;
 import com.tog.framework.sound.Sound;
@@ -12,6 +11,7 @@ import com.tog.framework.system.Game;
 import com.tog.framework.system.Service;
 import com.tog.framework.system.ServiceManager;
 import com.tog.framework.system.utils.Validator;
+import net.java.games.input.Component;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL;
@@ -66,7 +66,7 @@ public class RenderService extends Service {
             glViewport(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0f, 1f);
+            glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0f, -1000f);
             //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
@@ -183,12 +183,34 @@ public class RenderService extends Service {
 
         inputService.provideData(inputListener, InputService.ADD_LISTENER);
 
-		// Initiate the controllers array.
-		JoystickHandler.getEnabledControllers();
-		// Create a thread for a controller.
-		JoystickHandler.JoystickThread firstJoystickThread = JoystickHandler.createControllerThread(0);
-		// Now start the thread.
-		new Thread(firstJoystickThread).start();
+        // Just a simple test for you guys!!!
+        new Thread(new Runnable() {
+            @Override
+            public void run()
+            {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                while(true)
+                {
+                    // Debug.
+                    //InputService.debugController("Logitech Driving Force USB");
+
+                    // Example with name.
+                    //System.out.println(InputService.getButtonState("Logitech Driving Force USB", "Cross"));
+                    // Example with identifier.
+                    //System.out.println(InputService.getButtonState("Logitech Driving Force USB", Component.Identifier.Button._0));
+
+                    // Example with name.
+                    //System.out.println(InputService.getAxisValue("Logitech Driving Force USB", "Wheel axis"));
+                    // Example with identifier.
+                    System.out.println(InputService.getAxisValue("Logitech Driving Force USB", Component.Identifier.Axis.X));
+                }
+            }
+        }).start();
     }
 
     @Override

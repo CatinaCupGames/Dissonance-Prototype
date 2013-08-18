@@ -1,27 +1,13 @@
 package com.tog.framework.game.sprites.impl;
 
-import com.tog.framework.game.sprites.AnimatedSprite;
-import com.tog.framework.render.Camera;
 import com.tog.framework.render.RenderService;
 import org.lwjgl.input.Keyboard;
 
-public class Player extends AnimatedSprite {
+public class TestPlayer extends PlayableSprite {
 
     @Override
     public void onLoad() {
         super.onLoad();
-    }
-
-    @Override
-    public void setX(float x) {
-        super.setX(x);
-        Camera.setX(Camera.translateToCameraCenter(getVector(), 32f, 32f).getX());
-    }
-
-    @Override
-    public void setY(float y) {
-        super.setY(y);
-        Camera.setY(Camera.translateToCameraCenter(getVector(), 32f, 32f).getY());
     }
 
     @Override
@@ -31,6 +17,8 @@ public class Player extends AnimatedSprite {
 
     @Override
     public void update() {
+        if (!isPlaying())
+            return;
         updateInput();
 
         if (isAnimationPaused() && (w || a || s || d))
@@ -59,4 +47,48 @@ public class Player extends AnimatedSprite {
     }
 
 
+    @Override
+    public double getAttack() {
+        return 0;
+    }
+
+    @Override
+    public double getDefense() {
+        return 0;
+    }
+
+    @Override
+    public double getSpeed() {
+        return 0;
+    }
+
+    @Override
+    public double getVigor() {
+        return 0;
+    }
+
+    @Override
+    public double getStamina() {
+        return 0;
+    }
+
+    @Override
+    public double getWillPower() {
+        return 0;
+    }
+
+    @Override
+    public double getFocus() {
+        return 0;
+    }
+
+    @Override
+    public double getMarksmanShip() {
+        return 0;
+    }
+
+    @Override
+    public CombatType getCombatType() {
+        return CombatType.ALLY;
+    }
 }
