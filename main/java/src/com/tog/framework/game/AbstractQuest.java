@@ -7,14 +7,30 @@ public abstract class AbstractQuest {
     private AbstractQuest next;
     private boolean ended;
     private World world;
+    private boolean paused;
 
     public abstract void startQuest();
 
-    public void onPauseGame() {
+    public void pauseGame() {
+        if (paused)
+            return;
+        paused = true;
+        onPauseGame();
+    }
+
+    public void resumeGame() {
+        if (!paused)
+            return;
+        paused = false;
+        onResumeGame();
+    }
+
+
+    protected void onPauseGame() {
         //TODO Pause everything and show pause menu
     }
 
-    public void onResumeGame() {
+    protected void onResumeGame() {
         //TODO Resume everything and get rid of pause menu
     }
 

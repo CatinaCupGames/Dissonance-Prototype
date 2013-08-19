@@ -2,7 +2,6 @@ package com.tog.framework.game;
 
 import com.sun.istack.internal.NotNull;
 import com.tog.framework.game.world.World;
-import com.tog.framework.system.Service;
 import com.tog.framework.system.utils.Validator;
 
 public class GameService {
@@ -36,6 +35,15 @@ public class GameService {
     public static long getGameServiceThreadID() {
         return TID;
     }
+
+    public static Thread getQuestThread() {
+        return questThread;
+    }
+
+    public static void saveGame() {
+
+    }
+
 
     private static final Runnable questRun = new Runnable() {
 

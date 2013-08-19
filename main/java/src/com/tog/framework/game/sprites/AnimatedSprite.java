@@ -12,9 +12,9 @@ import java.security.InvalidParameterException;
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class AnimatedSprite extends Sprite implements Animator {
-    protected int ANIMATION_FACTORY_ID;
-    private SpriteAnimationInfo animation;
-    private int speed;
+    protected transient int ANIMATION_FACTORY_ID;
+    private transient SpriteAnimationInfo animation;
+    private transient int speed;
 
 
     @Override

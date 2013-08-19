@@ -1,6 +1,5 @@
 package com.tog.framework.system;
 
-import com.tog.framework.game.sprites.AnimatedSprite;
 import com.tog.framework.game.sprites.impl.TestPlayer;
 import com.tog.framework.game.world.World;
 import com.tog.framework.system.exceptions.WorldLoadFailedException;
@@ -76,7 +75,7 @@ public class Game {
             testPlayers.add(p);
         }
 
-        w.invalidateList();
+        w.invalidateDrawableList();
         for (TestPlayer testPlayer : testPlayers) {
             testPlayer.select();
             try {
@@ -97,13 +96,5 @@ public class Game {
 
     public static Ticker getSystemTicker() {
         return TICKER;
-    }
-
-    public static class TestSprite extends AnimatedSprite {
-
-        @Override
-        public String getSpriteName() {
-            return "sprite_test";
-        }
     }
 }
