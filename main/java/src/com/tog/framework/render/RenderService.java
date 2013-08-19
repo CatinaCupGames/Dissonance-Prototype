@@ -67,6 +67,7 @@ public class RenderService extends Service {
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
             glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0f, -1000f);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
@@ -248,6 +249,7 @@ public class RenderService extends Service {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glClearColor(1f, 1f, 1f, 1f);
             glMatrixMode(GL_MODELVIEW);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glLoadIdentity();
 
             glRotatef(-rotx, 1, 0, 0);
