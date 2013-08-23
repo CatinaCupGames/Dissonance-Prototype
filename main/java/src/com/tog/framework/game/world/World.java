@@ -25,16 +25,28 @@ public final class World implements Drawable {
     private String name;
     private NodeMap node_map;
 
+    private int ID;
+
     private transient final ArrayList<Drawable> drawable = new ArrayList<>();
     private transient Service renderingService;
     private transient Texture texture;
 
+    World(int ID) {
+        this.ID = ID;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
     public void init() {
-        if (renderingService != null) {
-            renderingService.provideData(this, RenderService.WORLD_DATA_TYPE);
-            return;
-        }
         renderingService = ServiceManager.createService(RenderService.class);
+    }
+
+    public void switchTo() {
+        //TODO Move all playable sprites to this world maybe?
+        if (renderingService == null)
+            return;
         renderingService.provideData(this, RenderService.WORLD_DATA_TYPE);
     }
 
@@ -202,6 +214,47 @@ public final class World implements Drawable {
             public void run() {
                 sprite.setWorld(World.this);
                 sprite.onLoad();
+            }
+        });
+    }
+
+    public void removeSprite(final Sprite sprite) {
+        removeDrawable(sprite, new Runnable() {
+
+            @Override
+            public void run() {
+                sprite.onUnload();
+                sprite.setWorld(null);
+            }
+        });
+    }
+
+    public void onUnload() { //This method is called when the world is not shown but is still in memory
+       //TODO Do stuff to save memory when this world is not shown
+    }
+
+    public void onDispose() {
+        drawable.clear();
+        texture.dispose();
+        renderingService = null;
+    }
+
+    public void removeDrawable(final Drawable drawable) {
+        removeDrawable(drawable, null);
+    }
+
+    public void removeDrawable(final Drawable drawable, final Runnable runnable) {
+        if (renderingService == null)
+            throw new IllegalStateException("init() has not been called on this world!");
+        Validator.validateNotNull(drawable, "sprite");
+
+        renderingService.runOnServiceThread(new Runnable() {
+
+            @Override
+            public void run() {
+                World.this.drawable.remove(drawable);
+                if (runnable != null)
+                    runnable.run();
             }
         });
     }

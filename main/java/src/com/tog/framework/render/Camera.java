@@ -1,6 +1,5 @@
 package com.tog.framework.render;
 
-import com.tog.framework.system.Game;
 import org.lwjgl.util.vector.Vector2f;
 
 public final class Camera {
@@ -29,8 +28,8 @@ public final class Camera {
     }
 
     public static Vector2f translateToCameraCenter(Vector2f vec, float width, float height) {
-        vec.setX(vec.getX() - (Game.GAME_WIDTH / 4.5f) + width);
-        vec.setY(vec.getY() - (Game.GAME_HEIGHT / 4.5f) + height);
+        vec.setX(vec.getX() - (RenderService.GAME_WIDTH / 4.5f) + width);
+        vec.setY(vec.getY() - (RenderService.GAME_HEIGHT / 4.5f) + height);
         return vec;
     }
 

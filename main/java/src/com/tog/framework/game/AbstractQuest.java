@@ -1,6 +1,7 @@
 package com.tog.framework.game;
 
 import com.tog.framework.game.world.World;
+import com.tog.framework.game.world.WorldFactory;
 import com.tog.framework.system.exceptions.QuestNotFoundException;
 
 public abstract class AbstractQuest {
@@ -38,8 +39,10 @@ public abstract class AbstractQuest {
         return world;
     }
 
-    void setWorld(World world) {
-          this.world = world;
+    protected void setWorld(World world) {
+        WorldFactory.swapView(this.world, world);
+        System.out.println("New world swapped to " + world.getID());
+        this.world = world;
     }
 
     public void setNextQuest(AbstractQuest quest) {
@@ -76,10 +79,10 @@ public abstract class AbstractQuest {
     }
 
     public synchronized void waitForEnd() throws InterruptedException {
-         while (true) {
-             if (ended)
-                 break;
-             super.wait(0L);
-         }
+        while (true) {
+            if (ended)
+                break;
+            super.wait(0L);
+        }
     }
 }

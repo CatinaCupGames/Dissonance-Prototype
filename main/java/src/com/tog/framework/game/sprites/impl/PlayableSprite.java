@@ -4,6 +4,7 @@ import com.tog.framework.render.Camera;
 
 public abstract class PlayableSprite extends CombatSprite {
     private boolean isPlaying = false;
+    private boolean frozen = false;
     private static PlayableSprite currentlyPlaying;
 
     @Override
@@ -18,6 +19,10 @@ public abstract class PlayableSprite extends CombatSprite {
         super.setY(y);
         if (isPlaying)
             Camera.setPos(Camera.translateToCameraCenter(getVector(), 32, 32));
+    }
+
+    public boolean isFrozen() {
+        return frozen;
     }
 
     /**
@@ -49,6 +54,18 @@ public abstract class PlayableSprite extends CombatSprite {
 
     public static PlayableSprite getCurrentlyPlayingSprite() {
         return currentlyPlaying;
+    }
+
+    public static void haltMovement() {
+        if (currentlyPlaying == null)
+            return;
+        currentlyPlaying.frozen = true;
+    }
+
+    public static void resumeMovement() {
+        if (currentlyPlaying == null)
+            return;
+        currentlyPlaying.frozen = false;
     }
 
     private final Camera.CameraEaseListener listener = new Camera.CameraEaseListener() {

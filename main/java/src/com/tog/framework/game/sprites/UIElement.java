@@ -1,5 +1,7 @@
 package com.tog.framework.game.sprites;
 
+import com.tog.framework.game.GameService;
+import com.tog.framework.game.sprites.impl.PlayableSprite;
 import com.tog.framework.render.Drawable;
 import com.tog.framework.render.texture.Texture;
 
@@ -24,6 +26,23 @@ public abstract class UIElement implements Drawable {
 
     public String getName() {
         return name;
+    }
+
+    public void displayUI() {
+        GameService.getCurrentWorld().addDrawable(this);
+        PlayableSprite.haltMovement();
+    }
+
+    public void close() {
+        PlayableSprite.resumeMovement();
+        GameService.getCurrentWorld().removeDrawable(this);
+
+        if (UI != null) {
+            UI.dispose();
+        }
+        if (UI_IMAGE != null) {
+            UI_IMAGE = null;
+        }
     }
 
     /**

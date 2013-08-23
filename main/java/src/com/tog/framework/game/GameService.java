@@ -9,18 +9,19 @@ public class GameService {
     private static Thread questThread;
     private static AbstractQuest currentQuest;
 
-    public static void beginQuest(@NotNull AbstractQuest quest, @NotNull World startWorld) {
+    public static void beginQuest(@NotNull AbstractQuest quest) {
         Validator.validateNotNull(quest, "quest");
-        Validator.validateNotNull(startWorld, "startWorld");
-        quest.setWorld(startWorld);
         while (quest != null) {
             TID = Thread.currentThread().getId();
             currentQuest = quest;
             currentQuest.setNextQuest((AbstractQuest) null);
             questThread = new Thread(questRun);
             questThread.start();
+            System.out.println("[GameService] QUEST " + quest.getClass().getCanonicalName() + " STARTED");
             try {
+                System.out.println("[GameService] Waiting for end");
                 currentQuest.waitForEnd();
+                System.out.println("[GameService] Quest Ended");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -30,6 +31,10 @@ public class GameService {
             }
         }
         //...what do we do now..?
+    }
+
+    public static World getCurrentWorld() {
+        return currentQuest.getWorld();
     }
 
     public static long getGameServiceThreadID() {

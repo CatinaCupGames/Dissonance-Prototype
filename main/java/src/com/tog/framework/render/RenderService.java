@@ -7,10 +7,10 @@ import com.tog.framework.game.world.World;
 import com.tog.framework.sound.Sound;
 import com.tog.framework.sound.SoundState;
 import com.tog.framework.sound.SoundSystem;
-import com.tog.framework.system.Game;
 import com.tog.framework.system.Service;
 import com.tog.framework.system.ServiceManager;
 import com.tog.framework.system.utils.Validator;
+import com.tog.game.Main;
 import net.java.games.input.Component;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -28,7 +28,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
 
 public class RenderService extends Service {
-
+    public static int GAME_WIDTH = 1280, GAME_HEIGHT = 720;
     public static final int WORLD_DATA_TYPE = 0;
     public static RenderService INSTANCE;
     public static float TIME_DELTA;
@@ -57,16 +57,16 @@ public class RenderService extends Service {
         RENDER_THREAD_ID = Thread.currentThread().getId();
 
         try {
-            Display.setDisplayMode(new DisplayMode(Game.GAME_WIDTH, Game.GAME_HEIGHT));
+            Display.setDisplayMode(new DisplayMode(GAME_WIDTH, GAME_HEIGHT));
             Display.create();
             AL.create();
 
             glClearColor(0f, 0f, 0f, 1f);
             glClearDepth(1f);
-            glViewport(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
+            glViewport(0, 0, GAME_WIDTH, GAME_HEIGHT);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0.0f, Game.GAME_WIDTH, Game.GAME_HEIGHT, 0.0f, 0f, -1000f);
+            glOrtho(0.0f, GAME_WIDTH, GAME_HEIGHT, 0.0f, 0f, -1000f);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
@@ -297,7 +297,7 @@ public class RenderService extends Service {
             if (Display.isCloseRequested()) {
                 ServiceManager.getService(InputService.class).terminate();
                 terminate();
-                Game.getSystemTicker().stopTick();
+                Main.getSystemTicker().stopTick();
                 return;
             }
         } else {
