@@ -38,7 +38,7 @@ public final class Sound {
     private TimerTask task;
 
     private void readSoundInfo() throws IOException {
-        InputStream in = getClass().getClassLoader().getResourceAsStream("sound/" + fileName + ".xml");
+        InputStream in = getClass().getClassLoader().getResourceAsStream("sounds/" + fileName + ".xml");
 
         if (in == null) {
             return;
@@ -65,6 +65,10 @@ public final class Sound {
 
             if (element.hasAttribute("count")) {
                 loopCount = Integer.parseInt(element.getAttribute("count"));
+
+                if (loopCount == -1) {
+                    loopCount = Integer.MAX_VALUE;
+                }
             }
 
             in.close();
@@ -144,7 +148,6 @@ public final class Sound {
         if (startTime != -1 && endTime != -1) {
             task.cancel();
             timer.cancel();
-            timer.notify();
             currentLoop = 0;
         }
 
