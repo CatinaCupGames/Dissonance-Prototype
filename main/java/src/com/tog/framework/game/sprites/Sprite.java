@@ -1,5 +1,6 @@
 package com.tog.framework.game.sprites;
 
+import com.tog.framework.game.sprites.impl.PlayableSprite;
 import com.tog.framework.game.world.World;
 import com.tog.framework.render.Drawable;
 import com.tog.framework.render.texture.Texture;
@@ -32,6 +33,10 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public void setX(float x) {
         this.x = x;
+    }
+
+    public void onSelected(PlayableSprite player) {
+
     }
 
     public void setY(float y) {
