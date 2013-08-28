@@ -1,20 +1,37 @@
 package com.tog.framework.game;
 
 import com.tog.framework.game.world.World;
+import com.tog.framework.game.world.WorldFactory;
 import com.tog.framework.system.exceptions.QuestNotFoundException;
 
 public abstract class AbstractQuest {
     private AbstractQuest next;
     private boolean ended;
     private World world;
+    private boolean paused;
 
     public abstract void startQuest();
 
-    public void onPauseGame() {
+    public void pauseGame() {
+        if (paused)
+            return;
+        paused = true;
+        onPauseGame();
+    }
+
+    public void resumeGame() {
+        if (!paused)
+            return;
+        paused = false;
+        onResumeGame();
+    }
+
+
+    protected void onPauseGame() {
         //TODO Pause everything and show pause menu
     }
 
-    public void onResumeGame() {
+    protected void onResumeGame() {
         //TODO Resume everything and get rid of pause menu
     }
 
@@ -22,8 +39,10 @@ public abstract class AbstractQuest {
         return world;
     }
 
-    void setWorld(World world) {
-          this.world = world;
+    protected void setWorld(World world) {
+        WorldFactory.swapView(this.world, world);
+        System.out.println("New world swapped to " + world.getID());
+        this.world = world;
     }
 
     public void setNextQuest(AbstractQuest quest) {
@@ -60,10 +79,10 @@ public abstract class AbstractQuest {
     }
 
     public synchronized void waitForEnd() throws InterruptedException {
-         while (true) {
-             if (ended)
-                 break;
-             super.wait(0L);
-         }
+        while (true) {
+            if (ended)
+                break;
+            super.wait(0L);
+        }
     }
 }

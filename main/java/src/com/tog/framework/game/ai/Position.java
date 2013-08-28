@@ -1,6 +1,8 @@
 package com.tog.framework.game.ai;
 
-public final class Position {
+import java.io.Serializable;
+
+public final class Position implements Serializable {
 
     private int x;
     private int y;

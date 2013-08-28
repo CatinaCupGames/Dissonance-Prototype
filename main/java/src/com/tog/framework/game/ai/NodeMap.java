@@ -2,13 +2,14 @@ package com.tog.framework.game.ai;
 
 import com.tog.framework.system.utils.Validator;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * A NodeMap contains the nodes that are being searched and provides pathfinding methods.
  */
-public final class NodeMap {
+public final class NodeMap implements Serializable {
 
     private Node[][] nodes;
 

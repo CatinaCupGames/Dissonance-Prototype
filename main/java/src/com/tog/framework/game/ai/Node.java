@@ -1,6 +1,8 @@
 package com.tog.framework.game.ai;
 
-public final class Node {
+import java.io.Serializable;
+
+public final class Node implements Serializable {
 
     private final static int MOVE_COST = 10;
     private final static int DIAGONAL_MOVE_COST = 14;

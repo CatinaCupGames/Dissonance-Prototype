@@ -1,15 +1,18 @@
 package com.tog.framework.game.sprites;
 
+import com.tog.framework.game.sprites.impl.PlayableSprite;
 import com.tog.framework.game.world.World;
 import com.tog.framework.render.Drawable;
 import com.tog.framework.render.texture.Texture;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.io.Serializable;
+
 import static org.lwjgl.opengl.GL11.*;
 
-public abstract class Sprite implements Drawable {
-    protected Texture texture;
-    protected World world;
+public abstract class Sprite implements Drawable, Serializable {
+    protected transient Texture texture;
+    protected transient World world;
     protected float x, y;
 
     public Texture getTexture() {
@@ -32,9 +35,13 @@ public abstract class Sprite implements Drawable {
         this.x = x;
     }
 
+    public void onSelected(PlayableSprite player) {
+
+    }
+
     public void setY(float y) {
         if (y != this.y && getWorld() != null)
-            getWorld().invalidateList();
+            getWorld().invalidateDrawableList();
         this.y = y;
     }
 
