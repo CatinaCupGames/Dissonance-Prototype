@@ -1,6 +1,7 @@
 package com.tog.game;
 
 import com.tog.framework.game.GameService;
+import com.tog.framework.game.input.InputKeys;
 import com.tog.framework.system.ticker.Ticker;
 import com.tog.game.test.TestQuest;
 
@@ -26,13 +27,16 @@ public class Main {
         System.setProperty("net.java.games.input.librarypath", System.getProperty("org.lwjgl.librarypath"));
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         System.out.println("Using libs folder " + System.getProperty("org.lwjgl.librarypath"));
         System.out.println("Starting Ticker");
+        InputKeys.initializeConfig();
+
         TICKER.startTick();
 
         GameService.beginQuest(new TestQuest());
     }
+
 
     private static boolean started;
     public static void startGame() {
