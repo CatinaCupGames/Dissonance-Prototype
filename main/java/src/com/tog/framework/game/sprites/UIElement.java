@@ -138,8 +138,6 @@ public abstract class UIElement implements Drawable {
             UI = null;
         }
         Graphics2D graphics2D = UI_IMAGE.createGraphics();
-        graphics2D.setColor(Color.WHITE);
-        graphics2D.drawRect(0, 0, (int) width, (int) height);
         draw(graphics2D);
         graphics2D.dispose();
 
