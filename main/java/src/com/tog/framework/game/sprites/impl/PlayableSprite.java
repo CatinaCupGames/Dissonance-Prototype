@@ -1,5 +1,6 @@
 package com.tog.framework.game.sprites.impl;
 
+import com.tog.framework.game.input.InputKeys;
 import com.tog.framework.game.sprites.Sprite;
 import com.tog.framework.render.Camera;
 import com.tog.framework.render.Drawable;
@@ -34,16 +35,16 @@ public abstract class PlayableSprite extends CombatSprite {
     public void update() {
         if (isPlaying) {
             checkSelect();
-
+            checkMovement();
         }
     }
 
-    boolean w, a, s, d;
+    protected boolean w, a, s, d;
     protected void checkMovement() {
-        w = Keyboard.isKeyDown(Keyboard.KEY_W);
-        d = Keyboard.isKeyDown(Keyboard.KEY_D);
-        s = Keyboard.isKeyDown(Keyboard.KEY_S);
-        a = Keyboard.isKeyDown(Keyboard.KEY_A);
+        w = Keyboard.isKeyDown(InputKeys.getMoveUpKey());
+        d = Keyboard.isKeyDown(InputKeys.getMoveRightKey());
+        s = Keyboard.isKeyDown(InputKeys.getMoveDownKey());
+        a = Keyboard.isKeyDown(InputKeys.getMoveLeftKey());
 
         if (w)
             setY(getY() - (10 * RenderService.TIME_DELTA));
@@ -57,13 +58,13 @@ public abstract class PlayableSprite extends CombatSprite {
 
     protected void checkSelect() {
         if (!attack_select) {
-            attack_select = Keyboard.isKeyDown(Keyboard.KEY_J);
+            attack_select = Keyboard.isKeyDown(InputKeys.getAttackKey());
 
             if (attack_select) {
                 onSelectAttackKey();
             }
 
-        } else if (!Keyboard.isKeyDown(Keyboard.KEY_J)) {
+        } else if (!Keyboard.isKeyDown(InputKeys.getAttackKey())) {
             attack_select = false;
         }
     }
@@ -100,14 +101,15 @@ public abstract class PlayableSprite extends CombatSprite {
 
     /**
      * Select this sprite to be the sprite the player will play as <br></br>
-     * If the player is currently playing as another Sprite, then the {@link com.tog.framework.game.sprites.impl.PlayableSprite#deselect()} will be
+     * If the player is currently playing as another Sprite, then the {@link com.tog.framework.game.sprites.impl.PlayableSprite#onDeselect()} will be
      * invoke on that sprite. <br></br>
      *
      * The Camera will pan to the newly selected sprite
      */
     public void select() {
-        if (currentlyPlaying != null)
+        if (currentlyPlaying != null) {
             currentlyPlaying.deselect();
+        }
 
         currentlyPlaying = this;
 
@@ -116,9 +118,21 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     public void deselect() {
+        onDeselect();
+        if (currentlyPlaying != null)
+            throw new RuntimeException("super.onDeselect was not executed! Try putting super.onDeselect at the top of your method!");
+    }
+
+    protected void onDeselect() {
         isPlaying = false;
         currentlyPlaying = null;
         Camera.setCameraEaseListener(null); //Safety net
+
+        w = false;
+        a = false;
+        s = false;
+        d = false;
+        attack_select = false;
     }
 
     public boolean isPlaying() {

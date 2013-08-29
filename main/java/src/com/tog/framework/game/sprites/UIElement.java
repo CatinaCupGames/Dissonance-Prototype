@@ -12,6 +12,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public abstract class UIElement implements Drawable {
     private boolean valid;
+    private boolean complete_invalid;
     private float width;
     private float height;
     private Texture UI;
@@ -93,7 +94,7 @@ public abstract class UIElement implements Drawable {
         while (this.width < width) {
             this.width *= 2;
         }
-        invalidateView();
+        completelyInvalidateView();
     }
 
     /**
@@ -108,20 +109,33 @@ public abstract class UIElement implements Drawable {
         while (this.height < height) {
             this.height *= 2;
         }
-        invalidateView();
+        completelyInvalidateView();
     }
 
+    /**
+     * Invalidate this UIElement but reuse the current texture
+     */
     public void invalidateView() {
         valid = false;
     }
 
+    /**
+     * Completely invalidate this UIElement and discard the current texture
+     */
+    public void completelyInvalidateView() {
+        valid = false;
+        complete_invalid = true;
+    }
+
     private void redrawTexture() {
-        if (valid)
+        if (valid || width == 0 || height == 0)
             return;
-        if (UI_IMAGE.getWidth() != width || UI_IMAGE.getHeight() != height) {
+        if (UI_IMAGE == null || complete_invalid) {
+            UI_IMAGE = new BufferedImage((int)width, (int)height, BufferedImage.TYPE_INT_ARGB);
+        }
+        if (UI != null) {
             UI.dispose();
             UI = null;
-            UI_IMAGE = new BufferedImage((int)width, (int)height, BufferedImage.TYPE_INT_ARGB);
         }
         Graphics2D graphics2D = UI_IMAGE.createGraphics();
         graphics2D.setColor(Color.WHITE);
@@ -137,8 +151,10 @@ public abstract class UIElement implements Drawable {
     public void render() {
         if (UI == null && valid)
             return;
-        else if (!valid)
+        else if (!valid && width != 0 && height != 0)
             redrawTexture();
+        else if (!valid)
+            return;
         UI.bind();
         float bx = UI.getTextureWidth() / 2;
         float by = UI.getTextureHeight() / 2;

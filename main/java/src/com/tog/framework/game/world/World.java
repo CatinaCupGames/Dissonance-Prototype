@@ -198,6 +198,8 @@ public final class World implements Drawable {
             @Override
             public void run() {
                 drawable.add(draw);
+                if (!(draw instanceof World))
+                    draw.init();
                 if (run != null)
                     run.run();
             }

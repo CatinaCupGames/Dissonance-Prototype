@@ -62,59 +62,59 @@ public class InputKeys {
         writeAllLines(PATH, config);
     }
 
-    public int getMoveUpKey() {
+    public static int getMoveUpKey() {
         return keys.get("moveUp");
     }
 
-    public int getMoveLeftKey() {
+    public static int getMoveLeftKey() {
         return keys.get("moveLeft");
     }
 
-    public int getMoveDownKey() {
+    public static int getMoveDownKey() {
         return keys.get("moveDown");
     }
 
-    public int getMoveRightKey() {
+    public static int getMoveRightKey() {
         return keys.get("moveRight");
     }
 
-    public int getJumpKey() {
+    public static int getJumpKey() {
         return keys.get("jump");
     }
 
-    public int getDodgeKey() {
+    public static int getDodgeKey() {
         return keys.get("dodge");
     }
 
-    public int getExtendLookKey() {
+    public static int getExtendLookKey() {
         return keys.get("extendLook");
     }
 
-    public int getStrafeKey() {
+    public static int getStrafeKey() {
         return keys.get("strafe");
     }
 
-    public int getAttackKey() {
+    public static int getAttackKey() {
         return keys.get("attack");
     }
 
-    public int getSpecialKey() {
+    public static int getSpecialKey() {
         return keys.get("special");
     }
 
-    public int getMagic1Key() {
+    public static int getMagic1Key() {
         return keys.get("magic1");
     }
 
-    public int getMagic2Key() {
+    public static int getMagic2Key() {
         return keys.get("magic2");
     }
 
-    public int getMenuKey() {
+    public static int getMenuKey() {
         return keys.get("menu");
     }
 
-    public int getPauseKey() {
+    public static int getPauseKey() {
         return keys.get("pause");
     }
 
