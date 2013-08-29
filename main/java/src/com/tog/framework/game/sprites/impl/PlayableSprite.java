@@ -3,6 +3,7 @@ package com.tog.framework.game.sprites.impl;
 import com.tog.framework.game.sprites.Sprite;
 import com.tog.framework.render.Camera;
 import com.tog.framework.render.Drawable;
+import com.tog.framework.render.RenderService;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -11,7 +12,9 @@ import java.util.Iterator;
 public abstract class PlayableSprite extends CombatSprite {
     private boolean isPlaying = false;
     private boolean frozen = false;
+    private boolean attack_select;
     private static PlayableSprite currentlyPlaying;
+
 
     @Override
     public void setX(float x) {
@@ -27,10 +30,29 @@ public abstract class PlayableSprite extends CombatSprite {
             Camera.setPos(Camera.translateToCameraCenter(getVector(), 32, 32));
     }
 
-    boolean attack_select;
     @Override
     public void update() {
+        if (isPlaying) {
+            checkSelect();
 
+        }
+    }
+
+    boolean w, a, s, d;
+    protected void checkMovement() {
+        w = Keyboard.isKeyDown(Keyboard.KEY_W);
+        d = Keyboard.isKeyDown(Keyboard.KEY_D);
+        s = Keyboard.isKeyDown(Keyboard.KEY_S);
+        a = Keyboard.isKeyDown(Keyboard.KEY_A);
+
+        if (w)
+            setY(getY() - (10 * RenderService.TIME_DELTA));
+        if (s)
+            setY(getY() + (10 * RenderService.TIME_DELTA));
+        if (a)
+            setX(getX() - (10 * RenderService.TIME_DELTA));
+        if (d)
+            setX(getX() + (10 * RenderService.TIME_DELTA));
     }
 
     protected void checkSelect() {
