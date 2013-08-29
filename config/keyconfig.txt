@@ -1,0 +1,14 @@
+moveUp:17
+moveLeft:30
+moveDown:31
+moveRight:32
+jump:57
+dodge:42
+extendLook:23
+strafe:29
+attack:36
+special:37
+magic1:24
+magic2:38
+menu:15
+pause:1
