@@ -1,9 +1,8 @@
 package com.tog.game;
 
-import com.tog.framework.game.GameService;
 import com.tog.framework.game.input.InputKeys;
+import com.tog.framework.steam.SteamProxy;
 import com.tog.framework.system.ticker.Ticker;
-import com.tog.game.test.TestQuest;
 
 import java.io.File;
 import java.util.Locale;
@@ -33,8 +32,9 @@ public class Main {
         InputKeys.initializeConfig();
 
         TICKER.startTick();
-
-        GameService.beginQuest(new TestQuest());
+        SteamProxy proxy = new SteamProxy();
+        proxy.initSteamAPI();
+        //GameService.beginQuest(new TestQuest());
     }
 
 
