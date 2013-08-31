@@ -43,7 +43,7 @@ public class TestQuest extends AbstractQuest {
          * around with the STRESS_COUNT value.
          */
         final World w = getWorld();
-        final int STRESS_COUNT = 10;
+        final int STRESS_COUNT = 2;
         final Random random = new Random();
         List<TestPlayer> testPlayers = new ArrayList<TestPlayer>();
         for (int i = 0; i < STRESS_COUNT; i++) {

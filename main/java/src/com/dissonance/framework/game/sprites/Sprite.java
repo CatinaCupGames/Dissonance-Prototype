@@ -1,11 +1,10 @@
 package com.dissonance.framework.game.sprites;
 
-import org.jbox2d.dynamics.BodyDef;
-
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.texture.Texture;
+import com.dissonance.framework.system.utils.Direction;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
@@ -20,10 +19,19 @@ public abstract class Sprite implements Drawable, Serializable {
     protected transient BodyDef physicsBodyDef;
     protected transient Texture texture;
     protected transient World world;
+    protected Direction facing_direction;
     protected float x, y;
 
     public Texture getTexture() {
         return texture;
+    }
+
+    public Direction getFacingDirection() {
+        return facing_direction;
+    }
+
+    public void setFacing(Direction direction) {
+        this.facing_direction = direction;
     }
 
     public void setTexture(Texture texture) {

@@ -12,6 +12,11 @@ public class TestPlayer extends PlayableSprite {
     }
 
     @Override
+    public void onSelected(PlayableSprite sprite) {
+        System.out.println(sprite + " SELECTED MEH!");
+    }
+
+    @Override
     public String getSpriteName() {
         return "player";
     }
