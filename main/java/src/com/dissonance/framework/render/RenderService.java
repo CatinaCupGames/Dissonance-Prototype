@@ -61,6 +61,8 @@ public class RenderService extends Service {
             Display.create();
             AL.create();
 
+            mb = new MotionBlurPostFilter(Display.getWidth(), Display.getHeight(), 0.7f, 0.0f);
+
             glClearColor(0f, 0f, 0f, 1f);
             glClearDepth(1f);
             glViewport(0, 0, GAME_WIDTH, GAME_HEIGHT);
@@ -71,6 +73,9 @@ public class RenderService extends Service {
             //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
+            {
+                //glDepthFunc(GL_LEQUAL);
+            }
             glLoadIdentity();
 
             shot = soundSystem.loadSound("shot", "shotproto.wav");
@@ -241,6 +246,8 @@ public class RenderService extends Service {
     }
 
 
+    MotionBlurPostFilter mb;
+    float x = 0.0f;
     @Override
     public void onUpdate() {
         now = System.currentTimeMillis();
@@ -281,6 +288,8 @@ public class RenderService extends Service {
                     t.printStackTrace();
                 }
             }
+
+            //mb.apply();
 
             try {
                 AnimationFactory.executeTick(); //Execute any animation
