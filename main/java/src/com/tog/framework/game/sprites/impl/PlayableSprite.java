@@ -5,8 +5,8 @@ import com.tog.framework.game.sprites.Sprite;
 import com.tog.framework.render.Camera;
 import com.tog.framework.render.Drawable;
 import com.tog.framework.render.RenderService;
+import org.jbox2d.common.Vec2;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.util.vector.Vector2f;
 
 import java.util.Iterator;
 
@@ -20,15 +20,17 @@ public abstract class PlayableSprite extends CombatSprite {
     @Override
     public void setX(float x) {
         super.setX(x);
-        if (isPlaying)
+        if (isPlaying) {
             Camera.setPos(Camera.translateToCameraCenter(getVector(), 32, 32));
+        }
     }
 
     @Override
     public void setY(float y) {
         super.setY(y);
-        if (isPlaying)
+        if (isPlaying){
             Camera.setPos(Camera.translateToCameraCenter(getVector(), 32, 32));
+        }
     }
 
     @Override
@@ -80,8 +82,8 @@ public abstract class PlayableSprite extends CombatSprite {
                 continue;
             if (d instanceof Sprite) {
                 Sprite sprite = (Sprite)d;
-                final Vector2f v2 = sprite.getVector();
-                final Vector2f v1 = getVector();
+                final Vec2 v2 = sprite.getVector();
+                final Vec2 v1 = getVector();
                 double distance = Math.sqrt(((v2.x - v1.x) * (v2.x - v1.x)) + ((v2.y - v1.y) * (v2.y - v1.y)));
                 if (distance <= 0.00001)
                     distance = 0;

@@ -7,7 +7,7 @@ import com.tog.framework.game.world.World;
 import com.tog.framework.game.world.WorldFactory;
 import com.tog.framework.render.Camera;
 import com.tog.framework.system.exceptions.WorldLoadFailedException;
-import org.lwjgl.util.vector.Vector2f;
+import org.jbox2d.common.Vec2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class TestQuest extends AbstractQuest {
 
         TestDialog test = new TestDialog();
         test.displayUI();
-        Camera.setPos(Camera.translateToCameraCenter(new Vector2f(test.getX(), test.getY()), test.getWidth(), test.getHeight()));
+        Camera.setPos(Camera.translateToCameraCenter(new Vec2(test.getX(), test.getY()), test.getWidth(), test.getHeight()));
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {

@@ -11,6 +11,7 @@ import com.tog.framework.system.Service;
 import com.tog.framework.system.ServiceManager;
 import com.tog.framework.system.exceptions.WorldLoadFailedException;
 import com.tog.framework.system.utils.Validator;
+import org.jbox2d.common.Vec2;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -22,17 +23,26 @@ import java.util.zip.GZIPOutputStream;
 import static org.lwjgl.opengl.GL11.*;
 
 public final class World implements Drawable {
-    private String name;
-    private NodeMap node_map;
-
-    private int ID;
+    private static final float GRAVITY = 9.81f;
+    private static final float TIME_STEP = 1f / 60f;
+    private static final int VELOCITY_ITERATIONS = 6;
+    private static final int POSITION_ITERATIONS = 2;
 
     private transient final ArrayList<Drawable> drawable = new ArrayList<>();
+    private transient org.jbox2d.dynamics.World physicsWorld;
+    private String name;
+    private NodeMap node_map;
+    private int ID;
     private transient Service renderingService;
     private transient Texture texture;
+    private String texture_location;
+    private Sprite[] preloadSprites = null;
+    private Drawable[] preloadDrawable = null;
+    private boolean invalid = true;
 
     World(int ID) {
         this.ID = ID;
+        physicsWorld = new org.jbox2d.dynamics.World(new Vec2(0, GRAVITY));
     }
 
     public int getID() {
@@ -52,6 +62,9 @@ public final class World implements Drawable {
 
     @Override
     public void update() {
+        if(this.physicsWorld != null) {
+            this.physicsWorld.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+        }
     }
 
     @Override
@@ -76,14 +89,11 @@ public final class World implements Drawable {
         texture.unbind();
     }
 
-    private String texture_location;
-    private Sprite[] preloadSprites = null;
-    private Drawable[] preloadDrawable = null;
     public void load(final String world) throws WorldLoadFailedException {
         if (renderingService == null)
             throw new WorldLoadFailedException("The RenderService was not created! Try calling World.init() before loading a world.");
 
-        texture_location =  "default";
+        texture_location = "default";
         InputStream fis = getClass().getResourceAsStream("worlds/" + world + "/" + world + ".dat");
         if (fis != null) {
             try {
@@ -103,7 +113,7 @@ public final class World implements Drawable {
                 if (objectInputStream.readByte() == 1) {
                     texture_location = objectInputStream.readUTF();
                 }
-                node_map = (NodeMap)objectInputStream.readObject();
+                node_map = (NodeMap) objectInputStream.readObject();
             } catch (IOException e) {
                 throw new WorldLoadFailedException("There was an error reading the World's .dat file!", e);
             } catch (ClassNotFoundException e) {
@@ -174,8 +184,6 @@ public final class World implements Drawable {
         objectOutputStream.writeObject(node_map);
     }
 
-
-    private boolean invalid = true;
     public Iterator<Drawable> getDrawable() {
         if (invalid) {
             Collections.sort(drawable);
@@ -232,7 +240,7 @@ public final class World implements Drawable {
     }
 
     public void onUnload() { //This method is called when the world is not shown but is still in memory
-       //TODO Do stuff to save memory when this world is not shown
+        //TODO Do stuff to save memory when this world is not shown
     }
 
     public void onDispose() {
@@ -305,7 +313,7 @@ public final class World implements Drawable {
             if (d instanceof AnimatedSprite) {
                 loadAnimatedTextureForSprite((AnimatedSprite) d);
             }
-            addSprite((Sprite)d);
+            addSprite((Sprite) d);
         } else {
             addDrawable(d);
         }
@@ -315,8 +323,16 @@ public final class World implements Drawable {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public NodeMap getNodeMap() {
         return node_map;
+    }
+
+    public void setNodeMap(NodeMap map) {
+        this.node_map = map;
     }
 
     public void setPreloadedSprites(Sprite[] sprites) {
@@ -331,15 +347,10 @@ public final class World implements Drawable {
         this.texture_location = path;
     }
 
-    public void setNodeMap(NodeMap map) {
-        this.node_map = map;
+    public org.jbox2d.dynamics.World getPhysicsWorld() {
+        return this.physicsWorld;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
     public int compareTo(Drawable o) {
         return BEFORE;
     }

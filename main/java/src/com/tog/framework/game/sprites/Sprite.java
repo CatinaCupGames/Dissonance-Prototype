@@ -4,13 +4,18 @@ import com.tog.framework.game.sprites.impl.PlayableSprite;
 import com.tog.framework.game.world.World;
 import com.tog.framework.render.Drawable;
 import com.tog.framework.render.texture.Texture;
-import org.lwjgl.util.vector.Vector2f;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
 
 import java.io.Serializable;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class Sprite implements Drawable, Serializable {
+    protected transient Body physicsBody;
+    protected transient BodyDef physicsBodyDef;
     protected transient Texture texture;
     protected transient World world;
     protected float x, y;
@@ -23,20 +28,38 @@ public abstract class Sprite implements Drawable, Serializable {
         this.texture = texture;
     }
 
-    public void setWorld(World w) {
-        this.world = w;
-    }
-
     public World getWorld() {
         return world;
+    }
+
+    public void setWorld(World w) {
+
+        if (this.physicsBody != null)
+            // Dealloc reference to body //
+            w.getPhysicsWorld().destroyBody(this.physicsBody);
+
+        this.world = w;
+        this.physicsBodyDef = new BodyDef();
+        this.physicsBodyDef.active = false;
+        this.physicsBodyDef.awake = false;
+        this.physicsBodyDef.type = BodyType.DYNAMIC;
+        this.physicsBody = w.getPhysicsWorld().createBody(physicsBodyDef);
+    }
+
+    public void onSelected(PlayableSprite player) {
+
+    }
+
+    public float getX() {
+        return x;
     }
 
     public void setX(float x) {
         this.x = x;
     }
 
-    public void onSelected(PlayableSprite player) {
-
+    public float getY() {
+        return y;
     }
 
     public void setY(float y) {
@@ -45,21 +68,15 @@ public abstract class Sprite implements Drawable, Serializable {
         this.y = y;
     }
 
-    public float getX() {
-        return x;
+    public Vec2 getVector() {
+        return new Vec2(x, y);
     }
 
-    public float getY() {
-        return y;
+    public void onLoad() {
     }
 
-    public Vector2f getVector() {
-        return new Vector2f(x, y);
+    public void onUnload() {
     }
-
-    public void onLoad() { }
-
-    public void onUnload() { }
 
     @Override
     public void render() {
@@ -67,6 +84,11 @@ public abstract class Sprite implements Drawable, Serializable {
         float bx = getTexture().getTextureWidth() / 2;
         float by = getTexture().getTextureHeight() / 2;
         final float x = getX(), y = getY();
+
+        if(physicsBodyDef.active) {
+            //TODO: Camera.worldToScreen
+        }
+
         //glColor3f(1f, .5f, .5f); DEBUG LINE FOR TEXTURES
         glBegin(GL_QUADS);
         glTexCoord2f(0f, 0f); //bottom left
@@ -84,7 +106,7 @@ public abstract class Sprite implements Drawable, Serializable {
     @Override
     public int compareTo(Drawable o) {
         if (o instanceof Sprite) {
-            Sprite s = (Sprite)o;
+            Sprite s = (Sprite) o;
             float by = (getTexture() != null ? getTexture().getTextureHeight() / 4 : 0);
             float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / 4 : 0);
 
