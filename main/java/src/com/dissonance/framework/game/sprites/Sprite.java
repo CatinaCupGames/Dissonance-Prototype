@@ -1,5 +1,7 @@
 package com.dissonance.framework.game.sprites;
 
+import org.jbox2d.dynamics.BodyDef;
+
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.Drawable;
