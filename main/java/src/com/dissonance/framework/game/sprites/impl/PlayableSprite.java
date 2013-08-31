@@ -1,11 +1,14 @@
 package com.dissonance.framework.game.sprites.impl;
 
 import com.dissonance.framework.game.input.InputKeys;
+import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.system.Settings;
 import com.dissonance.framework.system.utils.Direction;
+import net.java.games.input.Controller;
 import org.jbox2d.common.Vec2;
 import org.lwjgl.input.Keyboard;
 
@@ -42,12 +45,27 @@ public abstract class PlayableSprite extends CombatSprite {
         }
     }
 
+    protected Controller controller;
     protected boolean w, a, s, d;
     protected void checkMovement() {
-        w = Keyboard.isKeyDown(InputKeys.getMoveUpKey());
-        d = Keyboard.isKeyDown(InputKeys.getMoveRightKey());
-        s = Keyboard.isKeyDown(InputKeys.getMoveDownKey());
-        a = Keyboard.isKeyDown(InputKeys.getMoveLeftKey());
+        for(int i = 0; i < Settings.controllers.size(); i++)
+        {
+            if(Settings.controllers.values().toArray(new Boolean[Settings.controllers.size()])[i])
+            {
+                controller = Settings.controllers.keySet().toArray(new Controller[Settings.controllers.size()])[i];
+                Settings.usingController = true;
+            }
+        }
+
+        if(Settings.usingController)
+        {
+            // TODO: Move using D-Pad.
+        } else {
+            w = Keyboard.isKeyDown(InputKeys.getMoveUpKey());
+            d = Keyboard.isKeyDown(InputKeys.getMoveRightKey());
+            s = Keyboard.isKeyDown(InputKeys.getMoveDownKey());
+            a = Keyboard.isKeyDown(InputKeys.getMoveLeftKey());
+        }
 
         if (w) {
             setY(getY() - (10 * RenderService.TIME_DELTA));
