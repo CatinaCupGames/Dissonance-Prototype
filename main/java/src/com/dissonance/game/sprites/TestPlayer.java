@@ -1,4 +1,6 @@
-package com.dissonance.framework.game.sprites.impl;
+package com.dissonance.game.sprites;
+
+import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 
 public class TestPlayer extends PlayableSprite {
 

@@ -1,8 +1,8 @@
-package com.dissonance.game.test;
+package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.dialog.TestDialog;
-import com.dissonance.framework.game.sprites.impl.TestPlayer;
+import com.dissonance.game.sprites.TestPlayer;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.Camera;
@@ -35,8 +35,8 @@ public class TestQuest extends AbstractQuest {
         test.close();
 
         /**
-         * This is a stress test for sprite sorting.
-         * In this test, x amount of TestPlayer objects are created and drawn on the screen.
+         * This is a stress quests for sprite sorting.
+         * In this quests, x amount of TestPlayer objects are created and drawn on the screen.
          * Every 20 seconds, the player you play as is changed.
          *
          * It seems the current sorting method is perfectly fine. Feel free to play

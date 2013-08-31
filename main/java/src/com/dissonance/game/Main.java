@@ -3,7 +3,7 @@ package com.dissonance.game;
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.system.ticker.Ticker;
-import com.dissonance.game.test.TestQuest;
+import com.dissonance.game.quests.TestQuest;
 
 import java.io.File;
 import java.util.Locale;
