@@ -112,7 +112,7 @@ Control scheme:
   -W,S,A,D: move
   -Space: jump
   -Shift(with movement key): dodge
-  -I(hold then use movement keys): extended look
+  -I: cycle through party members
   -Ctrl: toggle strafe
   -J: attack/select
   -K: special ability
@@ -120,12 +120,13 @@ Control scheme:
   -L: magic 2
   -Tab: equipment/status/magic menu
   -Esc: pause
+  -Arrow keys: extended look
 
 -Default gamepad layout(modeled after X360 controller):
-  -D-pad: Move
+ -D-pad/left analog: Move
   -B: Jump
   -Y(with direction): dodge
-  -LB(hold then use D-pad): extended look
+  -LB: cycle through party members
   -RB: toggle strafe
   -A: attack/select
   -X: special ability
@@ -133,3 +134,4 @@ Control scheme:
   -RT: magic 2
   -Back: equipment/status/magic menu
   -Start: pause
+  -Right analog: extended look
