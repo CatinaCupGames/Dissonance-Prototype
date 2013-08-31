@@ -195,7 +195,7 @@ public class RenderService extends Service {
                     e.printStackTrace();
                 }
 
-                while(true)
+                while(InputService.isControllerPluggedIn("Logitech Driving Force USB"))
                 {
                     // Debug.
                     //InputService.debugController("Logitech Driving Force USB");
