@@ -45,18 +45,8 @@ public abstract class PlayableSprite extends CombatSprite {
         }
     }
 
-    protected Controller controller;
     protected boolean w, a, s, d;
     protected void checkMovement() {
-        for(int i = 0; i < Settings.controllers.size(); i++)
-        {
-            if(Settings.controllers.values().toArray(new Boolean[Settings.controllers.size()])[i])
-            {
-                controller = Settings.controllers.keySet().toArray(new Controller[Settings.controllers.size()])[i];
-                Settings.usingController = true;
-            }
-        }
-
         if(Settings.usingController)
         {
             // TODO: Move using D-Pad.
