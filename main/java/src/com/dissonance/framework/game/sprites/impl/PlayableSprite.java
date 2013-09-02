@@ -111,13 +111,13 @@ public abstract class PlayableSprite extends CombatSprite {
     protected boolean isFacing(Sprite s, double distance) {
         int xadd = 0;
         int yadd = 0;
-        if (getFacingDirection() == Direction.UP)
+        if (getDirection() == Direction.UP)
             yadd = -1;
-        else if (getFacingDirection() == Direction.DOWN)
+        else if (getDirection() == Direction.DOWN)
             yadd = 1;
-        else if (getFacingDirection() == Direction.LEFT)
+        else if (getDirection() == Direction.LEFT)
             xadd = -1;
-        else if (getFacingDirection() == Direction.RIGHT)
+        else if (getDirection() == Direction.RIGHT)
             xadd = 1;
 
         final Vec2 v2 = s.getVector();
