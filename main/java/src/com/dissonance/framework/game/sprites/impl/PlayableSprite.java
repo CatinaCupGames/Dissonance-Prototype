@@ -1,15 +1,11 @@
 package com.dissonance.framework.game.sprites.impl;
 
 import com.dissonance.framework.game.input.InputKeys;
-import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.system.Settings;
 import com.dissonance.framework.system.utils.Direction;
-import net.java.games.input.Component;
-import net.java.games.input.Controller;
 import org.jbox2d.common.Vec2;
 import org.lwjgl.input.Keyboard;
 
@@ -46,52 +42,12 @@ public abstract class PlayableSprite extends CombatSprite {
         }
     }
 
-	public static void enableController(String controller)
-	{
-		for(int i = 0; i < Settings.controllers.size(); i++)
-		{
-			if(Settings.controllers.keySet().toArray(new Controller[Settings.controllers.size()])[i].getName().equals(controller))
-			{
-                Settings.controllers.put(Settings.controllers.keySet().toArray(new Controller[Settings.controllers.size()])[i], true);
-                Settings.enabledController = controller;
-			} else {
-				Settings.controllers.put(Settings.controllers.keySet().toArray(new Controller[Settings.controllers.size()])[i], false);
-			}
-		}
-	}
-
-    private boolean isDown(Component.Identifier component)
-    {
-        for(int i = 0; i < Settings.controllers.size(); i++)
-        {
-            if(InputService.isControllerEnabled(Settings.controllers.keySet().toArray(new Controller[Settings.controllers.size()])[i].getName()))
-            {
-                if(InputService.getButtonState(Settings.controllers.keySet().toArray(new Controller[Settings.controllers.size()])[i].getName(), component))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     protected boolean w, a, s, d;
     protected void checkMovement() {
-        if(Settings.usingController)
-        {
-            // TODO: Move using D-Pad.
-            // RIGHT NOW IT'S JUST USING THE BASIC SHAPES.
-            w = isDown(Component.Identifier.Button._3);
-            d = isDown(Component.Identifier.Button._2);
-            s = isDown(Component.Identifier.Button._0);
-            a = isDown(Component.Identifier.Button._1);
-        } else {
-            w = Keyboard.isKeyDown(InputKeys.getMoveUpKey());
-            d = Keyboard.isKeyDown(InputKeys.getMoveRightKey());
-            s = Keyboard.isKeyDown(InputKeys.getMoveDownKey());
-            a = Keyboard.isKeyDown(InputKeys.getMoveLeftKey());
-        }
+        w = InputKeys.isButtonPressed(InputKeys.MOVEUP);
+        d = InputKeys.isButtonPressed(InputKeys.MOVEDOWN);
+        s = InputKeys.isButtonPressed(InputKeys.MOVELEFT);
+        a = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
 
         if (w) {
             if(RenderService.threedee)
@@ -145,7 +101,7 @@ public abstract class PlayableSprite extends CombatSprite {
             if (d == this)
                 continue;
             if (d instanceof Sprite) {
-               Sprite sprite = (Sprite)d;
+                Sprite sprite = (Sprite)d;
                 final Vec2 v2 = sprite.getVector();
                 final Vec2 v1 = getVector();
                 double distance = Math.sqrt(((v2.x - v1.x) * (v2.x - v1.x)) + ((v2.y - v1.y) * (v2.y - v1.y)));
@@ -166,13 +122,13 @@ public abstract class PlayableSprite extends CombatSprite {
     protected boolean isFacing(Sprite s, double distance) {
         int xadd = 0;
         int yadd = 0;
-        if (getFacingDirection() == Direction.UP)
+        if (getDirection() == Direction.UP)
             yadd = -1;
-        else if (getFacingDirection() == Direction.DOWN)
+        else if (getDirection() == Direction.DOWN)
             yadd = 1;
-        else if (getFacingDirection() == Direction.LEFT)
+        else if (getDirection() == Direction.LEFT)
             xadd = -1;
-        else if (getFacingDirection() == Direction.RIGHT)
+        else if (getDirection() == Direction.RIGHT)
             xadd = 1;
 
         final Vec2 v2 = s.getVector();

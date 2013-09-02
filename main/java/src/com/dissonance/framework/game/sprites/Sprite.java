@@ -19,19 +19,19 @@ public abstract class Sprite implements Drawable, Serializable {
     protected transient BodyDef physicsBodyDef;
     protected transient Texture texture;
     protected transient World world;
-    protected Direction facing_direction;
+    protected Direction direction;
     protected float x, y;
 
     public Texture getTexture() {
         return texture;
     }
 
-    public Direction getFacingDirection() {
-        return facing_direction;
+    public Direction getDirection() {
+        return direction;
     }
 
     public void setFacing(Direction direction) {
-        this.facing_direction = direction;
+        this.direction = direction;
     }
 
     public void setTexture(Texture texture) {
