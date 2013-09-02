@@ -8,6 +8,7 @@ import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.Settings;
 import com.dissonance.framework.system.utils.Direction;
+import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import org.jbox2d.common.Vec2;
 import org.lwjgl.input.Keyboard;
@@ -45,11 +46,46 @@ public abstract class PlayableSprite extends CombatSprite {
         }
     }
 
+	public static void enableController(String controller)
+	{
+		for(int i = 0; i < Settings.controllers.size(); i++)
+		{
+			if(Settings.controllers.keySet().toArray(new Controller[Settings.controllers.size()])[i].getName().equals(controller))
+			{
+                Settings.controllers.put(Settings.controllers.keySet().toArray(new Controller[Settings.controllers.size()])[i], true);
+                Settings.enabledController = controller;
+			} else {
+				Settings.controllers.put(Settings.controllers.keySet().toArray(new Controller[Settings.controllers.size()])[i], false);
+			}
+		}
+	}
+
+    private boolean isDown(Component.Identifier component)
+    {
+        for(int i = 0; i < Settings.controllers.size(); i++)
+        {
+            if(InputService.isControllerEnabled(Settings.controllers.keySet().toArray(new Controller[Settings.controllers.size()])[i].getName()))
+            {
+                if(InputService.getButtonState(Settings.controllers.keySet().toArray(new Controller[Settings.controllers.size()])[i].getName(), component))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     protected boolean w, a, s, d;
     protected void checkMovement() {
         if(Settings.usingController)
         {
             // TODO: Move using D-Pad.
+            // RIGHT NOW IT'S JUST USING THE BASIC SHAPES.
+            w = isDown(Component.Identifier.Button._3);
+            d = isDown(Component.Identifier.Button._2);
+            s = isDown(Component.Identifier.Button._0);
+            a = isDown(Component.Identifier.Button._1);
         } else {
             w = Keyboard.isKeyDown(InputKeys.getMoveUpKey());
             d = Keyboard.isKeyDown(InputKeys.getMoveRightKey());

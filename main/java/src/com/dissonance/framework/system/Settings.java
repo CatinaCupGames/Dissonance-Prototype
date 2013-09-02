@@ -18,6 +18,8 @@ public final class Settings
      */
     public static boolean usingController = false;
 
+    public static String enabledController = "";
+
 	public static Component.Identifier.Axis move;
 	public static Component.Identifier.Button jump;
 	public static Component.Identifier.Button dodge;
