@@ -44,26 +44,34 @@ public abstract class PlayableSprite extends CombatSprite {
 
     protected boolean w, a, s, d;
     protected void checkMovement() {
-        w = InputKeys.isButtonPressed(InputKeys.MOVEUP);
-        d = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
-        s = InputKeys.isButtonPressed(InputKeys.MOVEDOWN);
-        a = InputKeys.isButtonPressed(InputKeys.MOVELEFT);
+        if (InputKeys.usingController()) {
+            float xspeed = InputKeys.getJoypadValue(InputKeys.MOVEX) * (10 * RenderService.TIME_DELTA);
+            float yspeed = InputKeys.getJoypadValue(InputKeys.MOVEY) * (10 * RenderService.TIME_DELTA);
 
-        if (w) {
-            setY(getY() - (10 * RenderService.TIME_DELTA));
-            setFacing(Direction.UP);
-        }
-        if (s) {
-            setY(getY() + (10 * RenderService.TIME_DELTA));
-            setFacing(Direction.DOWN);
-        }
-        if (a) {
-            setX(getX() - (10 * RenderService.TIME_DELTA));
-            setFacing(Direction.LEFT);
-        }
-        if (d) {
-            setX(getX() + (10 * RenderService.TIME_DELTA));
-            setFacing(Direction.RIGHT);
+            setX(getX() + xspeed);
+            setY(getY() + yspeed);
+        } else {
+            w = InputKeys.isButtonPressed(InputKeys.MOVEUP);
+            d = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
+            s = InputKeys.isButtonPressed(InputKeys.MOVEDOWN);
+            a = InputKeys.isButtonPressed(InputKeys.MOVELEFT);
+
+            if (w) {
+                setY(getY() - (10 * RenderService.TIME_DELTA));
+                setFacing(Direction.UP);
+            }
+            if (s) {
+                setY(getY() + (10 * RenderService.TIME_DELTA));
+                setFacing(Direction.DOWN);
+            }
+            if (a) {
+                setX(getX() - (10 * RenderService.TIME_DELTA));
+                setFacing(Direction.LEFT);
+            }
+            if (d) {
+                setX(getX() + (10 * RenderService.TIME_DELTA));
+                setFacing(Direction.RIGHT);
+            }
         }
     }
 

@@ -12,6 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InputKeys {
+    public static final String MOVEX = "mx";
+    public static final String MOVEY = "my";
+    public static final String EXTENDX = "ex";
+    public static final String EXTENDY = "ey";
     public static final String MOVEUP = "moveUp";
     public static final String MOVEDOWN = "moveDown";
     public static final String MOVELEFT = "moveLeft";
@@ -127,6 +131,24 @@ public class InputKeys {
         }
     }
 
+    public static void setController(String name) {
+        for (Controller c : getAllControllers()) {
+            if (c.getName().equals(name)) {
+                setController(c);
+                break;
+            }
+        }
+    }
+
+    public static void setController(Controller controller) {
+        InputKeys.controller = controller;
+        try {
+            save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void save() throws IOException {
         String[] config = new String[keys.size() + buttons.size() + (controller == null ? 0 : 1)];
         int i = 0;
@@ -166,23 +188,33 @@ public class InputKeys {
         return checkKeyboard(button);
     }
 
-    /**
-     * I'm not sure which is left and right.
-     * Also I don't know if I'm reading the right variables.
-     * I'll figure all this out once I buy a gamepad.
-     */
-
-    public static Component.Identifier.Axis[] getLeftPad()
-    {
-        Component.Identifier.Axis[] axises = {Component.Identifier.Axis.X, Component.Identifier.Axis.Y};
-
-        return axises;
+    public static float getJoypadValue(String button) {
+        if (!usingController())
+            return 0f;
+        switch (button) {
+            case MOVEX:
+            case MOVELEFT:
+            case MOVERIGHT:
+                return controller.getComponent(getLeftPad()[0]).getPollData();
+            case MOVEY:
+            case MOVEUP:
+            case MOVEDOWN:
+                return controller.getComponent(getLeftPad()[1]).getPollData();
+            case EXTENDX:
+                return controller.getComponent(getRightPad()[0]).getPollData();
+            case EXTENDY:
+                return controller.getComponent(getRightPad()[1]).getPollData();
+            default:
+                return 0f;
+        }
     }
-    public static Component.Identifier.Axis[] getRightPad()
-    {
-        Component.Identifier.Axis[] axises = {Component.Identifier.Axis.RX, Component.Identifier.Axis.RY};
 
-        return axises;
+    private static Component.Identifier.Axis[] getLeftPad() {
+        return new Component.Identifier.Axis[] { Component.Identifier.Axis.X, Component.Identifier.Axis.Y };
+    }
+
+    private static Component.Identifier.Axis[] getRightPad() {
+        return new Component.Identifier.Axis[] { Component.Identifier.Axis.RX, Component.Identifier.Axis.RY };
     }
 
     private static boolean checkKeyboard(String button) {
