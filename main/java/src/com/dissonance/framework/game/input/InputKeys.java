@@ -109,6 +109,43 @@ public class InputKeys {
         writeAllLines(PATH, config);
     }
 
+    public static void setKey(String button, int key) {
+        keys.put(button, key);
+        try {
+            save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setButton(String button, Component component) {
+        buttons.put(button, component.getName());
+        try {
+            save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void save() throws IOException {
+        String[] config = new String[keys.size() + buttons.size() + (controller == null ? 0 : 1)];
+        int i = 0;
+        if (controller != null) {
+            config[i] = controller.getName();
+            i++;
+        }
+        for (String s : keys.keySet()) {
+            config[i] = s + ":" + keys.get(s);
+            i++;
+        }
+        for (String s : buttons.keySet()) {
+            config[i] = s + ":" + buttons.get(s);
+            i++;
+        }
+
+        writeAllLines(PATH, config);
+    }
+
     public static boolean isButtonPressed(String button) {
         if (usingController()) {
             if (button.equals(MOVEUP) || button.equals(MOVELEFT) || button.equals(MOVERIGHT) || button.equals(MOVELEFT)) {
