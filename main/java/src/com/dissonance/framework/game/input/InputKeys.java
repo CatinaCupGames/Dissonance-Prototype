@@ -131,7 +131,7 @@ public class InputKeys {
         String[] config = new String[keys.size() + buttons.size() + (controller == null ? 0 : 1)];
         int i = 0;
         if (controller != null) {
-            config[i] = controller.getName();
+            config[i] = "cname:" + controller.getName();
             i++;
         }
         for (String s : keys.keySet()) {
