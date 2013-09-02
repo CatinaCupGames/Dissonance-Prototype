@@ -1,72 +1,47 @@
 package com.dissonance.framework.game.input;
 
+import com.dissonance.framework.system.utils.FileUtils;
 import com.dissonance.framework.system.utils.Validator;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import org.lwjgl.input.Keyboard;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 public class InputKeys {
-    public static final String MOVEX = "mx";
-    public static final String MOVEY = "my";
-    public static final String EXTENDX = "ex";
-    public static final String EXTENDY = "ey";
-    public static final String MOVEUP = "moveUp";
-    public static final String MOVEDOWN = "moveDown";
-    public static final String MOVELEFT = "moveLeft";
-    public static final String MOVERIGHT = "moveRight";
-    public static final String PAUSE = "pause";
-    public static final String MENU = "menu";
-    public static final String MAGIC1 = "magic1";
-    public static final String MAGIC2 = "magic2";
-    public static final String SPECIAL = "special";
-    public static final String ATTACK = "attack";
-    public static final String STRAFE = "strafe";
-    public static final String JUMP = "jump";
-    public static final String DODGE = "dodge";
+    public static final String MOVEX      = "mx";
+    public static final String MOVEY      = "my";
+    public static final String EXTENDX    = "ex";
+    public static final String EXTENDY    = "ey";
+    public static final String MOVEUP     = "moveUp";
+    public static final String MOVEDOWN   = "moveDown";
+    public static final String MOVELEFT   = "moveLeft";
+    public static final String MOVERIGHT  = "moveRight";
+    public static final String PAUSE      = "pause";
+    public static final String MENU       = "menu";
+    public static final String MAGIC1     = "magic1";
+    public static final String MAGIC2     = "magic2";
+    public static final String SPECIAL    = "special";
+    public static final String ATTACK     = "attack";
+    public static final String STRAFE     = "strafe";
+    public static final String JUMP       = "jump";
+    public static final String DODGE      = "dodge";
     public static final String EXTENDLOOK = "extendLook";
 
     private final static String DIR = "config" + File.separator;
-    private final static String PATH = DIR + "keyconfig.txt"; //move if ya want
+    private final static String CONFIG_NAME = "keyconfig.txt";
+    private final static String PATH = DIR + CONFIG_NAME; //move if ya want
     private final static HashMap<String, Integer> keys = new HashMap<>();
     private final static HashMap<String, String> buttons = new HashMap<>();
     private static Controller controller;
 
-    private static String[] readAllLines(String filePath) throws IOException {
-        LineNumberReader reader = new LineNumberReader(new FileReader(filePath));
-        List<String> lines = new ArrayList<>();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            lines.add(line);
-        }
-        reader.close();
-
-        return lines.toArray(new String[lines.size()]);
-    }
-    private static void writeAllLines(String filePath, String[] lines) throws IOException {
-        FileOutputStream file = new FileOutputStream(filePath);
-        for (String line : lines) {
-            file.write((line + "\r\n").getBytes());
-        }
-        file.close();
-    }
-
     public static void initializeConfig() throws IOException {
-        File dir = new File(DIR);
-        if (!dir.exists()) {
-            dir.mkdir();
-        }
+        FileUtils.createIfNotExist(DIR, CONFIG_NAME, createConfig());
+        String[] lines = FileUtils.readAllLines(PATH);
 
-        if (!new File(PATH).exists()) {
-            createConfig();
-        }
-
-        String[] lines = readAllLines(PATH);
         Component[] components = null;
         for (String string : lines) {
             String[] split = string.split(":");
@@ -102,15 +77,8 @@ public class InputKeys {
         return ControllerEnvironment.getDefaultEnvironment().getControllers();
     }
 
-    private static void createConfig() throws IOException {
-        String[] config = {
-                "moveUp:17", "moveLeft:30", "moveDown:31", "moveRight:32",
-                "jump:57", "dodge:42", "extendLook:23", "strafe:29",
-                "attack:36", "special:37", "magic1:24", "magic2:38",
-                "menu:15", "pause:1"
-        };
-
-        writeAllLines(PATH, config);
+    private static String createConfig() throws IOException {
+        return "moveUp:17\nmoveLeft:30\nmoveDown:31\nmoveRight:32\njump:57\ndodge:42\nextendLook:23\nstrafe:29\nattack:36\nspecial:37\nmagic1:24\nmagic2:38\nmenu:15\npause:1";
     }
 
     public static void setKey(String button, int key) {
@@ -165,7 +133,7 @@ public class InputKeys {
             i++;
         }
 
-        writeAllLines(PATH, config);
+        FileUtils.writeLines(PATH, config);
     }
 
     public static boolean isButtonPressed(String button) {
@@ -292,7 +260,7 @@ public class InputKeys {
     }
 }
 /*
- -W,S,A,D: move
+  -W,S,A,D: move
   -Space: jump
   -Shift(with movement key): dodge
   -I(hold then use movement keys): extended look
