@@ -45,9 +45,9 @@ public abstract class PlayableSprite extends CombatSprite {
     protected boolean w, a, s, d;
     protected void checkMovement() {
         w = InputKeys.isButtonPressed(InputKeys.MOVEUP);
-        d = InputKeys.isButtonPressed(InputKeys.MOVEDOWN);
-        s = InputKeys.isButtonPressed(InputKeys.MOVELEFT);
-        a = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
+        d = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
+        s = InputKeys.isButtonPressed(InputKeys.MOVEDOWN);
+        a = InputKeys.isButtonPressed(InputKeys.MOVELEFT);
 
         if (w) {
             setY(getY() - (10 * RenderService.TIME_DELTA));
