@@ -3,17 +3,14 @@ package com.dissonance.framework.render;
 import com.dissonance.framework.game.input.InputListener;
 import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
-import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.sound.SoundState;
 import com.dissonance.framework.sound.SoundSystem;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
-import com.dissonance.framework.system.Settings;
 import com.dissonance.framework.system.utils.Validator;
 import com.dissonance.game.Main;
-import net.java.games.input.Component;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL;
@@ -188,41 +185,6 @@ public class RenderService extends Service {
         inputListener.getButtons().add(1);
 
         inputService.provideData(inputListener, InputService.ADD_LISTENER);
-
-        // Just a simple test for you guys!!!
-        new Thread(new Runnable() {
-            @Override
-            public void run()
-            {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                if(InputService.isControllerPluggedIn("Logitech Driving Force USB"))
-                {
-                    PlayableSprite.enableController("Logitech Driving Force USB");
-                    //Settings.usingController = true;
-                }
-
-                while(InputService.isControllerPluggedIn("Logitech Driving Force USB"))
-                {
-                    // Debug.
-                    //InputService.debugController("Logitech Driving Force USB");
-
-                    // Example with name.
-                    //System.out.println(InputService.getButtonState("Logitech Driving Force USB", "Cross"));
-                    // Example with identifier.
-                    //System.out.println(InputService.getButtonState("Logitech Driving Force USB", Component.Identifier.Button._0));
-
-                    // Example with name.
-                    //System.out.println(InputService.getAxisValue("Logitech Driving Force USB", "Wheel axis"));
-                    // Example with identifier.
-                    //System.out.println(InputService.getAxisValue("Logitech Driving Force USB", Component.Identifier.Axis.X));
-                }
-            }
-        }).start();
     }
 
     @Override
