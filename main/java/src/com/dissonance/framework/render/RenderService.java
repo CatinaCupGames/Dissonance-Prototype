@@ -3,12 +3,14 @@ package com.dissonance.framework.render;
 import com.dissonance.framework.game.input.InputListener;
 import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
+import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.sound.SoundState;
 import com.dissonance.framework.sound.SoundSystem;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
+import com.dissonance.framework.system.Settings;
 import com.dissonance.framework.system.utils.Validator;
 import com.dissonance.game.Main;
 import net.java.games.input.Component;
@@ -71,6 +73,9 @@ public class RenderService extends Service {
             //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
+            {
+                //glDepthFunc(GL_LEQUAL);
+            }
             glLoadIdentity();
 
             shot = soundSystem.loadSound("shot", "shotproto.wav");
@@ -195,7 +200,13 @@ public class RenderService extends Service {
                     e.printStackTrace();
                 }
 
-                while(true)
+                if(InputService.isControllerPluggedIn("Logitech Driving Force USB"))
+                {
+                    PlayableSprite.enableController("Logitech Driving Force USB");
+                    //Settings.usingController = true;
+                }
+
+                while(InputService.isControllerPluggedIn("Logitech Driving Force USB"))
                 {
                     // Debug.
                     //InputService.debugController("Logitech Driving Force USB");
@@ -208,7 +219,7 @@ public class RenderService extends Service {
                     // Example with name.
                     //System.out.println(InputService.getAxisValue("Logitech Driving Force USB", "Wheel axis"));
                     // Example with identifier.
-                    System.out.println(InputService.getAxisValue("Logitech Driving Force USB", Component.Identifier.Axis.X));
+                    //System.out.println(InputService.getAxisValue("Logitech Driving Force USB", Component.Identifier.Axis.X));
                 }
             }
         }).start();
@@ -241,6 +252,7 @@ public class RenderService extends Service {
     }
 
 
+    float x = 0.0f;
     @Override
     public void onUpdate() {
         now = System.currentTimeMillis();

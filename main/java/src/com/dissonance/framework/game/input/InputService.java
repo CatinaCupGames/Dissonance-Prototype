@@ -3,6 +3,7 @@ package com.dissonance.framework.game.input;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
+import com.dissonance.framework.system.Settings;
 import com.dissonance.framework.system.utils.Validator;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
@@ -154,6 +155,8 @@ public final class InputService extends Service {
                 controllers.put(controller2.getName(), controller2);
                 rumblers.put(controller2, controller2.getRumblers());
 
+                Settings.controllers.put(controllers.get(controller2.getName()), false);
+
                 //TEMP CODE
                 System.out.println(controller2.getName() + " : " + controller2.getPortNumber() + " : " + controller2.getPortType() + " : " + controller2.getType());
                 for(final Rumbler rumbler : controller2.getRumblers()) {
@@ -194,6 +197,12 @@ public final class InputService extends Service {
     public static float getAxisValue(String controller, String component)
     {
         Controller controller1 = controllers.get(controller);
+
+        if(!isControllerPluggedIn(controller) || !isControllerEnabled(controller))
+        {
+            throw new RuntimeException("Controller \"" + controller + "\" is not plugged in.");
+        }
+
         controller1.poll();
         Component[] components = controller1.getComponents();
 
@@ -212,6 +221,12 @@ public final class InputService extends Service {
     public static float getAxisValue(String controller, Component.Identifier componentId)
     {
         Controller controller1 = controllers.get(controller);
+
+        if(!isControllerPluggedIn(controller) || !isControllerEnabled(controller))
+        {
+            throw new RuntimeException("Controller \"" + controller + "\" is not plugged in.");
+        }
+
         controller1.poll();
         Component component = controller1.getComponent(componentId);
 
@@ -223,6 +238,12 @@ public final class InputService extends Service {
     public static boolean getButtonState(String controller, String component)
     {
         Controller controller1 = controllers.get(controller);
+
+        if(!isControllerPluggedIn(controller) || !isControllerEnabled(controller))
+        {
+            throw new RuntimeException("Controller \"" + controller + "\" is not plugged in.");
+        }
+
         controller1.poll();
         Component[] components = controller1.getComponents();
 
@@ -241,6 +262,12 @@ public final class InputService extends Service {
     public static boolean getButtonState(String controller, Component.Identifier componentId)
     {
         Controller controller1 = controllers.get(controller);
+
+        if(!isControllerPluggedIn(controller) || !isControllerEnabled(controller))
+        {
+            throw new RuntimeException("Controller \"" + controller + "\" is not plugged in.");
+        }
+
         controller1.poll();
         Component component = controller1.getComponent(componentId);
 
@@ -258,12 +285,38 @@ public final class InputService extends Service {
     {
         Controller controller1 = controllers.get(controller);
 
+        if(!isControllerPluggedIn(controller) || !isControllerEnabled(controller))
+        {
+            throw new RuntimeException("Controller \"" + controller + "\" is not plugged in.");
+        }
+
+
         return getButtonState(controller, componentId);
+    }
+
+    public static boolean isControllerPluggedIn(String controller)
+    {
+        Controller controller1 = controllers.get(controller);
+
+        return (controller1 != null);
+    }
+
+    public static boolean isControllerEnabled(String controller)
+    {
+        Controller controller1 = controllers.get(controller);
+
+        return Settings.controllers.get(controller1);
     }
 
     public static void debugController(String controller)
     {
         Controller controller1 = controllers.get(controller);
+
+        if(controller1 == null)
+        {
+            throw new RuntimeException("Controller \"" + controller + "\" is not plugged in.");
+        }
+
         StringBuffer buffer = new StringBuffer();
 
         Component component;
