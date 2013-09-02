@@ -2,7 +2,6 @@ package com.dissonance.framework.game.sprites;
 
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.sprites.animation.Animator;
-import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteAnimationInfo;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
@@ -65,7 +64,7 @@ public abstract class AnimatedSprite extends Sprite implements Animator {
         texture.bind();
         float bx = texture.getWidth() / 2;
         float by = texture.getHeight() / 2;
-        float x = getX(), y = getY();
+        final float x = getX(), y = getY();
 
         //glColor4f(0f, 0f, 0f, 1f); //DEBUG LINE FOR TEXTURES
         glEnable(GL_BLEND);
@@ -74,21 +73,15 @@ public abstract class AnimatedSprite extends Sprite implements Animator {
         Vector2f br = texture.getTextureCord(SpriteTexture.BOTTOM_RIGHT);
         Vector2f ur = texture.getTextureCord(SpriteTexture.TOP_RIGHT);
         Vector2f ul = texture.getTextureCord(SpriteTexture.TOP_LEFT);
-        if(RenderService.threedee)
-        {
-            x *= -1;
-            y *= -1;
-            glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
-        }
         glBegin(GL_QUADS);
         glTexCoord2f(bl.getX(), bl.getY()); //bottom left
-        glVertex3f(x - bx, y - by, 1f);
+        glVertex3f(x - bx, y - by, 0f);
         glTexCoord2f(br.getX(), br.getY()); //bottom right
-        glVertex3f(x + bx, y - by, 1f);
+        glVertex3f(x + bx, y - by, 0f);
         glTexCoord2f(ur.getX(), ur.getY()); //top right
-        glVertex3f(x + bx, y + by, 1f);
+        glVertex3f(x + bx, y + by, 0f);
         glTexCoord2f(ul.getX(), ul.getY()); //top left
-        glVertex3f(x - bx, y + by, 1f);
+        glVertex3f(x - bx, y + by, 0f);
         glEnd();
         texture.unbind();
         glDisable(GL_BLEND);
