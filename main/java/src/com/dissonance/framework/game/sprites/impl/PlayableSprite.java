@@ -50,11 +50,22 @@ public abstract class PlayableSprite extends CombatSprite {
         a = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
 
         if (w) {
-            setY(getY() - (10 * RenderService.TIME_DELTA));
+            if(RenderService.threedee)
+            {
+                setY(getY() + (10 * RenderService.TIME_DELTA));
+            } else {
+                setY(getY() - (10 * RenderService.TIME_DELTA));
+            }
             setFacing(Direction.UP);
         }
         if (s) {
-            setY(getY() + (10 * RenderService.TIME_DELTA));
+
+            if(RenderService.threedee)
+            {
+                setY(getY() - (10 * RenderService.TIME_DELTA));
+            } else {
+                setY(getY() + (10 * RenderService.TIME_DELTA));
+            }
             setFacing(Direction.DOWN);
         }
         if (a) {
