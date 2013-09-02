@@ -166,7 +166,24 @@ public class InputKeys {
         return checkKeyboard(button);
     }
 
-    //TODO Create method to get axis data for controller
+    /**
+     * I'm not sure which is left and right.
+     * Also I don't know if I'm reading the right variables.
+     * I'll figure all this out once I buy a gamepad.
+     */
+
+    public static Component.Identifier.Axis[] getLeftPad()
+    {
+        Component.Identifier.Axis[] axises = {Component.Identifier.Axis.X, Component.Identifier.Axis.Y};
+
+        return axises;
+    }
+    public static Component.Identifier.Axis[] getRightPad()
+    {
+        Component.Identifier.Axis[] axises = {Component.Identifier.Axis.RX, Component.Identifier.Axis.RY};
+
+        return axises;
+    }
 
     private static boolean checkKeyboard(String button) {
         return Keyboard.isKeyDown(keys.get(button));
