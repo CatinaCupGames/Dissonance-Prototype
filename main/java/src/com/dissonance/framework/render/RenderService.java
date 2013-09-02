@@ -28,6 +28,7 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
+import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 public class RenderService extends Service {
     public static int GAME_WIDTH = 1280, GAME_HEIGHT = 720;
@@ -68,7 +69,12 @@ public class RenderService extends Service {
             glViewport(0, 0, GAME_WIDTH, GAME_HEIGHT);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0.0f, GAME_WIDTH, GAME_HEIGHT, 0.0f, 0f, -1000f);
+            if(threedee)
+            {
+                gluPerspective(90, (float)GAME_WIDTH / (float)GAME_HEIGHT, 0.3f, 1000.0f);
+            } else {
+                glOrtho(0.0f, GAME_WIDTH, GAME_HEIGHT, 0.0f, 0f, -1000f);
+            }
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
@@ -252,6 +258,8 @@ public class RenderService extends Service {
     }
 
 
+
+    public static boolean threedee = false;
     float x = 0.0f;
     @Override
     public void onUpdate() {
@@ -268,7 +276,12 @@ public class RenderService extends Service {
             glRotatef(-roty, 0, 1, 0);
             glRotatef(0, 0, 0, 1);
             glScalef(2.5f, 2.5f, 1f);
-            glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
+            if(threedee)
+            {
+                glTranslatef(-Camera.getX() - 250, -Camera.getY() - 150f, -350f);
+            } else {
+                glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
+            }
 
             Iterator<Drawable> sprites = current_world.getDrawable();
             while (sprites.hasNext()) {

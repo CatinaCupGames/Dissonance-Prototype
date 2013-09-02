@@ -77,16 +77,33 @@ public final class World implements Drawable {
         float by = texture.getTextureHeight() / 2;
         final float x = 0, y = 0;
         //glColor3f(1f, .5f, .5f); DEBUG LINE FOR TEXTURES
-        glBegin(GL_QUADS);
-        glTexCoord2f(0f, 0f); //bottom left
-        glVertex3f(x - bx, y - by, 0f);
-        glTexCoord2f(1f, 0f); //bottom right
-        glVertex3f(x + bx, y - by, 0f);
-        glTexCoord2f(1f, 1f); //top right
-        glVertex3f(x + bx, y + by, 0f);
-        glTexCoord2f(0f, 1f); //top left
-        glVertex3f(x - bx, y + by, 0f);
-        glEnd();
+        if(RenderService.threedee)
+        {
+            //glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
+            glBegin(GL_QUADS);
+            {
+                glTexCoord2f(0f, 1f); //bottom left
+                glVertex3f(x - bx, y - by, 2f);
+                glTexCoord2f(1f, 1f); //bottom right
+                glVertex3f(x + bx, y - by, 2f);
+                glTexCoord2f(1f, 0f); //top right
+                glVertex3f(x + bx, y + by, 2f);
+                glTexCoord2f(0f, 0f); //top left
+                glVertex3f(x - bx, y + by, 2f);
+            }
+            glEnd();
+        } else {
+            glBegin(GL_QUADS);
+            glTexCoord2f(0f, 0f); //bottom left
+            glVertex3f(x - bx, y - by, 2f);
+            glTexCoord2f(1f, 0f); //bottom right
+            glVertex3f(x + bx, y - by, 2f);
+            glTexCoord2f(1f, 1f); //top right
+            glVertex3f(x + bx, y + by, 2f);
+            glTexCoord2f(0f, 1f); //top left
+            glVertex3f(x - bx, y + by, 2f);
+            glEnd();
+        }
         texture.unbind();
     }
 

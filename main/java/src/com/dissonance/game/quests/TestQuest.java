@@ -2,6 +2,7 @@ package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.dialog.TestDialog;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.game.sprites.TestPlayer;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
@@ -28,7 +29,7 @@ public class TestQuest extends AbstractQuest {
         test.displayUI();
         Camera.setPos(Camera.translateToCameraCenter(new Vec2(test.getX(), test.getY()), test.getWidth(), test.getHeight()));
         try {
-            Thread.sleep(5000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -43,7 +44,7 @@ public class TestQuest extends AbstractQuest {
          * around with the STRESS_COUNT value.
          */
         final World w = getWorld();
-        final int STRESS_COUNT = 2;
+        final int STRESS_COUNT = 1;
         final Random random = new Random();
         List<TestPlayer> testPlayers = new ArrayList<TestPlayer>();
         for (int i = 0; i < STRESS_COUNT; i++) {
@@ -51,7 +52,12 @@ public class TestQuest extends AbstractQuest {
             w.loadAnimatedTextureForSprite(p);
             w.addSprite(p);
             p.setX(random.nextInt(300));
-            p.setY(random.nextInt(300));
+            if(RenderService.threedee)
+            {
+                p.setY(random.nextInt(300) * -1);
+            } else {
+                p.setY(random.nextInt(300));
+            }
             testPlayers.add(p);
         }
 
