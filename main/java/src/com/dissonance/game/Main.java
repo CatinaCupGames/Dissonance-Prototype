@@ -2,6 +2,7 @@ package com.dissonance.game;
 
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.input.InputKeys;
+import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.system.ticker.Ticker;
 import com.dissonance.game.quests.TestQuest;
 
@@ -29,12 +30,11 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Using libs folder " + System.getProperty("org.lwjgl.librarypath"));
-        System.out.println("Starting Ticker");
+        System.out.println("Loading Input config");
         InputKeys.initializeConfig();
-
-        TICKER.startTick();
-        //SteamProxy proxy = new SteamProxy();
-        //proxy.initSteamAPI();
+        System.out.println("Loading game dialog");
+        DialogFactory.loadDialog();
+        System.out.println("Starting quest");
         GameService.beginQuest(new TestQuest());
     }
 

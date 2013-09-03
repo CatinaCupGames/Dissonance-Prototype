@@ -19,8 +19,6 @@ public class FileUtils {
         File fileFile = new File(path, fileName);
 
         boolean f = filePath.mkdirs();
-        if (!f)
-            throw new IOException("Failed to make parent directories!");
 
         if (!fileFile.exists()) {
             f = fileFile.createNewFile();

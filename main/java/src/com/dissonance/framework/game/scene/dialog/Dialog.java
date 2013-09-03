@@ -1,4 +1,4 @@
-package com.dissonance.framework.game.dialog;
+package com.dissonance.framework.game.scene.dialog;
 
 public class Dialog {
     private String[] lines;

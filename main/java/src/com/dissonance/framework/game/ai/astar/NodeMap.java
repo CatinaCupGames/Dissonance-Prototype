@@ -1,5 +1,6 @@
-package com.dissonance.framework.game.ai;
+package com.dissonance.framework.game.ai.astar;
 
+import com.dissonance.framework.game.ai.Position;
 import com.dissonance.framework.system.utils.Validator;
 
 import java.io.Serializable;

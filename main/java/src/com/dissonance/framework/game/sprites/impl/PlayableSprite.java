@@ -1,5 +1,8 @@
 package com.dissonance.framework.game.sprites.impl;
 
+import com.dissonance.framework.game.ai.Position;
+import com.dissonance.framework.game.ai.waypoint.WaypointMover;
+import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.render.Camera;
@@ -11,12 +14,12 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.Iterator;
 
-public abstract class PlayableSprite extends CombatSprite {
+public abstract class PlayableSprite extends CombatSprite implements WaypointSprite {
     private boolean isPlaying = false;
     private boolean frozen = false;
     private boolean attack_select;
     private static PlayableSprite currentlyPlaying;
-
+    protected Position currentWaypoint;
 
     @Override
     public void setX(float x) {
@@ -36,6 +39,8 @@ public abstract class PlayableSprite extends CombatSprite {
 
     @Override
     public void update() {
+        if (currentWaypoint != null && !WaypointMover.moveSpriteOneFrame(this))
+            currentWaypoint = null;
         if (isPlaying) {
             checkSelect();
             checkMovement();
@@ -44,6 +49,8 @@ public abstract class PlayableSprite extends CombatSprite {
 
     protected boolean w, a, s, d;
     protected void checkMovement() {
+        if (frozen)
+            return;
         if (InputKeys.usingController()) {
             float xspeed = InputKeys.getJoypadValue(InputKeys.MOVEX) * (10 * RenderService.TIME_DELTA);
             float yspeed = InputKeys.getJoypadValue(InputKeys.MOVEY) * (10 * RenderService.TIME_DELTA);
@@ -138,6 +145,23 @@ public abstract class PlayableSprite extends CombatSprite {
 
     public boolean isFrozen() {
         return frozen;
+    }
+
+    public void freeze() {
+        frozen = true;
+    }
+
+    public void unfreeze() {
+        frozen = false;
+    }
+
+    public void setWaypoint(Position position) {
+        this.currentWaypoint = position;
+    }
+
+    @Override
+    public Position getWaypoint() {
+        return currentWaypoint;
     }
 
     /**

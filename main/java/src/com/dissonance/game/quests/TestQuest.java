@@ -1,13 +1,15 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.dialog.TestDialog;
-import com.dissonance.game.sprites.TestPlayer;
+import com.dissonance.framework.game.ai.Position;
+import com.dissonance.framework.game.scene.dialog.Dialog;
+import com.dissonance.framework.game.scene.dialog.DialogFactory;
+import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
-
+import com.dissonance.game.sprites.TestPlayer;
 import org.jbox2d.common.Vec2;
 
 import java.util.ArrayList;
@@ -23,8 +25,17 @@ public class TestQuest extends AbstractQuest {
         } catch (WorldLoadFailedException e) {
             e.printStackTrace();
         }
+        Dialog d = DialogFactory.getDialog("TEST");
+        DialogUI dialogUI = new DialogUI("TESTINGDIALOG--", d);
+        dialogUI.displayUI();
+        Camera.setPos(Camera.translateToCameraCenter(new Vec2(dialogUI.getX(), dialogUI.getY()), dialogUI.getWidth(), dialogUI.getHeight()));
+        try {
+            dialogUI.waitForEnd();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        TestDialog test = new TestDialog();
+        /*TestDialog test = new TestDialog();
         test.displayUI();
         Camera.setPos(Camera.translateToCameraCenter(new Vec2(test.getX(), test.getY()), test.getWidth(), test.getHeight()));
         try {
@@ -32,7 +43,7 @@ public class TestQuest extends AbstractQuest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        test.close();
+        test.close();*/
 
         /**
          * This is a stress quests for sprite sorting.
@@ -53,6 +64,10 @@ public class TestQuest extends AbstractQuest {
             p.setX(random.nextInt(300));
             p.setY(random.nextInt(300));
             testPlayers.add(p);
+            if (i > 0) {
+                Position pos = new Position(testPlayers.get(0).getVector());
+                p.setWaypoint(pos);
+            }
         }
 
         w.invalidateDrawableList();

@@ -1,6 +1,6 @@
 package com.dissonance.framework.game.world;
 
-import com.dissonance.framework.game.ai.NodeMap;
+import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.sprites.AnimatedSprite;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.render.Drawable;

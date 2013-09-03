@@ -1,4 +1,4 @@
-package com.dissonance.framework.game.dialog;
+package com.dissonance.framework.game.scene.dialog;
 
 import com.dissonance.framework.game.sprites.UIElement;
 
@@ -17,7 +17,7 @@ public class TestDialog extends UIElement {
 
     @Override
     public void draw(Graphics2D graphics2D) {
-        graphics2D.setColor(Color.BLACK);
+        graphics2D.setColor(Color.WHITE);
         graphics2D.drawRect(0, 0, (int)getWidth(), (int)getHeight());
         graphics2D.setColor(Color.BLUE);
         graphics2D.drawString(text, 0, getHeight() / 2);

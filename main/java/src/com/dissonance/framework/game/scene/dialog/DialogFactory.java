@@ -1,4 +1,4 @@
-package com.dissonance.framework.game.dialog;
+package com.dissonance.framework.game.scene.dialog;
 
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import org.w3c.dom.Document;
@@ -42,7 +42,9 @@ public class DialogFactory {
                     if (nodelist != null && nodelist.getLength() > 0) {
                         lines = new String[nodelist.getLength()];
                         for (int ii = 0; ii < nodelist.getLength(); ii++) {
-                            lines[i] = ((Element)nodelist.item(i)).getNodeValue();
+                            if (nodelist.item(ii) == null)
+                                continue;
+                            lines[ii] = ((Element)nodelist.item(ii)).getFirstChild().getNodeValue();
                         }
                     } else {
                         lines = new String[0];
@@ -53,7 +55,9 @@ public class DialogFactory {
                     if (nodelist != null && nodelist.getLength() > 0) {
                         headers = new String[nodelist.getLength()];
                         for (int ii = 0; ii < nodelist.getLength(); ii++) {
-                            headers[i] = ((Element)nodelist.item(i)).getNodeValue();
+                            if (nodelist.item(ii) == null)
+                                continue;
+                            headers[ii] = ((Element)nodelist.item(ii)).getFirstChild().getNodeValue();
                         }
                     } else {
                         headers = new String[0];
@@ -64,7 +68,9 @@ public class DialogFactory {
                     if (nodelist != null && nodelist.getLength() > 0) {
                         images = new String[nodelist.getLength()];
                         for (int ii = 0; ii < nodelist.getLength(); ii++) {
-                            images[i] = ((Element)nodelist.item(i)).getNodeValue();
+                            if (nodelist.item(ii) == null)
+                                continue;
+                            images[ii] = ((Element)nodelist.item(ii)).getFirstChild().getNodeValue();
                         }
                     } else {
                         images = new String[0];

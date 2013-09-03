@@ -33,6 +33,12 @@ public final class Camera {
         posY = pos.y;
     }
 
+    public static Vec2 translateToScreenCord(Vec2 vec) {
+        vec.x = posX + vec.x;
+        vec.y = posY - vec.y;
+        return vec;
+    }
+
     public static Vec2 translateToCameraCenter(Vec2 vec, float width, float height) {
         vec.x = (vec.x - (RenderService.GAME_WIDTH / 4.5f) + width);
         vec.y = (vec.y - (RenderService.GAME_HEIGHT / 4.5f) + height);

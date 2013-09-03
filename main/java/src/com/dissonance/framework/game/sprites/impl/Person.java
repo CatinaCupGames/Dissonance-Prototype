@@ -1,7 +1,7 @@
 package com.dissonance.framework.game.sprites.impl;
 
-import com.dissonance.framework.game.dialog.Dialog;
-import com.dissonance.framework.game.dialog.DialogFactory;
+import com.dissonance.framework.game.scene.dialog.Dialog;
+import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.game.sprites.AnimatedSprite;
 import com.dissonance.framework.game.world.World;
 
