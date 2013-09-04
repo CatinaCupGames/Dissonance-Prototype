@@ -47,6 +47,10 @@ public class RenderService extends Service {
     long cur = System.currentTimeMillis();
     long now;
 
+    public static boolean isInRenderThread() {
+        return Thread.currentThread().getId() == RENDER_THREAD_ID;
+    }
+
     @Override
     protected void onStart() {
 
@@ -70,6 +74,8 @@ public class RenderService extends Service {
             //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glLoadIdentity();
 
             shot = soundSystem.loadSound("shot", "shotproto.wav");
