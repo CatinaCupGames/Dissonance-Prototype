@@ -10,7 +10,6 @@ import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.game.sprites.TestPlayer;
-import org.jbox2d.common.Vec2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +24,13 @@ public class TestQuest extends AbstractQuest {
         } catch (WorldLoadFailedException e) {
             e.printStackTrace();
         }
+        final Random random = new Random();
+        Camera.setX(random.nextInt(300) - 400);
+        Camera.setY(random.nextInt(300) - 400);
         Dialog d = DialogFactory.getDialog("TEST");
         DialogUI dialogUI = new DialogUI("TESTINGDIALOG--", d);
         dialogUI.displayUI();
-        Camera.setPos(Camera.translateToCameraCenter(new Vec2(dialogUI.getX(), dialogUI.getY()), dialogUI.getWidth(), dialogUI.getHeight()));
+        ///Camera.setPos(Camera.translateToCameraCenter(new Vec2(dialogUI.getX(), dialogUI.getY()), dialogUI.getWidth(), dialogUI.getHeight()));
         try {
             dialogUI.waitForEnd();
         } catch (InterruptedException e) {
@@ -55,7 +57,6 @@ public class TestQuest extends AbstractQuest {
          */
         final World w = getWorld();
         final int STRESS_COUNT = 2;
-        final Random random = new Random();
         List<TestPlayer> testPlayers = new ArrayList<TestPlayer>();
         for (int i = 0; i < STRESS_COUNT; i++) {
             TestPlayer p = new TestPlayer();

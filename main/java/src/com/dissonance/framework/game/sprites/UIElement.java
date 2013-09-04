@@ -3,6 +3,7 @@ package com.dissonance.framework.game.sprites;
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.render.Drawable;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 
 import java.awt.*;
@@ -34,7 +35,7 @@ public abstract class UIElement implements Drawable {
         PlayableSprite.haltMovement();
     }
 
-    public void close() {
+    private void _close() {
         PlayableSprite.resumeMovement();
         GameService.getCurrentWorld().removeDrawable(this);
 
@@ -43,6 +44,19 @@ public abstract class UIElement implements Drawable {
         }
         if (UI_IMAGE != null) {
             UI_IMAGE = null;
+        }
+    }
+
+    public void close() {
+        if (RenderService.isInRenderThread()) {
+            RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+                @Override
+                public void run() {
+                    _close();
+                }
+            }, true);
+        } else {
+            _close();
         }
     }
 
@@ -138,6 +152,8 @@ public abstract class UIElement implements Drawable {
             UI = null;
         }
         Graphics2D graphics2D = UI_IMAGE.createGraphics();
+        graphics2D.setColor(new Color(0f,0f,0f,0f));
+        graphics2D.fillRect(0,0,(int)width,(int)height);
         draw(graphics2D);
         graphics2D.dispose();
         UI = Texture.convertToTexture(name, UI_IMAGE);

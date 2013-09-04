@@ -105,8 +105,12 @@ public abstract class Service {
     public abstract void provideData(Object obj, int type);
 
     public void runOnServiceThread(Runnable runnable) {
+        runOnServiceThread(runnable, false);
+    }
+
+    public void runOnServiceThread(Runnable runnable, boolean force_next_frame) {
         Validator.validateNotNull(runnable, "runnable");
-        if (Thread.currentThread().getId() == serviceThreadID) //Run the runnable if were already on the service thread
+        if (Thread.currentThread().getId() == serviceThreadID && !force_next_frame) //Run the runnable if were already on the service thread
             runnable.run();
         else { //Otherwise queue it
             synchronized (listToRun) {
