@@ -21,7 +21,7 @@ public class Texture {
         if (cache.containsKey(resource))
             return cache.get(resource);
 
-        Texture t = TextureLoader.getTexture(resource, GL_TEXTURE_2D, GL_RGBA, GL_LINEAR, GL_LINEAR);
+        Texture t = TextureLoader.getTexture(resource, GL_TEXTURE_2D, GL_RGBA, GL_NEAREST, GL_NEAREST);
         t.resource = resource;
         t.onLoad();
         cache.put(resource, t);
@@ -32,7 +32,7 @@ public class Texture {
         if (cache.containsKey(name))
             return cache.get(name);
 
-        Texture t = TextureLoader.convertToTexture(image, GL_TEXTURE_2D, GL_RGBA, GL_LINEAR, GL_LINEAR);
+        Texture t = TextureLoader.convertToTexture(image, GL_TEXTURE_2D, GL_RGBA, GL_NEAREST, GL_NEAREST);
         t.resource = name;
         t.onLoad();
         cache.put(name, t);
