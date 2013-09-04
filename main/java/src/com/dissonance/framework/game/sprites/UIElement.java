@@ -5,11 +5,8 @@ import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.texture.Texture;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -143,12 +140,6 @@ public abstract class UIElement implements Drawable {
         Graphics2D graphics2D = UI_IMAGE.createGraphics();
         draw(graphics2D);
         graphics2D.dispose();
-
-        try {
-            ImageIO.write(UI_IMAGE, "PNG", new File("testing.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         UI = Texture.convertToTexture(name, UI_IMAGE);
         valid = true;
     }

@@ -6,10 +6,26 @@ import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.render.RenderService;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class DialogUI extends UIElement {
     private com.dissonance.framework.game.scene.dialog.Dialog dialog;
     private boolean ended;
+    private static Font font;
+
+    static {
+        InputStream in = DialogUI.class.getClassLoader().getResourceAsStream("fonts/term.ttf");
+        if (in != null) {
+            try {
+                font = Font.createFont(Font.TRUETYPE_FONT, in).deriveFont(16f);
+            } catch (FontFormatException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public DialogUI(String name, com.dissonance.framework.game.scene.dialog.Dialog dialog) {
         super(name);
@@ -21,7 +37,7 @@ public class DialogUI extends UIElement {
         graphics2D.setColor(Color.BLUE);
         graphics2D.fillRect(0, 0, (int) getWidth(), (int) getHeight());
         graphics2D.setColor(Color.BLACK);
-        graphics2D.setFont(graphics2D.getFont().deriveFont(12f));
+        graphics2D.setFont(font);
         graphics2D.drawString(dialog.getCurrentHeader(), 10, graphics2D.getFont().getSize2D());
         graphics2D.drawString(dialog.getCurrentLine(), 10, graphics2D.getFont().getSize2D() * 2);
     }
