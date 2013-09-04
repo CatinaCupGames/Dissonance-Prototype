@@ -11,10 +11,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class DialogUI extends UIElement {
     private com.dissonance.framework.game.scene.dialog.Dialog dialog;
     private boolean ended;
+    private ArrayList<LineText> text = new ArrayList<LineText>();
     private static Font font;
     private static Font text_font;
     private static Font header_font;
@@ -26,8 +28,8 @@ public class DialogUI extends UIElement {
         if (in != null) {
             try {
                 font = Font.createFont(Font.TRUETYPE_FONT, in);
-                text_font = font.deriveFont(16f);
-                header_font = font.deriveFont(12f);
+                text_font = font.deriveFont(14f).deriveFont(Font.PLAIN);
+                header_font = font.deriveFont(13f);
                 in.close();
             } catch (FontFormatException e) {
                 e.printStackTrace();
@@ -63,12 +65,18 @@ public class DialogUI extends UIElement {
     @Override
     public void draw(Graphics2D graphics2D) {
         graphics2D.drawImage(dialog_box, 0, 0, dialog_box.getWidth(), dialog_box.getHeight(), null);
+        graphics2D.setColor(Color.BLACK);
         if (!dialog.getCurrentHeader().equals("")) {
             graphics2D.drawImage(dialog_header, 0, 0, dialog_header.getWidth(), dialog_header.getHeight(), null);
+            graphics2D.setFont(header_font);
+            graphics2D.drawString(dialog.getCurrentHeader(), 10, header_font.getSize2D() + 5);
         }
-        graphics2D.setColor(Color.BLACK);
-        graphics2D.setFont(text_font);
-        graphics2D.drawString(dialog.getCurrentLine(), 10, graphics2D.getFont().getSize2D() * 2);
+        for (LineText t : text) {
+            graphics2D.setFont(t.font);
+            graphics2D.drawString(t.text, 10, t.y);
+            if (!t.reachedEnd && graphics2D.getFontMetrics().stringWidth(t.text) > 490)
+                t.reachedEnd = true;
+        }
     }
 
     @Override
@@ -85,12 +93,51 @@ public class DialogUI extends UIElement {
     }
 
     private boolean pressed;
+    private int i;
+    private int ii;
+    private boolean done = false;
+    private String temp = "";
     @Override
     public void update() {
+        if (i % 15 == 0 && !done) {
+            LineText line = null;
+            if (text.size() == 0) {
+                line = new LineText();
+                line.font = text_font;
+                line.y = (int)(dialog.getCurrentHeader().equals("") ? text_font.getSize2D() : (text_font.getSize2D() * 2) + 10);
+                line.text = "";
+                text.add(line);
+            } else if (!text.get(text.size() - 1).reachedEnd) {
+                line = text.get(text.size() - 1);
+            } else {
+                line = new LineText();
+                line.font = text_font;
+                line.y = (int)(dialog.getCurrentHeader().equals("") ? text_font.getSize2D() * (text.size() + 1) : ((text_font.getSize2D() * (text.size() + 2)) + 10));
+                line.text = "";
+                text.add(line);
+            }
+            if (!temp.equals(dialog.getCurrentLine())) {
+                char toadd = dialog.getCurrentLine().toCharArray()[ii];
+                line.text += toadd;
+                temp += toadd;
+                ii++;
+                completelyInvalidateView();
+            } else {
+                done = true;
+            }
+        }
+        i++;
+        if (i >= 500)
+            i = 0;
         if (!pressed) {
             pressed = InputKeys.isButtonPressed(InputKeys.ATTACK);
             if (pressed) {
                 boolean finished = dialog.advanceDialog();
+                temp = "";
+                text.clear();
+                done = false;
+                i = 0;
+                ii = 0;
                 if (finished)
                     endDialog();
                 else
@@ -120,5 +167,13 @@ public class DialogUI extends UIElement {
 
     private synchronized void doWakeUp() {
         super.notifyAll();
+    }
+
+
+    private class LineText {
+        public String text;
+        public int y;
+        public Font font;
+        public boolean reachedEnd;
     }
 }
