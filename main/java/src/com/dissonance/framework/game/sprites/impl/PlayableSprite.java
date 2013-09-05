@@ -1,8 +1,5 @@
 package com.dissonance.framework.game.sprites.impl;
 
-import com.dissonance.framework.game.ai.Position;
-import com.dissonance.framework.game.ai.waypoint.WaypointMover;
-import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.render.Camera;
@@ -14,12 +11,11 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.Iterator;
 
-public abstract class PlayableSprite extends CombatSprite implements WaypointSprite {
+public abstract class PlayableSprite extends CombatSprite {
     private boolean isPlaying = false;
     private boolean frozen = false;
     private boolean attack_select;
     private static PlayableSprite currentlyPlaying;
-    protected Position currentWaypoint;
 
     @Override
     public void setX(float x) {
@@ -39,8 +35,7 @@ public abstract class PlayableSprite extends CombatSprite implements WaypointSpr
 
     @Override
     public void update() {
-        if (currentWaypoint != null && !WaypointMover.moveSpriteOneFrame(this))
-            currentWaypoint = null;
+        super.update();
         if (isPlaying) {
             checkSelect();
             checkMovement();
@@ -153,15 +148,6 @@ public abstract class PlayableSprite extends CombatSprite implements WaypointSpr
 
     public void unfreeze() {
         frozen = false;
-    }
-
-    public void setWaypoint(Position position) {
-        this.currentWaypoint = position;
-    }
-
-    @Override
-    public Position getWaypoint() {
-        return currentWaypoint;
     }
 
     /**

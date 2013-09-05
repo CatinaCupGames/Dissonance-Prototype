@@ -1,19 +1,11 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.ai.Position;
-import com.dissonance.framework.game.scene.dialog.Dialog;
-import com.dissonance.framework.game.scene.dialog.DialogFactory;
-import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
-import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
+import com.dissonance.game.scene.TestScene;
 import com.dissonance.game.sprites.TestPlayer;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class TestQuest extends AbstractQuest {
     @Override
@@ -24,7 +16,7 @@ public class TestQuest extends AbstractQuest {
         } catch (WorldLoadFailedException e) {
             e.printStackTrace();
         }
-        final Random random = new Random();
+        /*final Random random = new Random();
         Camera.setX(random.nextInt(300));
         Camera.setY(random.nextInt(300));
         Dialog d = DialogFactory.getDialog("TEST");
@@ -50,7 +42,7 @@ public class TestQuest extends AbstractQuest {
          * It seems the current sorting method is perfectly fine. Feel free to play
          * around with the STRESS_COUNT value.
          */
-        final World w = getWorld();
+        /*final World w = getWorld();
         final int STRESS_COUNT = 2;
         List<TestPlayer> testPlayers = new ArrayList<TestPlayer>();
         for (int i = 0; i < STRESS_COUNT; i++) {
@@ -74,6 +66,19 @@ public class TestQuest extends AbstractQuest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
+
+        final World w = getWorld();
+        TestPlayer p = new TestPlayer();
+        w.loadAnimatedTextureForSprite(p);
+        w.addSprite(p);
+        p.setX(-100);
+        p.setY(0);
+        p.select();
+        p.freeze();
+        TestScene testScene = new TestScene();
+        testScene.beginScene();
+        p.unfreeze();
+
     }
 }

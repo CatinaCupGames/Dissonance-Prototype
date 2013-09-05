@@ -43,7 +43,11 @@ public abstract class Sprite implements Drawable, Serializable {
     }
 
     public void setWorld(World w) {
-
+        if (w == null) {
+            this.world.getPhysicsWorld().destroyBody(this.physicsBody);
+            this.world = null;
+            return;
+        }
         if (this.physicsBody != null)
             // Dealloc reference to body //
             w.getPhysicsWorld().destroyBody(this.physicsBody);

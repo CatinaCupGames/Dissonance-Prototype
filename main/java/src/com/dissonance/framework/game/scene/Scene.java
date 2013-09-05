@@ -7,14 +7,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class Scene {
-    private ArrayList<Dialog> current_dialog;
+    private ArrayList<Dialog> current_dialog = new ArrayList<Dialog>();
     private boolean sceneStarted;
     private static boolean scenePlaying = false;
     private int part = 0;
-    public Scene(Dialog[] startDialog) {
-        this.current_dialog = new ArrayList<Dialog>();
-        current_dialog.addAll(Arrays.asList(startDialog));
-    }
 
     public void beginScene() {
         if (sceneStarted)
@@ -23,23 +19,24 @@ public abstract class Scene {
             return;
         sceneStarted = true;
         scenePlaying = true;
+        initScene();
         boolean stuffTodo = true;
         while (stuffTodo) {
             boolean b = anythingToSay(); //Is there anything to say?
+            Dialog d = null;
             while (b) {
-                Dialog d = current_dialog.get(0); //If so, get the next thing to say
+                d = current_dialog.get(0); //If so, get the next thing to say
                 current_dialog.remove(0); //Remove it
                 b = displayDialog(d); //And display it
             }
             //Nothing else to say for now
-            while (anythingToMove(part)) { //Is there anything to move?
+            while (anythingToMove(d, part)) { //Is there anything to move?
                 moveThings(part); //If so, lets move them.
                 part++; //Advance to the next part of the scene
             }
             stuffTodo = anythingToSay(); //Is there anything else to say?
         }
-        scenePlaying = false;
-        sceneStarted = false;
+        onEndScene();
     }
 
     public boolean hasSceneStarted() {
@@ -65,11 +62,31 @@ public abstract class Scene {
         return anythingToSay();
     }
 
-    protected abstract boolean anythingToMove(int part);
+    protected abstract boolean anythingToMove(Dialog lastDialog, int part);
 
-    protected abstract boolean moveThings(int part);
+    protected abstract void moveThings(int part);
+
+    protected abstract void initScene();
 
     protected boolean anythingToSay() {
         return current_dialog.size() > 0;
+    }
+
+    protected void onEndScene() {
+        scenePlaying = false;
+        sceneStarted = false;
+        _wakeup();
+    }
+
+    private synchronized void _wakeup() {
+        super.notifyAll();
+    }
+
+    public synchronized void waitForSceneEnd() throws InterruptedException {
+        while (true) {
+            if (!sceneStarted)
+                break;
+            super.wait(0L);
+        }
     }
 }

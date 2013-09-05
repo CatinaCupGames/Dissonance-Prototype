@@ -1,8 +1,6 @@
 package com.dissonance.framework.game.sprites.impl;
 
-import com.dissonance.framework.game.sprites.AnimatedSprite;
-
-public abstract class CombatSprite extends AnimatedSprite {
+public abstract class CombatSprite extends AbstractWaypointSprite {
     //==FIXED STATS==//
     private double HP = 100; //This is a fixed stat
 

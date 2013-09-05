@@ -18,6 +18,7 @@ public class DialogUI extends UIElement {
     private boolean ended;
     private float cx;
     private float cy;
+    private boolean unfreeze;
     private ArrayList<LineText> text = new ArrayList<LineText>();
     private static Font font;
     private static Font text_font;
@@ -83,8 +84,9 @@ public class DialogUI extends UIElement {
 
     @Override
     public void init() {
-        if (PlayableSprite.getCurrentlyPlayingSprite() != null) {
-            //PlayableSprite.getCurrentlyPlayingSprite().freeze();
+        unfreeze = !PlayableSprite.getCurrentlyPlayingSprite().isFrozen();
+        if (unfreeze && PlayableSprite.getCurrentlyPlayingSprite() != null) {
+            PlayableSprite.getCurrentlyPlayingSprite().freeze();
         }
         setWidth(512);
         setHeight(64);
@@ -175,7 +177,7 @@ public class DialogUI extends UIElement {
         ended = true;
         close();
         doWakeUp();
-        if (PlayableSprite.getCurrentlyPlayingSprite() != null) {
+        if (unfreeze && PlayableSprite.getCurrentlyPlayingSprite() != null) {
             PlayableSprite.getCurrentlyPlayingSprite().unfreeze();
         }
     }

@@ -5,15 +5,21 @@ public class Dialog {
     private String[] image_path;
     private String[] header;
     private int index;
+    private String id;
 
-    Dialog(String[] lines, String[] image_path, String[] header) {
+    Dialog(String[] lines, String[] image_path, String[] header, String id) {
         this.header = header;
         this.image_path = image_path;
         this.lines = lines;
+        this.id = id;
     }
 
     public int getIndex() {
         return index;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getCurrentLine() {

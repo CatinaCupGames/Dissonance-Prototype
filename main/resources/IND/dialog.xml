@@ -1,4 +1,16 @@
 <game_dialog>
+    <dialog dialog_id="testscene-p1" >
+        <header>moot</header>
+        <message>Hey you! Wait!</message>
+    </dialog>
+
+    <dialog dialog_id="testscene-p2" >
+        <header>moot</header>
+        <message>Its to dangerous to go alone!</message>
+
+        <message>Take this!</message>
+    </dialog>
+
     <dialog dialog_id="TEST" >
         <header>The Old Man</header>
         <message>Hello...AAAAAAAAA BBBBBBBBBBBBB CCCCCCCCCCCCCCCCCCCCCCC APPLE SAUCE</message>

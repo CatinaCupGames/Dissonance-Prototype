@@ -76,7 +76,7 @@ public class DialogFactory {
                         images = new String[0];
                     }
 
-                    Dialog temp = new Dialog(lines, images, headers);
+                    Dialog temp = new Dialog(lines, images, headers, id);
                     text.put(id, temp);
                 }
             }
