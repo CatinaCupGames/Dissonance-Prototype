@@ -105,7 +105,9 @@ public class DialogUI extends UIElement {
     private String temp = "";
     @Override
     public void update() {
-        if (i % 15 == 0 && !done) {
+        boolean fast_moving = InputKeys.isButtonPressed(InputKeys.JUMP);
+
+        if (i % (fast_moving ? 3 : 13) == 0 && !done) {
             LineText line;
             if (text.size() == 0) {
                 line = new LineText();
@@ -147,8 +149,8 @@ public class DialogUI extends UIElement {
         }
 
         if (!pressed) {
-            pressed = InputKeys.isButtonPressed(InputKeys.ATTACK);
-            if (pressed) {
+            pressed = InputKeys.isButtonPressed(InputKeys.ATTACK) || InputKeys.isButtonPressed(InputKeys.JUMP);
+            if (pressed && done) {
                 boolean finished = dialog.advanceDialog();
                 temp = "";
                 text.clear();
@@ -160,7 +162,7 @@ public class DialogUI extends UIElement {
                 else
                     completelyInvalidateView();
             }
-        } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK)) {
+        } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK) && !InputKeys.isButtonPressed(InputKeys.JUMP)) {
             pressed = false;
         }
     }
