@@ -25,17 +25,12 @@ public class TestQuest extends AbstractQuest {
             e.printStackTrace();
         }
         final Random random = new Random();
-        Camera.setX(random.nextInt(300) - 400);
-        Camera.setY(random.nextInt(300) - 400);
+        Camera.setX(random.nextInt(300));
+        Camera.setY(random.nextInt(300));
         Dialog d = DialogFactory.getDialog("TEST");
         DialogUI dialogUI = new DialogUI("TESTINGDIALOG--", d);
         dialogUI.displayUI();
         ///Camera.setPos(Camera.translateToCameraCenter(new Vec2(dialogUI.getX(), dialogUI.getY()), dialogUI.getWidth(), dialogUI.getHeight()));
-        try {
-            dialogUI.waitForEnd();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         /*TestDialog test = new TestDialog();
         test.displayUI();

@@ -16,6 +16,8 @@ import java.util.ArrayList;
 public class DialogUI extends UIElement {
     private com.dissonance.framework.game.scene.dialog.Dialog dialog;
     private boolean ended;
+    private float cx;
+    private float cy;
     private ArrayList<LineText> text = new ArrayList<LineText>();
     private static Font font;
     private static Font text_font;
@@ -65,7 +67,7 @@ public class DialogUI extends UIElement {
     @Override
     public void draw(Graphics2D graphics2D) {
         graphics2D.drawImage(dialog_box, 0, 0, dialog_box.getWidth(), dialog_box.getHeight(), null);
-        graphics2D.setColor(Color.BLACK);
+        graphics2D.setColor(Color.WHITE);
         if (!dialog.getCurrentHeader().equals("")) {
             graphics2D.drawImage(dialog_header, 0, 0, dialog_header.getWidth(), dialog_header.getHeight(), null);
             graphics2D.setFont(header_font);
@@ -82,7 +84,7 @@ public class DialogUI extends UIElement {
     @Override
     public void init() {
         if (PlayableSprite.getCurrentlyPlayingSprite() != null) {
-            PlayableSprite.getCurrentlyPlayingSprite().freeze();
+            //PlayableSprite.getCurrentlyPlayingSprite().freeze();
         }
         setWidth(512);
         setHeight(64);
@@ -90,6 +92,8 @@ public class DialogUI extends UIElement {
         pos = Camera.translateToScreenCord(pos);
         setX(pos.x);
         setY(pos.y);
+        cx = Camera.getX();
+        cy = Camera.getY();
     }
 
     private boolean pressed;
@@ -129,6 +133,17 @@ public class DialogUI extends UIElement {
         i++;
         if (i >= 500)
             i = 0;
+
+        if (cx != Camera.getX() || cy != Camera.getY()) {
+            Vec2 pos = new Vec2(getWidth() / 2, getHeight() / 2);
+            pos = Camera.translateToScreenCord(pos);
+            setX(pos.x);
+            setY(pos.y);
+            cx = Camera.getX();
+            cy = Camera.getY();
+            //completelyInvalidateView();
+        }
+
         if (!pressed) {
             pressed = InputKeys.isButtonPressed(InputKeys.ATTACK);
             if (pressed) {

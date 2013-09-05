@@ -115,7 +115,9 @@ public abstract class Sprite implements Drawable, Serializable {
 
     @Override
     public int compareTo(Drawable o) {
-        if (o instanceof Sprite) {
+        if (o instanceof UIElement)
+            return Drawable.BEFORE;
+        else if (o instanceof Sprite) {
             Sprite s = (Sprite) o;
             float by = (getTexture() != null ? getTexture().getTextureHeight() / 4 : 0);
             float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / 4 : 0);

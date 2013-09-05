@@ -67,8 +67,6 @@ public abstract class AnimatedSprite extends Sprite implements Animator {
         final float x = getX(), y = getY();
 
         //glColor4f(0f, 0f, 0f, 1f); //DEBUG LINE FOR TEXTURES
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         Vector2f bl = texture.getTextureCord(SpriteTexture.BOTTOM_LEFT);
         Vector2f br = texture.getTextureCord(SpriteTexture.BOTTOM_RIGHT);
         Vector2f ur = texture.getTextureCord(SpriteTexture.TOP_RIGHT);
@@ -84,7 +82,6 @@ public abstract class AnimatedSprite extends Sprite implements Animator {
         glVertex3f(x - bx, y + by, 0f);
         glEnd();
         texture.unbind();
-        glDisable(GL_BLEND);
         //glColor3f(1f, 1f, 1f);
     }
 
