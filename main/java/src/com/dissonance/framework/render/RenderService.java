@@ -28,6 +28,7 @@ import static org.lwjgl.util.glu.GLU.gluErrorString;
 
 public class RenderService extends Service {
     public static int GAME_WIDTH = 1280, GAME_HEIGHT = 720;
+    public static boolean fullscreen = true; //TODO Create config to change this value
     public static final int WORLD_DATA_TYPE = 0;
     public static RenderService INSTANCE;
     public static float TIME_DELTA;
@@ -51,6 +52,65 @@ public class RenderService extends Service {
         return Thread.currentThread().getId() == RENDER_THREAD_ID;
     }
 
+    /**
+     * Set the display mode to be used
+     *
+     * @param width The width of the display required
+     * @param height The height of the display required
+     * @param fullscreen True if we want fullscreen mode
+     */
+    private void setDisplayMode(int width, int height, boolean fullscreen) {
+
+        // return if requested DisplayMode is already set
+        if ((Display.getDisplayMode().getWidth() == width) &&
+                (Display.getDisplayMode().getHeight() == height) &&
+                (Display.isFullscreen() == fullscreen)) {
+            return;
+        }
+
+        try {
+            DisplayMode targetDisplayMode = null;
+
+            if (fullscreen) {
+                DisplayMode[] modes = Display.getAvailableDisplayModes();
+                int freq = 0;
+
+                for (DisplayMode current : modes) {
+                    if ((current.getWidth() == width) && (current.getHeight() == height)) {
+                        if ((targetDisplayMode == null) || (current.getFrequency() >= freq)) {
+                            if ((targetDisplayMode == null) || (current.getBitsPerPixel() > targetDisplayMode.getBitsPerPixel())) {
+                                targetDisplayMode = current;
+                                freq = targetDisplayMode.getFrequency();
+                            }
+                        }
+
+                        // if we've found a match for bpp and frequence against the
+                        // original display mode then it's probably best to go for this one
+                        // since it's most likely compatible with the monitor
+                        if ((current.getBitsPerPixel() == Display.getDesktopDisplayMode().getBitsPerPixel()) &&
+                                (current.getFrequency() == Display.getDesktopDisplayMode().getFrequency())) {
+                            targetDisplayMode = current;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                targetDisplayMode = new DisplayMode(width,height);
+            }
+
+            if (targetDisplayMode == null) {
+                System.out.println("Failed to find value mode: "+width+"x"+height+" fs="+fullscreen);
+                return;
+            }
+
+            Display.setDisplayMode(targetDisplayMode);
+            Display.setFullscreen(fullscreen);
+
+        } catch (LWJGLException e) {
+            System.out.println("Unable to setup mode "+width+"x"+height+" fullscreen="+fullscreen + e);
+        }
+    }
+
     @Override
     protected void onStart() {
 
@@ -60,7 +120,7 @@ public class RenderService extends Service {
         RENDER_THREAD_ID = Thread.currentThread().getId();
 
         try {
-            Display.setDisplayMode(new DisplayMode(GAME_WIDTH, GAME_HEIGHT));
+            setDisplayMode(GAME_WIDTH, GAME_HEIGHT, false);
             Display.create();
             AL.create();
 
@@ -69,8 +129,8 @@ public class RenderService extends Service {
             glViewport(0, 0, GAME_WIDTH, GAME_HEIGHT);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0.0f, GAME_WIDTH, GAME_HEIGHT, 0.0f, 0f, -1000f);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glOrtho(0.0f, GAME_WIDTH, GAME_HEIGHT, 0.0f, 0f, -1f);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
@@ -223,6 +283,7 @@ public class RenderService extends Service {
         now = System.currentTimeMillis();
         TIME_DELTA = ((now - cur) / 100.0f);
         if (current_world != null && !isPaused()) {
+            boolean close = Keyboard.isKeyDown(Keyboard.KEY_ESCAPE); //TODO REMOVE
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glClearColor(1f, 1f, 1f, 1f);
             glMatrixMode(GL_MODELVIEW);
@@ -271,7 +332,7 @@ public class RenderService extends Service {
 
             Display.update();
             cur = now;
-            if (Display.isCloseRequested()) {
+            if (Display.isCloseRequested() || close) {
                 ServiceManager.getService(InputService.class).terminate();
                 terminate();
                 Main.getSystemTicker().stopTick();

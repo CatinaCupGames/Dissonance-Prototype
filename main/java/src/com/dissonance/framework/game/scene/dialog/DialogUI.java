@@ -24,12 +24,12 @@ public class DialogUI extends UIElement {
     private static BufferedImage dialog_header;
 
     static {
-        InputStream in = DialogUI.class.getClassLoader().getResourceAsStream("fonts/term.ttf");
+        InputStream in = DialogUI.class.getClassLoader().getResourceAsStream("fonts/INFO56_0.ttf");
         if (in != null) {
             try {
                 font = Font.createFont(Font.TRUETYPE_FONT, in);
-                text_font = font.deriveFont(14f).deriveFont(Font.PLAIN);
-                header_font = font.deriveFont(13f);
+                text_font = font.deriveFont(16f);
+                header_font = font.deriveFont(16f);
                 in.close();
             } catch (FontFormatException e) {
                 e.printStackTrace();
@@ -69,7 +69,7 @@ public class DialogUI extends UIElement {
         if (!dialog.getCurrentHeader().equals("")) {
             graphics2D.drawImage(dialog_header, 0, 0, dialog_header.getWidth(), dialog_header.getHeight(), null);
             graphics2D.setFont(header_font);
-            graphics2D.drawString(dialog.getCurrentHeader(), 10, header_font.getSize2D() + 5);
+            graphics2D.drawString(dialog.getCurrentHeader(), 10, header_font.getSize2D());
         }
         for (LineText t : text) {
             graphics2D.setFont(t.font);
@@ -86,7 +86,7 @@ public class DialogUI extends UIElement {
         }
         setWidth(512);
         setHeight(64);
-        Vec2 pos = new Vec2(256, -256);  //I...I'm not quite sure what its doing here..
+        Vec2 pos = new Vec2(getWidth() / 2, getHeight() / 2);
         pos = Camera.translateToScreenCord(pos);
         setX(pos.x);
         setY(pos.y);
@@ -100,11 +100,11 @@ public class DialogUI extends UIElement {
     @Override
     public void update() {
         if (i % 15 == 0 && !done) {
-            LineText line = null;
+            LineText line;
             if (text.size() == 0) {
                 line = new LineText();
                 line.font = text_font;
-                line.y = (int)(dialog.getCurrentHeader().equals("") ? text_font.getSize2D() : (text_font.getSize2D() * 2) + 10);
+                line.y = (int)(dialog.getCurrentHeader().equals("") ? text_font.getSize2D() : (text_font.getSize2D() * 2) + 5);
                 line.text = "";
                 text.add(line);
             } else if (!text.get(text.size() - 1).reachedEnd) {
@@ -112,7 +112,7 @@ public class DialogUI extends UIElement {
             } else {
                 line = new LineText();
                 line.font = text_font;
-                line.y = (int)(dialog.getCurrentHeader().equals("") ? text_font.getSize2D() * (text.size() + 1) : ((text_font.getSize2D() * (text.size() + 2)) + 10));
+                line.y = (int)(dialog.getCurrentHeader().equals("") ? text_font.getSize2D() * (text.size() + 1) : ((text_font.getSize2D() * (text.size() + 2)) + 5));
                 line.text = "";
                 text.add(line);
             }
