@@ -79,6 +79,11 @@ public class TestQuest extends AbstractQuest {
         TestScene testScene = new TestScene();
         testScene.beginScene();
         p.unfreeze();
+        TestPlayer pp = new TestPlayer();
+        w.loadAnimatedTextureForSprite(pp);
+        w.addSprite(pp);
+        pp.setX(-100);
+        pp.setY(200);
 
     }
 }

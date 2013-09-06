@@ -34,7 +34,6 @@ public class RenderService extends Service {
     public static RenderService INSTANCE;
     public static float TIME_DELTA;
     public static long RENDER_THREAD_ID;
-    private final ArrayList<Runnable> toRun = new ArrayList<>();
     private World current_world;
     private boolean drawing;
     private boolean looping;
@@ -268,7 +267,7 @@ public class RenderService extends Service {
         Display.destroy();
         //Kill any waiting threads
         for (Thread t : Thread.getAllStackTraces().keySet()) {
-            if (t.getState() == Thread.State.WAITING) {
+            if (t.getState() == Thread.State.WAITING && !t.getName().contains("Disposer")) {
                 t.interrupt();
             }
         }
@@ -284,8 +283,6 @@ public class RenderService extends Service {
         }
     }
 
-
-    float x = 0.0f;
     @Override
     public void onUpdate() {
         now = System.currentTimeMillis();

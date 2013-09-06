@@ -121,6 +121,7 @@ public abstract class PlayableSprite extends CombatSprite {
     protected boolean isFacing(Sprite s, double distance) {
         int xadd = 0;
         int yadd = 0;
+        boolean xcheck = getDirection() == Direction.UP || getDirection() == Direction.DOWN;
         if (getDirection() == Direction.UP)
             yadd = -1;
         else if (getDirection() == Direction.DOWN)
