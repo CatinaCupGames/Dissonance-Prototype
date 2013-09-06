@@ -1,17 +1,19 @@
 package com.dissonance.framework.game;
 
-import com.sun.istack.internal.NotNull;
+import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.system.utils.Validator;
+import com.sun.istack.internal.NotNull;
 
 public class GameService {
     private static long TID;
+    private static boolean alive = true;
     private static Thread questThread;
     private static AbstractQuest currentQuest;
 
     public static void beginQuest(@NotNull AbstractQuest quest) {
         Validator.validateNotNull(quest, "quest");
-        while (quest != null) {
+        while (quest != null && alive) {
             TID = Thread.currentThread().getId();
             currentQuest = quest;
             currentQuest.setNextQuest((AbstractQuest) null);
@@ -30,7 +32,23 @@ public class GameService {
                 quest.setWorld(currentQuest.getWorld()); //Set the world to the last world used by the last quest
             }
         }
+        if (!alive)
+            return;
         //...what do we do now..?
+    }
+
+    public static void handleKillRequest() {
+        //TODO Save any progress
+
+        alive = false;
+        try {
+            currentQuest.endQuest();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        if (DialogUI.currentDialogBox() != null) {
+            DialogUI.currentDialogBox().endDialog();
+        }
     }
 
     public static World getCurrentWorld() {

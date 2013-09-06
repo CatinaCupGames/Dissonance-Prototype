@@ -1,5 +1,6 @@
 package com.dissonance.framework.render;
 
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.input.InputListener;
 import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
@@ -264,6 +265,13 @@ public class RenderService extends Service {
         soundSystem.unloadAllSounds();
         current_world = null;
         INSTANCE = null;
+        Display.destroy();
+        //Kill any waiting threads
+        for (Thread t : Thread.getAllStackTraces().keySet()) {
+            if (t.getState() == Thread.State.WAITING) {
+                t.interrupt();
+            }
+        }
     }
 
     @Override
@@ -333,6 +341,7 @@ public class RenderService extends Service {
             Display.update();
             cur = now;
             if (Display.isCloseRequested() || close) {
+                GameService.handleKillRequest();
                 ServiceManager.getService(InputService.class).terminate();
                 terminate();
                 Main.getSystemTicker().stopTick();

@@ -88,7 +88,6 @@ public final class Sound {
         speed = 1F;
         volume = 1F;
         state = SoundState.STOPPED;
-        timer = new Timer(name + "_timer");
 
         try {
             readSoundInfo();
@@ -107,6 +106,9 @@ public final class Sound {
         if (alLoop) {
             AL10.alSourcei(source, AL10.AL_LOOPING, AL10.AL_TRUE);
         } else if (startTime != -1 && endTime != -1) {
+            if (timer == null) {
+                timer = new Timer(name + "_timer");
+            }
             AL10.alSourcef(source, AL11.AL_SEC_OFFSET, startTime);
 
             task = new TimerTask() {

@@ -13,6 +13,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class DialogUI extends UIElement {
+    private static DialogUI currentdialog;
+
     private com.dissonance.framework.game.scene.dialog.Dialog dialog;
     private boolean ended;
     private float cx;
@@ -83,6 +85,7 @@ public class DialogUI extends UIElement {
 
     @Override
     public void init() {
+        currentdialog = this;
         setWidth(512);
         setHeight(64);
         Vec2 pos = new Vec2(getWidth() / 2, getHeight() / 2);
@@ -170,14 +173,19 @@ public class DialogUI extends UIElement {
         }
     }
 
-    private void endDialog() {
+    public void endDialog() {
         ended = true;
         close();
         doWakeUp();
+        currentdialog = null;
     }
 
     private synchronized void doWakeUp() {
         super.notifyAll();
+    }
+
+    public static DialogUI currentDialogBox() {
+        return currentdialog;
     }
 
 

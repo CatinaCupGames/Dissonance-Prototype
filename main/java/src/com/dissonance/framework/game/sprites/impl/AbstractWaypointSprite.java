@@ -4,6 +4,7 @@ import com.dissonance.framework.game.ai.Position;
 import com.dissonance.framework.game.ai.waypoint.WaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.sprites.AnimatedSprite;
+import com.dissonance.framework.render.RenderService;
 
 public abstract class AbstractWaypointSprite extends AnimatedSprite implements WaypointSprite {
     protected Position currentWaypoint;
@@ -31,7 +32,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
 
     public synchronized void waitForWaypointReached() throws InterruptedException {
         while (true) {
-            if (currentWaypoint == null)
+            if (currentWaypoint == null || RenderService.INSTANCE == null)
                 break;
             super.wait(0L);
         }
