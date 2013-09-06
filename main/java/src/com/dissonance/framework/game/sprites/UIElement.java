@@ -21,6 +21,7 @@ public abstract class UIElement implements Drawable {
     private float x;
     private float y;
     private String name;
+    private boolean halted = false;
 
     public UIElement(String name) {
         setName(name);
@@ -31,12 +32,21 @@ public abstract class UIElement implements Drawable {
     }
 
     public void displayUI() {
+        displayUI(true);
+    }
+
+    public void displayUI(boolean halt) {
         GameService.getCurrentWorld().addDrawable(this);
-        PlayableSprite.haltMovement();
+        if (halt) {
+            PlayableSprite.haltMovement();
+            halted = true;
+        }
     }
 
     private void _close() {
-        PlayableSprite.resumeMovement();
+        if (halted) {
+            PlayableSprite.resumeMovement();
+        }
         GameService.getCurrentWorld().removeDrawable(this);
 
         if (UI != null) {

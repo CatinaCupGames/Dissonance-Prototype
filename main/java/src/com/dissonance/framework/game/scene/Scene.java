@@ -53,7 +53,7 @@ public abstract class Scene {
 
     protected boolean displayDialog(Dialog d) {
         DialogUI ui = new DialogUI("SCENE-DIALOG-" + super.hashCode(), d);
-        ui.displayUI();
+        ui.displayUI(false);
         try {
             ui.waitForEnd();
         } catch (InterruptedException e) {

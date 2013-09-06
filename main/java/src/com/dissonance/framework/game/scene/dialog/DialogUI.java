@@ -2,7 +2,6 @@ package com.dissonance.framework.game.scene.dialog;
 
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.UIElement;
-import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.render.Camera;
 import org.jbox2d.common.Vec2;
 
@@ -84,10 +83,6 @@ public class DialogUI extends UIElement {
 
     @Override
     public void init() {
-        unfreeze = !PlayableSprite.getCurrentlyPlayingSprite().isFrozen();
-        if (unfreeze && PlayableSprite.getCurrentlyPlayingSprite() != null) {
-            PlayableSprite.getCurrentlyPlayingSprite().freeze();
-        }
         setWidth(512);
         setHeight(64);
         Vec2 pos = new Vec2(getWidth() / 2, getHeight() / 2);
@@ -179,9 +174,6 @@ public class DialogUI extends UIElement {
         ended = true;
         close();
         doWakeUp();
-        if (unfreeze && PlayableSprite.getCurrentlyPlayingSprite() != null) {
-            PlayableSprite.getCurrentlyPlayingSprite().unfreeze();
-        }
     }
 
     private synchronized void doWakeUp() {

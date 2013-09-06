@@ -13,7 +13,7 @@ import java.util.Iterator;
 
 public abstract class PlayableSprite extends CombatSprite {
     private boolean isPlaying = false;
-    private boolean frozen = false;
+    private boolean frozen;
     private boolean attack_select;
     private static PlayableSprite currentlyPlaying;
 
