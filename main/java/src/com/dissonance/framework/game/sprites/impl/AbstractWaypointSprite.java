@@ -31,6 +31,8 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
     }
 
     public synchronized void waitForWaypointReached() throws InterruptedException {
+        if (RenderService.isInRenderThread())
+            throw new IllegalAccessError("You cant access this method in the render thread!");
         while (true) {
             if (currentWaypoint == null || RenderService.INSTANCE == null)
                 break;

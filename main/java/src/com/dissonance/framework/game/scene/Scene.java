@@ -2,6 +2,7 @@ package com.dissonance.framework.game.scene;
 
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogUI;
+import com.dissonance.framework.render.RenderService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,6 +94,8 @@ public abstract class Scene {
     }
 
     public synchronized void waitForSceneEnd() throws InterruptedException {
+        if (RenderService.isInRenderThread())
+            throw new IllegalAccessError("You cant access this method in the render thread!");
         while (true) {
             if (!sceneStarted)
                 break;

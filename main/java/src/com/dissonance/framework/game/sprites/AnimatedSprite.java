@@ -2,6 +2,7 @@ package com.dissonance.framework.game.sprites;
 
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.sprites.animation.Animator;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteAnimationInfo;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
@@ -119,6 +120,8 @@ public abstract class AnimatedSprite extends Sprite implements Animator {
 
     @Override
     public synchronized final void waitForAnimationEnd() {
+        if (RenderService.isInRenderThread())
+            throw new IllegalAccessError("You cant access this method in the render thread!");
         try {
             super.wait(0L);
         } catch (InterruptedException e) {

@@ -2,6 +2,7 @@ package com.dissonance.framework.game;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.exceptions.QuestNotFoundException;
 
 public abstract class AbstractQuest {
@@ -79,6 +80,8 @@ public abstract class AbstractQuest {
     }
 
     public synchronized void waitForEnd() throws InterruptedException {
+        if (RenderService.isInRenderThread())
+            throw new IllegalAccessError("You cant access this method in the render thread!");
         while (true) {
             if (ended)
                 break;

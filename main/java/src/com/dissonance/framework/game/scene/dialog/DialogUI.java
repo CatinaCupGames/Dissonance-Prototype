@@ -3,6 +3,7 @@ package com.dissonance.framework.game.scene.dialog;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.UIElement;
 import com.dissonance.framework.render.Camera;
+import com.dissonance.framework.render.RenderService;
 import org.jbox2d.common.Vec2;
 
 import javax.imageio.ImageIO;
@@ -173,6 +174,8 @@ public class DialogUI extends UIElement {
     }
 
     public synchronized void waitForEnd() throws InterruptedException {
+        if (RenderService.isInRenderThread())
+            throw new IllegalAccessError("You cant access this method in the render thread!");
         while (true) {
             if (ended)
                 break;

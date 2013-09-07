@@ -1,5 +1,7 @@
 package com.dissonance.framework.game.sprites.animation;
 
+import com.dissonance.framework.render.RenderService;
+
 public abstract class AbstractAnimator implements Animator {
     private int speed;
 
@@ -14,6 +16,8 @@ public abstract class AbstractAnimator implements Animator {
 
     @Override
     public synchronized final void waitForAnimationEnd() {
+        if (RenderService.isInRenderThread())
+            throw new IllegalAccessError("You cant access this method in the render thread!");
         try {
             super.wait();
         } catch (InterruptedException e) {
