@@ -23,7 +23,6 @@ public class Texture {
 
         Texture t = TextureLoader.getTexture(resource, GL_TEXTURE_2D, GL_RGBA, GL_NEAREST, GL_NEAREST);
         t.resource = resource;
-        t.onLoad();
         cache.put(resource, t);
         return t;
     }
@@ -34,12 +33,9 @@ public class Texture {
 
         Texture t = TextureLoader.convertToTexture(image, GL_TEXTURE_2D, GL_RGBA, GL_NEAREST, GL_NEAREST);
         t.resource = name;
-        t.onLoad();
         cache.put(name, t);
         return t;
     }
-
-    public void onLoad() { }
 
     private Texture() { }
 

@@ -32,12 +32,14 @@ public class RenderService extends Service {
     public static boolean fullscreen = true; //TODO Create config to change this value
     public static final int WORLD_DATA_TYPE = 0;
     public static RenderService INSTANCE;
+
     public static float TIME_DELTA;
     public static long RENDER_THREAD_ID;
     private World current_world;
     private boolean drawing;
     private boolean looping;
-
+    private float fpsCount;
+    private float fpsTime;
     private float rotx, roty;
     private float posx, posy;
 
@@ -294,10 +296,6 @@ public class RenderService extends Service {
             glMatrixMode(GL_MODELVIEW);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glLoadIdentity();
-
-            glRotatef(-rotx, 1, 0, 0);
-            glRotatef(-roty, 0, 1, 0);
-            glRotatef(0, 0, 0, 1);
             glScalef(2.5f, 2.5f, 1f);
             glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
 
@@ -336,6 +334,13 @@ public class RenderService extends Service {
             exitOnGLError("RenderService.renderSprites");
 
             Display.update();
+            fpsTime += TIME_DELTA;
+            fpsCount++;
+            if (fpsCount == 100) {
+                fpsCount = 0;
+                Display.setTitle("FPS: " + (1000f/fpsTime));
+                fpsTime = 0;
+            }
             cur = now;
             if (Display.isCloseRequested() || close) {
                 GameService.handleKillRequest();

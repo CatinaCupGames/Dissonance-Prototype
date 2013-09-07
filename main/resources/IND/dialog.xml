@@ -1,11 +1,11 @@
 <game_dialog>
     <dialog dialog_id="testscene-p1" >
-        <header>moot</header>
-        <message>Hey you! Wait!</message>
+        <header>mootykins</header>
+        <message>hey faget</message>
     </dialog>
 
     <dialog dialog_id="testscene-p2" >
-        <header>moot</header>
+        <header>mootykins</header>
         <message>Its to dangerous to go alone!</message>
 
         <message>Take this!</message>

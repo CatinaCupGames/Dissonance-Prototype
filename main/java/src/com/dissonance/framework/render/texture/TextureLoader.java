@@ -17,8 +17,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class TextureLoader {
 
-    private static final ColorModel glAlphaColorModel;
-    private static final ColorModel glColorModel;
+    public static final ColorModel glAlphaColorModel;
+    public static final ColorModel glColorModel;
     private static final IntBuffer textureIDBuffer = BufferUtils.createIntBuffer(1);
 
     static {
@@ -75,7 +75,7 @@ public class TextureLoader {
         }
 
         // convert that image into a byte buffer of texture data
-        ByteBuffer textureBuffer = convertImageData(bufferedImage,texture);
+        ByteBuffer textureBuffer = convertImageData(bufferedImage, texture, false);
 
         if (target == GL_TEXTURE_2D) {
             glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter);
@@ -124,7 +124,7 @@ public class TextureLoader {
         }
 
         // convert that image into a byte buffer of texture data
-        ByteBuffer textureBuffer = convertImageData(bufferedImage,texture);
+        ByteBuffer textureBuffer = convertImageData(bufferedImage, texture, false);
 
         if (target == GL_TEXTURE_2D) {
             glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter);
@@ -172,44 +172,57 @@ public class TextureLoader {
      * @param texture The texture to store the data into
      * @return A buffer containing the data
      */
-    private static ByteBuffer convertImageData(BufferedImage bufferedImage,Texture texture) {
+    private static ByteBuffer convertImageData(BufferedImage bufferedImage, Texture texture, boolean forceredraw) {
         ByteBuffer imageBuffer;
         WritableRaster raster;
         BufferedImage texImage;
 
-        int texWidth = 2;
-        int texHeight = 2;
+        int texWidth;
+        int texHeight;
+        int w = bufferedImage.getWidth();
+        int h = bufferedImage.getHeight();
+        boolean redraw = (w & (w - 1)) != 0 || (h & (h - 1)) != 0 || forceredraw;
 
-        while (texWidth < bufferedImage.getWidth()) {
-            texWidth *= 2;
-        }
-        while (texHeight < bufferedImage.getHeight()) {
-            texHeight *= 2;
+        if (redraw) {
+            texWidth = (w & (w - 1)) == 0 ? w : 2;
+            texHeight = (h & (h - 1)) == 0 ? h : 2;
+            while (texWidth < bufferedImage.getWidth()) {
+                texWidth *= 2;
+            }
+
+            while (texHeight < bufferedImage.getHeight()) {
+                texHeight *= 2;
+            }
+        } else {
+            texHeight = h;
+            texWidth = w;
         }
 
         texture.setTextureHeight(texHeight);
         texture.setTextureWidth(texWidth);
 
-        // create a raster that can be used by OpenGL as a source
-        // for a texture
-        if (bufferedImage.getColorModel().hasAlpha()) {
-            raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE,texWidth,texHeight,4,null);
-            texImage = new BufferedImage(glAlphaColorModel,raster,false,new Hashtable());
+        byte[] data;
+        if (redraw || !(bufferedImage.getRaster().getDataBuffer() instanceof DataBufferByte)) {
+            // create a raster that can be used by OpenGL as a source
+            // for a texture
+            if (bufferedImage.getColorModel().hasAlpha()) {
+                raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE,texWidth,texHeight,4,null);
+                texImage = new BufferedImage(glAlphaColorModel,raster,false,new Hashtable());
+            } else {
+                raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE,texWidth,texHeight,3,null);
+                texImage = new BufferedImage(glColorModel,raster,false,new Hashtable());
+            }
+
+            // copy the source image into the produced image
+            Graphics g = texImage.getGraphics();
+            g.setColor(new Color(0f,0f,0f,0f));
+            g.fillRect(0,0,texWidth,texHeight);
+            g.drawImage(bufferedImage, 0, 0, bufferedImage.getWidth(), bufferedImage.getHeight(), null);
+            g.dispose();
+            data = ((DataBufferByte) texImage.getRaster().getDataBuffer()).getData();
         } else {
-            raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE,texWidth,texHeight,3,null);
-            texImage = new BufferedImage(glColorModel,raster,false,new Hashtable());
+            data = ((DataBufferByte)bufferedImage.getRaster().getDataBuffer()).getData();
         }
-
-        // copy the source image into the produced image
-        Graphics g = texImage.getGraphics();
-        g.setColor(new Color(0f,0f,0f,0f));
-        g.fillRect(0,0,texWidth,texHeight);
-        g.drawImage(bufferedImage,0,0,null);
-        g.dispose();
-
-        // build a byte buffer from the temporary image
-        // that be used by OpenGL to produce a texture.
-        byte[] data = ((DataBufferByte) texImage.getRaster().getDataBuffer()).getData();
 
         imageBuffer = ByteBuffer.allocateDirect(data.length);
         imageBuffer.order(ByteOrder.nativeOrder());
@@ -244,4 +257,6 @@ public class TextureLoader {
 
         return bufferedImage;
     }
+
+
 }

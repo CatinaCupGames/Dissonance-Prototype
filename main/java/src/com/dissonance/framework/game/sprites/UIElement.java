@@ -14,8 +14,8 @@ import static org.lwjgl.opengl.GL11.*;
 public abstract class UIElement implements Drawable {
     private boolean valid;
     private boolean complete_invalid;
-    private float width;
-    private float height;
+    private int width;
+    private int height;
     private Texture UI;
     private BufferedImage UI_IMAGE;
     private float x;
@@ -82,11 +82,11 @@ public abstract class UIElement implements Drawable {
         this.name = name;
     }
 
-    public float getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public float getHeight() {
+    public int getHeight() {
         return height;
     }
 
@@ -155,7 +155,7 @@ public abstract class UIElement implements Drawable {
         if (valid || width == 0 || height == 0)
             return;
         if (UI_IMAGE == null || complete_invalid) {
-            UI_IMAGE = new BufferedImage((int)width, (int)height, BufferedImage.TYPE_INT_ARGB);
+            UI_IMAGE = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         }
         if (UI != null) {
             UI.dispose();
@@ -163,7 +163,7 @@ public abstract class UIElement implements Drawable {
         }
         Graphics2D graphics2D = UI_IMAGE.createGraphics();
         graphics2D.setColor(new Color(0f,0f,0f,0f));
-        graphics2D.fillRect(0,0,(int)width,(int)height);
+        graphics2D.fillRect(0,0, width, height);
         draw(graphics2D);
         graphics2D.dispose();
         UI = Texture.convertToTexture(name, UI_IMAGE);
@@ -179,8 +179,8 @@ public abstract class UIElement implements Drawable {
         else if (!valid)
             return;
         UI.bind();
-        float bx = UI.getTextureWidth() / 2;
-        float by = UI.getTextureHeight() / 2;
+        float bx = width / 2;
+        float by = height / 2;
         final float x = getX(), y = getY();
         glBegin(GL_QUADS);
         glTexCoord2f(0f, 0f); //bottom left
