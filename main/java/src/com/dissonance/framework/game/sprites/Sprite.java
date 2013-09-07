@@ -15,12 +15,18 @@ import java.io.Serializable;
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class Sprite implements Drawable, Serializable {
+    private SpriteEvent.SpriteSelectedEvent selectedEvent;
+
     protected transient Body physicsBody;
     protected transient BodyDef physicsBodyDef;
     protected transient Texture texture;
     protected transient World world;
     protected Direction direction;
     protected float x, y;
+
+    public void setSpriteSelectedListener(SpriteEvent.SpriteSelectedEvent selectedListener) {
+        selectedEvent = selectedListener;
+    }
 
     public Texture getTexture() {
         return texture;
@@ -61,7 +67,9 @@ public abstract class Sprite implements Drawable, Serializable {
     }
 
     public void onSelected(PlayableSprite player) {
-
+        if (selectedEvent != null) {
+            selectedEvent.onSpriteSelected(this, player);
+        }
     }
 
     public float getX() {
@@ -131,5 +139,12 @@ public abstract class Sprite implements Drawable, Serializable {
             else return Drawable.EQUAL;
         } else
             return Drawable.AFTER;
+    }
+
+    public interface SpriteEvent {
+        public interface SpriteSelectedEvent {
+            public void onSpriteSelected(Sprite selectedSprite, Sprite selector);
+        }
+        //TODO Add more listeners
     }
 }
