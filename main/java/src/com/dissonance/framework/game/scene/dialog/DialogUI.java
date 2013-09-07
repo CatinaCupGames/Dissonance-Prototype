@@ -94,6 +94,9 @@ public class DialogUI extends UIElement {
         setY(pos.y);
         cx = Camera.getX();
         cy = Camera.getY();
+        if (events != null) {
+            events.onDialogStarted(dialog);
+        }
     }
 
     private boolean pressed;
@@ -157,8 +160,12 @@ public class DialogUI extends UIElement {
                 ii = 0;
                 if (finished)
                     endDialog();
-                else
+                else {
                     completelyInvalidateView();
+                    if (events != null) {
+                        events.onDialogAdvance(dialog);
+                    }
+                }
             }
         } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK) && !InputKeys.isButtonPressed(InputKeys.JUMP)) {
             pressed = false;
@@ -178,6 +185,14 @@ public class DialogUI extends UIElement {
         close();
         doWakeUp();
         currentdialog = null;
+        if (events != null) {
+            events.onDialogEnded();
+        }
+    }
+
+    private DialogListener events;
+    public void setDialogListener(DialogListener events) {
+        this.events = events;
     }
 
     private synchronized void doWakeUp() {
@@ -188,6 +203,13 @@ public class DialogUI extends UIElement {
         return currentdialog;
     }
 
+    public static interface DialogListener {
+        public void onDialogAdvance(Dialog dialog);
+
+        public void onDialogStarted(Dialog dialog);
+
+        public void onDialogEnded();
+    }
 
     private class LineText {
         public String text;
