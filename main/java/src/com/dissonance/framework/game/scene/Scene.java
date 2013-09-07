@@ -11,6 +11,7 @@ public abstract class Scene {
     private boolean sceneStarted;
     private static boolean scenePlaying = false;
     private int part = 0;
+    private boolean kill = false;
 
     public void beginScene() {
         if (sceneStarted)
@@ -21,16 +22,16 @@ public abstract class Scene {
         scenePlaying = true;
         initScene();
         boolean stuffTodo = true;
-        while (stuffTodo) {
+        while (stuffTodo && !kill) {
             boolean b = anythingToSay(); //Is there anything to say?
             Dialog d = null;
-            while (b) {
+            while (b && !kill) {
                 d = current_dialog.get(0); //If so, get the next thing to say
                 current_dialog.remove(0); //Remove it
                 b = displayDialog(d); //And display it
             }
             //Nothing else to say for now
-            while (anythingToMove(d, part)) { //Is there anything to move?
+            while (anythingToMove(d, part) && !kill) { //Is there anything to move?
                 moveThings(part); //If so, lets move them.
                 part++; //Advance to the next part of the scene
             }
@@ -70,6 +71,15 @@ public abstract class Scene {
 
     protected boolean anythingToSay() {
         return current_dialog.size() > 0;
+    }
+
+    /**
+     * Terminate this scene. <br></br>
+     * Invoking this method will not terminate the scene immediately. You can call {@link com.dissonance.framework.game.scene.Scene#waitForSceneEnd()} to wait for the end of
+     * the scene.
+     */
+    public void terminateScene() {
+        kill = true;
     }
 
     protected void onEndScene() {
