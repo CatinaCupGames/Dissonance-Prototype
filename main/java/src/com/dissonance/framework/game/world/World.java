@@ -212,7 +212,7 @@ public final class World implements Drawable {
                 if (run != null)
                     run.run();
             }
-        });
+        }, true); //Force adding drawables on next frame
     }
 
     public void addDrawable(final Drawable draw) {
