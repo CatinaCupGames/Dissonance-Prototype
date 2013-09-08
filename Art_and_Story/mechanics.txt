@@ -1,0 +1,144 @@
+The Basics:
+-Game is an action RPG
+-Combat will consist of killing enemies using a variety of methods including
+melee weapons of various lengths, guns, magic spells, and hazards within
+the environment(exploding barrels, bursting steam valves, really sharp
+icicles, etc.)
+-Characters gain EXP for finishing quests and killing enemies
+-Characters will level up independently from each other(each character will
+require different amounts of EXP to level up, and each level up will grant
+different amounts of stat gains)
+-There are nine level-variable stats in the game, five of which(attack, 
+defense,speed, vigor, and stamina) are accessible to every character. Each 
+character will possess seven level-variable stats.
+
+The stats are as follows:
+  -Attack: determines the damage a physical attack by the player will deal,
+as well as the knockback the attack will cause to the enemy
+  -Defense: determines the damage taken by incoming attacks
+  -Speed: determines movement speed and the ability to dodge attacks
+  -Vigor: determines how high the critical hit rate is for the player's
+attacks, as well as how low the critical hit rate is for attacks against
+the player. Also determines the player's chance to survive an otherwise
+fatal blow
+  -Stamina: used to perform dodges and special abilities(explained in the 
+combat section), depletes with use and replenishes over time
+  -Willpower: determines the damage magic attacks deal, as well as the 
+damage received from magic attacks
+  -Focus: determines the damage absorbed by magic shields, the HP 
+replenished by cure magic, the duration of spells' effects, and the
+effectiveness of buff/debuff spells
+  -Marksmanship: determines recoil, reload speed, and jam frequency when
+using guns
+  -Magic resistance: For non-magic users, determines damage dealt by
+incoming magic attacks
+
+There are two non-level-variable stats in the game, one of which is
+available to all characters. They are:
+  -HP: a value that falls when the player takes damage, killing the player
+when it reaches zero. Fixed at 100 for all characters
+  -MP: used to cast spells for magic users. Upgradeable through the use of
+items
+
+
+Movement+Camera:
+-Free (non grid-based) movement eg. player may move up, down, left, and
+right as well as diagonally
+-Three-quarters view, similar to games such as the first six FF games, 
+LttP, Chrono Trigger, Mother, Secret of Mana, etc. (IT'S NOT CALLED 
+ISOMETRIC EDDIE YOU BITCH)
+-Player is fixed to the middle of the screen as the camera scrolls with his
+movement
+-Ability to dodge using a quick shuffle/roll in any direction
+-Ability to "look ahead" by moving the camera freely when not moving
+(in case player is feeling sneaky-sneaky and wants to spy on enemies)
+-Ability to strafe (useful for guns)
+
+Combat:
+-Imagine combat as something similar to 2D Zelda games at its core, but with
+a good deal more complexity(real-time combat with the ability to use
+melee or ranged weapons)
+-A party system will be present, but will be handled in a unique way. Instead
+of all party members being playable at the same time, the player cycles through
+party members. This will give the player the choice to confront situations in
+a variety of ways (a group of soldiers can be fought head-on with Wyatt or swiftly
+executed with Bryce)
+
+-There are four main classes of attack:
+  -One-handed melee: includes knives and gloves; generally have a shorter
+range and lower damage than two-handed melee weapons, but have a higher
+attack rate. Counts as physical attack
+  -Two-handed melee: includes swords and staves; generally slower than
+one-handed melee weapons, but have a longer range and higher damage. Counts
+as physical attack
+  -Guns: pretty self-explanitory, includes any ranged weapon; attack rate
+and damage will vary greatly. Counts as physical attack
+  -Magic: includes offensive magic spells which can either cause damage
+instantly or over a period of time. Relies on vigor stat
+
+-Enemies fall into three categories:
+  -Creatures: hostile things that aren't human
+  -Troops: human military units
+  -Machines: lack the organic carbon-based compounds and souls that we 
+privileged folks possess
+
+-Status conditions may be inflicted by certain weapons or attacks. They are
+as follows:
+  -Wound: inflicts a bleeding wound that drains HP, ineffective on machines
+and strong against troops
+  -Burn: inflicts heavy damage to the skin, lowering attack and defense, 
+ineffective on troops and strong against creatures
+  -Stun: sends a shock that lowers speed and vigor, ineffective on creatures
+but strong against machines
+  -Corrupt: enemies will begin to attack their own allies while the player
+will have his movement controls shuffled for a short time, works neutrally
+on all enemies
+
+-Special abilities are certain tactics that are unique to each player
+character. Examples are:
+  -Huxley's ability to go on a rampant killing spree, hitting every enemy on
+the screen for MASSIVE DAMAGE
+  -Bryce's ability to let out a burst of speed, propelling himself towards
+a distant enemy to perform an execution(also useful for traversing 
+obstacles)
+-Party members acquire different abilities throughout the game, but can
+only use one at a time
+-Special abilities deplete the stamina stat, preventing dodging for a short
+time
+Magic:
+-There are a few different categories of spells:
+ -Offensive: hits the target for direct damage
+ -Defensive: repels enemy attacks
+ -Buff/Debuff: raises and lowers stats
+ -Condition: inflicts the target with a status condition
+ 
+Control scheme:
+-The game will be able to support a keyboard or gamepad
+-Spells can be mapped to the magic 1 and magic 2 buttons from the magic menu
+-Default keyboard layout:
+  -W,S,A,D: move
+  -Space: jump
+  -Shift(with movement key): dodge
+  -I: cycle through party members
+  -Ctrl: lock-on/strafe
+  -J: attack/select
+  -K: special ability
+  -O: magic 1
+  -L: magic 2
+  -Tab: equipment/status/magic menu
+  -Esc: pause
+  -Arrow keys: extended look
+
+-Default gamepad layout(modeled after X360 controller):
+ -D-pad/left analog: Move
+  -B: Jump
+  -Y(with direction): dodge
+  -LB: cycle through party members
+  -RB: lock-on/strafe
+  -A: attack/select
+  -X: special ability
+  -LT: magic 1
+  -RT: magic 2
+  -Back: equipment/status/magic menu
+  -Start: pause
+  -Right analog: extended look
