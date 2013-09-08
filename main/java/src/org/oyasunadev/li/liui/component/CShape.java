@@ -28,33 +28,21 @@ public class CShape extends CComponent
 	}
 
 	@Override
-	public void initialize()
+	public void init()
 	{
-		super.initialize();
+		super.init();
 	}
 
-	@Override
-	public void preRender()
-	{
-		super.preRender();
-	}
+    @Override
+    public void update()
+    {
+        super.update();
+    }
 
 	@Override
-	public void render(int delta)
+	public void render()
 	{
-		super.render(delta);
-	}
-
-	@Override
-	public void postRender()
-	{
-		super.postRender();
-	}
-
-	@Override
-	public void trash()
-	{
-		super.trash();
+		super.render();
 	}
 
 	public Texture texture;

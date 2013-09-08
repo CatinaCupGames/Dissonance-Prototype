@@ -36,21 +36,21 @@ public class COval extends CShape
 	}
 
 	@Override
-	public void initialize()
+	public void init()
 	{
-		super.initialize();
+		super.init();
 	}
 
 	@Override
-	public void preRender()
+	public void update()
 	{
-		super.preRender();
+		super.update();
 	}
 
 	@Override
-	public void render(int delta)
+	public void render()
 	{
-		super.render(delta);
+		super.render();
 
 		// TODO: Make local.
 		float theta;
@@ -71,18 +71,6 @@ public class COval extends CShape
 			glEnd();
 		}
 		glLoadIdentity();
-	}
-
-	@Override
-	public void postRender()
-	{
-		super.postRender();
-	}
-
-	@Override
-	public void trash()
-	{
-		super.trash();
 	}
 
 	private float sides;

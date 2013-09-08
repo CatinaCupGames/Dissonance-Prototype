@@ -38,52 +38,34 @@ public class CPanel extends CComponent
 	}
 
 	@Override
-	public void initialize()
+	public void init()
 	{
-		super.initialize();
+		super.init();
 
-		toolbar.initialize();
-		content.initialize();
+		toolbar.init();
+		content.init();
 	}
 
 	@Override
-	public void preRender()
+	public void update()
 	{
-		super.preRender();
+		super.update();
 
-		toolbar.preRender();
-		content.preRender();
+		toolbar.update();
+		content.update();
 	}
 
 	@Override
-	public void render(int delta)
+	public void render()
 	{
-		super.render(delta);
+		super.render();
 
-		controlPanel(delta);
+		controlPanel();
 		controlKeyboard();
 		controlMouse();
 
-		toolbar.render(delta);
-		content.render(delta);
-	}
-
-	@Override
-	public void postRender()
-	{
-		super.postRender();
-
-		toolbar.postRender();
-		content.postRender();
-	}
-
-	@Override
-	public void trash()
-	{
-		super.trash();
-
-		toolbar.trash();
-		content.trash();
+		toolbar.render();
+		content.render();
 	}
 
 	private CRectangle toolbar;
@@ -96,7 +78,7 @@ public class CPanel extends CComponent
 	private boolean mouseLeft;
 	private boolean mouseRight;
 
-	private void controlPanel(final int delta)
+	private void controlPanel()
 	{
 		if(moving)
 		{

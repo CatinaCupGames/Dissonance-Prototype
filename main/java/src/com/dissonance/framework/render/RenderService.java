@@ -147,8 +147,6 @@ public class RenderService extends Service {
             glLoadIdentity();
 
             square = new CSquare("square", 10, 10, 100, Texture.retriveTexture("sprites/sprite_test/0.png"));
-            square.initialize();
-            square.preRender();
 
             shot = soundSystem.loadSound("shot", "shotproto.wav");
             song = soundSystem.loadSound("song", "song1.wav");
@@ -341,7 +339,7 @@ public class RenderService extends Service {
                 e.printStackTrace();
             }
 
-            square.render((int)TIME_DELTA);
+            square.render();
 
             Camera.executeEase(); //Execute any interlop
 
@@ -357,9 +355,6 @@ public class RenderService extends Service {
             }
             cur = now;
             if (Display.isCloseRequested() || close) {
-                square.postRender();
-                square.trash();
-
                 GameService.handleKillRequest();
                 ServiceManager.getService(InputService.class).terminate();
                 terminate();

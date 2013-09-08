@@ -1,6 +1,6 @@
 package org.oyasunadev.li.liui.core;
 
-import org.oyasunadev.li.liui.util.EScene;
+import com.dissonance.framework.render.Drawable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,7 +9,7 @@ import org.oyasunadev.li.liui.util.EScene;
  * Time: 2:02 PM
  */
 
-public abstract class CObject
+public abstract class CObject implements Drawable
 {
 	private CObject()
 	{
@@ -28,13 +28,19 @@ public abstract class CObject
 	public final int ID;
 	public final String name;
 
-	public EScene scene;
-
 	public int frame;
 
-	public abstract void initialize();
-	public abstract void preRender();
-	public abstract void render(int delta);
-	public abstract void postRender();
-	public abstract void trash();
+
+    @Override
+    public abstract void init();
+    @Override
+    public abstract void update();
+    @Override
+    public abstract void render();
+
+    @Override
+    public int compareTo(Drawable o)
+    {
+        return 0;
+    }
 }
