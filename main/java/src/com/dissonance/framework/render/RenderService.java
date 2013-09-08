@@ -5,6 +5,8 @@ import com.dissonance.framework.game.input.InputListener;
 import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.render.texture.Texture;
+import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.sound.SoundState;
 import com.dissonance.framework.sound.SoundSystem;
@@ -17,7 +19,9 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.oyasunadev.li.liui.component.shape.CSquare;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +36,8 @@ public class RenderService extends Service {
     public static boolean fullscreen = true; //TODO Create config to change this value
     public static final int WORLD_DATA_TYPE = 0;
     public static RenderService INSTANCE;
+
+    private CSquare square;
 
     public static float TIME_DELTA;
     public static long RENDER_THREAD_ID;
@@ -140,6 +146,10 @@ public class RenderService extends Service {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glLoadIdentity();
 
+            square = new CSquare("square", 10, 10, 100, Texture.retriveTexture("sprites/sprite_test/0.png"));
+            square.initialize();
+            square.preRender();
+
             shot = soundSystem.loadSound("shot", "shotproto.wav");
             song = soundSystem.loadSound("song", "song1.wav");
             town = soundSystem.loadSound("town", "town.wav");
@@ -150,6 +160,8 @@ public class RenderService extends Service {
         } catch (IOException e) {
             e.printStackTrace();
             return;
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (looping) {
                 looping = false;
@@ -329,6 +341,8 @@ public class RenderService extends Service {
                 e.printStackTrace();
             }
 
+            square.render((int)TIME_DELTA);
+
             Camera.executeEase(); //Execute any interlop
 
             exitOnGLError("RenderService.renderSprites");
@@ -343,6 +357,9 @@ public class RenderService extends Service {
             }
             cur = now;
             if (Display.isCloseRequested() || close) {
+                square.postRender();
+                square.trash();
+
                 GameService.handleKillRequest();
                 ServiceManager.getService(InputService.class).terminate();
                 terminate();
