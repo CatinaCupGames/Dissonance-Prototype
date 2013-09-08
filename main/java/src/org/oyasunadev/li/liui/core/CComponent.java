@@ -1,7 +1,5 @@
 package org.oyasunadev.li.liui.core;
 
-import org.oyasunadev.li.liui.util.EScene;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Oliver
@@ -22,50 +20,19 @@ public class CComponent extends CObject
 	}
 
 	@Override
-	public void initialize()
+	public void init()
 	{
-		if(scene != EScene.INITIALIZE)
-		{
-			scene = EScene.INITIALIZE;
-		}
 	}
 
-	@Override
-	public void preRender()
-	{
-		if(scene != EScene.PRERENDER)
-		{
-			scene = EScene.PRERENDER;
-		}
-	}
+    @Override
+    public void update()
+    {
+    }
 
 	@Override
-	public void render(int delta)
+	public void render()
 	{
-		if(scene != EScene.RENDER)
-		{
-			scene = EScene.RENDER;
-		}
-
 		frame++;
-	}
-
-	@Override
-	public void postRender()
-	{
-		if(scene != EScene.POSTRENDER)
-		{
-			scene = EScene.POSTRENDER;
-		}
-	}
-
-	@Override
-	public void trash()
-	{
-		if(scene != EScene.TRASH)
-		{
-			scene = EScene.TRASH;
-		}
 	}
 
 	public float x;
