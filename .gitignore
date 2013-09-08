@@ -93,3 +93,6 @@ main/c/SteamProxy/SteamProxy/SteamProxy.vcxproj
 main/c/SteamProxy/Debug/SteamProxy.dll
 main/c/SteamProxy/Debug/SteamProxy.ilk
 main/c/SteamProxy/Release/SteamProxy.dll
+/main/c#/DissonanceLevelEditor/DissonanceLevelEditor/bin
+/main/c#/DissonanceLevelEditor/DissonanceLevelEditor/obj
+/main/c#/DissonanceLevelEditor/*.suo
