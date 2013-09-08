@@ -1,12 +1,9 @@
 The Basics:
--Game is an action RPG with some platforming elements
+-Game is an action RPG
 -Combat will consist of killing enemies using a variety of methods including
 melee weapons of various lengths, guns, magic spells, and hazards within
 the environment(exploding barrels, bursting steam valves, really sharp
 icicles, etc.)
--Platforming will be simple: the player must jump over anything that will
-impale him/burn him/disintegrate him/make him fall into a bottomless
-abyss of inky blackness
 -Characters gain EXP for finishing quests and killing enemies
 -Characters will level up independently from each other(each character will
 require different amounts of EXP to level up, and each level up will grant
@@ -52,8 +49,6 @@ LttP, Chrono Trigger, Mother, Secret of Mana, etc. (IT'S NOT CALLED
 ISOMETRIC EDDIE YOU BITCH)
 -Player is fixed to the middle of the screen as the camera scrolls with his
 movement
--Ability to jump, which could be shown as the player's sprite moving a
-bit closer to the camera and a shadow appearing underneath him
 -Ability to dodge using a quick shuffle/roll in any direction
 -Ability to "look ahead" by moving the camera freely when not moving
 (in case player is feeling sneaky-sneaky and wants to spy on enemies)
@@ -63,6 +58,11 @@ Combat:
 -Imagine combat as something similar to 2D Zelda games at its core, but with
 a good deal more complexity(real-time combat with the ability to use
 melee or ranged weapons)
+-A party system will be present, but will be handled in a unique way. Instead
+of all party members being playable at the same time, the player cycles through
+party members. This will give the player the choice to confront situations in
+a variety of ways (a group of soldiers can be fought head-on with Wyatt or swiftly
+executed with Bryce)
 
 -There are four main classes of attack:
   -One-handed melee: includes knives and gloves; generally have a shorter
@@ -96,15 +96,22 @@ on all enemies
 
 -Special abilities are certain tactics that are unique to each player
 character. Examples are:
-  -Wyatt's ability to go on a rampant killing spree, hitting every enemy on
+  -Huxley's ability to go on a rampant killing spree, hitting every enemy on
 the screen for MASSIVE DAMAGE
   -Bryce's ability to let out a burst of speed, propelling himself towards
 a distant enemy to perform an execution(also useful for traversing 
 obstacles)
-
+-Party members acquire different abilities throughout the game, but can
+only use one at a time
+-Special abilities deplete the stamina stat, preventing dodging for a short
+time
 Magic:
--
-
+-There are a few different categories of spells:
+ -Offensive: hits the target for direct damage
+ -Defensive: repels enemy attacks
+ -Buff/Debuff: raises and lowers stats
+ -Condition: inflicts the target with a status condition
+ 
 Control scheme:
 -The game will be able to support a keyboard or gamepad
 -Spells can be mapped to the magic 1 and magic 2 buttons from the magic menu
@@ -113,7 +120,7 @@ Control scheme:
   -Space: jump
   -Shift(with movement key): dodge
   -I: cycle through party members
-  -Ctrl: toggle strafe
+  -Ctrl: lock-on/strafe
   -J: attack/select
   -K: special ability
   -O: magic 1
@@ -127,7 +134,7 @@ Control scheme:
   -B: Jump
   -Y(with direction): dodge
   -LB: cycle through party members
-  -RB: toggle strafe
+  -RB: lock-on/strafe
   -A: attack/select
   -X: special ability
   -LT: magic 1
