@@ -11,6 +11,12 @@
         <message>Take this!</message>
     </dialog>
 
+    <dialog dialog_id="arrem">
+        <header>Arrem</header>
+        <message>Scootaloo is not a chicken Eddie!</message>
+    </dialog>
+
+
     <dialog dialog_id="TEST" >
         <header>The Old Man</header>
         <message>Hello...AAAAAAAAA BBBBBBBBBBBBB CCCCCCCCCCCCCCCCCCCCCCC APPLE SAUCE</message>
