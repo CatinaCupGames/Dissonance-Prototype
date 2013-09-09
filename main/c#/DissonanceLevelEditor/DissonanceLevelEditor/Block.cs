@@ -88,7 +88,7 @@ namespace PewPewLevelEditor
             Name = name;
             Namespace = ns;
             Image = image;
-            Collision = TileCollision.Impassable;
+            Collision = TileCollision.Passable;
             ZPosition = ZPosition.OnLevel;
         }
 
@@ -152,87 +152,89 @@ namespace PewPewLevelEditor
 
         static Block()
         {
-            Water = new Block("water", "water", FromFile("water"));
-            WaterUnder = new Block("water_under", "water", FromFile("water_under"));
-
-            Lava = new Block("lava", "block", FromFile("lava"))
+            try
             {
-                Collision = TileCollision.Killable
-            };
+                Water = new Block("water", "water", FromFile("water"));
+                WaterUnder = new Block("water_under", "water", FromFile("water_under"));
+
+                Lava = new Block("lava", "block", FromFile("lava"))
+                {
+                    Collision = TileCollision.Killable
+                };
 
 
-            Spikes = new Block("spikes", "block", FromFile("spikes"))
-            {
-                Collision = TileCollision.Killable
-            };
+                Spikes = new Block("spikes", "block", FromFile("spikes"))
+                {
+                    Collision = TileCollision.Killable
+                };
 
 
-            Plank = new Block("plank", "block", FromFile("plank"))
-            {
-                Collision = TileCollision.Platform
-            };
+                Plank = new Block("plank", "block", FromFile("plank"))
+                {
+                    Collision = TileCollision.Platform
+                };
 
-            Bridge = new Block("bridge", "block", FromFile("bridge"))
-            {
-                Collision = TileCollision.Platform
-            };
-
-
-            Grass = new Block("grass", "block", FromFile("grass"))
-            {
-                Collision = TileCollision.Passable,
-                ZPosition = ZPosition.Behind
-            };
-
-            Bush = new Block("bush", "block", FromFile("bush"))
-            {
-                Collision = TileCollision.Passable,
-                ZPosition = ZPosition.Behind
-            };
-
-            Shroom = new Block("shroom", "block", FromFile("shroom"))
-            {
-                Collision = TileCollision.Passable,
-                ZPosition = ZPosition.Behind
-            };
-
-            AlienPlant = new Block("alien_plant", "block", FromFile("alien_plant"))
-            {
-                Collision = TileCollision.Passable,
-                ZPosition = ZPosition.Behind
-            };
-            Rock = new Block("rock", "block", FromFile("rock"))
-            {
-                Collision = TileCollision.Passable,
-                ZPosition = ZPosition.Behind
-            };
+                Bridge = new Block("bridge", "block", FromFile("bridge"))
+                {
+                    Collision = TileCollision.Platform
+                };
 
 
-            Fence = new Block("fence", "block", FromFile("fence"))
-            {
-                Collision = TileCollision.Passable,
-                ZPosition = ZPosition.Behind
-            };
+                Grass = new Block("grass", "block", FromFile("grass"))
+                {
+                    Collision = TileCollision.Passable,
+                    ZPosition = ZPosition.Behind
+                };
 
-            BrokenFence = new Block("fence_broken", "block", FromFile("fence_broken"))
-            {
-                Collision = TileCollision.Passable,
-                ZPosition = ZPosition.Behind
-            };
+                Bush = new Block("bush", "block", FromFile("bush"))
+                {
+                    Collision = TileCollision.Passable,
+                    ZPosition = ZPosition.Behind
+                };
 
-            Player = new Block("player", "player", FromFile("player"));
-            Exit = new Block("exit", "exit", FromFile("exit"));
+                Shroom = new Block("shroom", "block", FromFile("shroom"))
+                {
+                    Collision = TileCollision.Passable,
+                    ZPosition = ZPosition.Behind
+                };
 
-            CoinGold = new Block("coin_gold", "gem", FromFile("coin_gold"));
-            CoinSilver = new Block("coin_silver", "gem", FromFile("coin_silver"));
-            CoinBronze = new Block("coin_bronze", "gem", FromFile("coin_bronze"));
+                AlienPlant = new Block("alien_plant", "block", FromFile("alien_plant"))
+                {
+                    Collision = TileCollision.Passable,
+                    ZPosition = ZPosition.Behind
+                };
+                Rock = new Block("rock", "block", FromFile("rock"))
+                {
+                    Collision = TileCollision.Passable,
+                    ZPosition = ZPosition.Behind
+                };
 
-            Slime = new Block("slime", "slime", FromFile("slime"));
-            Fly = new Block("fly", "fly", FromFile("fly"));
+
+                Fence = new Block("fence", "block", FromFile("fence"))
+                {
+                    Collision = TileCollision.Passable,
+                    ZPosition = ZPosition.Behind
+                };
+
+                BrokenFence = new Block("fence_broken", "block", FromFile("fence_broken"))
+                {
+                    Collision = TileCollision.Passable,
+                    ZPosition = ZPosition.Behind
+                };
+
+                Player = new Block("player", "player", FromFile("player"));
+                Exit = new Block("exit", "exit", FromFile("exit"));
+
+                CoinGold = new Block("coin_gold", "gem", FromFile("coin_gold"));
+                CoinSilver = new Block("coin_silver", "gem", FromFile("coin_silver"));
+                CoinBronze = new Block("coin_bronze", "gem", FromFile("coin_bronze"));
+
+                Slime = new Block("slime", "slime", FromFile("slime"));
+                Fly = new Block("fly", "fly", FromFile("fly"));
 
 
 
-            DefaultBlocks = new[]
+                DefaultBlocks = new[]
             {
                 Plank,
                 Bridge,
@@ -272,6 +274,8 @@ namespace PewPewLevelEditor
 
                 Spikes
             };
+            }
+            catch { }
         }
 
         public static Bitmap FromFile(string file)

@@ -146,9 +146,12 @@ namespace PewPewLevelEditor
                         }
 
                         Block baseBlock = null;
-                        foreach (var based in Block.DefaultBlocks.Where(based => based.Name == _selectedBlockToPaint))
+                        if (Block.DefaultBlocks != null)
                         {
-                            baseBlock = based;
+                            foreach (var based in Block.DefaultBlocks.Where(based => based.Name == _selectedBlockToPaint))
+                            {
+                                baseBlock = based;
+                            }
                         }
 
                         if (baseBlock == null)
@@ -210,9 +213,12 @@ namespace PewPewLevelEditor
                     }
 
                     Block baseBlock = null;
-                    foreach (var based in Block.DefaultBlocks.Where(based => based.Name == _selectedBlockToPaint))
+                    if (Block.DefaultBlocks != null)
                     {
-                        baseBlock = based;
+                        foreach (var based in Block.DefaultBlocks.Where(based => based.Name == _selectedBlockToPaint))
+                        {
+                            baseBlock = based;
+                        }
                     }
 
                     if (baseBlock == null)
