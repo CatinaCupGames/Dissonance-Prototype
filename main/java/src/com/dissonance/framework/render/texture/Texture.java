@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public abstract class Texture {
+public class Texture {
     int textureId;
     private int targetId;
     private int image_width, image_height;
