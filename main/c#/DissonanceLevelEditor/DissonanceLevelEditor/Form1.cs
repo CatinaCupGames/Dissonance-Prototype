@@ -282,13 +282,17 @@ namespace PewPewLevelEditor
             _blocksUndid = new List<Block[]>();
 
 
-
             foreach (var image in Directory.EnumerateFiles("Images"))
             {
-                AddToList(image, (o, args) =>
-                {
-                    _selectedBlockToPaint = ((RadioButton)o).Tag.ToString().Replace("Images\\", "").Replace("Images/", "").Replace(".png", "");
-                });
+				// make sure we're loading a png
+				if (image.Substring(image.Length - 4) == ".png")
+				{
+					Console.WriteLine (image);
+	                AddToList(image, (o, args) =>
+	                {
+	                    _selectedBlockToPaint = ((RadioButton)o).Tag.ToString().Replace("Images\\", "").Replace("Images/", "").Replace(".png", "");
+	                });
+				}
             }
         }
 
