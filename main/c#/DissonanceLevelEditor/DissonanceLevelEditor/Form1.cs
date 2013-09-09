@@ -282,6 +282,11 @@ namespace PewPewLevelEditor
             _blocksUndid = new List<Block[]>();
 
 
+            if (!Directory.Exists("Images"))
+            {
+                Directory.CreateDirectory("Images");
+            }
+
             foreach (var image in Directory.EnumerateFiles("Images"))
             {
 				// make sure we're loading a png
