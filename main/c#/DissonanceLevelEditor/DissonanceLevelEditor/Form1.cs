@@ -146,9 +146,12 @@ namespace PewPewLevelEditor
                         }
 
                         Block baseBlock = null;
-                        foreach (var based in Block.DefaultBlocks.Where(based => based.Name == _selectedBlockToPaint))
+                        if (Block.DefaultBlocks != null)
                         {
-                            baseBlock = based;
+                            foreach (var based in Block.DefaultBlocks.Where(based => based.Name == _selectedBlockToPaint))
+                            {
+                                baseBlock = based;
+                            }
                         }
 
                         if (baseBlock == null)
@@ -210,9 +213,12 @@ namespace PewPewLevelEditor
                     }
 
                     Block baseBlock = null;
-                    foreach (var based in Block.DefaultBlocks.Where(based => based.Name == _selectedBlockToPaint))
+                    if (Block.DefaultBlocks != null)
                     {
-                        baseBlock = based;
+                        foreach (var based in Block.DefaultBlocks.Where(based => based.Name == _selectedBlockToPaint))
+                        {
+                            baseBlock = based;
+                        }
                     }
 
                     if (baseBlock == null)
@@ -285,14 +291,19 @@ namespace PewPewLevelEditor
             if (!Directory.Exists("Images"))
             {
                 Directory.CreateDirectory("Images");
-                return;
             }
+
             foreach (var image in Directory.EnumerateFiles("Images"))
             {
-                AddToList(image, (o, args) =>
-                {
-                    _selectedBlockToPaint = ((RadioButton)o).Tag.ToString().Replace("Images\\", "").Replace("Images/", "").Replace(".png", "");
-                });
+				// make sure we're loading a png
+				if (image.Substring(image.Length - 4) == ".png")
+				{
+					Console.WriteLine (image);
+	                AddToList(image, (o, args) =>
+	                {
+	                    _selectedBlockToPaint = ((RadioButton)o).Tag.ToString().Replace("Images\\", "").Replace("Images/", "").Replace(".png", "");
+	                });
+				}
             }
         }
 
