@@ -5,6 +5,7 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.game.scene.TestScene;
+import com.dissonance.game.sprites.TestNPC;
 import com.dissonance.game.sprites.TestPlayer;
 
 public class TestQuest extends AbstractQuest {
@@ -84,6 +85,10 @@ public class TestQuest extends AbstractQuest {
         w.addSprite(pp);
         pp.setX(-100);
         pp.setY(200);
-
+        TestNPC npc = new TestNPC("arrem");
+        w.loadAnimatedTextureForSprite(npc);
+        w.addSprite(npc);
+        pp.setX(-200);
+        pp.setY(200);
     }
 }

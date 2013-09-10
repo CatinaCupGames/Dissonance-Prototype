@@ -203,7 +203,7 @@ public final class World implements Drawable {
                 if (runnable != null)
                     runnable.run();
             }
-        });
+        }, true);
     }
 
     public void loadTextureForSprite(final String resource, final Sprite sprite) {
