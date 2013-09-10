@@ -12,23 +12,19 @@ import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Validator;
 import org.jbox2d.common.Vec2;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import tiled.core.Map;
+import tiled.io.TMXMapReader;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public final class World implements Drawable {
+    private static final TMXMapReader MAP_READER = new TMXMapReader();
     private static final float GRAVITY = 9.81f;
     private static final float TIME_STEP = 1f / 60f;
     private static final int VELOCITY_ITERATIONS = 6;
@@ -42,6 +38,7 @@ public final class World implements Drawable {
     private transient Service renderingService;
     private transient Texture texture;
     private boolean invalid = true;
+    private Map tiledMap;
 
     World(int ID) {
         this.ID = ID;
@@ -96,102 +93,14 @@ public final class World implements Drawable {
         if (renderingService == null)
             throw new WorldLoadFailedException("The RenderService was not created! Try calling World.init() before loading a world.");
 
-        int width;
-        int height;
-        ArrayList<Block> blocks = new ArrayList<Block>();
-        InputStream in = texture.getClass().getClassLoader().getResourceAsStream("worlds/" + world + ".xml");
+        InputStream in = getClass().getClassLoader().getResourceAsStream("worlds/" + world + ".tmx");
         if (in != null) {
             try {
-                DocumentBuilder db = SpriteTexture.DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
-                Document dom = db.parse(in);
-                Element elm = dom.getDocumentElement();
-                NodeList nl = elm.getElementsByTagName("level");
-                if (nl != null && nl.getLength() > 0) {
-                    Element level = (Element) nl.item(0);
-
-                    NodeList temp = level.getElementsByTagName("width");
-                    if (temp != null && temp.getLength() > 0) {
-                        width = Integer.parseInt(temp.item(0).getFirstChild().getNodeValue());
-                    }
-
-                    temp = level.getElementsByTagName("height");
-                    if (temp != null && temp.getLength() > 0) {
-                        height = Integer.parseInt(temp.item(0).getFirstChild().getNodeValue());
-                    }
-
-                    temp = level.getElementsByTagName("blocks");
-                    if (temp != null && temp.getLength() > 0) {
-                        Element block_element = (Element)temp.item(0);
-                        NodeList block_types = block_element.getChildNodes();
-                        if (block_types != null && block_types.getLength() > 0) {
-                            for (int i = 0; i < block_types.getLength(); i++) {
-                                Element b = (Element)block_types.item(0);
-                                String namespace = b.getTagName();
-                                Block.CollisionType collisionType;
-                                int zpos = 0;
-                                int x = 0;
-                                int y = 0;
-                                String name = "air";
-                                HashMap<String, String> extra = new HashMap<String, String>();
-
-                                temp = b.getElementsByTagName("tilecollision");
-                                if (temp != null && temp.getLength() > 0) {
-                                    collisionType = Block.CollisionType.fromInt(Integer.parseInt(temp.item(0).getFirstChild().getNodeValue()));
-                                } else {
-                                    collisionType = Block.CollisionType.PASSABLE; //Assume passable
-                                }
-
-                                temp = b.getElementsByTagName("zposition");
-                                if (temp != null && temp.getLength() > 0) {
-                                    zpos = Integer.parseInt(temp.item(0).getFirstChild().getNodeValue());
-                                }
-
-                                temp = b.getElementsByTagName("x");
-                                if (temp != null && temp.getLength() > 0) {
-                                    x = Integer.parseInt(temp.item(0).getFirstChild().getNodeValue());
-                                }
-
-                                temp = b.getElementsByTagName("y");
-                                if (temp != null && temp.getLength() > 0) {
-                                    y = Integer.parseInt(temp.item(0).getFirstChild().getNodeValue());
-                                }
-
-                                temp = b.getElementsByTagName("name");
-                                if (temp != null && temp.getLength() > 0) {
-                                    name = temp.item(0).getFirstChild().getNodeValue();
-                                }
-
-                                temp = b.getElementsByTagName("extras");
-                                if (temp != null && temp.getLength() > 0) {
-                                    NodeList extras = b.getChildNodes();
-                                    if (extras != null && extras.getLength() > 0) {
-                                        for (int ii = 0; i < extras.getLength(); ii++) {
-                                            Element e = (Element) extras.item(ii);
-                                            String key = e.getNodeName();
-                                            String value = e.getNodeValue();
-                                            extra.put(key, value);
-                                        }
-                                    }
-                                }
-
-                                Block block = new Block(collisionType, zpos, x, y, name, extra);
-
-                                //TODO Attempt to create NPC
-
-                                blocks.add(block);
-                            }
-                        }
-                    }
-                }
-            } catch (ParserConfigurationException e) {
-                throw new WorldLoadFailedException("Failed to parse world file!", e);
-            } catch (SAXException e) {
-                throw new WorldLoadFailedException("Unknown exception!", e);
-            } catch (IOException e) {
-                throw new WorldLoadFailedException("Failed to load world file!", e);
+                tiledMap = MAP_READER.readMap(in);
+            } catch (Exception e) {
+                throw new WorldLoadFailedException("Error loading TMX file!", e);
             }
         }
-
         //===TEMP CODE===
         renderingService.runOnServiceThread(new Runnable() {
 
@@ -206,7 +115,7 @@ public final class World implements Drawable {
         });
         //===TEMP CODE===
 
-        addDrawable(this);
+        addDrawable(this); //TODO Maybe remove this..
 
         if (renderingService.isPaused())
             renderingService.resume();
