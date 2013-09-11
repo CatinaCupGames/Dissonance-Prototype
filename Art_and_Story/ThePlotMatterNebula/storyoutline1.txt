@@ -1,0 +1,102 @@
+This is the story outline, which will explain the plot itself without going
+into any detail about the explanation of themes or dialogue. The story is 
+divided into acts, which each cover one period of time (e.g. Act II covers
+from the battle at Adoma to Farrand's death). Acts are further divided into 
+chapters, which are defined as one party's perspective of an act (e.g.
+Wyatt and Huxley's trip to Adoma takes place at the same time as Bryce's 
+escape from the Adlers but they are covered in different chapters). Scenes 
+even further divide chapters into manageable chunks (e.g. Wyatt and Huxley's
+fireside chat is a different scene than Farrand giving Wyatt the package to 
+deliver).   
+
+
+============================================================================
+TL;DR Outline
+============================================================================
+-Prologue: A Necessary Measure depicts the burning of Scaltal, the first in
+a series of attacks on eastern Isthmo orchestrated by Waldomar II
+____________________________________________________________________________
+Act I: Departure
+____________________________________________________________________________
+-Act I-1 covers the first portion of Wyatt and Huxley's journey to Adoma to
+deliver a package to the High Sage
+ -start point is the boys' fireside chat, end point is leaving Golua 
+-Act I-2 covers Bryce's deployment into Scaltal and his escape before the 
+battle at Adoma
+ -start point is the looting of Scaltal, end point is Bryce's escape
+-Act I-3 covers Wyatt and Huxley's run-in with Bryce and the three's trip to
+Adoma
+ -start point is Wyatt and Huxley's meeting with Bryce, end point is the
+battle at Adoma
+____________________________________________________________________________
+Act II: Leaders Falter
+____________________________________________________________________________
+-Act II-1 covers Huxley being wounded and left with the High sage to recover
+while Wyatt and Bryce are escorted through the Adoma Tunnels by Amynta
+ -start point is the battle at Adoma, end point is making it out of the 
+tunnels
+-Act II-2 covers the reveal that the High Sage was being threatened by 
+the Adlers to hand over Huxley to Waldomar
+ -start point is the standoff between the High Sage and Adler officers, end
+point is Huxley's conditioning
+-Act II-3 covers Farrand's recollection of his past with Waldomar and his
+decision to sacrifice himself during the invasion of Nuado
+ -start point is the beginning of the invasion, end point is Farrand's death
+-Act II-4 covers Wyatt, Bryce, and Amynta's fight against the Adlers at 
+Nuado and Wyatt's discovery of his father's demise
+ -start point is exiting the tunnels, end point is Wyatt's despair
+============================================================================
+Outline
+============================================================================
+----------------------------------------------------------------------------
+Prologue: A Necessary Measure
+----------------------------------------------------------------------------
+-the camera fades in, centered over Isthmo Candidus
+-zoom into Scaltal, a vast settlement populated mostly by slaves
+-the sun is beginning to set, casting a red glow over the landscape
+-a giant wall marks the eastern border of the settlement
+-the settlement is characterized by poverty, with residents retreating off
+of dirt roads into run-down wooden shacks
+-camera pans across Scaltal, moving slowly towards the west and revealing
+a large group of Adler troops preparing to attack
+-an officer in front of the crowd waves his hand, signaling the troops to
+move forward
+-within the next few moments, Hell appears to break loose in the settlement,
+as soldiers begin lobbing incendiary grenades through windows and shooting
+at anyone trying to escape
+-camera zooms into a burning house, showing a small girl trembling in the
+corner holding a stuffed eagle doll
+-camera fades out slowly 
+----------------------------------------------------------------------------
+Act I: Departure
+----------------------------------------------------------------------------
+Chapter 1: Wyatt and Huxley
+____________________________________________________________________________
+Scene 1
+-story begins in Nuado City, a modest agricultual settlement in South-
+Eastern Isthmo
+-Wyatt and Huxley meet up on the outskirts of town in the evening to have 
+a smoke
+-As they walk along a narrow path surrounded by a dense field of crops,
+Huxley worries about the reprocussions of staying out late at night
+-The two set up a bonfire at a clearing near a river and share their
+thoughts on what the world outside of Nuado is like
+-Huxley walks over to the river, noticing a plume of smoke on the horizon,
+and calls Wyatt over
+-The two hypothesize that there is another group of boys enjoying themselves
+on the other side of the river
+-After the fire begins to die down, they toss some water on it and head back
+to town
+-On the way back, a swarm of insects blocks their path
+-The player takes control of the boys, fighting off the creatures with
+Wyatt's water bucket and Huxley's slingshot
+-This part acts as a tutorial to combat and basic platforming, with the boys
+having to jump up ledges
+-Once the boys return to town, Huxley goes back on his own to his house
+-The player controls Wyatt as he walks back to his house in the center of 
+town
+-Night falls upon Nuado and the opening credits roll as Wyatt walks
+ -The red glow of evening gradually fades to a dark blue, reaching its
+darkest point just as the player reaches the door of the house
+____________________________________________________________________________
+SCENE 2 COMING SOON

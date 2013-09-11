@@ -1,22 +1,40 @@
 <game_dialog>
+    <dialog dialog_id="testscene-p1" >
+        <header>mootykins</header>
+        <message>hey faget</message>
+    </dialog>
+
+    <dialog dialog_id="testscene-p2" >
+        <header>mootykins</header>
+        <message>Its to dangerous to go alone!</message>
+
+        <message>Take this!</message>
+    </dialog>
+
+    <dialog dialog_id="arrem">
+        <header>Arrem</header>
+        <message>Scootaloo is not a chicken Eddie!</message>
+    </dialog>
+
+
     <dialog dialog_id="TEST" >
-        <header>"The Old Man"</header>
-        <message>"Hello..."</message>
+        <header>The Old Man</header>
+        <message>Hello...AAAAAAAAA BBBBBBBBBBBBB CCCCCCCCCCCCCCCCCCCCCCC APPLE SAUCE</message>
 
-        <header>"The Old Man"</header>
-        <message>"How's it going..."</message>
+        <header>The Old Man</header>
+        <message>How's it going...</message>
 
-        <message>"...Be..Because I'm fine...</message>
+        <message>...Be..Because I'm fine...</message>
     </dialog>
 
     <dialog dialog_id="TEST2" >
-        <header>"TEST1"</header>
-        <message>"Hello..."</message>
+        <header>TEST1</header>
+        <message>Hello...</message>
 
-        <header>"TEST2"</header>
-        <message>"How's it going..."</message>
-        <image>"reaction1.png"</image>
+        <header>TEST2</header>
+        <message>How's it going..</message>
+        <image>reaction1.png</image>
 
-        <message>"...Be..Because I'm fine...</message>
+        <message>...Be..Because I'm fine...</message>
     </dialog>
 </game_dialog>

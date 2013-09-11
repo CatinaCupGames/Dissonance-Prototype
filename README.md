@@ -1,8 +1,27 @@
-That-one-Game
+Dissonance
+=============
+A game by BLANK
+
+
+Description
+=============
+A short summary of the story should go here (like the back of a book)
+
+Team
 =============
 
-I will change the title and this later...
+###Programmers
+* hypereddie
+* Arrem
+* headdetect
+* oyasunadev
 
-[Facebook Group][1]
+###Story Board
+* simplej978
 
-[1]: https://www.facebook.com/groups/150452615126051/
+###Music/Sound
+* simplej978
+
+###Artists
+* toakongu834
+* JedTheKrampus
