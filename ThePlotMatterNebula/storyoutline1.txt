@@ -14,7 +14,7 @@ TL;DR Outline
 -Prologue: A Necessary Measure depicts the burning of Scaltal, the first in
 a series of attacks on eastern Isthmo orchestrated by Waldomar II
 ____________________________________________________________________________
-Act I: Defiance
+Act I: Departure
 ____________________________________________________________________________
 -Act I-1 covers the first portion of Wyatt and Huxley's journey to Adoma to
 deliver a package to the High Sage
@@ -42,9 +42,11 @@ decision to sacrifice himself during the invasion of Nuado
  -start point is the beginning of the invasion, end point is Farrand's death
 -Act II-4 covers Wyatt, Bryce, and Amynta's fight against the Adlers at 
 Nuado and Wyatt's discovery of his father's demise
- -start point is exiting the tunnels, end point is Wyatt's rage
+ -start point is exiting the tunnels, end point is Wyatt's despair
 ____________________________________________________________________________
-ACT III COMING SOON 
+Act III: A War on Ideals
+____________________________________________________________________________
+-
 ----------------------------------------------------------------------------
 Prologue: A Necessary Measure
 ----------------------------------------------------------------------------
@@ -65,7 +67,7 @@ at anyone trying to escape
 corner holding a stuffed eagle doll
 -camera fades out slowly 
 ----------------------------------------------------------------------------
-Act I: Defiance
+Act I: Departure
 ----------------------------------------------------------------------------
 Chapter 1: Wyatt and Huxley
 ____________________________________________________________________________
@@ -86,7 +88,7 @@ on the other side of the river
 to town
 -On the way back, a swarm of insects blocks their path
 -The player takes control of the boys, fighting off the creatures with
-Wyatt's fists and Huxley's slingshot
+Wyatt's water bucket and Huxley's slingshot
 -This part acts as a tutorial to combat and basic platforming, with the boys
 having to jump up ledges
 -Once the boys return to town, Huxley goes back on his own to his house
