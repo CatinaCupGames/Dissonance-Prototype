@@ -70,6 +70,7 @@ public class TestQuest extends AbstractQuest {
         }*/
 
         final World w = getWorld();
+
         TestPlayer p = new TestPlayer();
         w.loadAnimatedTextureForSprite(p);
         w.addSprite(p);
@@ -77,6 +78,7 @@ public class TestQuest extends AbstractQuest {
         p.setY(0);
         p.select();
         p.freeze();
+
         TestScene testScene = new TestScene();
         testScene.beginScene();
         p.unfreeze();
@@ -85,7 +87,21 @@ public class TestQuest extends AbstractQuest {
         w.addSprite(pp);
         pp.setX(-100);
         pp.setY(200);
+
         TestNPC npc = new TestNPC("arrem");
+        /*npc.setTalkEvent(new NPCSprite.NPCEvent.OnTalkEvent() {
+            @Override
+            public void onTalk(NPCSprite sprite, Dialog dialog) {
+                System.out.println("TestNPC has started talking!");
+            }
+        });
+        npc.setTalkFinishedEvent(new NPCSprite.NPCEvent.OnTalkFinishedEvent() {
+            @Override
+            public void onTalkFinished(NPCSprite sprite) {
+                System.out.println("TestNPC has finished talking!");
+            }
+        });*/
+
         w.loadAnimatedTextureForSprite(npc);
         w.addSprite(npc);
         pp.setX(-200);

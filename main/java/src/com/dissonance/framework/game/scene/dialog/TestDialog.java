@@ -18,7 +18,7 @@ public class TestDialog extends UIElement {
     @Override
     public void draw(Graphics2D graphics2D) {
         graphics2D.setColor(Color.WHITE);
-        graphics2D.drawRect(0, 0, (int)getWidth(), (int)getHeight());
+        graphics2D.drawRect(0, 0, getWidth(), getHeight());
         graphics2D.setColor(Color.BLUE);
         graphics2D.drawString(text, 0, getHeight() / 2);
     }
