@@ -201,11 +201,6 @@ public class SpriteTexture extends Texture {
         return height;
     }
 
-    public static final int BOTTOM_LEFT = 0;
-    public static final int BOTTOM_RIGHT = 1;
-    public static final int TOP_RIGHT = 2;
-    public static final int TOP_LEFT = 3;
-
     public Vector2f getTextureCord(int type) {
         float st = 1.0f / max_frames;
         float rt = 1.0f / (float) animations.length;

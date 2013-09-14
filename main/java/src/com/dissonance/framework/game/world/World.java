@@ -118,7 +118,7 @@ public final class World implements Drawable {
                 for (MapLayer layer : tiledMap) {
                     if (layer instanceof TileLayer) {
                         TileLayer tlayer = (TileLayer)layer;
-
+                        //TODO Load tiles in this layer and attach there texture from above using Texture.getTexture(tile.getTileSet().getName())..
                     }
                 }
             } catch (Exception e) {

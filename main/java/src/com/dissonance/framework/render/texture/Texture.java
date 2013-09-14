@@ -10,6 +10,12 @@ import java.util.HashMap;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Texture {
+    public static final int BOTTOM_LEFT = 0;
+    public static final int BOTTOM_RIGHT = 1;
+    public static final int TOP_RIGHT = 2;
+    public static final int TOP_LEFT = 3;
+
+
     int textureId;
     private int targetId;
     private int image_width, image_height;
@@ -43,6 +49,10 @@ public class Texture {
         Validator.validateNotNull(with, "with");
 
         cache.put(replace.resource, with);
+    }
+
+    public static Texture getTexture(String name) {
+        return cache.get(name);
     }
 
     private Texture() { }
