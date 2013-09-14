@@ -34,7 +34,7 @@ public final class Camera {
     }
 
     public static Vec2 translateToScreenCord(Vec2 vec) {
-        return translateToScreenCord(vec, 2.5f);
+        return translateToScreenCord(vec, 2f);
     }
 
     public static Vec2 translateToScreenCord(Vec2 vec, float scale) {
@@ -44,8 +44,8 @@ public final class Camera {
     }
 
     public static Vec2 translateToCameraCenter(Vec2 vec, float width, float height) {
-        vec.x = (vec.x - (RenderService.GAME_WIDTH / 4.5f) + width);
-        vec.y = (vec.y - (RenderService.GAME_HEIGHT / 4.5f) + height);
+        vec.x = (vec.x - (RenderService.GAME_WIDTH / 4f) + width);
+        vec.y = (vec.y - (RenderService.GAME_HEIGHT / 4f) + height);
         return vec;
     }
 

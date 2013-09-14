@@ -89,7 +89,7 @@ public class DialogUI extends UIElement {
         currentdialog = this;
         setWidth(512);
         setHeight(64);
-        Vec2 pos = new Vec2(getWidth() / 2, getHeight() / 2);
+        Vec2 pos = new Vec2(getWidth() / 1.52f, getHeight() / 2);
         pos = Camera.translateToScreenCord(pos);
         setX(pos.x);
         setY(pos.y);
@@ -141,7 +141,7 @@ public class DialogUI extends UIElement {
             i = 0;
 
         if (cx != Camera.getX() || cy != Camera.getY()) {
-            Vec2 pos = new Vec2(getWidth() / 2, getHeight() / 2);
+            Vec2 pos = new Vec2(getWidth() / 1.52f, getHeight() / 2);
             pos = Camera.translateToScreenCord(pos);
             setX(pos.x);
             setY(pos.y);

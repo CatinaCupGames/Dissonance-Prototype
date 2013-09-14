@@ -6,7 +6,6 @@ import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.texture.Texture;
-import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.sound.SoundState;
 import com.dissonance.framework.sound.SoundSystem;
@@ -21,7 +20,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.oyasunadev.li.liui.component.shape.CSquare;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -306,7 +304,7 @@ public class RenderService extends Service {
             glMatrixMode(GL_MODELVIEW);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glLoadIdentity();
-            glScalef(2.5f, 2.5f, 1f);
+            glScalef(2f, 2f, 1f);
             glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
 
             Iterator<Drawable> sprites = current_world.getDrawable();
@@ -338,8 +336,6 @@ public class RenderService extends Service {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
-
-            square.render();
 
             Camera.executeEase(); //Execute any interlop
 
