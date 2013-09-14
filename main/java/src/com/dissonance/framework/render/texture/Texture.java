@@ -1,6 +1,7 @@
 package com.dissonance.framework.render.texture;
 
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.system.utils.Validator;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -9,13 +10,19 @@ import java.util.HashMap;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Texture {
+    public static final int BOTTOM_LEFT = 0;
+    public static final int BOTTOM_RIGHT = 1;
+    public static final int TOP_RIGHT = 2;
+    public static final int TOP_LEFT = 3;
+
+
     int textureId;
     private int targetId;
     private int image_width, image_height;
     private int texture_width, texture_height;
     private float width, height;
     private String resource;
-    private static final HashMap<String, Texture> cache = new HashMap<String, Texture>();
+    protected static final HashMap<String, Texture> cache = new HashMap<String, Texture>();
 
     public static Texture retriveTexture(String resource) throws IOException {
         if (cache.containsKey(resource))
@@ -35,6 +42,17 @@ public class Texture {
         t.resource = name;
         cache.put(name, t);
         return t;
+    }
+
+    public static void replaceTexture(Texture replace, Texture with) {
+        Validator.validateNotNull(replace, "replace");
+        Validator.validateNotNull(with, "with");
+
+        cache.put(replace.resource, with);
+    }
+
+    public static Texture getTexture(String name) {
+        return cache.get(name);
     }
 
     private Texture() { }

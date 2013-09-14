@@ -7,13 +7,28 @@ import com.dissonance.framework.game.sprites.AnimatedSprite;
 import com.dissonance.framework.render.RenderService;
 
 public abstract class AbstractWaypointSprite extends AnimatedSprite implements WaypointSprite {
+    private WaypointSpriteEvent.OnWaypointReachedEvent waypointReachedEvent;
+
     protected Position currentWaypoint;
+
+    /**
+     * Sets this {@link WaypointSprite WaypointSprite's}
+     * {@link WaypointSpriteEvent.OnWaypointReachedEvent OnTalkEvent listener} to the specified listener.
+     *
+     * @param waypointReachedListener The new event listener.
+     */
+    public void setWaypointReachedListener(WaypointSpriteEvent.OnWaypointReachedEvent waypointReachedListener) {
+        this.waypointReachedEvent = waypointReachedListener;
+    }
 
     @Override
     public void update() {
         if (currentWaypoint != null && !WaypointMover.moveSpriteOneFrame(this)) {
             currentWaypoint = null;
             _wakeup();
+            if (waypointReachedEvent != null) {
+                waypointReachedEvent.onWaypointReached(this);
+            }
         }
     }
 
@@ -34,9 +49,19 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         if (RenderService.isInRenderThread())
             throw new IllegalAccessError("You cant access this method in the render thread!");
         while (true) {
-            if (currentWaypoint == null || RenderService.INSTANCE == null)
+            if (currentWaypoint == null || RenderService.INSTANCE == null) {
                 break;
+            }
             super.wait(0L);
+        }
+    }
+
+    public interface WaypointSpriteEvent {
+        /**
+         * Interface definition for a callback to be invoked when the {@link WaypointSprite} has reached its destination.
+         */
+        public interface OnWaypointReachedEvent {
+            public void onWaypointReached(WaypointSprite sprite);
         }
     }
 }

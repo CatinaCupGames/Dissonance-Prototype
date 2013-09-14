@@ -44,7 +44,7 @@ public class DialogFactory {
                         for (int ii = 0; ii < nodelist.getLength(); ii++) {
                             if (nodelist.item(ii) == null)
                                 continue;
-                            lines[ii] = ((Element)nodelist.item(ii)).getFirstChild().getNodeValue();
+                            lines[ii] = nodelist.item(ii).getFirstChild().getNodeValue();
                         }
                     } else {
                         lines = new String[0];
@@ -57,7 +57,7 @@ public class DialogFactory {
                         for (int ii = 0; ii < nodelist.getLength(); ii++) {
                             if (nodelist.item(ii) == null)
                                 continue;
-                            headers[ii] = ((Element)nodelist.item(ii)).getFirstChild().getNodeValue();
+                            headers[ii] = nodelist.item(ii).getFirstChild().getNodeValue();
                         }
                     } else {
                         headers = new String[0];
@@ -70,7 +70,7 @@ public class DialogFactory {
                         for (int ii = 0; ii < nodelist.getLength(); ii++) {
                             if (nodelist.item(ii) == null)
                                 continue;
-                            images[ii] = ((Element)nodelist.item(ii)).getFirstChild().getNodeValue();
+                            images[ii] = nodelist.item(ii).getFirstChild().getNodeValue();
                         }
                     } else {
                         images = new String[0];

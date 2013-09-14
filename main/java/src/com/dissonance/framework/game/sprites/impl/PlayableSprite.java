@@ -12,16 +12,39 @@ import org.lwjgl.input.Keyboard;
 import java.util.Iterator;
 
 public abstract class PlayableSprite extends CombatSprite {
+    private PlayableSpriteEvent.OnSelectedEvent selectedEvent;
+    private PlayableSpriteEvent.OnDeselectedEvent deselectedEvent;
+
     private boolean isPlaying = false;
     private boolean frozen;
     private boolean attack_select;
     private static PlayableSprite currentlyPlaying;
 
+    /**
+     * Sets this {@link PlayableSprite PlayableSprite's}
+     * {@link PlayableSpriteEvent.OnSelectedEvent OnSelectedEvent listener} to the specified listener.
+     *
+     * @param selectedListener The new event listener.
+     */
+    public void setSelectedListener(PlayableSpriteEvent.OnSelectedEvent selectedListener) {
+        this.selectedEvent = selectedListener;
+    }
+
+    /**
+     * Sets this {@link PlayableSprite PlayalbeSprite's}
+     * {@link PlayableSpriteEvent.OnDeselectedEvent OnDeselectedEvent listener} to the specified listener.
+     *
+     * @param deselectedListener The new event listener.
+     */
+    public void setDeselectedListener(PlayableSpriteEvent.OnDeselectedEvent deselectedListener) {
+        this.deselectedEvent = deselectedListener;
+    }
+
     @Override
     public void setX(float x) {
         super.setX(x);
         if (isPlaying) {
-            Camera.setPos(Camera.translateToCameraCenter(getVector(), 32, 32));
+            Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
         }
     }
 
@@ -29,7 +52,7 @@ public abstract class PlayableSprite extends CombatSprite {
     public void setY(float y) {
         super.setY(y);
         if (isPlaying) {
-            Camera.setPos(Camera.translateToCameraCenter(getVector(), 32, 32));
+            Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
         }
     }
 
@@ -159,6 +182,10 @@ public abstract class PlayableSprite extends CombatSprite {
      * The Camera will pan to the newly selected sprite
      */
     public void select() {
+        if (selectedEvent != null) {
+            selectedEvent.onSelectedEvent(this);
+        }
+
         if (currentlyPlaying != null) {
             currentlyPlaying.deselect();
         }
@@ -166,10 +193,14 @@ public abstract class PlayableSprite extends CombatSprite {
         currentlyPlaying = this;
 
         Camera.setCameraEaseListener(listener);
-        Camera.easeMovement(Camera.translateToCameraCenter(getVector(), 32, 32), 800);
+        Camera.easeMovement(Camera.translateToCameraCenter(getVector(), 32), 800);
     }
 
     public void deselect() {
+        if (deselectedEvent != null) {
+            deselectedEvent.onDeselectedEvent(this);
+        }
+
         onDeselect();
         if (currentlyPlaying != null)
             throw new RuntimeException("super.onDeselect was not executed! Try putting super.onDeselect at the top of your method!");
@@ -218,4 +249,20 @@ public abstract class PlayableSprite extends CombatSprite {
             Camera.setCameraEaseListener(null); //Reset listener
         }
     };
+
+    public interface PlayableSpriteEvent {
+        /**
+         * Interface definition for a callback to be invoked when the {@link PlayableSprite} has been selected by the player.
+         */
+        public interface OnSelectedEvent {
+            public void onSelectedEvent(PlayableSprite sprite);
+        }
+
+        /**
+         * Interface definition for a callback to be invoked when the {@link PlayableSprite} has been deselected.
+         */
+        public interface OnDeselectedEvent {
+            public void onDeselectedEvent(PlayableSprite sprite);
+        }
+    }
 }

@@ -11,7 +11,7 @@ public abstract class Person extends AnimatedSprite {
 
     public Person(World w, String sprite_name) {
         setWorld(w);
-        this.name = name;
+        this.name = sprite_name;
         w.loadAnimatedTextureForSprite(this);
     }
 

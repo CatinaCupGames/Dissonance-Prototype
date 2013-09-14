@@ -9,6 +9,9 @@ import java.util.LinkedList;
 
 public abstract class NPCSprite extends AbstractWaypointSprite {
 
+    private NPCSpriteEvent.OnTalkEvent talkEvent;
+    private NPCSpriteEvent.OnTalkFinishedEvent talkFinishedEvent;
+
     private LinkedList<Dialog> dialogQueue = new LinkedList<>();
     private DialogUI dialogUI;
 
@@ -42,6 +45,26 @@ public abstract class NPCSprite extends AbstractWaypointSprite {
      * Creates a new instance of the NPCSprite without enqueueing any {@link Dialog Dialogs}.
      */
     public NPCSprite() {}
+
+    /**
+     * Sets this {@link NPCSprite NPCSprite's}
+     * {@link NPCSpriteEvent.OnTalkEvent OnTalkEvent listener} to the specified listener.
+     *
+     * @param talkListener The new event listener.
+     */
+    public void setTalkListener(NPCSpriteEvent.OnTalkEvent talkListener) {
+        talkEvent = talkListener;
+    }
+
+    /**
+     * Sets this {@link NPCSprite NPCSprite's}
+     * {@link NPCSpriteEvent.OnTalkFinishedEvent OnTalkFinished listener} to the specified listener.
+     *
+     * @param talkFinishedListener The new event listener.
+     */
+    public void setTalkFinishedListener(NPCSpriteEvent.OnTalkFinishedEvent talkFinishedListener) {
+        talkFinishedEvent = talkFinishedListener;
+    }
 
     /**
      * Gets the next {@link Dialog} for this NPC and dequeues it.
@@ -93,7 +116,12 @@ public abstract class NPCSprite extends AbstractWaypointSprite {
 
         if (dialog != null) {
             dialogUI = new DialogUI("NPC-DIALOG-" + super.hashCode(), dialog);
+
             onSpeak();
+            if (talkEvent != null) {
+                talkEvent.onTalk(this, dialog);
+            }
+
             dialogUI.displayUI();
         }
     }
@@ -106,18 +134,19 @@ public abstract class NPCSprite extends AbstractWaypointSprite {
         dialogUI.setDialogListener(new DialogUI.DialogListener() {
             @Override
             public void onDialogAdvance(Dialog dialog) {
-                System.out.println("NPCSprite: Dialog advanced event called");
             }
 
             @Override
             public void onDialogStarted(Dialog dialog) {
-                System.out.println("NPCSprite: Dialog started event called");
             }
 
             @Override
             public void onDialogEnded() {
-                System.out.println("NPCSprite: Dialog end event called");
                 onSpeakingFinished();
+
+                if (talkFinishedEvent != null) {
+                    talkFinishedEvent.onTalkFinished(NPCSprite.this);
+                }
             }
         });
     }
@@ -126,6 +155,20 @@ public abstract class NPCSprite extends AbstractWaypointSprite {
      * The onSpeakingFinished method is called when the dialog has ended.
      */
     public void onSpeakingFinished() {}
+
+    public interface NPCSpriteEvent {
+        /**
+        * Interface definition for a callback to be invoked when the {@link NPCSprite} has started talking.
+        */
+        public interface OnTalkEvent {
+            public void onTalk(NPCSprite sprite, Dialog dialog);
+        }
+
+        /**
+         * Interface definition for a callback to be invoked when the {@link NPCSprite} has finished talking.
+         */
+        public interface OnTalkFinishedEvent {
+            public void onTalkFinished(NPCSprite sprite);
+        }
+    }
 }
-
-
