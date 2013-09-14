@@ -44,7 +44,7 @@ public abstract class PlayableSprite extends CombatSprite {
     public void setX(float x) {
         super.setX(x);
         if (isPlaying) {
-            Camera.setPos(Camera.translateToCameraCenter(getVector(), 32, 32));
+            Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
         }
     }
 
@@ -52,7 +52,7 @@ public abstract class PlayableSprite extends CombatSprite {
     public void setY(float y) {
         super.setY(y);
         if (isPlaying) {
-            Camera.setPos(Camera.translateToCameraCenter(getVector(), 32, 32));
+            Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
         }
     }
 
@@ -193,7 +193,7 @@ public abstract class PlayableSprite extends CombatSprite {
         currentlyPlaying = this;
 
         Camera.setCameraEaseListener(listener);
-        Camera.easeMovement(Camera.translateToCameraCenter(getVector(), 32, 32), 800);
+        Camera.easeMovement(Camera.translateToCameraCenter(getVector(), 32), 800);
     }
 
     public void deselect() {

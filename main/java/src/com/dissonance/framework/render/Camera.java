@@ -43,14 +43,14 @@ public final class Camera {
         return vec;
     }
 
-    public static Vec2 translateToCameraCenter(Vec2 vec, float width, float height) {
-        vec.x = (vec.x - (RenderService.GAME_WIDTH / 4f) + width);
+    public static Vec2 translateToCameraCenter(Vec2 vec, float height) {
+        vec.x = (vec.x - (RenderService.GAME_WIDTH / 4f));
         vec.y = (vec.y - (RenderService.GAME_HEIGHT / 4f) + height);
         return vec;
     }
 
     public static Vec2 translateToCameraCenter(Vec2 vec) {
-        return translateToCameraCenter(vec, 0f, 0f);
+        return translateToCameraCenter(vec, 0f);
     }
 
     public static void setCameraEaseListener(CameraEaseListener listener) {
