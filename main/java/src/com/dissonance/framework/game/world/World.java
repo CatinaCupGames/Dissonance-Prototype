@@ -10,11 +10,17 @@ import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
+import com.dissonance.framework.system.utils.ReflectionUtils;
 import com.dissonance.framework.system.utils.Validator;
 import org.jbox2d.common.Vec2;
 import tiled.core.Map;
+import tiled.core.MapLayer;
+import tiled.core.TileLayer;
+import tiled.core.TileSet;
 import tiled.io.TMXMapReader;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -97,6 +103,21 @@ public final class World implements Drawable {
         if (in != null) {
             try {
                 tiledMap = MAP_READER.readMap(in);
+                //Load all tileSets into textures
+                for (TileSet sets : tiledMap.getTileSets()) {
+                    Image awtImage = ReflectionUtils.getPrivateField("tileSetImage", sets, Image.class);
+                    if (!(awtImage instanceof BufferedImage)) {
+                        continue;
+                    }
+                    Texture tileset = Texture.convertToTexture(sets.getName(), (BufferedImage)awtImage);
+                }
+
+                for (MapLayer layer : tiledMap) {
+                    if (layer instanceof TileLayer) {
+                        TileLayer tlayer = (TileLayer)layer;
+
+                    }
+                }
             } catch (Exception e) {
                 throw new WorldLoadFailedException("Error loading TMX file!", e);
             }
