@@ -111,7 +111,7 @@ public final class World implements Drawable {
                         continue;
                     }
                     Texture temp = Texture.convertToTexture(sets.getName(), (BufferedImage)awtImage);
-                    TileTexture tileset = new TileTexture(temp, sets.getTileWidth(), sets.getTileHeight(), sets.getTileSpacing());
+                    TileTexture tileset = new TileTexture(temp, sets.getTileWidth(), sets.getTileHeight(), sets.getTileSpacing(), sets.getTileMargin(), sets.getTilesPerRow());
                     Texture.replaceTexture(temp, tileset);
                 }
 
