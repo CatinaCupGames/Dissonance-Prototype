@@ -89,19 +89,6 @@ public class TestQuest extends AbstractQuest {
         pp.setY(200);
 
         TestNPC npc = new TestNPC("arrem");
-        /*npc.setTalkEvent(new NPCSprite.NPCEvent.OnTalkEvent() {
-            @Override
-            public void onTalk(NPCSprite sprite, Dialog dialog) {
-                System.out.println("TestNPC has started talking!");
-            }
-        });
-        npc.setTalkFinishedEvent(new NPCSprite.NPCEvent.OnTalkFinishedEvent() {
-            @Override
-            public void onTalkFinished(NPCSprite sprite) {
-                System.out.println("TestNPC has finished talking!");
-            }
-        });*/
-
         w.loadAnimatedTextureForSprite(npc);
         w.addSprite(npc);
         pp.setX(-200);

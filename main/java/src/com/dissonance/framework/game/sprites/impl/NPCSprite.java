@@ -9,8 +9,8 @@ import java.util.LinkedList;
 
 public abstract class NPCSprite extends AbstractWaypointSprite {
 
-    private NPCEvent.OnTalkEvent talkEvent;
-    private NPCEvent.OnTalkFinishedEvent talkFinishedEvent;
+    private NPCSpriteEvent.OnTalkEvent talkEvent;
+    private NPCSpriteEvent.OnTalkFinishedEvent talkFinishedEvent;
 
     private LinkedList<Dialog> dialogQueue = new LinkedList<>();
     private DialogUI dialogUI;
@@ -47,20 +47,22 @@ public abstract class NPCSprite extends AbstractWaypointSprite {
     public NPCSprite() {}
 
     /**
-     * Sets this NPC's {@link NPCEvent.OnTalkEvent OnTalkEvent listener} to the specified listener.
+     * Sets this {@link NPCSprite NPCSprite's}
+     * {@link NPCSpriteEvent.OnTalkEvent OnTalkEvent listener} to the specified listener.
      *
      * @param talkListener The new event listener.
      */
-    public void setTalkEvent(NPCEvent.OnTalkEvent talkListener) {
+    public void setTalkListener(NPCSpriteEvent.OnTalkEvent talkListener) {
         talkEvent = talkListener;
     }
 
     /**
-     * Sets this NPC's {@link NPCEvent.OnTalkFinishedEvent OnTalkFinished listener} to the specified listener.
+     * Sets this {@link NPCSprite NPCSprite's}
+     * {@link NPCSpriteEvent.OnTalkFinishedEvent OnTalkFinished listener} to the specified listener.
      *
      * @param talkFinishedListener The new event listener.
      */
-    public void setTalkFinishedEvent(NPCEvent.OnTalkFinishedEvent talkFinishedListener) {
+    public void setTalkFinishedListener(NPCSpriteEvent.OnTalkFinishedEvent talkFinishedListener) {
         talkFinishedEvent = talkFinishedListener;
     }
 
@@ -154,16 +156,16 @@ public abstract class NPCSprite extends AbstractWaypointSprite {
      */
     public void onSpeakingFinished() {}
 
-    public interface NPCEvent {
+    public interface NPCSpriteEvent {
         /**
-        * Interface definition for a callback to be invoked when the NPCSprite has started talking.
+        * Interface definition for a callback to be invoked when the {@link NPCSprite} has started talking.
         */
         public interface OnTalkEvent {
             public void onTalk(NPCSprite sprite, Dialog dialog);
         }
 
         /**
-         * Interface definition for a callback to be invoked when the NPCSprite has finished talking.
+         * Interface definition for a callback to be invoked when the {@link NPCSprite} has finished talking.
          */
         public interface OnTalkFinishedEvent {
             public void onTalkFinished(NPCSprite sprite);
