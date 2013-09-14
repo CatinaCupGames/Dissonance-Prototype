@@ -7,6 +7,7 @@ import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
+import com.dissonance.framework.render.texture.tile.TileTexture;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
@@ -109,7 +110,9 @@ public final class World implements Drawable {
                     if (!(awtImage instanceof BufferedImage)) {
                         continue;
                     }
-                    Texture tileset = Texture.convertToTexture(sets.getName(), (BufferedImage)awtImage);
+                    Texture temp = Texture.convertToTexture(sets.getName(), (BufferedImage)awtImage);
+                    TileTexture tileset = new TileTexture(temp, sets.getTileWidth(), sets.getTileHeight(), sets.getTileSpacing());
+                    Texture.replaceTexture(temp, tileset);
                 }
 
                 for (MapLayer layer : tiledMap) {
