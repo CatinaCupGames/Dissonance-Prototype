@@ -13,10 +13,33 @@ import java.security.InvalidParameterException;
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class AnimatedSprite extends Sprite implements Animator {
+
+    private AnimatedSpriteEvent.OnAnimationPlayEvent animationPlayEvent;
+    private AnimatedSpriteEvent.OnAnimationPauseEvent animationPauseEvent;
+
     protected transient int ANIMATION_FACTORY_ID;
     private transient SpriteAnimationInfo animation;
     private transient int speed;
 
+    /**
+     * Sets this {@link AnimatedSprite AnimatedSprite's}
+     * {@link AnimatedSpriteEvent.OnAnimationPauseEvent OnAnimationPauseEvent listener} to the specified listener.
+     *
+     * @param animationPlayListener The new event listener.
+     */
+    public void setAnimationPlayListener(AnimatedSpriteEvent.OnAnimationPlayEvent animationPlayListener) {
+        this.animationPlayEvent = animationPlayListener;
+    }
+
+    /**
+     * Sets this {@link AnimatedSprite AnimatedSprite's}
+     * {@link AnimatedSpriteEvent.OnAnimationPlayEvent OnAnimationPlayEvent listener} to the specified listener.
+     *
+     * @param animationPauseListener The new event listener.
+     */
+    public void setAnimationPauseListener(AnimatedSpriteEvent.OnAnimationPauseEvent animationPauseListener) {
+        this.animationPauseEvent = animationPauseListener;
+    }
 
     @Override
     public void setTexture(Texture texture) {
@@ -95,10 +118,18 @@ public abstract class AnimatedSprite extends Sprite implements Animator {
 
     private boolean paused;
     public void pauseAnimation() {
+        if (animationPauseEvent != null) {
+            animationPauseEvent.onAnimationPause(this);
+        }
+
         paused = true;
     }
 
     public void playAnimation() {
+        if (animationPlayEvent != null) {
+            animationPlayEvent.onAnimationPlay(this);
+        }
+
         paused = false;
     }
 
@@ -148,6 +179,24 @@ public abstract class AnimatedSprite extends Sprite implements Animator {
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    public interface AnimatedSpriteEvent {
+        /**
+         * Interface definition for a callback to be invoked when the {@link AnimatedSprite AnimatedSprite's} animation
+         * has been resumed.
+         */
+        public interface OnAnimationPlayEvent {
+            public void onAnimationPlay(AnimatedSprite sprite);
+        }
+
+        /**
+         * Interface definition for a callback to be invoked when the {@link AnimatedSprite AnimatedSprite's} animation
+         * has been paused.
+         */
+        public interface OnAnimationPauseEvent {
+            public void onAnimationPause(AnimatedSprite sprite);
+        }
     }
 
 }
