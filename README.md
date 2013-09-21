@@ -25,3 +25,4 @@ Team
 ###Artists
 * toakongu834
 * JedTheKrampus
+* TheDaringPastry
