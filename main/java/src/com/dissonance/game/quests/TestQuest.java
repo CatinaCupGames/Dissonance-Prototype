@@ -1,6 +1,8 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.sprites.Enemy;
+import com.dissonance.framework.game.sprites.impl.CombatSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
@@ -8,7 +10,23 @@ import com.dissonance.game.scene.TestScene;
 import com.dissonance.game.sprites.TestNPC;
 import com.dissonance.game.sprites.TestPlayer;
 
+import java.util.Random;
+
 public class TestQuest extends AbstractQuest {
+
+    private Enemy.AIInterface testEnemyInterface = new Enemy.AIInterface() {
+        private Random random = new Random();
+
+        @Override
+        public void onUpdate(Enemy enemy) {
+            if (random.nextInt(100) == 3) {
+                enemy.setX(enemy.getX() + (random.nextBoolean() ? random.nextInt(4) : -random.nextInt(4)));
+            }
+            if (random.nextInt(100) == 3)
+                enemy.setY(enemy.getY() + (random.nextBoolean() ? random.nextInt(4) : -random.nextInt(4)));
+        }
+    };
+
     @Override
     public void startQuest() {
         try {
@@ -93,5 +111,17 @@ public class TestQuest extends AbstractQuest {
         w.addSprite(npc);
         pp.setX(-200);
         pp.setY(200);
+
+        Enemy enemy1 = new Enemy("enemy1", Enemy.StatType.NON_MAGIC, CombatSprite.CombatType.CREATURE, testEnemyInterface);
+        w.loadAnimatedTextureForSprite(enemy1);
+        w.addSprite(enemy1);
+        enemy1.setX(-250);
+        enemy1.setY(200);
+
+        Enemy enemy2 = new Enemy("enemy2", Enemy.StatType.MAGIC, CombatSprite.CombatType.CREATURE, testEnemyInterface);
+        w.loadAnimatedTextureForSprite(enemy2);
+        w.addSprite(enemy2);
+        enemy2.setX(-300);
+        enemy2.setY(200);
     }
 }

@@ -133,7 +133,7 @@ public abstract class PlayableSprite extends CombatSprite {
                 if (!isFacing(sprite, distance))
                     continue;
                 System.out.println(distance);
-                if (distance <= 25) {
+                if (distance <= 30) {
                     sprite.onSelected(this);
                     break;
                 }

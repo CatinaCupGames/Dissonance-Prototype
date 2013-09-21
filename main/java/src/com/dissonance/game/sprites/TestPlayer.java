@@ -43,42 +43,47 @@ public class TestPlayer extends PlayableSprite {
 
 
     @Override
-    public double getAttack() {
+    public int getAttack() {
         return 0;
     }
 
     @Override
-    public double getDefense() {
+    public int getDefense() {
         return 0;
     }
 
     @Override
-    public double getSpeed() {
+    public int getSpeed() {
         return 0;
     }
 
     @Override
-    public double getVigor() {
+    public int getVigor() {
         return 0;
     }
 
     @Override
-    public double getStamina() {
+    public int getStamina() {
         return 0;
     }
 
     @Override
-    public double getWillPower() {
+    public int getWillPower() {
         return 0;
     }
 
     @Override
-    public double getFocus() {
+    public int getFocus() {
         return 0;
     }
 
     @Override
-    public double getMarksmanShip() {
+    public int getMarksmanship() {
+        return 0;
+    }
+
+    @Override
+    public int getMagicResistance() {
         return 0;
     }
 

@@ -14,7 +14,7 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
      * @return
      *        The attack stat, otherwise 0
      */
-    public abstract double getAttack();
+    public abstract int getAttack();
 
     /**
      * Determines the damage taken by incoming attacks
@@ -23,7 +23,7 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
      * @return
      *        The defense stat, otherwise 0
      */
-    public abstract double getDefense();
+    public abstract int getDefense();
 
     /**
      * Determines movement speed and the ability to dodge attacks
@@ -32,7 +32,7 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
      * @return
      *        The speed stat, otherwise 0
      */
-    public abstract double getSpeed();
+    public abstract int getSpeed();
 
     /**
      * Determines how high the critical hit rate is for the player's
@@ -44,7 +44,7 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
      * @return
      *        The vigor stat, otherwise 0
      */
-    public abstract double getVigor();
+    public abstract int getVigor();
 
     /**
      * Used to perform dodges and special abilities, depletes with use and replenishes over time
@@ -53,7 +53,7 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
      * @return
      *        The stamina stat, otherwise 0
      */
-    public abstract double getStamina();
+    public abstract int getStamina();
 
     /**
      * Determines the damage magic attacks deal, as well as the
@@ -63,7 +63,7 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
      * @return
      *        The willpower stat, otherwise 0
      */
-    public abstract double getWillPower();
+    public abstract int getWillPower();
 
     /**
      * Determines the damage absorbed by magic shields, the HP
@@ -74,7 +74,7 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
      * @return
      *        The focus stat, otherwise 0
      */
-    public abstract double getFocus();
+    public abstract int getFocus();
 
     /**
      * Determines recoil, reload speed, and jam frequency when
@@ -82,9 +82,18 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
      *
      * If this Sprite does not have this stat, then this method should return 0
      * @return
-     *        The marksman ship stat, otherwise 0
+     *        The marksmanship stat, otherwise 0
      */
-    public abstract double getMarksmanShip();
+    public abstract int getMarksmanship();
+
+    /**
+     * For non-magic users, determines damage dealt by incoming magic attacks
+     *
+     * If this Sprite does not have this stat, then this method should return 0
+     * @return
+     *        The magic resistance stat, othwerwise 0
+     */
+    public abstract int getMagicResistance();
 
     /**
      * Get the {@link CombatType} of this Sprite. The {@link CombatType} determines
