@@ -1,4 +1,4 @@
-package com.dissonance.framework.game.sprites;
+package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.sprites.impl.CombatSprite;
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
@@ -138,7 +138,6 @@ public class Enemy extends CombatSprite {
         this.statType = statType;
         this.combatType = combatType;
         this.ai = ai;
-
         setLevel(1);
     }
 

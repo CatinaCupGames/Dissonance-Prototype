@@ -1,7 +1,7 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.sprites.Enemy;
+import com.dissonance.game.sprites.Enemy;
 import com.dissonance.framework.game.sprites.impl.CombatSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
