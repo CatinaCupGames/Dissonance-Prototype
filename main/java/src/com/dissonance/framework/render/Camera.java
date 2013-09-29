@@ -1,5 +1,6 @@
 package com.dissonance.framework.render;
 
+import com.dissonance.framework.game.GameSettings;
 import org.jbox2d.common.Vec2;
 
 public final class Camera {
@@ -38,14 +39,14 @@ public final class Camera {
     }
 
     public static Vec2 translateToScreenCord(Vec2 vec, float scale) {
-        vec.x = (posX + (-vec.x + (RenderService.GAME_WIDTH / scale)));
-        vec.y = (posY + (-vec.y + (RenderService.GAME_HEIGHT / scale)));
+        vec.x = (posX + (-vec.x + (GameSettings.Display.window_width / scale)));
+        vec.y = (posY + (-vec.y + (GameSettings.Display.window_height / scale)));
         return vec;
     }
 
     public static Vec2 translateToCameraCenter(Vec2 vec, float height) {
-        vec.x = (vec.x - (RenderService.GAME_WIDTH / 4f));
-        vec.y = (vec.y - (RenderService.GAME_HEIGHT / 4f) + height);
+        vec.x = (vec.x - (GameSettings.Display.window_width / 4f));
+        vec.y = (vec.y - (GameSettings.Display.window_height / 4f) + height);
         return vec;
     }
 

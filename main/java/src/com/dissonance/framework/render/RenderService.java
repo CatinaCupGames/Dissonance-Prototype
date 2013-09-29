@@ -1,6 +1,7 @@
 package com.dissonance.framework.render;
 
 import com.dissonance.framework.game.GameService;
+import com.dissonance.framework.game.GameSettings;
 import com.dissonance.framework.game.input.InputListener;
 import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
@@ -30,10 +31,15 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
 
 public class RenderService extends Service {
-    public static int GAME_WIDTH = 1280, GAME_HEIGHT = 720;
-    public static boolean fullscreen = true; //TODO Create config to change this value
     public static final int WORLD_DATA_TYPE = 0;
     public static RenderService INSTANCE;
+
+    /****************************************************
+     * RENDER SETTINGS                                  *
+     ***************************************************/
+    /*public static int WINDOW_WIDTH = 1280, WINDOW_HEIGHT = 720;
+    public static double GAME_WIDTH = (double)WINDOW_WIDTH, GAME_HEIGHT = (double)WINDOW_HEIGHT; // TODO: For now the resolution will be the same as the window size;
+    public static boolean fullscreen = true; //TODO Create config to change this value*/
 
     private CSquare square;
 
@@ -126,18 +132,18 @@ public class RenderService extends Service {
         RENDER_THREAD_ID = Thread.currentThread().getId();
 
         try {
-            setDisplayMode(GAME_WIDTH, GAME_HEIGHT, false);
+            setDisplayMode(GameSettings.Display.window_width, GameSettings.Display.window_height, GameSettings.Display.fullscreen);
             Display.create();
             AL.create();
 
             glClearColor(0f, 0f, 0f, 1f);
             glClearDepth(1f);
-            glViewport(0, 0, GAME_WIDTH, GAME_HEIGHT);
+            glViewport(0, 0, GameSettings.Display.window_width, GameSettings.Display.window_height); // TODO: Not sure if it should be WINDOW_ or GAME_.
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0.0f, GAME_WIDTH, GAME_HEIGHT, 0.0f, 0f, -1f);
+            glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0f, -1f);
             //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            //gluPerspective(90, Game.GAME_WIDTH / Game.GAME_HEIGHT, 0.1f, 10000);
+            //gluPerspective(90, Game.WINDOW_WIDTH / Game.WINDOW_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
