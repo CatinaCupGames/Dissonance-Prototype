@@ -186,7 +186,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"..\/..\/..\/Art_and_Story\/WIP\/tilesets\/dirt.png",
+         "image":"dirt.png",
          "imageheight":32,
          "imagewidth":32,
          "margin":0,
@@ -201,7 +201,7 @@
         }, 
         {
          "firstgid":2,
-         "image":"..\/..\/..\/Art_and_Story\/WIP\/tilesets\/dirt.png",
+         "image":"dirt.png",
          "imageheight":32,
          "imagewidth":32,
          "margin":0,
@@ -216,7 +216,7 @@
         }, 
         {
          "firstgid":3,
-         "image":"..\/sprites\/player\/player_sheet.png",
+         "image":"sprites\/player\/player_sheet.png",
          "imageheight":128,
          "imagewidth":64,
          "margin":0,

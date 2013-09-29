@@ -3,10 +3,11 @@ package com.dissonance.framework.game.world.tiled;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.tile.TileTexture;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class TileSet {
-    private int firstgrid;
+    private int firstgid;
     private String image;
     private int imageheight;
     private int imagewidth;
@@ -23,9 +24,15 @@ public class TileSet {
     }
 
     public void loadTexture() {
-        Texture temp = Texture.getTexture(image);
+        Texture temp = null;
+        try {
+            temp = Texture.retriveTexture(image);
+        } catch (IOException e) {
+            System.out.println("[WARNING] Texture not found for TileSet \"" + name + "\" (\"" + image + "\") ! ");
+            return;
+        }
         if (temp == null) {
-            System.out.println("[WARNING] Texture not found for TileSet \"" + name + "\" !");
+            System.out.println("[WARNING] Texture not found for TileSet \"" + name + "\" (\"" + image + "\") ! ");
             return;
         }
         texture = new TileTexture(temp, tilewidth, tileheight, spacing, margin, getTilesPerRow(), getRowCount());
@@ -37,7 +44,7 @@ public class TileSet {
     }
 
     public boolean containsID(int id) {
-        return id >= firstgrid && id <= ((getTilesPerRow() * getRowCount()) + (firstgrid - 1));
+        return id >= firstgid && id <= ((getTilesPerRow() * getRowCount()) + (firstgid - 1));
     }
 
     public int getTilesPerRow() {
@@ -49,7 +56,7 @@ public class TileSet {
     }
 
     public int getFirstGrid() {
-        return firstgrid;
+        return firstgid;
     }
 
     public String getImagePath() {

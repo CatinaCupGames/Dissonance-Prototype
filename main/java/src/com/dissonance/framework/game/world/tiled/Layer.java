@@ -16,6 +16,17 @@ public class Layer {
     private TiledObject[] objects; //for type objectgroup
     private int[] data; //for type tilelayer
 
+    private int layer_number;
+
+    void setLayerNumber(int number) {
+        this.layer_number = number;
+    }
+
+    public int getLayerNumber() {
+        return layer_number;
+    }
+
+
     public int getHeight() {
         return height;
     }

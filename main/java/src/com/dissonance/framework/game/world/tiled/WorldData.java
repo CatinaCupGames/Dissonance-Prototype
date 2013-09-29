@@ -1,6 +1,10 @@
 package com.dissonance.framework.game.world.tiled;
 
+import com.dissonance.framework.game.world.Tile;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class WorldData {
     private int height;
@@ -46,7 +50,7 @@ public class WorldData {
 
     public TileSet findTileSetFromID(int id) {
         for (TileSet tileSet : tilesets) {
-            if (id > tileSet.getFirstGrid()) {
+            if (id >= tileSet.getFirstGrid()) {
                 if (tileSet.containsID(id)) {
                     return tileSet;
                 }
@@ -59,5 +63,30 @@ public class WorldData {
         for (TileSet tileSet : tilesets) {
             tileSet.loadTexture();
         }
+    }
+
+    public void assignAllLayers() {
+        for (int i = 0; i < layers.length; i++) {
+            layers[i].setLayerNumber(i);
+        }
+    }
+
+    public List<Tile> createTiles() {
+        ArrayList<Tile> tiles = new ArrayList<Tile>();
+        for (Layer layer : layers) {
+            if (layer.isTiledLayer()) {
+                for (int i = 0; i < layer.getTileLayerData().length; i++) {
+                    int id = layer.getTileLayerData()[i];
+                    if (id == 0)
+                        continue;
+                    TileSet set = findTileSetFromID(id);
+                    Tile t = new Tile(id, set, layer, i);
+                    tiles.add(t);
+                    t.init();
+                }
+            }
+        }
+
+        return tiles;
     }
 }

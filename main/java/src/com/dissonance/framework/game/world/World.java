@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-import static org.lwjgl.opengl.GL11.*;
-
 public final class World implements Drawable {
     private static final Gson GSON = new Gson();
     private static final float GRAVITY = 9.81f;
@@ -70,7 +68,7 @@ public final class World implements Drawable {
 
     @Override
     public void render() {
-        if (texture == null)
+        /*if (texture == null)
             return;
         texture.bind();
         float bx = texture.getTextureWidth() / 2;
@@ -87,7 +85,7 @@ public final class World implements Drawable {
         glTexCoord2f(0f, 1f); //top left
         glVertex2f(x - bx, y + by);
         glEnd();
-        texture.unbind();
+        texture.unbind();*/
     }
 
     public void load(final String world) throws WorldLoadFailedException {
@@ -98,8 +96,16 @@ public final class World implements Drawable {
         if (in != null) {
             try {
                 tiledData = GSON.fromJson(new InputStreamReader(in), WorldData.class);
-                tiledData.loadAllTileSets();
-                System.out.println(tiledData);
+                renderingService.runOnServiceThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tiledData.loadAllTileSets();
+                        System.out.println("Creating tiles..");
+                        long ms = System.currentTimeMillis();
+                        drawable.addAll(tiledData.createTiles());
+                        System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
+                    }
+                });
             } catch (Exception e) {
                 throw new WorldLoadFailedException("Error loading Tiled file!", e);
             }
@@ -139,7 +145,7 @@ public final class World implements Drawable {
     private void addDrawable(final Drawable draw, final Runnable run) {
         if (renderingService == null)
             throw new IllegalStateException("init() has not been called on this world!");
-        Validator.validateNotNull(draw, "sprite");
+        Validator.validateNotNull(draw, "drawable");
 
         renderingService.runOnServiceThread(new Runnable() {
 
