@@ -4,8 +4,20 @@ import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.system.utils.Validator;
 import com.sun.istack.internal.NotNull;
+import org.yaml.snakeyaml.Yaml;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameService {
+    public static final String encryptAlgorithm = "PBEWithMD5AndDES";
+
     private static long TID;
     private static boolean alive = true;
     private static Thread questThread;
@@ -38,7 +50,11 @@ public class GameService {
     }
 
     public static void handleKillRequest() {
-        //TODO Save any progress
+        try {
+            saveGame();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         alive = false;
         try {
@@ -63,8 +79,89 @@ public class GameService {
         return questThread;
     }
 
-    public static void saveGame() {
+    public static void saveGame() throws Exception
+    {
+        Map<Object, Object> topLevel;
+        Map<Object, Object> settingsLevel;
+        Map<Object, Object> windowLevel;
+        Map<Object, Object> renderLevel;
+        Map<Object, Object> displayLevel;
+        Map<Object, Object> colorLevel;
+        Map<Object, Object> playerLevel;
+        topLevel = new HashMap<Object, Object>();
+        {
+            settingsLevel = new HashMap<Object, Object>();
+            {
+                windowLevel = new HashMap<Object, Object>();
+                renderLevel = new HashMap<Object, Object>();
+                {
+                    displayLevel = new HashMap<Object, Object>();
+                    colorLevel = new HashMap<Object, Object>();
+                }
+            }
+            playerLevel = new HashMap<Object, Object>();
+        }
 
+        topLevel.put("settings", settingsLevel);
+        {
+            settingsLevel.put("window", windowLevel);
+            {
+                windowLevel.put("size", new Integer[] {GameSettings.Display.window_width, GameSettings.Display.window_height});
+                windowLevel.put("fullscreen", GameSettings.Display.fullscreen);
+            }
+            settingsLevel.put("render", renderLevel);
+            {
+                renderLevel.put("display", displayLevel);
+                {
+                    int resW = (int)GameSettings.Display.resolution.getWidth();
+                    int resH = (int)GameSettings.Display.resolution.getHeight();
+                    double[] ar = GameSettings.Display.resolution.aspectRatio.getAspectRatio();
+                    int[] aspectRatio = new int[] {(int)ar[0], (int)ar[1]};
+
+                    displayLevel.put("monitor", 0);
+                    displayLevel.put("resolution", new Integer[] {resW, resH});
+                    displayLevel.put("aspect-ratio", new Integer[] {aspectRatio[0], aspectRatio[1]});
+                }
+                renderLevel.put("color", colorLevel);
+                {
+                    colorLevel.put("brightness", GameSettings.Display.color.brightness);
+                    colorLevel.put("contrast", GameSettings.Display.color.contrast);
+                    colorLevel.put("saturation", GameSettings.Display.color.saturation);
+                    colorLevel.put("balance", new Integer[] {GameSettings.Display.color.red, GameSettings.Display.color.green, GameSettings.Display.color.blue});
+                }
+            }
+        }
+        topLevel.put("player", playerLevel);
+        {
+            playerLevel.put("name", "Derick");
+            playerLevel.put("level", 7);
+            playerLevel.put("powers", new String[] {"+Speed, +Agility, -Stamina"});
+        }
+
+        Yaml yaml = new Yaml();
+
+        yaml.setName("test");
+        yaml.dump(topLevel, new FileWriter("config/save.yml"));
+
+        FileInputStream fis = new FileInputStream("config/save.yml");
+        FileOutputStream fos = new FileOutputStream("config/save.dat");
+
+        byte k[] = "HignDIPs".getBytes();
+        SecretKeySpec key = new SecretKeySpec(k, encryptAlgorithm.split("/")[0]);
+        Cipher encrypt = Cipher.getInstance(encryptAlgorithm);
+        encrypt.init(Cipher.ENCRYPT_MODE, key);
+        CipherOutputStream cos = new CipherOutputStream(fos, encrypt);
+
+        byte[] buf = new byte[2048];
+        int read;
+        while((read = fis.read(buf)) != -1)
+        {
+            cos.write(buf, 0, read);
+        }
+
+        fis.close();
+        cos.flush();
+        cos.close();
     }
 
 

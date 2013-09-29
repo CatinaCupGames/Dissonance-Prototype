@@ -70,7 +70,7 @@ corner holding a stuffed eagle doll
 ----------------------------------------------------------------------------
 Act I: Departure
 ----------------------------------------------------------------------------
-Chapter 1: Wyatt and Huxley
+Chapter 1: Nuado
 ____________________________________________________________________________
 Scene 1
 -story begins in Nuado City, a modest agricultual settlement in South-
@@ -99,4 +99,8 @@ town
  -The red glow of evening gradually fades to a dark blue, reaching its
 darkest point just as the player reaches the door of the house
 ____________________________________________________________________________
-SCENE 2 COMING SOON
+-Wyatt opens the door slowly, as if to come in unnoticed
+-The interior of the house is inviting, with stained wood floors and walls
+lined with ornate torches
+-Farrand, waiting at the dinner table in the middle of the room, calls Wyatt
+over and jokingly scolds him for not being able to sneak in
