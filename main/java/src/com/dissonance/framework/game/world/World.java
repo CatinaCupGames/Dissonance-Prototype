@@ -3,35 +3,27 @@ package com.dissonance.framework.game.world;
 import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.sprites.AnimatedSprite;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.world.tiled.WorldData;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
-import com.dissonance.framework.render.texture.tile.TileTexture;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
-import com.dissonance.framework.system.utils.ReflectionUtils;
 import com.dissonance.framework.system.utils.Validator;
+import com.google.gson.Gson;
 import org.jbox2d.common.Vec2;
-import tiled.core.Map;
-import tiled.core.MapLayer;
-import tiled.core.TileLayer;
-import tiled.core.TileSet;
-import tiled.io.TMXMapReader;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-import static org.lwjgl.opengl.GL11.*;
-
 public final class World implements Drawable {
-    private static final TMXMapReader MAP_READER = new TMXMapReader();
+    private static final Gson GSON = new Gson();
     private static final float GRAVITY = 9.81f;
     private static final float TIME_STEP = 1f / 60f;
     private static final int VELOCITY_ITERATIONS = 6;
@@ -45,7 +37,7 @@ public final class World implements Drawable {
     private transient Service renderingService;
     private transient Texture texture;
     private boolean invalid = true;
-    private Map tiledMap;
+    private WorldData tiledData;
 
     World(int ID) {
         this.ID = ID;
@@ -76,7 +68,7 @@ public final class World implements Drawable {
 
     @Override
     public void render() {
-        if (texture == null)
+        /*if (texture == null)
             return;
         texture.bind();
         float bx = texture.getTextureWidth() / 2;
@@ -93,36 +85,29 @@ public final class World implements Drawable {
         glTexCoord2f(0f, 1f); //top left
         glVertex2f(x - bx, y + by);
         glEnd();
-        texture.unbind();
+        texture.unbind();*/
     }
 
     public void load(final String world) throws WorldLoadFailedException {
         if (renderingService == null)
             throw new WorldLoadFailedException("The RenderService was not created! Try calling World.init() before loading a world.");
 
-        InputStream in = getClass().getClassLoader().getResourceAsStream("worlds/" + world + ".tmx");
+        InputStream in = getClass().getClassLoader().getResourceAsStream("worlds/" + world + ".json");
         if (in != null) {
             try {
-                tiledMap = MAP_READER.readMap(in);
-                //Load all tileSets into textures
-                for (TileSet sets : tiledMap.getTileSets()) {
-                    Image awtImage = ReflectionUtils.getPrivateField("tileSetImage", sets, Image.class);
-                    if (!(awtImage instanceof BufferedImage)) {
-                        continue;
+                tiledData = GSON.fromJson(new InputStreamReader(in), WorldData.class);
+                renderingService.runOnServiceThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tiledData.loadAllTileSets();
+                        System.out.println("Creating tiles..");
+                        long ms = System.currentTimeMillis();
+                        drawable.addAll(tiledData.createTiles());
+                        System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
                     }
-                    Texture temp = Texture.convertToTexture(sets.getName(), (BufferedImage)awtImage);
-                    TileTexture tileset = new TileTexture(temp, sets.getTileWidth(), sets.getTileHeight(), sets.getTileSpacing(), sets.getTileMargin(), sets.getTilesPerRow());
-                    Texture.replaceTexture(temp, tileset);
-                }
-
-                for (MapLayer layer : tiledMap) {
-                    if (layer instanceof TileLayer) {
-                        TileLayer tlayer = (TileLayer)layer;
-                        //TODO Load tiles in this layer and attach there texture from above using Texture.getTexture(tile.getTileSet().getName())..
-                    }
-                }
+                });
             } catch (Exception e) {
-                throw new WorldLoadFailedException("Error loading TMX file!", e);
+                throw new WorldLoadFailedException("Error loading Tiled file!", e);
             }
         }
         //===TEMP CODE===
@@ -160,7 +145,7 @@ public final class World implements Drawable {
     private void addDrawable(final Drawable draw, final Runnable run) {
         if (renderingService == null)
             throw new IllegalStateException("init() has not been called on this world!");
-        Validator.validateNotNull(draw, "sprite");
+        Validator.validateNotNull(draw, "drawable");
 
         renderingService.runOnServiceThread(new Runnable() {
 
@@ -278,6 +263,48 @@ public final class World implements Drawable {
         } else {
             addDrawable(d);
         }
+    }
+
+    /**
+     * Find an {@link AnimatedSprite} in this world with the name <b>name</b>
+     * @param name
+     *            The full name of the {@link AnimatedSprite}
+     * @return
+     *        The {@link AnimatedSprite} with the same name
+     */
+    public AnimatedSprite getAnimatedSpriteByName(String name) {
+        for (Drawable d : drawable) {
+            if (d instanceof AnimatedSprite) {
+                AnimatedSprite sprite = (AnimatedSprite)d;
+                if (sprite.getSpriteName().equals(name))
+                    return sprite;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Find an {@link AnimatedSprite} with the name similar to <b>name</b> <br></br>
+     * If more than 1 {@link AnimatedSprite} is found with similar names, then this method will return name.
+     * @param name
+     *            The search term
+     * @return
+     *        An {@link AnimatedSprite} object with a similar name. <br></br>
+     *        This method will return null if no {@link AnimatedSprite} was found <b>or</b> if 2 or more sprites were found with the given search term.
+     */
+    public AnimatedSprite findAnimatedSprite(String name) {
+        AnimatedSprite toreturn = null;
+        for (Drawable d : drawable) {
+            if (d instanceof AnimatedSprite) {
+                AnimatedSprite sprite = (AnimatedSprite)d;
+                if (toreturn == null && sprite.getSpriteName().contains(name)) {
+                    toreturn = sprite;
+                } else if (toreturn != null && sprite.getSpriteName().contains(name)) {
+                    return null;
+                }
+            }
+        }
+        return toreturn;
     }
 
     public String getName() {

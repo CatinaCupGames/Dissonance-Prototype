@@ -7,7 +7,7 @@ import com.dissonance.framework.system.utils.Validator;
 public class WorldFactory {
     private static final int WORLD_CACHE_LIMIT = 5;
     private static int worldCount;
-    private static final int WORLD_ACCESS_LIMIT_SECONDS = 60 * 2;
+    public static final int WORLD_ACCESS_LIMIT_SECONDS = 120;
     private static WorldHolder[] cacheWorlds = new WorldHolder[WORLD_CACHE_LIMIT];
 
     /**
@@ -95,6 +95,16 @@ public class WorldFactory {
         return null;
     }
 
+    /**
+     * Change which world is currently being viewed.
+     * @param old
+     *           The old world. This parameter may be null, but the old world will not be unloaded if one is currently <br></br>
+     *           being displayed. <br></br>
+     *           When this parameter is not null, the {@link World} 's {@link com.dissonance.framework.game.world.World#onUnload()}
+     *           method is invoked, but the {@link World} is not disposed.
+     * @param newworld
+     *                The new world to display. This parameter <b>cannot</b> be null.
+     */
     public static void swapView(World old, World newworld) {
         Validator.validateNotNull(newworld, "NewWorld");
         if (old != null) {
@@ -118,6 +128,17 @@ public class WorldFactory {
         newworld.switchTo();
     }
 
+    /**
+     * Clear the {@link World} cache. The <b>force</b> parameter determines whether to remove worlds regardless of when they were
+     * last accessed. <br></br>
+     * When a {@link World} is disposed, it's {@link com.dissonance.framework.game.world.World#onDispose()} method
+     * is invoked. <br></br>
+     * If the <b>force</b> parameter is false, then world's will only be removed if there last access property is
+     * greater than {@link WorldFactory#WORLD_ACCESS_LIMIT_SECONDS} <br></br>
+     * The currently selected {@link World} is never disposed.
+     * @param force
+     *             Whether to force clearing of all worlds except the currently selected one.
+     */
     public static void cleanCache(boolean force) {
         long curr = System.currentTimeMillis();
         boolean removed = false;
