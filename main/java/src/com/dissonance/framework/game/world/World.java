@@ -280,6 +280,48 @@ public final class World implements Drawable {
         }
     }
 
+    /**
+     * Find an {@link AnimatedSprite} in this world with the name <b>name</b>
+     * @param name
+     *            The full name of the {@link AnimatedSprite}
+     * @return
+     *        The {@link AnimatedSprite} with the same name
+     */
+    public AnimatedSprite getAnimatedSpriteByName(String name) {
+        for (Drawable d : drawable) {
+            if (d instanceof AnimatedSprite) {
+                AnimatedSprite sprite = (AnimatedSprite)d;
+                if (sprite.getSpriteName().equals(name))
+                    return sprite;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Find an {@link AnimatedSprite} with the name similar to <b>name</b> <br></br>
+     * If more than 1 {@link AnimatedSprite} is found with similar names, then this method will return name.
+     * @param name
+     *            The search term
+     * @return
+     *        An {@link AnimatedSprite} object with a similar name. <br></br>
+     *        This method will return null if no {@link AnimatedSprite} was found <b>or</b> if 2 or more sprites were found with the given search term.
+     */
+    public AnimatedSprite findAnimatedSprite(String name) {
+        AnimatedSprite toreturn = null;
+        for (Drawable d : drawable) {
+            if (d instanceof AnimatedSprite) {
+                AnimatedSprite sprite = (AnimatedSprite)d;
+                if (toreturn == null && sprite.getSpriteName().contains(name)) {
+                    toreturn = sprite;
+                } else if (toreturn != null && sprite.getSpriteName().contains(name)) {
+                    return null;
+                }
+            }
+        }
+        return toreturn;
+    }
+
     public String getName() {
         return name;
     }
