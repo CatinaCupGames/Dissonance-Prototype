@@ -1,8 +1,8 @@
 package com.dissonance.framework.render.texture.tile;
 
+import com.dissonance.framework.game.world.tiled.TileSet;
 import com.dissonance.framework.render.texture.Texture;
 import org.jbox2d.common.Vec2;
-import tiled.core.Tile;
 
 import java.security.InvalidParameterException;
 
@@ -29,13 +29,18 @@ public class TileTexture extends Texture {
     }
 
     public TileTexture(Texture texture, int tileWidth, int tileHeight, int spacing, int margin, int perrow) {
+        this(texture, tileWidth, tileHeight, spacing, margin, perrow, 0);
+        this.size = getSize();
+    }
+
+    public TileTexture(Texture texture, int tilewidth, int tileheight, int spacing, int margin, int tilesPerRow, int rowCount) {
         super(texture);
-        this.tileWidth = tileWidth;
-        this.tileHeight = tileHeight;
+        this.tileWidth = tilewidth;
+        this.tileHeight = tileheight;
         this.spacing = spacing;
         this.margin = margin;
-        this.perrow = perrow;
-        this.size = getSize();
+        this.perrow = tilesPerRow;
+        this.size = rowCount;
 
         x_fraction = 1.0f / (float)(perrow);
         y_fraction = 1.0f / (float)(size);
@@ -56,8 +61,10 @@ public class TileTexture extends Texture {
         return temp;
     }
 
-    public Vec2 getTextureCord(int pos, Tile tile) {
-        int tilepos = tile.getId(); //Returns the tile id of this tile, relative to tileset.
+    public Vec2 getTextureCord(int pos, int id, TileSet tile) {
+        if (!tile.containsID(id))
+            throw new InvalidParameterException("The TileSet provided does not contain the tile \"" + id + "\"");
+        int tilepos = (id - tile.getFirstGrid()) + 1; //Returns the tile id of this tile, relative to tileset.
 
         int x = (tilepos % perrow) * tileWidth;
         int y = (tilepos % size) * tileHeight;

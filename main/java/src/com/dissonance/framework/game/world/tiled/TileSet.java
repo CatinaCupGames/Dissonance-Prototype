@@ -1,0 +1,86 @@
+package com.dissonance.framework.game.world.tiled;
+
+import com.dissonance.framework.render.texture.Texture;
+import com.dissonance.framework.render.texture.tile.TileTexture;
+
+import java.util.HashMap;
+
+public class TileSet {
+    private int firstgrid;
+    private String image;
+    private int imageheight;
+    private int imagewidth;
+    private int margin;
+    private String name;
+    private int spacing;
+    private int tileheight;
+    private int tilewidth;
+    private HashMap<Object, Object> properties;
+    private TileTexture texture;
+
+    public String getProperty(String key) {
+        return (String) properties.get(key);
+    }
+
+    public void loadTexture() {
+        Texture temp = Texture.getTexture(image);
+        if (temp == null) {
+            System.out.println("[WARNING] Texture not found for TileSet \"" + name + "\" !");
+            return;
+        }
+        texture = new TileTexture(temp, tilewidth, tileheight, spacing, margin, getTilesPerRow(), getRowCount());
+        Texture.replaceTexture(temp, texture);
+    }
+
+    public TileTexture getTexture() {
+        return texture;
+    }
+
+    public boolean containsID(int id) {
+        return id >= firstgrid && id <= ((getTilesPerRow() * getRowCount()) + (firstgrid - 1));
+    }
+
+    public int getTilesPerRow() {
+        return imagewidth / tilewidth;
+    }
+
+    public int getRowCount() {
+        return imageheight / tileheight;
+    }
+
+    public int getFirstGrid() {
+        return firstgrid;
+    }
+
+    public String getImagePath() {
+        return image;
+    }
+
+    public int getImageWidth() {
+        return imagewidth;
+    }
+
+    public int getImageHeight() {
+        return imageheight;
+    }
+
+    public int getMargin() {
+        return margin;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getSpacing() {
+        return spacing;
+    }
+
+    public int getTileWidth() {
+        return tilewidth;
+    }
+
+    public int getTileHeight() {
+        return tileheight;
+    }
+}
