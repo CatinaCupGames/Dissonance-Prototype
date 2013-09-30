@@ -66,10 +66,11 @@ public class TileTexture extends Texture {
             throw new InvalidParameterException("The TileSet provided does not contain the tile \"" + id + "\"");
         int tilepos = (id - tile.getFirstGrid()) + 1; //Returns the tile id of this tile, relative to tileset.
 
-        int x = (tilepos % perrow) * tileWidth;
-        int y = (tilepos % size) * tileHeight;
+        float x = (tilepos % perrow) * tileWidth;
+        float y = (tilepos % size) * tileHeight;
 
-        y += tileHeight; //Get bottom left
+        y -= tileHeight;
+        x -= tileWidth;
 
         x /= super.getTextureWidth(); //Convert to fraction
         y /= super.getTextureHeight(); //Convert to fraction
