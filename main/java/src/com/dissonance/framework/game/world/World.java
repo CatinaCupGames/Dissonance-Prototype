@@ -102,7 +102,7 @@ public final class World implements Drawable {
                         tiledData.loadAllTileSets();
                         System.out.println("Creating tiles..");
                         long ms = System.currentTimeMillis();
-                        drawable.addAll(tiledData.createTiles());
+                        drawable.addAll(tiledData.createDrawables());
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
                     }
                 });
