@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class Tile extends DrawableTile {
+public class TileObject extends DrawableTile {
     private static final HashMap<Integer, TexCordHolder> cache = new HashMap<Integer, TexCordHolder>();
     private TexCordHolder tex_cords;
 
@@ -21,7 +21,7 @@ public class Tile extends DrawableTile {
     private int x;
     private int y;
 
-    public Tile(int ID, TileSet parentTileSet, Layer parentLayer, int data_index) {
+    public TileObject(int ID, TileSet parentTileSet, Layer parentLayer, int data_index) {
         super(parentLayer);
         this.ID = ID;
         this.parentTileSet = parentTileSet;

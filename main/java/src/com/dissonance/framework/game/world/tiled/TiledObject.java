@@ -1,5 +1,7 @@
 package com.dissonance.framework.game.world.tiled;
 
+import org.jbox2d.common.Vec2;
+
 import java.util.HashMap;
 
 public class TiledObject {
@@ -11,7 +13,8 @@ public class TiledObject {
     private int x;
     private int y;
     private HashMap<Object, Object> properties;
-    private TiledPoint[] polygon;
+    private Vec2[] polygon;
+    private boolean isSquare;
 
     public String getProperty(String key) {
         return (String) properties.get(key);
@@ -45,16 +48,25 @@ public class TiledObject {
         return ellipse;
     }
 
-    public TiledPoint[] getPolygonPoints() {
-        if (ellipse || polygon == null) {
-            return new TiledPoint[0];
+    public Vec2[] getPolygonPoints() {
+        if (ellipse) {
+            return new Vec2[0];
+        } if (polygon == null) {
+            polygon = new Vec2[4];
+            polygon[0] = new Vec2(x, y);
+            polygon[1] = new Vec2(x + width, y);
+            polygon[2] = new Vec2(x, y + height);
+            polygon[3] = new Vec2(x + width, y + height);
+            isSquare = true;
+
+            return polygon;
         } else {
             return polygon;
         }
     }
 
     public boolean isSquare() {
-        return !ellipse && polygon == null;
+        return !ellipse && (polygon == null || isSquare);
     }
 
 

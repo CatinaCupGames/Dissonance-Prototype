@@ -1,7 +1,7 @@
 package com.dissonance.framework.game.world.tiled;
 
 import com.dissonance.framework.game.world.tiled.impl.ImageLayer;
-import com.dissonance.framework.game.world.tiled.impl.Tile;
+import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Drawable;
 
 import java.util.ArrayList;
@@ -82,7 +82,7 @@ public class WorldData {
                     if (id == 0)
                         continue;
                     TileSet set = findTileSetFromID(id);
-                    Tile t = new Tile(id, set, layer, i);
+                    TileObject t = new TileObject(id, set, layer, i);
                     tiles.add(t);
                     t.init();
                 }
