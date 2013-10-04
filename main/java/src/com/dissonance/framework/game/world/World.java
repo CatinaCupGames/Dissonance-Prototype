@@ -3,7 +3,10 @@ package com.dissonance.framework.game.world;
 import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.sprites.AnimatedSprite;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.world.tiled.Layer;
+import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.WorldData;
+import com.dissonance.framework.game.world.tiled.impl.Tile;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
@@ -18,9 +21,11 @@ import org.jbox2d.common.Vec2;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 public final class World implements Drawable {
     private static final Gson GSON = new Gson();
@@ -67,26 +72,7 @@ public final class World implements Drawable {
     }
 
     @Override
-    public void render() {
-        /*if (texture == null)
-            return;
-        texture.bind();
-        float bx = texture.getTextureWidth() / 2;
-        float by = texture.getTextureHeight() / 2;
-        final float x = 0, y = 0;
-        //glColor3f(1f, .5f, .5f); DEBUG LINE FOR TEXTURES
-        glBegin(GL_QUADS);
-        glTexCoord2f(0f, 0f); //bottom left
-        glVertex2f(x - bx, y - by);
-        glTexCoord2f(1f, 0f); //bottom right
-        glVertex2f(x + bx, y - by);
-        glTexCoord2f(1f, 1f); //top right
-        glVertex2f(x + bx, y + by);
-        glTexCoord2f(0f, 1f); //top left
-        glVertex2f(x - bx, y + by);
-        glEnd();
-        texture.unbind();*/
-    }
+    public void render() { }
 
     public void load(final String world) throws WorldLoadFailedException {
         if (renderingService == null)
@@ -110,19 +96,6 @@ public final class World implements Drawable {
                 throw new WorldLoadFailedException("Error loading Tiled file!", e);
             }
         }
-        //===TEMP CODE===
-        renderingService.runOnServiceThread(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    World.this.texture = Texture.retriveTexture("worlds/" + world + "/" + world + ".png");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        //===TEMP CODE===
 
         addDrawable(this); //TODO Maybe remove this..
 
@@ -305,6 +278,36 @@ public final class World implements Drawable {
             }
         }
         return toreturn;
+    }
+
+    public Tile getTileAt(float x, float y, int layernumber) {
+        Validator.validateNotBelow(layernumber, 0, "layer");
+        Validator.validateNotOver(layernumber, tiledData.getLayers().length, "layer");
+        Layer l = tiledData.getLayers()[layernumber];
+        if (!l.isTiledLayer())
+            throw new InvalidParameterException("The layer specified is not a tile layer!");
+
+        /*TODO Create a dummy tile object. Since we cant really get the actually tile object being rendered easily without looping,
+          it would be easter to create a dummy object that has all the info of the tile such as type, x, y, parent tileset, parent layer
+          ect..
+
+          Or better yet, maybe just return an enum type based on the ID
+        */
+        return null;
+    }
+
+    public Layer[] getLayers(LayerType type) {
+        List<Layer> layers = new ArrayList<Layer>();
+        for (Layer l : tiledData.getLayers()) {
+            if (l.getLayerType() == type)
+                layers.add(l);
+        }
+
+        return layers.toArray(new Layer[layers.size()]);
+    }
+
+    public Layer[] getLayers() {
+        return tiledData.getLayers();
     }
 
     public String getName() {

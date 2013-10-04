@@ -86,4 +86,8 @@ public class Layer {
     public TiledObject[] getObjectGroupData() {
         return objects;
     }
+
+    public LayerType getLayerType() {
+        return LayerType.parse(type);
+    }
 }

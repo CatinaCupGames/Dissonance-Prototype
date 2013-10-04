@@ -11,7 +11,7 @@ public class TiledObject {
     private int x;
     private int y;
     private HashMap<Object, Object> properties;
-    private TiledPolygon[] polygon;
+    private TiledPoint[] polygon;
 
     public String getProperty(String key) {
         return (String) properties.get(key);
@@ -45,9 +45,9 @@ public class TiledObject {
         return ellipse;
     }
 
-    public TiledPolygon[] getPolygonPoints() {
+    public TiledPoint[] getPolygonPoints() {
         if (ellipse || polygon == null) {
-            return new TiledPolygon[0];
+            return new TiledPoint[0];
         } else {
             return polygon;
         }
