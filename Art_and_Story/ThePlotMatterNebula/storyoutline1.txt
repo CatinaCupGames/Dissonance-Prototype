@@ -101,6 +101,11 @@ darkest point just as the player reaches the door of the house
 ____________________________________________________________________________
 -Wyatt opens the door slowly, as if to come in unnoticed
 -The interior of the house is inviting, with stained wood floors and walls
-lined with ornate torches
+lined with ornate lanterns
 -Farrand, waiting at the dinner table in the middle of the room, calls Wyatt
 over and jokingly scolds him for not being able to sneak in
+-He notices some insect blood on Wyatt's sleeve and asks him about his and Huxley's
+"hunting session"
+-Wyatt replies that the bugs were particularly aggressive, attacking unprovoked
+when they walked near them
+-Farrand says that "it's probably nothing" and tells him that he should probably get some rest
