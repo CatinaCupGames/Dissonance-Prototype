@@ -119,7 +119,7 @@ public class TileSet {
 
     /**
      * All the TileSets that are using this texture.
-     * This multiple maps will have multiple instances of the same TileSet, many textures will be repeatedly loaded.
+     * Multiple maps will have multiple instances of the same TileSet, many textures will be repeatedly loaded.
      *
      * This cache ensures that the texture is only loaded once and keeps track of which TileSets are using it.
      *

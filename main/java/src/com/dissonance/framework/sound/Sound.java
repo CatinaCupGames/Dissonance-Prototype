@@ -98,10 +98,11 @@ public final class Sound {
 
     public void play() {
         if (state == SoundState.PLAYING) {
-            stop();
+            return;
         }
 
         AL10.alSourcePlay(source);
+        AL10.alSourcef(source, AL11.AL_SEC_OFFSET, -1);
 
         if (alLoop) {
             AL10.alSourcei(source, AL10.AL_LOOPING, AL10.AL_TRUE);

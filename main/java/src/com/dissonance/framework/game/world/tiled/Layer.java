@@ -92,7 +92,8 @@ public class Layer {
     }
 
     public void dispose() {
-        properties.clear();
+        if (properties != null)
+            properties.clear();
         data = null;
         objects = null;
     }

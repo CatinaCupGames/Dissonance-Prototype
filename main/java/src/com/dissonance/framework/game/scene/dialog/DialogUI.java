@@ -4,6 +4,7 @@ import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.UIElement;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.sound.Sound;
 import org.jbox2d.common.Vec2;
 
 import javax.imageio.ImageIO;
@@ -182,7 +183,7 @@ public class DialogUI extends UIElement {
             super.wait(0L);
         }
     }
-
+    private static Sound sound_advance;
     public void endDialog() {
         ended = true;
         close();

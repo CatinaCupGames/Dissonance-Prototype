@@ -156,6 +156,8 @@ public final class World implements Drawable {
                 sprite.setWorld(null);
             }
         });
+
+        tiledData.dispose();
     }
 
     public void onUnload() { //This method is called when the world is not shown but is still in memory
