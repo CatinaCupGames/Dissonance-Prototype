@@ -95,4 +95,15 @@ public class WorldData {
 
         return tiles;
     }
+
+    public void dispose() {
+        properties.clear();
+        for (Layer l : layers) {
+            l.dispose();
+        }
+
+        for (TileSet sets : tilesets) {
+            sets.dispose();
+        }
+    }
 }

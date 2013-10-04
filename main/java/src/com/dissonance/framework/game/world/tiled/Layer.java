@@ -90,4 +90,10 @@ public class Layer {
     public LayerType getLayerType() {
         return LayerType.parse(type);
     }
+
+    public void dispose() {
+        properties.clear();
+        data = null;
+        objects = null;
+    }
 }
