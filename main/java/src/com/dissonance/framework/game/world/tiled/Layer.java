@@ -6,7 +6,7 @@ public class Layer {
     private int height;
     private int width;
     private String name;
-    private int opacity;
+    private float opacity;
     private boolean visible;
     private int x;
     private int y;
@@ -39,7 +39,7 @@ public class Layer {
         return name;
     }
 
-    public int getOpacity() {
+    public float getOpacity() {
         return opacity;
     }
 
@@ -85,5 +85,15 @@ public class Layer {
 
     public TiledObject[] getObjectGroupData() {
         return objects;
+    }
+
+    public LayerType getLayerType() {
+        return LayerType.parse(type);
+    }
+
+    public void dispose() {
+        properties.clear();
+        data = null;
+        objects = null;
     }
 }

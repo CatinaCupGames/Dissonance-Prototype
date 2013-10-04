@@ -1,6 +1,8 @@
 package com.dissonance.framework.game.world.tiled;
 
-import com.dissonance.framework.game.world.Tile;
+import com.dissonance.framework.game.world.tiled.impl.ImageLayer;
+import com.dissonance.framework.game.world.tiled.impl.TileObject;
+import com.dissonance.framework.render.Drawable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,8 +73,8 @@ public class WorldData {
         }
     }
 
-    public List<Tile> createTiles() {
-        ArrayList<Tile> tiles = new ArrayList<Tile>();
+    public List<Drawable> createDrawables() {
+        ArrayList<Drawable> tiles = new ArrayList<Drawable>();
         for (Layer layer : layers) {
             if (layer.isTiledLayer()) {
                 for (int i = 0; i < layer.getTileLayerData().length; i++) {
@@ -80,13 +82,28 @@ public class WorldData {
                     if (id == 0)
                         continue;
                     TileSet set = findTileSetFromID(id);
-                    Tile t = new Tile(id, set, layer, i);
+                    TileObject t = new TileObject(id, set, layer, i);
                     tiles.add(t);
                     t.init();
                 }
+            } else if (layer.isImageLayer()) {
+                final ImageLayer il = new ImageLayer(layer);
+                tiles.add(il);
+                il.init();
             }
         }
 
         return tiles;
+    }
+
+    public void dispose() {
+        properties.clear();
+        for (Layer l : layers) {
+            l.dispose();
+        }
+
+        for (TileSet sets : tilesets) {
+            sets.dispose();
+        }
     }
 }

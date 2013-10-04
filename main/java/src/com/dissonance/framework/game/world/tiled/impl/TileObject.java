@@ -1,8 +1,8 @@
-package com.dissonance.framework.game.world;
+package com.dissonance.framework.game.world.tiled.impl;
 
+import com.dissonance.framework.game.world.tiled.DrawableTile;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.TileSet;
-import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.texture.Texture;
 import org.jbox2d.common.Vec2;
 
@@ -10,22 +10,21 @@ import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class Tile implements Drawable {
+public class TileObject extends DrawableTile {
     private static final HashMap<Integer, TexCordHolder> cache = new HashMap<Integer, TexCordHolder>();
     private TexCordHolder tex_cords;
 
     private TileSet parentTileSet;
-    private Layer parentLayer;
     private int data_index;
     private final int ID;
 
     private int x;
     private int y;
 
-    public Tile(int ID, TileSet parentTileSet, Layer parentLayer, int data_index) {
+    public TileObject(int ID, TileSet parentTileSet, Layer parentLayer, int data_index) {
+        super(parentLayer);
         this.ID = ID;
         this.parentTileSet = parentTileSet;
-        this.parentLayer = parentLayer;
         this.data_index = data_index;
 
         x = data_index % parentLayer.getWidth();
@@ -48,11 +47,13 @@ public class Tile implements Drawable {
         }
     }
 
-    public int getX() {
+    @Override
+    public float getX() {
         return x * parentTileSet.getTileWidth();
     }
 
-    public int getY() {
+    @Override
+    public float getY() {
         return y * parentTileSet.getTileHeight();
     }
 
@@ -67,6 +68,8 @@ public class Tile implements Drawable {
     public void render() {
         if (parentTileSet.getTexture() == null)
             return;
+        super.render();
+
         parentTileSet.getTexture().bind();
         float bx = parentTileSet.getTileWidth() / 2;
         float by = parentTileSet.getTileHeight() / 2;
@@ -83,23 +86,8 @@ public class Tile implements Drawable {
         glVertex3f(x - bx, y + by, 0f);
         glEnd();
         parentTileSet.getTexture().unbind();
-    }
 
-    @Override
-    public int compareTo(Drawable o) {
-        if (o instanceof Tile) {
-            Tile t = (Tile)o;
-            if (t.parentLayer != null && parentLayer != null) {
-                if (t.parentLayer.getLayerNumber() > parentLayer.getLayerNumber())
-                    return Drawable.BEFORE;
-                else if (t.parentLayer.getLayerNumber() < parentLayer.getLayerNumber())
-                    return Drawable.AFTER;
-                else
-                    return Drawable.EQUAL;
-            } else
-                return Drawable.EQUAL;
-        }
-        return Drawable.BEFORE;
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     private static class TexCordHolder {
