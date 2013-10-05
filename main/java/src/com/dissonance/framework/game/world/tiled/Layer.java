@@ -1,5 +1,9 @@
 package com.dissonance.framework.game.world.tiled;
 
+import com.dissonance.framework.game.world.Tile;
+import com.dissonance.framework.game.world.TileType;
+
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 
 public class Layer {
@@ -20,6 +24,16 @@ public class Layer {
 
     void setLayerNumber(int number) {
         this.layer_number = number;
+    }
+
+    public Tile getTileAt(float x, float y) {
+        if (!isTiledLayer())
+            throw new InvalidParameterException("This layer is not a Tile Layer!");
+        int index = (int) (x + (y * height));
+
+        TileType tt = TileType.values()[data[index] - 1];
+
+        return new Tile(tt, x, y, this);
     }
 
     public int getLayerNumber() {

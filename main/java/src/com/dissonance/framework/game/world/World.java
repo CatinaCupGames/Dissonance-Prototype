@@ -6,7 +6,6 @@ import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.WorldData;
-import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
@@ -282,20 +281,14 @@ public final class World implements Drawable {
         return toreturn;
     }
 
-    public TileObject getTileAt(float x, float y, Layer layer) {
+    public Tile getTileAt(float x, float y, Layer layer) {
         if (!layer.isTiledLayer())
             throw new InvalidParameterException("The layer specified is not a tile layer!");
 
-        /*TODO Create a dummy tile object. Since we cant really get the actually tile object being rendered easily without looping,
-          it would be easter to create a dummy object that has all the info of the tile such as type, x, y, parent tileset, parent layer
-          ect..
-
-          Or better yet, maybe just return an enum type based on the ID
-        */
-        return null;
+        return layer.getTileAt(x, y);
     }
 
-    public TileObject getTileAt(float x, float y, int layernumber) {
+    public Tile getTileAt(float x, float y, int layernumber) {
         Validator.validateNotBelow(layernumber, 0, "layer");
         Validator.validateNotOver(layernumber, tiledData.getLayers().length, "layer");
         Layer l = tiledData.getLayers()[layernumber];
