@@ -3,6 +3,7 @@ package com.dissonance.framework.render;
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.GameSettings;
 import com.dissonance.framework.game.input.InputService;
+import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.system.Service;
@@ -216,6 +217,11 @@ public class RenderService extends Service {
                 if (s == null)
                     continue;
                 try {
+                    if (s instanceof Sprite) {
+                        if (Camera.isOffScreen((Sprite)s, 2))
+                            continue;
+                    } else if (Camera.isOffScreen(s.getX(), s.getY(), 16, 16, 2)) //Assume everything is 32x32
+                        continue;
                     s.render();
                 } catch (Throwable t) {
                     t.printStackTrace();

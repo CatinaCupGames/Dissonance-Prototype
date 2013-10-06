@@ -90,6 +90,27 @@ public class TileObject extends DrawableTile {
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
+    public boolean isAnimated() {
+        return parentTileSet.getTileProperty(ID, "animated").equalsIgnoreCase("true");
+    }
+
+    public int[] getAnimatedTiles() {
+        if (!isAnimated())
+            return new int[0];
+        String[] tiles = parentTileSet.getTileProperty(ID, "animated_ids").replaceAll(" ", "").split(",");
+
+        int[] IDS = new int[tiles.length];
+        for (int i = 0; i < tiles.length; i++) {
+            try {
+                IDS[i] = Integer.parseInt(tiles[i]);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
+
+        return IDS;
+    }
+
     private static class TexCordHolder {
         public Vec2 top_left;
         public Vec2 top_right;

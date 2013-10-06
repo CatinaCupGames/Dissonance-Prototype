@@ -50,4 +50,12 @@ public class Tile {
     public Tile getTileRightOfThis() {
         return getRelativeTile(new Vec2(0, 1));
     }
+
+    public String getProperty(String property, World world) {
+        return world.getTiledData().findTileSetFromID(type.getID()).getTileProperty(this, property);
+    }
+
+    public boolean hasProperty(String property, World world) {
+        return getProperty(property, world) != null;
+    }
 }

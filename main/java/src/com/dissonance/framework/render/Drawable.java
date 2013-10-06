@@ -10,4 +10,8 @@ public interface Drawable extends Comparable<Drawable> {
     public void update();
 
     public void render();
+
+    public float getX();
+
+    public float getY();
 }

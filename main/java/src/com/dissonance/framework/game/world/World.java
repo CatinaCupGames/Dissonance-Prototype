@@ -73,6 +73,16 @@ public final class World implements Drawable {
     @Override
     public void render() { }
 
+    @Override
+    public float getX() {
+        return 0;
+    }
+
+    @Override
+    public float getY() {
+        return 0;
+    }
+
     public void load(final String world) throws WorldLoadFailedException {
         if (renderingService == null)
             throw new WorldLoadFailedException("The RenderService was not created! Try calling World.init() before loading a world.");
@@ -332,5 +342,9 @@ public final class World implements Drawable {
 
     public int compareTo(Drawable o) {
         return BEFORE;
+    }
+
+    public WorldData getTiledData() {
+        return tiledData;
     }
 }
