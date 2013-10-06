@@ -13,7 +13,6 @@ public class Enemy extends CombatSprite {
     private final StatType statType;
     private final CombatType combatType;
     private final AIInterface ai;
-    private int level;
 
     private int attack;
     private int defense;
@@ -149,6 +148,11 @@ public class Enemy extends CombatSprite {
     public final void setLevel(int level) {
         this.level = level;
 
+        onLevelUp();
+    }
+
+    @Override
+    public void onLevelUp() {
         int[] stats = generateStats(level * 9, statType);
         attack = stats[0];
         defense = stats[1];
@@ -159,22 +163,6 @@ public class Enemy extends CombatSprite {
         focus = stats[6];
         marksmanship = stats[7];
         magicResistance = stats[8];
-    }
-
-    /**
-     * Increases this enemy's level by one.
-     */
-    public final void levelUp() {
-        setLevel(getLevel() + 1);
-    }
-
-    /**
-     * Gets the level of this enemy.
-     *
-     * @return The level of this enemy.
-     */
-    public final int getLevel() {
-        return level;
     }
 
     @Override

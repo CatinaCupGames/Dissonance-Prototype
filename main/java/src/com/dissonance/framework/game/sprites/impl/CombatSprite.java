@@ -5,6 +5,18 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
     private double HP = 100; //This is a fixed stat
 
     //==VARIABLE STATS==//
+    protected int level = 1;
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void levelUp() {
+        level++;
+        onLevelUp();
+    }
+
+    public abstract void onLevelUp();
 
     /**
      * Deteremine the level.
