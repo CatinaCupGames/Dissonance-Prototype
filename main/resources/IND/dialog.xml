@@ -16,6 +16,11 @@
         <message>Scootaloo is not a chicken Eddie!</message>
     </dialog>
 
+    <dialog dialog_id="shader-test">
+        <header>SHADERS!!!</header>
+        <message>ACTIVATE SHADER POWERS!!!!!!!</message>
+    </dialog>
+
 
     <dialog dialog_id="TEST" >
         <header>The Old Man</header>

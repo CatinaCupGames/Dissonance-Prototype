@@ -30,4 +30,5 @@ public class TestNPC extends NPCSprite {
     public void onSpeakingFinished() {
         getWorld().removeSprite(this);
     }
+
 }
