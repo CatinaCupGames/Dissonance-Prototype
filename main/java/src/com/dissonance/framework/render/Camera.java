@@ -93,6 +93,15 @@ public final class Camera {
         easeMovement(new Vec2(newPos, getY()), duration);
     }
 
+    private static final WhatAmIDoing uwot = new WhatAmIDoing();
+    public static void waitForEndOfEase() throws InterruptedException {
+        uwot.waitForEnd();
+    }
+
+    private static void wakeUp() {
+        uwot.wakeUp();
+    }
+
     static void executeEase() {
         if (!isEasing)
             return;
@@ -107,6 +116,7 @@ public final class Camera {
             isEasing = false;
             if (listener != null)
                 listener.onEaseFinished();
+            wakeUp();
         }
     }
 
@@ -134,5 +144,19 @@ public final class Camera {
         public void onEase(float x, float y, long time);
 
         public void onEaseFinished();
+    }
+
+    private static class WhatAmIDoing {
+        public synchronized void waitForEnd() throws InterruptedException {
+            while (true) {
+                if (!isEasing)
+                    break;
+                super.wait(0L);
+            }
+        }
+
+        public synchronized void wakeUp() {
+            super.notifyAll();
+        }
     }
 }

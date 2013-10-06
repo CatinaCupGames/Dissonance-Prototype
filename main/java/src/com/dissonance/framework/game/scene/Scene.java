@@ -33,7 +33,11 @@ public abstract class Scene {
             }
             //Nothing else to say for now
             while (anythingToMove(d, part) && !kill) { //Is there anything to move?
-                moveThings(part); //If so, lets move them.
+                try {
+                    moveThings(part); //If so, lets move them.
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 part++; //Advance to the next part of the scene
             }
             stuffTodo = anythingToSay(); //Is there anything else to say?
@@ -66,7 +70,7 @@ public abstract class Scene {
 
     protected abstract boolean anythingToMove(Dialog lastDialog, int part);
 
-    protected abstract void moveThings(int part);
+    protected abstract void moveThings(int part) throws Exception;
 
     protected abstract void initScene();
 
