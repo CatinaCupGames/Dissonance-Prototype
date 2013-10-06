@@ -24,7 +24,6 @@ public class Enemy extends CombatSprite {
     private int marksmanship;
     private int magicResistance;
 
-    //region Stat getters
     @Override
     public int getAttack() {
         return attack;
@@ -88,12 +87,10 @@ public class Enemy extends CombatSprite {
         System.out.println(this);
     }
 
-    //endregion
-
     public enum StatType {
         MAGIC, NON_MAGIC
     }
-    //region Stat generation
+
     private static int[] generateStats(int points, StatType type) { //in case someone else does enemies, remove docs
         return getRandomStats(new int[STAT_COUNT], points, type, (points / 4)); //when done cause private method
     }
@@ -125,7 +122,6 @@ public class Enemy extends CombatSprite {
 
         return statArray;
     }
-    //endregion
 
     @Override
     public String getSpriteName() {

@@ -36,7 +36,7 @@ public final class World implements Drawable {
     private transient final ArrayList<Drawable> drawable = new ArrayList<>();
     private transient org.jbox2d.dynamics.World physicsWorld;
     private String name;
-    private NodeMap node_map;
+    private NodeMap nodeMap;
     private int ID;
     private transient Service renderingService;
     private transient Texture texture;
@@ -65,13 +65,14 @@ public final class World implements Drawable {
 
     @Override
     public void update() {
-        if(this.physicsWorld != null) {
+        if (this.physicsWorld != null) {
             this.physicsWorld.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
         }
     }
 
     @Override
-    public void render() { }
+    public void render() {
+    }
 
     @Override
     public float getX() {
@@ -95,12 +96,16 @@ public final class World implements Drawable {
                     @Override
                     public void run() {
                         tiledData.loadAllTileSets();
+                        tiledData.assignAllLayers();
                         System.out.println("Creating tiles..");
                         long ms = System.currentTimeMillis();
                         drawable.addAll(tiledData.createDrawables());
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
                     }
                 });
+                name = world;
+                nodeMap = new NodeMap(this, tiledData.getWidth(), tiledData.getHeight());
+                nodeMap.readMap();
             } catch (Exception e) {
                 throw new WorldLoadFailedException("Error loading Tiled file!", e);
             }
@@ -165,8 +170,6 @@ public final class World implements Drawable {
                 sprite.setWorld(null);
             }
         });
-
-        tiledData.dispose();
     }
 
     public void onUnload() { //This method is called when the world is not shown but is still in memory
@@ -176,6 +179,7 @@ public final class World implements Drawable {
     public void onDispose() {
         drawable.clear();
         texture.dispose();
+        tiledData.dispose();
         renderingService = null;
     }
 
@@ -251,15 +255,14 @@ public final class World implements Drawable {
 
     /**
      * Find an {@link AnimatedSprite} in this world with the name <b>name</b>
-     * @param name
-     *            The full name of the {@link AnimatedSprite}
-     * @return
-     *        The {@link AnimatedSprite} with the same name
+     *
+     * @param name The full name of the {@link AnimatedSprite}
+     * @return The {@link AnimatedSprite} with the same name
      */
     public AnimatedSprite getAnimatedSpriteByName(String name) {
         for (Drawable d : drawable) {
             if (d instanceof AnimatedSprite) {
-                AnimatedSprite sprite = (AnimatedSprite)d;
+                AnimatedSprite sprite = (AnimatedSprite) d;
                 if (sprite.getSpriteName().equals(name))
                     return sprite;
             }
@@ -270,17 +273,16 @@ public final class World implements Drawable {
     /**
      * Find an {@link AnimatedSprite} with the name similar to <b>name</b> <br></br>
      * If more than 1 {@link AnimatedSprite} is found with similar names, then this method will return name.
-     * @param name
-     *            The search term
-     * @return
-     *        An {@link AnimatedSprite} object with a similar name. <br></br>
-     *        This method will return null if no {@link AnimatedSprite} was found <b>or</b> if 2 or more sprites were found with the given search term.
+     *
+     * @param name The search term
+     * @return An {@link AnimatedSprite} object with a similar name. <br></br>
+     *         This method will return null if no {@link AnimatedSprite} was found <b>or</b> if 2 or more sprites were found with the given search term.
      */
     public AnimatedSprite findAnimatedSprite(String name) {
         AnimatedSprite toreturn = null;
         for (Drawable d : drawable) {
             if (d instanceof AnimatedSprite) {
-                AnimatedSprite sprite = (AnimatedSprite)d;
+                AnimatedSprite sprite = (AnimatedSprite) d;
                 if (toreturn == null && sprite.getSpriteName().contains(name)) {
                     toreturn = sprite;
                 } else if (toreturn != null && sprite.getSpriteName().contains(name)) {
@@ -320,6 +322,14 @@ public final class World implements Drawable {
         return tiledData.getLayers();
     }
 
+    public int getWidth() {
+        return tiledData.getWidth();
+    }
+
+    public int getHeight() {
+        return tiledData.getHeight();
+    }
+
     public String getName() {
         return name;
     }
@@ -329,11 +339,11 @@ public final class World implements Drawable {
     }
 
     public NodeMap getNodeMap() {
-        return node_map;
+        return nodeMap;
     }
 
     public void setNodeMap(NodeMap map) {
-        this.node_map = map;
+        this.nodeMap = map;
     }
 
     public org.jbox2d.dynamics.World getPhysicsWorld() {

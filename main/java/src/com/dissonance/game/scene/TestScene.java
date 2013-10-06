@@ -1,7 +1,7 @@
 package com.dissonance.game.scene;
 
 import com.dissonance.framework.game.GameService;
-import com.dissonance.framework.game.ai.Position;
+import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.scene.Scene;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
@@ -12,6 +12,7 @@ import com.dissonance.game.sprites.TestPlayer;
 
 public class TestScene extends Scene {
     TestPlayer moot;
+
     @Override
     protected boolean anythingToMove(Dialog d, int part) {
         if (d == null)
@@ -44,7 +45,7 @@ public class TestScene extends Scene {
                 queueDialog(DialogFactory.getDialog("testscene-p2"));
                 break;
             case 1: //After Take This!
-                moot.setWaypoint(new Position((int)PlayableSprite.getCurrentlyPlayingSprite().getX() - 500, (int)PlayableSprite.getCurrentlyPlayingSprite().getY()));
+                moot.setWaypoint(new Position((int) PlayableSprite.getCurrentlyPlayingSprite().getX() - 500, (int) PlayableSprite.getCurrentlyPlayingSprite().getY()));
                 moot.waitForWaypointReached();
                 Camera.easeMovement(Camera.translateToCameraCenter(PlayableSprite.getCurrentlyPlayingSprite().getVector(), 32), 1000);
                 Camera.waitForEndOfEase();

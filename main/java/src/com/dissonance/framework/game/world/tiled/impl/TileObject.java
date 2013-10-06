@@ -1,8 +1,9 @@
 package com.dissonance.framework.game.world.tiled.impl;
 
-import com.dissonance.framework.game.world.tiled.DrawableTile;
+import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.TileSet;
+import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.texture.Texture;
 import org.jbox2d.common.Vec2;
 
@@ -10,26 +11,34 @@ import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class TileObject extends DrawableTile {
+public class TileObject extends Sprite {
     private static final HashMap<Integer, TexCordHolder> cache = new HashMap<Integer, TexCordHolder>();
     private TexCordHolder tex_cords;
 
     private TileSet parentTileSet;
     private int data_index;
     private final int ID;
+    private Layer parentLayer;
 
     private int x;
     private int y;
 
     public TileObject(int ID, TileSet parentTileSet, Layer parentLayer, int data_index) {
-        super(parentLayer);
         this.ID = ID;
+        this.parentLayer = parentLayer;
         this.parentTileSet = parentTileSet;
         this.data_index = data_index;
 
         x = data_index % parentLayer.getWidth();
         y = data_index / parentLayer.getHeight();
-        y++;
+
+        x *= parentTileSet.getTileWidth();
+        y *= parentTileSet.getTileHeight();
+    }
+
+    @Override
+    public Texture getTexture() {
+        return parentTileSet.getTexture();
     }
 
     @Override
@@ -47,14 +56,18 @@ public class TileObject extends DrawableTile {
         }
     }
 
+    public Layer getLayer() {
+        return parentLayer;
+    }
+
     @Override
     public float getX() {
-        return x * parentTileSet.getTileWidth();
+        return x;
     }
 
     @Override
     public float getY() {
-        return y * parentTileSet.getTileHeight();
+        return y;
     }
 
     public int getIndex() {
@@ -68,7 +81,7 @@ public class TileObject extends DrawableTile {
     public void render() {
         if (parentTileSet.getTexture() == null)
             return;
-        super.render();
+        glColor4f(1.0f, 1.0f, 1.0f, parentLayer.getOpacity());
 
         parentTileSet.getTexture().bind();
         float bx = parentTileSet.getTileWidth() / 2;
@@ -88,6 +101,31 @@ public class TileObject extends DrawableTile {
         parentTileSet.getTexture().unbind();
 
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    @Override
+    public int compareTo(Drawable d) {
+        if (isGroundLayer()) {
+            if (d instanceof TileObject && ((TileObject)d).isGroundLayer()) {
+                TileObject t = (TileObject)d;
+
+                if (t.getLayer().getLayerNumber() > getLayer().getLayerNumber()) return Drawable.BEFORE;
+                else if (t.getLayer().getLayerNumber() < getLayer().getLayerNumber()) return Drawable.AFTER;
+                else return Drawable.EQUAL;
+            }
+            return Drawable.BEFORE;
+        }
+        else if (isAlwaysAbove())
+            return Drawable.AFTER;
+        return super.compareTo(d);
+    }
+
+    public boolean isGroundLayer() {
+        return (getLayer().getProperty("ground") != null && getLayer().getProperty("ground").equalsIgnoreCase("true"));
+    }
+
+    public boolean isAlwaysAbove() {
+        return parentTileSet.getTileProperty(ID, "above") != null && parentTileSet.getTileProperty(ID, "above").equalsIgnoreCase("true");
     }
 
     public boolean isAnimated() {

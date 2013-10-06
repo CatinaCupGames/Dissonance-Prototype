@@ -15,8 +15,11 @@ public class TiledObject {
     private HashMap<Object, Object> properties;
     private Vec2[] polygon;
     private boolean isSquare;
+    private boolean isBound;
 
     public String getProperty(String key) {
+        if (properties == null)
+            return null;
         return (String) properties.get(key);
     }
 
@@ -69,5 +72,9 @@ public class TiledObject {
         return !ellipse && (polygon == null || isSquare);
     }
 
+
+    public boolean isBound() {
+        return isBound;
+    }
 
 }
