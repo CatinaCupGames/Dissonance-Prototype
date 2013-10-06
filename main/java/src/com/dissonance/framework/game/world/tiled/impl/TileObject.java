@@ -105,8 +105,16 @@ public class TileObject extends Sprite {
 
     @Override
     public int compareTo(Drawable d) {
-        if (isGroundLayer())
+        if (isGroundLayer()) {
+            if (d instanceof TileObject && ((TileObject)d).isGroundLayer()) {
+                TileObject t = (TileObject)d;
+
+                if (t.getLayer().getLayerNumber() > getLayer().getLayerNumber()) return Drawable.BEFORE;
+                else if (t.getLayer().getLayerNumber() < getLayer().getLayerNumber()) return Drawable.AFTER;
+                else return Drawable.EQUAL;
+            }
             return Drawable.BEFORE;
+        }
         else if (isAlwaysAbove())
             return Drawable.AFTER;
         return super.compareTo(d);
