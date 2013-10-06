@@ -95,6 +95,7 @@ public final class World implements Drawable {
                     @Override
                     public void run() {
                         tiledData.loadAllTileSets();
+                        tiledData.assignAllLayers();
                         System.out.println("Creating tiles..");
                         long ms = System.currentTimeMillis();
                         drawable.addAll(tiledData.createDrawables());
@@ -165,8 +166,6 @@ public final class World implements Drawable {
                 sprite.setWorld(null);
             }
         });
-
-        tiledData.dispose();
     }
 
     public void onUnload() { //This method is called when the world is not shown but is still in memory
@@ -176,6 +175,7 @@ public final class World implements Drawable {
     public void onDispose() {
         drawable.clear();
         texture.dispose();
+        tiledData.dispose();
         renderingService = null;
     }
 
