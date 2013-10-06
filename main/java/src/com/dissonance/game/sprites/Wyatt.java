@@ -4,6 +4,11 @@ import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 
 public class Wyatt extends PlayableSprite {
     @Override
+    public int getLevel() {
+        return 0;
+    }
+
+    @Override
     public int getAttack() {
         return 0;
     }

@@ -1,6 +1,7 @@
 package com.dissonance.framework.game;
 
 import com.dissonance.framework.game.scene.dialog.DialogUI;
+import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.sound.SoundSystem;
 import com.dissonance.framework.system.utils.Validator;
@@ -139,8 +140,19 @@ public class GameService {
         }
         topLevel.put("player", playerLevel);
         {
-            playerLevel.put("name", "Derick");
-            playerLevel.put("level", 7);
+            PlayableSprite ps = PlayableSprite.getCurrentlyPlayingSprite();
+
+            playerLevel.put("name", ps.getSpriteName());
+            playerLevel.put("level", ps.getLevel());
+            playerLevel.put("attack", ps.getAttack());
+            playerLevel.put("defense", ps.getDefense());
+            playerLevel.put("speed", ps.getSpeed());
+            playerLevel.put("vigor", ps.getVigor());
+            playerLevel.put("stamina", ps.getStamina());
+            playerLevel.put("willpower", ps.getWillPower());
+            playerLevel.put("focus", ps.getFocus());
+            playerLevel.put("marksmanship", ps.getMarksmanship());
+            playerLevel.put("magicresistance", ps.getMagicResistance());
             playerLevel.put("powers", new String[] {"+Speed, +Agility, -Stamina"});
         }
 
