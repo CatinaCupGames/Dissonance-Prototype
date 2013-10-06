@@ -3,8 +3,8 @@ package com.dissonance.framework.config.test;
 import com.dissonance.framework.config.SLFS;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Test SLFS library.
@@ -14,12 +14,12 @@ import java.util.Map;
  */
 public class TestSLFS
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
         new TestSLFS(args);
     }
 
-    private TestSLFS(String[] args)
+    private TestSLFS(String[] args) throws Exception
     {
         File file = new File("config/mysave.dat");
 
@@ -39,20 +39,29 @@ public class TestSLFS
         }
         slfs.addNode("firstnode", firstnode);
 
-//        HashMap<String, Object> secondnode = new HashMap<String, Object>();
-//        {
-//            secondnode.put("longVar", 9l);
-//
-//            HashMap<String, Object> firstchild = new HashMap<String, Object>();
-//            {
-//                firstchild.put("floatVar", 3.0f);
-//                firstchild.put("stringVar", "kk");
-//            }
-//
-//            secondnode.put("firstchild", firstchild);
-//        }
-//        slfs.addNode("secondnode", secondnode);
+        HashMap<String, Object> secondnode = new HashMap<String, Object>();
+        {
+            secondnode.put("longVar", 9l);
 
+            HashMap<String, Object> firstchild = new HashMap<String, Object>();
+            {
+                firstchild.put("floatVar", 3.0f);
+                firstchild.put("stringVar", "kk");
+            }
+
+            //secondnode.put("firstchild", firstchild);
+        }
+        slfs.addNode("secondnode", secondnode);
+
+        slfs.setHeader(
+                "Name: TestConfig\n" +
+                "Description: These are the settings for the whole game."
+        );
         slfs.save(true);
+
+        //
+
+        SLFS slfsLoad = new SLFS(file);
+        slfs.load(true);
     }
 }

@@ -8,11 +8,19 @@
 package com.dissonance.framework.config;
 
 import com.dissonance.framework.config.util.ConsoleColor;
+import org.lwjgl.Sys;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,6 +37,7 @@ public class SLFS
     public SLFS(File file)
     {
         this.file = file;
+        header = "";
         nodes = new HashMap<String, HashMap<String, Object>>();
     }
 
@@ -36,6 +45,7 @@ public class SLFS
     //                  VARIABLES                   //
     //////////////////////////////////////////////////
     private File file;
+    private String header;
     private Map<String, HashMap<String, Object>> nodes;
 
     //////////////////////////////////////////////////
@@ -46,43 +56,114 @@ public class SLFS
         nodes.put(key, values);
     }
 
-    public boolean save(boolean debug)
+    public boolean save(boolean debug) throws FileNotFoundException
     {
         String output = format();
+        if(!header.contains("#"))
+        {
+            formatHeader();
+        }
+        output = header + output;
 
         if(debug)
         {
-            System.out.println(ConsoleColor.ANSI_CYAN + "CONTENT OF OUTPUT: ");
-            System.out.println(output + ConsoleColor.ANSI_RESET);
+            System.out.println(ConsoleColor.ANSI_CYAN + output);
         }
 
-        System.out.println(ConsoleColor.ANSI_YELLOW + "Saving...");
+        System.out.println(ConsoleColor.ANSI_YELLOW + (debug ? "\n" : "") + "Saving...");
 
         PrintWriter out = null;
-        try {
-            out = new PrintWriter(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        out = new PrintWriter(file);
 
-        if(out != null)
-        {
-            out.println(output);
-            out.close();
-        }
+        out.println(output);
+        out.close();
 
         if(file.exists())
         {
-            System.out.println(ConsoleColor.ANSI_GREEN + "Successfully saved!");
+            System.out.println(ConsoleColor.ANSI_GREEN + "Successfully saved!" + ConsoleColor.ANSI_RESET);
         } else {
-            System.out.println(ConsoleColor.ANSI_RED + "Error while saving!");
+            System.out.println(ConsoleColor.ANSI_RED + "Error while saving!" + ConsoleColor.ANSI_RESET);
         }
 
         return false;
     }
 
-    public void load()
+    public void load(boolean debug) throws IOException
     {
+        Charset charset = Charset.defaultCharset();
+        byte[] encoded = Files.readAllBytes(Paths.get(file.toURI()));
+        String content = charset.decode(ByteBuffer.wrap(encoded)).toString();
+
+        if(debug)
+        {
+            System.out.println(ConsoleColor.ANSI_CYAN + content);
+        }
+
+        System.out.println(ConsoleColor.ANSI_YELLOW + "Loading...");
+
+        Map<String, HashMap<String, Object>> nodes = new HashMap<String, HashMap<String, Object>>();
+        HashMap<String, Object> children = new HashMap<String, Object>();
+        List<HashMap<String, Object>> childrenList = new ArrayList<HashMap<String, Object>>();
+
+        content = content.split("#\n\n")[1];
+
+        for(int i = content.split("\n").length - 1; i >= 0; i--)
+        {
+            String line = content.split("\n")[i];
+
+            if(line.startsWith("\u0020") && !line.startsWith("\u0020\t"))
+            {
+                line = line.replaceFirst("\u0020", "");
+
+                System.out.println(ConsoleColor.ANSI_PURPLE + "Found node:  " + line.split(":")[0]);
+
+                nodes.put(line.split(":")[0], children);
+                children = new HashMap<String, Object>();
+            } else if(line.startsWith("\u0020\t")) {
+                line = line.replaceFirst("\u0020\t", "");
+
+                String[] value = line.split(": ");
+
+                System.out.println(ConsoleColor.ANSI_BLUE + "Found child: \t" + value[0] + "=" + value[1] + "|" + formatForType(value[1]).getClass());
+
+                children.put(value[0], formatForType(value[1]));
+            }
+        }
+
+        this.nodes = nodes;
+
+        System.out.println(ConsoleColor.ANSI_GREEN + "Successfully loaded!" + ConsoleColor.ANSI_RESET);
+
+        // TODO: This is just for testing.
+        //       Remove later.
+        file = new File("config/mysave1.dat");
+        save(false);
+    }
+
+    private Object formatForType(String value)
+    {
+        if(value.startsWith("0x"))
+        {
+            return Byte.valueOf(value.split("x")[1]);
+        } else if(value.endsWith("s")) {
+            return Short.valueOf(value.split("s")[0]);
+        } else if(value.endsWith("i")) {
+            return Integer.valueOf(value.split("i")[0]);
+        } else if(value.endsWith("l")) {
+            return Long.valueOf(value.split("l")[0]);
+        } else if(value.endsWith("f")) {
+            return Float.valueOf(value.split("f")[0]);
+        } else if(value.endsWith("d")) {
+            return Double.valueOf(value.split("d")[0]);
+        } else if(value.equals("true") || value.equals("false")) {
+            return Boolean.valueOf(value);
+        } else if(value.startsWith("'") && value.endsWith("'")) {
+            return value.replaceAll("'", "").charAt(0);
+        } else if(value.startsWith("\"")  && value.endsWith("\"")) {
+            return String.valueOf(value.replaceAll("\"", ""));
+        }
+
+        return null;
     }
 
     private String format()
@@ -91,8 +172,8 @@ public class SLFS
 
         for(String node : nodes.keySet())
         {
-            output.append(node + ":");
-            output.append("\n");
+            output.append("\u0020" + node + ":");
+            output.append(" \n");
 
             for(String key : nodes.get(node).keySet())
             {
@@ -100,7 +181,7 @@ public class SLFS
 
                 if(value.getClass() == HashMap.class)
                 {
-                    output.append("\t");
+                    output.append("\u0020\t");
                     output.append(key);
                     output.append("\n");
 
@@ -108,12 +189,12 @@ public class SLFS
                     {
                         Object value2 = ((HashMap<String, Object>)value).get(key2);
 
-                        output.append("\t\t");
+                        output.append("\u0020\t\t");
                         output.append(key2 + ": " + formatValue(value2));
                         output.append("\n");
                     }
                 } else {
-                    output.append("\t");
+                    output.append("\u0020\t");
                     output.append(key + ": " + formatValue(value));
                     output.append("\n");
                 }
@@ -129,7 +210,8 @@ public class SLFS
 
         if(cls == Byte.class)
         {
-            value = "0x" + String.format("%02x ", value);
+            //value = "0x" + String.format("%02x", value);
+            value = "0x" + value;
         } else if(cls == Short.class) {
             value = value + "s";
         } else if(cls == Integer.class) {
@@ -151,7 +233,73 @@ public class SLFS
         return value;
     }
 
+    private void formatHeader()
+    {
+        String[] lines = header.split("\n");
+        header = "";
+
+        int longest = 0;
+
+        for(String s : lines)
+        {
+            if(longest < s.length())
+            {
+                longest = s.length();
+            }
+        }
+
+        for(int i = 0; i < longest + 6; i++)
+        {
+            header += "#";
+        }
+        header += "\n";
+        for(String s : lines)
+        {
+            header += "## " + s;
+            for(int i = 0; i < longest - s.length(); i++)
+            {
+                header += " ";
+            }
+            header += " ##" + "\n";
+        }
+        for(int i = 0; i < longest + 6; i++)
+        {
+            header += "#";
+        }
+        header += "\n\n";
+    }
+
     //////////////////////////////////////////////////
     //             GETTERS AND SETTERS              //
     //////////////////////////////////////////////////
+
+    public File getFile()
+    {
+        return file;
+    }
+
+    public void setFile(File file)
+    {
+        this.file = file;
+    }
+
+    public String getHeader()
+    {
+        return header;
+    }
+
+    public void setHeader(String header)
+    {
+        this.header = header;
+    }
+
+    public Map<String, HashMap<String, Object>> getNodes()
+    {
+        return nodes;
+    }
+
+    public void setNodes(Map<String, HashMap<String, Object>> nodes)
+    {
+        this.nodes = nodes;
+    }
 }
