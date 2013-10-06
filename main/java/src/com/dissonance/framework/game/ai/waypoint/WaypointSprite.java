@@ -1,6 +1,6 @@
 package com.dissonance.framework.game.ai.waypoint;
 
-import com.dissonance.framework.game.ai.Position;
+import com.dissonance.framework.game.ai.astar.Position;
 
 public interface WaypointSprite {
 
