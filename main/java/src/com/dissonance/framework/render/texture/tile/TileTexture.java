@@ -61,19 +61,29 @@ public class TileTexture extends Texture {
         return temp;
     }
 
+    @Override
+    public int getTextureWidth() {
+        return tileWidth * 2;
+    }
+
+    @Override
+    public int getTextureHeight() {
+        return tileHeight * 2;
+    }
+
     public Vec2 getTextureCord(int pos, int id, TileSet tile) {
         if (!tile.containsID(id))
             throw new InvalidParameterException("The TileSet provided does not contain the tile \"" + id + "\"");
         int tilepos = (id - tile.getFirstGrid()) + 1; //Returns the tile id of this tile, relative to tileset.
 
         float x = (tilepos % perrow) * tileWidth;
-        float y = (tilepos % size) * tileHeight;
+        float y = (int)(((tilepos - 1) / perrow)) * tileHeight;
 
-        y -= tileHeight;
+        //y -= tileHeight;
         x -= tileWidth;
 
-        x /= super.getTextureWidth(); //Convert to fraction
-        y /= super.getTextureHeight(); //Convert to fraction
+        x /= getImageWidth(); //Convert to fraction
+        y /= getImageHeight(); //Convert to fraction
 
         if (pos == 0) { //Bottom left
             return new Vec2(x, y);

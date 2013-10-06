@@ -76,6 +76,8 @@ public class Layer {
     }
 
     public String getProperty(String key) {
+        if (properties == null)
+            return null;
         return (String) properties.get(key);
     }
 

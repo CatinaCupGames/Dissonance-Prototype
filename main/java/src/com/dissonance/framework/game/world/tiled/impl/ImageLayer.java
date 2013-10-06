@@ -1,21 +1,25 @@
 package com.dissonance.framework.game.world.tiled.impl;
 
-import com.dissonance.framework.game.world.tiled.DrawableTile;
 import com.dissonance.framework.game.world.tiled.Layer;
+import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.texture.Texture;
 
 import java.io.IOException;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glColor4f;
 
-public class ImageLayer extends DrawableTile {
+public class ImageLayer implements Drawable {
     private Texture texture;
     private String path;
+    private Layer parentLayer;
     public ImageLayer(Layer parentLayer) {
-        super(parentLayer);
+        this.parentLayer = parentLayer;
 
         path = parentLayer.getImageLayerData();
+    }
+
+    public Layer getlayer() {
+        return parentLayer;
     }
 
     @Override
@@ -45,7 +49,7 @@ public class ImageLayer extends DrawableTile {
     public void render() {
         if (texture == null)
             return;
-        super.render();
+        glColor4f(1.0f, 1.0f, 1.0f, parentLayer.getOpacity());
 
         texture.bind();
         float bx = texture.getTextureWidth() / 2;
@@ -65,5 +69,10 @@ public class ImageLayer extends DrawableTile {
         texture.unbind();
 
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    @Override
+    public int compareTo(Drawable o) {
+        return Drawable.BEFORE;
     }
 }

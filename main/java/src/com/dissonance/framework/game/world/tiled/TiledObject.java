@@ -17,6 +17,8 @@ public class TiledObject {
     private boolean isSquare;
 
     public String getProperty(String key) {
+        if (properties == null)
+            return null;
         return (String) properties.get(key);
     }
 

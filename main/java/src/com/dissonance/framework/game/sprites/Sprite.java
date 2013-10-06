@@ -2,6 +2,7 @@ package com.dissonance.framework.game.sprites;
 
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.utils.Direction;
@@ -142,14 +143,17 @@ public abstract class Sprite implements Drawable, Serializable {
             return Drawable.BEFORE;
         else if (o instanceof Sprite) {
             Sprite s = (Sprite) o;
-            float by = (getTexture() != null ? getTexture().getTextureHeight() / 4 : 0);
-            float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / 4 : 0);
-
+            if (s instanceof TileObject && ((TileObject)o).isGroundLayer())
+                return Drawable.AFTER;
+            else if (s instanceof TileObject && ((TileObject)o).isAlwaysAbove())
+                return Drawable.BEFORE;
+            float by = (getTexture() != null ? getTexture().getTextureHeight() / (this instanceof TileObject ? 2 : 4) : 0);
+            float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / (s instanceof TileObject ? 2 : 4) : 0);
             if (getY() - by < s.getY() - sy) return Drawable.BEFORE;
             else if (getY() - by > s.getY() - sy) return Drawable.AFTER;
             else return Drawable.EQUAL;
-        } else
-            return Drawable.AFTER;
+        }
+        return Drawable.AFTER;
     }
 
     public interface SpriteEvent {
