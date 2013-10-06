@@ -1,6 +1,6 @@
 package com.dissonance.framework.game.sprites.impl;
 
-import com.dissonance.framework.game.ai.Position;
+import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.waypoint.WaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.sprites.AnimatedSprite;

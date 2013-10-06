@@ -1,11 +1,16 @@
 package com.dissonance.framework.game.ai.astar;
 
-import com.dissonance.framework.game.ai.Position;
+import com.dissonance.framework.game.world.Tile;
+import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.tiled.Layer;
+import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.system.utils.Validator;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * A NodeMap contains the nodes that are being searched and provides pathfinding methods.
@@ -13,12 +18,11 @@ import java.util.List;
 public final class NodeMap implements Serializable {
 
     private Node[][] nodes;
-
     private int width;
     private int height;
-
     private List<Node> openList;
     private List<Node> closedList;
+    private World world;
 
     /**
      * Creates a new NodeMap with the specified width and height.
@@ -26,9 +30,10 @@ public final class NodeMap implements Serializable {
      * @param width  The width of the map
      * @param height The height of the map
      */
-    public NodeMap(int width, int height) {
+    public NodeMap(World world, int width, int height) {
         Validator.validateNotBelow(width, 1, "width");
         Validator.validateNotBelow(height, 1, "height");
+        Validator.validateNotNull(world, "world");
 
         nodes = new Node[width][height];
 
@@ -40,20 +45,76 @@ public final class NodeMap implements Serializable {
                 nodes[x][y] = new Node(new Position(x, y));
             }
         }
+
+        this.world = world;
+    }
+
+    public void readMap() {
+        String fileName = "config" + File.separator + world.getName() + ".nodes";
+        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(fileName)))) {
+            for (Node[] nodeArray : nodes) {
+                for (Node node : nodeArray) {
+                    node.readNode(stream);
+                }
+            }
+            System.out.println("NodeMap.java: Successfully read map!");
+        } catch (IOException e) {
+            System.out.println("NodeMap.java: Error reading map! Constructing new map!");
+            constructMap();
+        }
+    }
+
+    public void constructMap() {
+        String fileName = "config" + File.separator + world.getName() + ".nodes";
+        new File(fileName).delete();
+
+        Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
+        System.out.println("There are " + layers.length + " layers");
+        for (int x = 0; x < nodes.length; x++) {
+            for (int y = 0; y < nodes[x].length; y++) {
+                for (Layer layer : layers) {
+
+                    Tile tile = world.getTileAt(x, y, layer);
+
+                    if (tile != null) {
+                        nodes[x][y].setPassable(tile.getType().isPassable());
+                        nodes[x][y].setExtraCost(tile.getType().getExtraCost());
+                    } else {
+                        nodes[x][y].setPassable(false);
+                    }
+                }
+            }
+        }
+        System.out.println("NodeMap.java: Successfully constructed map!");
+        saveMap();
+    }
+
+    public void saveMap() {
+        String fileName = "config" + File.separator + world.getName() + ".nodes";
+        try (DataOutputStream stream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(fileName)))) {
+            for (Node[] nodeArray : nodes) {
+                for (Node node : nodeArray) {
+                    node.saveNode(stream);
+                }
+            }
+            System.out.println("NodeMap.java: Successfully saved map!");
+        } catch (IOException e) {
+            System.out.println("NodeMap.java: Error saving map!");
+        }
     }
 
     /**
      * Sets the reachability of the node at the specified position.
      */
     public void setReachable(int x, int y, boolean reachable) {
-        getNode(x, y).setReachable(reachable);
+        getNode(x, y).setPassable(reachable);
     }
 
     /**
      * Sets the reachability of the node at the specified position.
      */
     public void setReachable(Position position, boolean reachable) {
-        getNode(position).setReachable(reachable);
+        getNode(position).setPassable(reachable);
     }
 
     /**
@@ -87,10 +148,14 @@ public final class NodeMap implements Serializable {
      * @param goal  The final position.
      */
     public final List<Position> findPath(Position start, Position goal) {
-        Validator.validateInRange(start.getX(), 0, width + 1, "start x");
+        /*Validator.validateInRange(start.getX(), 0, width + 1, "start x");
         Validator.validateInRange(start.getY(), 0, height + 1, "start y");
         Validator.validateInRange(goal.getX(), 0, width + 1, "goal x");
-        Validator.validateInRange(goal.getY(), 0, height + 1, "goal y");
+        Validator.validateInRange(goal.getY(), 0, height + 1, "goal y");*/
+
+        if (start.getX() > width || start.getY() > height || goal.getX() > width || goal.getY() > height) {
+            return null;
+        }
         openList = new LinkedList<>();
         closedList = new LinkedList<>();
         openList.add(nodes[start.getX()][start.getY()]);
@@ -165,7 +230,7 @@ public final class NodeMap implements Serializable {
         Node temp;
         if (x > 0) {
             temp = this.getNode((x - 1), y);
-            if (temp.isReachable() && !closedList.contains(temp)) {
+            if (temp.isPassable() && !closedList.contains(temp)) {
                 temp.setWasDiagonal(false);
                 adj.add(temp);
             }
@@ -173,7 +238,7 @@ public final class NodeMap implements Serializable {
 
         if (x < width) {
             temp = this.getNode((x + 1), y);
-            if (temp.isReachable() && !closedList.contains(temp)) {
+            if (temp.isPassable() && !closedList.contains(temp)) {
                 temp.setWasDiagonal(false);
                 adj.add(temp);
             }
@@ -181,7 +246,7 @@ public final class NodeMap implements Serializable {
 
         if (y > 0) {
             temp = this.getNode(x, (y - 1));
-            if (temp.isReachable() && !closedList.contains(temp)) {
+            if (temp.isPassable() && !closedList.contains(temp)) {
                 temp.setWasDiagonal(false);
                 adj.add(temp);
             }
@@ -189,7 +254,7 @@ public final class NodeMap implements Serializable {
 
         if (y < height) {
             temp = this.getNode(x, (y + 1));
-            if (temp.isReachable() && !closedList.contains(temp)) {
+            if (temp.isPassable() && !closedList.contains(temp)) {
                 temp.setWasDiagonal(false);
                 adj.add(temp);
             }
@@ -197,7 +262,7 @@ public final class NodeMap implements Serializable {
 
         if (x < width && y < height) {
             temp = this.getNode((x + 1), (y + 1));
-            if (temp.isReachable() && !closedList.contains(temp)) {
+            if (temp.isPassable() && !closedList.contains(temp)) {
                 temp.setWasDiagonal(true);
                 adj.add(temp);
             }
@@ -205,7 +270,7 @@ public final class NodeMap implements Serializable {
 
         if (x > 0 && y > 0) {
             temp = this.getNode((x - 1), (y - 1));
-            if (temp.isReachable() && !closedList.contains(temp)) {
+            if (temp.isPassable() && !closedList.contains(temp)) {
                 temp.setWasDiagonal(true);
                 adj.add(temp);
             }
@@ -213,7 +278,7 @@ public final class NodeMap implements Serializable {
 
         if (x > 0 && y < height) {
             temp = this.getNode((x - 1), (y + 1));
-            if (temp.isReachable() && !closedList.contains(temp)) {
+            if (temp.isPassable() && !closedList.contains(temp)) {
                 temp.setWasDiagonal(true);
                 adj.add(temp);
             }
@@ -221,7 +286,7 @@ public final class NodeMap implements Serializable {
 
         if (x < width && y > 0) {
             temp = this.getNode((x + 1), (y - 1));
-            if (temp.isReachable() && !closedList.contains(temp)) {
+            if (temp.isPassable() && !closedList.contains(temp)) {
                 temp.setWasDiagonal(true);
                 adj.add(temp);
             }
