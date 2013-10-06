@@ -11,4 +11,11 @@ public class SettingsLevelTest
 
     public String test3 = "my awesome string";
     //public String[] test4 = {"yo", "hi", "babe", "lol"};
+
+    public yo yo1 = new yo();
+
+    private class yo
+    {
+        public boolean test5 = false;
+    }
 }
