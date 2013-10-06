@@ -22,6 +22,8 @@ public class TileSet {
     private TileTexture texture;
 
     public String getProperty(String key) {
+        if (properties == null)
+            return null;
         return (String) properties.get(key);
     }
 
@@ -94,8 +96,11 @@ public class TileSet {
     }
 
     public String getTileProperty(int ID, String property) {
-        if (tileproperties.containsKey(ID)) {
-            return (String) tileproperties.get(ID).get(property);
+        if (tileproperties == null)
+            return null;
+        ID -= firstgid;
+        if (tileproperties.containsKey("" + ID)) {
+            return (String) tileproperties.get("" + ID).get(property);
         }
         return null;
     }

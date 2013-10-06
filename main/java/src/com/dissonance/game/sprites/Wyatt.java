@@ -3,6 +3,12 @@ package com.dissonance.game.sprites;
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 
 public class Wyatt extends PlayableSprite {
+
+    @Override
+    public void onLevelUp() {
+        //TODO Ask for stat things? idk
+    }
+
     @Override
     public int getAttack() {
         return 0;

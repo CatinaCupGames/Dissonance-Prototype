@@ -1,7 +1,8 @@
 package com.dissonance.framework.game.ai.astar;
 
-import com.dissonance.framework.game.ai.Position;
-
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 
 public final class Node implements Serializable {
@@ -10,7 +11,7 @@ public final class Node implements Serializable {
     private final static int DIAGONAL_MOVE_COST = 14;
 
     private Position position;
-    private boolean reachable;
+    private boolean passable;
 
     private Node parent;
     private boolean wasDiagonal;
@@ -20,9 +21,33 @@ public final class Node implements Serializable {
     private int hCost;
 
     public Node(Position position) {
+        this(position, true, 0);
+    }
+
+    public Node(Position position, boolean passable, int extraCost) {
         this.position = position;
-        this.reachable = true;
-        this.extraCost = 0;
+        this.passable = passable;
+        this.extraCost = extraCost;
+    }
+
+    public void saveNode(DataOutputStream stream) throws IOException {
+        stream.writeInt(position.getX());
+        stream.writeInt(position.getY());
+        stream.writeBoolean(passable);
+        stream.writeInt(extraCost);
+        stream.writeInt(gCost);
+        stream.writeInt(hCost);
+        stream.writeBoolean(wasDiagonal);
+    }
+
+    public void readNode(DataInputStream stream) throws IOException {
+        position.setX(stream.readInt());
+        position.setY(stream.readInt());
+        passable = stream.readBoolean();
+        extraCost = stream.readInt();
+        gCost = stream.readInt();
+        hCost = stream.readInt();
+        wasDiagonal = stream.readBoolean();
     }
 
     /**
@@ -60,15 +85,15 @@ public final class Node implements Serializable {
     /**
      * Sets the reachability of this node.
      */
-    public void setReachable(boolean reachable) {
-        this.reachable = reachable;
+    public void setPassable(boolean passable) {
+        this.passable = passable;
     }
 
     /**
      * Gets the reachability of this node.
      */
-    public boolean isReachable() {
-        return reachable;
+    public boolean isPassable() {
+        return passable;
     }
 
     /**
@@ -129,7 +154,7 @@ public final class Node implements Serializable {
     /**
      * Sets the G cost of this node including the cost of the parent node.
      *
-     * @param parent The parent node of this node.
+     * @param parent   The parent node of this node.
      * @param diagonal Whether the movement from the parent node was diagonal.
      */
     public void setGCost(Node parent, boolean diagonal) {

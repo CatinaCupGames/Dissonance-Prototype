@@ -40,51 +40,58 @@ public class TestPlayer extends PlayableSprite {
         pauseAnimation();
     }
 
+    @Override
+    public int getLevel() {
+        return 1;
+    }
 
+    @Override
+    public void onLevelUp() {
+    }
 
     @Override
     public int getAttack() {
-        return 0;
+        return 1;
     }
 
     @Override
     public int getDefense() {
-        return 0;
+        return 1;
     }
 
     @Override
     public int getSpeed() {
-        return 0;
+        return 1;
     }
 
     @Override
     public int getVigor() {
-        return 0;
+        return 1;
     }
 
     @Override
     public int getStamina() {
-        return 0;
+        return 1;
     }
 
     @Override
     public int getWillPower() {
-        return 0;
+        return 1;
     }
 
     @Override
     public int getFocus() {
-        return 0;
+        return 1;
     }
 
     @Override
     public int getMarksmanship() {
-        return 0;
+        return 1;
     }
 
     @Override
     public int getMagicResistance() {
-        return 0;
+        return 1;
     }
 
     @Override

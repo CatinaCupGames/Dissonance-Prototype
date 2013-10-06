@@ -1,10 +1,8 @@
-package com.dissonance.framework.game.ai;
+package com.dissonance.framework.game.ai.astar;
 
 import org.jbox2d.common.Vec2;
 
-import java.io.Serializable;
-
-public final class Position implements Serializable {
+public final class Position {
 
     private int x;
     private int y;
@@ -15,25 +13,33 @@ public final class Position implements Serializable {
     }
 
     public Position(Vec2 vector) {
-        this((int)vector.x, (int)vector.y);
+        this((int) vector.x, (int) vector.y);
     }
 
     public int getX() {
         return x;
     }
 
+    protected void setX(int x) {
+        this.x = x;
+    }
+
     public int getY() {
         return y;
     }
 
+    protected void setY(int y) {
+        this.y = y;
+    }
+
     @Override
     public boolean equals(Object obj) {
-         if (!(obj instanceof Position)) {
+        if (!(obj instanceof Position)) {
             return false;
-         }
+        }
 
-         Position pos = (Position) obj;
+        Position pos = (Position) obj;
 
-         return (pos.x == x && pos.y == y);
+        return (pos.x == x && pos.y == y);
     }
 }

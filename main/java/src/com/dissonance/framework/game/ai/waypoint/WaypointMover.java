@@ -1,17 +1,18 @@
 package com.dissonance.framework.game.ai.waypoint;
 
-import com.dissonance.framework.game.ai.Position;
+import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.render.RenderService;
 
 public class WaypointMover {
     private static final float SPEED = 10; //Maybe make this sprite specific?
+
     public static boolean moveSpriteOneFrame(WaypointSprite sprite) {
         Position dest = sprite.getWaypoint();
         if (dest == null)
             return false;
 
-        float xdiff = sprite.getX() - (float)(dest.getX());
-        float ydiff = sprite.getY() - (float)(dest.getY());
+        float xdiff = sprite.getX() - (float) (dest.getX());
+        float ydiff = sprite.getY() - (float) (dest.getY());
         boolean moved = false;
         if (xdiff <= -0.5f || xdiff >= 0.5f) {
             moved = true;

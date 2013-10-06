@@ -30,7 +30,9 @@ public class Layer {
         if (!isTiledLayer())
             throw new InvalidParameterException("This layer is not a Tile Layer!");
         int index = (int) (x + (y * height));
-
+        if (index < data.length || index > data.length) {
+            return null;
+        }
         TileType tt = TileType.values()[data[index] - 1];
 
         return new Tile(tt, x, y, this);
@@ -74,6 +76,8 @@ public class Layer {
     }
 
     public String getProperty(String key) {
+        if (properties == null)
+            return null;
         return (String) properties.get(key);
     }
 

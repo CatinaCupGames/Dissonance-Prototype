@@ -18,6 +18,8 @@ public class TiledObject {
     private boolean isBound;
 
     public String getProperty(String key) {
+        if (properties == null)
+            return null;
         return (String) properties.get(key);
     }
 
