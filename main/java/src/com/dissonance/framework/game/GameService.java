@@ -1,6 +1,7 @@
 package com.dissonance.framework.game;
 
 import com.dissonance.framework.game.scene.dialog.DialogUI;
+import com.dissonance.framework.game.settings.SettingsLevelTest;
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.sound.SoundSystem;
@@ -155,6 +156,9 @@ public class GameService {
             playerLevel.put("magicresistance", ps.getMagicResistance());
             playerLevel.put("powers", new String[] {"+Speed, +Agility, -Stamina"});
         }
+
+        SettingsLevelTest slt = new SettingsLevelTest();
+        topLevel.put("test", slt);
 
         Yaml yaml = new Yaml();
 
