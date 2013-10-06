@@ -58,7 +58,7 @@
         }, 
         {
          "height":100,
-         "image":"..\/..\/..\/out\/production\/That-one-Game\/worlds\/sprites\/bryce\/br1.png",
+         "image":"sprites\/bryce\/br1.png",
          "name":"test",
          "opacity":1,
          "transparentcolor":"#aa0000",
@@ -245,7 +245,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"..\/..\/..\/out\/production\/That-one-Game\/worlds\/dirt.png",
+         "image":"dirt.png",
          "imageheight":32,
          "imagewidth":32,
          "margin":0,
@@ -260,7 +260,7 @@
         }, 
         {
          "firstgid":2,
-         "image":"..\/..\/..\/out\/production\/That-one-Game\/worlds\/dirt.png",
+         "image":"dirt.png",
          "imageheight":32,
          "imagewidth":32,
          "margin":0,
@@ -275,7 +275,7 @@
         }, 
         {
          "firstgid":3,
-         "image":"..\/..\/..\/out\/production\/That-one-Game\/worlds\/sprites\/player\/player_sheet.png",
+         "image":"sprites\/player\/player_sheet.png",
          "imageheight":128,
          "imagewidth":64,
          "margin":0,
