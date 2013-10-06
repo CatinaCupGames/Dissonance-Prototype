@@ -39,8 +39,6 @@ public class GameSettings
 
         public static boolean fullscreen;
 
-        public static Color color;
-
         static
         {
             window_width = 1280;
@@ -51,8 +49,6 @@ public class GameSettings
             resolution = new Resolution(game_width, game_height);
 
             fullscreen = false;
-
-            color = new Color(50, 50, 50, 50, 50, 50);
         }
     }
 
@@ -60,6 +56,13 @@ public class GameSettings
     {
         private Graphics()
         {
+        }
+
+        public static Color color;
+
+        static
+        {
+            color = new Color(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
         }
     }
 }

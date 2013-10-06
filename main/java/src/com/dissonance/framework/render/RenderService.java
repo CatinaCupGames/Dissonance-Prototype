@@ -138,6 +138,10 @@ public class RenderService extends Service {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glLoadIdentity();
 
+            System.out.println("OpenGL version: " + glGetString(GL_VERSION));
+
+            UseShader.init();
+
         } catch (LWJGLException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -211,6 +215,8 @@ public class RenderService extends Service {
                 }
             }
 
+            UseShader.preDraw();
+
             sprites = current_world.getDrawable();
             while (sprites.hasNext()) {
                 Drawable s = sprites.next();
@@ -235,6 +241,8 @@ public class RenderService extends Service {
             }
 
             Camera.executeEase(); //Execute any interlop
+
+            UseShader.postDraw();
 
             exitOnGLError("RenderService.renderSprites");
 

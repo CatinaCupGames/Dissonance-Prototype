@@ -6,7 +6,7 @@ public class Color
     {
     }
 
-    public Color(int brightness, int contrast, int saturation, int red, int green, int blue)
+    public Color(float brightness, float contrast, float saturation, float red, float green, float blue)
     {
         this.brightness = brightness;
         this.contrast = contrast;
@@ -16,10 +16,10 @@ public class Color
         this.blue = blue;
     }
 
-    public int brightness;
-    public int contrast;
-    public int saturation;
-    public int red;
-    public int green;
-    public int blue;
+    public float brightness;
+    public float contrast;
+    public float saturation;
+    public float red;
+    public float green;
+    public float blue;
 }

@@ -132,10 +132,10 @@ public class GameService {
                 }
                 renderLevel.put("color", colorLevel);
                 {
-                    colorLevel.put("brightness", GameSettings.Display.color.brightness);
-                    colorLevel.put("contrast", GameSettings.Display.color.contrast);
-                    colorLevel.put("saturation", GameSettings.Display.color.saturation);
-                    colorLevel.put("balance", new Integer[] {GameSettings.Display.color.red, GameSettings.Display.color.green, GameSettings.Display.color.blue});
+                    colorLevel.put("brightness", GameSettings.Graphics.color.brightness);
+                    colorLevel.put("contrast", GameSettings.Graphics.color.contrast);
+                    colorLevel.put("saturation", GameSettings.Graphics.color.saturation);
+                    colorLevel.put("balance", new Float[] {GameSettings.Graphics.color.red, GameSettings.Graphics.color.green, GameSettings.Graphics.color.blue});
                 }
             }
         }
