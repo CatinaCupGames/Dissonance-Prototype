@@ -19,14 +19,6 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
     public abstract void onLevelUp();
 
     /**
-     * Deteremine the level.
-     *
-     * @return
-     *        The attack stat, otherwise 0
-     */
-    public abstract int getLevel();
-
-    /**
      * Determines the damage a physical attack by the player will deal,
      * as well as the knockback the attack will cause to the enemy
      *
