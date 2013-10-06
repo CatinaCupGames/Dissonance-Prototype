@@ -46,6 +46,10 @@ public class TestPlayer extends PlayableSprite {
     }
 
     @Override
+    public void onLevelUp() {
+    }
+
+    @Override
     public int getAttack() {
         return 1;
     }

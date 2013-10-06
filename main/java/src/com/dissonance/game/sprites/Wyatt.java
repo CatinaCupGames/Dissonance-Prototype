@@ -3,9 +3,10 @@ package com.dissonance.game.sprites;
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 
 public class Wyatt extends PlayableSprite {
+
     @Override
-    public int getLevel() {
-        return 0;
+    public void onLevelUp() {
+        //TODO Ask for stat things? idk
     }
 
     @Override
