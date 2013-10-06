@@ -27,7 +27,7 @@ public class TestSLFS
 
         HashMap<String, Object> firstnode = new HashMap<String, Object>();
         {
-            firstnode.put("byteVar", (byte)0xff);
+            firstnode.put("byteVar", (byte)0xf2);
             firstnode.put("shortVar", (short)3);
             firstnode.put("intVar", 5);
             firstnode.put("longVar", 7l);

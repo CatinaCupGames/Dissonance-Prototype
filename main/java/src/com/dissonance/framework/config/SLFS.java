@@ -109,18 +109,46 @@ public class SLFS
                         Object value2 = ((HashMap<String, Object>)value).get(key2);
 
                         output.append("\t\t");
-                        output.append(key2 + ": " + value2);
+                        output.append(key2 + ": " + formatValue(value2));
                         output.append("\n");
                     }
                 } else {
                     output.append("\t");
-                    output.append(key + ": " + value);
+                    output.append(key + ": " + formatValue(value));
                     output.append("\n");
                 }
             }
         }
 
         return output.toString();
+    }
+
+    private Object formatValue(Object value)
+    {
+        Class cls = value.getClass();
+
+        if(cls == Byte.class)
+        {
+            value = "0x" + String.format("%02x ", value);
+        } else if(cls == Short.class) {
+            value = value + "s";
+        } else if(cls == Integer.class) {
+            value = value + "i";
+        } else if(cls == Long.class) {
+            value = value + "l";
+        } else if(cls == Float.class) {
+            value = value + "f";
+        } else if(cls == Double.class) {
+            value = value + "d";
+        } else if(cls == Boolean.class) {
+            value = value;
+        } else if(cls == Character.class) {
+            value = "'" + value + "'";
+        } else if(cls == String.class) {
+            value = "\"" + value + "\"";
+        }
+
+        return value;
     }
 
     //////////////////////////////////////////////////
