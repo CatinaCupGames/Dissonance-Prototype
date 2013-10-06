@@ -5,7 +5,9 @@ import com.dissonance.framework.game.ai.Position;
 import com.dissonance.framework.game.scene.Scene;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
+import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.game.sprites.TestPlayer;
 
 public class TestScene extends Scene {
@@ -24,24 +26,28 @@ public class TestScene extends Scene {
     }
 
     @Override
-    protected void moveThings(int part) {
+    protected void moveThings(int part) throws Exception {
         switch (part) {
             case 0: //After Hey wait!
-                moot.setWaypoint(new Position((int)PlayableSprite.getCurrentlyPlayingSprite().getX() - 25, (int)PlayableSprite.getCurrentlyPlayingSprite().getY()));
-                try {
-                    moot.waitForWaypointReached();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                Camera.easeMovement(Camera.translateToCameraCenter(moot.getVector(), 32), 1000);
+                Camera.waitForEndOfEase();
+                Thread.sleep(300);
+                moot.setWaypoint(new Position((int) PlayableSprite.getCurrentlyPlayingSprite().getX() - 25, (int) PlayableSprite.getCurrentlyPlayingSprite().getY()));
+                moot.setSpriteMovedListener(new Sprite.SpriteEvent.SpriteMovedEvent() {
+                    @Override
+                    public void onSpriteMoved(Sprite sprite, float oldx, float oldy) {
+                        Camera.setPos(Camera.translateToCameraCenter(sprite.getVector(), 32));
+                    }
+                });
+                moot.waitForWaypointReached();
+                moot.setSpriteMovedListener(null);
                 queueDialog(DialogFactory.getDialog("testscene-p2"));
                 break;
             case 1: //After Take This!
-                moot.setWaypoint(new Position((int)PlayableSprite.getCurrentlyPlayingSprite().getX() - 300, (int)PlayableSprite.getCurrentlyPlayingSprite().getY()));
-                try {
-                    moot.waitForWaypointReached();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                moot.setWaypoint(new Position((int)PlayableSprite.getCurrentlyPlayingSprite().getX() - 500, (int)PlayableSprite.getCurrentlyPlayingSprite().getY()));
+                moot.waitForWaypointReached();
+                Camera.easeMovement(Camera.translateToCameraCenter(PlayableSprite.getCurrentlyPlayingSprite().getVector(), 32), 1000);
+                Camera.waitForEndOfEase();
                 break;
         }
     }
@@ -50,7 +56,7 @@ public class TestScene extends Scene {
     protected void initScene() {
         moot = new TestPlayer();
         moot.setY(PlayableSprite.getCurrentlyPlayingSprite().getY());
-        moot.setX(PlayableSprite.getCurrentlyPlayingSprite().getX() - 100);
+        moot.setX(PlayableSprite.getCurrentlyPlayingSprite().getX() - 500);
         GameService.getCurrentWorld().loadAnimatedTextureForSprite(moot);
         GameService.getCurrentWorld().addSprite(moot);
 

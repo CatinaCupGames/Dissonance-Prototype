@@ -16,6 +16,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public abstract class Sprite implements Drawable, Serializable {
     private SpriteEvent.SpriteSelectedEvent selectedEvent;
+    private SpriteEvent.SpriteMovedEvent spriteMoved;
 
     protected transient Body physicsBody;
     protected transient BodyDef physicsBodyDef;
@@ -26,6 +27,10 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public void setSpriteSelectedListener(SpriteEvent.SpriteSelectedEvent selectedListener) {
         selectedEvent = selectedListener;
+    }
+
+    public void setSpriteMovedListener(SpriteEvent.SpriteMovedEvent selectedListener) {
+        this.spriteMoved = selectedListener;
     }
 
     public Texture getTexture() {
@@ -77,7 +82,10 @@ public abstract class Sprite implements Drawable, Serializable {
     }
 
     public void setX(float x) {
+        float ox = this.x;
         this.x = x;
+        if (spriteMoved != null)
+            spriteMoved.onSpriteMoved(this, ox, y);
     }
 
     public float getY() {
@@ -85,9 +93,12 @@ public abstract class Sprite implements Drawable, Serializable {
     }
 
     public void setY(float y) {
+        float oy = this.y;
         if (y != this.y && getWorld() != null)
             getWorld().invalidateDrawableList();
         this.y = y;
+        if (spriteMoved != null)
+            spriteMoved.onSpriteMoved(this, x, oy);
     }
 
     public Vec2 getVector() {
@@ -144,6 +155,10 @@ public abstract class Sprite implements Drawable, Serializable {
     public interface SpriteEvent {
         public interface SpriteSelectedEvent {
             public void onSpriteSelected(Sprite selectedSprite, Sprite selector);
+        }
+
+        public interface SpriteMovedEvent {
+            public void onSpriteMoved(Sprite sprite, float oldx, float oldy);
         }
         //TODO Add more listeners
     }
