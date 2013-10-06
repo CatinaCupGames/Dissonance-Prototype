@@ -1,10 +1,10 @@
 package com.dissonance.framework.game.world.tiled;
 
+import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.tile.TileTexture;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TileSet {
@@ -18,7 +18,7 @@ public class TileSet {
     private int tileheight;
     private int tilewidth;
     private HashMap<Object, Object> properties;
-    private static HashMap<String, TextureData> textures = new HashMap<String, TextureData>();
+    private HashMap<Object, HashMap<Object, Object>> tileproperties;
     private TileTexture texture;
 
     public String getProperty(String key) {
@@ -26,11 +26,6 @@ public class TileSet {
     }
 
     public void loadTexture() {
-        if (textures.containsKey(image)) {
-            TextureData td = textures.get(image);
-            texture = td.texture;
-            td.users.add(this); //Register yourself as a user of this texture
-        } else {
             Texture temp = null;
             try {
                 temp = Texture.retriveTexture(image);
@@ -44,13 +39,6 @@ public class TileSet {
             }
             texture = new TileTexture(temp, tilewidth, tileheight, spacing, margin, getTilesPerRow(), getRowCount());
             Texture.replaceTexture(temp, texture);
-
-            TextureData td = new TextureData();
-            td.texture = texture;
-            td.users.add(this); //Register yourself as a user of this texture
-
-            textures.put(image, td);
-        }
     }
 
     public TileTexture getTexture() {
@@ -105,28 +93,26 @@ public class TileSet {
         return tileheight;
     }
 
-    public void dispose() {
-        properties.clear();
-
-        TextureData td = textures.get(image);
-        td.users.remove(this); //Unregister myself from the cache
-
-        if (td.users.size() == 0) { //If no one else is using the texture
-            textures.remove(image); //Remove it from the cache
-            texture.dispose(); //And remove it from memory
+    public String getTileProperty(int ID, String property) {
+        if (tileproperties.containsKey(ID)) {
+            return (String) tileproperties.get(ID).get(property);
         }
+        return null;
     }
 
-    /**
-     * All the TileSets that are using this texture.
-     * Multiple maps will have multiple instances of the same TileSet, many textures will be repeatedly loaded.
-     *
-     * This cache ensures that the texture is only loaded once and keeps track of which TileSets are using it.
-     *
-     * When no TileSets are using it, the texture is unloaded from memory
-     */
-    private static class TextureData {
-        public ArrayList<TileSet> users = new ArrayList<TileSet>();
-        public TileTexture texture;
+    public String getTileProperty(Tile t, String property)  {
+        return getTileProperty(t.getType().getID(), property);
+    }
+
+    public boolean tileHasProperty(Tile t, String property) {
+        return getTileProperty(t, property) != null;
+    }
+
+    public boolean tileHasProperty(int ID, String property) {
+        return getTileProperty(ID, property) != null;
+    }
+
+    public void dispose() {
+        properties.clear();
     }
 }

@@ -1,6 +1,7 @@
 package com.dissonance.framework.render;
 
 import com.dissonance.framework.game.GameSettings;
+import com.dissonance.framework.game.sprites.Sprite;
 import org.jbox2d.common.Vec2;
 
 public final class Camera {
@@ -32,6 +33,18 @@ public final class Camera {
     public static void setPos(Vec2 pos) {
         posX = pos.x;
         posY = pos.y;
+    }
+
+    public static boolean isOffScreen(float x, float y, float width, float height, float scale) {
+        return (x + width) - posX < 0 || Math.abs(posX - (x - width))  > GameSettings.Display.window_width / scale || (y + height) - posY < 0 || Math.abs(posY - (y - height)) > GameSettings.Display.window_height / scale;
+    }
+
+    public static boolean isOffScreen(Sprite sprite, float scale) {
+        return isOffScreen(sprite.getX(), sprite.getY(), sprite.getTexture().getTextureWidth() / 2, sprite.getTexture().getTextureHeight() / 2, scale);
+    }
+
+    public static boolean isOffScreen(float x, float y, float scale) {
+        return isOffScreen(x, y, 0, 0, scale);
     }
 
     public static Vec2 translateToScreenCord(Vec2 vec) {

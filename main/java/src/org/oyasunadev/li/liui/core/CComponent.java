@@ -9,34 +9,44 @@ package org.oyasunadev.li.liui.core;
 
 public class CComponent extends CObject
 {
-	public CComponent(String name, float x, float y, float w, float h)
-	{
-		super(name);
+    public CComponent(String name, float x, float y, float w, float h)
+    {
+        super(name);
 
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
-	}
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+    }
 
-	@Override
-	public void init()
-	{
-	}
+    @Override
+    public void init()
+    {
+    }
 
     @Override
     public void update()
     {
     }
 
-	@Override
-	public void render()
-	{
-		frame++;
-	}
+    @Override
+    public void render()
+    {
+        frame++;
+    }
 
-	public float x;
-	public float y;
-	public float w;
-	public float h;
+    @Override
+    public float getX() {
+        return y;
+    }
+
+    @Override
+    public float getY() {
+        return x;
+    }
+
+    public float x;
+    public float y;
+    public float w;
+    public float h;
 }
