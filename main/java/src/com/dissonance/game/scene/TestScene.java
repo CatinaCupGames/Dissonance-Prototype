@@ -57,7 +57,7 @@ public class TestScene extends Scene {
     protected void initScene() {
         moot = new TestPlayer();
         moot.setY(PlayableSprite.getCurrentlyPlayingSprite().getY());
-        moot.setX(PlayableSprite.getCurrentlyPlayingSprite().getX() - 500);
+        moot.setX(PlayableSprite.getCurrentlyPlayingSprite().getX() - 100);
         GameService.getCurrentWorld().loadAnimatedTextureForSprite(moot);
         GameService.getCurrentWorld().addSprite(moot);
 
