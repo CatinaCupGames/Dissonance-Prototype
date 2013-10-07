@@ -112,7 +112,7 @@ public class UseShader
         }
     }
 
-    private static int createShader(String filename, int shaderType)
+    private static int createShader(String filename, int shaderType) throws Exception
     {
         int shader = 0;
 
@@ -136,7 +136,7 @@ public class UseShader
             return shader;
         } catch (Exception e) {
             ARBShaderObjects.glDeleteObjectARB(shader);
-            e.printStackTrace();
+            throw e;
         }
     }
 
