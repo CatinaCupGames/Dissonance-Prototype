@@ -192,89 +192,6 @@ public class RenderService extends Service {
         }
     }
 
-    private static CMenu menu = new CMenu("mymenu", 10.0f, 10.0f, 100.0f, 200.0f);
-    static
-    {
-        menu.init();
-
-        menu.addItem("Brightness",
-                new MenuItem(9,
-                        new String[]
-                                {"-0.9",
-                                "-0.8",
-                                "-0.7",
-                                "-0.6",
-                                "-0.5",
-                                "-0.4",
-                                "-0.3",
-                                "-0.2",
-                                "-0.1",
-                                "0.0",
-                                "+0.1",
-                                "+0.2",
-                                "+0.3",
-                                "+0.4",
-                                "+0.5",
-                                "+0.6",
-                                "+0.7",
-                                "+0.8",
-                                "+0.9",
-                                }
-                )
-        );
-        menu.addItem("Contrast",
-                new MenuItem(9,
-                        new String[]
-                                {
-                                "-0.9",
-                                "-0.8",
-                                "-0.7",
-                                "-0.6",
-                                "-0.5",
-                                "-0.4",
-                                "-0.3",
-                                "-0.2",
-                                "-0.1",
-                                "1.0",
-                                "+1.1",
-                                "+1.2",
-                                "+1.3",
-                                "+1.4",
-                                "+1.5",
-                                "+1.6",
-                                "+1.7",
-                                "+1.8",
-                                "+1.9",
-                                }
-                )
-        );
-        menu.addItem("Saturation",
-                new MenuItem(9,
-                        new String[]
-                                {"-0.9",
-                                        "-0.8",
-                                        "-0.7",
-                                        "-0.6",
-                                        "-0.5",
-                                        "-0.4",
-                                        "-0.3",
-                                        "-0.2",
-                                        "-0.1",
-                                        "0.0",
-                                        "+0.1",
-                                        "+0.2",
-                                        "+0.3",
-                                        "+0.4",
-                                        "+0.5",
-                                        "+0.6",
-                                        "+0.7",
-                                        "+0.8",
-                                        "+0.9",
-                                }
-                )
-        );
-    }
-
     @Override
     public void onUpdate() {
         now = System.currentTimeMillis();
@@ -300,7 +217,6 @@ public class RenderService extends Service {
                     t.printStackTrace();
                 }
             }
-            menu.update();
 
             UseShader.preDraw();
 
@@ -320,7 +236,6 @@ public class RenderService extends Service {
                     t.printStackTrace();
                 }
             }
-            menu.render();
 
             try {
                 AnimationFactory.executeTick(); //Execute any animation
