@@ -3,9 +3,15 @@ package com.dissonance.framework.render;
 import com.dissonance.framework.game.GameSettings;
 import org.lwjgl.opengl.*;
 
+import javax.swing.*;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,6 +29,13 @@ public class UseShader
     private static boolean useShader;
     private static int program = 0;
 
+    private static int brightnessVar;
+    private static int contrastVar;
+    private static int saturationVar;
+    private static int redVar;
+    private static int greenVar;
+    private static int blueVar;
+
     public static void init()
     {
         int vertShader = 0;
@@ -30,8 +43,8 @@ public class UseShader
 
         try
         {
-            vertShader = createShader("E:\\PROJECTS\\Java\\That-one-Game\\That-one-Game\\main\\resources\\shaders/screenvert.glsl", ARBVertexShader.GL_VERTEX_SHADER_ARB);
-            fragShader = createShader("E:\\PROJECTS\\Java\\That-one-Game\\That-one-Game\\main\\resources\\shaders/screenfrag.glsl", ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
+            vertShader = createShader("/shaders/screenvert.glsl", ARBVertexShader.GL_VERTEX_SHADER_ARB);
+            fragShader = createShader("/shaders/screenfrag.glsl", ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -69,13 +82,6 @@ public class UseShader
         useShader = true;
     }
 
-    private static int brightnessVar;
-    private static int contrastVar;
-    private static int saturationVar;
-    private static int redVar;
-    private static int greenVar;
-    private static int blueVar;
-
     public static void preDraw()
     {
         if(useShader)
@@ -106,7 +112,7 @@ public class UseShader
         }
     }
 
-    private static int createShader(String filename, int shaderType) throws Exception
+    private static int createShader(String filename, int shaderType)
     {
         int shader = 0;
 
@@ -130,70 +136,21 @@ public class UseShader
             return shader;
         } catch (Exception e) {
             ARBShaderObjects.glDeleteObjectARB(shader);
-            throw e;
+            e.printStackTrace();
         }
     }
 
     private static String readFileAsString(String filename) throws Exception
     {
         StringBuilder sb = new StringBuilder();
-        FileInputStream fis = new FileInputStream(filename);
-        Exception e = null;
 
-        InputStreamReader isr;
-        BufferedReader br;
-        try
+        InputStreamReader isr = new InputStreamReader(UseShader.class.getResourceAsStream(filename), "UTF-8");
+        BufferedReader br = new BufferedReader(isr);
+
+        String line;
+        while((line = br.readLine()) != null)
         {
-            isr = new InputStreamReader(fis, "UTF-8");
-            br = new BufferedReader(isr);
-
-            Exception e1 = null;
-            try
-            {
-                String line;
-                while((line = br.readLine()) != null)
-                {
-                    sb.append(line).append('\n');
-                }
-            } catch (Exception e2) {
-                e = e2;
-            } finally {
-                try
-                {
-                    br.close();
-                } catch (Exception e2) {
-                    if(e1 == null)
-                    {
-                        e1 = e2;
-                    } else {
-                        e2.printStackTrace();
-                    }
-                }
-            }
-
-            if(e1 != null)
-            {
-                throw e1;
-            }
-        } catch (Exception e1) {
-            e = e1;
-        } finally {
-            try
-            {
-                fis.close();
-            } catch (Exception e1) {
-                if(e == null)
-                {
-                    e = e1;
-                } else {
-                    e1.printStackTrace();
-                }
-            }
-
-            if(e != null)
-            {
-                throw e;
-            }
+            sb.append(line).append("\n");
         }
 
         return sb.toString();
