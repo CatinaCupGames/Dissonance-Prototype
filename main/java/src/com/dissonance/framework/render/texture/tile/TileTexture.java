@@ -79,7 +79,7 @@ public class TileTexture extends Texture {
         float x = (tilepos % perrow) * tileWidth;
         float y = (int)(((tilepos - 1) / perrow)) * tileHeight;
 
-        //y -= tileHeight;
+        //zy -= tileHeight;
         x -= tileWidth;
 
         x /= getImageWidth(); //Convert to fraction

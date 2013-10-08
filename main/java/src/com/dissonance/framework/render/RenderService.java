@@ -6,6 +6,7 @@ import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.render.shader.ShaderFactory;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.utils.Validator;
@@ -15,9 +16,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.oyasunadev.li.liui.component.gui.CMenu;
-import org.oyasunadev.li.liui.component.gui.CText;
-import org.oyasunadev.li.liui.component.gui.MenuItem;
 import org.oyasunadev.li.liui.component.shape.CSquare;
 
 import java.util.Iterator;
@@ -143,7 +141,10 @@ public class RenderService extends Service {
 
             System.out.println("OpenGL version: " + glGetString(GL_VERSION));
 
-            UseShader.init();
+            System.out.println("Building shaders..");
+            long ms = System.currentTimeMillis();
+            ShaderFactory.buildAllShaders();
+            System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms.");
 
         } catch (LWJGLException e) {
             e.printStackTrace();
@@ -218,7 +219,7 @@ public class RenderService extends Service {
                 }
             }
 
-            UseShader.preDraw();
+            ShaderFactory.executePreRender();
 
             sprites = current_world.getDrawable();
             while (sprites.hasNext()) {
@@ -245,7 +246,7 @@ public class RenderService extends Service {
 
             Camera.executeEase(); //Execute any interlop
 
-            UseShader.postDraw();
+            ShaderFactory.executePreRender();
 
             exitOnGLError("RenderService.renderSprites");
 

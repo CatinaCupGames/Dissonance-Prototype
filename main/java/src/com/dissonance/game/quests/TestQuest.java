@@ -9,7 +9,6 @@ import com.dissonance.game.scene.TestScene;
 import com.dissonance.game.sprites.Enemy;
 import com.dissonance.game.sprites.TestNPC;
 import com.dissonance.game.sprites.TestPlayer;
-import com.dissonance.game.sprites.TestShaderSprite;
 
 import java.util.Random;
 
@@ -112,13 +111,6 @@ public class TestQuest extends AbstractQuest {
         w.addSprite(npc);
         npc.setX(-200);
         npc.setY(200);
-
-        TestShaderSprite shaderSprite = new TestShaderSprite("shader-test");
-        w.loadAnimatedTextureForSprite(shaderSprite);
-        w.addSprite(shaderSprite);
-        shaderSprite.setX(-40);
-        shaderSprite.setY(40);
-        shaderSprite.setSpeed(13);
 
         Enemy enemy1 = new Enemy("enemy1", Enemy.StatType.NON_MAGIC, CombatSprite.CombatType.CREATURE, testEnemyInterface);
         w.loadAnimatedTextureForSprite(enemy1);
