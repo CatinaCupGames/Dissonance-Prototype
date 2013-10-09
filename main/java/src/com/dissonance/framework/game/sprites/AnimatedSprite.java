@@ -12,7 +12,7 @@ import java.security.InvalidParameterException;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public abstract class AnimatedSprite extends Sprite implements Animator {
+public abstract class AnimatedSprite extends UpdatableSprite implements Animator {
 
     private AnimatedSpriteEvent.OnAnimationPlayEvent animationPlayEvent;
     private AnimatedSpriteEvent.OnAnimationPauseEvent animationPauseEvent;

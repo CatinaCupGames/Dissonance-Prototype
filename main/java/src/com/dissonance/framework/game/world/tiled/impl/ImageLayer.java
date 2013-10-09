@@ -2,6 +2,7 @@ package com.dissonance.framework.game.world.tiled.impl;
 
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.render.Drawable;
+import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
 
 import java.io.IOException;
@@ -32,17 +33,12 @@ public class ImageLayer implements Drawable {
         return parentLayer.getY();
     }
 
-    @Override
     public void init() {
         try {
             texture = Texture.retriveTexture(path);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void update() {
     }
 
     @Override
@@ -73,6 +69,6 @@ public class ImageLayer implements Drawable {
 
     @Override
     public int compareTo(Drawable o) {
-        return Drawable.BEFORE;
+        return UpdatableDrawable.BEFORE;
     }
 }

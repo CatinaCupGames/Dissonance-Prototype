@@ -4,6 +4,7 @@ import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
 
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.awt.image.BufferedImage;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public abstract class UIElement implements Drawable {
+public abstract class UIElement implements UpdatableDrawable {
     private boolean valid;
     private boolean complete_invalid;
     private int width;
@@ -199,6 +200,6 @@ public abstract class UIElement implements Drawable {
 
     @Override
     public int compareTo(Drawable o) {
-        return Drawable.AFTER;
+        return UpdatableDrawable.AFTER;
     }
 }

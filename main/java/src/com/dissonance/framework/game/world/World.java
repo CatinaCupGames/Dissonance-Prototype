@@ -8,6 +8,7 @@ import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.WorldData;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.Service;
@@ -26,7 +27,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public final class World implements Drawable {
+public final class World implements UpdatableDrawable {
     private static final Gson GSON = new Gson();
     private static final float GRAVITY = 9.81f;
     private static final float TIME_STEP = 1f / 60f;
@@ -42,6 +43,7 @@ public final class World implements Drawable {
     private transient Texture texture;
     private boolean invalid = true;
     private WorldData tiledData;
+    private List<UpdatableDrawable> udrawables = new ArrayList<>();
 
     World(int ID) {
         this.ID = ID;
@@ -117,12 +119,16 @@ public final class World implements Drawable {
             renderingService.resume();
     }
 
-    public Iterator<Drawable> getDrawable() {
+    public Iterator<Drawable> getSortedDrawables() {
         if (invalid) {
             Collections.sort(drawable);
             invalid = false;
         }
         return drawable.iterator();
+    }
+
+    public Iterator<UpdatableDrawable> getUpdatables() {
+        return udrawables.iterator();
     }
 
     public void invalidateDrawableList() {
@@ -139,8 +145,12 @@ public final class World implements Drawable {
             @Override
             public void run() {
                 drawable.add(draw);
-                if (!(draw instanceof World))
-                    draw.init();
+                if (draw instanceof UpdatableDrawable) {
+                    UpdatableDrawable ud = (UpdatableDrawable)draw;
+                    if (!(ud instanceof World))
+                        ud.init();
+                    udrawables.add(ud);
+                }
                 if (run != null)
                     run.run();
             }
@@ -350,11 +360,12 @@ public final class World implements Drawable {
         return this.physicsWorld;
     }
 
-    public int compareTo(Drawable o) {
-        return BEFORE;
-    }
-
     public WorldData getTiledData() {
         return tiledData;
+    }
+
+    @Override
+    public int compareTo(Drawable o) {
+        return Drawable.BEFORE;
     }
 }

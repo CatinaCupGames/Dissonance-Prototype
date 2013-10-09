@@ -1,15 +1,15 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.sprites.impl.CombatSprite;
+import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
-import com.dissonance.game.scene.TestScene;
 import com.dissonance.game.sprites.Enemy;
-import com.dissonance.game.sprites.TestNPC;
 import com.dissonance.game.sprites.TestPlayer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class TestQuest extends AbstractQuest {
@@ -61,8 +61,9 @@ public class TestQuest extends AbstractQuest {
          * It seems the current sorting method is perfectly fine. Feel free to play
          * around with the STRESS_COUNT value.
          */
-        /*final World w = getWorld();
-        final int STRESS_COUNT = 2;
+        final World w = getWorld();
+        final Random random = new Random();
+        final int STRESS_COUNT = 1000;
         List<TestPlayer> testPlayers = new ArrayList<TestPlayer>();
         for (int i = 0; i < STRESS_COUNT; i++) {
             TestPlayer p = new TestPlayer();
@@ -85,8 +86,8 @@ public class TestQuest extends AbstractQuest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }*/
-
+        }
+        /*
         final World w = getWorld();
 
         TestPlayer p = new TestPlayer();
@@ -122,6 +123,6 @@ public class TestQuest extends AbstractQuest {
         w.loadAnimatedTextureForSprite(enemy2);
         w.addSprite(enemy2);
         enemy2.setX(-300);
-        enemy2.setY(200);
+        enemy2.setY(200);*/
     }
 }

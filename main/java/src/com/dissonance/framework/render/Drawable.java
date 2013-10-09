@@ -5,10 +5,6 @@ public interface Drawable extends Comparable<Drawable> {
     public static final int EQUAL = 0;
     public static final int AFTER = 1;
 
-    public void init();
-
-    public void update();
-
     public void render();
 
     public float getX();

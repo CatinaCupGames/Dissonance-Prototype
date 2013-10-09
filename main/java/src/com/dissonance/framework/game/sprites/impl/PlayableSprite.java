@@ -3,7 +3,7 @@ package com.dissonance.framework.game.sprites.impl;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.render.Camera;
-import com.dissonance.framework.render.Drawable;
+import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
 import org.jbox2d.common.Vec2;
@@ -117,9 +117,9 @@ public abstract class PlayableSprite extends CombatSprite {
         //TODO Detect whether to attack or select something...
         //TODO Maybe have a button to ready and unready weapon..?
 
-        Iterator<Drawable> sprites = getWorld().getDrawable();
+        Iterator<UpdatableDrawable> sprites = getWorld().getUpdatables(); //Sprites will always be Updatable
         while (sprites.hasNext()) {
-            Drawable d = sprites.next();
+            UpdatableDrawable d = sprites.next();
             if (d == this)
                 continue;
             if (d instanceof Sprite) {

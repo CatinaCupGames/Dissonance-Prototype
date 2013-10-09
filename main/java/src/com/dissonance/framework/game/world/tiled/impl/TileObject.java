@@ -4,6 +4,7 @@ import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.TileSet;
 import com.dissonance.framework.render.Drawable;
+import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
 import org.jbox2d.common.Vec2;
 
@@ -41,7 +42,6 @@ public class TileObject extends Sprite {
         return parentTileSet.getTexture();
     }
 
-    @Override
     public void init() {
         if (cache.containsKey(ID)) {
             tex_cords = cache.get(ID);
@@ -75,9 +75,6 @@ public class TileObject extends Sprite {
     }
 
     @Override
-    public void update() { }
-
-    @Override
     public void render() {
         if (parentTileSet.getTexture() == null)
             return;
@@ -109,14 +106,14 @@ public class TileObject extends Sprite {
             if (d instanceof TileObject && ((TileObject)d).isGroundLayer()) {
                 TileObject t = (TileObject)d;
 
-                if (t.getLayer().getLayerNumber() > getLayer().getLayerNumber()) return Drawable.BEFORE;
-                else if (t.getLayer().getLayerNumber() < getLayer().getLayerNumber()) return Drawable.AFTER;
-                else return Drawable.EQUAL;
+                if (t.getLayer().getLayerNumber() > getLayer().getLayerNumber()) return UpdatableDrawable.BEFORE;
+                else if (t.getLayer().getLayerNumber() < getLayer().getLayerNumber()) return UpdatableDrawable.AFTER;
+                else return UpdatableDrawable.EQUAL;
             }
-            return Drawable.BEFORE;
+            return UpdatableDrawable.BEFORE;
         }
         else if (isAlwaysAbove())
-            return Drawable.AFTER;
+            return UpdatableDrawable.AFTER;
         return super.compareTo(d);
     }
 

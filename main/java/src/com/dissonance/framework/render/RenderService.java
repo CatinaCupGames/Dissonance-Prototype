@@ -207,9 +207,9 @@ public class RenderService extends Service {
             glScalef(2f, 2f, 1f);
             glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
 
-            Iterator<Drawable> sprites = current_world.getDrawable();
-            while (sprites.hasNext()) {
-                Drawable s = sprites.next();
+            Iterator<UpdatableDrawable> updates = current_world.getUpdatables();
+            while (updates.hasNext()) {
+                UpdatableDrawable s = updates.next();
                 if (s == null)
                     continue;
                 try {
@@ -221,7 +221,7 @@ public class RenderService extends Service {
 
             ShaderFactory.executePreRender();
 
-            sprites = current_world.getDrawable();
+            Iterator<Drawable> sprites = current_world.getSortedDrawables();
             while (sprites.hasNext()) {
                 Drawable s = sprites.next();
                 if (s == null)

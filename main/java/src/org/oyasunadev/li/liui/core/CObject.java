@@ -1,6 +1,7 @@
 package org.oyasunadev.li.liui.core;
 
 import com.dissonance.framework.render.Drawable;
+import com.dissonance.framework.render.UpdatableDrawable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,7 +10,7 @@ import com.dissonance.framework.render.Drawable;
  * Time: 2:02 PM
  */
 
-public abstract class CObject implements Drawable
+public abstract class CObject implements UpdatableDrawable
 {
 	private CObject()
 	{
@@ -39,8 +40,7 @@ public abstract class CObject implements Drawable
     public abstract void render();
 
     @Override
-    public int compareTo(Drawable o)
-    {
-        return 0;
+    public int compareTo(Drawable o) {
+        return Drawable.AFTER;
     }
 }

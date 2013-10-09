@@ -61,6 +61,22 @@ public class TileTexture extends Texture {
         return temp;
     }
 
+    public int[] convertToCords(int pos) {
+        int x = 0;
+        int y = 0;
+        int temp = 1;
+        while (y + tileHeight + margin <= super.getImageHeight()) {
+            x += tileWidth + spacing;
+            if (x + tileWidth + margin > super.getImageWidth()) {
+                x = margin;
+                y += tileHeight + spacing;
+            }
+            temp++;
+        }
+
+        return new int[] { x, y };
+    }
+
     @Override
     public int getTextureWidth() {
         return tileWidth * 2;
