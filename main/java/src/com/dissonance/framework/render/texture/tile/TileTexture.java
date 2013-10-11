@@ -61,7 +61,7 @@ public class TileTexture extends Texture {
         return temp;
     }
 
-    public int[] convertToCords(int pos) {
+    public float[] convertToCords(int pos) {
         int x = 0;
         int y = 0;
         int temp = 1;
@@ -72,9 +72,11 @@ public class TileTexture extends Texture {
                 y += tileHeight + spacing;
             }
             temp++;
+            if (temp == pos)
+                break;
         }
 
-        return new int[] { x, y };
+        return new float[] { x, y };
     }
 
     @Override
@@ -92,25 +94,25 @@ public class TileTexture extends Texture {
             throw new InvalidParameterException("The TileSet provided does not contain the tile \"" + id + "\"");
         int tilepos = (id - tile.getFirstGrid()) + 1; //Returns the tile id of this tile, relative to tileset.
 
-        float x = (tilepos % perrow) * tileWidth;
-        float y = (int)(((tilepos - 1) / perrow)) * tileHeight;
+        float x, y;
+        float[] temp = convertToCords(tilepos);
 
-        //zy -= tileHeight;
-        x -= tileWidth;
-
-        x /= getImageWidth(); //Convert to fraction
-        y /= getImageHeight(); //Convert to fraction
-
+        x = temp[0];
+        y = temp[1];
         if (pos == 0) { //Bottom left
-            return new Vec2(x, y);
+            y += tileHeight;
         } else if (pos == 1) { //Bottom right
-            return new Vec2(x + x_fraction, y);
+            y += tileHeight;
+            x += tileWidth;
         } else if (pos == 2) { //Top right
-            return new Vec2(x + x_fraction, y + y_fraction);
-        } else if (pos == 3) { //Top left
-            return new Vec2(x, y + y_fraction);
-        } else {
+            x += tileWidth;
+        }  else if (pos != 3) { //We start with the Top Left, ignore pos 3
             throw new InvalidParameterException("The parameter \"type\"'s value can only be 0, 1, 2, or 3");
         }
+
+        x /= super.getTextureWidth(); //Convert to fraction
+        y /= super.getTextureHeight(); //Convert to fraction
+
+        return new Vec2(x, y);
     }
 }

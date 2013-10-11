@@ -32,7 +32,7 @@ public class TestScene extends Scene {
             case 0: //After Hey wait!
                 Camera.easeMovement(Camera.translateToCameraCenter(moot.getVector(), 32), 1000);
                 Camera.waitForEndOfEase();
-                Thread.sleep(300);
+                waitFor(0.3);
                 moot.setWaypoint(new Position((int) PlayableSprite.getCurrentlyPlayingSprite().getX() - 25, (int) PlayableSprite.getCurrentlyPlayingSprite().getY()));
                 moot.setSpriteMovedListener(new Sprite.SpriteEvent.SpriteMovedEvent() {
                     @Override

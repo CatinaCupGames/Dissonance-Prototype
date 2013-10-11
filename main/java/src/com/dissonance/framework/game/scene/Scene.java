@@ -57,6 +57,10 @@ public abstract class Scene {
         current_dialog.addAll(Arrays.asList(dialogs));
     }
 
+    protected void waitFor(double seconds) throws InterruptedException {
+        Thread.sleep((long) (seconds * 1000));
+    }
+
     protected boolean displayDialog(Dialog d) {
         DialogUI ui = new DialogUI("SCENE-DIALOG-" + super.hashCode(), d);
         ui.displayUI(false);
