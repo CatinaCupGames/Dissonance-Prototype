@@ -53,7 +53,7 @@ public final class InputService extends Service {
     private Runnable keyboardRunnable = new Runnable() {
         @Override
         public void run() {
-
+            Thread.currentThread().setName("KeyboardListener Thread");
             while (!paused) {
                 if (!renderService.isTerminated() && listeners != null) {
                     for (InputListener listener : listeners) {
@@ -79,6 +79,7 @@ public final class InputService extends Service {
     private Runnable mouseRunnable = new Runnable() {
         @Override
         public void run() {
+            Thread.currentThread().setName("MouseListener Thread");
             while (!paused) {
                 if (!renderService.isTerminated()  && listeners != null) {
                     Mouse.next();
@@ -107,6 +108,11 @@ public final class InputService extends Service {
             }
         }
     };
+
+    @Override
+    protected String getName() {
+        return "InputService Thread";
+    }
 
     @Override
     protected void onStart() {

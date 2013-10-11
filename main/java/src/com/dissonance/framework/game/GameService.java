@@ -4,6 +4,7 @@ import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.game.settings.SettingsLevelTest;
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.SoundSystem;
 import com.dissonance.framework.system.utils.Validator;
 import com.sun.istack.internal.NotNull;
@@ -29,6 +30,9 @@ public class GameService {
 
     public static void beginQuest(@NotNull AbstractQuest quest) {
         Validator.validateNotNull(quest, "quest");
+        if (RenderService.isInRenderThread())
+            throw new RuntimeException("The Quest Thread cannot be the same thread as the RenderService Thread!");
+        Thread.currentThread().setName("QuestHandler Thread");
         while (quest != null && alive) {
             TID = Thread.currentThread().getId();
             currentQuest = quest;
@@ -191,6 +195,7 @@ public class GameService {
 
         @Override
         public void run() {
+            Thread.currentThread().setName("Quest Thread");
             currentQuest.startQuest();
         }
     };

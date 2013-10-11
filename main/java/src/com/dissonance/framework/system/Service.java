@@ -22,6 +22,7 @@ public abstract class Service {
             public void run() {
                 serviceThreadID = Thread.currentThread().getId();
                 onStart();
+                Thread.currentThread().setName(getName());
                 while (!terminated) {
 
                     // Flush all "Run on thread" actions //
@@ -99,6 +100,10 @@ public abstract class Service {
     protected abstract void onTerminated();
 
     protected abstract void onUpdate();
+
+    protected String getName() {
+        return getClass().getSimpleName();
+    }
 
 
     // === Functions === //

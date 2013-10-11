@@ -194,6 +194,11 @@ public class RenderService extends Service {
     }
 
     @Override
+    protected String getName() {
+        return "RenderService Thread";
+    }
+
+    @Override
     public void onUpdate() {
         now = System.currentTimeMillis();
         TIME_DELTA = ((now - cur) / 100.0f);
