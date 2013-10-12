@@ -2,6 +2,7 @@ package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.ai.astar.Position;
+import com.dissonance.framework.game.scene.hud.HUD;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
@@ -62,6 +63,10 @@ public class TestQuest extends AbstractQuest {
          * around with the STRESS_COUNT value.
          */
         final World w = getWorld();
+
+        HUD hud = new HUD("->hud");
+        w.addDrawable(hud);
+
         final Random random = new Random();
         final int STRESS_COUNT = 1000;
         List<TestPlayer> testPlayers = new ArrayList<TestPlayer>();
