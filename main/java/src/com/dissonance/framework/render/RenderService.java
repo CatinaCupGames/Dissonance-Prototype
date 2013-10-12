@@ -7,6 +7,7 @@ import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.shader.ShaderFactory;
+import com.dissonance.framework.render.shader.impl.BlurShader;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.utils.Validator;
@@ -45,6 +46,8 @@ public class RenderService extends Service {
     private float fpsTime;
     private float rotx, roty;
     private float posx, posy;
+
+    private boolean accumShader;
 
     long cur = System.currentTimeMillis();
     long now;
@@ -146,6 +149,19 @@ public class RenderService extends Service {
             ShaderFactory.buildAllShaders();
             System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms.");
 
+            for(String s : Main.args)
+            {
+                if(s.startsWith("blur"))
+                {
+                    s = s.split("=")[1];
+
+                    if(s.equalsIgnoreCase("accum") || s.equalsIgnoreCase("both"))
+                    {
+                        accumShader = true;
+                    }
+                }
+            }
+
         } catch (LWJGLException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -241,6 +257,13 @@ public class RenderService extends Service {
                 } catch (Throwable t) {
                     t.printStackTrace();
                 }
+            }
+
+            if(accumShader)
+            {
+                glAccum(GL_MULT, 0.90f);
+                glAccum(GL_ACCUM, 1.0f - 0.90f);
+                glAccum(GL_RETURN, 1.0f);
             }
 
             try {

@@ -145,9 +145,14 @@ public class ShaderFactory {
 
         for(String s : Main.args)
         {
-            if(s.equalsIgnoreCase("blur"))
+            if(s.startsWith("blur"))
             {
-                new BlurShader().build();
+                s = s.split("=")[1];
+
+                if(s.equalsIgnoreCase("shader") || s.equalsIgnoreCase("both"))
+                {
+                    new BlurShader().build();
+                }
             }
         }
 
