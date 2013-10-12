@@ -1,7 +1,9 @@
 package com.dissonance.framework.render.shader;
 
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.render.shader.impl.BrightnessShader;
+import com.dissonance.framework.render.shader.impl.BlurShader;
+import com.dissonance.framework.render.shader.impl.MainShader;
+import com.dissonance.game.Main;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
@@ -137,8 +139,18 @@ public class ShaderFactory {
     }
 
 
-    public static void buildAllShaders() {
-        new BrightnessShader().build();
+    public static void buildAllShaders()
+    {
+        new MainShader().build();
+
+        for(String s : Main.args)
+        {
+            if(s.equalsIgnoreCase("blur"))
+            {
+                new BlurShader().build();
+            }
+        }
+
         //TODO Put all shader building in here..
     }
 }
