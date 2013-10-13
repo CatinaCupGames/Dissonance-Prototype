@@ -5,7 +5,11 @@ import com.dissonance.framework.game.sprites.UIElement;
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.render.Camera;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,6 +20,56 @@ import java.awt.*;
 
 public class HUD extends UIElement
 {
+    private static BufferedImage healthbar;
+    private static BufferedImage boarder;
+    private static BufferedImage mana;
+
+    static {
+        InputStream in = HUD.class.getClassLoader().getResourceAsStream("healthbar.bmp");
+        if (in != null) {
+            try {
+                healthbar = ImageIO.read(in);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        in = HUD.class.getClassLoader().getResourceAsStream("borderbar.bmp");
+        if (in != null) {
+            try {
+                boarder = ImageIO.read(in);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        in = HUD.class.getClassLoader().getResourceAsStream("manabar.bmp");
+        if (in != null) {
+            try {
+                mana = ImageIO.read(in);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
     public HUD(String name)
     {
         super(name);
@@ -87,8 +141,8 @@ public class HUD extends UIElement
 
         String playerName = PlayableSprite.getCurrentlyPlayingSprite().getSpriteName();
         playerName = "Amynta"; // TODO: Remove this once we can actually get the player name.
-                               //       This was added just to find out the max width the
-                               //       HUD needs for the player name area.
+        //       This was added just to find out the max width the
+        //       HUD needs for the player name area.
 
         // TODO: Should be -3.
         int offsetx = -1;
@@ -125,15 +179,20 @@ public class HUD extends UIElement
         g.drawString("HP ", x + 2, y + textCenter + 1);
         g.drawString("SP ", x + 2, y + (textCenter * 2) + 1);
 
-        g.setColor(Color.RED);
+        g.drawImage(boarder, x + g.getFontMetrics().stringWidth("HP "), y + 3, 65, 9, null);
+        g.drawImage(healthbar, x + g.getFontMetrics().stringWidth("HP "), y + 4, 65, 7, null);
+        //g.drawImage(boarder, x + g.getFontMetrics().stringWidth("HP "), y + 4, 64, 6, null);
+        /*g.setColor(Color.RED);
         g.fillRect(x + g.getFontMetrics().stringWidth("HP "), y + 4, 64 + 1, 6 + 1);
         g.setColor(Color.WHITE);
-        g.drawRect(x + g.getFontMetrics().stringWidth("HP "), y + 4, 64, 6);
+        g.drawRect(x + g.getFontMetrics().stringWidth("HP "), y + 4, 64, 6);*/
 
-        g.setColor(Color.BLUE);
+        g.drawImage(boarder, x + g.getFontMetrics().stringWidth("SP "), y + textCenter + 4, 65, 7, null);
+        g.drawImage(mana, x + g.getFontMetrics().stringWidth("SP "), y + textCenter + 4, 65, 7, null);
+        /*g.setColor(Color.BLUE);
         g.fillRect(x + g.getFontMetrics().stringWidth("SP "), y + textCenter + 4, 64 + 1, 6 + 1);
         g.setColor(Color.WHITE);
-        g.drawRect(x + g.getFontMetrics().stringWidth("SP "), y + textCenter + 4, 64, 6);
+        g.drawRect(x + g.getFontMetrics().stringWidth("SP "), y + textCenter + 4, 64, 6);*/
 
         // TODO: Add cash, level up meter, and anything else requested by developers.
 
