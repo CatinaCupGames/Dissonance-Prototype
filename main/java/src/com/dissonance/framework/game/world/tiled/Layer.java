@@ -32,8 +32,10 @@ public class Layer {
         int index = (int) (x + (y * height));
         if (index < 0 || index >= data.length) {
             return null;
+        } else if (data[index] >= TileType.values().length) {
+            return new Tile(TileType.UNKNOWN, x, y, this); //Assume an unknown type
         }
-        TileType tt = TileType.values()[data[index] - 1];
+        TileType tt = TileType.values()[data[index]];
 
         return new Tile(tt, x, y, this);
     }

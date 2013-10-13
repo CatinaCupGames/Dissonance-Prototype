@@ -2,6 +2,7 @@ package com.dissonance.framework.game.world;
 
 public enum TileType {
     //TODO Add all tiles and there Tiled tileset ID
+    UNKNOWN(0),
     DIRT(1);
 
     int ID;
