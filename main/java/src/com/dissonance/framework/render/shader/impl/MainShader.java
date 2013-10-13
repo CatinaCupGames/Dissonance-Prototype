@@ -17,6 +17,11 @@ public class MainShader extends AbstractShader {
     }
 
     @Override
+    public String getName() {
+        return "MainShader";
+    }
+
+    @Override
     protected void onPreRender() {
         super.onPreRender();
         final int program = getProgramID();
