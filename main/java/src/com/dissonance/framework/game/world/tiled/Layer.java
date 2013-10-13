@@ -116,5 +116,6 @@ public class Layer {
             properties.clear();
         data = null;
         objects = null;
+        properties = null;
     }
 }

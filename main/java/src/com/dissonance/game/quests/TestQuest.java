@@ -90,6 +90,7 @@ public class TestQuest extends AbstractQuest {
                 Thread.sleep(20000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                break;
             }
         }
         /*
