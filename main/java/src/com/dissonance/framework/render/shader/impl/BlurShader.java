@@ -55,6 +55,7 @@ public class BlurShader
         private void b()
         {
             build();
+            setActive(true);
         }
     }
 
@@ -103,6 +104,7 @@ public class BlurShader
         private void b()
         {
             build();
+            setActive(true);
         }
     }
 }
