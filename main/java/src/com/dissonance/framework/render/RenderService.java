@@ -47,8 +47,6 @@ public class RenderService extends Service {
     private float rotx, roty;
     private float posx, posy;
 
-    private boolean accumShader;
-
     long cur = System.currentTimeMillis();
     long now;
 
@@ -149,19 +147,6 @@ public class RenderService extends Service {
             ShaderFactory.buildAllShaders();
             System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms.");
 
-            for(String s : Main.args)
-            {
-                if(s.startsWith("blur"))
-                {
-                    s = s.split("=")[1];
-
-                    if(s.equalsIgnoreCase("accum") || s.equalsIgnoreCase("both"))
-                    {
-                        accumShader = true;
-                    }
-                }
-            }
-
         } catch (LWJGLException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -259,13 +244,6 @@ public class RenderService extends Service {
                 }
             }
 
-            if(accumShader)
-            {
-                glAccum(GL_MULT, 0.90f);
-                glAccum(GL_ACCUM, 1.0f - 0.90f);
-                glAccum(GL_RETURN, 1.0f);
-            }
-
             try {
                 AnimationFactory.executeTick(); //Execute any animation
             } catch (IllegalAccessException e) {
@@ -274,7 +252,7 @@ public class RenderService extends Service {
 
             Camera.executeEase(); //Execute any interlop
 
-            ShaderFactory.executePreRender();
+            ShaderFactory.executePostRender();
 
             exitOnGLError("RenderService.renderSprites");
 

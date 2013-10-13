@@ -68,7 +68,7 @@ public class TestQuest extends AbstractQuest {
         w.addDrawable(hud);
 
         final Random random = new Random();
-        final int STRESS_COUNT = 1000;
+        final int STRESS_COUNT = 3;
         List<TestPlayer> testPlayers = new ArrayList<TestPlayer>();
         for (int i = 0; i < STRESS_COUNT; i++) {
             TestPlayer p = new TestPlayer();

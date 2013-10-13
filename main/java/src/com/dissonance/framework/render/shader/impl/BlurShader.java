@@ -4,6 +4,8 @@ import com.dissonance.framework.game.GameSettings;
 import com.dissonance.framework.render.shader.AbstractShader;
 import org.lwjgl.opengl.GL20;
 
+import static org.lwjgl.opengl.GL11.*;
+
 public class BlurShader
 {
     public BlurShader()
@@ -76,6 +78,14 @@ public class BlurShader
 
             GL20.glUniform1f(resolution_heightVar, GameSettings.Display.window_height);
             GL20.glUniform1f(radiusVar, 1.2f);
+        }
+
+        @Override
+        protected void onPostRender() {
+            super.onPostRender();
+            glAccum(GL_MULT, 0.90f);
+            glAccum(GL_ACCUM, 1.0f - 0.90f);
+            glAccum(GL_RETURN, 1.0f);
         }
 
         private void b()
