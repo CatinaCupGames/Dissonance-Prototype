@@ -8,8 +8,9 @@ import com.dissonance.framework.render.Camera;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,9 +24,50 @@ public class HUD extends UIElement
     private static BufferedImage healthbar;
     private static BufferedImage boarder;
     private static BufferedImage mana;
+    private static Map<String, BufferedImage> names;
 
     static {
-        InputStream in = HUD.class.getClassLoader().getResourceAsStream("healthbar.bmp");
+        ClassLoader loader = HUD.class.getClassLoader();
+        InputStream in = null;
+
+        {
+            names = new HashMap<String, BufferedImage>();
+
+            String directory = "graphics/hud/names";
+            BufferedReader index = new BufferedReader(new InputStreamReader(loader.getResourceAsStream(directory)));
+
+            String fileName;
+            try
+            {
+                while((fileName = index.readLine()) != null)
+                {
+                    if(fileName.endsWith("49x16.png"))
+                    {
+                        if(fileName.equals("Player49x16.png"))
+                        {
+                            fileName = "player49x16.png";
+                        }
+
+                        in = loader.getResourceAsStream(directory + "/" + fileName);
+
+                        names.put(fileName.split("49x16.png")[0], ImageIO.read(in));
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if(in != null)
+                {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        in = loader.getResourceAsStream("healthbar.bmp");
         if (in != null) {
             try {
                 healthbar = ImageIO.read(in);
@@ -40,7 +82,7 @@ public class HUD extends UIElement
             }
         }
 
-        in = HUD.class.getClassLoader().getResourceAsStream("borderbar.bmp");
+        in = loader.getResourceAsStream("borderbar.bmp");
         if (in != null) {
             try {
                 boarder = ImageIO.read(in);
@@ -55,7 +97,7 @@ public class HUD extends UIElement
             }
         }
 
-        in = HUD.class.getClassLoader().getResourceAsStream("manabar.bmp");
+        in = loader.getResourceAsStream("manabar.bmp");
         if (in != null) {
             try {
                 mana = ImageIO.read(in);
@@ -139,8 +181,10 @@ public class HUD extends UIElement
         width = (getWidth() / 4) - 15;
         height = getHeight() / 4;
 
+        System.out.println(width + "," + height);
+
         String playerName = PlayableSprite.getCurrentlyPlayingSprite().getSpriteName();
-        playerName = "Amynta"; // TODO: Remove this once we can actually get the player name.
+        playerName = "Huxley"; // TODO: Remove this once we can actually get the player name.
         //       This was added just to find out the max width the
         //       HUD needs for the player name area.
 
@@ -148,18 +192,23 @@ public class HUD extends UIElement
         int offsetx = -1;
         int offsety = +0;
 
-        g.setColor(Color.BLACK);
+        //g.setColor(Color.BLACK);
+        Color c = new Color(Color.GRAY.getRed() + 32, Color.GRAY.getBlue() + 32, Color.GRAY.getBlue() + 32);
+        //c = Color.GRAY;
+        //c = Color.LIGHT_GRAY;
+        g.setPaint(new GradientPaint(x, y + offsety, c, x, y + height + offsety, Color.GRAY));
         g.fillRect(x, y + offsety, width + 1 + offsetx, height + 1 + offsety);
 
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Arial", Font.BOLD, 12));
-        g.drawString(playerName, x + ((width - g.getFontMetrics().stringWidth(playerName)) / 2), y + g.getFont().getSize() + offsety);
+        g.drawImage(names.get(playerName), x, y + (height / 6) + offsety, 49, 16, null);
+        //g.setColor(Color.WHITE);
+        //g.setFont(new Font("Arial", Font.BOLD, 12));
+        //g.drawString(playerName, x + ((width - g.getFontMetrics().stringWidth(playerName)) / 2), y + g.getFont().getSize() + offsety);
 
         g.setColor(Color.GREEN);
         g.drawLine(x, y + offsety, x + width + offsetx, y + offsety);
         if(offsety == 0)
         {
-            g.drawLine(x, y + height, x + width + offsetx, y + height);
+            //g.drawLine(x, y + height, x + width + offsetx, y + height);
         }
         g.drawLine(x, y + offsety, x, y + height + offsety);
         g.drawLine(x + width + offsetx, y + offsety, x + width + offsetx, y + height + offsety);
@@ -170,7 +219,8 @@ public class HUD extends UIElement
         width = getWidth() - 1;
         height = (int)(getHeight() / (8.0f / 3.0f));
 
-        g.setColor(Color.BLACK);
+        //g.setColor(Color.BLACK);
+        g.setPaint(new GradientPaint(x, y, Color.GRAY, x, y + height, Color.DARK_GRAY));
         g.fillRect(x, y, width + 1, height + 1);
 
         g.setColor(Color.WHITE);
@@ -197,7 +247,8 @@ public class HUD extends UIElement
         // TODO: Add cash, level up meter, and anything else requested by developers.
 
         g.setColor(Color.GREEN);
-        g.drawLine(x/* + ((getWidth() / 4) - 15) - 1*/, y, x + width, y);
+        //g.drawLine(x/* + ((getWidth() / 4) - 15) - 1*/, y, x + width, y);
+        g.drawLine(x + ((getWidth() / 4) - 15) - 1, y, x + width, y);
         g.drawLine(x, y + height, x + width, y + height);
         g.drawLine(x, y, x, y + height);
         g.drawLine(x + width, y, x + width, y + height);
