@@ -4,7 +4,6 @@ import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Drawable;
-import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.utils.Direction;
 import org.jbox2d.common.Vec2;
@@ -141,20 +140,20 @@ public abstract class Sprite implements Drawable, Serializable {
     @Override
     public int compareTo(Drawable o) {
         if (o instanceof UIElement)
-            return UpdatableDrawable.BEFORE;
+            return Drawable.BEFORE;
         else if (o instanceof Sprite) {
             Sprite s = (Sprite) o;
             if (s instanceof TileObject && ((TileObject)o).isGroundLayer())
-                return UpdatableDrawable.AFTER;
+                return Drawable.AFTER;
             else if (s instanceof TileObject && ((TileObject)o).isAlwaysAbove())
-                return UpdatableDrawable.BEFORE;
+                return Drawable.BEFORE;
             float by = (getTexture() != null ? getTexture().getTextureHeight() / (this instanceof TileObject ? 2 : 4) : 0);
             float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / (s instanceof TileObject ? 2 : 4) : 0);
-            if (getY() - by < s.getY() - sy) return UpdatableDrawable.BEFORE;
-            else if (getY() - by > s.getY() - sy) return UpdatableDrawable.AFTER;
-            else return UpdatableDrawable.EQUAL;
+            if (getY() - by < s.getY() - sy) return Drawable.BEFORE;
+            else if (getY() - by > s.getY() - sy) return Drawable.AFTER;
+            else return Drawable.EQUAL;
         }
-        return UpdatableDrawable.AFTER;
+        return Drawable.AFTER;
     }
 
     public interface SpriteEvent {

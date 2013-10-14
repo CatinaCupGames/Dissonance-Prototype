@@ -11,8 +11,8 @@ public class WaypointMover {
         if (dest == null)
             return false;
 
-        float xdiff = sprite.getX() - (float) (dest.getX());
-        float ydiff = sprite.getY() - (float) (dest.getY());
+        float xdiff = sprite.getX() - dest.getX();
+        float ydiff = sprite.getY() - dest.getY();
         boolean moved = false;
         if (xdiff <= -0.5f || xdiff >= 0.5f) {
             moved = true;

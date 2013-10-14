@@ -4,10 +4,10 @@ import org.jbox2d.common.Vec2;
 
 public final class Position {
 
-    private int x;
-    private int y;
+    private float x;
+    private float y;
 
-    public Position(int x, int y) {
+    public Position(float x, float y) {
         this.x = x;
         this.y = y;
     }
@@ -16,19 +16,27 @@ public final class Position {
         this((int) vector.x, (int) vector.y);
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    protected void setX(int x) {
+    protected void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public Position expand() {
+        return new Position(FastMath.fastFloor(getX() * 32), FastMath.fastFloor(getY() * 32));
+    }
+
+    public Position shrink() {
+        return new Position(FastMath.fastFloor(getX() / 32), FastMath.fastFloor(getY() / 32));
+    }
+
+    public float getY() {
         return y;
     }
 
-    protected void setY(int y) {
+    protected void setY(float y) {
         this.y = y;
     }
 

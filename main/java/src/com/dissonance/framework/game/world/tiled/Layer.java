@@ -29,12 +29,14 @@ public class Layer {
     public Tile getTileAt(float x, float y) {
         if (!isTiledLayer())
             throw new InvalidParameterException("This layer is not a Tile Layer!");
+
         int index = (int) (x + (y * height));
+
         if (index < 0 || index >= data.length) {
+            System.out.println("Invalid index specified");
             return null;
         }
         TileType tt = TileType.values()[data[index] - 1];
-
         return new Tile(tt, x, y, this);
     }
 

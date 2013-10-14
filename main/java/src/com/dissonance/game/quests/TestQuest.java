@@ -1,18 +1,17 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.game.sprites.Enemy;
 import com.dissonance.game.sprites.TestPlayer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class TestQuest extends AbstractQuest {
+    public static float xx = 0, yy = 0;
+    public static TestPlayer pl;
 
     private Enemy.AIInterface testEnemyInterface = new Enemy.AIInterface() {
         private Random random = new Random();
@@ -30,7 +29,7 @@ public class TestQuest extends AbstractQuest {
     @Override
     public void startQuest() {
         try {
-            World w = WorldFactory.getWorld("test_world");
+            World w = WorldFactory.getWorld("arrem_world");
             setWorld(w);
         } catch (WorldLoadFailedException e) {
             e.printStackTrace();
@@ -62,31 +61,32 @@ public class TestQuest extends AbstractQuest {
          * around with the STRESS_COUNT value.
          */
         final World w = getWorld();
-        final Random random = new Random();
-        final int STRESS_COUNT = 1000;
-        List<TestPlayer> testPlayers = new ArrayList<TestPlayer>();
-        for (int i = 0; i < STRESS_COUNT; i++) {
-            TestPlayer p = new TestPlayer();
-            w.loadAnimatedTextureForSprite(p);
-            w.addSprite(p);
-            p.setX(random.nextInt(300));
-            p.setY(random.nextInt(300));
-            testPlayers.add(p);
-            if (i > 0) {
-                Position pos = new Position(testPlayers.get(0).getVector());
-                p.setWaypoint(pos);
-            }
-        }
+
+        pl = new TestPlayer();
+        w.loadAnimatedTextureForSprite(pl);
+        w.addSprite(pl);
+        pl.setWorld(w);
+        pl.setX(576);
+        pl.setY(256);
+
+
+        TestPlayer p = new TestPlayer();
+        w.loadAnimatedTextureForSprite(p);
+        w.addSprite(p);
+        p.setWorld(w);
+        p.setX(256);
+        p.setY(256);
+        p.select();
 
         w.invalidateDrawableList();
-        for (TestPlayer testPlayer : testPlayers) {
+        /*for (TestPlayer testPlayer : testPlayers) {
             testPlayer.select();
             try {
                 Thread.sleep(20000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
         /*
         final World w = getWorld();
 

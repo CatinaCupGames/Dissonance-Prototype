@@ -31,23 +31,24 @@ public final class Node implements Serializable {
     }
 
     public void saveNode(DataOutputStream stream) throws IOException {
-        stream.writeInt(position.getX());
-        stream.writeInt(position.getY());
+        stream.writeFloat(position.getX());
+        stream.writeFloat(position.getY());
         stream.writeBoolean(passable);
         stream.writeInt(extraCost);
-        stream.writeInt(gCost);
-        stream.writeInt(hCost);
-        stream.writeBoolean(wasDiagonal);
     }
 
     public void readNode(DataInputStream stream) throws IOException {
-        position.setX(stream.readInt());
-        position.setY(stream.readInt());
+        position.setX(stream.readFloat());
+        position.setY(stream.readFloat());
         passable = stream.readBoolean();
         extraCost = stream.readInt();
-        gCost = stream.readInt();
-        hCost = stream.readInt();
-        wasDiagonal = stream.readBoolean();
+    }
+
+    public void reset() {
+        parent = null;
+        wasDiagonal = false;
+        gCost = 0;
+        hCost = 0;
     }
 
     /**
@@ -200,9 +201,9 @@ public final class Node implements Serializable {
      * Sets the H (heuristic) cost to the specified end node using the <i>Manehattan</i> method.
      */
     public void setHCost(Node endNode) {
-        setHCost((Math.abs(position.getX() - endNode.getPosition().getX()) +
+        setHCost((int) ((Math.abs(position.getX() - endNode.getPosition().getX()) +
                 Math.abs(position.getY() - endNode.getPosition().getY()))
-                * MOVE_COST);
+                * MOVE_COST));
     }
 
     @Override

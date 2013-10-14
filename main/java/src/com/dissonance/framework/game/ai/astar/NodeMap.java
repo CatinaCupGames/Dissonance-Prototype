@@ -69,18 +69,18 @@ public final class NodeMap implements Serializable {
         new File(fileName).delete();
 
         Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
-        System.out.println("There are " + layers.length + " layers");
         for (int x = 0; x < nodes.length; x++) {
             for (int y = 0; y < nodes[x].length; y++) {
                 for (Layer layer : layers) {
-
                     Tile tile = world.getTileAt(x, y, layer);
-
                     if (tile != null) {
                         nodes[x][y].setPassable(tile.getType().isPassable());
                         nodes[x][y].setExtraCost(tile.getType().getExtraCost());
                     } else {
-                        nodes[x][y].setPassable(false);
+                        if (nodes[x][y] == null) {
+                            nodes[x][y] = new Node(new Position(x, y));
+                            nodes[x][y].setPassable(false);
+                        }
                     }
                 }
             }
@@ -131,7 +131,7 @@ public final class NodeMap implements Serializable {
      * Gets the node at the specified position.
      */
     public Node getNode(Position position) {
-        return getNode(position.getX(), position.getY());
+        return getNode((int) position.getX(), (int) position.getY());
     }
 
     /**
@@ -148,17 +148,14 @@ public final class NodeMap implements Serializable {
      * @param goal  The final position.
      */
     public final List<Position> findPath(Position start, Position goal) {
-        /*Validator.validateInRange(start.getX(), 0, width + 1, "start x");
+        Validator.validateInRange(start.getX(), 0, width + 1, "start x");
         Validator.validateInRange(start.getY(), 0, height + 1, "start y");
         Validator.validateInRange(goal.getX(), 0, width + 1, "goal x");
-        Validator.validateInRange(goal.getY(), 0, height + 1, "goal y");*/
+        Validator.validateInRange(goal.getY(), 0, height + 1, "goal y");
 
-        if (start.getX() > width || start.getY() > height || goal.getX() > width || goal.getY() > height) {
-            return null;
-        }
         openList = new LinkedList<>();
         closedList = new LinkedList<>();
-        openList.add(nodes[start.getX()][start.getY()]);
+        openList.add(nodes[FastMath.fastFloor(start.getX())][FastMath.fastFloor(start.getY())]);
 
         Node currentNode;
 
@@ -168,14 +165,14 @@ public final class NodeMap implements Serializable {
             openList.remove(currentNode);
 
             if ((currentNode.getPosition().equals(goal))) {
-                return calcPath(nodes[goal.getX()][goal.getY()], currentNode);
+                return calcPath(nodes[FastMath.fastFloor(goal.getX())][FastMath.fastFloor(goal.getY())], currentNode);
             }
 
             List<Node> adjacentNodes = getAdjacent(currentNode);
             for (Node adjacent : adjacentNodes) {
                 if (!openList.contains(adjacent)) {
                     adjacent.setParent(currentNode);
-                    adjacent.setHCost(nodes[goal.getX()][goal.getY()]);
+                    adjacent.setHCost(nodes[FastMath.fastFloor(goal.getX())][FastMath.fastFloor(goal.getY())]);
                     adjacent.setGCost(currentNode);
                     openList.add(adjacent);
                 } else {
@@ -187,6 +184,12 @@ public final class NodeMap implements Serializable {
             }
 
             if (openList.isEmpty()) {
+                System.out.println("empty");
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        nodes[x][y].reset();
+                    }
+                }
                 return new LinkedList<>();
             }
         }
@@ -209,6 +212,12 @@ public final class NodeMap implements Serializable {
                 break;
             }
         }
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                nodes[x][y].reset();
+            }
+        }
         return path;
     }
 
@@ -223,8 +232,8 @@ public final class NodeMap implements Serializable {
     }
 
     private List<Node> getAdjacent(Node node) {
-        int x = node.getPosition().getX();
-        int y = node.getPosition().getY();
+        int x = FastMath.fastFloor(node.getPosition().getX());
+        int y = FastMath.fastFloor(node.getPosition().getY());
         List<Node> adj = new LinkedList<>();
 
         Node temp;
@@ -237,7 +246,7 @@ public final class NodeMap implements Serializable {
         }
 
         if (x < width) {
-            temp = this.getNode((x + 1), y);
+            temp = getNode((x + 1), y);
             if (temp.isPassable() && !closedList.contains(temp)) {
                 temp.setWasDiagonal(false);
                 adj.add(temp);
@@ -245,7 +254,7 @@ public final class NodeMap implements Serializable {
         }
 
         if (y > 0) {
-            temp = this.getNode(x, (y - 1));
+            temp = getNode(x, (y - 1));
             if (temp.isPassable() && !closedList.contains(temp)) {
                 temp.setWasDiagonal(false);
                 adj.add(temp);
@@ -253,16 +262,46 @@ public final class NodeMap implements Serializable {
         }
 
         if (y < height) {
-            temp = this.getNode(x, (y + 1));
+            temp = getNode(x, (y + 1));
             if (temp.isPassable() && !closedList.contains(temp)) {
                 temp.setWasDiagonal(false);
                 adj.add(temp);
             }
         }
 
+        boolean hasUnreachable = false;
+
+        if (x < width && y < height) {
+            if (!getNode((x + 1), (y + 1)).isPassable()) {
+                hasUnreachable = true;
+            }
+        }
+
+        if (x > 0 && y > 0) {
+            temp = this.getNode((x - 1), (y - 1));
+            if (!temp.isPassable()) {
+                hasUnreachable = true;
+            }
+        }
+
+        if (x > 0 && y < height) {
+            temp = this.getNode((x - 1), (y + 1));
+            if (!temp.isPassable()) {
+                hasUnreachable = true;
+            }
+        }
+
+        if (x < width && y > 0) {
+            temp = this.getNode((x + 1), (y - 1));
+            if (!temp.isPassable()) {
+                hasUnreachable = true;
+            }
+        }
+
+
         if (x < width && y < height) {
             temp = this.getNode((x + 1), (y + 1));
-            if (temp.isPassable() && !closedList.contains(temp)) {
+            if (temp.isPassable() && !closedList.contains(temp) && !hasUnreachable) {
                 temp.setWasDiagonal(true);
                 adj.add(temp);
             }
@@ -270,7 +309,7 @@ public final class NodeMap implements Serializable {
 
         if (x > 0 && y > 0) {
             temp = this.getNode((x - 1), (y - 1));
-            if (temp.isPassable() && !closedList.contains(temp)) {
+            if (temp.isPassable() && !closedList.contains(temp) && !hasUnreachable) {
                 temp.setWasDiagonal(true);
                 adj.add(temp);
             }
@@ -278,7 +317,7 @@ public final class NodeMap implements Serializable {
 
         if (x > 0 && y < height) {
             temp = this.getNode((x - 1), (y + 1));
-            if (temp.isPassable() && !closedList.contains(temp)) {
+            if (temp.isPassable() && !closedList.contains(temp) && !hasUnreachable) {
                 temp.setWasDiagonal(true);
                 adj.add(temp);
             }
@@ -286,7 +325,7 @@ public final class NodeMap implements Serializable {
 
         if (x < width && y > 0) {
             temp = this.getNode((x + 1), (y - 1));
-            if (temp.isPassable() && !closedList.contains(temp)) {
+            if (temp.isPassable() && !closedList.contains(temp) && !hasUnreachable) {
                 temp.setWasDiagonal(true);
                 adj.add(temp);
             }

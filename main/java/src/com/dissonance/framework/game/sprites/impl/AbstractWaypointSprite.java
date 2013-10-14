@@ -1,15 +1,19 @@
 package com.dissonance.framework.game.sprites.impl;
 
+import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.waypoint.WaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.sprites.AnimatedSprite;
 import com.dissonance.framework.render.RenderService;
 
+import java.util.List;
+
 public abstract class AbstractWaypointSprite extends AnimatedSprite implements WaypointSprite {
     private WaypointSpriteEvent.OnWaypointReachedEvent waypointReachedEvent;
 
     protected Position currentWaypoint;
+    protected List<Position> waypointList;
 
     /**
      * Sets this {@link WaypointSprite WaypointSprite's}
@@ -23,17 +27,31 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
 
     @Override
     public void update() {
-        if (currentWaypoint != null && !WaypointMover.moveSpriteOneFrame(this)) {
-            currentWaypoint = null;
-            _wakeup();
-            if (waypointReachedEvent != null) {
-                waypointReachedEvent.onWaypointReached(this);
+
+        if (currentWaypoint != null && waypointList != null) {
+
+            if (!WaypointMover.moveSpriteOneFrame(this)) {
+                if (waypointList.size() > 0) {
+                    currentWaypoint = waypointList.get(0).expand();
+                    waypointList.remove(0);
+                } else {
+                    currentWaypoint = null;
+                    _wakeup();
+                    if (waypointReachedEvent != null) {
+                        waypointReachedEvent.onWaypointReached(this);
+                    }
+                }
             }
         }
     }
 
     public void setWaypoint(Position position) {
-        this.currentWaypoint = position;
+
+        NodeMap map = getWorld().getNodeMap();
+
+        waypointList = map.findPath(new Position(getX(), getY()).shrink(), position.shrink());
+        if (waypointList.size() > 0)
+            currentWaypoint = waypointList.get(0).expand();
     }
 
     @Override

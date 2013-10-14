@@ -106,7 +106,9 @@ public final class World implements UpdatableDrawable {
                     }
                 });
                 name = world;
+
                 nodeMap = new NodeMap(this, tiledData.getWidth(), tiledData.getHeight());
+
                 nodeMap.readMap();
             } catch (Exception e) {
                 throw new WorldLoadFailedException("Error loading Tiled file!", e);
