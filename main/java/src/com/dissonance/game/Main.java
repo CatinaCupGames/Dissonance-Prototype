@@ -29,6 +29,8 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
+        Main.args = args;
+
         System.out.println("Using libs folder " + System.getProperty("org.lwjgl.librarypath"));
         System.out.println("Loading Input config");
         InputKeys.initializeConfig();
@@ -37,6 +39,8 @@ public class Main {
         System.out.println("Starting quest");
         GameService.beginQuest(new TestQuest());
     }
+
+    public static String[] args;
 
 
     private static boolean started;

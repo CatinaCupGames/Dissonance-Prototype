@@ -1,7 +1,10 @@
 package com.dissonance.framework.game.sprites;
 
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
+import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.tiled.Layer;
+import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.texture.Texture;
@@ -76,6 +79,34 @@ public abstract class Sprite implements Drawable, Serializable {
         if (selectedEvent != null) {
             selectedEvent.onSpriteSelected(this, player);
         }
+    }
+
+    public Tile getTileStandingOn() {
+        if (world == null)
+            return null;
+
+        Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
+        Layer lowest = null;
+        for (Layer l : layers) {
+            if (l == null)
+                continue;
+            if (isGroundLayer(l)) {
+                lowest = l;
+                break;
+            }
+        }
+
+        if (lowest == null)
+            return null;
+
+        int x = (int)(getX() / 32);
+        int y = (int)(getY() / 32);
+
+        return lowest.getTileAt(x, y);
+    }
+
+    private boolean isGroundLayer(Layer l) {
+        return (l.getProperty("ground") != null && l.getProperty("ground").equalsIgnoreCase("true"));
     }
 
     public float getX() {

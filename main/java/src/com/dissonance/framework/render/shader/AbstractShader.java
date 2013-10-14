@@ -31,6 +31,8 @@ public abstract class AbstractShader {
 
     public abstract String getFragmentFile();
 
+    public abstract String getName();
+
     private boolean check1;
     void postRender() {
         check1 = false;

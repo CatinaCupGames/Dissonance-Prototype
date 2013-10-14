@@ -99,14 +99,14 @@ public class TileTexture extends Texture {
 
         x = temp[0];
         y = temp[1];
-        if (pos == 0) { //Bottom left
+        if (pos == 3) { //Bottom left
             y += tileHeight;
-        } else if (pos == 1) { //Bottom right
+        } else if (pos == 2) { //Bottom right
             y += tileHeight;
             x += tileWidth;
-        } else if (pos == 2) { //Top right
+        } else if (pos == 1) { //Top right
             x += tileWidth;
-        }  else if (pos != 3) { //We start with the Top Left, ignore pos 3
+        }  else if (pos != 0) { //We start with the Top Left, ignore pos 3
             throw new InvalidParameterException("The parameter \"type\"'s value can only be 0, 1, 2, or 3");
         }
 

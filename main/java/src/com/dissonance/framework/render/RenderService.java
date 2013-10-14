@@ -7,6 +7,7 @@ import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.shader.ShaderFactory;
+import com.dissonance.framework.render.shader.impl.BlurShader;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.utils.Validator;
@@ -251,7 +252,7 @@ public class RenderService extends Service {
 
             Camera.executeEase(); //Execute any interlop
 
-            ShaderFactory.executePreRender();
+            ShaderFactory.executePostRender();
 
             exitOnGLError("RenderService.renderSprites");
 

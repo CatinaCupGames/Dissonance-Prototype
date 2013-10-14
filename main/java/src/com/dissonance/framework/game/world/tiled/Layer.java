@@ -35,6 +35,8 @@ public class Layer {
         if (index < 0 || index >= data.length) {
             System.out.println("Invalid index specified");
             return null;
+        } else if (data[index] >= TileType.values().length) {
+            return new Tile(TileType.UNKNOWN, x, y, this); //Assume an unknown type
         }
         TileType tt = TileType.values()[data[index] - 1];
         return new Tile(tt, x, y, this);
@@ -116,5 +118,6 @@ public class Layer {
             properties.clear();
         data = null;
         objects = null;
+        properties = null;
     }
 }

@@ -1,7 +1,9 @@
 package com.dissonance.framework.render.shader;
 
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.render.shader.impl.BrightnessShader;
+import com.dissonance.framework.render.shader.impl.BlurShader;
+import com.dissonance.framework.render.shader.impl.MainShader;
+import com.dissonance.game.Main;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
@@ -11,13 +13,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ShaderFactory {
     static {
         activeShaders = new ArrayList<>();
+        shaderList = new HashMap<>();
     }
     private static final ArrayList<AbstractShader> activeShaders;
+    private static final HashMap<String, AbstractShader> shaderList;
 
     public static void registerShader(AbstractShader shader) {
         validateState();
@@ -47,7 +53,7 @@ public class ShaderFactory {
 
             shader.setProgram(program);
             shader.setShaders(new int[] { vi, fi });
-            shader.setActive(true);
+            shaderList.put(shader.getName(), shader);
         } catch (Throwable t) {
             t.printStackTrace();
             return;
@@ -55,10 +61,14 @@ public class ShaderFactory {
     }
 
     static void cacheActiveShader(AbstractShader s) {
+        if (!shaderList.containsKey(s.getName()))
+            throw new InvalidParameterException("This shader is not registered! Try executing ShaderFactory.registerShader first.");
         activeShaders.add(s);
     }
 
     static void decacheActiveShader(AbstractShader s) {
+        if (!shaderList.containsKey(s.getName()))
+            throw new InvalidParameterException("This shader is not registered! Try executing ShaderFactory.registerShader first.");
         activeShaders.remove(s);
     }
 
@@ -72,6 +82,41 @@ public class ShaderFactory {
                 a.preRender();
             }
         }
+    }
+
+    /**
+     * Get a shader with the given name. This method is case sensitive.
+     * @param name
+     *            The name of the shader (case sensitive)
+     * @return
+     *        An {@link AbstractShader} who's {@link com.dissonance.framework.render.shader.AbstractShader#getName()} method is equal to the parameter <b>name</b><br></br>
+     *        Null if no shader was found with the given name
+     */
+    public static AbstractShader getShaderByName(String name) {
+        return shaderList.get(name);
+    }
+
+    /**
+     * Search for a shader using a keyword. If more than one shader was found using the keyword given then this
+     * method will return null
+     * @param keyword A search term
+     * @return An {@link AbstractShader} with a similar name. Null if no shader was found or if more than one shader
+     * was found.
+     */
+    public static AbstractShader findShaderByName(String keyword) {
+        AbstractShader shader = null;
+
+        for (String key : shaderList.keySet()) {
+            if (key.contains(keyword)) {
+                if (shader == null) {
+                    shader = shaderList.get(key);
+                } else {
+                    return null;
+                }
+            }
+        }
+
+        return shader;
     }
 
     public static void executePostRender() {
@@ -137,8 +182,23 @@ public class ShaderFactory {
     }
 
 
-    public static void buildAllShaders() {
-        new BrightnessShader().build();
+    public static void buildAllShaders()
+    {
+        new MainShader().build();
+
+        for(String s : Main.args)
+        {
+            if(s.startsWith("blur"))
+            {
+                s = s.split("=")[1];
+
+                if(s.equalsIgnoreCase("shader") || s.equalsIgnoreCase("both"))
+                {
+                    new BlurShader().build();
+                }
+            }
+        }
+
         //TODO Put all shader building in here..
     }
 }

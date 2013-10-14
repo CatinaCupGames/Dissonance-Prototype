@@ -70,6 +70,7 @@ public class GameService {
 
         alive = false;
         try {
+            questThread.interrupt();
             currentQuest.endQuest();
         } catch (IllegalAccessException e) {
             e.printStackTrace();

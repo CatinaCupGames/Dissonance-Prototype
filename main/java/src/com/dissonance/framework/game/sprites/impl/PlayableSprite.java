@@ -9,6 +9,7 @@ import com.dissonance.framework.system.utils.Direction;
 import org.jbox2d.common.Vec2;
 import org.lwjgl.input.Keyboard;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public abstract class PlayableSprite extends CombatSprite {
@@ -19,6 +20,7 @@ public abstract class PlayableSprite extends CombatSprite {
     private boolean frozen;
     private boolean attack_select;
     private static PlayableSprite currentlyPlaying;
+    private ArrayList<PlayableSprite> party = new ArrayList<PlayableSprite>();
 
     /**
      * Sets this {@link PlayableSprite PlayableSprite's}
@@ -63,6 +65,23 @@ public abstract class PlayableSprite extends CombatSprite {
             checkSelect();
             checkMovement();
         }
+    }
+
+    public void joinParty(PlayableSprite joiner) {
+        for (PlayableSprite p : party) {
+            if (!p.party.contains(joiner))
+                p.party.add(joiner); //Add the newcomer to everyone elses party
+            if (!joiner.party.contains(p))
+                joiner.party.add(p); //Add everyone else to the newcomer's party
+        }
+        if (!party.contains(joiner))
+            party.add(joiner); //Add the newcomer to this players party
+        if (!joiner.party.contains(this))
+            joiner.party.add(this); //Add this player to the newcomer's party
+    }
+
+    public PlayableSprite[] getParty() {
+        return party.toArray(new PlayableSprite[party.size()]);
     }
 
     protected boolean w, a, s, d;
@@ -219,6 +238,10 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    public boolean isSelected() {
         return isPlaying;
     }
 

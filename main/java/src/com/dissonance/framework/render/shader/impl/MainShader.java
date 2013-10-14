@@ -4,16 +4,21 @@ import com.dissonance.framework.game.GameSettings;
 import com.dissonance.framework.render.shader.AbstractShader;
 import org.lwjgl.opengl.GL20;
 
-public class BrightnessShader extends AbstractShader {
+public class MainShader extends AbstractShader {
 
     @Override
     public String getVertexFile() {
-        return "screenvert.glsl";
+        return "main.vert";
     }
 
     @Override
     public String getFragmentFile() {
-        return "screenfrag.glsl";
+        return "main.frag";
+    }
+
+    @Override
+    public String getName() {
+        return "MainShader";
     }
 
     @Override
