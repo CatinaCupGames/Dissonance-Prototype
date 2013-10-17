@@ -28,7 +28,7 @@ public abstract class Sprite implements Drawable, Serializable {
     protected transient Texture texture;
     protected transient World world;
     protected Direction direction;
-    protected float x, y;
+    protected float x, y, width, height;
 
     public void setSpriteSelectedListener(SpriteEvent.SpriteSelectedEvent selectedListener) {
         selectedEvent = selectedListener;
@@ -52,6 +52,8 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public void setTexture(Texture texture) {
         this.texture = texture;
+        width = texture.getTextureWidth();
+        height = texture.getTextureHeight();
     }
 
     public World getWorld() {
@@ -134,6 +136,23 @@ public abstract class Sprite implements Drawable, Serializable {
             spriteMoved.onSpriteMoved(this, x, oy);
     }
 
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setWidth(float w) {
+        width = w;
+    }
+
+    public void setHeight(float h) {
+        height = h;
+    }
+
     public Vec2 getVector() {
         return new Vec2(x, y);
     }
@@ -147,8 +166,8 @@ public abstract class Sprite implements Drawable, Serializable {
     @Override
     public void render() {
         getTexture().bind();
-        float bx = getTexture().getTextureWidth() / 2;
-        float by = getTexture().getTextureHeight() / 2;
+        float bx = width / 2;
+        float by = height / 2;
         final float x = getX(), y = getY();
 
         if(physicsBodyDef.active) {

@@ -81,6 +81,9 @@ public class TestQuest extends AbstractQuest {
                 Position pos = new Position(testPlayers.get(0).getVector());
                 p.setWaypoint(pos);
             }
+            int add = random.nextInt(400);
+            p.setWidth(p.getWidth() + add);
+            p.setHeight(p.getHeight() + add);
         }
 
         w.invalidateDrawableList();
