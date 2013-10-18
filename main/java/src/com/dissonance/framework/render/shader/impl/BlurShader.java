@@ -33,6 +33,12 @@ public class BlurShader
         }
 
         @Override
+        public String getName()
+        {
+            return "HorizontalBlur";
+        }
+
+        @Override
         protected void onPreRender()
         {
             super.onPreRender();
@@ -49,6 +55,7 @@ public class BlurShader
         private void b()
         {
             build();
+            //setActive(true);
         }
     }
 
@@ -64,6 +71,12 @@ public class BlurShader
         public String getFragmentFile()
         {
             return "vblur.frag";
+        }
+
+        @Override
+        public String getName()
+        {
+            return "VerticalBlur";
         }
 
         @Override
@@ -91,6 +104,7 @@ public class BlurShader
         private void b()
         {
             build();
+            //setActive(true);
         }
     }
 }

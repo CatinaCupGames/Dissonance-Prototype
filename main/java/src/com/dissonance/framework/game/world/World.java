@@ -29,7 +29,7 @@ import java.util.List;
 
 public final class World implements UpdatableDrawable {
     private static final Gson GSON = new Gson();
-    private static final float GRAVITY = 9.81f;
+    private static final float GRAVITY = 0f;
     private static final float TIME_STEP = 1f / 60f;
     private static final int VELOCITY_ITERATIONS = 6;
     private static final int POSITION_ITERATIONS = 2;
@@ -106,7 +106,9 @@ public final class World implements UpdatableDrawable {
                     }
                 });
                 name = world;
+
                 nodeMap = new NodeMap(this, tiledData.getWidth(), tiledData.getHeight());
+
                 nodeMap.readMap();
             } catch (Exception e) {
                 throw new WorldLoadFailedException("Error loading Tiled file!", e);
@@ -157,6 +159,10 @@ public final class World implements UpdatableDrawable {
         }, true); //Force adding drawables on next frame
     }
 
+    /**
+     * Add this renderer to the list of Drawable objects to render on the screen
+     * @param draw
+     */
     public void addDrawable(final Drawable draw) {
         addDrawable(draw, null);
     }

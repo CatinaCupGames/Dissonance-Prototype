@@ -2,7 +2,7 @@ package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
 
-public class Wyatt extends PlayableSprite {
+public final class Wyatt extends PlayableSprite {
 
     @Override
     public void onLevelUp() {

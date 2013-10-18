@@ -1,6 +1,9 @@
 package com.dissonance.game.sprites;
 
+import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.sprites.impl.PlayableSprite;
+import com.dissonance.game.quests.TestQuest;
+import org.lwjgl.input.Keyboard;
 
 public class TestPlayer extends PlayableSprite {
 
@@ -30,6 +33,20 @@ public class TestPlayer extends PlayableSprite {
         else if (!w && !a && !s && !d) {
             setFrame(0);
             pauseAnimation();
+        }
+
+        if (isPlaying()) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_8)) {
+                System.out.println(getX() + " " + getY());
+            } else if (Keyboard.isKeyDown(Keyboard.KEY_9)) {
+                TestQuest.xx = getX();
+                TestQuest.yy = getY();
+                TestQuest.pl.setWaypoint(new Position(getX(), getY()));
+            }
+        } else {
+            if (Keyboard.isKeyDown(Keyboard.KEY_7)) {
+                System.out.println(getX() + " " + getY());
+            }
         }
     }
 

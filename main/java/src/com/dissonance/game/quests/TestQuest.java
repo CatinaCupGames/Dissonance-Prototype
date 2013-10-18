@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Random;
 
 public class TestQuest extends AbstractQuest {
+    public static float xx = 0, yy = 0;
+    public static TestPlayer pl;
 
     private Enemy.AIInterface testEnemyInterface = new Enemy.AIInterface() {
         private Random random = new Random();
@@ -31,7 +33,7 @@ public class TestQuest extends AbstractQuest {
     @Override
     public void startQuest() {
         try {
-            World w = WorldFactory.getWorld("test_world");
+            World w = WorldFactory.getWorld("arrem_world");
             setWorld(w);
         } catch (WorldLoadFailedException e) {
             e.printStackTrace();
@@ -63,75 +65,27 @@ public class TestQuest extends AbstractQuest {
          * around with the STRESS_COUNT value.
          */
         final World w = getWorld();
-
         HUD hud = new HUD("->hud");
         w.addDrawable(hud);
 
-        final Random random = new Random();
-        final int STRESS_COUNT = 3;
-        List<TestPlayer> testPlayers = new ArrayList<TestPlayer>();
-        for (int i = 0; i < STRESS_COUNT; i++) {
-            TestPlayer p = new TestPlayer();
-            w.loadAnimatedTextureForSprite(p);
-            w.addSprite(p);
-            p.setX(random.nextInt(300));
-            p.setY(random.nextInt(300));
-            testPlayers.add(p);
-            if (i > 0) {
-                Position pos = new Position(testPlayers.get(0).getVector());
-                p.setWaypoint(pos);
-            }
-            int add = random.nextInt(400);
-            p.setWidth(p.getWidth() + add);
-            p.setHeight(p.getHeight() + add);
-        }
+        pl = new TestPlayer();
+        w.loadAnimatedTextureForSprite(pl);
+        w.addSprite(pl);
+        pl.setWorld(w);
+        pl.setX(576);
+        pl.setY(256);
+        pl.setWidth(pl.getWidth() * 2);
+        pl.setHeight(pl.getHeight() * 2);
 
-        w.invalidateDrawableList();
-        for (TestPlayer testPlayer : testPlayers) {
-            testPlayer.select();
-            try {
-                Thread.sleep(20000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                break;
-            }
-        }
-        /*
-        final World w = getWorld();
 
         TestPlayer p = new TestPlayer();
         w.loadAnimatedTextureForSprite(p);
         w.addSprite(p);
-        p.setX(-100);
-        p.setY(0);
+        p.setWorld(w);
+        p.setX(256);
+        p.setY(256);
         p.select();
-        p.freeze();
 
-        TestScene testScene = new TestScene();
-        testScene.beginScene();
-        p.unfreeze();
-        TestPlayer pp = new TestPlayer();
-        w.loadAnimatedTextureForSprite(pp);
-        w.addSprite(pp);
-        pp.setX(-100);
-        pp.setY(200);
-
-        TestNPC npc = new TestNPC("arrem");
-        w.loadAnimatedTextureForSprite(npc);
-        w.addSprite(npc);
-        npc.setX(-200);
-        npc.setY(200);
-
-        Enemy enemy1 = new Enemy("enemy1", Enemy.StatType.NON_MAGIC, CombatSprite.CombatType.CREATURE, testEnemyInterface);
-        w.loadAnimatedTextureForSprite(enemy1);
-        w.addSprite(enemy1);
-        enemy1.setX(-250);
-        enemy1.setY(200);
-
-        Enemy enemy2 = new Enemy("enemy2", Enemy.StatType.MAGIC, CombatSprite.CombatType.CREATURE, testEnemyInterface);
-        w.loadAnimatedTextureForSprite(enemy2);
-        w.addSprite(enemy2);
-        enemy2.setX(-300);
-        enemy2.setY(200);*/
+        w.invalidateDrawableList();
     }
 }

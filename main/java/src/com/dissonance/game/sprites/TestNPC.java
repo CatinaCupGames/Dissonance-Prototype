@@ -3,7 +3,7 @@ package com.dissonance.game.sprites;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.impl.NPCSprite;
 
-public class TestNPC extends NPCSprite {
+public final class TestNPC extends NPCSprite {
 
     public TestNPC(Dialog... dialogs) {
         super(dialogs);

@@ -2,8 +2,8 @@ package com.dissonance.framework.game.world;
 
 public enum TileType {
     //TODO Add all tiles and there Tiled tileset ID
-    UNKNOWN(0),
-    DIRT(1);
+    UNKNOWN(0), DIRT(1), LAVA(2, false), WATER(3, true, 40), STONE(4);
+
 
     int ID;
     boolean passable;
