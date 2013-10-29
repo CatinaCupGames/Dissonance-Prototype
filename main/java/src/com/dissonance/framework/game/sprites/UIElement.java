@@ -1,7 +1,7 @@
 package com.dissonance.framework.game.sprites;
 
 import com.dissonance.framework.game.GameService;
-import com.dissonance.framework.game.sprites.impl.PlayableSprite;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;

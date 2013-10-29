@@ -6,7 +6,7 @@ import com.dissonance.framework.game.scene.Scene;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.game.sprites.Sprite;
-import com.dissonance.framework.game.sprites.impl.PlayableSprite;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.game.sprites.TestPlayer;
 

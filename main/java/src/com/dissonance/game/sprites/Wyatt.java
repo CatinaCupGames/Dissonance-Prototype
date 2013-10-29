@@ -1,6 +1,6 @@
 package com.dissonance.game.sprites;
 
-import com.dissonance.framework.game.sprites.impl.PlayableSprite;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 
 public final class Wyatt extends PlayableSprite {
 

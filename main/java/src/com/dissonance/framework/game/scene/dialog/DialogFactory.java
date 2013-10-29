@@ -80,6 +80,8 @@ public class DialogFactory {
                     text.put(id, temp);
                 }
             }
+
+            in.close();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
             return false;
@@ -90,7 +92,6 @@ public class DialogFactory {
             e.printStackTrace();
             return false;
         }
-
         return true;
     }
 

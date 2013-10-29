@@ -1,4 +1,4 @@
-package com.dissonance.framework.game.sprites;
+package com.dissonance.framework.game.sprites.impl;
 
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.sprites.animation.Animator;

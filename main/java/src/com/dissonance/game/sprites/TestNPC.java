@@ -1,7 +1,7 @@
 package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.scene.dialog.Dialog;
-import com.dissonance.framework.game.sprites.impl.NPCSprite;
+import com.dissonance.framework.game.sprites.impl.game.NPCSprite;
 
 public final class TestNPC extends NPCSprite {
 

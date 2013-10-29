@@ -119,6 +119,9 @@ public class SpriteTexture extends Texture {
                 e.printStackTrace();
             }
         }
+
+        in.close();
+
         return texture;
     }
 

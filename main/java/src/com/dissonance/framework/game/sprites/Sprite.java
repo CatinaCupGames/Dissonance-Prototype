@@ -1,6 +1,6 @@
 package com.dissonance.framework.game.sprites;
 
-import com.dissonance.framework.game.sprites.impl.PlayableSprite;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;

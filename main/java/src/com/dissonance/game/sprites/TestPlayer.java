@@ -1,7 +1,7 @@
 package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.ai.astar.Position;
-import com.dissonance.framework.game.sprites.impl.PlayableSprite;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.game.quests.TestQuest;
 import org.lwjgl.input.Keyboard;
 

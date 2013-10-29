@@ -1,4 +1,6 @@
-package com.dissonance.framework.game.sprites.impl;
+package com.dissonance.framework.game.sprites.impl.game;
+
+import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 
 public abstract class CombatSprite extends AbstractWaypointSprite {
     //==FIXED STATS==//

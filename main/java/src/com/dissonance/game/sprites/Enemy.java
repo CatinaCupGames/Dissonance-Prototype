@@ -1,7 +1,7 @@
 package com.dissonance.game.sprites;
 
-import com.dissonance.framework.game.sprites.impl.CombatSprite;
-import com.dissonance.framework.game.sprites.impl.PlayableSprite;
+import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 
 import java.util.Random;
 

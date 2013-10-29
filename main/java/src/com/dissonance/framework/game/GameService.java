@@ -2,7 +2,7 @@ package com.dissonance.framework.game;
 
 import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.game.settings.SettingsLevelTest;
-import com.dissonance.framework.game.sprites.impl.PlayableSprite;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.SoundSystem;

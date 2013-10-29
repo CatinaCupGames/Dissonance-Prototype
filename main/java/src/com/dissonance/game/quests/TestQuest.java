@@ -86,6 +86,8 @@ public class TestQuest extends AbstractQuest {
         p.setY(256);
         p.select();
 
+        pl.joinParty(p);
+
         w.invalidateDrawableList();
     }
 }

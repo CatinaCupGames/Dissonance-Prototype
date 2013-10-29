@@ -1,7 +1,7 @@
 package com.dissonance.framework.game.world;
 
 import com.dissonance.framework.game.ai.astar.NodeMap;
-import com.dissonance.framework.game.sprites.AnimatedSprite;
+import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
@@ -110,6 +110,7 @@ public final class World implements UpdatableDrawable {
                 nodeMap = new NodeMap(this, tiledData.getWidth(), tiledData.getHeight());
 
                 nodeMap.readMap();
+                in.close();
             } catch (Exception e) {
                 throw new WorldLoadFailedException("Error loading Tiled file!", e);
             }

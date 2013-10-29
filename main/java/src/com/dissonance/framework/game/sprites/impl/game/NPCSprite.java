@@ -1,4 +1,4 @@
-package com.dissonance.framework.game.sprites.impl;
+package com.dissonance.framework.game.sprites.impl.game;
 
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;

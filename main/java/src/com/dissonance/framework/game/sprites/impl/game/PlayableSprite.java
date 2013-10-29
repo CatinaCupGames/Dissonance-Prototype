@@ -1,5 +1,6 @@
-package com.dissonance.framework.game.sprites.impl;
+package com.dissonance.framework.game.sprites.impl.game;
 
+import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.render.Camera;
@@ -21,6 +22,7 @@ public abstract class PlayableSprite extends CombatSprite {
     private boolean attack_select;
     private static PlayableSprite currentlyPlaying;
     private ArrayList<PlayableSprite> party = new ArrayList<PlayableSprite>();
+    private float ox, oy;
 
     /**
      * Sets this {@link PlayableSprite PlayableSprite's}
@@ -64,6 +66,13 @@ public abstract class PlayableSprite extends CombatSprite {
         if (isPlaying) {
             checkSelect();
             checkMovement();
+        } else {
+            System.out.println(ox + "-" + currentlyPlaying.getX() + "    " + oy + "-" + currentlyPlaying.getY());
+            if (Math.abs(ox - currentlyPlaying.getX()) > getWidth() / 2 || Math.abs(oy - currentlyPlaying.getY()) > getHeight() / 2) {
+                appendWaypoint(new Position(currentlyPlaying.getX(), currentlyPlaying.getY()));
+                ox = currentlyPlaying.getX();
+                oy = currentlyPlaying.getY();
+            }
         }
     }
 
@@ -195,7 +204,7 @@ public abstract class PlayableSprite extends CombatSprite {
 
     /**
      * Select this sprite to be the sprite the player will play as <br></br>
-     * If the player is currently playing as another Sprite, then the {@link com.dissonance.framework.game.sprites.impl.PlayableSprite#onDeselect()} will be
+     * If the player is currently playing as another Sprite, then the {@link PlayableSprite#onDeselect()} will be
      * invoke on that sprite. <br></br>
      *
      * The Camera will pan to the newly selected sprite
