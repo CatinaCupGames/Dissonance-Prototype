@@ -15,4 +15,18 @@ public class WeaponItem extends Item {
     public Weapon getWeapon() {
         return weapon;
     }
+
+    @Override
+    public String getItemName() {
+        return weapon.getName();
+    }
+
+    @Override
+    public void use(Object... parameters) {
+        if (weapon.isSpell()) {
+            //TODO Animate spell
+        } else {
+
+        }
+    }
 }

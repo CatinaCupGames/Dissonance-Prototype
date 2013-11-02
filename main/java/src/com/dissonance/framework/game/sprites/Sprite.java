@@ -15,6 +15,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 
 import java.io.Serializable;
+import java.security.InvalidParameterException;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -28,6 +29,19 @@ public abstract class Sprite implements Drawable, Serializable {
     protected transient World world;
     protected Direction direction;
     protected float x, y, width, height;
+
+    public static Sprite fromClass(Class<?> class_) {
+        if (!class_.isAssignableFrom(Sprite.class))
+            throw new InvalidParameterException("The class provided is not assignable to Sprite!");
+
+        try {
+            return (Sprite) class_.newInstance();
+        } catch (InstantiationException e) {
+            throw new RuntimeException("The class provided threw an InstantiationException!", e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("The class provided threw an IllegalAccessException!", e);
+        }
+    }
 
     public void setSpriteSelectedListener(SpriteEvent.SpriteSelectedEvent selectedListener) {
         selectedEvent = selectedListener;

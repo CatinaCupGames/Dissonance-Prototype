@@ -1,8 +1,16 @@
 package com.dissonance.framework.game.sprites.impl.game;
 
-import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
+import com.dissonance.framework.game.item.Item;
+import com.dissonance.framework.game.item.impl.WeaponItem;
+import com.dissonance.framework.system.utils.Validator;
+
+import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CombatSprite extends AbstractWaypointSprite {
+    private ArrayList<Item> inventory = new ArrayList<Item>();
+    private int weaponIndex;
     //==FIXED STATS==//
     private double HP = 100; //This is a fixed stat
 
@@ -122,6 +130,130 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
 
     public double getHP() {
         return HP;
+    }
+
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
+    /**
+     * Add an {@link Item} to this {@link CombatSprite} inventory. <br></br>
+     * If this {@link CombatSprite} already has an instance of the {@link Item} in the inventory, then
+     * the {@link Item#setItemCount(int)} method is invoked to combine the amounts, otherwise the {@link Item} is added. <br></br>
+     * @param item
+     *            The {@link Item} object to add
+     * @return
+     *        The index where the {@link Item} was put.
+     */
+    public int addItem(Item item) {
+
+        if (item.getOwner() != this) {
+            item.setItemOwner(this);
+        }
+
+        WeaponItem w = getCurrentWeapon();
+
+        int index = getFirstIndex(item.getItemName());
+        if (index == -1) {
+            inventory.add(item);
+            index = inventory.size() - 1;
+        } else {
+            Item i = getItem(index);
+            i.setItemCount(i.getItemCount() + item.getItemCount()); //Combine these items
+        }
+
+
+        if (w != null && index == inventory.size() - 1) //Only update index if item was added
+            weaponIndex = getFirstIndex(w);
+
+        return index;
+    }
+
+    /**
+     * Remove an instance of an {@link Item} from this player's inventory. This will remove ALL the instances of the item.
+     * @param item
+     *            The {@link Item} to remove
+     */
+    public void removeItem(Item item) {
+        WeaponItem w = getCurrentWeapon();
+        inventory.remove(item);
+        if (w != null && !w.equals(item))
+            weaponIndex = getFirstIndex(w); //Recalculate index of weapon
+    }
+
+    /**
+     * Remove an {@link Item} at the specified index. <br></br>
+     * @param index
+     *             The index
+     */
+    public void removeItem(int index) {
+        Validator.validateInRange(index, 0, inventory.size() - 1, "index");
+
+        WeaponItem w = getCurrentWeapon();
+        inventory.remove(index);
+        if (w != null && weaponIndex != index)
+            weaponIndex = getFirstIndex(w); //Recalculate index of weapon
+    }
+
+    public int getFirstIndex(Item item) {
+        return getFirstIndex(item.getItemName());
+    }
+
+    public int getFirstIndex(String item) {
+        for (int i = 0; i < inventory.size(); i++) {
+            Item it = inventory.get(i);
+            if (it.getItemName().equalsIgnoreCase(item))
+                return i;
+        }
+        return -1;
+    }
+
+    public int getItemCount() {
+        return inventory.size();
+    }
+
+    public boolean hasItem(String name) {
+        for (Item i : inventory) {
+            if (i.getItemName().equalsIgnoreCase(name))
+                return true;
+        }
+        return false;
+    }
+
+    public Item getItem(String name) {
+        for (Item i : inventory) {
+            if (i.getItemName().equalsIgnoreCase(name))
+                return i;
+        }
+        return null;
+    }
+
+    public Item getItem(int index) {
+        Validator.validateInRange(index, 0, inventory.size() - 1, "index");
+        return inventory.get(index);
+    }
+
+    public WeaponItem getCurrentWeapon() {
+        return (WeaponItem) inventory.get(weaponIndex);
+    }
+
+    public int getCurrentWeaponIndex() {
+        return weaponIndex;
+    }
+
+    public void setCurrentWeapon(int index) {
+        Validator.validateInRange(index, 0, inventory.size() - 1, "index");
+        if (!(inventory.get(index) instanceof WeaponItem))
+            throw new InvalidParameterException("The item in the specified index is not a weapon!");
+        weaponIndex = index;
+    }
+
+    public void setCurrentWeapon(WeaponItem item) {
+        int index;
+        if ((index = getFirstIndex(item)) == -1)
+            index = addItem(item);
+
+        setCurrentWeapon(index);
     }
 
 
