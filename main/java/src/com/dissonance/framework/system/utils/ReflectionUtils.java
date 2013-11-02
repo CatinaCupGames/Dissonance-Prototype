@@ -1,6 +1,8 @@
 package com.dissonance.framework.system.utils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.security.InvalidParameterException;
 
 public class ReflectionUtils {
 
@@ -30,5 +32,26 @@ public class ReflectionUtils {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Method getMethod(String methodName, Class<?> class_, Class<?>... parameters) {
+        final Method m;
+        try {
+            m = class_.getDeclaredMethod(methodName, parameters);
+        } catch (NoSuchMethodException e) {
+            throw new InvalidParameterException("The method \"" + methodName + "\" with the specified parameters was not found!");
+        }
+        return m;
+    }
+
+    public static Method getMethod(String methodName, Object obj, Object... parameters) {
+        Class<?> class_ = obj.getClass();
+
+        Class<?>[] parametersClass = new Class<?>[parameters.length];
+        for (int i = 0; i < parameters.length; i++) {
+            parametersClass[i] = parameters[i].getClass();
+        }
+
+        return getMethod(methodName, class_, parametersClass);
     }
 }
