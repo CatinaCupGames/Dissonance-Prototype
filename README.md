@@ -14,7 +14,7 @@ Team
 * hypereddie
 * Arrem
 * headdetect
-* oyasunadev
+* oyasunadev **[INACTIVE]**
 
 ###Story Board
 * simplej978
@@ -23,6 +23,5 @@ Team
 * simplej978
 
 ###Artists
-* toakongu834
-* JedTheKrampus
+* toakongu834 **[INACTIVE]**
 * TheDaringPastry
