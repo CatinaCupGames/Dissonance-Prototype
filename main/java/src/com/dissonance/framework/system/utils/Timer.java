@@ -12,6 +12,7 @@ import java.security.InvalidParameterException;
 public class Timer {
 
     public static void delayedInvokeMethod(final long delay, String methodName, final Object object, final Object... parameters) {
+        Validator.validateNotBelow(delay, 1, "delay");
         final Method m = ReflectionUtils.getMethod(methodName, object, parameters);
         new Thread(new Runnable() {
 
@@ -34,8 +35,8 @@ public class Timer {
     }
 
     public static void delayedInvokeMethod(final long delay, final int count, String methodName, final Object object, final Object... parameters) {
-        if (count <= 0)
-            throw new InvalidParameterException("The parameter \"count\" must be greater than 0");
+        Validator.validateNotBelow(count, 1, "count");
+        Validator.validateNotBelow(delay, 1, "delay");
         final Method m = ReflectionUtils.getMethod(methodName, object, parameters);
         new Thread(new Runnable() {
 

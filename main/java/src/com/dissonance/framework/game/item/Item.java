@@ -20,6 +20,8 @@ public abstract class Item {
     }
 
     public void setItemCount(int count) {
+        if (!isStackable() && count > 1)
+            count = 1;
         this.count = count;
         if (count <= 0)
             owner.removeItem(this);
@@ -27,6 +29,8 @@ public abstract class Item {
 
     public abstract String getItemName();
 
+    public abstract boolean isStackable();
+    
     public abstract void use(Object... parameters);
 
     public void setItemOwner(CombatSprite itemOwner) {

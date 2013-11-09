@@ -29,6 +29,7 @@ public class Weapon {
     private int marksmanship;
     private int magicResistance;
     private int range;
+    private int swipeRange;
 
     //==Spell Animation Stuff==
     //If this weapon is not a spell, then play the normal sprite
@@ -90,6 +91,8 @@ public class Weapon {
                                 w.magicResistance = Integer.parseInt(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("range"))
                                 w.range = Integer.parseInt(el.getFirstChild().getNodeValue());
+                            else if (nodeName.equals("swipe"))
+                                w.swipeRange = Integer.parseInt(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("spell"))
                                 w.isSpell = el.getFirstChild().getNodeValue().equalsIgnoreCase("true");
                             else if (nodeName.equals("spellSpriteClass"))
@@ -196,5 +199,9 @@ public class Weapon {
         if (class_ == null)
             return null;
         return Sprite.fromClass(class_);
+    }
+
+    public int getSwipeRange() {
+        return swipeRange;
     }
 }

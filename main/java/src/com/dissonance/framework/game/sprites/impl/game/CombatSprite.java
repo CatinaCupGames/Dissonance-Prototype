@@ -152,14 +152,19 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
         }
 
         WeaponItem w = getCurrentWeapon();
-
-        int index = getFirstIndex(item.getItemName());
-        if (index == -1) {
+        int index;
+        if (item.isStackable()) {
+            index = getFirstIndex(item.getItemName());
+            if (index == -1) {
+                inventory.add(item);
+                index = inventory.size() - 1;
+            } else {
+                Item i = getItem(index);
+                i.setItemCount(i.getItemCount() + item.getItemCount()); //Combine these items
+            }
+        } else {
             inventory.add(item);
             index = inventory.size() - 1;
-        } else {
-            Item i = getItem(index);
-            i.setItemCount(i.getItemCount() + item.getItemCount()); //Combine these items
         }
 
 
@@ -254,6 +259,10 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
             index = addItem(item);
 
         setCurrentWeapon(index);
+    }
+
+    public void strike(CombatSprite attacker, WeaponItem with) {
+
     }
 
 
