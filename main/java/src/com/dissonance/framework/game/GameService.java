@@ -22,6 +22,7 @@ import java.util.Map;
 public class GameService {
     public static final String encryptAlgorithm = "PBEWithMD5AndDES";
 
+    public static String[] args;
     private static long TID;
     private static boolean alive = true;
     private static Thread questThread;

@@ -13,9 +13,10 @@ import java.security.InvalidParameterException;
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class AnimatedSprite extends UpdatableSprite implements Animator {
-
     private AnimatedSpriteEvent.OnAnimationPlayEvent animationPlayEvent;
     private AnimatedSpriteEvent.OnAnimationPauseEvent animationPauseEvent;
+    private AnimatedSpriteEvent.OnAnimationFinished animationFinished;
+    private SpriteTexture texture;
 
     protected transient int ANIMATION_FACTORY_ID;
     private transient SpriteAnimationInfo animation;
@@ -29,6 +30,10 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
      */
     public void setAnimationPlayListener(AnimatedSpriteEvent.OnAnimationPlayEvent animationPlayListener) {
         this.animationPlayEvent = animationPlayListener;
+    }
+
+    public void setAnimationFinishedListener(AnimatedSpriteEvent.OnAnimationFinished animationFinished) {
+        this.animationFinished = animationFinished;
     }
 
     /**
@@ -45,6 +50,7 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     public void setTexture(Texture texture) {
         if (texture instanceof SpriteTexture) {
             super.setTexture(texture);
+            this.texture = (SpriteTexture)texture;
         } else
             throw new InvalidParameterException("An AnimatedSprite can only have a SpriteTexture!");
     }
@@ -66,10 +72,19 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     public abstract String getSpriteName();
 
     public void setAnimation(String name) {
-        if (getTexture() != null) {
-            final SpriteTexture texture = (SpriteTexture)getTexture();
+        if (texture != null) {
             SpriteAnimationInfo ani;
             if ((ani = texture.setCurrentAnimation(name)) != null) {
+                this.animation = ani;
+                speed = (int)ani.getDefaultSpeed();
+            }
+        }
+    }
+
+    public void setAnimation(int row) {
+        if (texture != null) {
+            SpriteAnimationInfo ani;
+            if ((ani = texture.setCurrentAnimation(row)) != null) {
                 this.animation = ani;
                 speed = (int)ani.getDefaultSpeed();
             }
@@ -84,7 +99,6 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     public void render() {
         if (getTexture() == null)
             return;
-        final SpriteTexture texture = (SpriteTexture)getTexture();
         texture.bind();
         float bx = texture.getWidth() / 2;
         float by = texture.getHeight() / 2;
@@ -107,10 +121,6 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         glEnd();
         texture.unbind();
         //glColor3f(1f, 1f, 1f);
-    }
-
-    @Override
-    public void update() {
     }
 
     @Override
@@ -138,15 +148,28 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     }
 
     public void setFrame(int frame_num) {
-        ((SpriteTexture)getTexture()).setCurrentFrame(frame_num);
+        if (texture == null)
+            return;
+        texture.setCurrentFrame(frame_num);
+    }
+
+    public int getCurrentFrame() {
+        if (texture == null)
+            return -1;
+        return texture.getCurrentStep();
     }
 
     @Override
     public void onAnimate() {
         if (paused)
             return;
-        if (getTexture() != null)
-            ((SpriteTexture)getTexture()).step();
+        if (texture != null) {
+            texture.step();
+            if (animationFinished != null) {
+                if (getCurrentFrame() == 0)
+                    animationFinished.onAnimationFinished(this);
+            }
+        }
     }
 
     @Override
@@ -177,7 +200,7 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         return -1;
     }
 
-    public void setSpeed(int speed) {
+    public void setAnimationSpeed(int speed) {
         this.speed = speed;
     }
 
@@ -196,6 +219,10 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
          */
         public interface OnAnimationPauseEvent {
             public void onAnimationPause(AnimatedSprite sprite);
+        }
+
+        public interface OnAnimationFinished {
+            public void onAnimationFinished(AnimatedSprite sprite);
         }
     }
 

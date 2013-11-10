@@ -1,7 +1,10 @@
 package com.dissonance.framework.game.sprites.impl.game;
 
+import com.dissonance.framework.game.combat.Spell;
+import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.item.Item;
 import com.dissonance.framework.game.item.impl.WeaponItem;
+import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.system.utils.Validator;
 
 import java.security.InvalidParameterException;
@@ -11,6 +14,7 @@ import java.util.List;
 public abstract class CombatSprite extends AbstractWaypointSprite {
     private ArrayList<Item> inventory = new ArrayList<Item>();
     private int weaponIndex;
+    private boolean isCastingSpell = false;
     //==FIXED STATS==//
     private double HP = 100; //This is a fixed stat
 
@@ -126,7 +130,29 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
      */
     public abstract CombatType getCombatType();
 
+    public void castSpell(Spell spell, Weapon data) {
+        if (spell == null)
+            return;
+        isCastingSpell = true;
+        setAnimation(data.getAnimationRow());
+        setAnimationSpeed(data.getAnimationSpeed());
+        spell.activate();
+        super.setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+            @Override
+            public void onAnimationFinished(AnimatedSprite sprite) {
+                isCastingSpell = false;
+            }
+        });
+    }
 
+    @Override
+    public void update() {
+        super.update();
+        if (isUpdateCanceled())
+            return;
+        if (isCastingSpell)
+            setUpdateCanceled(true);
+    }
 
     public double getHP() {
         return HP;

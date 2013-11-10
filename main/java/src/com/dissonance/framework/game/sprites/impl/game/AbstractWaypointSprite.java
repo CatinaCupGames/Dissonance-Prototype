@@ -27,6 +27,9 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
 
     @Override
     public void update() {
+        super.update();
+        if (isUpdateCanceled())
+            return;
         if (currentWaypoint != null && waypointList != null) {
 
             if (!WaypointMover.moveSpriteOneFrame(this)) {

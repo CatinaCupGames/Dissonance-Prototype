@@ -63,6 +63,8 @@ public abstract class PlayableSprite extends CombatSprite {
     @Override
     public void update() {
         super.update();
+        if (isUpdateCanceled())
+            return;
         if (isPlaying) {
             checkSelect();
             checkMovement();

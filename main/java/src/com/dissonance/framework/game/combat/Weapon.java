@@ -34,10 +34,11 @@ public class Weapon {
     //==Spell Animation Stuff==
     //If this weapon is not a spell, then play the normal sprite
     //attack animation
-    private boolean isSpell;
-    private String spellSpriteClass;
-    private int animationRow;
-    private int animationSpeed;
+    private boolean isSpell; //Whether this weapon is a spell
+    private String spellSpriteClass; //The Spell class this weapon will use
+    private double spellSpeed = 0; //The speed of the spell (defaults to 0 for non-moving spells)
+    private int animationRow; //The animation row to play on the sprite
+    private int animationSpeed; //The animation speed to play at for the sprite
 
 
     private static HashMap<String, Weapon> weapons = new HashMap<String, Weapon>();
@@ -97,6 +98,8 @@ public class Weapon {
                                 w.isSpell = el.getFirstChild().getNodeValue().equalsIgnoreCase("true");
                             else if (nodeName.equals("spellSpriteClass"))
                                 w.spellSpriteClass = el.getFirstChild().getNodeValue();
+                            else if (nodeName.equals("spellSpeed"))
+                                w.spellSpeed = Double.parseDouble(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("animationRow"))
                                 w.animationRow = Integer.parseInt(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("animationSpeed"))
@@ -145,6 +148,10 @@ public class Weapon {
 
     public int getSpeed() {
         return speed;
+    }
+
+    public double getSpellSpeed() {
+        return spellSpeed;
     }
 
     public int getVigor() {

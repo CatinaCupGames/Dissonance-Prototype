@@ -1,5 +1,6 @@
 package com.dissonance.framework.render.shader;
 
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.shader.impl.BlurShader;
 import com.dissonance.framework.render.shader.impl.MainShader;
@@ -186,7 +187,7 @@ public class ShaderFactory {
     {
         new MainShader().build();
 
-        for(String s : Main.args)
+        for(String s : GameService.args)
         {
             if(s.startsWith("blur"))
             {

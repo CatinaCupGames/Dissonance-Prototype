@@ -168,11 +168,12 @@ public class SpriteTexture extends Texture {
         return getAnimationInfo(name);
     }
 
-    public void setCurrentAnimation(int index) {
+    public SpriteAnimationInfo setCurrentAnimation(int index) {
         Validator.validateNotBelow(index, 0, "index");
         Validator.validateNotOver(index, animations.length - 1, "index");
 
         row = index;
+        return animations[row];
     }
 
     public SpriteAnimationInfo getAnimationInfo(String name) {
@@ -225,5 +226,9 @@ public class SpriteTexture extends Texture {
     public void setCurrentFrame(int frame_num) {
         Validator.validateInRange(frame_num, 0, animations[row].size() - 1, "frame_num");
         step = frame_num;
+    }
+
+    public int getCurrentStep() {
+        return step;
     }
 }
