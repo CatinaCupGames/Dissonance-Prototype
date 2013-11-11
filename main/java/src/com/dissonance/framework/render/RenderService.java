@@ -199,10 +199,11 @@ public class RenderService extends Service {
         return "RenderService Thread";
     }
 
+    private float otd;
     @Override
     public void onUpdate() {
         now = System.currentTimeMillis();
-        TIME_DELTA = ((now - cur) / 100.0f);
+        TIME_DELTA = (now - cur) / 100.0f;
         if (current_world != null && !isPaused()) {
             boolean close = Keyboard.isKeyDown(Keyboard.KEY_ESCAPE); //TODO REMOVE
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

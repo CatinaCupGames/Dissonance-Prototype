@@ -152,6 +152,8 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
             return;
         if (isCastingSpell)
             setUpdateCanceled(true);
+        if (HP <= 0)
+            setUpdateCanceled(true);
     }
 
     public double getHP() {
@@ -288,7 +290,24 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
     }
 
     public void strike(CombatSprite attacker, WeaponItem with) {
+        double defense = getDefense() + (getCurrentWeapon() != null ? getCurrentWeapon().getWeapon().getDefense() : 0);
+        double attack = attacker.getAttack() + with.getWeapon().getAttack();
+        double damage;
+        damage = (attack * Math.log(attack * 4)) / defense;
 
+        HP -= damage;
+        //TODO Display damage
+
+        if (HP <= 0) {
+            //TODO Give attacker EXP
+            //TODO Play death animation for this sprite
+            setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+                @Override
+                public void onAnimationFinished(AnimatedSprite sprite) {
+                    getWorld().removeSprite(CombatSprite.this);
+                }
+            });
+        }
     }
 
 

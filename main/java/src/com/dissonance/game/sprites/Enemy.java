@@ -77,6 +77,8 @@ public class Enemy extends CombatSprite {
     @Override
     public void update() {
         super.update();
+        if (isUpdateCanceled())
+            return;
 
         ai.onUpdate(this);
     }

@@ -174,6 +174,7 @@ public abstract class Sprite implements Drawable, Serializable {
     }
 
     public void onUnload() {
+        texture = null;
     }
 
     @Override

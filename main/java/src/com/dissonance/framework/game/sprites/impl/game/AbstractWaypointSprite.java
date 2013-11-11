@@ -47,6 +47,13 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         }
     }
 
+    @Override
+    public void onUnload() {
+        super.onUnload();
+        waypointList.clear();
+        waypointList = null;
+    }
+
     public void setWaypoint(Position position) {
 
         NodeMap map = getWorld().getNodeMap();
