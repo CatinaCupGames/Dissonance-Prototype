@@ -1,7 +1,6 @@
 package com.dissonance.framework.game.world.tiled;
 
 import com.dissonance.framework.game.world.Tile;
-import com.dissonance.framework.game.world.TileType;
 import com.dissonance.framework.game.world.World;
 
 import java.security.InvalidParameterException;
@@ -36,8 +35,6 @@ public class Layer {
         if (index < 0 || index >= data.length) {
             System.out.println("Invalid index specified");
             return null;
-        } else if (data[index] >= TileType.values().length) {
-            return new Tile(-1, x, y, this, world); //Assume an unknown type
         }
         return new Tile(data[index], x, y, this, world);
     }
