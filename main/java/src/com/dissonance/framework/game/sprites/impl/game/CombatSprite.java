@@ -301,12 +301,13 @@ public abstract class CombatSprite extends AbstractWaypointSprite {
         if (HP <= 0) {
             //TODO Give attacker EXP
             //TODO Play death animation for this sprite
-            setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+            /*setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
                 @Override
                 public void onAnimationFinished(AnimatedSprite sprite) {
                     getWorld().removeSprite(CombatSprite.this);
                 }
-            });
+            });*/
+            getWorld().removeSprite(CombatSprite.this);
         }
     }
 

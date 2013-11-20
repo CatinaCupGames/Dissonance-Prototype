@@ -7,17 +7,14 @@ import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.shader.ShaderFactory;
-import com.dissonance.framework.render.shader.impl.BlurShader;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.utils.Validator;
 import com.dissonance.game.Main;
 import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.oyasunadev.li.liui.component.shape.CSquare;
 
 import java.util.Iterator;
 
@@ -35,20 +32,17 @@ public class RenderService extends Service {
     public static double GAME_WIDTH = (double)WINDOW_WIDTH, GAME_HEIGHT = (double)WINDOW_HEIGHT; // TODO: For now the resolution will be the same as the window size;
     public static boolean fullscreen = true; //TODO Create config to change this value*/
 
-    private CSquare square;
-
     public static float TIME_DELTA;
     public static long RENDER_THREAD_ID;
     private World current_world;
-    private boolean drawing;
     private boolean looping;
     private float fpsCount;
     private float fpsTime;
-    private float rotx, roty;
-    private float posx, posy;
 
+    long next_tick;
     long cur = System.currentTimeMillis();
     long now;
+    long started;
 
     public static boolean isInRenderThread() {
         return Thread.currentThread().getId() == RENDER_THREAD_ID;
@@ -115,8 +109,6 @@ public class RenderService extends Service {
 
     @Override
     protected void onStart() {
-
-        drawing = true;
         INSTANCE = this;
 
         RENDER_THREAD_ID = Thread.currentThread().getId();
@@ -159,6 +151,12 @@ public class RenderService extends Service {
         }
 
         ServiceManager.createService(InputService.class);
+        started = System.currentTimeMillis();
+        next_tick = getTimeSinceStartMillis();
+    }
+
+    private long getTimeSinceStartMillis() {
+        return System.currentTimeMillis() - started;
     }
 
     @Override
@@ -171,7 +169,6 @@ public class RenderService extends Service {
 
     @Override
     protected void onTerminated() {
-        drawing = false;
         GameService.getSoundSystem().unloadAllSounds();
         current_world = null;
         INSTANCE = null;
@@ -199,21 +196,12 @@ public class RenderService extends Service {
         return "RenderService Thread";
     }
 
-    private float otd;
     @Override
     public void onUpdate() {
-        now = System.currentTimeMillis();
+        cur = now;
+        now = getTimeSinceStartMillis();
         TIME_DELTA = (now - cur) / 100.0f;
         if (current_world != null && !isPaused()) {
-            boolean close = Keyboard.isKeyDown(Keyboard.KEY_ESCAPE); //TODO REMOVE
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glClearColor(1f, 1f, 1f, 1f);
-            glMatrixMode(GL_MODELVIEW);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glLoadIdentity();
-            glScalef(2f, 2f, 1f);
-            glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
-
             Iterator<UpdatableDrawable> updates = current_world.getUpdatables();
             while (updates.hasNext()) {
                 UpdatableDrawable s = updates.next();
@@ -225,6 +213,13 @@ public class RenderService extends Service {
                     t.printStackTrace();
                 }
             }
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glClearColor(1f, 1f, 1f, 1f);
+            glMatrixMode(GL_MODELVIEW);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glLoadIdentity();
+            glScalef(2f, 2f, 1f);
+            glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
 
             ShaderFactory.executePreRender();
 
@@ -258,6 +253,7 @@ public class RenderService extends Service {
             exitOnGLError("RenderService.renderSprites");
 
             Display.update();
+
             fpsTime += TIME_DELTA;
             fpsCount++;
             if (fpsCount == 100) {
@@ -265,13 +261,11 @@ public class RenderService extends Service {
                 Display.setTitle("FPS: " + (1000f/fpsTime));
                 fpsTime = 0;
             }
-            cur = now;
-            if (Display.isCloseRequested() || close) {
+            if (Display.isCloseRequested()) {
                 GameService.handleKillRequest();
                 ServiceManager.getService(InputService.class).terminate();
                 terminate();
                 Main.getSystemTicker().stopTick();
-                return;
             }
         } else {
             try {
@@ -280,21 +274,6 @@ public class RenderService extends Service {
                 e.printStackTrace();
             }
         }
-
-        updateInput();
-    }
-
-    private void updateInput() {
-        int multi = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? 2 : 1;
-
-        /*if (Keyboard.isKeyDown(Keyboard.KEY_W))
-            Camera.setY(Camera.getY() + (1.5f * multi));
-        if (Keyboard.isKeyDown(Keyboard.KEY_S))
-            Camera.setY(Camera.getY() - (1.5f * multi));
-        if (Keyboard.isKeyDown(Keyboard.KEY_A))
-            Camera.setX(Camera.getX() + (1.5f * multi));
-        if (Keyboard.isKeyDown(Keyboard.KEY_D))
-            Camera.setX(Camera.getX() - (1.5f * multi));*/
     }
 
 

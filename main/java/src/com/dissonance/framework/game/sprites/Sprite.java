@@ -118,7 +118,7 @@ public abstract class Sprite implements Drawable, Serializable {
         int x = (int)(getX() / 32);
         int y = (int)(getY() / 32);
 
-        return lowest.getTileAt(x, y);
+        return lowest.getTileAt(x, y, world);
     }
 
     private boolean isGroundLayer(Layer l) {

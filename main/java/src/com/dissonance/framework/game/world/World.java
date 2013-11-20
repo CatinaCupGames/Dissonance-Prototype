@@ -315,7 +315,7 @@ public final class World implements UpdatableDrawable {
         if (!layer.isTiledLayer())
             throw new InvalidParameterException("The layer specified is not a tile layer!");
 
-        return layer.getTileAt(x, y);
+        return layer.getTileAt(x, y, this);
     }
 
     public Tile getTileAt(float x, float y, int layernumber) {

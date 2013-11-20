@@ -2,6 +2,7 @@ package com.dissonance.framework.game.world.tiled;
 
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.TileType;
+import com.dissonance.framework.game.world.World;
 
 import java.security.InvalidParameterException;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public class Layer {
         this.layer_number = number;
     }
 
-    public Tile getTileAt(float x, float y) {
+    public Tile getTileAt(float x, float y, World world) {
         if (!isTiledLayer())
             throw new InvalidParameterException("This layer is not a Tile Layer!");
 
@@ -36,10 +37,9 @@ public class Layer {
             System.out.println("Invalid index specified");
             return null;
         } else if (data[index] >= TileType.values().length) {
-            return new Tile(TileType.UNKNOWN, x, y, this); //Assume an unknown type
+            return new Tile(-1, x, y, this, world); //Assume an unknown type
         }
-        TileType tt = TileType.values()[data[index]];
-        return new Tile(tt, x, y, this);
+        return new Tile(data[index], x, y, this, world);
     }
 
     public int getLayerNumber() {

@@ -106,7 +106,7 @@ public class TileSet {
     }
 
     public String getTileProperty(Tile t, String property)  {
-        return getTileProperty(t.getType().getID(), property);
+        return getTileProperty(t.getID(), property);
     }
 
     public boolean tileHasProperty(Tile t, String property) {

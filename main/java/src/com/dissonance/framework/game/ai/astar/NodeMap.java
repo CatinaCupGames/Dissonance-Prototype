@@ -74,8 +74,8 @@ public final class NodeMap implements Serializable {
                 for (Layer layer : layers) {
                     Tile tile = world.getTileAt(x, y, layer);
                     if (tile != null) {
-                        nodes[x][y].setPassable(tile.getType().isPassable());
-                        nodes[x][y].setExtraCost(tile.getType().getExtraCost());
+                        nodes[x][y].setPassable(tile.isPassable());
+                        nodes[x][y].setExtraCost(tile.getExtraCost());
                     } else {
                         if (nodes[x][y] == null) {
                             nodes[x][y] = new Node(new Position(x, y));
