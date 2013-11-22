@@ -69,7 +69,6 @@ public abstract class PlayableSprite extends CombatSprite {
             checkSelect();
             checkMovement();
         } else {
-            System.out.println(ox + "-" + currentlyPlaying.getX() + "    " + oy + "-" + currentlyPlaying.getY());
             if (Math.abs(ox - currentlyPlaying.getX()) > getWidth() / 2 || Math.abs(oy - currentlyPlaying.getY()) > getHeight() / 2) {
                 appendWaypoint(new Position(currentlyPlaying.getX(), currentlyPlaying.getY()));
                 ox = currentlyPlaying.getX();

@@ -311,6 +311,33 @@ public final class World implements UpdatableDrawable {
         return toreturn;
     }
 
+    /**
+     * Returns all polygons (if any) that collide with the specified point. If the point specified in the parameter is
+     * inside a polygon in this world, then that polygon is added to the list of polygon's to return.<br></br>
+     * <b>NOTE: This method only work for the square tool and the triangle tool in Tiled. However, the triangle tool can
+     * make complex polygons.</b>
+     * @param x
+     *         The x-coordinate to check against
+     * @param y
+     *         The y-coordinate to check against
+     * @return
+     *        A {@link List} of {@link TiledObject} that intersect with the point specified.
+     */
+    public List<TiledObject> getPolygonsAt(float x, float y) {
+        ArrayList<TiledObject> objects = new ArrayList<TiledObject>();
+        Layer[] objLayers = getLayers(LayerType.OBJECT_LAYER);
+        for (Layer layer : objLayers) {
+            for (TiledObject obj : layer.getObjectGroupData()) {
+                if (obj.isPointInside(x, y)) {
+                    objects.add(obj);
+                }
+            }
+        }
+
+        return objects;
+
+    }
+
     public Tile getTileAt(float x, float y, Layer layer) {
         if (!layer.isTiledLayer())
             throw new InvalidParameterException("The layer specified is not a tile layer!");
