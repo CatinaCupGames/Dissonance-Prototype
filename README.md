@@ -1,6 +1,6 @@
 Dissonance
 =============
-A game by BLANK
+A game by Cat In a Cup
 
 
 Description
