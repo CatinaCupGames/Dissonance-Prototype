@@ -1,6 +1,6 @@
 Dissonance
 =============
-A game by BLANK
+A game by Cat In a Cup
 
 
 Description
@@ -14,7 +14,7 @@ Team
 * hypereddie
 * Arrem
 * headdetect
-* oyasunadev **[INACTIVE]**
+* oyasunadev
 
 ###Story Board
 * simplej978
