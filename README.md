@@ -25,3 +25,5 @@ Team
 ###Artists
 * toakongu834 **[INACTIVE]**
 * TheDaringPastry
+* argaudreau
+* mattmudge
