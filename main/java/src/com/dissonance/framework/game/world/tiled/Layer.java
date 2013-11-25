@@ -33,7 +33,6 @@ public class Layer {
         int index = (int) (x + (y * height));
 
         if (index < 0 || index >= data.length) {
-            System.out.println("Invalid index specified");
             return null;
         }
         return new Tile(data[index], x, y, this, world);

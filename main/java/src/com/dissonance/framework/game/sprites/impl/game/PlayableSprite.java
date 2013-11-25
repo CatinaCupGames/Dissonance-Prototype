@@ -7,6 +7,7 @@ import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.HitBox;
 import org.jbox2d.common.Vec2;
 import org.lwjgl.input.Keyboard;
 
@@ -46,7 +47,11 @@ public abstract class PlayableSprite extends CombatSprite {
 
     @Override
     public void setX(float x) {
+        float ox = getX();
         super.setX(x);
+        if (hb.checkForCollision(getWorld(), this)) {
+            super.setX(ox);
+        }
         if (isPlaying) {
             Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
         }
@@ -54,12 +59,17 @@ public abstract class PlayableSprite extends CombatSprite {
 
     @Override
     public void setY(float y) {
+        float oy = getY();
         super.setY(y);
+        if (hb.checkForCollision(getWorld(), this)) {
+            super.setY(oy);
+        }
         if (isPlaying) {
             Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
         }
     }
 
+    HitBox hb = new HitBox(9, 19, 22, 29);
     @Override
     public void update() {
         super.update();

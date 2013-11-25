@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.world.tiled;
 
+import com.dissonance.framework.game.ai.astar.FastMath;
 import org.jbox2d.common.Vec2;
 
 import java.awt.*;
@@ -8,12 +9,12 @@ import java.util.HashMap;
 
 public class TiledObject {
     private boolean ellipse;
-    private int height;
-    private int width;
+    private float height;
+    private float width;
     private String name;
     private boolean visible;
-    private int x;
-    private int y;
+    private float x;
+    private float y;
     private HashMap<Object, Object> properties;
     private Vec2[] polygon;
     private boolean isSquare;
@@ -30,11 +31,11 @@ public class TiledObject {
         return visible;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
@@ -42,11 +43,11 @@ public class TiledObject {
         return name;
     }
 
-    public int getWidth() {
+    public float getWidth() {
         return width;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 
@@ -81,7 +82,7 @@ public class TiledObject {
             for (Vec2 point : points) {
                 javaPolygon.addPoint((int)point.x, (int)point.y);
             }
-            javaPolygon.translate(this.x, this.y);
+            javaPolygon.translate(FastMath.fastFloor(this.x), FastMath.fastFloor(this.y));
         }
 
         return javaPolygon.contains(x, y);
