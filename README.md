@@ -14,7 +14,7 @@ Team
 * hypereddie
 * Arrem
 * headdetect
-* oyasunadev **[INACTIVE]**
+* oyasunadev
 
 ###Story Board
 * simplej978
