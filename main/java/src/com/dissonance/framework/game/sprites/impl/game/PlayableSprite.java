@@ -47,11 +47,7 @@ public abstract class PlayableSprite extends CombatSprite {
 
     @Override
     public void setX(float x) {
-        float ox = getX();
         super.setX(x);
-        if (hb.checkForCollision(getWorld(), this)) {
-            super.setX(ox);
-        }
         if (isPlaying) {
             Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
         }
@@ -59,17 +55,12 @@ public abstract class PlayableSprite extends CombatSprite {
 
     @Override
     public void setY(float y) {
-        float oy = getY();
         super.setY(y);
-        if (hb.checkForCollision(getWorld(), this)) {
-            super.setY(oy);
-        }
         if (isPlaying) {
             Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
         }
     }
 
-    HitBox hb = new HitBox(9, 19, 22, 29); //TODO Configured in XML file..
     @Override
     public void update() {
         super.update();

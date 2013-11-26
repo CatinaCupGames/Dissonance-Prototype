@@ -11,7 +11,7 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CombatSprite extends AbstractWaypointSprite {
+public abstract class CombatSprite extends PhysicsSprite {
     private ArrayList<Item> inventory = new ArrayList<Item>();
     private int weaponIndex;
     private boolean isCastingSpell = false;

@@ -9,12 +9,33 @@ import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 
 public class HitBox {
     private float minX, maxX, minY, maxY;
+    private float x, y;
 
     public HitBox(float minX, float minY, float maxX, float maxY) {
         this.minX = minX;
         this.minY = minY;
         this.maxY = maxY;
         this.maxX = maxX;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public boolean checkForCollision(World world) {
+        return checkForCollision(world, x, y);
     }
 
     public boolean checkForCollision(World world, Sprite sprite) {

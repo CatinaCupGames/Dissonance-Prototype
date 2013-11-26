@@ -7,7 +7,7 @@ import com.dissonance.framework.game.scene.dialog.DialogUI;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public abstract class NPCSprite extends AbstractWaypointSprite {
+public abstract class NPCSprite extends PhysicsSprite {
 
     private NPCSpriteEvent.OnTalkEvent talkEvent;
     private NPCSpriteEvent.OnTalkFinishedEvent talkFinishedEvent;
