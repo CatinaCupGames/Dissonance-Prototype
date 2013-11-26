@@ -69,7 +69,7 @@ public abstract class PlayableSprite extends CombatSprite {
         }
     }
 
-    HitBox hb = new HitBox(9, 19, 22, 29);
+    HitBox hb = new HitBox(9, 19, 22, 29); //TODO Configured in XML file..
     @Override
     public void update() {
         super.update();
