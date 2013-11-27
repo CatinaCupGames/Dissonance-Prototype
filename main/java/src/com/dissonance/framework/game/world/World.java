@@ -1,8 +1,8 @@
 package com.dissonance.framework.game.world;
 
 import com.dissonance.framework.game.ai.astar.NodeMap;
-import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
@@ -17,7 +17,6 @@ import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Validator;
 import com.google.gson.Gson;
-import org.jbox2d.common.Vec2;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,15 +27,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public final class World implements UpdatableDrawable {
+public final class World {
     private static final Gson GSON = new Gson();
-    private static final float GRAVITY = 0f;
-    private static final float TIME_STEP = 1f / 60f;
-    private static final int VELOCITY_ITERATIONS = 6;
-    private static final int POSITION_ITERATIONS = 2;
 
     private transient final ArrayList<Drawable> drawable = new ArrayList<>();
-    private transient org.jbox2d.dynamics.World physicsWorld;
     private String name;
     private NodeMap nodeMap;
     private int ID;
@@ -48,7 +42,6 @@ public final class World implements UpdatableDrawable {
 
     World(int ID) {
         this.ID = ID;
-        physicsWorld = new org.jbox2d.dynamics.World(new Vec2(0, GRAVITY));
     }
 
     public int getID() {
@@ -64,27 +57,6 @@ public final class World implements UpdatableDrawable {
         if (renderingService == null)
             return;
         renderingService.provideData(this, RenderService.WORLD_DATA_TYPE);
-    }
-
-    @Override
-    public void update() {
-        if (this.physicsWorld != null) {
-            this.physicsWorld.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
-        }
-    }
-
-    @Override
-    public void render() {
-    }
-
-    @Override
-    public float getX() {
-        return 0;
-    }
-
-    @Override
-    public float getY() {
-        return 0;
     }
 
     public void load(final String world) throws WorldLoadFailedException {
@@ -104,6 +76,27 @@ public final class World implements UpdatableDrawable {
                         long ms = System.currentTimeMillis();
                         drawable.addAll(tiledData.createDrawables());
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
+                        WorldLoader loader = null;
+                        System.out.println("Searching for loader..");
+                        if (tiledData.getProperty("loader") != null) {
+                            try {
+                                Class<?> class_ = Class.forName(tiledData.getProperty("loader"));
+                                if (WorldLoader.class.isAssignableFrom(class_)) {
+                                    loader = (WorldLoader)class_.newInstance();
+                                }
+                            } catch (Exception e) {
+                                loader = attemptSearchForWorldLoader();
+                            }
+                        } else {
+                            loader = attemptSearchForWorldLoader();
+                        }
+
+                        if (loader != null) {
+                            System.out.println("Loader found @ " + loader.getClass().getName());
+                            loader.onLoad(World.this);
+                        } else {
+                            System.out.println("No loader found..");
+                        }
                     }
                 });
                 name = world;
@@ -117,10 +110,18 @@ public final class World implements UpdatableDrawable {
             }
         }
 
-        addDrawable(this); //TODO Maybe remove this..
-
         if (renderingService.isPaused())
             renderingService.resume();
+    }
+
+    private WorldLoader attemptSearchForWorldLoader() {
+        try {
+            Class<?> class_ = Class.forName("com.dissonance.game.w." + name);
+            if (WorldLoader.class.isAssignableFrom(class_)) {
+                return (WorldLoader) class_.newInstance();
+            }
+        } catch (Exception ignored) { }
+        return null;
     }
 
     public Iterator<Drawable> getSortedDrawables() {
@@ -150,9 +151,7 @@ public final class World implements UpdatableDrawable {
             public void run() {
                 drawable.add(draw);
                 if (draw instanceof UpdatableDrawable) {
-                    UpdatableDrawable ud = (UpdatableDrawable)draw;
-                    if (!(ud instanceof World))
-                        ud.init();
+                    UpdatableDrawable ud = (UpdatableDrawable) draw;
                     udrawables.add(ud);
                 }
                 if (run != null)
@@ -391,16 +390,7 @@ public final class World implements UpdatableDrawable {
         this.nodeMap = map;
     }
 
-    public org.jbox2d.dynamics.World getPhysicsWorld() {
-        return this.physicsWorld;
-    }
-
     public WorldData getTiledData() {
         return tiledData;
-    }
-
-    @Override
-    public int compareTo(Drawable o) {
-        return Drawable.BEFORE;
     }
 }

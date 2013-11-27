@@ -1,14 +1,13 @@
 package com.dissonance.framework.game.sprites.impl.game;
 
-import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.render.Camera;
-import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.system.utils.Direction;
-import org.jbox2d.common.Vec2;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -147,8 +146,8 @@ public abstract class PlayableSprite extends CombatSprite {
                 continue;
             if (d instanceof Sprite) {
                 Sprite sprite = (Sprite)d;
-                final Vec2 v2 = sprite.getVector();
-                final Vec2 v1 = getVector();
+                final Vector2f v2 = sprite.getVector();
+                final Vector2f v1 = getVector();
                 double distance = Math.sqrt(((v2.x - v1.x) * (v2.x - v1.x)) + ((v2.y - v1.y) * (v2.y - v1.y)));
                 if (distance <= 0.00001)
                     distance = 0;
@@ -177,8 +176,8 @@ public abstract class PlayableSprite extends CombatSprite {
         else if (getDirection() == Direction.RIGHT)
             xadd = 1;
 
-        final Vec2 v2 = s.getVector();
-        final Vec2 v1 = getVector();
+        final Vector2f v2 = s.getVector();
+        final Vector2f v1 = getVector();
         double new_distance = Math.sqrt(((v2.x - (v1.x + xadd)) * (v2.x - (v1.x + xadd))) + ((v2.y - (v1.y + yadd)) * (v2.y - (v1.y + yadd))));
 
         return new_distance < distance;

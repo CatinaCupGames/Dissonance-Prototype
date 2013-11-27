@@ -3,10 +3,9 @@ package com.dissonance.framework.game.world.tiled;
 import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
-import org.jbox2d.common.Vec2;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class TiledObject implements Collidable {
@@ -18,7 +17,7 @@ public class TiledObject implements Collidable {
     private float x;
     private float y;
     private HashMap<Object, Object> properties;
-    private Vec2[] polygon;
+    private Vector2f[] polygon;
     private boolean isSquare;
     private boolean isBound;
     private Polygon javaPolygon;
@@ -68,15 +67,15 @@ public class TiledObject implements Collidable {
         return ellipse;
     }
 
-    public Vec2[] getPolygonPoints() {
+    public Vector2f[] getPolygonPoints() {
         if (ellipse) {
-            return new Vec2[0];
+            return new Vector2f[0];
         } if (polygon == null) {
-            polygon = new Vec2[5];
-            polygon[0] = new Vec2(0, 0);
-            polygon[1] = new Vec2(width, 0);
-            polygon[2] = new Vec2(width, height);
-            polygon[3] = new Vec2(0, height);
+            polygon = new Vector2f[5];
+            polygon[0] = new Vector2f(0, 0);
+            polygon[1] = new Vector2f(width, 0);
+            polygon[2] = new Vector2f(width, height);
+            polygon[3] = new Vector2f(0, height);
             polygon[4] = polygon[0];
             isSquare = true;
 
@@ -89,11 +88,11 @@ public class TiledObject implements Collidable {
     @Override
     public boolean isPointInside(float x, float y) {
         if (javaPolygon == null) {
-            Vec2[] points = getPolygonPoints();
+            Vector2f[] points = getPolygonPoints();
             if (points.length == 0)
                 return false; //TODO Check for inside a circle
             javaPolygon = new Polygon();
-            for (Vec2 point : points) {
+            for (Vector2f point : points) {
                 javaPolygon.addPoint((int)point.x, (int)point.y);
             }
             javaPolygon.translate(FastMath.fastFloor(this.x), FastMath.fastFloor(this.y));

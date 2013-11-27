@@ -5,7 +5,7 @@ import com.dissonance.framework.game.sprites.UIElement;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
-import org.jbox2d.common.Vec2;
+import org.lwjgl.util.vector.Vector2f;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -90,7 +90,7 @@ public class DialogUI extends UIElement {
         currentdialog = this;
         setWidth(512);
         setHeight(64);
-        Vec2 pos = new Vec2(getWidth() / 1.52f, getHeight() / 2);
+        Vector2f pos = new Vector2f(getWidth() / 1.52f, getHeight() / 2);
         pos = Camera.translateToScreenCord(pos);
         setX(pos.x);
         setY(pos.y);
@@ -142,7 +142,7 @@ public class DialogUI extends UIElement {
             i = 0;
 
         if (cx != Camera.getX() || cy != Camera.getY()) {
-            Vec2 pos = new Vec2(getWidth() / 1.52f, getHeight() / 2);
+            Vector2f pos = new Vector2f(getWidth() / 1.52f, getHeight() / 2);
             pos = Camera.translateToScreenCord(pos);
             setX(pos.x);
             setY(pos.y);

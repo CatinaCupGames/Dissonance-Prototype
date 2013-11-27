@@ -9,10 +9,7 @@ import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.utils.Direction;
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.BodyType;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.io.Serializable;
 import java.security.InvalidParameterException;
@@ -23,8 +20,6 @@ public abstract class Sprite implements Drawable, Serializable {
     private SpriteEvent.SpriteSelectedEvent selectedEvent;
     private SpriteEvent.SpriteMovedEvent spriteMoved;
 
-    protected transient Body physicsBody;
-    protected transient BodyDef physicsBodyDef;
     protected transient Texture texture;
     protected transient World world;
     protected Direction direction;
@@ -75,20 +70,10 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public void setWorld(World w) {
         if (w == null) {
-            this.world.getPhysicsWorld().destroyBody(this.physicsBody);
             this.world = null;
             return;
         }
-        if (this.physicsBody != null)
-            // Dealloc reference to body //
-            w.getPhysicsWorld().destroyBody(this.physicsBody);
-
         this.world = w;
-        this.physicsBodyDef = new BodyDef();
-        this.physicsBodyDef.active = false;
-        this.physicsBodyDef.awake = false;
-        this.physicsBodyDef.type = BodyType.DYNAMIC;
-        this.physicsBody = w.getPhysicsWorld().createBody(physicsBodyDef);
     }
 
     public void onSelected(PlayableSprite player) {
@@ -166,8 +151,8 @@ public abstract class Sprite implements Drawable, Serializable {
         height = h;
     }
 
-    public Vec2 getVector() {
-        return new Vec2(x, y);
+    public Vector2f getVector() {
+        return new Vector2f(x, y);
     }
 
     public void onLoad() {
@@ -183,10 +168,6 @@ public abstract class Sprite implements Drawable, Serializable {
         float bx = width / 2;
         float by = height / 2;
         final float x = getX(), y = getY();
-
-        if(physicsBodyDef.active) {
-            //TODO: Camera.worldToScreen
-        }
 
         //glColor3f(1f, .5f, .5f); DEBUG LINE FOR TEXTURES
         glBegin(GL_QUADS);

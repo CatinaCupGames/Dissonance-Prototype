@@ -2,7 +2,7 @@ package com.dissonance.framework.render.texture.tile;
 
 import com.dissonance.framework.game.world.tiled.TileSet;
 import com.dissonance.framework.render.texture.Texture;
-import org.jbox2d.common.Vec2;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.security.InvalidParameterException;
 
@@ -89,7 +89,7 @@ public class TileTexture extends Texture {
         return tileHeight * 2;
     }
 
-    public Vec2 getTextureCord(int pos, int id, TileSet tile) {
+    public Vector2f getTextureCord(int pos, int id, TileSet tile) {
         if (!tile.containsID(id))
             throw new InvalidParameterException("The TileSet provided does not contain the tile \"" + id + "\"");
         int tilepos = (id - tile.getFirstGrid()) + 1; //Returns the tile id of this tile, relative to tileset.
@@ -113,6 +113,6 @@ public class TileTexture extends Texture {
         x /= super.getTextureWidth(); //Convert to fraction
         y /= super.getTextureHeight(); //Convert to fraction
 
-        return new Vec2(x, y);
+        return new Vector2f(x, y);
     }
 }

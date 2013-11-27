@@ -6,7 +6,7 @@ import com.dissonance.framework.game.world.tiled.TileSet;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
-import org.jbox2d.common.Vec2;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.util.HashMap;
 
@@ -147,9 +147,9 @@ public class TileObject extends Sprite {
     }
 
     private static class TexCordHolder {
-        public Vec2 top_left;
-        public Vec2 top_right;
-        public Vec2 bottom_left;
-        public Vec2 bottom_right;
+        public Vector2f top_left;
+        public Vector2f top_right;
+        public Vector2f bottom_left;
+        public Vector2f bottom_right;
     }
 }

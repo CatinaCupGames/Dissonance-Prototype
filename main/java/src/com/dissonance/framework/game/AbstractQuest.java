@@ -13,6 +13,8 @@ public abstract class AbstractQuest {
 
     public abstract void startQuest();
 
+    public abstract String getName();
+
     public void pauseGame() {
         if (paused)
             return;

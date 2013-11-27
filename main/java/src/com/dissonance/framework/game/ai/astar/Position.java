@@ -1,6 +1,6 @@
 package com.dissonance.framework.game.ai.astar;
 
-import org.jbox2d.common.Vec2;
+import org.lwjgl.util.vector.Vector2f;
 
 public final class Position {
 
@@ -12,7 +12,7 @@ public final class Position {
         this.y = y;
     }
 
-    public Position(Vec2 vector) {
+    public Position(Vector2f vector) {
         this((int) vector.x, (int) vector.y);
     }
 

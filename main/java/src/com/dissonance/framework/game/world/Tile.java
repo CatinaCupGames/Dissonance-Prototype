@@ -3,7 +3,7 @@ package com.dissonance.framework.game.world;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
-import org.jbox2d.common.Vec2;
+import org.lwjgl.util.vector.Vector2f;
 
 public class Tile implements Collidable {
     private final int id;
@@ -80,24 +80,24 @@ public class Tile implements Collidable {
         return parent;
     }
 
-    public Tile getRelativeTile(Vec2 addLocation) {
+    public Tile getRelativeTile(Vector2f addLocation) {
         return containingLayer.getTileAt(x + addLocation.x, y + addLocation.y, parent);
     }
 
     public Tile getTileAboveThis() {
-        return getRelativeTile(new Vec2(1, 0));
+        return getRelativeTile(new Vector2f(1, 0));
     }
 
     public Tile getTileBelowThis() {
-        return getRelativeTile(new Vec2(-1, 0));
+        return getRelativeTile(new Vector2f(-1, 0));
     }
 
     public Tile getTileLeftOfThis() {
-        return getRelativeTile(new Vec2(0, -1));
+        return getRelativeTile(new Vector2f(0, -1));
     }
 
     public Tile getTileRightOfThis() {
-        return getRelativeTile(new Vec2(0, 1));
+        return getRelativeTile(new Vector2f(0, 1));
     }
 
     public String getProperty(String property, World world) {

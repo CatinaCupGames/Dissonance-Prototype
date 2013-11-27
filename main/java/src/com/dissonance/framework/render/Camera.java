@@ -2,14 +2,14 @@ package com.dissonance.framework.render;
 
 import com.dissonance.framework.game.GameSettings;
 import com.dissonance.framework.game.sprites.Sprite;
-import org.jbox2d.common.Vec2;
+import org.lwjgl.util.vector.Vector2f;
 
 public final class Camera {
     private static float posX;
     private static float posY;
     private static boolean isEasing;
-    private static Vec2 nextPos;
-    private static Vec2 oldPos;
+    private static Vector2f nextPos;
+    private static Vector2f oldPos;
     private static long startTime;
     private static float duration;
     private static CameraEaseListener listener;
@@ -30,7 +30,7 @@ public final class Camera {
         posY = y;
     }
 
-    public static void setPos(Vec2 pos) {
+    public static void setPos(Vector2f pos) {
         posX = pos.x;
         posY = pos.y;
     }
@@ -47,23 +47,23 @@ public final class Camera {
         return isOffScreen(x, y, 0, 0, scale);
     }
 
-    public static Vec2 translateToScreenCord(Vec2 vec) {
+    public static Vector2f translateToScreenCord(Vector2f vec) {
         return translateToScreenCord(vec, 2f);
     }
 
-    public static Vec2 translateToScreenCord(Vec2 vec, float scale) {
+    public static Vector2f translateToScreenCord(Vector2f vec, float scale) {
         vec.x = (posX + (-vec.x + (GameSettings.Display.window_width / scale)));
         vec.y = (posY + (-vec.y + (GameSettings.Display.window_height / scale)));
         return vec;
     }
 
-    public static Vec2 translateToCameraCenter(Vec2 vec, float height) {
+    public static Vector2f translateToCameraCenter(Vector2f vec, float height) {
         vec.x = (vec.x - (GameSettings.Display.window_width / 4f));
         vec.y = (vec.y - (GameSettings.Display.window_height / 4f) + height);
         return vec;
     }
 
-    public static Vec2 translateToCameraCenter(Vec2 vec) {
+    public static Vector2f translateToCameraCenter(Vector2f vec) {
         return translateToCameraCenter(vec, 0f);
     }
 
@@ -72,12 +72,12 @@ public final class Camera {
     }
 
     public static void lerp(float newx, float newy, float duration) {
-        easeMovement(new Vec2(newx, newy), duration);
+        easeMovement(new Vector2f(newx, newy), duration);
     }
 
-    public static void easeMovement(Vec2 newPos, float duration) {
+    public static void easeMovement(Vector2f newPos, float duration) {
         nextPos = newPos;
-        oldPos = new Vec2(getX(), getY());
+        oldPos = new Vector2f(getX(), getY());
         startTime = System.currentTimeMillis();
         if (isEasing)
             startTime -= 10;
@@ -86,11 +86,11 @@ public final class Camera {
     }
 
     public static void easeMovementY(float newPos, float duration) {
-        easeMovement(new Vec2(getX(), newPos), duration);
+        easeMovement(new Vector2f(getX(), newPos), duration);
     }
 
     public static void easeMovementX(float newPos, float duration) {
-        easeMovement(new Vec2(newPos, getY()), duration);
+        easeMovement(new Vector2f(newPos, getY()), duration);
     }
 
     private static final WhatAmIDoing uwot = new WhatAmIDoing();

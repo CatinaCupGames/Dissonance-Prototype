@@ -1,12 +1,8 @@
 package org.oyasunadev.li.liui.component.gui;
 
 import com.dissonance.framework.game.sprites.UIElement;
-import com.dissonance.framework.render.Camera;
-import org.jbox2d.common.Vec2;
 
 import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
 
 /**
  * Created with IntelliJ IDEA.
