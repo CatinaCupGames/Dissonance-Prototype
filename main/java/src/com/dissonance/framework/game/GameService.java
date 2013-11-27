@@ -198,7 +198,11 @@ public class GameService {
         @Override
         public void run() {
             Thread.currentThread().setName("Quest Thread");
-            currentQuest.startQuest();
+            try {
+                currentQuest.startQuest();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     };
 }

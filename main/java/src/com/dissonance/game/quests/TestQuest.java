@@ -26,13 +26,14 @@ public class TestQuest extends AbstractQuest {
     };
 
     @Override
-    public void startQuest() {
-        try {
-            World w = WorldFactory.getWorld("arrem_world");
-            setWorld(w);
-        } catch (WorldLoadFailedException e) {
-            e.printStackTrace();
-        }
+    public void startQuest() throws Exception {
+        World w = WorldFactory.getWorld("arrem_world");
+        setWorld(w);
+        Thread.sleep(3000);
+        w = WorldFactory.getWorld("test_world");
+        setWorld(w);
+
+
     }
 
     @Override

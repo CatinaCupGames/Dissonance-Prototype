@@ -1,6 +1,7 @@
 package com.dissonance.framework.game.world;
 
 import com.dissonance.framework.game.world.tiled.Layer;
+import com.dissonance.framework.game.world.tiled.TileSet;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
 import org.lwjgl.util.vector.Vector2f;
@@ -101,7 +102,10 @@ public class Tile implements Collidable {
     }
 
     public String getProperty(String property, World world) {
-        return world.getTiledData().findTileSetFromID(id).getTileProperty(this, property);
+        TileSet t = world.getTiledData().findTileSetFromID(id);
+        if (t == null)
+            return null;
+        return t.getTileProperty(this, property);
     }
 
     public boolean hasProperty(String property, World world) {

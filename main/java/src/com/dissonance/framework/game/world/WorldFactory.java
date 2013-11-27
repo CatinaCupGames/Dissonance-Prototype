@@ -9,6 +9,8 @@ public class WorldFactory {
     private static int worldCount;
     public static final int WORLD_ACCESS_LIMIT_SECONDS = 120;
     private static WorldHolder[] cacheWorlds = new WorldHolder[WORLD_CACHE_LIMIT];
+    private static World lastWorld;
+    private static World currentWorld;
 
     /**
      * Get a world by its name <br></br>
@@ -97,22 +99,17 @@ public class WorldFactory {
 
     /**
      * Change which world is currently being viewed.
-     * @param old
-     *           The old world. This parameter may be null, but the old world will not be unloaded if one is currently <br></br>
-     *           being displayed. <br></br>
-     *           When this parameter is not null, the {@link World} 's {@link com.dissonance.framework.game.world.World#onUnload()}
-     *           method is invoked, but the {@link World} is not disposed.
      * @param newworld
      *                The new world to display. This parameter <b>cannot</b> be null.
      */
-    public static void swapView(World old, World newworld) {
+    public static void swapView(World newworld) {
         Validator.validateNotNull(newworld, "NewWorld");
-        if (old != null) {
-            WorldHolder w = getWorldHolder(old.getID());
+        if (currentWorld != null) {
+            WorldHolder w = getWorldHolder(currentWorld.getID());
             if (w != null) {
                 w.lastAccess = System.currentTimeMillis();
             }
-            old.onUnload();
+            currentWorld.onUnload();
         }
         WorldHolder w = getWorldHolder(newworld.getID());
         if (w != null) {
@@ -126,6 +123,17 @@ public class WorldFactory {
             cacheWorlds[index] = w;
         }
         newworld.switchTo();
+        lastWorld = currentWorld;
+        currentWorld = newworld;
+        System.out.println("New World: " + currentWorld + ", Old World: " + lastWorld);
+    }
+
+    public static World getCurrentWorld() {
+        return currentWorld;
+    }
+
+    public static World getLastWorld() {
+        return lastWorld;
     }
 
     /**

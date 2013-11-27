@@ -11,7 +11,7 @@ public abstract class AbstractQuest {
     private World world;
     private boolean paused;
 
-    public abstract void startQuest();
+    public abstract void startQuest() throws Exception;
 
     public abstract String getName();
 
@@ -43,7 +43,7 @@ public abstract class AbstractQuest {
     }
 
     protected void setWorld(World world) {
-        WorldFactory.swapView(this.world, world);
+        WorldFactory.swapView(world);
         System.out.println("New world swapped to " + world.getID());
         this.world = world;
     }
