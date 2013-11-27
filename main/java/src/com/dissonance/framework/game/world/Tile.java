@@ -1,9 +1,11 @@
 package com.dissonance.framework.game.world;
 
 import com.dissonance.framework.game.world.tiled.Layer;
+import com.dissonance.framework.system.utils.physics.Collidable;
+import com.dissonance.framework.system.utils.physics.HitBox;
 import org.jbox2d.common.Vec2;
 
-public class Tile {
+public class Tile implements Collidable {
     private final int id;
     private final int cost;
     private boolean passable = true;
@@ -54,6 +56,20 @@ public class Tile {
 
     public float getY() {
         return y;
+    }
+
+    HitBox hitBox;
+    @Override
+    public HitBox getHitBox() {
+        if (hitBox == null) {
+            hitBox = new HitBox(0, 0, 32, 32);
+        }
+        return hitBox;
+    }
+
+    @Override
+    public boolean isPointInside(float x, float y) {
+        return false; //We don't need to check for tiles..
     }
 
     public Layer getContainingLayer() {

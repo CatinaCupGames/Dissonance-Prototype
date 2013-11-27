@@ -1,17 +1,47 @@
 package com.dissonance.framework.game.sprites.impl.game;
 
-import com.dissonance.framework.system.utils.HitBox;
+import com.dissonance.framework.render.texture.sprite.SpriteTexture;
+import com.dissonance.framework.system.utils.physics.Collidable;
+import com.dissonance.framework.system.utils.physics.HitBox;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public abstract class PhysicsSprite extends AbstractWaypointSprite {
+public abstract class PhysicsSprite extends AbstractWaypointSprite implements Collidable {
     private HitBox hb;
+    private float heightC = -1;
+    private float widthC = -1;
 
-    public HitBox getHitbox() {
+    @Override
+    public HitBox getHitBox() {
         return hb;
+    }
+
+    @Override
+    public boolean isPointInside(float x, float y) {
+        if (heightC == -1 || widthC == -1) {
+            if (getTexture() instanceof SpriteTexture) {
+                SpriteTexture temp = (SpriteTexture)getTexture();
+                heightC = temp.getHeight();
+                widthC = temp.getWidth();
+            } else {
+                heightC = getHeight();
+                widthC = getWidth();
+            }
+        }
+
+        float sX = getX();
+        float sY = getY() + (heightC / 4.0f);
+
+        sX += hb.getMinX();
+        sY += hb.getMinY();
+        float maxValue = sX + hb.getMaxX();
+        float maxValueY = sY + hb.getMaxY();
+        maxValue -= (widthC / 4.0f);
+        maxValueY -= (heightC / 2.0f);
+        return x > sX && x < maxValue && y > sY && y < maxValueY;
     }
 
     @Override
@@ -22,6 +52,12 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite {
 
         if (hb != null && hb.checkForCollision(getWorld(), this)) {
             super.setX(oX);
+            if (hb.getLastCollide() instanceof PhysicsSprite) {
+                float add = getX() - hb.getLastCollide().getX();
+                for (int i = 0; i < 1000 && hb.checkForCollision(getWorld(), this); i++) {
+                    super.setX(super.getX() + (add < 0 ? -1 : 1));
+                }
+            }
         }
     }
 
@@ -32,6 +68,12 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite {
 
         if (hb != null && hb.checkForCollision(getWorld(), this)) {
             super.setY(oY);
+            if (hb.getLastCollide() instanceof PhysicsSprite) {
+                float add = getY() - hb.getLastCollide().getY();
+                for (int i = 0; i < 1000 && hb.checkForCollision(getWorld(), this); i++) {
+                    super.setY(super.getY() + (add < 0 ? -1 : 1));
+                }
+            }
         }
     }
 
@@ -79,5 +121,12 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite {
         }
 
         hb = new HitBox(sX, sY, bX, bY);
+
+        HitBox.registerSprite(this);
+    }
+
+    @Override
+    public void onUnload() {
+        HitBox.unregisterSprite(this);
     }
 }

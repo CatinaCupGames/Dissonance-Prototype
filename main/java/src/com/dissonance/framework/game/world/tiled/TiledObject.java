@@ -1,13 +1,15 @@
 package com.dissonance.framework.game.world.tiled;
 
 import com.dissonance.framework.game.ai.astar.FastMath;
+import com.dissonance.framework.system.utils.physics.Collidable;
+import com.dissonance.framework.system.utils.physics.HitBox;
 import org.jbox2d.common.Vec2;
 
 import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class TiledObject {
+public class TiledObject implements Collidable {
     private boolean ellipse;
     private float height;
     private float width;
@@ -20,6 +22,7 @@ public class TiledObject {
     private boolean isSquare;
     private boolean isBound;
     private Polygon javaPolygon;
+    private HitBox hitBox;
 
     public String getProperty(String key) {
         if (properties == null)
@@ -31,12 +34,22 @@ public class TiledObject {
         return visible;
     }
 
+    @Override
     public float getX() {
         return x;
     }
 
+    @Override
     public float getY() {
         return y;
+    }
+
+    @Override
+    public HitBox getHitBox() {
+        if (hitBox == null) {
+            hitBox = new HitBox(0, 0, width, height);
+        }
+        return hitBox;
     }
 
     public String getName() {
@@ -73,6 +86,7 @@ public class TiledObject {
         }
     }
 
+    @Override
     public boolean isPointInside(float x, float y) {
         if (javaPolygon == null) {
             Vec2[] points = getPolygonPoints();

@@ -19,6 +19,7 @@ public class Layer {
     private String image; //for type imagelayer
     private TiledObject[] objects; //for type objectgroup
     private int[] data; //for type tilelayer
+    private HashMap<Integer, Tile> cache = new HashMap<Integer, Tile>();
 
     private int layer_number;
 
@@ -32,10 +33,15 @@ public class Layer {
 
         int index = (int) (x + (y * height));
 
+        if (cache.containsKey(index))
+            return cache.get(index);
+
         if (index < 0 || index >= data.length) {
             return null;
         }
-        return new Tile(data[index], x, y, this, world);
+        Tile t = new Tile(data[index], x, y, this, world);
+        cache.put(index, t);
+        return t;
     }
 
     public int getLayerNumber() {

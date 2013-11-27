@@ -7,7 +7,6 @@ import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
-import com.dissonance.framework.system.utils.HitBox;
 import org.jbox2d.common.Vec2;
 import org.lwjgl.input.Keyboard;
 
@@ -69,12 +68,6 @@ public abstract class PlayableSprite extends CombatSprite {
         if (isPlaying) {
             checkSelect();
             checkMovement();
-        } else {
-            if (Math.abs(ox - currentlyPlaying.getX()) > getWidth() / 2 || Math.abs(oy - currentlyPlaying.getY()) > getHeight() / 2) {
-                appendWaypoint(new Position(currentlyPlaying.getX(), currentlyPlaying.getY()));
-                ox = currentlyPlaying.getX();
-                oy = currentlyPlaying.getY();
-            }
         }
     }
 

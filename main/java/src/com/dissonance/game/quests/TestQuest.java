@@ -68,14 +68,14 @@ public class TestQuest extends AbstractQuest {
         HUD hud = new HUD("->hud");
         w.addDrawable(hud);
 
-        /*pl = new TestPlayer();
+        pl = new TestPlayer();
         w.loadAnimatedTextureForSprite(pl);
         w.addSprite(pl);
         pl.setWorld(w);
         pl.setX(576);
         pl.setY(256);
         pl.setWidth(pl.getWidth() * 2);
-        pl.setHeight(pl.getHeight() * 2);*/
+        pl.setHeight(pl.getHeight() * 2);
 
 
         TestPlayer p = new TestPlayer();
