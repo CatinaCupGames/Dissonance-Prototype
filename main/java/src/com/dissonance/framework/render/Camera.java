@@ -48,10 +48,6 @@ public final class Camera {
     }
 
     public static Vector2f translateToScreenCord(Vector2f vec) {
-        return translateToScreenCord(vec, 2f);
-    }
-
-    public static Vector2f translateToScreenCord(Vector2f vec, float scale) {
         float yadd = 0;
         if (GameSettings.Display.window_height > 1000) {
             yadd = 0.5f * GameSettings.Display.window_height-532;
