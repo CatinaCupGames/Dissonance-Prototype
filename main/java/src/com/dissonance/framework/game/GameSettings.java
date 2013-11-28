@@ -48,7 +48,7 @@ public class GameSettings
             game_height = 1080;
             resolution = new Resolution(game_width, game_height);
 
-            fullscreen = true;
+            fullscreen = false;
         }
     }
 

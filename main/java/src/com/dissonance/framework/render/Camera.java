@@ -122,7 +122,7 @@ public final class Camera {
 
     //Code taken from: https://code.google.com/p/replicaisland/source/browse/trunk/src/com/replica/replicaisland/Lerp.java?r=5
     //Because I'm a no good dirty scrub
-    private static float ease(float start, float target, float duration, float timeSinceStart) {
+    static float ease(float start, float target, float duration, float timeSinceStart) {
         float value = start;
         if (timeSinceStart > 0.0f && timeSinceStart < duration) {
             final float range = target - start;

@@ -15,6 +15,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.util.Iterator;
 
@@ -39,6 +40,15 @@ public class RenderService extends Service {
     private float fpsCount;
     private float fpsTime;
 
+    private long startTime;
+    private boolean isFading;
+    private boolean fromFade;
+    private float curVal;
+    private float speed;
+    private float curAlpha;
+    private float newAlpha;
+    private float startAlpha;
+
     long next_tick;
     long cur = System.currentTimeMillis();
     long now;
@@ -46,6 +56,22 @@ public class RenderService extends Service {
 
     public static boolean isInRenderThread() {
         return Thread.currentThread().getId() == RENDER_THREAD_ID;
+    }
+
+    public void fadeToBlack(float speed) {
+        fadeToAlpha(speed, 0f);
+    }
+
+    public void fadeFromBlack(int speed) {
+        fadeToAlpha(speed, 1f);
+    }
+
+    public void fadeToAlpha(float speed, float alpha) {
+        isFading = true;
+        newAlpha = alpha;
+        startAlpha = curAlpha;
+        this.speed = speed;
+        startTime = System.currentTimeMillis();
     }
 
     /**
@@ -103,7 +129,7 @@ public class RenderService extends Service {
             Display.setFullscreen(fullscreen);
 
         } catch (LWJGLException e) {
-            System.out.println("Unable to setup mode "+width+"x"+height+" fullscreen="+fullscreen + e);
+            System.out.println("Unable to setup mode " + width + "x" + height + " fullscreen=" + fullscreen + e);
         }
     }
 
@@ -131,6 +157,7 @@ public class RenderService extends Service {
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glLoadIdentity();
+            curAlpha = 1f;
 
             System.out.println("OpenGL version: " + glGetString(GL_VERSION));
 
@@ -214,7 +241,10 @@ public class RenderService extends Service {
                 }
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glClearColor(1f, 1f, 1f, 1f);
+            if (!isFading && !fromFade)
+                glClearColor(1f, 1f, 1f, 1f);
+            else
+                glClearColor(0f, 0f, 0f, 1f);
             glMatrixMode(GL_MODELVIEW);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glLoadIdentity();
@@ -223,6 +253,13 @@ public class RenderService extends Service {
 
             ShaderFactory.executePreRender();
 
+
+            if (isFading) {
+                long time = System.currentTimeMillis() - startTime;
+                curAlpha = Camera.ease(startAlpha, newAlpha, speed, time);
+            }
+
+            glColor4f(1f, 1f, 1f, curAlpha);
             Iterator<Drawable> sprites = current_world.getSortedDrawables();
             while (sprites.hasNext()) {
                 Drawable s = sprites.next();

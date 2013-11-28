@@ -37,7 +37,7 @@ public class Main {
         System.out.println("Loading game dialog");
         DialogFactory.loadDialog();
         System.out.println("Starting quest");
-        GameService.beginQuest(new TestQuest());
+        GameService.beginQuest(new MenuQuest());
     }
 
 

@@ -37,6 +37,7 @@ public final class World {
     private transient Service renderingService;
     private transient Texture texture;
     private boolean invalid = true;
+    private boolean loaded = false;
     private WorldData tiledData;
     private List<UpdatableDrawable> udrawables = new ArrayList<>();
 
@@ -98,6 +99,8 @@ public final class World {
                         } else {
                             System.out.println("No loader found..");
                         }
+                        loaded = true;
+                        _wakeLoadWaiters();
                     }
                 });
 
@@ -112,10 +115,24 @@ public final class World {
             WorldLoader loader = attemptSearchForWorldLoader();
             if (loader != null)
                 loader.onLoad(this);
+            loaded = true;
+            _wakeLoadWaiters();
         }
 
         if (renderingService.isPaused())
             renderingService.resume();
+    }
+
+    public synchronized void waitForWorldLoaded() throws InterruptedException {
+        while (true) {
+            if (loaded)
+                break;
+            super.wait(0L);
+        }
+    }
+
+    private synchronized void _wakeLoadWaiters() {
+        super.notifyAll();
     }
 
     private WorldLoader attemptSearchForWorldLoader() {
