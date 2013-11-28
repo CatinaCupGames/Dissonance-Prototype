@@ -2,9 +2,11 @@ package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.scene.hud.HUD;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
+import com.dissonance.game.scene.TestScene;
 import com.dissonance.game.sprites.Enemy;
 import com.dissonance.game.sprites.TestPlayer;
 
@@ -32,8 +34,6 @@ public class TestQuest extends AbstractQuest {
         Thread.sleep(3000);
         w = WorldFactory.getWorld("test_world");
         setWorld(w);
-
-
     }
 
     @Override

@@ -28,7 +28,7 @@ public class AspectRatio
 
     private void calculate(double width, double height)
     {
-        double remainder;
+        double remainder = 0;
         double newWidth = width;
         double newHeight = height;
 

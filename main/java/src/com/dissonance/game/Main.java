@@ -4,6 +4,7 @@ import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.system.ticker.Ticker;
+import com.dissonance.game.quests.MenuQuest;
 import com.dissonance.game.quests.TestQuest;
 
 import java.io.File;

@@ -64,6 +64,7 @@ public final class World {
         if (renderingService == null)
             throw new WorldLoadFailedException("The RenderService was not created! Try calling World.init() before loading a world.");
 
+        name = world;
         InputStream in = getClass().getClassLoader().getResourceAsStream("worlds/" + world + ".json");
         if (in != null) {
             try {
@@ -93,14 +94,12 @@ public final class World {
                         }
 
                         if (loader != null) {
-                            System.out.println("Loader found @ " + loader.getClass().getName());
                             loader.onLoad(World.this);
                         } else {
                             System.out.println("No loader found..");
                         }
                     }
                 });
-                name = world;
 
                 nodeMap = new NodeMap(this, tiledData.getWidth(), tiledData.getHeight());
 
@@ -109,6 +108,10 @@ public final class World {
             } catch (Exception e) {
                 throw new WorldLoadFailedException("Error loading Tiled file!", e);
             }
+        } else { //Find and invoke WorldLoader for this world
+            WorldLoader loader = attemptSearchForWorldLoader();
+            if (loader != null)
+                loader.onLoad(this);
         }
 
         if (renderingService.isPaused())
@@ -153,6 +156,7 @@ public final class World {
                 drawable.add(draw);
                 if (draw instanceof UpdatableDrawable) {
                     UpdatableDrawable ud = (UpdatableDrawable) draw;
+                    ud.init();
                     udrawables.add(ud);
                 }
                 if (run != null)

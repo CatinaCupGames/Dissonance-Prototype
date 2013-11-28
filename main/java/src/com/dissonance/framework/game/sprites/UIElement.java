@@ -2,6 +2,9 @@ package com.dissonance.framework.game.sprites;
 
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.WorldFactory;
+import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
@@ -36,8 +39,16 @@ public abstract class UIElement implements UpdatableDrawable {
         displayUI(true);
     }
 
+    public void displayUI(World world) {
+        displayUI(false, world);
+    }
+
     public void displayUI(boolean halt) {
-        GameService.getCurrentWorld().addDrawable(this);
+        displayUI(halt, WorldFactory.getCurrentWorld());
+    }
+
+    public void displayUI(boolean halt, World world) {
+        world.addDrawable(this);
         if (halt) {
             PlayableSprite.haltMovement();
             halted = true;

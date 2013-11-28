@@ -120,7 +120,7 @@ public class RenderService extends Service {
 
             glClearColor(0f, 0f, 0f, 1f);
             glClearDepth(1f);
-            glViewport(0, 0, GameSettings.Display.window_width, GameSettings.Display.window_height); // TODO: Not sure if it should be WINDOW_ or GAME_.
+            glViewport(0, 0, GameSettings.Display.window_width, GameSettings.Display.window_height);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
             glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0f, -1f);

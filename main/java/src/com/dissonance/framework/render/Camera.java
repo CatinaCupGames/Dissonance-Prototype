@@ -52,8 +52,12 @@ public final class Camera {
     }
 
     public static Vector2f translateToScreenCord(Vector2f vec, float scale) {
-        vec.x = (posX + (-vec.x + (GameSettings.Display.window_width / scale)));
-        vec.y = (posY + (-vec.y + (GameSettings.Display.window_height / scale)));
+        float yadd = 0;
+        if (GameSettings.Display.window_height > 1000) {
+            yadd = 0.5f * GameSettings.Display.window_height-532;
+        }
+        vec.x = posX + vec.x;
+        vec.y = posY + (vec.y + yadd);
         return vec;
     }
 

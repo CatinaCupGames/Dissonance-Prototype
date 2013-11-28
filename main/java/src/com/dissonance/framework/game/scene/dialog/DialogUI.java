@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.scene.dialog;
 
+import com.dissonance.framework.game.GameSettings;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.UIElement;
 import com.dissonance.framework.render.Camera;
@@ -90,7 +91,7 @@ public class DialogUI extends UIElement {
         currentdialog = this;
         setWidth(512);
         setHeight(64);
-        Vector2f pos = new Vector2f(getWidth() / 1.52f, getHeight() / 2);
+        Vector2f pos = new Vector2f(GameSettings.Display.window_width / 4, (GameSettings.Display.window_height / 2.0f) - ((getHeight() / 2.0f) + 8));
         pos = Camera.translateToScreenCord(pos);
         setX(pos.x);
         setY(pos.y);
@@ -142,7 +143,7 @@ public class DialogUI extends UIElement {
             i = 0;
 
         if (cx != Camera.getX() || cy != Camera.getY()) {
-            Vector2f pos = new Vector2f(getWidth() / 1.52f, getHeight() / 2);
+            Vector2f pos = new Vector2f(GameSettings.Display.window_width / 4, (GameSettings.Display.window_height / 2.0f) - ((getHeight() / 2.0f) + 8));
             pos = Camera.translateToScreenCord(pos);
             setX(pos.x);
             setY(pos.y);
