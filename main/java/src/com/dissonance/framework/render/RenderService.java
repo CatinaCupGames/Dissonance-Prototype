@@ -42,10 +42,8 @@ public class RenderService extends Service {
 
     private long startTime;
     private boolean isFading;
-    private boolean fromFade;
-    private float curVal;
     private float speed;
-    private float curAlpha;
+    private static float curAlpha;
     private float newAlpha;
     private float startAlpha;
 
@@ -72,6 +70,14 @@ public class RenderService extends Service {
         startAlpha = curAlpha;
         this.speed = speed;
         startTime = System.currentTimeMillis();
+    }
+
+    public static float getCurrentAlphaValue() {
+        return curAlpha;
+    }
+
+    public void waitForFade() throws InterruptedException {
+        Thread.sleep((long) speed);
     }
 
     /**
@@ -241,7 +247,7 @@ public class RenderService extends Service {
                 }
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            if (!isFading && !fromFade)
+            if (!isFading)
                 glClearColor(1f, 1f, 1f, 1f);
             else
                 glClearColor(0f, 0f, 0f, 1f);

@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import static org.lwjgl.opengl.GL11.glColor4f;
+
 public class DialogUI extends UIElement {
     private static DialogUI currentdialog;
 
@@ -100,6 +102,15 @@ public class DialogUI extends UIElement {
         if (events != null) {
             events.onDialogStarted(dialog);
         }
+    }
+
+    @Override
+    public void render() {
+        //The dialog box should always be visible, regardless of the current alpha of the overall
+        //display
+        glColor4f(1f, 1f, 1f, 1f);
+        super.render();
+        glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
     }
 
     private boolean pressed;

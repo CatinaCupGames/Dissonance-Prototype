@@ -92,11 +92,14 @@ public abstract class PlayableSprite extends CombatSprite {
         if (frozen)
             return;
         if (InputKeys.usingController()) {
-            float xspeed = InputKeys.getJoypadValue(InputKeys.MOVEX) * (10 * RenderService.TIME_DELTA);
-            float yspeed = InputKeys.getJoypadValue(InputKeys.MOVEY) * (10 * RenderService.TIME_DELTA);
+            System.out.println(InputKeys.getJoypadValue(InputKeys.MOVEX) + " : " + InputKeys.getJoypadValue(InputKeys.MOVEY));
+            Vector2f values = new Vector2f(InputKeys.getJoypadValue(InputKeys.MOVEX), InputKeys.getJoypadValue(InputKeys.MOVEY));
+            System.out.println(values.lengthSquared());
+            if (values.lengthSquared() < 0.25f)
+                values = new Vector2f(0,0);
 
-            setX(getX() + xspeed);
-            setY(getY() + yspeed);
+            setX(getX() + values.x * (10 * RenderService.TIME_DELTA));
+            setY(getY() + values.y * (10 * RenderService.TIME_DELTA));
         } else {
             w = InputKeys.isButtonPressed(InputKeys.MOVEUP);
             d = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);

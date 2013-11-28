@@ -18,9 +18,9 @@ public class MenuQuest extends AbstractQuest {
         Thread.sleep(5000);
         for (int i = 0; i < 3; i++) {
             RenderService.INSTANCE.fadeToAlpha(300, 0.7f);
-            Thread.sleep(300 + 500);
+            Thread.sleep(500);
             RenderService.INSTANCE.fadeFromBlack(300);
-            Thread.sleep(300 + 500);
+            Thread.sleep(500);
         }
     }
 

@@ -8,6 +8,7 @@ import com.dissonance.game.quests.MenuQuest;
 import com.dissonance.game.quests.TestQuest;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class Main {
@@ -37,7 +38,7 @@ public class Main {
         System.out.println("Loading game dialog");
         DialogFactory.loadDialog();
         System.out.println("Starting quest");
-        GameService.beginQuest(new MenuQuest());
+        GameService.beginQuest(new TestQuest());
     }
 
 
