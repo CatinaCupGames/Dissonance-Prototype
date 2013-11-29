@@ -1,6 +1,9 @@
 package com.dissonance.game.w;
 
+import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.World;
+import com.dissonance.game.quests.TestQuest;
+import com.dissonance.game.sprites.Enemy;
 import com.dissonance.game.sprites.TestPlayer;
 
 public class arrem_world extends GameWorldLoader {
@@ -10,12 +13,15 @@ public class arrem_world extends GameWorldLoader {
 
         TestPlayer pl;
         pl = new TestPlayer();
-        w.loadAnimatedTextureForSprite(pl);
-        w.addSprite(pl);
-        pl.setWorld(w);
+        w.loadAndAdd(pl);
         pl.setX(576);
         pl.setY(256);
         pl.setWidth(pl.getWidth() * 2);
         pl.setHeight(pl.getHeight() * 2);
+
+        Enemy e = new Enemy("enemy1", Enemy.StatType.NON_MAGIC, CombatSprite.CombatType.CREATURE, TestQuest.testEnemyInterface);
+        w.loadAndAdd(e);
+        e.setX(400);
+        e.setY(400);
     }
 }

@@ -136,8 +136,8 @@ public class HitBox {
 
     public List<Collidable> checkAndRetrieve(World world, float startX, float startY, Sprite ignore) {
         ArrayList<Collidable> collidables = new ArrayList<Collidable>();
-        for (float x = startX; x < startX + (maxX - minX); x++) {
-            for (float y = startY; y < startY + (maxY - minY); y++) {
+        for (float x = minX + startX; x < startX + (maxX - minX); x++) {
+            for (float y = minY + startY; y < startY + (maxY - minY); y++) {
                 for (PhysicsSprite sprite : cache) {
                     if (sprite == ignore)
                         continue;

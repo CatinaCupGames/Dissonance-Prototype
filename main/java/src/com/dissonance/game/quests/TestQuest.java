@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class TestQuest extends AbstractQuest {
 
-    private Enemy.AIInterface testEnemyInterface = new Enemy.AIInterface() {
+    public static Enemy.AIInterface testEnemyInterface = new Enemy.AIInterface() {
         private Random random = new Random();
 
         @Override

@@ -292,14 +292,25 @@ public abstract class CombatSprite extends PhysicsSprite {
     }
 
     public void strike(CombatSprite attacker, WeaponItem with) {
-        double defense = getDefense() + (getCurrentWeapon() != null ? getCurrentWeapon().getWeapon().getDefense() : 0);
-        double attack = attacker.getAttack() + with.getWeapon().getAttack();
+        double defense = getDefense() + (getCurrentWeapon() != null ? getCurrentWeapon().getWeaponInfo().getDefense() : 0);
+        double attack = attacker.getAttack() + with.getWeaponInfo().getAttack();
         double damage;
-        damage = (attack * Math.log(attack * 4)) / defense;
+        damage = (attack * 4 * Math.log(attack)) / defense;
 
         HP -= damage;
         //TODO Display damage
-
+        System.out.println("Status: ");
+        System.out.println("Damage: " + damage);
+        System.out.println("Current Health: " + HP);
+        System.out.println("Your Stats:");
+        System.out.println("    Attack: " + attacker.getAttack());
+        System.out.println("Weapon Stats:");
+        System.out.println("    Attack: " + with.getWeaponInfo().getDefense());
+        System.out.println("Enemy Stats:");
+        System.out.println("    Defense: " + getDefense());
+        System.out.println("Enemy's Weapon Stats:");
+        System.out.println("    Defense: " + (getCurrentWeapon() != null ? getCurrentWeapon().getWeaponInfo().getDefense() : 0));
+        System.out.println("END STATUS");
         if (HP <= 0) {
             //TODO Give attacker EXP
             //TODO Play death animation for this sprite

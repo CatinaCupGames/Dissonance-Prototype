@@ -6,11 +6,13 @@ import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.UpdatableSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class WeaponItem extends Item {
         this.weapon = w;
     }
 
-    public Weapon getWeapon() {
+    public Weapon getWeaponInfo() {
         return weapon;
     }
 
@@ -57,14 +59,27 @@ public class WeaponItem extends Item {
                     swordHitbox.setX(getOwner().getX());
                     swordHitbox.setY(getOwner().getY());
                     final float finalRange = weapon.getRange();
-                    final float steps = finalRange / getOwner().getCurrentAnimation().size() - 1;
+                    final float steps = finalRange / (float)(getOwner().getCurrentAnimation().size() - 1);
+                    System.out.println(steps + " : " + finalRange);
                     final HitBox finalSwordHitbox = swordHitbox;
+                    final ArrayList<CombatSprite> hits = new ArrayList<CombatSprite>();
                     getOwner().setAnimationFrameListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFrame() {
                         @Override
                         public void onAnimationFrame(AnimatedSprite sprite) {
                             List<Collidable> list = finalSwordHitbox.checkAndRetrieve(sprite.getWorld(), finalSwordHitbox.getX(), finalSwordHitbox.getY(), sprite);
-                            System.out.println(list);
-                            System.out.println("X: " + finalSwordHitbox.getX() + " Y: " + finalSwordHitbox.getY() + "         " + finalSwordHitbox.getMinX() + " : " + finalSwordHitbox.getMinY() + "       " + finalSwordHitbox.getMaxX() + " : " + finalSwordHitbox.getMaxY());
+                            for (Collidable c : list) {
+                                if (c instanceof CombatSprite) {
+                                    CombatSprite combatSprite = (CombatSprite)c;
+                                    if (!hits.contains(combatSprite)) {
+                                        combatSprite.strike(getOwner(), WeaponItem.this);
+                                        hits.add(combatSprite);
+                                    }
+                                } else if (c instanceof TiledObject) {
+                                    //TODO They hit a wall! We should stop it and play a sound or something
+                                    break;
+                                }
+                            }
+                            //System.out.println(list);
                             switch (facingDirection) {
                                 case UP:
                                     finalSwordHitbox.setMinY(finalSwordHitbox.getMinY() - steps);
@@ -91,6 +106,7 @@ public class WeaponItem extends Item {
                                 ((PlayableSprite)getOwner()).attacking = false;
                             }
                             sprite.setAnimation(0);
+                            hits.clear();
                         }
                     });
                     getOwner().playAnimation();

@@ -31,7 +31,7 @@ public class Enemy extends CombatSprite {
 
     @Override
     public int getDefense() {
-        return defense;
+        return 19;
     }
 
     @Override

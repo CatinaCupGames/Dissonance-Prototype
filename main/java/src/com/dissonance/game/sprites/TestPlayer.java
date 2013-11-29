@@ -67,7 +67,7 @@ public class TestPlayer extends PlayableSprite {
 
     @Override
     public int getAttack() {
-        return 1;
+        return 30;
     }
 
     @Override
