@@ -41,11 +41,11 @@ public class GameSettings
 
         static
         {
-            window_width = 1920;
-            window_height = 1080;
+            window_width = 1280;
+            window_height = 720;
 
-            game_width = 1920;
-            game_height = 1080;
+            game_width = 1280;
+            game_height = 720;
             resolution = new Resolution(game_width, game_height);
 
             fullscreen = false;

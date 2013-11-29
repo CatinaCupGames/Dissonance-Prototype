@@ -6,6 +6,7 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteAnimationInfo;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
+import com.dissonance.framework.system.utils.Direction;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.security.InvalidParameterException;
@@ -16,6 +17,7 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     private AnimatedSpriteEvent.OnAnimationPlayEvent animationPlayEvent;
     private AnimatedSpriteEvent.OnAnimationPauseEvent animationPauseEvent;
     private AnimatedSpriteEvent.OnAnimationFinished animationFinished;
+    private AnimatedSpriteEvent.OnAnimationFrame animationFrame;
     private SpriteTexture texture;
 
     protected transient int ANIMATION_FACTORY_ID;
@@ -34,6 +36,10 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
 
     public void setAnimationFinishedListener(AnimatedSpriteEvent.OnAnimationFinished animationFinished) {
         this.animationFinished = animationFinished;
+    }
+
+    public void setAnimationFrameListener(AnimatedSpriteEvent.OnAnimationFrame animationFrame) {
+        this.animationFrame = animationFrame;
     }
 
     /**
@@ -165,8 +171,11 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
             return;
         if (texture != null) {
             texture.step();
+            if (animationFrame != null) {
+                animationFrame.onAnimationFrame(this);
+            }
             if (animationFinished != null) {
-                if (getCurrentFrame() == 0)
+                if (getCurrentFrame() == 0 || getCurrentFrame() == getFrameCount() - 1)
                     animationFinished.onAnimationFinished(this);
             }
         }
@@ -223,6 +232,10 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
 
         public interface OnAnimationFinished {
             public void onAnimationFinished(AnimatedSprite sprite);
+        }
+
+        public interface OnAnimationFrame {
+            public void onAnimationFrame(AnimatedSprite sprite);
         }
     }
 

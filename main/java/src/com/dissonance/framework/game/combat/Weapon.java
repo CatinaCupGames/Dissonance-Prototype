@@ -35,9 +35,12 @@ public class Weapon {
     //If this weapon is not a spell, then play the normal sprite
     //attack animation
     private boolean isSpell; //Whether this weapon is a spell
+    private boolean isGun; //Whether this weapon is a gun
     private String spellSpriteClass; //The Spell class this weapon will use
     private double spellSpeed = 0; //The speed of the spell (defaults to 0 for non-moving spells)
+    //TODO This may not be needed..
     private int animationRow; //The animation row to play on the sprite
+    //TODO This may not be needed..
     private int animationSpeed; //The animation speed to play at for the sprite
 
 
@@ -61,11 +64,12 @@ public class Weapon {
                     db = SpriteTexture.DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
                     Document dom = db.parse(in);
                     Element elm = dom.getDocumentElement();
-
-                    NodeList nl = elm.getElementsByTagName("weapon");
+                    NodeList nl = elm.getChildNodes();
                     Weapon w = new Weapon();
                     if (nl != null && nl.getLength() > 0) {
                         for (int i = 0; i < nl.getLength(); i++) {
+                            if (!(nl.item(i) instanceof Element))
+                                continue;
                             Element el = (Element)nl.item(i);
 
                             String nodeName = el.getNodeName();
@@ -96,6 +100,8 @@ public class Weapon {
                                 w.swipeRange = Integer.parseInt(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("spell"))
                                 w.isSpell = el.getFirstChild().getNodeValue().equalsIgnoreCase("true");
+                            else if (nodeName.equals("gun"))
+                                w.isGun = el.getFirstChild().getNodeValue().equalsIgnoreCase("true");
                             else if (nodeName.equals("spellSpriteClass"))
                                 w.spellSpriteClass = el.getFirstChild().getNodeValue();
                             else if (nodeName.equals("spellSpeed"))
@@ -148,6 +154,10 @@ public class Weapon {
 
     public int getSpeed() {
         return speed;
+    }
+
+    public boolean isGun() {
+        return isGun;
     }
 
     public double getSpellSpeed() {

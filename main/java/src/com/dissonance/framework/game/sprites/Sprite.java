@@ -51,6 +51,8 @@ public abstract class Sprite implements Drawable, Serializable {
     }
 
     public Direction getDirection() {
+        if (direction == null)
+            direction = Direction.DOWN;
         return direction;
     }
 

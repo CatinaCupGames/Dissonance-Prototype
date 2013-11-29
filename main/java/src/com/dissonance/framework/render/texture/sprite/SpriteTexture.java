@@ -23,7 +23,6 @@ public class SpriteTexture extends Texture {
     private int step;
     private int width;
     private int height;
-    private int max_frames;
 
 
     public static SpriteTexture retriveSpriteTexture(String sprite_name) throws IOException {
@@ -49,13 +48,6 @@ public class SpriteTexture extends Texture {
                         try {
                             texture.height = Integer.parseInt(elm.getAttribute("height"));
                             //texture.setTextureSize();
-                        } catch (Throwable t) {
-                            t.printStackTrace();
-                        }
-                    }
-                    if (elm.hasAttribute("max_frames")) {
-                        try {
-                            texture.max_frames = Integer.parseInt(elm.getAttribute("max_frames"));
                         } catch (Throwable t) {
                             t.printStackTrace();
                         }
@@ -173,6 +165,7 @@ public class SpriteTexture extends Texture {
         Validator.validateNotOver(index, animations.length - 1, "index");
 
         row = index;
+        step = 0; //Reset animation
         return animations[row];
     }
 
@@ -205,22 +198,35 @@ public class SpriteTexture extends Texture {
         return height;
     }
 
+    private float[] convertToCords(int row, int step) {
+        int x;
+        int y;
+        y = height * row;
+        x = width * step;
+        return new float[] { x, y };
+    }
+
     public Vector2f getTextureCord(int type) {
-        float st = 1.0f / max_frames;
-        float rt = 1.0f / (float) animations.length;
-        float cx = (float) (step % animations[row].size()) / max_frames;
-        float cy = (float) (row / animations.length) / height;
-        if (type == 0) {
-            return new Vector2f(cx, cy);
-        } else if (type == 1) {
-            return new Vector2f(cx + st, cy);
-        } else if (type == 2) {
-            return new Vector2f(cx + st, cy + rt);
-        } else if (type == 3) {
-            return new Vector2f(cx, cy + rt);
-        } else {
+        float x, y;
+        float temp[] = convertToCords(row, step);
+
+        x = temp[0];
+        y = temp[1];
+        if (type == 3) { //Bottom left
+            y += height;
+        } else if (type == 2) { //Bottom right
+            y += height;
+            x += width;
+        } else if (type == 1) { //Top right
+            x += width;
+        }  else if (type != 0) { //We start with the Top Left, ignore pos 3
             throw new InvalidParameterException("The parameter \"type\"'s value can only be 0, 1, 2, or 3");
         }
+
+        x /= super.getTextureWidth(); //Convert to fraction
+        y /= super.getTextureHeight(); //Convert to fraction
+
+        return new Vector2f(x, y);
     }
 
     public void setCurrentFrame(int frame_num) {

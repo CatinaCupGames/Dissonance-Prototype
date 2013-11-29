@@ -2,6 +2,7 @@ package com.dissonance.framework.game.sprites.impl.game;
 
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
@@ -22,6 +23,7 @@ public abstract class PlayableSprite extends CombatSprite {
     private static PlayableSprite currentlyPlaying;
     private ArrayList<PlayableSprite> party = new ArrayList<PlayableSprite>();
     private float ox, oy;
+    public boolean attacking = false;
 
     /**
      * Sets this {@link PlayableSprite PlayableSprite's}
@@ -101,6 +103,25 @@ public abstract class PlayableSprite extends CombatSprite {
             setX(getX() + values.x * (10 * RenderService.TIME_DELTA));
             setY(getY() + values.y * (10 * RenderService.TIME_DELTA));
         } else {
+            if (InputKeys.isButtonPressed(InputKeys.ATTACK) && getCurrentWeapon() != null) {
+                getCurrentWeapon().use("stab");
+                attacking = true;
+                return;
+                /*setAnimation("sword_stab");
+                freeze();
+                attacking = true;
+                setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+                    @Override
+                    public void onAnimationFinished(AnimatedSprite sprite) {
+                        unfreeze();
+                        attacking = false;
+                        setAnimationFinishedListener(null);
+                        setAnimation(0);
+                    }
+                });
+                playAnimation();
+                return;*/
+            }
             w = InputKeys.isButtonPressed(InputKeys.MOVEUP);
             d = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
             s = InputKeys.isButtonPressed(InputKeys.MOVEDOWN);

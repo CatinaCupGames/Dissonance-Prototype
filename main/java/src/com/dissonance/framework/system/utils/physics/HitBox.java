@@ -49,7 +49,7 @@ public class HitBox {
 
     /**
      * Check for collision with any {@link Collidable} objects and return the <b>FIRST</b> object found colliding. <br></br>
-     * The x and y returned by {@link com.dissonance.framework.system.utils.physics.HitBox#getX()} and {@link com.dissonance.framework.system.utils.physics.HitBox#getY()} are used when {@link HitBox#checkForCollision(com.dissonance.framework.game.world.World, float, float)} is invoked.
+     * The x and y returned by {@link com.dissonance.framework.system.utils.physics.HitBox#getX()} and {@link com.dissonance.framework.system.utils.physics.HitBox#getY()} are used when {@link HitBox#checkForCollision(com.dissonance.framework.game.world.World, float, float, Sprite)} is invoked.
      * @param world
      *             The world to check in
      * @return
@@ -134,6 +134,39 @@ public class HitBox {
         return false;
     }
 
+    public List<Collidable> checkAndRetrieve(World world, float startX, float startY, Sprite ignore) {
+        ArrayList<Collidable> collidables = new ArrayList<Collidable>();
+        for (float x = startX; x < startX + (maxX - minX); x++) {
+            for (float y = startY; y < startY + (maxY - minY); y++) {
+                for (PhysicsSprite sprite : cache) {
+                    if (sprite == ignore)
+                        continue;
+                    if (sprite.isPointInside(x, y) && !collidables.contains(sprite)) {
+                        collidables.add(sprite);
+                    }
+                }
+                List<TiledObject> list = world.getPolygonsAt(x, y);
+                if (list.size() > 0) {
+                    for (TiledObject t : list) {
+                        if (collidables.contains(t))
+                            continue;
+                        collidables.add(t);
+                    }
+                }
+                else {
+                    for (Layer l : world.getLayers(LayerType.TILE_LAYER)) {
+                        Tile t = world.getTileAt(x, y, l);
+                        if (t != null && !t.isPassable() && !collidables.contains(t)) {
+                            collidables.add(t);
+                        }
+                    }
+                }
+            }
+        }
+
+        return collidables;
+    }
+
     public float getMinY() {
         return minY;
     }
@@ -148,6 +181,22 @@ public class HitBox {
 
     public float getMaxY() {
         return maxY;
+    }
+
+    public void setMinX(float x) {
+        this.minX = x;
+    }
+
+    public void setMinY(float y) {
+        this.minY = y;
+    }
+
+    public void setMaxX(float x) {
+        this.maxX = x;
+    }
+
+    public void setMaxY(float y) {
+        this.maxY = y;
     }
 
     public static void registerSprite(PhysicsSprite collidable) {

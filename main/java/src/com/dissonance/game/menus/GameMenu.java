@@ -24,8 +24,10 @@ public class GameMenu extends UIElement {
         graphics2D.fillRect(0, 0, getWidth(), getHeight());
 
         graphics2D.setColor(Color.BLACK);
-        String text = "HI! This is a really cool menu yus";
-        graphics2D.drawString(text, (getWidth() / 2) - (graphics2D.getFontMetrics().stringWidth(text) / 2), (getHeight() / 2));
+        String text = "Wow, such menu";
+        graphics2D.drawString(text, (getWidth() / 2) - (graphics2D.getFontMetrics().stringWidth(text) / 2), graphics2D.getFontMetrics().getHeight() + 400);
+        String button1 = "Button 1";
+        graphics2D.drawString(button1, (getWidth() / 2) - (graphics2D.getFontMetrics().stringWidth(button1)), graphics2D.getFontMetrics().getHeight() + 500);
     }
 
     @Override

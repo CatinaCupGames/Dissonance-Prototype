@@ -267,6 +267,8 @@ public abstract class CombatSprite extends PhysicsSprite {
     }
 
     public WeaponItem getCurrentWeapon() {
+        if (inventory.size() == 0 || weaponIndex >= inventory.size())
+            return null;
         return (WeaponItem) inventory.get(weaponIndex);
     }
 

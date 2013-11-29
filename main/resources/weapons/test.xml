@@ -1,0 +1,18 @@
+<weapon>
+    <type>light_melee</type>
+    <attack>0</attack>
+    <defense>0</defense>
+    <speed>0</speed>
+    <vigor>0</vigor>
+    <stamina>0</stamina>
+    <willpower>0</willpower>
+    <focus>0</focus>
+    <marksmanship>0</marksmanship>
+    <range>100</range>
+    <swipe>10</swipe>
+    <spell>false</spell>
+    <gun>false</gun>
+    <animationRow>4</animationRow>
+    <animationSpeed>30</animationSpeed>
+    <name>Test Weapon</name>
+</weapon>

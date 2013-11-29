@@ -31,9 +31,9 @@ public class TestQuest extends AbstractQuest {
     public void startQuest() throws Exception {
         World w = WorldFactory.getWorld("arrem_world");
         setWorld(w);
-        Thread.sleep(3000);
-        w = WorldFactory.getWorld("test_world");
-        setWorld(w);
+        //Thread.sleep(30000);
+        //w = WorldFactory.getWorld("test_world");
+        //setWorld(w);
     }
 
     @Override

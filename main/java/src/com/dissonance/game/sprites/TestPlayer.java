@@ -1,6 +1,7 @@
 package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.ai.astar.Position;
+import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.game.quests.TestQuest;
 import org.lwjgl.input.Keyboard;
@@ -12,6 +13,8 @@ public class TestPlayer extends PlayableSprite {
         super.onLoad();
         setFrame(0);
         pauseAnimation();
+        Weapon w = Weapon.getWeapon("test");
+        setCurrentWeapon(w.createItem(this));
     }
 
     @Override
@@ -30,7 +33,7 @@ public class TestPlayer extends PlayableSprite {
         super.update();
         if (isAnimationPaused() && (w || a || s || d))
             playAnimation();
-        else if (!w && !a && !s && !d) {
+        else if (!w && !a && !s && !d && !attacking) {
             setFrame(0);
             pauseAnimation();
         }
