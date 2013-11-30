@@ -202,7 +202,7 @@ public class RenderService extends Service {
 
     @Override
     protected void onTerminated() {
-        GameService.getSoundSystem().unloadAllSounds();
+        //GameService.getSoundSystem().unloadAllSounds();
         current_world = null;
         INSTANCE = null;
         Display.destroy();

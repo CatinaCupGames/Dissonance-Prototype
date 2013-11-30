@@ -4,6 +4,7 @@ import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.waypoint.WaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
+import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.render.RenderService;
 
@@ -54,23 +55,28 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         waypointList = null;
     }
 
-    public void setWaypoint(Position position) {
-
-        NodeMap map = getWorld().getNodeMap();
-        waypointList = map.findPath(new Position(getX(), getY()).shrink(), position.shrink());
-        if (waypointList.size() > 0)
-            currentWaypoint = waypointList.get(0).expand();
+    public void setWaypoint(Position position, WaypointType type) {
+        if (type == WaypointType.SMART) {
+            NodeMap map = getWorld().getNodeMap();
+            waypointList = map.findPath(new Position(getX(), getY()).shrink(), position.shrink());
+            if (waypointList.size() > 0)
+                currentWaypoint = waypointList.get(0).expand();
+        } else {
+           currentWaypoint = position;
+        }
     }
 
-    public void appendWaypoint(Position position) {
-        if (waypointList == null) {
-            setWaypoint(position);
+    public void appendWaypoint(Position position, WaypointType type) {
+        if (waypointList == null || type == WaypointType.SIMPLE) {
+            setWaypoint(position, type);
             return;
         }
-        NodeMap map = getWorld().getNodeMap();
-        List<Position> points = map.findPath(new Position(getX(), getY()).shrink(), position.shrink());
-        if (points.size() > 0) {
-            waypointList.addAll(points);
+        if (type == WaypointType.SMART) {
+            NodeMap map = getWorld().getNodeMap();
+            List<Position> points = map.findPath(new Position(getX(), getY()).shrink(), position.shrink());
+            if (points.size() > 0) {
+                waypointList.addAll(points);
+            }
         }
     }
 

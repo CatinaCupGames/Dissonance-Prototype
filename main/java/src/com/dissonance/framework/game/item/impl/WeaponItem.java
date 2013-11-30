@@ -8,6 +8,8 @@ import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.render.UpdatableDrawable;
+import com.dissonance.framework.render.texture.Texture;
+import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
@@ -49,8 +51,138 @@ public class WeaponItem extends Item {
             if (parameters.length > 0) {
                 String type = (String) parameters[0];
                 if (type.equals("swipe")) {
-                    //TODO Swipe code
+
+                    /**
+                     * =========================================================
+                     * This chunk of code is the sword swipping detection code
+                     * =========================================================
+                     */
+                    getOwner().setAnimation("sword_swipe");
+                    if (getOwner() instanceof PlayableSprite)
+                        ((PlayableSprite)getOwner()).freeze();
+                    float height;
+                    float width;
+                    Texture texture = getOwner().getTexture();
+                    if (texture instanceof SpriteTexture) {
+                        height = texture.getHeight();
+                        width = texture.getWidth();
+                    } else {
+                        height = getOwner().getHeight();
+                        width = getOwner().getWidth();
+                    }
+                    final float minX, minY, maxX, maxY, x, y, xadd, yadd;
+                    float range = weapon.getRange();
+                    final float swipe = weapon.getSwipeRange();
+                    switch (facingDirection) {
+                        case UP:
+                            minY = -range;
+                            maxY = 0;
+                            minX = 0;
+                            maxX = swipe;
+                            y = getOwner().getY() - (height / 2);
+                            x = getOwner().getX() - (width / 2);
+                            xadd = width / (float)(getOwner().getFrameCount() - 1);
+                            yadd = 0;
+                            break;
+                        case DOWN:
+                            minY = 0;
+                            maxY = range;
+                            minX = 0;
+                            maxX = swipe;
+                            y = getOwner().getY() + (height / 2);
+                            x = getOwner().getX() - (width / 2);
+                            xadd = width / (float)(getOwner().getFrameCount() - 1);
+                            yadd = 0;
+                            break;
+                        case LEFT:
+                            minY = 0;
+                            maxY = swipe;
+                            minX = -range;
+                            maxX = 0;
+                            y = getOwner().getY() - (height / 2);
+                            x = getOwner().getX() - (width / 2);
+                            yadd = height / (float)(getOwner().getFrameCount() - 1);
+                            xadd = 0;
+                            break;
+                        case RIGHT:
+                            minY = 0;
+                            maxY = swipe;
+                            minX = 0;
+                            maxX = range;
+                            y = getOwner().getY() - (height / 2);
+                            x = getOwner().getX() + (width / 2);
+                            yadd = height / (float)(getOwner().getFrameCount() - 1);
+                            xadd = 0;
+                            break;
+                        default:
+                            minY = 0;
+                            maxY = 0;
+                            minX = 0;
+                            maxX = 0;
+                            x = getOwner().getX();
+                            y = getOwner().getY();
+                            xadd = 0;
+                            yadd = 0;
+                            break;
+                    }
+
+                    final HitBox swordHitBox = new HitBox(minX, minY, maxX, maxY);
+                    swordHitBox.setX(x);
+                    swordHitBox.setY(y);
+                    final int[] temp_step = new int[1];
+                    System.out.println(xadd + " : " + yadd);
+                    final List<CombatSprite> hits = new ArrayList<CombatSprite>();
+                    getOwner().setAnimationFrameListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFrame() {
+                        @Override
+                        public void onAnimationFrame(AnimatedSprite sprite) {
+                            List<Collidable> list = swordHitBox.checkAndRetrieve(sprite.getWorld(), swordHitBox.getX(), swordHitBox.getY(), sprite);
+                            for (Collidable c : list) {
+                                if (c instanceof CombatSprite) {
+                                    CombatSprite combatSprite = (CombatSprite)c;
+                                    if (!hits.contains(combatSprite)) {
+                                        System.out.println("HIT ON STEP: " + temp_step[0] + " @ (" + swordHitBox.getX() + "," + swordHitBox.getY() + ")");
+                                        combatSprite.strike(getOwner(), WeaponItem.this);
+                                        hits.add(combatSprite);
+                                    }
+                                } else if (c instanceof TiledObject) {
+                                    //TODO They hit a wall! We should stop it and play a sound or something
+                                    break;
+                                }
+                            }
+                            temp_step[0]++;
+                            if (xadd != 0)
+                                swordHitBox.setX(swordHitBox.getX() + xadd);
+                            if (yadd != 0)
+                                swordHitBox.setY(swordHitBox.getY() + yadd);
+                        }
+                    });
+                    getOwner().setAnimationFinishedListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFinished() {
+                        @Override
+                        public void onAnimationFinished(AnimatedSprite sprite) {
+                            sprite.setAnimationFinishedListener(null);
+                            sprite.setAnimationFrameListener(null);
+                            if (getOwner() instanceof PlayableSprite) {
+                                ((PlayableSprite)getOwner()).unfreeze();
+                                ((PlayableSprite)getOwner()).attacking = false;
+                            }
+                            sprite.setAnimation(0);
+                            hits.clear();
+                        }
+                    });
+                    getOwner().playAnimation();
+
+                    /**
+                     * ===================
+                     * END OF CODE CHUNK
+                     * ===================
+                     */
                 } else {
+
+                    /**
+                     * =========================================================
+                     * This chunk of code is the sword stabbing detection code
+                     * =========================================================
+                     */
                     getOwner().setAnimation("sword_stab");
                     if (getOwner() instanceof PlayableSprite)
                         ((PlayableSprite)getOwner()).freeze();
@@ -60,7 +192,6 @@ public class WeaponItem extends Item {
                     swordHitbox.setY(getOwner().getY());
                     final float finalRange = weapon.getRange();
                     final float steps = finalRange / (float)(getOwner().getCurrentAnimation().size() - 1);
-                    System.out.println(steps + " : " + finalRange);
                     final HitBox finalSwordHitbox = swordHitbox;
                     final ArrayList<CombatSprite> hits = new ArrayList<CombatSprite>();
                     getOwner().setAnimationFrameListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFrame() {
@@ -79,7 +210,6 @@ public class WeaponItem extends Item {
                                     break;
                                 }
                             }
-                            //System.out.println(list);
                             switch (facingDirection) {
                                 case UP:
                                     finalSwordHitbox.setMinY(finalSwordHitbox.getMinY() - steps);
@@ -110,39 +240,14 @@ public class WeaponItem extends Item {
                         }
                     });
                     getOwner().playAnimation();
+
+                    /**
+                     * ==================
+                     * END OF CODE CHUNK
+                     * ==================
+                     */
                 }
             }
         }
-
-        /*Direction facingDirection = getOwner().getDirection();
-        int range = weapon.getRange();
-        int swipe = weapon.getSwipeRange();
-        double xadd = 0, yadd = 0;
-        if (facingDirection == Direction.UP)
-            yadd = range;
-        else if (facingDirection == Direction.DOWN)
-            yadd = -range;
-        else if (facingDirection == Direction.LEFT)
-            xadd = range;
-        else if (facingDirection == Direction.RIGHT)
-            xadd = -range;
-
-        double x = getOwner().getX() + xadd;
-        double y = getOwner().getX() + yadd;
-
-        double xmin = x - swipe;
-        double xmax = x + swipe;
-        double ymin = y - swipe;
-        double ymax = y + swipe;
-        Iterator<UpdatableDrawable> sprites = getOwner().getWorld().getUpdatables();
-        while (sprites.hasNext()) {
-            UpdatableDrawable ud = sprites.next();
-            if (ud != null && ud instanceof CombatSprite) {
-                CombatSprite combatSprite = (CombatSprite)ud;
-                if (combatSprite.getX() > xmin && combatSprite.getX() < xmax && combatSprite.getY() > ymin && combatSprite.getY() < ymax) { //TODO Check within hitbox, not bounds of sprite
-                    combatSprite.strike(getOwner(), this);
-                }
-            }
-        }*/
     }
 }

@@ -86,7 +86,6 @@ public class Enemy extends CombatSprite {
     @Override
     public void onSelected(PlayableSprite player) {
         levelUp();
-        System.out.println(this);
     }
 
     public enum StatType {

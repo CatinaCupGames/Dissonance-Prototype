@@ -104,7 +104,7 @@ public abstract class PlayableSprite extends CombatSprite {
             setY(getY() + values.y * (10 * RenderService.TIME_DELTA));
         } else {
             if (InputKeys.isButtonPressed(InputKeys.ATTACK) && getCurrentWeapon() != null) {
-                getCurrentWeapon().use("stab");
+                getCurrentWeapon().use("swipe");
                 attacking = true;
                 return;
                 /*setAnimation("sword_stab");

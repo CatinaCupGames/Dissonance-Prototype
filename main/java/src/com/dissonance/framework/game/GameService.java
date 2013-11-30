@@ -5,7 +5,6 @@ import com.dissonance.framework.game.settings.SettingsLevelTest;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.sound.SoundSystem;
 import com.dissonance.framework.system.utils.Validator;
 import com.sun.istack.internal.NotNull;
 import org.yaml.snakeyaml.Yaml;
@@ -26,7 +25,7 @@ public class GameService {
     private static long TID;
     private static boolean alive = true;
     private static Thread questThread;
-    private static final SoundSystem soundSystem = new SoundSystem();
+    //private static final SoundSystem soundSystem = new SoundSystem();
     private static AbstractQuest currentQuest;
 
     public static void beginQuest(@NotNull AbstractQuest quest) {
@@ -58,9 +57,9 @@ public class GameService {
         //...what do we do now..?
     }
 
-    public static SoundSystem getSoundSystem() {
-        return soundSystem;
-    }
+    //public static SoundSystem getSoundSystem() {
+    //    return soundSystem;
+    //}
 
     public static void handleKillRequest() {
         try {

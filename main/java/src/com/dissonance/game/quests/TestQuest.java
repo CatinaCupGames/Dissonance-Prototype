@@ -5,6 +5,8 @@ import com.dissonance.framework.game.scene.hud.HUD;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
+import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.game.scene.TestScene;
 import com.dissonance.game.sprites.Enemy;
@@ -31,6 +33,11 @@ public class TestQuest extends AbstractQuest {
     public void startQuest() throws Exception {
         World w = WorldFactory.getWorld("arrem_world");
         setWorld(w);
+        w.waitForWorldLoaded();
+        Thread.sleep(5000);
+        TestScene test = new TestScene();
+        test.beginScene();
+        test.waitForSceneEnd();
         //Thread.sleep(30000);
         //w = WorldFactory.getWorld("test_world");
         //setWorld(w);
