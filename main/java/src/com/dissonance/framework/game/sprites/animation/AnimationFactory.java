@@ -47,15 +47,15 @@ public class AnimationFactory {
 
         synchronized (animate) {
             for (AnimatorData ad : animate) {
-                ad.ticks++;
-                if (ad.ticks >= ad.animator.getAnimationSpeed()) {
+                long time = System.currentTimeMillis() - ad.last_tick;
+                if (time >= ad.animator.getAnimationSpeed()) {
                     ad.animator.onAnimate();
                     ad.current_frame_number++;
                     if (ad.current_frame_number >= ad.animator.getFrameCount()) {
                         ad.current_frame_number = 0;
                         ad.animator.wakeUp();
                     }
-                    ad.ticks = 0;
+                    ad.last_tick = System.currentTimeMillis();
                 }
             }
         }
@@ -63,7 +63,7 @@ public class AnimationFactory {
 
     private static class AnimatorData {
         public Animator animator;
-        public int ticks;
+        public long last_tick;
         public int current_frame_number;
 
         @Override
