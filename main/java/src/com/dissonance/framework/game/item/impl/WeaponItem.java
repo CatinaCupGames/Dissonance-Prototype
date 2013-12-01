@@ -130,7 +130,6 @@ public class WeaponItem extends Item {
                     swordHitBox.setX(x);
                     swordHitBox.setY(y);
                     final int[] temp_step = new int[1];
-                    System.out.println(xadd + " : " + yadd);
                     final List<CombatSprite> hits = new ArrayList<CombatSprite>();
                     getOwner().setAnimationFrameListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFrame() {
                         @Override

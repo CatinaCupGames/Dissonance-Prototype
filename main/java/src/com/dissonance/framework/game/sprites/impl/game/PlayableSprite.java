@@ -2,7 +2,6 @@ package com.dissonance.framework.game.sprites.impl.game;
 
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
-import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
@@ -19,7 +18,8 @@ public abstract class PlayableSprite extends CombatSprite {
 
     private boolean isPlaying = false;
     private boolean frozen;
-    private boolean attack_select;
+    private boolean use_select;
+    private boolean use_attack;
     private static PlayableSprite currentlyPlaying;
     private ArrayList<PlayableSprite> party = new ArrayList<PlayableSprite>();
     private float ox, oy;
@@ -115,7 +115,6 @@ public abstract class PlayableSprite extends CombatSprite {
                     setFacing(Direction.UP);
                 }
             }
-            System.out.println(getDirection());
         } else {
             w = InputKeys.isButtonPressed(InputKeys.MOVEUP);
             d = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
@@ -142,22 +141,28 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     protected void checkKeys() {
-        if (InputKeys.isButtonPressed(InputKeys.ATTACK) && getCurrentWeapon() != null) {
-            getCurrentWeapon().use("swipe");
-            attacking = true;
+        if (!use_attack) {
+            if (InputKeys.isButtonPressed(InputKeys.ATTACK) && getCurrentWeapon() != null) {
+                getCurrentWeapon().use("swipe");
+                attacking = true;
+                use_attack = true;
+            }
+        } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK)) use_attack = false;
+        if (InputKeys.isButtonPressed(InputKeys.DODGE)) {
+            frozen = true;
         }
     }
 
-    protected void checkSelect() {
-        if (!attack_select) {
-            attack_select = Keyboard.isKeyDown(InputKeys.getAttackKey());
+    protected void checkSelect() { //TODO Make work for joypad
+        if (!use_select) {
+            use_select = Keyboard.isKeyDown(InputKeys.getAttackKey());
 
-            if (attack_select) {
+            if (use_select) {
                 onSelectAttackKey();
             }
 
         } else if (!Keyboard.isKeyDown(InputKeys.getAttackKey())) {
-            attack_select = false;
+            use_select = false;
         }
     }
 
@@ -190,7 +195,27 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     protected boolean isFacing(Sprite s, double distance) {
-        int xadd = 0;
+        float ydif = s.getY() - getY();
+        float xdif = s.getX() - getX();
+        double angle = Math.toDegrees(Math.atan2(-ydif, xdif));
+        while (angle < 0)
+            angle += 360;
+        while (angle > 360)
+            angle -= 360;
+        Direction direction1 = getDirection();
+        if (angle != 0 && angle != -0) {
+            if ((angle > 315 || angle < 45) && direction1 == Direction.RIGHT) {
+                return Math.abs(xdif) < distance;
+            } else if (angle > 255 && angle <= 315 && direction1 == Direction.DOWN) {
+                return Math.abs(ydif) < distance;
+            } else if (angle > 135 && angle <= 225 && direction1 == Direction.LEFT) {
+                return Math.abs(xdif) < distance;
+            } else if (angle >= 45 && angle <= 135 && direction1 == Direction.UP) {
+                return Math.abs(ydif) < distance;
+            }
+        }
+        return false;
+        /*int xadd = 0;
         int yadd = 0;
         boolean xcheck = getDirection() == Direction.UP || getDirection() == Direction.DOWN;
         if (getDirection() == Direction.UP)
@@ -206,7 +231,7 @@ public abstract class PlayableSprite extends CombatSprite {
         final Vector2f v1 = getVector();
         double new_distance = Math.sqrt(((v2.x - (v1.x + xadd)) * (v2.x - (v1.x + xadd))) + ((v2.y - (v1.y + yadd)) * (v2.y - (v1.y + yadd))));
 
-        return new_distance < distance;
+        return new_distance < distance;*/
     }
 
 
@@ -263,7 +288,7 @@ public abstract class PlayableSprite extends CombatSprite {
         a = false;
         s = false;
         d = false;
-        attack_select = false;
+        use_select = false;
     }
 
     public boolean isPlaying() {
