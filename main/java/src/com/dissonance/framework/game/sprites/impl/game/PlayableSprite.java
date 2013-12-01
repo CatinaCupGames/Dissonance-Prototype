@@ -69,6 +69,7 @@ public abstract class PlayableSprite extends CombatSprite {
         if (isPlaying) {
             checkSelect();
             checkMovement();
+            checkKeys();
         }
     }
 
@@ -94,34 +95,28 @@ public abstract class PlayableSprite extends CombatSprite {
         if (frozen)
             return;
         if (InputKeys.usingController()) {
-            System.out.println(InputKeys.getJoypadValue(InputKeys.MOVEX) + " : " + InputKeys.getJoypadValue(InputKeys.MOVEY));
             Vector2f values = new Vector2f(InputKeys.getJoypadValue(InputKeys.MOVEX), InputKeys.getJoypadValue(InputKeys.MOVEY));
-            System.out.println(values.lengthSquared());
             if (values.lengthSquared() < 0.25f)
                 values = new Vector2f(0,0);
 
             setX(getX() + values.x * (10 * RenderService.TIME_DELTA));
             setY(getY() + values.y * (10 * RenderService.TIME_DELTA));
-        } else {
-            if (InputKeys.isButtonPressed(InputKeys.ATTACK) && getCurrentWeapon() != null) {
-                getCurrentWeapon().use("swipe");
-                attacking = true;
-                return;
-                /*setAnimation("sword_stab");
-                freeze();
-                attacking = true;
-                setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
-                    @Override
-                    public void onAnimationFinished(AnimatedSprite sprite) {
-                        unfreeze();
-                        attacking = false;
-                        setAnimationFinishedListener(null);
-                        setAnimation(0);
-                    }
-                });
-                playAnimation();
-                return;*/
+            double angle = Math.toDegrees(Math.atan2(-values.y, values.x));
+            if (angle < 0)
+                angle += 360;
+            if (angle != 0 && angle != -0) {
+                if (angle > 315 || angle < 45) {
+                    setFacing(Direction.RIGHT);
+                } else if (angle > 255 && angle <= 315) {
+                    setFacing(Direction.DOWN);
+                } else if (angle > 135 && angle <= 225) {
+                    setFacing(Direction.LEFT);
+                } else if (angle >= 45 && angle <= 135) {
+                    setFacing(Direction.UP);
+                }
             }
+            System.out.println(getDirection());
+        } else {
             w = InputKeys.isButtonPressed(InputKeys.MOVEUP);
             d = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
             s = InputKeys.isButtonPressed(InputKeys.MOVEDOWN);
@@ -143,6 +138,13 @@ public abstract class PlayableSprite extends CombatSprite {
                 setX(getX() + (10 * RenderService.TIME_DELTA));
                 setFacing(Direction.RIGHT);
             }
+        }
+    }
+
+    protected void checkKeys() {
+        if (InputKeys.isButtonPressed(InputKeys.ATTACK) && getCurrentWeapon() != null) {
+            getCurrentWeapon().use("swipe");
+            attacking = true;
         }
     }
 
