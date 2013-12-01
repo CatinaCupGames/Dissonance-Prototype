@@ -1,9 +1,7 @@
 package com.dissonance.game.sprites;
 
-import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
-import com.dissonance.game.quests.TestQuest;
 import org.lwjgl.input.Keyboard;
 
 public class TestPlayer extends PlayableSprite {
@@ -33,7 +31,7 @@ public class TestPlayer extends PlayableSprite {
         super.update();
         if (isAnimationPaused() && (w || a || s || d))
             playAnimation();
-        else if (!w && !a && !s && !d && !attacking) {
+        else if (!w && !a && !s && !d && !ignore_movement) {
             setFrame(0);
             pauseAnimation();
         }
@@ -77,7 +75,7 @@ public class TestPlayer extends PlayableSprite {
 
     @Override
     public int getSpeed() {
-        return 1;
+        return 100;
     }
 
     @Override

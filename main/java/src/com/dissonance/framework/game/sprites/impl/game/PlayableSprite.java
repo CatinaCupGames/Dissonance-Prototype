@@ -1,7 +1,9 @@
 package com.dissonance.framework.game.sprites.impl.game;
 
 import com.dissonance.framework.game.input.InputKeys;
+import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
@@ -18,12 +20,13 @@ public abstract class PlayableSprite extends CombatSprite {
 
     private boolean isPlaying = false;
     private boolean frozen;
-    private boolean use_select;
-    private boolean use_attack;
+    private boolean use_select, use_attack, use_dodge;
+    private float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
+    private long dodgeStartTime;
     private static PlayableSprite currentlyPlaying;
     private ArrayList<PlayableSprite> party = new ArrayList<PlayableSprite>();
-    private float ox, oy;
-    public boolean attacking = false;
+    public boolean ignore_movement = false;
+    private boolean is_dodging;
 
     /**
      * Sets this {@link PlayableSprite PlayableSprite's}
@@ -73,6 +76,10 @@ public abstract class PlayableSprite extends CombatSprite {
         }
     }
 
+    protected float movementSpeed() {
+        return 20 + (getSpeed() / 10);
+    }
+
     public void joinParty(PlayableSprite joiner) {
         for (PlayableSprite p : party) {
             if (!p.party.contains(joiner))
@@ -92,15 +99,44 @@ public abstract class PlayableSprite extends CombatSprite {
 
     protected boolean w, a, s, d;
     protected void checkMovement() {
+        if (is_dodging) {
+            float moveX, moveY;
+            if (dodgeX != 0) {
+                moveX = Camera.ease(dodgeStartX, dodgeX, totalDodgeTime, ((System.currentTimeMillis() - dodgeStartTime)));
+                setX(moveX);
+                if (moveX == dodgeX) {
+                    setAnimationFinishedListener(null);
+                    setAnimationFrameListener(null);
+                    unfreeze();
+                    setAnimation(0);
+                    ignore_movement = false;
+                    is_dodging = false;
+                    return;
+                }
+            } else if (dodgeY != 0) {
+                moveY = Camera.ease(dodgeStartY, dodgeY, totalDodgeTime, ((System.currentTimeMillis() - dodgeStartTime)));
+                setY(moveY);
+                if (moveY == dodgeY) {
+                    setAnimationFinishedListener(null);
+                    setAnimationFrameListener(null);
+                    unfreeze();
+                    setAnimation(0);
+                    ignore_movement = false;
+                    is_dodging = false;
+                    return;
+                }
+            }
+        }
         if (frozen)
             return;
+        float speed = movementSpeed();
         if (InputKeys.usingController()) {
             Vector2f values = new Vector2f(InputKeys.getJoypadValue(InputKeys.MOVEX), InputKeys.getJoypadValue(InputKeys.MOVEY));
             if (values.lengthSquared() < 0.25f)
                 values = new Vector2f(0,0);
 
-            setX(getX() + values.x * (10 * RenderService.TIME_DELTA));
-            setY(getY() + values.y * (10 * RenderService.TIME_DELTA));
+            setX(getX() + values.x * (speed * RenderService.TIME_DELTA));
+            setY(getY() + values.y * (speed * RenderService.TIME_DELTA));
             double angle = Math.toDegrees(Math.atan2(-values.y, values.x));
             if (angle < 0)
                 angle += 360;
@@ -122,35 +158,81 @@ public abstract class PlayableSprite extends CombatSprite {
             a = InputKeys.isButtonPressed(InputKeys.MOVELEFT);
 
             if (w) {
-                setY(getY() - (10 * RenderService.TIME_DELTA));
+                setY(getY() - (speed * RenderService.TIME_DELTA));
                 setFacing(Direction.UP);
             }
             if (s) {
-                setY(getY() + (10 * RenderService.TIME_DELTA));
+                setY(getY() + (speed * RenderService.TIME_DELTA));
                 setFacing(Direction.DOWN);
             }
             if (a) {
-                setX(getX() - (10 * RenderService.TIME_DELTA));
+                setX(getX() - (speed * RenderService.TIME_DELTA));
                 setFacing(Direction.LEFT);
             }
             if (d) {
-                setX(getX() + (10 * RenderService.TIME_DELTA));
+                setX(getX() + (speed * RenderService.TIME_DELTA));
                 setFacing(Direction.RIGHT);
             }
         }
     }
 
     protected void checkKeys() {
-        if (!use_attack) {
+        if (!use_attack && !is_dodging) {
             if (InputKeys.isButtonPressed(InputKeys.ATTACK) && getCurrentWeapon() != null) {
                 getCurrentWeapon().use("swipe");
-                attacking = true;
+                ignore_movement = true;
                 use_attack = true;
             }
         } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK)) use_attack = false;
-        if (InputKeys.isButtonPressed(InputKeys.DODGE)) {
-            frozen = true;
-        }
+        if (!use_dodge && !is_dodging) {
+            if (InputKeys.isButtonPressed(InputKeys.DODGE)) {
+                frozen = true;
+                Direction direction1 = getDirection();
+                switch (direction1) {
+                    case UP:
+                        dodgeY = getY() - 100;
+                        dodgeX = 0;
+                        break;
+                    case DOWN:
+                        dodgeY = getY() + 100;
+                        dodgeX = 0;
+                        break;
+                    case LEFT:
+                        dodgeX = getX() - 100;
+                        dodgeY = 0;
+                        break;
+                    case RIGHT:
+                        dodgeX = getX() + 100;
+                        dodgeY = 0;
+                        break;
+                    default:
+                        return;
+                }
+                setAnimation("dodge"); //TODO Set for multiple directions
+                totalDodgeTime = getAnimationSpeed() * (getFrameCount() - 1);
+                totalDodgeTime -= (getSpeed() * 10);
+                float timePerFrame = totalDodgeTime / (getFrameCount() - 1);
+                setAnimationSpeed((int) timePerFrame);
+                dodgeStartTime = System.currentTimeMillis();
+                dodgeStartX = getX();
+                dodgeStartY = getY();
+                is_dodging = true;
+                setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+                    @Override
+                    public void onAnimationFinished(AnimatedSprite sprite) {
+                        setAnimationFinishedListener(null);
+                        setAnimationFrameListener(null);
+                        unfreeze();
+                        setAnimation(0);
+                        ignore_movement = false;
+                        is_dodging = false;
+                    }
+                });
+                ignore_movement = true;
+                playAnimation();
+                use_dodge = true;
+            }
+        } else if (!InputKeys.isButtonPressed(InputKeys.DODGE)) use_dodge = false;
     }
 
     protected void checkSelect() { //TODO Make work for joypad
@@ -215,23 +297,6 @@ public abstract class PlayableSprite extends CombatSprite {
             }
         }
         return false;
-        /*int xadd = 0;
-        int yadd = 0;
-        boolean xcheck = getDirection() == Direction.UP || getDirection() == Direction.DOWN;
-        if (getDirection() == Direction.UP)
-            yadd = -1;
-        else if (getDirection() == Direction.DOWN)
-            yadd = 1;
-        else if (getDirection() == Direction.LEFT)
-            xadd = -1;
-        else if (getDirection() == Direction.RIGHT)
-            xadd = 1;
-
-        final Vector2f v2 = s.getVector();
-        final Vector2f v1 = getVector();
-        double new_distance = Math.sqrt(((v2.x - (v1.x + xadd)) * (v2.x - (v1.x + xadd))) + ((v2.y - (v1.y + yadd)) * (v2.y - (v1.y + yadd))));
-
-        return new_distance < distance;*/
     }
 
 

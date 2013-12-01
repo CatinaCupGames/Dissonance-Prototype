@@ -296,7 +296,9 @@ public abstract class CombatSprite extends PhysicsSprite {
         double defense = getDefense() + (getCurrentWeapon() != null ? getCurrentWeapon().getWeaponInfo().getDefense() : 0);
         double attack = attacker.getAttack() + with.getWeaponInfo().getAttack();
         double damage;
-        damage = (attack * 4 * Math.log(attack)) / defense;
+        damage = ((attack * Math.log(attack)) / (defense / Math.log(defense))) * 2;
+        if (damage > 100)
+            damage = 100;
 
         HP -= damage;
         //TODO Display damage

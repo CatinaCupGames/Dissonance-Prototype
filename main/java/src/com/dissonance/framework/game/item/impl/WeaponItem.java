@@ -3,11 +3,9 @@ package com.dissonance.framework.game.item.impl;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.item.Item;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
-import com.dissonance.framework.game.sprites.impl.UpdatableSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.tiled.TiledObject;
-import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.utils.Direction;
@@ -15,7 +13,6 @@ import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class WeaponItem extends Item {
@@ -162,7 +159,7 @@ public class WeaponItem extends Item {
                             sprite.setAnimationFrameListener(null);
                             if (getOwner() instanceof PlayableSprite) {
                                 ((PlayableSprite)getOwner()).unfreeze();
-                                ((PlayableSprite)getOwner()).attacking = false;
+                                ((PlayableSprite)getOwner()).ignore_movement = false;
                             }
                             sprite.setAnimation(0);
                             hits.clear();
@@ -232,7 +229,7 @@ public class WeaponItem extends Item {
                             sprite.setAnimationFrameListener(null);
                             if (getOwner() instanceof PlayableSprite) {
                                 ((PlayableSprite)getOwner()).unfreeze();
-                                ((PlayableSprite)getOwner()).attacking = false;
+                                ((PlayableSprite)getOwner()).ignore_movement = false;
                             }
                             sprite.setAnimation(0);
                             hits.clear();

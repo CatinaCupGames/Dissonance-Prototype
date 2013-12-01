@@ -106,7 +106,7 @@ public class TileTexture extends Texture {
             x += tileWidth;
         } else if (pos == 1) { //Top right
             x += tileWidth;
-        }  else if (pos != 0) { //We start with the Top Left, ignore pos 3
+        }  else if (pos != 0) { //We start with the Top Left, ignore_movement pos 3
             throw new InvalidParameterException("The parameter \"type\"'s value can only be 0, 1, 2, or 3");
         }
 
