@@ -59,4 +59,26 @@ public class Timer {
             }
         }).start();
     }
+
+    public static void delayedInvokeRunnable(long delay, Runnable runnable) {
+        delayedInvokeRunnable(delay, 1, runnable);
+    }
+
+    public static void delayedInvokeRunnable(final long delay, final int count, final Runnable runnable) {
+        Validator.validateNotBelow(count, 1, "count");
+        Validator.validateNotBelow(delay, 1, "delay");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < count; i++) {
+                    try {
+                        Thread.sleep(delay);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    runnable.run();
+                }
+            }
+        }).start();
+    }
 }

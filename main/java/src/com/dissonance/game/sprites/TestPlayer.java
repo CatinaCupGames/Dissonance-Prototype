@@ -75,7 +75,7 @@ public class TestPlayer extends PlayableSprite {
 
     @Override
     public int getSpeed() {
-        return 100;
+        return 90;
     }
 
     @Override

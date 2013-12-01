@@ -8,6 +8,7 @@ import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.Timer;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -26,7 +27,7 @@ public abstract class PlayableSprite extends CombatSprite {
     private static PlayableSprite currentlyPlaying;
     private ArrayList<PlayableSprite> party = new ArrayList<PlayableSprite>();
     public boolean ignore_movement = false;
-    private boolean is_dodging;
+    private boolean is_dodging, allow_dodge = true;
 
     /**
      * Sets this {@link PlayableSprite PlayableSprite's}
@@ -77,7 +78,7 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     protected float movementSpeed() {
-        return 20 + (getSpeed() / 10);
+        return 10 + (getSpeed() / 10);
     }
 
     public void joinParty(PlayableSprite joiner) {
@@ -102,7 +103,15 @@ public abstract class PlayableSprite extends CombatSprite {
         if (is_dodging) {
             float moveX, moveY;
             if (dodgeX != 0) {
-                moveX = Camera.ease(dodgeStartX, dodgeX, totalDodgeTime, ((System.currentTimeMillis() - dodgeStartTime)));
+                float dif = (float)(System.currentTimeMillis() - dodgeStartTime);
+                float percent;
+                if (dif > totalDodgeTime) {
+                    percent = 1;
+                } else {
+                    percent = dif / totalDodgeTime;
+                }
+                moveX = dodgeStartX + ((dodgeX - dodgeStartX) * percent);
+                //moveX = Camera.ease(dodgeStartX, dodgeX, totalDodgeTime, ((System.currentTimeMillis() - dodgeStartTime))); //TODO Replace Camera.ease with something less smooth and more linear
                 setX(moveX);
                 if (moveX == dodgeX) {
                     setAnimationFinishedListener(null);
@@ -111,10 +120,24 @@ public abstract class PlayableSprite extends CombatSprite {
                     setAnimation(0);
                     ignore_movement = false;
                     is_dodging = false;
+                    Timer.delayedInvokeRunnable(500, new Runnable() {
+                        @Override
+                        public void run() {
+                            allow_dodge = true;
+                        }
+                    });
                     return;
                 }
             } else if (dodgeY != 0) {
-                moveY = Camera.ease(dodgeStartY, dodgeY, totalDodgeTime, ((System.currentTimeMillis() - dodgeStartTime)));
+                float dif = (float)(System.currentTimeMillis() - dodgeStartTime);
+                float percent;
+                if (dif > totalDodgeTime) {
+                    percent = 1;
+                } else {
+                    percent = dif / totalDodgeTime;
+                }
+                moveY = dodgeStartY + ((dodgeY - dodgeStartY) * percent);
+                //moveY = Camera.ease(dodgeStartY, dodgeY, totalDodgeTime, ((System.currentTimeMillis() - dodgeStartTime)));
                 setY(moveY);
                 if (moveY == dodgeY) {
                     setAnimationFinishedListener(null);
@@ -123,6 +146,12 @@ public abstract class PlayableSprite extends CombatSprite {
                     setAnimation(0);
                     ignore_movement = false;
                     is_dodging = false;
+                    Timer.delayedInvokeRunnable(500, new Runnable() {
+                        @Override
+                        public void run() {
+                            allow_dodge = true;
+                        }
+                    });
                     return;
                 }
             }
@@ -184,25 +213,25 @@ public abstract class PlayableSprite extends CombatSprite {
                 use_attack = true;
             }
         } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK)) use_attack = false;
-        if (!use_dodge && !is_dodging) {
+        if (!use_dodge && !is_dodging && allow_dodge) {
             if (InputKeys.isButtonPressed(InputKeys.DODGE)) {
                 frozen = true;
                 Direction direction1 = getDirection();
                 switch (direction1) {
                     case UP:
-                        dodgeY = getY() - 100;
+                        dodgeY = getY() - 80;
                         dodgeX = 0;
                         break;
                     case DOWN:
-                        dodgeY = getY() + 100;
+                        dodgeY = getY() + 80;
                         dodgeX = 0;
                         break;
                     case LEFT:
-                        dodgeX = getX() - 100;
+                        dodgeX = getX() - 80;
                         dodgeY = 0;
                         break;
                     case RIGHT:
-                        dodgeX = getX() + 100;
+                        dodgeX = getX() + 80;
                         dodgeY = 0;
                         break;
                     default:
@@ -210,13 +239,16 @@ public abstract class PlayableSprite extends CombatSprite {
                 }
                 setAnimation("dodge"); //TODO Set for multiple directions
                 totalDodgeTime = getAnimationSpeed() * (getFrameCount() - 1);
-                totalDodgeTime -= (getSpeed() * 10);
+                totalDodgeTime -= (getSpeed() + 20) * 15;
+                if (totalDodgeTime < 350)
+                    totalDodgeTime = 350;
                 float timePerFrame = totalDodgeTime / (getFrameCount() - 1);
                 setAnimationSpeed((int) timePerFrame);
                 dodgeStartTime = System.currentTimeMillis();
                 dodgeStartX = getX();
                 dodgeStartY = getY();
                 is_dodging = true;
+                allow_dodge = false;
                 setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
                     @Override
                     public void onAnimationFinished(AnimatedSprite sprite) {
@@ -226,6 +258,12 @@ public abstract class PlayableSprite extends CombatSprite {
                         setAnimation(0);
                         ignore_movement = false;
                         is_dodging = false;
+                        Timer.delayedInvokeRunnable(500, new Runnable() {
+                            @Override
+                            public void run() {
+                                allow_dodge = true;
+                            }
+                        });
                     }
                 });
                 ignore_movement = true;
