@@ -50,11 +50,11 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         float oX = super.getX();
         super.setX(x);
 
-        if (hb != null && hb.checkForCollision(getWorld(), this)) {
+        if (hb != null && hb.checkForCollision(this)) {
             super.setX(oX);
             if (hb.getLastCollide() instanceof PhysicsSprite) {
                 float add = getX() - hb.getLastCollide().getX();
-                for (int i = 0; i < 1000 && hb.checkForCollision(getWorld(), this); i++) {
+                for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
                     super.setX(super.getX() + (add < 0 ? -1 : 1));
                 }
             }
@@ -66,11 +66,11 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         float oY = super.getY();
         super.setY(y);
 
-        if (hb != null && hb.checkForCollision(getWorld(), this)) {
+        if (hb != null && hb.checkForCollision(this)) {
             super.setY(oY);
             if (hb.getLastCollide() instanceof PhysicsSprite) {
                 float add = getY() - hb.getLastCollide().getY();
-                for (int i = 0; i < 1000 && hb.checkForCollision(getWorld(), this); i++) {
+                for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
                     super.setY(super.getY() + (add < 0 ? -1 : 1));
                 }
             }

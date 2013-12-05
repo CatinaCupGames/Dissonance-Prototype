@@ -63,8 +63,6 @@ public class HitBox {
 
     /**
      * Check for collision with any {@link Collidable} objects and return the <b>FIRST</b> object found colliding.
-     * @param world
-     *             The world to check in
      * @param sprite
      *              The sprite to check collision for.
      * @return
@@ -72,7 +70,7 @@ public class HitBox {
      *        tiles. <br></br>
      *        If no objects were found, then a null value is returned.
      */
-    public boolean checkForCollision(World world, Sprite sprite) {
+    public boolean checkForCollision(Sprite sprite) {
         float height;
         if (sprite.getTexture() instanceof SpriteTexture) {
             SpriteTexture temp = (SpriteTexture)sprite.getTexture();
@@ -87,7 +85,25 @@ public class HitBox {
         sX += minX;
         sY += minY;
 
-        return checkForCollision(world, sX, sY, sprite);
+        return checkForCollision(sprite.getWorld(), sX, sY, sprite);
+    }
+
+    public boolean checkForCollision(Sprite sprite, float x, float y) {
+        float height;
+        if (sprite.getTexture() instanceof SpriteTexture) {
+            SpriteTexture temp = (SpriteTexture)sprite.getTexture();
+            height = temp.getHeight();
+        } else {
+            height = sprite.getHeight();
+        }
+
+        float sX = x;
+        float sY = y + (height / 4.0f);
+
+        sX += minX;
+        sY += minY;
+
+        return checkForCollision(sprite.getWorld(), sX, sY, sprite);
     }
 
     /**

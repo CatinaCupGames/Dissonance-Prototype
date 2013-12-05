@@ -215,60 +215,7 @@ public abstract class PlayableSprite extends CombatSprite {
         } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK)) use_attack = false;
         if (!use_dodge && !is_dodging && allow_dodge) {
             if (InputKeys.isButtonPressed(InputKeys.DODGE)) {
-                frozen = true;
-                Direction direction1 = getDirection();
-                switch (direction1) {
-                    case UP:
-                        dodgeY = getY() - 80;
-                        dodgeX = 0;
-                        break;
-                    case DOWN:
-                        dodgeY = getY() + 80;
-                        dodgeX = 0;
-                        break;
-                    case LEFT:
-                        dodgeX = getX() - 80;
-                        dodgeY = 0;
-                        break;
-                    case RIGHT:
-                        dodgeX = getX() + 80;
-                        dodgeY = 0;
-                        break;
-                    default:
-                        return;
-                }
-                setAnimation("dodge"); //TODO Set for multiple directions
-                totalDodgeTime = getAnimationSpeed() * (getFrameCount() - 1);
-                totalDodgeTime -= (getSpeed() + 20) * 15;
-                if (totalDodgeTime < 350)
-                    totalDodgeTime = 350;
-                float timePerFrame = totalDodgeTime / (getFrameCount() - 1);
-                setAnimationSpeed((int) timePerFrame);
-                dodgeStartTime = System.currentTimeMillis();
-                dodgeStartX = getX();
-                dodgeStartY = getY();
-                is_dodging = true;
-                allow_dodge = false;
-                setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
-                    @Override
-                    public void onAnimationFinished(AnimatedSprite sprite) {
-                        setAnimationFinishedListener(null);
-                        setAnimationFrameListener(null);
-                        unfreeze();
-                        setAnimation(0);
-                        ignore_movement = false;
-                        is_dodging = false;
-                        Timer.delayedInvokeRunnable(500, new Runnable() {
-                            @Override
-                            public void run() {
-                                allow_dodge = true;
-                            }
-                        });
-                    }
-                });
-                ignore_movement = true;
-                playAnimation();
-                use_dodge = true;
+                dodge(getDirection());
             }
         } else if (!InputKeys.isButtonPressed(InputKeys.DODGE)) use_dodge = false;
     }
@@ -392,6 +339,83 @@ public abstract class PlayableSprite extends CombatSprite {
         s = false;
         d = false;
         use_select = false;
+    }
+
+
+    protected void dodge(Direction direction1) {
+        frozen = true;
+        switch (direction1) {
+            case UP:
+                int i = 0;
+                for (; i < 80; i++) {
+                    if (getHitBox().checkForCollision(this, getX(), getY() - i))
+                        break;
+                }
+                dodgeY = getY() - i;
+                dodgeX = 0;
+                break;
+            case DOWN:
+                int ii = 0;
+                for (; ii < 80; ii++) {
+                    if (getHitBox().checkForCollision(this, getX(), getY() + ii))
+                        break;
+                }
+                dodgeY = getY() + ii;
+                dodgeX = 0;
+                break;
+            case LEFT:
+                int iii = 0;
+                for (; iii < 80; iii++) {
+                    if (getHitBox().checkForCollision(this, getX() - iii, getY()))
+                        break;
+                }
+                dodgeX = getX() - iii;
+                dodgeY = 0;
+                break;
+            case RIGHT:
+                int iiii = 0;
+                for (; iiii < 80; iiii++) {
+                    if (getHitBox().checkForCollision(this, getX() + iiii, getY()))
+                        break;
+                }
+                dodgeX = getX() + iiii;
+                dodgeY = 0;
+                break;
+            default:
+                return;
+        }
+        setAnimation("dodge"); //TODO Set for multiple directions
+        totalDodgeTime = getAnimationSpeed() * (getFrameCount() - 1);
+        totalDodgeTime -= (getSpeed() + 20) * 15;
+        if (totalDodgeTime < 350)
+            totalDodgeTime = 350;
+        float timePerFrame = totalDodgeTime / (getFrameCount() - 1);
+        setAnimationSpeed((int) timePerFrame);
+        dodgeStartTime = System.currentTimeMillis();
+        dodgeStartX = getX();
+        dodgeStartY = getY();
+        is_dodging = true;
+        allow_dodge = false;
+        setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+            @Override
+            public void onAnimationFinished(AnimatedSprite sprite) {
+                setAnimationFinishedListener(null);
+                setAnimationFrameListener(null);
+                unfreeze();
+                setAnimation(0);
+                ignore_movement = false;
+                is_dodging = false;
+                Timer.delayedInvokeRunnable(500, new Runnable() {
+                    @Override
+                    public void run() {
+                        allow_dodge = true;
+                    }
+                });
+            }
+        });
+        ignore_movement = true;
+        playAnimation();
+        use_dodge = true;
     }
 
     public boolean isPlaying() {
