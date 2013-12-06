@@ -2,6 +2,7 @@ package com.dissonance.framework.game.sprites.impl.game;
 
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.item.impl.WeaponItem;
+import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.render.Camera;
@@ -21,7 +22,8 @@ public abstract class PlayableSprite extends CombatSprite {
 
     private boolean isPlaying = false;
     private boolean frozen;
-    private boolean use_select, use_attack, use_dodge;
+    private boolean use_attack;
+    private boolean use_dodge;
     private float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
     private long dodgeStartTime;
     private static PlayableSprite currentlyPlaying;
@@ -71,7 +73,6 @@ public abstract class PlayableSprite extends CombatSprite {
         if (isUpdateCanceled())
             return;
         if (isPlaying) {
-            checkSelect();
             checkMovement();
             checkKeys();
         }
@@ -207,9 +208,12 @@ public abstract class PlayableSprite extends CombatSprite {
 
     protected void checkKeys() {
         if (!use_attack && !is_dodging) {
-            if (InputKeys.isButtonPressed(InputKeys.ATTACK) && getCurrentWeapon() != null) {
-                getCurrentWeapon().use("swipe");
-                ignore_movement = true;
+            if (InputKeys.isButtonPressed(InputKeys.ATTACK)) {
+                boolean skip = checkSelect();
+                if (!skip && getCurrentWeapon() != null) {
+                    getCurrentWeapon().use("swipe");
+                    ignore_movement = true;
+                }
                 use_attack = true;
             }
         } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK)) use_attack = false;
@@ -220,30 +224,14 @@ public abstract class PlayableSprite extends CombatSprite {
         } else if (!InputKeys.isButtonPressed(InputKeys.DODGE)) use_dodge = false;
     }
 
-    protected void checkSelect() { //TODO Make work for joypad
-        if (!use_select) {
-            use_select = Keyboard.isKeyDown(InputKeys.getAttackKey());
-
-            if (use_select) {
-                onSelectAttackKey();
-            }
-
-        } else if (!Keyboard.isKeyDown(InputKeys.getAttackKey())) {
-            use_select = false;
-        }
-    }
-
-    protected void onSelectAttackKey() {
-        //TODO Detect whether to attack or select something...
-        //TODO Maybe have a button to ready and unready weapon..?
-
+    protected boolean checkSelect() { //TODO Make work for joypad
         Iterator<UpdatableDrawable> sprites = getWorld().getUpdatables(); //Sprites will always be Updatable
         while (sprites.hasNext()) {
             UpdatableDrawable d = sprites.next();
             if (d == this)
                 continue;
-            if (d instanceof Sprite) {
-                Sprite sprite = (Sprite)d;
+            if (d instanceof Selectable) {
+                Selectable sprite = (Selectable)d;
                 final Vector2f v2 = sprite.getVector();
                 final Vector2f v1 = getVector();
                 double distance = Math.sqrt(((v2.x - v1.x) * (v2.x - v1.x)) + ((v2.y - v1.y) * (v2.y - v1.y)));
@@ -252,16 +240,16 @@ public abstract class PlayableSprite extends CombatSprite {
 
                 if (!isFacing(sprite, distance))
                     continue;
-                System.out.println(distance);
-                if (distance <= 30) {
+                if (distance <= 50) {
                     sprite.onSelected(this);
-                    break;
+                    return true;
                 }
             }
         }
+        return false;
     }
 
-    protected boolean isFacing(Sprite s, double distance) {
+    protected boolean isFacing(Selectable s, double distance) {
         float ydif = s.getY() - getY();
         float xdif = s.getX() - getX();
         double angle = Math.toDegrees(Math.atan2(-ydif, xdif));
@@ -270,16 +258,14 @@ public abstract class PlayableSprite extends CombatSprite {
         while (angle > 360)
             angle -= 360;
         Direction direction1 = getDirection();
-        if (angle != 0 && angle != -0) {
-            if ((angle > 315 || angle < 45) && direction1 == Direction.RIGHT) {
-                return Math.abs(xdif) < distance;
-            } else if (angle > 255 && angle <= 315 && direction1 == Direction.DOWN) {
-                return Math.abs(ydif) < distance;
-            } else if (angle > 135 && angle <= 225 && direction1 == Direction.LEFT) {
-                return Math.abs(xdif) < distance;
-            } else if (angle >= 45 && angle <= 135 && direction1 == Direction.UP) {
-                return Math.abs(ydif) < distance;
-            }
+        if ((angle > 315 || angle < 45) && direction1 == Direction.RIGHT) {
+            return Math.abs(xdif) < distance;
+        } else if (angle > 255 && angle <= 315 && direction1 == Direction.DOWN) {
+            return Math.abs(ydif) < distance;
+        } else if (angle > 135 && angle <= 225 && direction1 == Direction.LEFT) {
+            return Math.abs(xdif) < distance;
+        } else if (angle >= 45 && angle <= 135 && direction1 == Direction.UP) {
+            return Math.abs(ydif) < distance;
         }
         return false;
     }
@@ -338,7 +324,6 @@ public abstract class PlayableSprite extends CombatSprite {
         a = false;
         s = false;
         d = false;
-        use_select = false;
     }
 
 

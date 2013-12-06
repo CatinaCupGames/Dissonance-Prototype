@@ -16,12 +16,6 @@ public class TestPlayer extends PlayableSprite {
     }
 
     @Override
-    public void onSelected(PlayableSprite sprite) {
-        super.onSelected(sprite);
-        System.out.println(sprite + " SELECTED MEH!");
-    }
-
-    @Override
     public String getSpriteName() {
         return "player";
     }

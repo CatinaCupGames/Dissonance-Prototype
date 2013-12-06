@@ -83,11 +83,6 @@ public class Enemy extends CombatSprite {
         ai.onUpdate(this);
     }
 
-    @Override
-    public void onSelected(PlayableSprite player) {
-        levelUp();
-    }
-
     public enum StatType {
         MAGIC, NON_MAGIC
     }

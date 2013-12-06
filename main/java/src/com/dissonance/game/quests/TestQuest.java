@@ -34,7 +34,7 @@ public class TestQuest extends AbstractQuest {
         World w = WorldFactory.getWorld("arrem_world");
         setWorld(w);
         w.waitForWorldLoaded();
-        Thread.sleep(5000);
+        Thread.sleep(30000);
         TestScene test = new TestScene();
         test.beginScene();
         test.waitForSceneEnd();

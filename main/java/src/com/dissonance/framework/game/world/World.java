@@ -236,6 +236,8 @@ public final class World {
             @Override
             public void run() {
                 World.this.drawable.remove(drawable);
+                if (drawable instanceof UpdatableDrawable)
+                    World.this.udrawables.remove(drawable);
                 if (runnable != null)
                     runnable.run();
             }

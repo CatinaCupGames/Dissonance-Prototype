@@ -28,7 +28,6 @@ public final class TestNPC extends NPCSprite {
 
     @Override
     public void onSpeakingFinished() {
-        getWorld().removeSprite(this);
     }
 
 }

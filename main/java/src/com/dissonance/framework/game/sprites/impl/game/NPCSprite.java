@@ -3,11 +3,12 @@ package com.dissonance.framework.game.sprites.impl.game;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.game.scene.dialog.DialogUI;
+import com.dissonance.framework.game.sprites.Selectable;
 
 import java.util.Collections;
 import java.util.LinkedList;
 
-public abstract class NPCSprite extends PhysicsSprite {
+public abstract class NPCSprite extends PhysicsSprite implements Selectable {
 
     private NPCSpriteEvent.OnTalkEvent talkEvent;
     private NPCSpriteEvent.OnTalkFinishedEvent talkFinishedEvent;
@@ -111,7 +112,7 @@ public abstract class NPCSprite extends PhysicsSprite {
     }
 
     @Override
-    public void onSelected(PlayableSprite player) {
+    public boolean onSelected(PlayableSprite player) {
         Dialog dialog = getNextDialog();
 
         if (dialog != null) {
@@ -123,7 +124,9 @@ public abstract class NPCSprite extends PhysicsSprite {
             }
 
             dialogUI.displayUI();
+            return true;
         }
+        return false;
     }
 
     /**

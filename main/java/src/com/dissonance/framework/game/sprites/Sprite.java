@@ -17,7 +17,6 @@ import java.security.InvalidParameterException;
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class Sprite implements Drawable, Serializable {
-    private SpriteEvent.SpriteSelectedEvent selectedEvent;
     private SpriteEvent.SpriteMovedEvent spriteMoved;
 
     protected transient Texture texture;
@@ -36,10 +35,6 @@ public abstract class Sprite implements Drawable, Serializable {
         } catch (IllegalAccessException e) {
             throw new RuntimeException("The class provided threw an IllegalAccessException!", e);
         }
-    }
-
-    public void setSpriteSelectedListener(SpriteEvent.SpriteSelectedEvent selectedListener) {
-        selectedEvent = selectedListener;
     }
 
     public void setSpriteMovedListener(SpriteEvent.SpriteMovedEvent selectedListener) {
@@ -76,12 +71,6 @@ public abstract class Sprite implements Drawable, Serializable {
             return;
         }
         this.world = w;
-    }
-
-    public void onSelected(PlayableSprite player) {
-        if (selectedEvent != null) {
-            selectedEvent.onSpriteSelected(this, player);
-        }
     }
 
     public Tile getTileStandingOn() {
@@ -205,9 +194,6 @@ public abstract class Sprite implements Drawable, Serializable {
     }
 
     public interface SpriteEvent {
-        public interface SpriteSelectedEvent {
-            public void onSpriteSelected(Sprite selectedSprite, Sprite selector);
-        }
 
         public interface SpriteMovedEvent {
             public void onSpriteMoved(Sprite sprite, float oldx, float oldy);

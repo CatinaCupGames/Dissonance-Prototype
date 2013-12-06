@@ -4,6 +4,7 @@ import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.game.quests.TestQuest;
 import com.dissonance.game.sprites.Enemy;
+import com.dissonance.game.sprites.TestNPC;
 import com.dissonance.game.sprites.TestPlayer;
 
 public class arrem_world extends GameWorldLoader {
@@ -11,8 +12,8 @@ public class arrem_world extends GameWorldLoader {
     public void onLoad(World w) {
         super.onLoad(w);
 
-        TestPlayer pl;
-        pl = new TestPlayer();
+        TestNPC pl;
+        pl = new TestNPC("TEST");
         w.loadAndAdd(pl);
         pl.setX(576);
         pl.setY(256);
