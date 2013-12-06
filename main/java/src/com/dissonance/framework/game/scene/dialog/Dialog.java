@@ -1,17 +1,19 @@
 package com.dissonance.framework.game.scene.dialog;
 
+import java.util.ArrayList;
+
 public class Dialog {
-    private String[] lines;
+    private CustomString[] lines;
     private String[] image_path;
     private String[] header;
     private int index;
     private String id;
 
-    Dialog(String[] lines, String[] image_path, String[] header, String id) {
+    Dialog(CustomString[] lines, String[] image_path, String[] header, String id) {
         this.header = header;
         this.image_path = image_path;
-        this.lines = lines;
         this.id = id;
+        this.lines = lines;
     }
 
     public int getIndex() {
@@ -22,9 +24,9 @@ public class Dialog {
         return id;
     }
 
-    public String getCurrentLine() {
+    public CustomString getCurrentLine() {
         if (index >= lines.length) {
-            return "";
+            return new CustomString("");
         } else {
             return lines[index];
         }
@@ -53,5 +55,9 @@ public class Dialog {
     public boolean advanceDialog() {
         index++;
         return index >= lines.length;
+    }
+
+    public CustomString[] getAllLines() {
+        return lines;
     }
 }

@@ -38,16 +38,31 @@ public class DialogFactory {
                     }
 
                     NodeList nodelist = el.getElementsByTagName("message");
-                    String[] lines;
+                    CustomString[] lines;
                     if (nodelist != null && nodelist.getLength() > 0) {
-                        lines = new String[nodelist.getLength()];
+                        lines = new CustomString[nodelist.getLength()];
                         for (int ii = 0; ii < nodelist.getLength(); ii++) {
                             if (nodelist.item(ii) == null)
                                 continue;
-                            lines[ii] = nodelist.item(ii).getFirstChild().getNodeValue();
+                            String text = nodelist.item(ii).getFirstChild().getNodeValue();
+                            Style style = Style.NORMAL;
+                            if (nodelist.item(ii).getAttributes().getNamedItem("style") != null) {
+                                String stype = nodelist.item(ii).getAttributes().getNamedItem("style").getNodeValue();
+                                for (Style l : Style.values()) {
+                                    if (l.name().toLowerCase().equals(stype)) {
+                                        style = l;
+                                        break;
+                                    }
+                                }
+                            }
+                            boolean append = false;
+                            if (nodelist.item(ii).getAttributes().getNamedItem("type") != null) {
+                                append = nodelist.item(ii).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase("append");
+                            }
+                            lines[ii] = new CustomString(text, style, append);
                         }
                     } else {
-                        lines = new String[0];
+                        lines = new CustomString[0];
                     }
 
                     nodelist = el.getElementsByTagName("header");

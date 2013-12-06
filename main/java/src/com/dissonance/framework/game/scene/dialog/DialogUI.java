@@ -25,9 +25,9 @@ public class DialogUI extends UIElement {
     private float cx;
     private float cy;
     private boolean unfreeze;
-    private ArrayList<LineText> text = new ArrayList<LineText>();
+    private ArrayList<SH> text = new ArrayList<SH>();
     private static Font font;
-    private static Font text_font;
+    static Font text_font;
     private static Font header_font;
     private static BufferedImage dialog_box;
     private static BufferedImage dialog_header;
@@ -80,12 +80,7 @@ public class DialogUI extends UIElement {
             graphics2D.setFont(header_font);
             graphics2D.drawString(dialog.getCurrentHeader(), 10, header_font.getSize2D());
         }
-        for (LineText t : text) {
-            graphics2D.setFont(t.font);
-            graphics2D.drawString(t.text, 10, t.y);
-            if (!t.reachedEnd && graphics2D.getFontMetrics().stringWidth(t.text) > 490)
-                t.reachedEnd = true;
-        }
+        drawText(graphics2D);
     }
 
     @Override
@@ -102,6 +97,32 @@ public class DialogUI extends UIElement {
         if (events != null) {
             events.onDialogStarted(dialog);
         }
+        funOnTheBun();
+    }
+
+    private void funOnTheBun() {
+        for (int i = dialog.getIndex(); i < dialog.getAllLines().length; i++) {
+            if (i == dialog.getIndex() || dialog.getAllLines()[i].isAppend()) {
+                addText(dialog.getAllLines()[i]);
+            } else {
+                break;
+            }
+        }
+    }
+
+    private void addText(CustomString string) {
+        SH ss = new SH();
+        ss.s = string;
+        ss.line = nextLine(string.getString());
+        ss.ID = text.size();
+        text.add(ss);
+    }
+
+    private int nextLine(String text) {
+        int line = 0;
+        while (getTotalChars(line) + text.toCharArray().length >= 60)
+            line++;
+        return line;
     }
 
     @Override
@@ -123,31 +144,8 @@ public class DialogUI extends UIElement {
         boolean fast_moving = InputKeys.isButtonPressed(InputKeys.JUMP);
 
         if (i % (fast_moving ? 3 : 13) == 0 && !done) {
-            LineText line;
-            if (text.size() == 0) {
-                line = new LineText();
-                line.font = text_font;
-                line.y = (int)(dialog.getCurrentHeader().equals("") ? text_font.getSize2D() : (text_font.getSize2D() * 2) + 5);
-                line.text = "";
-                text.add(line);
-            } else if (!text.get(text.size() - 1).reachedEnd) {
-                line = text.get(text.size() - 1);
-            } else {
-                line = new LineText();
-                line.font = text_font;
-                line.y = (int)(dialog.getCurrentHeader().equals("") ? text_font.getSize2D() * (text.size() + 1) : ((text_font.getSize2D() * (text.size() + 2)) + 5));
-                line.text = "";
-                text.add(line);
-            }
-            if (!temp.equals(dialog.getCurrentLine())) {
-                char toadd = dialog.getCurrentLine().toCharArray()[ii];
-                line.text += toadd;
-                temp += toadd;
-                ii++;
-                completelyInvalidateView();
-            } else {
-                done = true;
-            }
+            char_offset++;
+            completelyInvalidateView();
         }
         i++;
         if (i >= 500)
@@ -166,9 +164,14 @@ public class DialogUI extends UIElement {
         if (!pressed) {
             pressed = InputKeys.isButtonPressed(InputKeys.ATTACK) || InputKeys.isButtonPressed(InputKeys.JUMP);
             if (pressed && done) {
-                boolean finished = dialog.advanceDialog();
+                boolean finished = false;
+                for (int i = 0; i < text.size(); i++) {
+                    finished = dialog.advanceDialog();
+                }
                 temp = "";
                 text.clear();
+                char_offset = 0;
+                funOnTheBun();
                 done = false;
                 i = 0;
                 ii = 0;
@@ -184,6 +187,83 @@ public class DialogUI extends UIElement {
         } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK) && !InputKeys.isButtonPressed(InputKeys.JUMP)) {
             pressed = false;
         }
+    }
+
+    int char_offset;
+    int line_offset;
+    public void drawText(Graphics g) {
+        ArrayList<SH> used = new ArrayList<SH>();
+        int yoffset = (int)(dialog.getCurrentHeader().equals("") ? font.getSize2D() : ((font.getSize2D() * 31) + 5));
+        int xoffset = 10;
+        for (int i = 0; i <= line_offset; i++) {
+            if (i >= 3)
+                break;
+            if (i == line_offset) {
+                int current_char_offset = 0;
+                final int total_chars = getTotalChars(i);
+                while (current_char_offset < char_offset) {
+                    SH current = null;
+                    for (SH s : text) {
+                        if (used.contains(s))
+                            continue;
+                        if (s.line == i && current == null)
+                            current = s;
+                        else if (s.line == i && s.ID < current.ID)
+                            current = s;
+                    }
+                    if (current == null) {
+                        char_offset = 0;
+                        line_offset++;
+                        break;
+                    }
+                    for (int z = 0; z < current.s.getString().toCharArray().length; z++) {
+                        if (current_char_offset >= char_offset)
+                            break;
+                        if (current_char_offset  >= total_chars)
+                            break;
+                        g.setFont(current.s.getFont());
+                        g.drawString("" + current.s.getString().toCharArray()[z], xoffset, yoffset);
+                        current_char_offset++;
+                        xoffset += g.getFontMetrics().stringWidth("" + current.s.getString().toCharArray()[z]);
+                    }
+                    used.add(current);
+                }
+                if (char_offset == total_chars)
+                    done = true;
+            }
+            else {
+                while (true) {
+                    SH current = null;
+                    for (SH s : text) {
+                        if (used.contains(s))
+                            continue;
+                        if (s.line == i && current == null)
+                            current = s;
+                        else if (s.line == i && s.ID < current.ID)
+                            current = s;
+                    }
+                    if (current == null)
+                        break;
+                    for (int z = 0; z < current.s.getString().toCharArray().length; z++) {
+                        g.setFont(current.s.getFont());
+                        g.drawString("" + current.s.getString().toCharArray()[z], xoffset, yoffset);
+                        xoffset += g.getFontMetrics().charWidth(current.s.getString().toCharArray()[z]);
+                    }
+                    used.add(current);
+                }
+            }
+            yoffset += g.getFontMetrics().getHeight();
+            xoffset = 10;
+        }
+    }
+
+    private int getTotalChars(int line) {
+        int toreturn = 0;
+        for (SH s : text) {
+            if (s.line == line)
+                toreturn += s.s.getString().toCharArray().length;
+        }
+        return toreturn;
     }
 
     public synchronized void waitForEnd() throws InterruptedException {
@@ -232,5 +312,16 @@ public class DialogUI extends UIElement {
         public int y;
         public Font font;
         public boolean reachedEnd;
+    }
+
+    private class SH {
+        public CustomString s;
+        public int line;
+        public int ID;
+
+        @Override
+        public int hashCode() {
+            return ID;
+        }
     }
 }

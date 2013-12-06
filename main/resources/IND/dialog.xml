@@ -6,9 +6,9 @@
 
     <dialog dialog_id="testscene-p2" >
         <header>mootykins</header>
-        <message>Its to dangerous to go alone!</message>
+        <message style="bold" type="new">Its to dangerous to go alone!</message>
 
-        <message>Take this!</message>
+        <message type="append">Take this!</message>
     </dialog>
 
     <dialog dialog_id="arrem">
@@ -24,8 +24,9 @@
 
     <dialog dialog_id="TEST" >
         <header>The Old Man</header>
-        <message>Hello...AAAAAAAAA BBBBBBBBBBBBB CCCCCCCCCCCCCCCCCCCCCCC APPLE SAUCE</message>
-
+        <message>Hello...</message>
+        <message type="append" style="bold"> AAAAAAAAA BBBBBBBBBBBBB CCCCCCCCCCC APPLE SAUCE</message>
+        <message type="append" style="italic"> WHAT IS GOING ON, I DONT EVEN KNOW ANYMORE..</message>
         <header>The Old Man</header>
         <message>How's it going...</message>
 
