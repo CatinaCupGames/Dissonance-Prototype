@@ -171,6 +171,7 @@ public class DialogUI extends UIElement {
                 temp = "";
                 text.clear();
                 char_offset = 0;
+                line_offset = 0;
                 funOnTheBun();
                 done = false;
                 i = 0;
@@ -201,6 +202,7 @@ public class DialogUI extends UIElement {
             if (i == line_offset) {
                 int current_char_offset = 0;
                 final int total_chars = getTotalChars(i);
+                boolean ignore = false;
                 while (current_char_offset < char_offset) {
                     SH current = null;
                     for (SH s : text) {
@@ -211,9 +213,13 @@ public class DialogUI extends UIElement {
                         else if (s.line == i && s.ID < current.ID)
                             current = s;
                     }
-                    if (current == null) {
+                    if (current == null && textOnLine(line_offset + 1)) {
                         char_offset = 0;
                         line_offset++;
+                        ignore = true;
+                        break;
+                    } else if (current == null) {
+                        done = true;
                         break;
                     }
                     for (int z = 0; z < current.s.getString().toCharArray().length; z++) {
@@ -228,8 +234,6 @@ public class DialogUI extends UIElement {
                     }
                     used.add(current);
                 }
-                if (char_offset == total_chars)
-                    done = true;
             }
             else {
                 while (true) {
@@ -264,6 +268,14 @@ public class DialogUI extends UIElement {
                 toreturn += s.s.getString().toCharArray().length;
         }
         return toreturn;
+    }
+
+    private boolean textOnLine(int line) {
+        for (SH s : text) {
+            if (s.line == line)
+                return true;
+        }
+        return false;
     }
 
     public synchronized void waitForEnd() throws InterruptedException {

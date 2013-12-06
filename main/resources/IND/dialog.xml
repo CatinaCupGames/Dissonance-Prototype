@@ -26,7 +26,7 @@
         <header>The Old Man</header>
         <message>Hello...</message>
         <message type="append" style="bold"> AAAAAAAAA BBBBBBBBBBBBB CCCCCCCCCCC APPLE SAUCE</message>
-        <message type="append" style="italic"> WHAT IS GOING ON, I DONT EVEN KNOW ANYMORE..</message>
+        <message type="append" style="italic">WHAT IS GOING ON, I DONT EVEN KNOW ANYMORE..</message>
         <header>The Old Man</header>
         <message>How's it going...</message>
 
