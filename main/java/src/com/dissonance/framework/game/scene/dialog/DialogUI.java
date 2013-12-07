@@ -136,9 +136,7 @@ public class DialogUI extends UIElement {
 
     private boolean pressed;
     private int i;
-    private int ii;
     private boolean done = false;
-    private String temp = "";
     @Override
     public void update() {
         boolean fast_moving = InputKeys.isButtonPressed(InputKeys.JUMP);
@@ -165,17 +163,15 @@ public class DialogUI extends UIElement {
             pressed = InputKeys.isButtonPressed(InputKeys.ATTACK) || InputKeys.isButtonPressed(InputKeys.JUMP);
             if (pressed && done) {
                 boolean finished = false;
-                for (int i = 0; i < text.size(); i++) {
+                for (SH ignored : text) {
                     finished = dialog.advanceDialog();
                 }
-                temp = "";
                 text.clear();
                 char_offset = 0;
                 line_offset = 0;
                 funOnTheBun();
                 done = false;
                 i = 0;
-                ii = 0;
                 if (finished)
                     endDialog();
                 else {
@@ -317,13 +313,6 @@ public class DialogUI extends UIElement {
         public void onDialogStarted(Dialog dialog);
 
         public void onDialogEnded();
-    }
-
-    private class LineText {
-        public String text;
-        public int y;
-        public Font font;
-        public boolean reachedEnd;
     }
 
     private class SH {
