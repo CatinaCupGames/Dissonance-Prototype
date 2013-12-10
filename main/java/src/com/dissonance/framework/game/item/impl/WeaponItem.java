@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.item.impl;
 
+import com.dissonance.framework.game.combat.Spell;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.item.Item;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
@@ -12,11 +13,14 @@ import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WeaponItem extends Item {
     private Weapon weapon;
+    private Spell spell;
 
     public WeaponItem(CombatSprite owner, Weapon w) {
         super(owner);
@@ -37,10 +41,34 @@ public class WeaponItem extends Item {
         return false;
     }
 
+    public boolean isSpell() {
+        return weapon.isSpell();
+    }
+
+    public Spell getSpell() {
+        return spell;
+    }
+
     @Override
     public void use(Object... parameters) {
         if (weapon.isSpell()) {
-            //TODO Code for spells
+            if (spell == null) {
+                try {
+                    Constructor<Spell> constructor = (Constructor<Spell>) Class.forName(weapon.getSpellClass()).getConstructor(Direction.class, CombatSprite.class);
+                    spell = constructor.newInstance(getOwner().getDirection(), getOwner());
+                } catch (NoSuchMethodException e) {
+                    return;
+                } catch (ClassNotFoundException e) {
+                    return;
+                } catch (InvocationTargetException e) {
+                    return;
+                } catch (InstantiationException e) {
+                    return;
+                } catch (IllegalAccessException e) {
+                    return;
+                }
+            }
+            spell.activate();
         } else if (weapon.isGun()) {
             //TODO Code for guns
         } else {

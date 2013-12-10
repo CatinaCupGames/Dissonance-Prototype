@@ -9,6 +9,7 @@ import com.dissonance.framework.system.utils.Validator;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class CombatSprite extends PhysicsSprite {
@@ -162,7 +163,27 @@ public abstract class CombatSprite extends PhysicsSprite {
     }
 
     public List<Item> getInventory() {
-        return inventory;
+        return Collections.unmodifiableList(inventory);
+    }
+
+    public List<WeaponItem> getAllWeapons() {
+        ArrayList<WeaponItem> list = new ArrayList<WeaponItem>();
+        for (Item i : inventory) {
+            if (i instanceof WeaponItem) {
+                list.add((WeaponItem) i);
+            }
+        }
+        return Collections.unmodifiableList(list);
+    }
+
+    public List<WeaponItem> getAllSpells() {
+        ArrayList<WeaponItem> list = new ArrayList<WeaponItem>();
+        for (Item i : inventory) {
+            if (i instanceof WeaponItem && ((WeaponItem)i).isSpell()) {
+                list.add((WeaponItem) i);
+            }
+        }
+        return Collections.unmodifiableList(list);
     }
 
     /**

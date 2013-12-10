@@ -67,6 +67,7 @@ public abstract class Spell extends AnimatedSprite {
                 onDestroy();
                 setActive(false);
                 getWorld().removeSprite(this);
+                setUpdateCanceled(true);
                 return;
             }
         }
@@ -102,6 +103,9 @@ public abstract class Spell extends AnimatedSprite {
     protected abstract void onActivate();
 
     public void activate() {
+        owner.getWorld().loadAndAdd(this);
+        setX(getOwner().getX());
+        setY(getOwner().getY());
         onActivate();
         setActive(true);
     }

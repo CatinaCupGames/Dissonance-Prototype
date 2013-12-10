@@ -113,12 +113,22 @@ public class DialogUI extends UIElement {
     private void addText(CustomString string) {
         SH ss = new SH();
         ss.s = string;
-        ss.line = nextLine(string.getString());
+        ss.line = nextLine(string);
         ss.ID = text.size();
         text.add(ss);
     }
 
-    private int nextLine(String text) {
+    private int nextLine(CustomString string) {
+        String text = string.getString();
+        while (text.length() >= 60) {
+            char[] temp = text.toCharArray();
+            int i = temp.length - 1;
+            for (; i >= 0; i--) {
+                if (temp[i] == ' ')
+                    break;
+            }
+            text = text.substring(0, i);
+        }
         int line = 0;
         while (getTotalChars(line) + text.toCharArray().length >= 60)
             line++;

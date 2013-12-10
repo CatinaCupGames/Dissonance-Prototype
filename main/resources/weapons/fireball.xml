@@ -1,0 +1,7 @@
+<weapon>
+    <type>spell</type>
+    <spell>true</spell>
+    <spellSpriteClass>com.dissonance.framework.game.combat.impl.Fireball</spellSpriteClass>
+    <spellSpeed>30</spellSpeed>
+    <name>Fireball</name>
+</weapon>

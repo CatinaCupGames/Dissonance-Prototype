@@ -4,6 +4,7 @@ import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
+import com.dissonance.framework.system.utils.Direction;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -13,6 +14,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 public class Weapon {
@@ -204,18 +207,8 @@ public class Weapon {
         return isSpell;
     }
 
-    public Sprite getSpellSprite() {
-        if (!isSpell())
-            return null;
-        Class<?> class_ = null;
-        try {
-            class_ = Class.forName(spellSpriteClass);
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
-        if (class_ == null)
-            return null;
-        return Sprite.fromClass(class_);
+    public String getSpellClass() {
+        return spellSpriteClass;
     }
 
     public int getSwipeRange() {

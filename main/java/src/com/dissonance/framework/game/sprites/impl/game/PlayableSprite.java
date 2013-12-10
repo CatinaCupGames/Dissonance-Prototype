@@ -3,14 +3,12 @@ package com.dissonance.framework.game.sprites.impl.game;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.sprites.Selectable;
-import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.Timer;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.util.ArrayList;
@@ -21,6 +19,8 @@ public abstract class PlayableSprite extends CombatSprite {
     private PlayableSpriteEvent.OnDeselectedEvent deselectedEvent;
 
     private boolean isPlaying = false;
+    private WeaponItem spell1, spell2;
+    private boolean usespell1, usespell2;
     private boolean frozen;
     private boolean use_attack;
     private boolean use_dodge;
@@ -217,11 +217,26 @@ public abstract class PlayableSprite extends CombatSprite {
                 use_attack = true;
             }
         } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK)) use_attack = false;
+
         if (!use_dodge && !is_dodging && allow_dodge) {
             if (InputKeys.isButtonPressed(InputKeys.DODGE)) {
                 dodge(getDirection());
             }
         } else if (!InputKeys.isButtonPressed(InputKeys.DODGE)) use_dodge = false;
+
+        if (!usespell1 && spell1 != null) {
+            if (InputKeys.isButtonPressed(InputKeys.MAGIC1)) {
+                spell1.use();
+                usespell1 = true;
+            }
+        } else if (!InputKeys.isButtonPressed(InputKeys.MAGIC1)) usespell1 = false;
+
+        if (!usespell2 && spell2 != null) {
+            if (InputKeys.isButtonPressed(InputKeys.MAGIC2)) {
+                spell2.use();
+                usespell2 = true;
+            }
+        } else if (!InputKeys.isButtonPressed(InputKeys.MAGIC2)) usespell2 = false;
     }
 
     protected boolean checkSelect() { //TODO Make work for joypad
@@ -281,6 +296,22 @@ public abstract class PlayableSprite extends CombatSprite {
 
     public void unfreeze() {
         frozen = false;
+    }
+
+    public WeaponItem getSpell1() {
+        return spell1;
+    }
+
+    public WeaponItem getSpell2() {
+        return spell2;
+    }
+
+    public void setSpell1(WeaponItem item) {
+        this.spell1 = item;
+    }
+
+    public void setSpell2(WeaponItem item) {
+        this.spell2 = item;
     }
 
     /**
@@ -427,13 +458,13 @@ public abstract class PlayableSprite extends CombatSprite {
         currentlyPlaying.frozen = false;
     }
 
-    private final Camera.CameraEaseListener listener = new Camera.CameraEaseListener() {
+    private final Camera.CameraMovementListener listener = new Camera.CameraMovementListener() {
         @Override
-        public void onEase(float x, float y, long time) {
+        public void onMovement(float x, float y, long time) {
         }
 
         @Override
-        public void onEaseFinished() {
+        public void onMovementFinished() {
             isPlaying = true;
             Camera.setCameraEaseListener(null); //Reset listener
         }

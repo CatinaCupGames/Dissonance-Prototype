@@ -31,7 +31,7 @@ public class TestScene extends Scene {
     protected void moveThings(int part) throws Exception {
         switch (part) {
             case 0: //After Hey wait!
-                Camera.easeMovement(Camera.translateToCameraCenter(moot.getVector(), 32), 1000);
+                Camera.linearMovement(Camera.translateToCameraCenter(moot.getVector(), 32), 1000);
                 Camera.waitForEndOfEase();
                 waitFor(0.3);
                 moot.setWaypoint(new Position((int) PlayableSprite.getCurrentlyPlayingSprite().getX() - 25, (int) PlayableSprite.getCurrentlyPlayingSprite().getY()), WaypointType.SIMPLE);

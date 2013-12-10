@@ -15,7 +15,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.util.vector.Vector2f;
 
 import java.util.Iterator;
 
@@ -289,7 +288,7 @@ public class RenderService extends Service {
                 e.printStackTrace();
             }
 
-            Camera.executeEase(); //Execute any interlop
+            Camera.executeAnimation(); //Execute any interlop
 
             ShaderFactory.executePostRender();
 

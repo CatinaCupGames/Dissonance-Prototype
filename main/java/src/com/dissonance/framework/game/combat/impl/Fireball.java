@@ -17,9 +17,7 @@ public class Fireball extends Spell {
     protected void onDestroy() { }
 
     @Override
-    protected void onActivate() {
-        setActive(true);
-    }
+    protected void onActivate() { }
 
     @Override
     public void update() {

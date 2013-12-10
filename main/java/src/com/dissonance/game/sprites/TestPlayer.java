@@ -13,6 +13,7 @@ public class TestPlayer extends PlayableSprite {
         pauseAnimation();
         Weapon w = Weapon.getWeapon("test");
         setCurrentWeapon(w.createItem(this));
+        setSpell1(Weapon.getWeapon("fireball").createItem(this));
     }
 
     @Override

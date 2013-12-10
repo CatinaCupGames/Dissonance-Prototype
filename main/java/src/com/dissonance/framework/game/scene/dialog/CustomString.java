@@ -6,6 +6,7 @@ import java.util.Arrays;
 public class CustomString {
     private String text;
     private Font font;
+    private Style style;
     private boolean append;
 
     public CustomString(String text) {
@@ -18,6 +19,7 @@ public class CustomString {
 
     public CustomString(String text, Style style, boolean append) {
         this.text = text;
+        this.style = style;
         switch (style) {
             case NORMAL:
                 font = DialogUI.text_font;
@@ -30,6 +32,10 @@ public class CustomString {
                 break;
         }
         this.append = append;
+    }
+
+    public Style getStyle() {
+        return style;
     }
 
     public String getString() {
