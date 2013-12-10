@@ -8,11 +8,13 @@ public final class Camera {
     private static float posX;
     private static float posY;
     private static boolean isEasing;
+    private static boolean isMoving;
+    private static boolean isLinear;
     private static Vector2f nextPos;
     private static Vector2f oldPos;
     private static long startTime;
     private static float duration;
-    private static CameraEaseListener listener;
+    private static CameraMovementListener listener;
 
     public static float getX() {
         return posX;
@@ -67,7 +69,7 @@ public final class Camera {
         return translateToCameraCenter(vec, 0f);
     }
 
-    public static void setCameraEaseListener(CameraEaseListener listener) {
+    public static void setCameraEaseListener(CameraMovementListener listener) {
         Camera.listener = listener;
     }
 
@@ -83,6 +85,18 @@ public final class Camera {
             startTime -= 10;
         Camera.duration = duration;
         isEasing = true;
+        isMoving = true;
+        isLinear = false;
+    }
+
+    public static void linearMovement(Vector2f newPos, float duration) {
+        nextPos = newPos;
+        oldPos = new Vector2f(getX(), getY());
+        startTime = System.currentTimeMillis();
+        Camera.duration = duration;
+        isEasing = false;
+        isMoving = true;
+        isLinear = true;
     }
 
     public static void easeMovementY(float newPos, float duration) {
@@ -102,21 +116,46 @@ public final class Camera {
         uwot.wakeUp();
     }
 
-    static void executeEase() {
-        if (!isEasing)
+    static void executeAnimation() {
+        if (!isMoving)
             return;
-        long time = System.currentTimeMillis() - startTime;
-        float x = ease(oldPos.x, nextPos.x, duration, time);
-        float y = ease(oldPos.y, nextPos.y, duration, time);
-        setX(x);
-        setY(y);
-        if (listener != null)
-            listener.onEase(x, y, time);
-        if (x == nextPos.x && y == nextPos.y) {
-            isEasing = false;
+        if (isLinear) {
+            long time = System.currentTimeMillis() - startTime;
+            float percent;
+            if (time > duration) {
+                percent = 1;
+            } else {
+                percent = time / duration;
+            }
+            float x = oldPos.x + ((nextPos.x - oldPos.x) * percent);
+            float y = oldPos.y + ((nextPos.y - oldPos.y) * percent);
+            setX(x);
+            setY(y);
             if (listener != null)
-                listener.onEaseFinished();
-            wakeUp();
+                listener.onMovement(x, y, time);
+            if (x == nextPos.x && y == nextPos.y) {
+                isMoving = false;
+                isLinear = false;
+                if (listener != null)
+                    listener.onMovementFinished();
+                wakeUp();
+            }
+        }
+        else if (isEasing) {
+            long time = System.currentTimeMillis() - startTime;
+            float x = ease(oldPos.x, nextPos.x, duration, time);
+            float y = ease(oldPos.y, nextPos.y, duration, time);
+            setX(x);
+            setY(y);
+            if (listener != null)
+                listener.onMovement(x, y, time);
+            if (x == nextPos.x && y == nextPos.y) {
+                isMoving = false;
+                isEasing = false;
+                if (listener != null)
+                    listener.onMovementFinished();
+                wakeUp();
+            }
         }
     }
 
@@ -140,10 +179,10 @@ public final class Camera {
         return value;
     }
 
-    public interface CameraEaseListener {
-        public void onEase(float x, float y, long time);
+    public interface CameraMovementListener {
+        public void onMovement(float x, float y, long time);
 
-        public void onEaseFinished();
+        public void onMovementFinished();
     }
 
     private static class WhatAmIDoing {
