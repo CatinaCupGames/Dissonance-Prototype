@@ -35,12 +35,12 @@ public class TestQuest extends AbstractQuest {
         setWorld(w);
         w.waitForWorldLoaded();
         Thread.sleep(5000);
-        TestScene test = new TestScene();
-        test.beginScene();
-        test.waitForSceneEnd();
+        //TestScene test = new TestScene();
+        //test.beginScene();
+        //test.waitForSceneEnd();
         //Thread.sleep(30000);
-        //w = WorldFactory.getWorld("test_world");
-        //setWorld(w);
+        w = WorldFactory.getWorld("test_world");
+        setWorld(w);
     }
 
     @Override

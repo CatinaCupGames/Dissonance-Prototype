@@ -4,6 +4,7 @@ import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.TileSet;
 import com.dissonance.framework.render.Drawable;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
 import org.lwjgl.util.vector.Vector2f;
@@ -78,7 +79,10 @@ public class TileObject extends Sprite {
     public void render() {
         if (parentTileSet.getTexture() == null)
             return;
-        glColor4f(1.0f, 1.0f, 1.0f, parentLayer.getOpacity());
+        float alpha = parentLayer.getOpacity() - (1 - RenderService.getCurrentAlphaValue());
+        if (alpha < 0)
+            alpha = 0;
+        glColor4f(1.0f, 1.0f, 1.0f, alpha);
 
         parentTileSet.getTexture().bind();
         float bx = parentTileSet.getTileWidth() / 2;
@@ -97,7 +101,7 @@ public class TileObject extends Sprite {
         glEnd();
         parentTileSet.getTexture().unbind();
 
-        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        glColor4f(1.0f, 1.0f, 1.0f, RenderService.getCurrentAlphaValue());
     }
 
     @Override

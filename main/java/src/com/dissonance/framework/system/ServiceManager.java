@@ -7,11 +7,11 @@ import java.util.ArrayList;
 public class ServiceManager {
     private static final ArrayList<Service> services = new ArrayList<>();
 
-    public static Service createService(Class<?> class_) {
+    public static <T extends Service> T createService(Class<?> class_) {
         Validator.validateNotNull(class_, "class_");
         Service s;
         if ((s = getService(class_.getName())) != null)
-            return s;
+            return (T) s;
         try {
             s = (Service) class_.newInstance();
 
@@ -20,7 +20,7 @@ public class ServiceManager {
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        return s;
+        return (T) s;
     }
 
     public static Service getService(String name) {

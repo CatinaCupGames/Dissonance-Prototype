@@ -2,6 +2,7 @@ package com.dissonance.framework.game.world.tiled.impl;
 
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.render.Drawable;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
 
@@ -45,7 +46,10 @@ public class ImageLayer implements Drawable {
     public void render() {
         if (texture == null)
             return;
-        glColor4f(1.0f, 1.0f, 1.0f, parentLayer.getOpacity());
+        float alpha = parentLayer.getOpacity() - (1 - RenderService.getCurrentAlphaValue());
+        if (alpha < 0)
+            alpha = 0;
+        glColor4f(1.0f, 1.0f, 1.0f, alpha);
 
         texture.bind();
         float bx = texture.getTextureWidth() / 2;
@@ -64,7 +68,7 @@ public class ImageLayer implements Drawable {
         glEnd();
         texture.unbind();
 
-        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        glColor4f(1.0f, 1.0f, 1.0f, RenderService.getCurrentAlphaValue());
     }
 
     @Override

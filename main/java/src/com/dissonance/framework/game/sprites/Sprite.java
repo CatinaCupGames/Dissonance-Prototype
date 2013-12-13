@@ -160,7 +160,6 @@ public abstract class Sprite implements Drawable, Serializable {
         float by = height / 2;
         final float x = getX(), y = getY();
 
-        //glColor3f(1f, .5f, .5f); DEBUG LINE FOR TEXTURES
         glBegin(GL_QUADS);
         glTexCoord2f(0f, 0f); //bottom left
         glVertex3f(x - bx, y - by, 0f);

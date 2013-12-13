@@ -246,7 +246,7 @@ public class RenderService extends Service {
                 }
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            if (!isFading)
+            if (!isFading && curAlpha != 0)
                 glClearColor(1f, 1f, 1f, 1f);
             else
                 glClearColor(0f, 0f, 0f, 1f);
@@ -262,6 +262,8 @@ public class RenderService extends Service {
             if (isFading) {
                 long time = System.currentTimeMillis() - startTime;
                 curAlpha = Camera.ease(startAlpha, newAlpha, speed, time);
+                if (curAlpha == newAlpha)
+                    isFading = false;
             }
 
             glColor4f(1f, 1f, 1f, curAlpha);

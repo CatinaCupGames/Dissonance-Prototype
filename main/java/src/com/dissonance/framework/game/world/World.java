@@ -15,6 +15,7 @@ import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
+import com.dissonance.framework.system.utils.Timer;
 import com.dissonance.framework.system.utils.Validator;
 import com.google.gson.Gson;
 
@@ -34,7 +35,7 @@ public final class World {
     private String name;
     private NodeMap nodeMap;
     private int ID;
-    private transient Service renderingService;
+    private transient RenderService renderingService;
     private transient Texture texture;
     private boolean invalid = true;
     private boolean loaded = false;
@@ -58,7 +59,20 @@ public final class World {
         //TODO Move all playable sprites to this world maybe?
         if (renderingService == null)
             return;
+        renderingService.fadeToBlack(1000);
+        try {
+            renderingService.waitForFade();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         renderingService.provideData(this, RenderService.WORLD_DATA_TYPE);
+        Timer.delayedInvokeRunnable(300, new Runnable() {
+
+            @Override
+            public void run() {
+                renderingService.fadeFromBlack(1000);
+            }
+        });
     }
 
     public void load(final String world) throws WorldLoadFailedException {
