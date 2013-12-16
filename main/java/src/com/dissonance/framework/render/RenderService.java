@@ -6,6 +6,7 @@ import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.tiled.impl.GroundObject;
 import com.dissonance.framework.render.shader.ShaderFactory;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
@@ -155,8 +156,6 @@ public class RenderService extends Service {
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
             glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0f, -1f);
-            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            //gluPerspective(90, Game.WINDOW_WIDTH / Game.WINDOW_HEIGHT, 0.1f, 10000);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
@@ -273,11 +272,13 @@ public class RenderService extends Service {
                 if (s == null)
                     continue;
                 try {
-                    if (s instanceof Sprite) {
-                        if (Camera.isOffScreen((Sprite)s, 2))
+                    if (!(s instanceof GroundObject)) {
+                        if (s instanceof Sprite) {
+                            if (Camera.isOffScreen((Sprite)s, 2))
+                                continue;
+                        } else if (Camera.isOffScreen(s.getX(), s.getY(), s.getWidth(), s.getHeight(), 2)) //Assume everything is 32x32
                             continue;
-                    } else if (Camera.isOffScreen(s.getX(), s.getY(), 16, 16, 2)) //Assume everything is 32x32
-                        continue;
+                    }
                     s.render();
                 } catch (Throwable t) {
                     t.printStackTrace();

@@ -21,7 +21,7 @@ public class GameMenu extends UIElement {
     @Override
     public void draw(Graphics2D graphics2D) {
         graphics2D.setColor(Color.BLUE);
-        graphics2D.fillRect(0, 0, getWidth(), getHeight());
+        graphics2D.fillRect(0, 0, (int)getWidth(), (int)getHeight());
 
         graphics2D.setColor(Color.BLACK);
         String text = "Wow, such menu";

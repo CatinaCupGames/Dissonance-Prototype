@@ -7,7 +7,7 @@ import com.dissonance.game.sprites.Enemy;
 import com.dissonance.game.sprites.TestNPC;
 import com.dissonance.game.sprites.TestPlayer;
 
-public class arrem_world extends GameWorldLoader {
+public class test_tileset extends GameWorldLoader {
     @Override
     public void onLoad(World w) {
         super.onLoad(w);

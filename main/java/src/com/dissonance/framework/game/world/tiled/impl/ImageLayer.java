@@ -34,6 +34,16 @@ public class ImageLayer implements Drawable {
         return parentLayer.getY();
     }
 
+    @Override
+    public float getWidth() {
+        return texture.getTextureWidth();
+    }
+
+    @Override
+    public float getHeight() {
+        return texture.getTextureHeight();
+    }
+
     public void init() {
         try {
             texture = Texture.retriveTexture(path);

@@ -172,8 +172,8 @@ public class HUD extends UIElement
     {
         int x = 0;
         int y = (int)(getHeight() / (8.0f / 3.0f));
-        int width;
-        int height;
+        float width;
+        float height;
 
         /****** NAME ******/
         y -= 2;
@@ -196,21 +196,21 @@ public class HUD extends UIElement
         //c = Color.GRAY;
         //c = Color.LIGHT_GRAY;
         g.setPaint(new GradientPaint(x, y + offsety, c, x, y + height + offsety, Color.GRAY));
-        g.fillRect(x, y + offsety, width + 1 + offsetx, height + 1 + offsety);
+        g.fillRect(x, y + offsety, (int)width + 1 + offsetx, (int)height + 1 + offsety);
 
-        g.drawImage(names.get(playerName), x, y + (height / 6) + offsety, 49, 16, null);
+        g.drawImage(names.get(playerName), x, y + ((int)height / 6) + offsety, 49, 16, null);
         //g.setColor(Color.WHITE);
         //g.setFont(new Font("Arial", Font.BOLD, 12));
         //g.drawString(playerName, x + ((width - g.getFontMetrics().stringWidth(playerName)) / 2), y + g.getFont().getSize() + offsety);
 
         g.setColor(Color.GREEN);
-        g.drawLine(x, y + offsety, x + width + offsetx, y + offsety);
+        g.drawLine(x, y + offsety, x + (int)width + offsetx, y + offsety);
         if(offsety == 0)
         {
             //g.drawLine(x, y + height, x + width + offsetx, y + height);
         }
-        g.drawLine(x, y + offsety, x, y + height + offsety);
-        g.drawLine(x + width + offsetx, y + offsety, x + width + offsetx, y + height + offsety);
+        g.drawLine(x, y + offsety, x, y + (int)height + offsety);
+        g.drawLine(x + (int)width + offsetx, y + offsety, x +(int) width + offsetx, y + (int)height + offsety);
         /****** NAME ******/
 
         /****** STATS ******/
@@ -220,11 +220,11 @@ public class HUD extends UIElement
 
         //g.setColor(Color.BLACK);
         g.setPaint(new GradientPaint(x, y, Color.GRAY, x, y + height, Color.DARK_GRAY));
-        g.fillRect(x, y, width + 1, height + 1);
+        g.fillRect(x, y, (int)width + 1, (int)height + 1);
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.PLAIN, 10));
-        int textCenter = (((height / 2) - g.getFontMetrics().getHeight()) / 2) + g.getFontMetrics().getAscent(); //=10
+        int textCenter = ((((int)height / 2) - g.getFontMetrics().getHeight()) / 2) + g.getFontMetrics().getAscent(); //=10
         g.drawString("HP ", x + 2, y + textCenter + 1);
         g.drawString("SP ", x + 2, y + (textCenter * 2) + 1);
 
@@ -247,10 +247,10 @@ public class HUD extends UIElement
 
         g.setColor(Color.GREEN);
         //g.drawLine(x/* + ((getWidth() / 4) - 15) - 1*/, y, x + width, y);
-        g.drawLine(x + ((getWidth() / 4) - 15) - 1, y, x + width, y);
-        g.drawLine(x, y + height, x + width, y + height);
-        g.drawLine(x, y, x, y + height);
-        g.drawLine(x + width, y, x + width, y + height);
+        g.drawLine(x + (((int)(getWidth()) / 4) - 15) - 1, y, x + (int)width, y);
+        g.drawLine(x, y + (int)height, x + (int)width, y + (int)height);
+        g.drawLine(x, y, x, y + (int)height);
+        g.drawLine(x + (int)width, y, x + (int)width, y + (int)height);
         /****** STATS ******/
     }
 

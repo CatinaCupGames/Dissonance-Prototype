@@ -1,8 +1,11 @@
 package com.dissonance.framework.game.world.tiled;
 
+import com.dissonance.framework.game.world.tiled.impl.GroundObject;
 import com.dissonance.framework.game.world.tiled.impl.ImageLayer;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Drawable;
+import com.dissonance.framework.render.texture.TextureLoader;
+import org.lwjgl.opengl.GLContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,9 +67,11 @@ public class WorldData {
     }
 
     public void loadAllTileSets() {
+        TextureLoader.setFastRedraw(false);
         for (TileSet tileSet : tilesets) {
             tileSet.loadTexture();
         }
+        TextureLoader.setFastRedraw(true);
     }
 
     public void assignAllLayers() {
@@ -77,6 +82,7 @@ public class WorldData {
 
     public List<Drawable> createDrawables() {
         ArrayList<Drawable> tiles = new ArrayList<Drawable>();
+        //ArrayList<TileObject> ground_tiles = new ArrayList<TileObject>();
         for (Layer layer : layers) {
             if (layer.isTiledLayer()) {
                 for (int i = 0; i < layer.getTileLayerData().length; i++) {
@@ -85,7 +91,11 @@ public class WorldData {
                         continue;
                     TileSet set = findTileSetFromID(id);
                     TileObject t = new TileObject(id, set, layer, i);
+                    //if (t.isGroundLayer() && GLContext.getCapabilities().GL_EXT_framebuffer_object) {
+                    //    ground_tiles.add(t);
+                    //} else {
                     tiles.add(t);
+                    //}
                     t.init();
                 }
             } else if (layer.isImageLayer()) {
@@ -94,7 +104,10 @@ public class WorldData {
                 il.init();
             }
         }
-
+        /*if (ground_tiles.size() > 0) {
+            GroundObject obj = new GroundObject(ground_tiles.toArray(new TileObject[ground_tiles.size()]), this.width * this.tilewidth, this.height * this.tileheight, tilewidth);
+            tiles.add(obj);
+        }*/
         return tiles;
     }
 

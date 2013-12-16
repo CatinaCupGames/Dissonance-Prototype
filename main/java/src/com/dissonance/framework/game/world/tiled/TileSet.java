@@ -32,11 +32,11 @@ public class TileSet {
             try {
                 temp = Texture.retriveTexture(image);
             } catch (IOException e) {
-                System.out.println("[WARNING] Texture not found for TileSet \"" + name + "\" (\"" + image + "\") ! ");
+                System.out.println("[WARNING] Texture not find for TileSet \"" + name + "\" (\"" + image + "\") ! ");
                 return;
             }
             if (temp == null) {
-                System.out.println("[WARNING] Texture not found for TileSet \"" + name + "\" (\"" + image + "\") ! ");
+                System.out.println("[WARNING] Texture not find for TileSet \"" + name + "\" (\"" + image + "\") ! ");
                 return;
             }
             texture = new TileTexture(temp, tilewidth, tileheight, spacing, margin, getTilesPerRow(), getRowCount());

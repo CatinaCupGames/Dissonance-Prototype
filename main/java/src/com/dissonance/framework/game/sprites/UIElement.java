@@ -94,11 +94,11 @@ public abstract class UIElement implements UpdatableDrawable {
         this.name = name;
     }
 
-    public int getWidth() {
+    public float getWidth() {
         return width;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 

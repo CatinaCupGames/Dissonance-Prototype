@@ -31,16 +31,10 @@ public class TestQuest extends AbstractQuest {
 
     @Override
     public void startQuest() throws Exception {
-        World w = WorldFactory.getWorld("arrem_world");
+        World w = WorldFactory.getWorld("test_tileset");
         setWorld(w);
         w.waitForWorldLoaded();
         Thread.sleep(5000);
-        //TestScene test = new TestScene();
-        //test.beginScene();
-        //test.waitForSceneEnd();
-        //Thread.sleep(30000);
-        w = WorldFactory.getWorld("test_world");
-        setWorld(w);
     }
 
     @Override

@@ -150,6 +150,14 @@ public class TileObject extends Sprite {
         return IDS;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 71 * hash + this.x;
+        hash = 71 * hash + this.y;
+        return hash;
+    }
+
     private static class TexCordHolder {
         public Vector2f top_left;
         public Vector2f top_right;

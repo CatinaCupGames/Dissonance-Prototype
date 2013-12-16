@@ -20,6 +20,7 @@ public class TextureLoader {
     public static final ColorModel glAlphaColorModel;
     public static final ColorModel glColorModel;
     private static final IntBuffer textureIDBuffer = BufferUtils.createIntBuffer(1);
+    private static boolean fastRedraw = true;
 
     static {
 
@@ -36,6 +37,10 @@ public class TextureLoader {
                 false,
                 ComponentColorModel.OPAQUE,
                 DataBuffer.TYPE_BYTE);
+    }
+
+    public static void setFastRedraw(boolean value) {
+        fastRedraw = value;
     }
 
     /**
@@ -203,23 +208,43 @@ public class TextureLoader {
 
         byte[] data;
         if (redraw || !(bufferedImage.getRaster().getDataBuffer() instanceof DataBufferByte)) {
-            boolean alpha = bufferedImage.getColorModel().hasAlpha();
-            int[] pixels = new int[bufferedImage.getWidth() * bufferedImage.getHeight()];
-            bufferedImage.getRGB(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight(), pixels, 0, bufferedImage.getWidth());
-            data = new byte[texWidth * texHeight * (alpha ? 4  : 3)];
-            int i = 0;
-            for (int y = 0; y < bufferedImage.getHeight(); y++) {
-                for (int x = 0; x < bufferedImage.getWidth(); x++) {
-                    int pixel = pixels[y * bufferedImage.getWidth() + x];
-                    data[i] = (byte)((pixel >> 16) & 0xFF);
-                    i++;
-                    data[i] = (byte)((pixel >> 8) & 0xFF);
-                    i++;
-                    data[i] = (byte)((pixel & 0xFF));
-                    i++;
-                    if (alpha) {
-                        data[i] = (byte)((pixel >> 24) & 0xFF);
-                        i++;
+            // create a raster that can be used by OpenGL as a source
+            // for a texture
+            if (!fastRedraw) {
+                //Use java's Image API to redraw the original bufferedimage
+                //Slow, but always works.
+                if (bufferedImage.getColorModel().hasAlpha()) {
+                    raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE,texWidth,texHeight,4,null);
+                    texImage = new BufferedImage(glAlphaColorModel,raster,false,new Hashtable());
+                } else {
+                    raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE,texWidth,texHeight,3,null);
+                    texImage = new BufferedImage(glColorModel,raster,false,new Hashtable());
+                }
+
+                // copy the source image into the produced image
+                Graphics g = texImage.getGraphics();
+                g.setColor(new Color(0f,0f,0f,0f));
+                g.fillRect(0,0,texWidth,texHeight);
+                g.drawImage(bufferedImage, 0, 0, bufferedImage.getWidth(), bufferedImage.getHeight(), null);
+                g.dispose();
+                data = ((DataBufferByte) texImage.getRaster().getDataBuffer()).getData();
+            } else {
+                //Convert all int's to 3 bytes (4 if using alpha)
+                //This method is not compatible with tiles..
+                boolean alpha = bufferedImage.getColorModel().hasAlpha();
+                int[] pixels = new int[bufferedImage.getWidth() * bufferedImage.getHeight()];
+                bufferedImage.getRGB(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight(), pixels, 0, bufferedImage.getWidth());
+                data = new byte[texWidth * texHeight * (alpha ? 4  : 3)];
+                int i = 0;
+                for (int y = 0; y < bufferedImage.getHeight(); y++) {
+                    for (int x = 0; x < bufferedImage.getWidth(); x++) {
+                        int pixel = pixels[y * bufferedImage.getWidth() + x];
+                        data[i++] = (byte)((pixel >> 16) & 0xFF);
+                        data[i++] = (byte)((pixel >> 8) & 0xFF);
+                        data[i++] = (byte)(pixel & 0xFF);
+                        if (alpha) {
+                            data[i++] = (byte)((pixel >> 24) & 0xFF);
+                        }
                     }
                 }
             }

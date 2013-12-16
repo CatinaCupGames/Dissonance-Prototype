@@ -65,7 +65,7 @@ public class TileTexture extends Texture {
         int x = 0;
         int y = 0;
         int temp = 1;
-        while (y + tileHeight + margin <= super.getImageHeight()) {
+        while (temp != pos && y + tileHeight + margin <= super.getImageHeight()) {
             x += tileWidth + spacing;
             if (x + tileWidth + margin > super.getImageWidth()) {
                 x = margin;
@@ -76,6 +76,16 @@ public class TileTexture extends Texture {
                 break;
         }
 
+        return new float[] { x, y };
+    }
+
+    public float[] convertToCords2(int pos, TileSet tileSet) {
+        float x = 0;
+        float y = 0;
+        int step = (pos - 1) % perrow;
+        int row = (pos - 1) / size;
+        x = tileWidth * step;
+        y = tileHeight * row;
         return new float[] { x, y };
     }
 
@@ -95,7 +105,7 @@ public class TileTexture extends Texture {
         int tilepos = (id - tile.getFirstGrid()) + 1; //Returns the tile id of this tile, relative to tileset.
 
         float x, y;
-        float[] temp = convertToCords(tilepos);
+        float[] temp = convertToCords2(tilepos, tile);
 
         x = temp[0];
         y = temp[1];
