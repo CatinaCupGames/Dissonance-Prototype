@@ -6,6 +6,7 @@ public final class Position {
 
     private float x;
     private float y;
+    private boolean shrunk;
 
     public Position(float x, float y) {
         this.x = x;
@@ -25,11 +26,17 @@ public final class Position {
     }
 
     public Position expand() {
+        shrunk = false;
         return new Position(FastMath.fastFloor(getX() * 32), FastMath.fastFloor(getY() * 32));
     }
 
     public Position shrink() {
+        shrunk = true;
         return new Position(FastMath.fastFloor(getX() / 32), FastMath.fastFloor(getY() / 32));
+    }
+
+    public boolean isShrunk() {
+        return shrunk;
     }
 
     public float getY() {

@@ -32,8 +32,8 @@ public class GameMenu extends UIElement {
 
     @Override
     public void init() {
-        setWidth(GameSettings.Display.window_width);
-        setHeight(GameSettings.Display.window_height);
+        setWidth(GameSettings.Display.window_width / 2);
+        setHeight(GameSettings.Display.window_height / 2);
         Vector2f pos = new Vector2f(GameSettings.Display.window_width / 4 , GameSettings.Display.window_height / 4);
         pos = Camera.translateToScreenCord(pos);
         System.out.println(pos);
@@ -43,5 +43,6 @@ public class GameMenu extends UIElement {
 
     @Override
     public void update() {
+
     }
 }

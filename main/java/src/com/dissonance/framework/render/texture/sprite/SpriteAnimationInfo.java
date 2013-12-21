@@ -6,13 +6,19 @@ public class SpriteAnimationInfo {
     private int count;
     private long default_speed;
     private boolean loop;
+    private int lastRow;
 
-    SpriteAnimationInfo(String name, long default_speed, int row, int count, boolean loop) {
+    SpriteAnimationInfo(String name, long default_speed, int row, int count, boolean loop, int lastRow) {
         this.name = name;
         this.default_speed = default_speed;
         this.row = row;
         this.count = count;
         this.loop = loop;
+        this.lastRow = lastRow;
+    }
+
+    public int getLastRow() {
+        return lastRow;
     }
 
     public String getName() {

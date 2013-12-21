@@ -8,15 +8,13 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 
 public class DialogFactory {
     private static final HashMap<String, Dialog>  text = new HashMap<String, Dialog>();
 
-    public static boolean loadDialog() {
-        InputStream in = DialogFactory.class.getClassLoader().getResourceAsStream("IND/dialog.xml");
+    public static boolean loadDialog(InputStream in) {
         if (in == null)
             return false;
 
@@ -108,6 +106,22 @@ public class DialogFactory {
             return false;
         }
         return true;
+    }
+
+    public static boolean loadDialog() {
+        InputStream in = DialogFactory.class.getClassLoader().getResourceAsStream("IND/dialog.xml");
+        return loadDialog(in);
+    }
+
+    public static boolean loadDialog(File file) {
+        InputStream in;
+        try {
+            in = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return loadDialog(in);
     }
 
     public static Dialog getDialog(String ID) {

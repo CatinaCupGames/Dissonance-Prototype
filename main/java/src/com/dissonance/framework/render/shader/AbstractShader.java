@@ -2,6 +2,9 @@ package com.dissonance.framework.render.shader;
 
 import org.lwjgl.opengl.ARBShaderObjects;
 
+import java.security.InvalidParameterException;
+import static org.lwjgl.opengl.GL20.*;
+
 public abstract class AbstractShader {
     private int[] shaderID;
     private int program;

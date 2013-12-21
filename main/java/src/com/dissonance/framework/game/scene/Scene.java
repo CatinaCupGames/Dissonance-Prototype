@@ -91,9 +91,18 @@ public abstract class Scene {
         kill = true;
     }
 
+    private boolean invoked = false;
+    private void endScene() {
+        invoked = false;
+        onEndScene();
+        if (!invoked)
+            throw new RuntimeException("super.onEndScene was not invoked. Please add super.onEndScene to the top of your method.");
+    }
+
     protected void onEndScene() {
         scenePlaying = false;
         sceneStarted = false;
+        invoked = true;
         _wakeup();
     }
 

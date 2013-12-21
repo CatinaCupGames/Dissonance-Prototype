@@ -15,9 +15,9 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class TileObject extends Sprite {
     private static final HashMap<Integer, TexCordHolder> cache = new HashMap<Integer, TexCordHolder>();
-    private TexCordHolder tex_cords;
+    TexCordHolder tex_cords;
 
-    private TileSet parentTileSet;
+    TileSet parentTileSet;
     private int data_index;
     private final int ID;
     private Layer parentLayer;

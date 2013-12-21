@@ -9,6 +9,7 @@ import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
+import com.dissonance.framework.render.texture.TextureLoader;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -178,6 +179,7 @@ public abstract class UIElement implements UpdatableDrawable {
         graphics2D.fillRect(0,0, width, height);
         draw(graphics2D);
         graphics2D.dispose();
+        TextureLoader.setFastRedraw(true);
         UI = Texture.convertToTexture(name, UI_IMAGE);
         valid = true;
     }

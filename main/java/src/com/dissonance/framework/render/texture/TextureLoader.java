@@ -150,7 +150,7 @@ public class TextureLoader {
         return texture;
     }
 
-    private static int createTextureID() {
+    public static int createTextureID() {
         glGenTextures(textureIDBuffer);
         return textureIDBuffer.get(0);
     }

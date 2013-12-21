@@ -4,14 +4,17 @@ import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.system.ticker.Ticker;
+import com.dissonance.game.quests.DialogQuest;
 import com.dissonance.game.quests.MenuQuest;
 import com.dissonance.game.quests.TestQuest;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Scanner;
 
 public class Main {
+    public static String DID;
     private static final Ticker TICKER = new Ticker();
 
     static {
@@ -37,8 +40,31 @@ public class Main {
         InputKeys.initializeConfig();
         System.out.println("Loading game dialog");
         DialogFactory.loadDialog();
-        System.out.println("Starting quest");
+        //dialogMenu();
+        System.out.println("Starting TestQuest");
         GameService.beginQuest(new TestQuest());
+    }
+
+    private static void dialogMenu() {
+        System.out.print("Please type in test dialog file: ");
+        File fileObj;
+        Scanner scanner;
+        do {
+            scanner = new Scanner(System.in);
+            String file = scanner.nextLine();
+            fileObj = new File(file);
+            if (fileObj.exists() && !fileObj.isDirectory())
+                break;
+            System.out.println("Invalid dialog file!");
+        } while (true);
+        System.out.println("Loading dialog file \"" + fileObj.getName() + "\"");
+        boolean success = DialogFactory.loadDialog(fileObj);
+        if (!success) {
+            System.out.println("Error loading dialog!");
+            return;
+        }
+        System.out.print("Please type in the dialog ID to test: ");
+        DID = scanner.nextLine();
     }
 
 

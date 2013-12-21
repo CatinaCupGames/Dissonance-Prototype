@@ -7,7 +7,9 @@ import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.render.RenderService;
+import javafx.geometry.Pos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractWaypointSprite extends AnimatedSprite implements WaypointSprite {
@@ -35,7 +37,10 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
 
             if (!WaypointMover.moveSpriteOneFrame(this)) {
                 if (waypointList.size() > 0) {
-                    currentWaypoint = waypointList.get(0).expand();
+                    Position pos = waypointList.get(0);
+                    if (pos.isShrunk())
+                        pos.expand();
+                    currentWaypoint = pos;
                     waypointList.remove(0);
                 } else {
                     currentWaypoint = null;
@@ -62,7 +67,9 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
             if (waypointList.size() > 0)
                 currentWaypoint = waypointList.get(0).expand();
         } else {
-           currentWaypoint = position;
+            if (waypointList == null)
+                waypointList = new ArrayList<Position>();
+            waypointList.add(position);
         }
     }
 

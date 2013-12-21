@@ -30,6 +30,7 @@ import java.util.List;
 
 public final class World {
     private static final Gson GSON = new Gson();
+    private static String wlpackage = "com.dissonance.game.w";
 
     private transient final ArrayList<Drawable> drawable = new ArrayList<>();
     private String name;
@@ -47,6 +48,10 @@ public final class World {
         this.ID = ID;
     }
 
+    public static void setDefaultLoaderPackage(String wlpackage) {
+        World.wlpackage = wlpackage;
+    }
+
     public int getID() {
         return ID;
     }
@@ -59,20 +64,24 @@ public final class World {
         //TODO Move all playable sprites to this world maybe?
         if (renderingService == null)
             return;
-        renderingService.fadeToBlack(1000);
-        try {
-            renderingService.waitForFade();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (!renderingService.isCrossFading()) {
+            renderingService.fadeToBlack(1000);
+            try {
+                renderingService.waitForFade();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         renderingService.provideData(this, RenderService.WORLD_DATA_TYPE);
-        Timer.delayedInvokeRunnable(300, new Runnable() {
+        if (!renderingService.isCrossFading()) {
+            Timer.delayedInvokeRunnable(300, new Runnable() {
 
-            @Override
-            public void run() {
-                renderingService.fadeFromBlack(1000);
-            }
-        });
+                @Override
+                public void run() {
+                    renderingService.fadeFromBlack(1000);
+                }
+            });
+        }
     }
 
     public void load(final String world) throws WorldLoadFailedException {
@@ -151,7 +160,7 @@ public final class World {
 
     private WorldLoader attemptSearchForWorldLoader() {
         try {
-            Class<?> class_ = Class.forName("com.dissonance.game.w." + name);
+            Class<?> class_ = Class.forName(wlpackage + "." + name);
             if (WorldLoader.class.isAssignableFrom(class_)) {
                 return (WorldLoader) class_.newInstance();
             }

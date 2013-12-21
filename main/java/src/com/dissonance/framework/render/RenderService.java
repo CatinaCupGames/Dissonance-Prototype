@@ -6,17 +6,20 @@ import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.world.World;
-import com.dissonance.framework.game.world.tiled.impl.GroundObject;
+import com.dissonance.framework.render.framebuffer.Framebuffer;
 import com.dissonance.framework.render.shader.ShaderFactory;
+import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.utils.Validator;
 import com.dissonance.game.Main;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.*;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.util.Iterator;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -24,6 +27,8 @@ import static org.lwjgl.util.glu.GLU.gluErrorString;
 
 public class RenderService extends Service {
     public static final int WORLD_DATA_TYPE = 0;
+    public static final int ENABLE_CROSS_FADE = 1;
+    public static final int CROSS_FADE_DURATION = 2;
     public static RenderService INSTANCE;
 
     /****************************************************
@@ -39,6 +44,9 @@ public class RenderService extends Service {
     private boolean looping;
     private float fpsCount;
     private float fpsTime;
+    private boolean crossfade;
+    private World next_world;
+    private ContextCapabilities capabilities;
 
     private long startTime;
     private boolean isFading;
@@ -70,6 +78,10 @@ public class RenderService extends Service {
         startAlpha = curAlpha;
         this.speed = speed;
         startTime = System.currentTimeMillis();
+    }
+
+    public boolean isCrossFading() {
+        return crossfade;
     }
 
     public static float getCurrentAlphaValue() {
@@ -162,6 +174,7 @@ public class RenderService extends Service {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glLoadIdentity();
             curAlpha = 1f;
+            capabilities = GLContext.getCapabilities();
 
             System.out.println("OpenGL version: " + glGetString(GL_VERSION));
 
@@ -218,7 +231,16 @@ public class RenderService extends Service {
         if (type == WORLD_DATA_TYPE) {
             Validator.validateClass(obj, World.class);
 
-            this.current_world = (World) obj;
+            if (!crossfade)
+                this.current_world = (World) obj;
+            else {
+                this.next_world = (World) obj;
+                fadeStartTime = System.currentTimeMillis();
+            }
+        } else if (type == ENABLE_CROSS_FADE && capabilities.GL_EXT_framebuffer_object) {
+            this.crossfade = (boolean)obj;
+        } else if (type == CROSS_FADE_DURATION && crossfade) {
+            this.fadeDuration = (float)obj;
         }
     }
 
@@ -227,6 +249,8 @@ public class RenderService extends Service {
         return "RenderService Thread";
     }
 
+    private long fadeStartTime;
+    private float fadeDuration;
     @Override
     public void onUpdate() {
         cur = now;
@@ -272,16 +296,51 @@ public class RenderService extends Service {
                 if (s == null)
                     continue;
                 try {
-                    if (!(s instanceof GroundObject)) {
-                        if (s instanceof Sprite) {
-                            if (Camera.isOffScreen((Sprite)s, 2))
-                                continue;
-                        } else if (Camera.isOffScreen(s.getX(), s.getY(), s.getWidth(), s.getHeight(), 2)) //Assume everything is 32x32
+                    if (s instanceof Sprite) {
+                        if (Camera.isOffScreen((Sprite)s, 2))
                             continue;
-                    }
+                    } else if (Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2, 2)) //Assume everything is 32x32
+                        continue;
                     s.render();
                 } catch (Throwable t) {
                     t.printStackTrace();
+                }
+            }
+
+            if (next_world != null) {
+                long time = System.currentTimeMillis() - fadeStartTime;
+                float percent;
+                if (time > fadeDuration) {
+                    percent = 1;
+                } else {
+                    percent = time / fadeDuration;
+                }
+                float emu = curAlpha;
+                curAlpha = percent; //Some drawables require the curAlpha to be set, so we save what it use to be and set it
+                glColor4f(1f, 1f, 1f, curAlpha);
+
+                Iterator<Drawable> next_sprites = next_world.getSortedDrawables();
+                while (next_sprites.hasNext()) {
+                    Drawable d = next_sprites.next();
+                    if (d == null)
+                        continue;
+                    try {
+                        if (d instanceof Sprite) {
+                            if (Camera.isOffScreen((Sprite)d, 2))
+                                continue;
+                        } else if (Camera.isOffScreen(d.getX(), d.getY(), d.getWidth() / 2, d.getHeight() / 2, 2)) //Assume everything is 32x32
+                            continue;
+                        d.render();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
+                }
+
+                curAlpha = emu;
+
+                if (percent == 1) {
+                    current_world = next_world;
+                    next_world = null;
                 }
             }
 
@@ -294,7 +353,6 @@ public class RenderService extends Service {
             Camera.executeAnimation(); //Execute any interlop
 
             ShaderFactory.executePostRender();
-
             exitOnGLError("RenderService.renderSprites");
 
             Display.update();

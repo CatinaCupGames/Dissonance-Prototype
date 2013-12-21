@@ -5,7 +5,7 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.game.quests.TestQuest;
 import com.dissonance.game.sprites.Enemy;
 import com.dissonance.game.sprites.TestNPC;
-import com.dissonance.game.sprites.TestPlayer;
+
 
 public class test_tileset extends GameWorldLoader {
     @Override

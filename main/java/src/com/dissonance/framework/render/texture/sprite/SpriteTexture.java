@@ -56,6 +56,7 @@ public class SpriteTexture extends Texture {
                         Element el = (Element) nl.item(i);
                         String name = "";
                         int row = 0;
+                        int lastRow = -1;
                         long default_speed = 1;
                         boolean loop = false;
                         int frames = 1;
@@ -75,6 +76,13 @@ public class SpriteTexture extends Texture {
                         if (el.hasAttribute("frames")) {
                             try {
                                 frames = Integer.parseInt(el.getAttribute("frames"));
+                            } catch (Throwable t) {
+                                t.printStackTrace();
+                            }
+                        }
+                        if (el.hasAttribute("lastRow")) {
+                            try {
+                                lastRow = Integer.parseInt(el.getAttribute("lastRow"));
                             } catch (Throwable t) {
                                 t.printStackTrace();
                             }
@@ -102,7 +110,7 @@ public class SpriteTexture extends Texture {
                             }
                         }
 
-                        texture.animations[i] = new SpriteAnimationInfo(name, default_speed, row, frames, loop);
+                        texture.animations[row] = new SpriteAnimationInfo(name, default_speed, row, frames, loop, lastRow == -1 ? row : lastRow);
                     }
                 }
             } catch (ParserConfigurationException e) {
@@ -145,10 +153,13 @@ public class SpriteTexture extends Texture {
 
 
     public void step() {
-        if (step + 1 < animations[row].size() || animations[row].doesLoop()) {
+        if (step + 1 < animations[row].size() || row < animations[row].getLastRow() || animations[row].doesLoop()) {
             step++;
-            if (step >= animations[row].size())
+            if (step >= animations[row].size()) {
                 step = 0;
+                if (row < animations[row].getLastRow())
+                    row++;
+            }
         }
     }
 
