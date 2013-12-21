@@ -7,6 +7,11 @@ Description
 =============
 A short summary of the story should go here (like the back of a book)
 
+
+Wiki
+=============
+The [wiki][1] explains how to do certain things in the Dissonance framework and how certain things work.
+
 Meet the Team
 =============
 
@@ -31,3 +36,5 @@ Meet the Team
 * mattmudge
 * DavisM33
 * rfding
+
+[1]:https://github.com/hypereddie10/Dissonance/wiki
