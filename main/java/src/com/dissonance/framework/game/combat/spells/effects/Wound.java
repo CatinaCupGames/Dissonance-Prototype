@@ -26,4 +26,7 @@ public class Wound extends StatusEffect {
 
         owner.applyDamage(Tdamage);
     }
+
+    @Override
+    protected void onEnd(CombatSprite owner) { }
 }
