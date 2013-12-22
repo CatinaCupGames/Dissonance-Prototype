@@ -60,11 +60,11 @@ public final class World {
         renderingService = ServiceManager.createService(RenderService.class);
     }
 
-    public void switchTo() {
+    public void switchTo(boolean fadeToBlack) {
         //TODO Move all playable sprites to this world maybe?
         if (renderingService == null)
             return;
-        if (!renderingService.isCrossFading()) {
+        if (!renderingService.isCrossFading() && fadeToBlack) {
             renderingService.fadeToBlack(1000);
             try {
                 renderingService.waitForFade();
@@ -73,7 +73,7 @@ public final class World {
             }
         }
         renderingService.provideData(this, RenderService.WORLD_DATA_TYPE);
-        if (!renderingService.isCrossFading()) {
+        if (!renderingService.isCrossFading() && fadeToBlack) {
             Timer.delayedInvokeRunnable(300, new Runnable() {
 
                 @Override

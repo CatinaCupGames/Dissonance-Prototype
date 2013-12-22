@@ -37,10 +37,7 @@ public class Weapon {
     //==Spell Animation Stuff==
     //If this weapon is not a spell, then play the normal sprite
     //attack animation
-    private boolean isSpell; //Whether this weapon is a spell
     private boolean isGun; //Whether this weapon is a gun
-    private String spellSpriteClass; //The Spell class this weapon will use
-    private double spellSpeed = 0; //The speed of the spell (defaults to 0 for non-moving spells)
     //TODO This may not be needed..
     private int animationRow; //The animation row to play on the sprite
     //TODO This may not be needed..
@@ -101,14 +98,8 @@ public class Weapon {
                                 w.range = Integer.parseInt(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("swipe"))
                                 w.swipeRange = Integer.parseInt(el.getFirstChild().getNodeValue());
-                            else if (nodeName.equals("spell"))
-                                w.isSpell = el.getFirstChild().getNodeValue().equalsIgnoreCase("true");
                             else if (nodeName.equals("gun"))
                                 w.isGun = el.getFirstChild().getNodeValue().equalsIgnoreCase("true");
-                            else if (nodeName.equals("spellSpriteClass"))
-                                w.spellSpriteClass = el.getFirstChild().getNodeValue();
-                            else if (nodeName.equals("spellSpeed"))
-                                w.spellSpeed = Double.parseDouble(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("animationRow"))
                                 w.animationRow = Integer.parseInt(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("animationSpeed"))
@@ -163,10 +154,6 @@ public class Weapon {
         return isGun;
     }
 
-    public double getSpellSpeed() {
-        return spellSpeed;
-    }
-
     public int getVigor() {
         return vigor;
     }
@@ -201,14 +188,6 @@ public class Weapon {
 
     public int getAnimationSpeed() {
         return animationSpeed;
-    }
-
-    public boolean isSpell() {
-        return isSpell;
-    }
-
-    public String getSpellClass() {
-        return spellSpriteClass;
     }
 
     public int getSwipeRange() {

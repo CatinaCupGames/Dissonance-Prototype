@@ -4,6 +4,7 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.exceptions.QuestNotFoundException;
+import javafx.animation.Transition;
 
 public abstract class AbstractQuest {
     private AbstractQuest next;
@@ -43,8 +44,16 @@ public abstract class AbstractQuest {
     }
 
     protected void setWorld(World world) {
-        WorldFactory.swapView(world);
+        WorldFactory.swapView(world, true);
         System.out.println("New world swapped to " + world.getID());
+        this.world = world;
+    }
+
+    protected void setWorld(World world, RenderService.TransitionType transitionType) {
+        if (transitionType == RenderService.TransitionType.CROSSFADE) {
+            RenderService.INSTANCE.provideData(true, RenderService.ENABLE_CROSS_FADE);
+        }
+        WorldFactory.swapView(world, transitionType == RenderService.TransitionType.FADETOBLACK);
         this.world = world;
     }
 
@@ -90,4 +99,6 @@ public abstract class AbstractQuest {
             super.wait(0L);
         }
     }
+
+
 }

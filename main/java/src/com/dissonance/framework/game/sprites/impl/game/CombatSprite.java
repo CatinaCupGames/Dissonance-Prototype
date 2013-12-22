@@ -1,19 +1,19 @@
 package com.dissonance.framework.game.sprites.impl.game;
 
-import com.dissonance.framework.game.combat.Spell;
-import com.dissonance.framework.game.combat.Weapon;
+import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.item.Item;
 import com.dissonance.framework.game.item.impl.WeaponItem;
-import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.system.utils.Validator;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class CombatSprite extends PhysicsSprite {
     private ArrayList<Item> inventory = new ArrayList<Item>();
+    private final ArrayList<StatusEffect> effects = new ArrayList<StatusEffect>();
     private int weaponIndex;
     private boolean isCastingSpell = false;
     //==FIXED STATS==//
@@ -132,30 +132,35 @@ public abstract class CombatSprite extends PhysicsSprite {
      */
     public abstract CombatType getCombatType();
 
-    public void castSpell(Spell spell, Weapon data) {
-        if (spell == null)
-            return;
-        isCastingSpell = true;
-        setAnimation(data.getAnimationRow());
-        setAnimationSpeed(data.getAnimationSpeed());
-        spell.activate();
-        super.setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
-            @Override
-            public void onAnimationFinished(AnimatedSprite sprite) {
-                isCastingSpell = false;
-            }
-        });
-    }
-
     @Override
     public void update() {
         super.update();
         if (isUpdateCanceled())
             return;
+
+        if (effects.size() > 0) {
+            synchronized (effects) {
+                Iterator<StatusEffect> effectIterator = effects.iterator();
+                while (effectIterator.hasNext()) {
+                    StatusEffect effect = effectIterator.next();
+                    if (!effect.hasStarted())
+                        effect.startEffect();
+                    if (effect.inflict(this))
+                        effectIterator.remove();
+                }
+            }
+        }
+
         if (isCastingSpell)
             setUpdateCanceled(true);
         if (HP <= 0)
             setUpdateCanceled(true);
+    }
+
+    public void applyStatusCondition(StatusEffect effect) {
+        synchronized (effects) {
+            effects.add(effect);
+        }
     }
 
     public double getHP() {
@@ -170,16 +175,6 @@ public abstract class CombatSprite extends PhysicsSprite {
         ArrayList<WeaponItem> list = new ArrayList<WeaponItem>();
         for (Item i : inventory) {
             if (i instanceof WeaponItem) {
-                list.add((WeaponItem) i);
-            }
-        }
-        return Collections.unmodifiableList(list);
-    }
-
-    public List<WeaponItem> getAllSpells() {
-        ArrayList<WeaponItem> list = new ArrayList<WeaponItem>();
-        for (Item i : inventory) {
-            if (i instanceof WeaponItem && ((WeaponItem)i).isSpell()) {
                 list.add((WeaponItem) i);
             }
         }
@@ -321,37 +316,31 @@ public abstract class CombatSprite extends PhysicsSprite {
         if (damage > 100)
             damage = 100;
 
-        HP -= damage;
-        //TODO Display damage
+        applyDamage(damage);
         if (HP <= 0) {
             //TODO Give attacker EXP
+        }
+    }
+
+    public void applyDamage(double damage) {
+        HP -= damage;
+        if (HP <= 0) {
             //TODO Play death animation for this sprite
-            /*setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
-                @Override
-                public void onAnimationFinished(AnimatedSprite sprite) {
-                    getWorld().removeSprite(CombatSprite.this);
-                }
-            });*/
-            getWorld().removeSprite(CombatSprite.this);
+            getWorld().removeSprite(this);
         }
     }
 
 
     public enum CombatType {
         /**
-         * Any thing that the player can play as
-         */
-        ALLY,
-
-        /**
          * Hostile things that aren't human
          */
         CREATURE,
 
         /**
-         * Human military units
+         * Pretty self-explanatory
          */
-        TROOP,
+        HUMAN,
 
         /**
          * Lack the organic carbon-based compounds and souls that we

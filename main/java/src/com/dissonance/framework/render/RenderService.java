@@ -237,7 +237,7 @@ public class RenderService extends Service {
                 this.next_world = (World) obj;
                 fadeStartTime = System.currentTimeMillis();
             }
-        } else if (type == ENABLE_CROSS_FADE && capabilities.GL_EXT_framebuffer_object) {
+        } else if (type == ENABLE_CROSS_FADE) {
             this.crossfade = (boolean)obj;
         } else if (type == CROSS_FADE_DURATION && crossfade) {
             this.fadeDuration = (float)obj;
@@ -390,5 +390,11 @@ public class RenderService extends Service {
             if (Display.isCreated()) Display.destroy();
             System.exit(-1);
         }
+    }
+
+    public static enum TransitionType {
+        CROSSFADE,
+        FADETOBLACK,
+        NONE
     }
 }

@@ -102,7 +102,7 @@ public class WorldFactory {
      * @param newworld
      *                The new world to display. This parameter <b>cannot</b> be null.
      */
-    public static void swapView(World newworld) {
+    public static void swapView(World newworld, boolean fadetoblack) {
         Validator.validateNotNull(newworld, "NewWorld");
         if (currentWorld != null) {
             WorldHolder w = getWorldHolder(currentWorld.getID());
@@ -122,7 +122,7 @@ public class WorldFactory {
             w.world = newworld;
             cacheWorlds[index] = w;
         }
-        newworld.switchTo();
+        newworld.switchTo(fadetoblack);
         lastWorld = currentWorld;
         currentWorld = newworld;
         System.out.println("New World: " + currentWorld + ", Old World: " + lastWorld);
