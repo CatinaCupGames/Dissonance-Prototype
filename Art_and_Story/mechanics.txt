@@ -79,16 +79,16 @@ instantly or over a period of time. Relies on vigor stat
 
 -Enemies fall into three categories:
   -Creatures: hostile things that aren't human
-  -Troops: human military units
+  -Humans: pretty self-explanitory
   -Machines: lack the organic carbon-based compounds and souls that we 
 privileged folks possess
 
 -Status conditions may be inflicted by certain weapons or attacks. They are
 as follows:
   -Wound: inflicts a bleeding wound that drains HP, ineffective on machines
-and strong against troops
+and strong against humans
   -Burn: inflicts heavy damage to the skin, lowering attack and defense, 
-ineffective on troops and strong against creatures
+ineffective on humans and strong against creatures
   -Stun: sends a shock that lowers speed and vigor, ineffective on creatures
 but strong against machines
   -Corrupt: enemies will begin to attack their own allies while the player
