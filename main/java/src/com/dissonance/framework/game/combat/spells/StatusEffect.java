@@ -20,10 +20,16 @@ public abstract class StatusEffect {
             onInflict(owner);
             lastInflict = cur;
         }
-        return cur - startTime > duration;
+        if (cur - startTime > duration) {
+            onEnd(owner);
+            return true;
+        }
+        return false;
     }
 
     protected abstract void onInflict(CombatSprite owner);
+
+    protected abstract void onEnd(CombatSprite owner);
 
     public boolean hasStarted() {
         return started;

@@ -12,4 +12,7 @@ public class HPHeal extends StatusEffect {
     protected void onInflict(CombatSprite owner) {
         owner.setHP(owner.getHP() + super.damage); //Use the damage variable as an add modifier
     }
+
+    @Override
+    protected void onEnd(CombatSprite owner) { }
 }
