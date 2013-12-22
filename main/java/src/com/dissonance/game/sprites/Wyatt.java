@@ -56,7 +56,7 @@ public final class Wyatt extends PlayableSprite {
 
     @Override
     public CombatType getCombatType() {
-        return CombatType.ALLY;
+        return CombatType.HUMAN;
     }
 
     @Override

@@ -21,6 +21,7 @@ public abstract class CombatSprite extends PhysicsSprite {
 
     //==VARIABLE STATS==//
     protected int level = 1;
+    private float MP;
 
     public int getLevel() {
         return level;
@@ -328,6 +329,20 @@ public abstract class CombatSprite extends PhysicsSprite {
             //TODO Play death animation for this sprite
             getWorld().removeSprite(this);
         }
+    }
+
+    public abstract boolean isAlly(CombatSprite sprite);
+
+    public void setHP(double HP) {
+        this.HP = HP;
+    }
+
+    public float getMP() {
+        return MP;
+    }
+
+    public void setMP(float MP) {
+        this.MP = MP;
     }
 
 

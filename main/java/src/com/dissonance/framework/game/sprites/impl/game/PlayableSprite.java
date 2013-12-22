@@ -52,6 +52,11 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     @Override
+    public boolean isAlly(CombatSprite sprite) {
+        return sprite instanceof PlayableSprite && party.contains(sprite);
+    }
+
+    @Override
     public void setX(float x) {
         super.setX(x);
         if (isPlaying) {

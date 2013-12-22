@@ -3,6 +3,7 @@ package com.dissonance.framework.game.world;
 import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
+import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
@@ -42,6 +43,7 @@ public final class World {
     private boolean loaded = false;
     private WorldData tiledData;
     private List<UpdatableDrawable> udrawables = new ArrayList<>();
+    private List<CombatSprite> combatCache = new ArrayList<CombatSprite>();
 
 
     World(int ID) {
@@ -219,6 +221,8 @@ public final class World {
             public void run() {
                 sprite.setWorld(World.this);
                 sprite.onLoad();
+                if (sprite instanceof CombatSprite)
+                    combatCache.add((CombatSprite) sprite);
             }
         });
     }
@@ -230,8 +234,14 @@ public final class World {
             public void run() {
                 sprite.onUnload();
                 sprite.setWorld(null);
+                if (sprite instanceof CombatSprite)
+                    combatCache.remove(sprite);
             }
         });
+    }
+
+    public List<CombatSprite> getAllCombatSprites() {
+        return Collections.unmodifiableList(combatCache);
     }
 
     public void onUnload() { //This method is called when the world is not shown but is still in memory
