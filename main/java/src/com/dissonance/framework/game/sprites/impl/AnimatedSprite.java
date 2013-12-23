@@ -6,7 +6,6 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteAnimationInfo;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
-import com.dissonance.framework.system.utils.Direction;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.security.InvalidParameterException;

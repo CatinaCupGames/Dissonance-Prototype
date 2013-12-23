@@ -234,6 +234,7 @@ public class DialogUI extends UIElement {
                         if (current_char_offset  >= total_chars)
                             break;
                         g.setFont(current.s.getFont());
+                        g.setColor(current.s.getColor());
                         g.drawString("" + current.s.getString().toCharArray()[z], xoffset, yoffset);
                         current_char_offset++;
                         xoffset += g.getFontMetrics().stringWidth("" + current.s.getString().toCharArray()[z]);
@@ -256,6 +257,7 @@ public class DialogUI extends UIElement {
                         break;
                     for (int z = 0; z < current.s.getString().toCharArray().length; z++) {
                         g.setFont(current.s.getFont());
+                        g.setColor(current.s.getColor());
                         g.drawString("" + current.s.getString().toCharArray()[z], xoffset, yoffset);
                         xoffset += g.getFontMetrics().charWidth(current.s.getString().toCharArray()[z]);
                     }

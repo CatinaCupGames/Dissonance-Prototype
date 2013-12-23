@@ -48,9 +48,9 @@ public abstract class ProjectileSpell extends AnimatedSprite implements Spell {
     @Override
     public void update() {
         super.update();
-        if (!isUpdateCanceled())
+        if (isUpdateCanceled())
             return;
-
+        moveOneFrame();
     }
 
     @Override

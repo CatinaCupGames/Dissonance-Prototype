@@ -34,7 +34,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        /*GameService.args = args;
+        GameService.args = args;
         System.out.println("Using libs folder " + System.getProperty("org.lwjgl.librarypath"));
         System.out.println("Loading Input config");
         InputKeys.initializeConfig();
@@ -42,15 +42,7 @@ public class Main {
         DialogFactory.loadDialog();
         //dialogMenu();
         System.out.println("Starting TestQuest");
-        GameService.beginQuest(new TestQuest());*/
-
-        int ox = 6 + 5;
-        int oy = 10 + 5;
-        for (int i = 0; i < 20; i++) {
-            int x = (int) (6 + 5 * Math.cos(Math.toRadians(i * 18)));
-            int y = (int) (10 + 5 * Math.sin(Math.toRadians(i * 18)));
-            System.out.println(x + " : " + y);
-        }
+        GameService.beginQuest(new TestQuest());
     }
 
     private static void dialogMenu() {

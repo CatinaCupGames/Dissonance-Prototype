@@ -8,7 +8,9 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
+import java.awt.*;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 
 public class DialogFactory {
@@ -44,6 +46,7 @@ public class DialogFactory {
                                 continue;
                             String text = nodelist.item(ii).getFirstChild().getNodeValue();
                             Style style = Style.NORMAL;
+                            Color color = Color.WHITE;
                             if (nodelist.item(ii).getAttributes().getNamedItem("style") != null) {
                                 String stype = nodelist.item(ii).getAttributes().getNamedItem("style").getNodeValue();
                                 for (Style l : Style.values()) {
@@ -53,11 +56,20 @@ public class DialogFactory {
                                     }
                                 }
                             }
+                            if (nodelist.item(ii).getAttributes().getNamedItem("color") != null) {
+                                String scolor = nodelist.item(ii).getAttributes().getNamedItem("color").getNodeValue();
+                                try {
+                                    Field field = Class.forName("java.awt.Color").getField(scolor);
+                                    color = (Color)field.get(null);
+                                } catch (Exception e) {
+                                    color = Color.WHITE;
+                                }
+                            }
                             boolean append = false;
                             if (nodelist.item(ii).getAttributes().getNamedItem("type") != null) {
                                 append = nodelist.item(ii).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase("append");
                             }
-                            lines[ii] = new CustomString(text, style, append);
+                            lines[ii] = new CustomString(text, style, append, color);
                         }
                     } else {
                         lines = new CustomString[0];

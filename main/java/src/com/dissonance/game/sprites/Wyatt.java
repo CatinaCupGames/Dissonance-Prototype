@@ -55,8 +55,28 @@ public final class Wyatt extends PlayableSprite {
     }
 
     @Override
+    public void setAttack(int attack) {
+
+    }
+
+    @Override
+    public void setDefense(int defense) {
+
+    }
+
+    @Override
     public CombatType getCombatType() {
         return CombatType.HUMAN;
+    }
+
+    @Override
+    public void setSpeed(int speed) {
+
+    }
+
+    @Override
+    public void setVigor(int vigor) {
+
     }
 
     @Override

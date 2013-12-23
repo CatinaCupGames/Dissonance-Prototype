@@ -13,7 +13,6 @@ public class TestPlayer extends PlayableSprite {
         pauseAnimation();
         Weapon w = Weapon.getWeapon("test");
         setCurrentWeapon(w.createItem(this));
-        setSpell1(Weapon.getWeapon("fireball").createItem(this));
     }
 
     @Override
@@ -40,6 +39,16 @@ public class TestPlayer extends PlayableSprite {
                 System.out.println(getX() + " " + getY());
             }
         }
+    }
+
+    @Override
+    public void setSpeed(int speed) {
+
+    }
+
+    @Override
+    public void setVigor(int vigor) {
+
     }
 
     @Override
@@ -101,6 +110,16 @@ public class TestPlayer extends PlayableSprite {
     @Override
     public int getMagicResistance() {
         return 1;
+    }
+
+    @Override
+    public void setAttack(int attack) {
+
+    }
+
+    @Override
+    public void setDefense(int defense) {
+
     }
 
     @Override

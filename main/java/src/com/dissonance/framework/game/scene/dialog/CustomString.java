@@ -8,6 +8,7 @@ public class CustomString {
     private Font font;
     private Style style;
     private boolean append;
+    private Color color = Color.WHITE;
 
     public CustomString(String text) {
         this(text, Style.NORMAL);
@@ -34,12 +35,21 @@ public class CustomString {
         this.append = append;
     }
 
+    public CustomString(String text, Style style, boolean append, Color color) {
+        this(text, style, append);
+        this.color = color;
+    }
+
     public Style getStyle() {
         return style;
     }
 
     public String getString() {
         return text;
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     public String toString() {

@@ -21,8 +21,8 @@ public class SpriteTexture extends Texture {
     private SpriteAnimationInfo[] animations;
     private int row;
     private int step;
-    private int width;
-    private int height;
+    private int sprite_width;
+    private int sprite_height;
 
 
     public static SpriteTexture retriveSpriteTexture(String sprite_name) throws IOException {
@@ -38,7 +38,7 @@ public class SpriteTexture extends Texture {
                     texture.animations = new SpriteAnimationInfo[nl.getLength()];
                     if (elm.hasAttribute("width")) {
                         try {
-                            texture.width = Integer.parseInt(elm.getAttribute("width"));
+                            texture.sprite_width = Integer.parseInt(elm.getAttribute("width"));
                             //texture.setTextureSize();
                         } catch (Throwable t) {
                             t.printStackTrace();
@@ -46,7 +46,7 @@ public class SpriteTexture extends Texture {
                     }
                     if (elm.hasAttribute("height")) {
                         try {
-                            texture.height = Integer.parseInt(elm.getAttribute("height"));
+                            texture.sprite_height = Integer.parseInt(elm.getAttribute("height"));
                             //texture.setTextureSize();
                         } catch (Throwable t) {
                             t.printStackTrace();
@@ -140,10 +140,10 @@ public class SpriteTexture extends Texture {
 
         // find the closest power of 2 for the width and height
         // of the produced texture
-        while (texWidth < width) {
+        while (texWidth < sprite_width) {
             texWidth *= 2;
         }
-        while (texHeight < height) {
+        while (texHeight < sprite_height) {
             texHeight *= 2;
         }
 
@@ -201,19 +201,19 @@ public class SpriteTexture extends Texture {
 
     @Override
     public float getWidth() {
-        return width;
+        return sprite_width;
     }
 
     @Override
     public float getHeight() {
-        return height;
+        return sprite_height;
     }
 
     private float[] convertToCords(int row, int step) {
         int x;
         int y;
-        y = height * row;
-        x = width * step;
+        y = sprite_height * row;
+        x = sprite_width * step;
         return new float[] { x, y };
     }
 
@@ -224,12 +224,12 @@ public class SpriteTexture extends Texture {
         x = temp[0];
         y = temp[1];
         if (type == 3) { //Bottom left
-            y += height;
+            y += sprite_height;
         } else if (type == 2) { //Bottom right
-            y += height;
-            x += width;
+            y += sprite_height;
+            x += sprite_width;
         } else if (type == 1) { //Top right
-            x += width;
+            x += sprite_width;
         }  else if (type != 0) { //We start with the Top Left, ignore_movement pos 3
             throw new InvalidParameterException("The parameter \"type\"'s value can only be 0, 1, 2, or 3");
         }

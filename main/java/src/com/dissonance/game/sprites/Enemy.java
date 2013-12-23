@@ -70,6 +70,16 @@ public class Enemy extends CombatSprite {
     }
 
     @Override
+    public void setAttack(int attack) {
+
+    }
+
+    @Override
+    public void setDefense(int defense) {
+
+    }
+
+    @Override
     public CombatType getCombatType() {
         return combatType;
     }
@@ -81,6 +91,21 @@ public class Enemy extends CombatSprite {
             return;
 
         ai.onUpdate(this);
+    }
+
+    @Override
+    public boolean isAlly(CombatSprite sprite) {
+        return false;
+    }
+
+    @Override
+    public void setSpeed(int speed) {
+
+    }
+
+    @Override
+    public void setVigor(int vigor) {
+
     }
 
     public enum StatType {

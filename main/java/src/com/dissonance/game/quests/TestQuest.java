@@ -1,6 +1,9 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.scene.dialog.Dialog;
+import com.dissonance.framework.game.scene.dialog.DialogFactory;
+import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.game.scene.hud.HUD;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
@@ -35,10 +38,14 @@ public class TestQuest extends AbstractQuest {
         setWorld(w);
         w.waitForWorldLoaded();
         Thread.sleep(5000);
-        RenderService.INSTANCE.provideData(true, RenderService.ENABLE_CROSS_FADE);
-        RenderService.INSTANCE.provideData(3000f, RenderService.CROSS_FADE_DURATION);
-        World world = WorldFactory.getWorld("test_tileset2");
-        setWorld(world, RenderService.TransitionType.CROSSFADE);
+        Dialog d = DialogFactory.getDialog("TEST");
+        DialogUI ui = new DialogUI("asdfas", d);
+        ui.displayUI(true, getWorld());
+        ui.waitForEnd();
+        //RenderService.INSTANCE.provideData(true, RenderService.ENABLE_CROSS_FADE);
+        //RenderService.INSTANCE.provideData(3000f, RenderService.CROSS_FADE_DURATION);
+        //World world = WorldFactory.getWorld("test_tileset2");
+        //setWorld(world, RenderService.TransitionType.CROSSFADE);
     }
 
     @Override
