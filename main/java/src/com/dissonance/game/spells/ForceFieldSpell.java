@@ -1,4 +1,4 @@
-package com.dissonance.framework.game.combat.spells.impl;
+package com.dissonance.game.spells;
 
 import com.dissonance.framework.game.combat.spells.Spell;
 import com.dissonance.framework.game.combat.spells.StatusEffect;

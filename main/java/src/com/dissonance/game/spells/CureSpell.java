@@ -1,8 +1,8 @@
-package com.dissonance.framework.game.combat.spells.impl;
+package com.dissonance.game.spells;
 
 import com.dissonance.framework.game.combat.spells.Spell;
-import com.dissonance.framework.game.combat.spells.effects.HPHeal;
-import com.dissonance.framework.game.combat.spells.effects.MPHeal;
+import com.dissonance.game.spells.statuseffects.HPHeal;
+import com.dissonance.game.spells.statuseffects.MPHeal;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 
 public abstract class CureSpell implements Spell {
