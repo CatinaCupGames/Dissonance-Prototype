@@ -24,8 +24,9 @@
 
     <dialog dialog_id="TEST" >
         <header>The Old Man</header>
-        <message>Hello...</message>
-        <message type="append" style="bold"> AAAAAAAAA BBBBBBBBBBBBB CCCCCCCCCCC APPLE SAUCE</message>
+        <message color="red" style="italic">Hello...</message>
+        <message type="append"> my name is Alexander..</message>
+        <message style="bold">AAAAAAAAA BBBBBBBBBBBBB CCCCCCCCCCC APPLE SAUCE</message>
         <message type="append" style="italic">WHAT IS GOING ON, I DONT EVEN KNOW ANYMORE..</message>
         <header>The Old Man</header>
         <message>How's it going...</message>
