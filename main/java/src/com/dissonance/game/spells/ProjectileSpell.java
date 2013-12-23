@@ -127,7 +127,7 @@ public abstract class ProjectileSpell extends AnimatedSprite implements Spell {
                 if (c instanceof PhysicsSprite) {
                     if (c instanceof CombatSprite) {
                         CombatSprite combat = (CombatSprite)c;
-                        //TODO Deal damage
+                        //TODO Deal value
                         combat.applyStatusCondition(getEffect());
                         destory();
                         setUpdateCanceled(true);

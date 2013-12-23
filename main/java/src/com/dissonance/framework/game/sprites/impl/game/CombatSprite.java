@@ -40,7 +40,7 @@ public abstract class CombatSprite extends PhysicsSprite {
     public abstract void onLevelUp();
 
     /**
-     * Determines the damage a physical attack by the player will deal,
+     * Determines the value a physical attack by the player will deal,
      * as well as the knockback the attack will cause to the enemy
      *
      * If this Sprite does not have this stat, then this method should return 0
@@ -50,7 +50,7 @@ public abstract class CombatSprite extends PhysicsSprite {
     public abstract int getAttack();
 
     /**
-     * Determines the damage taken by incoming attacks
+     * Determines the value taken by incoming attacks
      *
      * If this Sprite does not have this stat, then this method should return 0
      * @return
@@ -89,8 +89,8 @@ public abstract class CombatSprite extends PhysicsSprite {
     public abstract int getStamina();
 
     /**
-     * Determines the damage magic attacks deal, as well as the
-     * damage received from magic attacks
+     * Determines the value magic attacks deal, as well as the
+     * value received from magic attacks
      *
      * If this Sprite does not have this stat, then this method should return 0
      * @return
@@ -99,7 +99,7 @@ public abstract class CombatSprite extends PhysicsSprite {
     public abstract int getWillPower();
 
     /**
-     * Determines the damage absorbed by magic shields, the HP
+     * Determines the value absorbed by magic shields, the HP
      * replenished by cure magic, the duration of spells' effects, and the
      * effectiveness of buff/debuff spells
      *
@@ -120,13 +120,20 @@ public abstract class CombatSprite extends PhysicsSprite {
     public abstract int getMarksmanship();
 
     /**
-     * For non-magic users, determines damage dealt by incoming magic attacks
+     * For non-magic users, determines value dealt by incoming magic attacks
      *
      * If this Sprite does not have this stat, then this method should return 0
      * @return
      *        The magic resistance stat, othwerwise 0
      */
     public abstract int getMagicResistance();
+
+
+    public abstract void setAttack(int attack);
+
+    public abstract void setDefense(int defense);
+
+    //TODO Add abstract setters for all other stats
 
     /**
      * Get the {@link CombatType} of this Sprite. The {@link CombatType} determines
@@ -149,7 +156,7 @@ public abstract class CombatSprite extends PhysicsSprite {
                 while (effectIterator.hasNext()) {
                     StatusEffect effect = effectIterator.next();
                     if (!effect.hasStarted())
-                        effect.startEffect();
+                        effect.startEffect(this);
                     if (effect.inflict(this))
                         effectIterator.remove();
                 }
@@ -415,6 +422,10 @@ public abstract class CombatSprite extends PhysicsSprite {
     public void setMP(float MP) {
         this.MP = MP;
     }
+
+    public abstract void setSpeed(int speed);
+
+    public abstract void setVigor(int vigor);
 
 
     public enum CombatType {

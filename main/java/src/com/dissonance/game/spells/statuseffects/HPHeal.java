@@ -4,13 +4,18 @@ import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 
 public class HPHeal extends StatusEffect {
-    public HPHeal(long duration, float damage) {
-        super(duration, damage);
+    public HPHeal(long duration, float value) {
+        super(duration, value);
+    }
+
+    @Override
+    protected void onStart(CombatSprite owner) {
+
     }
 
     @Override
     protected void onInflict(CombatSprite owner) {
-        owner.setHP(owner.getHP() + super.damage); //Use the damage variable as an add modifier
+        owner.setHP(owner.getHP() + super.value); //Use the value variable as an add modifier
     }
 
     @Override

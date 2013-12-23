@@ -7,11 +7,11 @@ public abstract class StatusEffect {
     private long lastInflict;
     protected long duration;
     protected long startTime;
-    protected float damage;
+    protected float value;
     private boolean started = false;
-    public StatusEffect(long duration, float damage) {
+    public StatusEffect(long duration, float value) {
         this.duration = duration;
-        this.damage = damage;
+        this.value = value;
     }
 
     public boolean inflict(CombatSprite owner) {
@@ -27,6 +27,8 @@ public abstract class StatusEffect {
         return false;
     }
 
+    protected abstract void onStart(CombatSprite owner);
+
     protected abstract void onInflict(CombatSprite owner);
 
     protected abstract void onEnd(CombatSprite owner);
@@ -35,9 +37,10 @@ public abstract class StatusEffect {
         return started;
     }
 
-    public void startEffect() {
+    public void startEffect(CombatSprite owner) {
         started = true;
         startTime = System.currentTimeMillis();
         lastInflict = startTime;
+        onStart(owner);
     }
 }

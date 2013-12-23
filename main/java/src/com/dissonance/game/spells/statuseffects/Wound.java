@@ -4,8 +4,13 @@ import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 
 public class Wound extends StatusEffect {
-    public Wound(long duration, float damage) {
-        super(duration, damage);
+    public Wound(long duration, float value) {
+        super(duration, value);
+    }
+
+    @Override
+    protected void onStart(CombatSprite owner) {
+
     }
 
     @Override
@@ -16,11 +21,10 @@ public class Wound extends StatusEffect {
         if (owner.getCombatType() == CombatSprite.CombatType.HUMAN)
             damage = 7;
 
-        //TODO Test this equation to see if its fair or not..
-        double defense = owner.getFocus();
-        double attack = super.damage + damage;
-        double Tdamage;
-        Tdamage = ((attack * Math.log(attack)) / (defense / Math.log(defense))) * 2;
+
+        double willpower = owner.getWillPower();
+        double focus = super.value; //Use the parent's value variable as the orgin's focus stat
+        double Tdamage = (Math.pow((willpower / focus), (1.0/3.0)) * damage) * 2;
         if (Tdamage > 100)
             Tdamage = 100;
 

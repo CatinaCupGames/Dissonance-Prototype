@@ -4,13 +4,18 @@ import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 
 public class MPHeal extends StatusEffect {
-    public MPHeal(long duration, float damage) {
-        super(duration, damage);
+    public MPHeal(long duration, float value) {
+        super(duration, value);
+    }
+
+    @Override
+    protected void onStart(CombatSprite owner) {
+
     }
 
     @Override
     protected void onInflict(CombatSprite owner) {
-        owner.setMP(owner.getMP() + super.damage);
+        owner.setMP(owner.getMP() + super.value);
     }
 
     @Override
