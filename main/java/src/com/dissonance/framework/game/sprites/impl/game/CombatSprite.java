@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.sprites.impl.game;
 
+import com.dissonance.framework.game.combat.spells.Spell;
 import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.item.Item;
 import com.dissonance.framework.game.item.impl.WeaponItem;
@@ -13,6 +14,9 @@ import java.util.List;
 
 public abstract class CombatSprite extends PhysicsSprite {
     private ArrayList<Item> inventory = new ArrayList<Item>();
+    private ArrayList<Spell> spells = new ArrayList<Spell>();
+    private Spell spell1;
+    private Spell spell2;
     private final ArrayList<StatusEffect> effects = new ArrayList<StatusEffect>();
     private int weaponIndex;
     private boolean isCastingSpell = false;
@@ -156,6 +160,73 @@ public abstract class CombatSprite extends PhysicsSprite {
             setUpdateCanceled(true);
         if (HP <= 0)
             setUpdateCanceled(true);
+    }
+
+    public void addSpell(Spell spell) {
+        if (!spells.contains(spell))
+            spells.add(spell);
+    }
+
+    public List<Spell> getAllSpells() {
+        return Collections.unmodifiableList(spells);
+    }
+
+    public Spell getSpell(String name) {
+        for (Spell s : spells) {
+            if (s.getName().equals(name))
+                return s;
+        }
+        return null;
+    }
+
+    public Spell getSpell(int i) {
+        Validator.validateNotBelow(i, 0, "index");
+        Validator.validateNotOver(i, spells.size() - 1, "index");
+
+        return spells.get(i);
+    }
+
+    public boolean hasSpell(Spell spell) {
+        return spells.contains(spell);
+    }
+
+    public boolean hasSpell1() {
+        return spell1 != null;
+    }
+
+    public boolean hasSpell2() {
+        return spell2 != null;
+    }
+
+    public void setSpell1(Spell spell) {
+        this.spell1 = spell;
+    }
+
+    public void setSpell2(Spell spell) {
+        this.spell2 = spell;
+    }
+
+    public void useSpell1() {
+        if (!hasSpell1())
+            return;
+        this.isCastingSpell = true;
+        spell1.castSpell();
+        this.isCastingSpell = false;
+    }
+
+    public void useSpell2() {
+        if (!hasSpell1())
+            return;
+        this.isCastingSpell = true;
+        spell1.castSpell();
+        this.isCastingSpell = false;
+    }
+
+    public void useSpell(Spell spell) {
+        Validator.validateNotNull(spell, "spell");
+        isCastingSpell = true;
+        spell.castSpell();
+        isCastingSpell = false;
     }
 
     public void applyStatusCondition(StatusEffect effect) {

@@ -250,6 +250,8 @@ public final class World {
 
     public void onDispose() {
         drawable.clear();
+        udrawables.clear();
+        combatCache.clear();
         texture.dispose();
         tiledData.dispose();
         renderingService = null;

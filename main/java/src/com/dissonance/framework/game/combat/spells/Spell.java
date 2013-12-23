@@ -9,4 +9,6 @@ public interface Spell {
     public int mpCost();
 
     public CombatSprite getOwner();
+
+    public String getName();
 }

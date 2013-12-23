@@ -19,7 +19,6 @@ public abstract class PlayableSprite extends CombatSprite {
     private PlayableSpriteEvent.OnDeselectedEvent deselectedEvent;
 
     private boolean isPlaying = false;
-    private WeaponItem spell1, spell2;
     private boolean usespell1, usespell2;
     private boolean frozen;
     private boolean use_attack;
@@ -117,7 +116,6 @@ public abstract class PlayableSprite extends CombatSprite {
                     percent = dif / totalDodgeTime;
                 }
                 moveX = dodgeStartX + ((dodgeX - dodgeStartX) * percent);
-                //moveX = Camera.ease(dodgeStartX, dodgeX, totalDodgeTime, ((System.currentTimeMillis() - dodgeStartTime))); //TODO Replace Camera.ease with something less smooth and more linear
                 setX(moveX);
                 if (moveX == dodgeX) {
                     setAnimationFinishedListener(null);
@@ -229,22 +227,30 @@ public abstract class PlayableSprite extends CombatSprite {
             }
         } else if (!InputKeys.isButtonPressed(InputKeys.DODGE)) use_dodge = false;
 
-        if (!usespell1 && spell1 != null) {
+        if (!usespell1) {
             if (InputKeys.isButtonPressed(InputKeys.MAGIC1)) {
-                spell1.use();
+                if (hasSpell1())
+                    useSpell1();
+                else {
+                    //TODO Play sound
+                }
                 usespell1 = true;
             }
         } else if (!InputKeys.isButtonPressed(InputKeys.MAGIC1)) usespell1 = false;
 
-        if (!usespell2 && spell2 != null) {
+        if (!usespell2) {
             if (InputKeys.isButtonPressed(InputKeys.MAGIC2)) {
-                spell2.use();
+                if (hasSpell2())
+                    useSpell2();
+                else {
+                    //TODO Play sound
+                }
                 usespell2 = true;
             }
         } else if (!InputKeys.isButtonPressed(InputKeys.MAGIC2)) usespell2 = false;
     }
 
-    protected boolean checkSelect() { //TODO Make work for joypad
+    protected boolean checkSelect() {
         Iterator<UpdatableDrawable> sprites = getWorld().getUpdatables(); //Sprites will always be Updatable
         while (sprites.hasNext()) {
             UpdatableDrawable d = sprites.next();
@@ -301,22 +307,6 @@ public abstract class PlayableSprite extends CombatSprite {
 
     public void unfreeze() {
         frozen = false;
-    }
-
-    public WeaponItem getSpell1() {
-        return spell1;
-    }
-
-    public WeaponItem getSpell2() {
-        return spell2;
-    }
-
-    public void setSpell1(WeaponItem item) {
-        this.spell1 = item;
-    }
-
-    public void setSpell2(WeaponItem item) {
-        this.spell2 = item;
     }
 
     /**
