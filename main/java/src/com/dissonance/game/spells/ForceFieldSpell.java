@@ -29,7 +29,13 @@ public abstract class ForceFieldSpell implements Spell {
         List<CombatSprite> combatSprites = owner.getWorld().getAllCombatSprites();
         for (CombatSprite c : combatSprites) {
             if (!c.isAlly(owner)) {
-                //TODO Apply value
+                double defense = c.getWillPower();
+                double attack = owner.getFocus();
+                double damage;
+                damage = ((attack * Math.log(attack)) / (defense / Math.log(defense))) * 2;
+                if (damage > 100)
+                    damage = 100;
+                c.applyDamage(damage);
                 c.applyStatusCondition(getEffect());
             }
         }

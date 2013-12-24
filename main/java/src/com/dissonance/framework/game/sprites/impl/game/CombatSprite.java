@@ -155,8 +155,6 @@ public abstract class CombatSprite extends PhysicsSprite {
                 Iterator<StatusEffect> effectIterator = effects.iterator();
                 while (effectIterator.hasNext()) {
                     StatusEffect effect = effectIterator.next();
-                    if (!effect.hasStarted())
-                        effect.startEffect(this);
                     if (effect.inflict(this))
                         effectIterator.remove();
                 }
@@ -216,7 +214,12 @@ public abstract class CombatSprite extends PhysicsSprite {
     public void useSpell1() {
         if (!hasSpell1())
             return;
+        if (MP < spell1.mpCost()) {
+            //TODO Play sound
+            return;
+        }
         this.isCastingSpell = true;
+        MP -= spell1.mpCost();
         spell1.castSpell();
         this.isCastingSpell = false;
     }
@@ -224,14 +227,24 @@ public abstract class CombatSprite extends PhysicsSprite {
     public void useSpell2() {
         if (!hasSpell1())
             return;
+        if (MP < spell2.mpCost()) {
+            //TODO Play sound
+            return;
+        }
         this.isCastingSpell = true;
+        MP -= spell2.mpCost();
         spell1.castSpell();
         this.isCastingSpell = false;
     }
 
     public void useSpell(Spell spell) {
         Validator.validateNotNull(spell, "spell");
+        if (MP < spell.mpCost()) {
+            //TODO Play sound
+            return;
+        }
         isCastingSpell = true;
+        MP -= spell.mpCost();
         spell.castSpell();
         isCastingSpell = false;
     }
@@ -239,6 +252,7 @@ public abstract class CombatSprite extends PhysicsSprite {
     public void applyStatusCondition(StatusEffect effect) {
         synchronized (effects) {
             effects.add(effect);
+            effect.startEffect(this);
         }
     }
 
@@ -426,6 +440,16 @@ public abstract class CombatSprite extends PhysicsSprite {
     public abstract void setSpeed(int speed);
 
     public abstract void setVigor(int vigor);
+
+    public abstract void setStamina(int stamina);
+
+    public abstract void setWillpower(int willpower);
+
+    public abstract void setFocus(int focus);
+
+    public abstract void Marksmanship(int markmanship);
+
+    public abstract void setMagicResistance(int magicResistance);
 
 
     public enum CombatType {
