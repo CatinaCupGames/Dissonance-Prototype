@@ -1,5 +1,6 @@
 package com.dissonance.framework.game;
 
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
@@ -40,10 +41,13 @@ public abstract class AbstractQuest {
     }
 
     public World getWorld() {
+        if (PlayableSprite.getCurrentlyPlayingSprite().getWorld() != world) {
+            world = PlayableSprite.getCurrentlyPlayingSprite().getWorld();
+        }
         return world;
     }
 
-    protected void setWorld(World world) {
+    public void setWorld(World world) {
         WorldFactory.swapView(world, true);
         System.out.println("New world swapped to " + world.getID());
         this.world = world;

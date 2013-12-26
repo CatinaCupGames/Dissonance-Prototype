@@ -14,6 +14,44 @@
          "width":100,
          "x":0,
          "y":0
+        }, 
+        {
+         "height":100,
+         "name":"Object Layer 1",
+         "objects":[
+                {
+                 "height":45,
+                 "name":"test_spawn",
+                 "properties":
+                    {
+
+                    },
+                 "type":"spawn",
+                 "visible":true,
+                 "width":47,
+                 "x":119,
+                 "y":327
+                }, 
+                {
+                 "height":41,
+                 "name":"",
+                 "properties":
+                    {
+                     "spawn":"testing_worlds",
+                     "world":"testworld"
+                    },
+                 "type":"door",
+                 "visible":true,
+                 "width":48,
+                 "x":199,
+                 "y":443
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":100,
+         "x":0,
+         "y":0
         }],
  "orientation":"orthogonal",
  "properties":

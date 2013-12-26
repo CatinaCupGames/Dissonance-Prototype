@@ -1,7 +1,6 @@
 package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 
 import java.util.Random;
 
@@ -105,6 +104,31 @@ public class Enemy extends CombatSprite {
 
     @Override
     public void setVigor(int vigor) {
+
+    }
+
+    @Override
+    public void setStamina(int stamina) {
+
+    }
+
+    @Override
+    public void setWillpower(int willpower) {
+
+    }
+
+    @Override
+    public void setFocus(int focus) {
+
+    }
+
+    @Override
+    public void Marksmanship(int markmanship) {
+
+    }
+
+    @Override
+    public void setMagicResistance(int magicResistance) {
 
     }
 

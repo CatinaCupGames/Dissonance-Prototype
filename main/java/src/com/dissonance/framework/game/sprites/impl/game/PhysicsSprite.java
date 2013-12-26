@@ -1,6 +1,13 @@
 package com.dissonance.framework.game.sprites.impl.game;
 
+import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.GameService;
+import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.WorldFactory;
+import com.dissonance.framework.game.world.tiled.TiledObject;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
+import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
 
@@ -46,16 +53,56 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
 
     @Override
     public void setX(float x) {
-
+        System.out.println(getWorld().getName());
         float oX = super.getX();
         super.setX(x);
 
         if (hb != null && hb.checkForCollision(this)) {
-            super.setX(oX);
-            if (hb.getLastCollide() instanceof PhysicsSprite) {
-                float add = getX() - hb.getLastCollide().getX();
+            Collidable c = hb.getLastCollide();
+            if (c instanceof PhysicsSprite) {
+                super.setX(oX);
+                float add = getX() - c.getX();
                 for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
                     super.setX(super.getX() + (add < 0 ? -1 : 1));
+                }
+            } else if (c instanceof TiledObject) {
+                TiledObject to = (TiledObject)c;
+                if (to.isHitbox())
+                    super.setX(oX);
+                else if (to.isDoor() && this instanceof PlayableSprite) { //2meta4me
+                    String target = to.getDoorTarget();
+                    if (target.equalsIgnoreCase("")) {
+                        super.setX(oX);
+                        return;
+                    }
+                    String world = to.getDoorWorldTarget();
+                    World worldObj;
+                    if (world.equalsIgnoreCase("")) {
+                        worldObj = getWorld();
+                    } else {
+                        try {
+                            worldObj = WorldFactory.getWorld(world);
+                        } catch (WorldLoadFailedException e) {
+                            e.printStackTrace();
+                            super.setX(oX);
+                            return;
+                        }
+                    }
+
+                    TiledObject spawn = worldObj.getSpawn(target);
+                    if (spawn == null) {
+                        super.setX(oX);
+                        return;
+                    }
+
+                    if (worldObj != getWorld()) {
+                        RenderService.INSTANCE.fadeToBlack(300);
+                        WorldFactory.swapView(worldObj, true);
+                        setWorld(worldObj);
+                    }
+
+                    super.setX(spawn.getX());
+                    super.setY(spawn.getY());
                 }
             }
         }
@@ -67,11 +114,51 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         super.setY(y);
 
         if (hb != null && hb.checkForCollision(this)) {
-            super.setY(oY);
-            if (hb.getLastCollide() instanceof PhysicsSprite) {
+            Collidable c = hb.getLastCollide();
+            if (c instanceof PhysicsSprite) {
+                super.setY(oY);
                 float add = getY() - hb.getLastCollide().getY();
                 for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
                     super.setY(super.getY() + (add < 0 ? -1 : 1));
+                }
+            }  else if (c instanceof TiledObject) {
+                TiledObject to = (TiledObject)c;
+                if (to.isHitbox())
+                    super.setY(oY);
+                else if (to.isDoor() && this instanceof PlayableSprite) { //2meta4me
+                    String target = to.getDoorTarget();
+                    if (target.equalsIgnoreCase("")) {
+                        super.setY(oY);
+                        return;
+                    }
+                    String world = to.getDoorWorldTarget();
+                    World worldObj;
+                    if (world.equalsIgnoreCase("")) {
+                        worldObj = getWorld();
+                    } else {
+                        try {
+                            worldObj = WorldFactory.getWorld(world);
+                        } catch (WorldLoadFailedException e) {
+                            e.printStackTrace();
+                            super.setY(oY);
+                            return;
+                        }
+                    }
+
+                    TiledObject spawn = worldObj.getSpawn(target);
+                    if (spawn == null) {
+                        super.setY(oY);
+                        return;
+                    }
+
+                    if (worldObj != getWorld()) {
+                        RenderService.INSTANCE.fadeToBlack(300);
+                        WorldFactory.swapView(worldObj, true);
+                        setWorld(worldObj);
+                    }
+
+                    super.setX(spawn.getX());
+                    super.setY(spawn.getY());
                 }
             }
         }

@@ -16,6 +16,7 @@ public class TiledObject implements Collidable {
     private boolean visible;
     private float x;
     private float y;
+    private String type;
     private HashMap<Object, Object> properties;
     private Vector2f[] polygon;
     private boolean isSquare;
@@ -83,6 +84,32 @@ public class TiledObject implements Collidable {
         } else {
             return polygon;
         }
+    }
+
+    public boolean isHitbox() {
+        return type == null || type.equals("") || type.toLowerCase().equals("hitbox");
+    }
+
+    public boolean isDoor() {
+        return type != null && type.toLowerCase().equals("door");
+    }
+
+    public boolean isSpawn() {
+        return type != null && type.toLowerCase().equals("spawn");
+    }
+
+    public String getDoorTarget() {
+        String value = getProperty("spawn");
+        if (value != null)
+            return value;
+        return "";
+    }
+
+    public String getDoorWorldTarget() {
+        String value = getProperty("world");
+        if (value != null)
+            return value;
+        return "";
     }
 
     @Override

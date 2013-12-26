@@ -6,7 +6,9 @@ import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.system.ticker.Ticker;
 import com.dissonance.game.quests.DialogQuest;
 import com.dissonance.game.quests.MenuQuest;
+import com.dissonance.game.quests.PreviewQuest;
 import com.dissonance.game.quests.TestQuest;
+import com.dissonance.game.sprites.ImageSprite;
 
 import java.io.File;
 import java.util.Arrays;
@@ -15,6 +17,7 @@ import java.util.Scanner;
 
 public class Main {
     public static String DID;
+    public static String imagePath;
     private static final Ticker TICKER = new Ticker();
 
     static {
@@ -40,9 +43,29 @@ public class Main {
         InputKeys.initializeConfig();
         System.out.println("Loading game dialog");
         DialogFactory.loadDialog();
+        //imagePreview();
         //dialogMenu();
         System.out.println("Starting TestQuest");
         GameService.beginQuest(new TestQuest());
+    }
+
+    private static void imagePreview() {
+        File fileObj;
+        Scanner scanner;
+        do {
+            System.out.print("Please type in image file to preview: ");
+            scanner = new Scanner(System.in);
+            String file = scanner.nextLine();
+            fileObj = new File(file);
+            if (fileObj.exists() && !fileObj.isDirectory())
+                break;
+            System.out.println("Invalid dialog file!");
+        } while (true);
+        System.out.println("Loading image \"" + fileObj.getName() + "\" to sprite object");
+        imagePath = fileObj.getAbsolutePath();
+        ImageSprite sprite = new ImageSprite();
+        System.out.println("Starting preview quest");
+        GameService.beginQuest(new PreviewQuest(sprite));
     }
 
     private static void dialogMenu() {

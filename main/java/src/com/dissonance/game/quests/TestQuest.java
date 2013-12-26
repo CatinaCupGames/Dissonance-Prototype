@@ -4,16 +4,9 @@ import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.game.scene.dialog.DialogUI;
-import com.dissonance.framework.game.scene.hud.HUD;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
-import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.sound.Sound;
-import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
-import com.dissonance.game.scene.TestScene;
 import com.dissonance.game.sprites.Enemy;
-import com.dissonance.game.sprites.TestPlayer;
 
 import java.util.Random;
 
@@ -38,10 +31,6 @@ public class TestQuest extends AbstractQuest {
         setWorld(w);
         w.waitForWorldLoaded();
         Thread.sleep(5000);
-        Dialog d = DialogFactory.getDialog("TEST");
-        DialogUI ui = new DialogUI("asdfas", d);
-        ui.displayUI(true, getWorld());
-        ui.waitForEnd();
         //RenderService.INSTANCE.provideData(true, RenderService.ENABLE_CROSS_FADE);
         //RenderService.INSTANCE.provideData(3000f, RenderService.CROSS_FADE_DURATION);
         //World world = WorldFactory.getWorld("test_tileset2");

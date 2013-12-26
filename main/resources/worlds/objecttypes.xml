@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objecttypes>
+ <objecttype name="spawn" color="#aa0000"/>
+ <objecttype name="door" color="#5500ff"/>
+ <objecttype name="hitbox" color="#a0a0a4"/>
+</objecttypes>

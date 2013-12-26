@@ -392,6 +392,10 @@ public class RenderService extends Service {
         }
     }
 
+    public boolean isFading() {
+        return isFading;
+    }
+
     public static enum TransitionType {
         CROSSFADE,
         FADETOBLACK,

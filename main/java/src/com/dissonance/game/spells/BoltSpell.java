@@ -64,6 +64,7 @@ public abstract class BoltSpell implements Spell {
                     damage = 100;
                 s.applyDamage(damage);
                 s.applyStatusCondition(getEffect());
+                onContact(s);
             }
         }
     }
@@ -76,4 +77,6 @@ public abstract class BoltSpell implements Spell {
     public abstract StatusEffect getEffect();
 
     public abstract float getRange();
+
+    public abstract void onContact(CombatSprite combat);
 }

@@ -5,6 +5,7 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.game.quests.TestQuest;
 import com.dissonance.game.sprites.Enemy;
 import com.dissonance.game.sprites.TestNPC;
+import org.lwjgl.util.vector.Vector2f;
 
 
 public class test_tileset extends GameWorldLoader {

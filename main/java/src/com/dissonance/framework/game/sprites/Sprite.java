@@ -1,6 +1,5 @@
 package com.dissonance.framework.game.sprites;
 
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;
@@ -123,6 +122,11 @@ public abstract class Sprite implements Drawable, Serializable {
         this.y = y;
         if (spriteMoved != null)
             spriteMoved.onSpriteMoved(this, x, oy);
+    }
+
+    public void setPos(Vector2f vector2f) {
+        setX(vector2f.x);
+        setY(vector2f.y);
     }
 
 

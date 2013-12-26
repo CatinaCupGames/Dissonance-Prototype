@@ -3,6 +3,7 @@ package com.dissonance.game.w;
 import com.dissonance.framework.game.scene.hud.HUD;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.game.sprites.TestPlayer;
 import com.dissonance.game.sprites.Wyatt;
 
@@ -21,14 +22,13 @@ public abstract class GameWorldLoader implements WorldLoader {
         //    hud = new HUD("->hud");
         //hud.displayUI(false, w);
 
-
-        //TODO Always load the player and the party here
-        TestPlayer p = new TestPlayer();
-        w.loadAnimatedTextureForSprite(p);
-        w.addSprite(p);
-        p.setWorld(w);
-        p.setX(256);
-        p.setY(256);
-        p.select();
+        if (wyatt == null) {
+            wyatt = new Wyatt();
+            w.loadAndAdd(wyatt);
+            wyatt.select();
+        } else {
+            w.loadAndAdd(wyatt);
+            Camera.setPos(Camera.translateToCameraCenter(wyatt.getVector(), 32));
+        }
     }
 }

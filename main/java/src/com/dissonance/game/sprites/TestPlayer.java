@@ -52,6 +52,31 @@ public class TestPlayer extends PlayableSprite {
     }
 
     @Override
+    public void setStamina(int stamina) {
+
+    }
+
+    @Override
+    public void setWillpower(int willpower) {
+
+    }
+
+    @Override
+    public void setFocus(int focus) {
+
+    }
+
+    @Override
+    public void Marksmanship(int markmanship) {
+
+    }
+
+    @Override
+    public void setMagicResistance(int magicResistance) {
+
+    }
+
+    @Override
     public void onDeselect() {
         super.onDeselect();
         setFrame(0);
