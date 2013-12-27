@@ -1,7 +1,5 @@
 package com.dissonance.framework.game.scene.dialog;
 
-import java.util.ArrayList;
-
 public class Dialog {
     private CustomString[] lines;
     private String[] image_path;

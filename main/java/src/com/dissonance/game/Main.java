@@ -3,13 +3,11 @@ package com.dissonance.game;
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.ticker.Ticker;
-import com.dissonance.game.quests.DialogQuest;
-import com.dissonance.game.quests.MenuQuest;
 import com.dissonance.game.quests.TestQuest;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -31,6 +29,7 @@ public class Main {
             lwjgl_folder += "solaris";
         System.setProperty("org.lwjgl.librarypath", new File(lwjgl_folder).getAbsolutePath());
         System.setProperty("net.java.games.input.librarypath", System.getProperty("org.lwjgl.librarypath"));
+        System.setProperty("java.library.path", System.getProperty("org.lwjgl.librarypath"));
     }
 
     public static void main(String[] args) throws Exception {
@@ -40,6 +39,8 @@ public class Main {
         InputKeys.initializeConfig();
         System.out.println("Loading game dialog");
         DialogFactory.loadDialog();
+        System.out.println("Loading sounds");
+        Sound.loadAllSounds();
         //dialogMenu();
         System.out.println("Starting TestQuest");
         GameService.beginQuest(new TestQuest());

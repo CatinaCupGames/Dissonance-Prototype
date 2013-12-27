@@ -185,6 +185,7 @@ public class DialogUI extends UIElement {
                 if (finished)
                     endDialog();
                 else {
+                    Sound.playSound("dialogadvance");
                     completelyInvalidateView();
                     if (events != null) {
                         events.onDialogAdvance(dialog);
@@ -295,7 +296,7 @@ public class DialogUI extends UIElement {
             super.wait(0L);
         }
     }
-    private static Sound sound_advance;
+
     public void endDialog() {
         ended = true;
         close();

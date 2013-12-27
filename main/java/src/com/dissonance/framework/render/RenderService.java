@@ -6,20 +6,17 @@ import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.world.World;
-import com.dissonance.framework.render.framebuffer.Framebuffer;
 import com.dissonance.framework.render.shader.ShaderFactory;
-import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.utils.Validator;
 import com.dissonance.game.Main;
 import org.lwjgl.LWJGLException;
-import org.lwjgl.openal.AL;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.ContextCapabilities;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GLContext;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
 import java.util.Iterator;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -160,7 +157,6 @@ public class RenderService extends Service {
         try {
             setDisplayMode(GameSettings.Display.window_width, GameSettings.Display.window_height, GameSettings.Display.fullscreen);
             Display.create();
-            AL.create();
 
             glClearColor(0f, 0f, 0f, 1f);
             glClearDepth(1f);
