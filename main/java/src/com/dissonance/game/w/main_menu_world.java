@@ -3,6 +3,7 @@ package com.dissonance.game.w;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.game.menus.GameMenu;
+import org.lwjgl.util.vector.Vector2f;
 
 /**
  * This World Loader adds a GameMenu UIElement to the World after it's been loaded.

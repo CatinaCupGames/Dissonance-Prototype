@@ -19,6 +19,7 @@ import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Timer;
 import com.dissonance.framework.system.utils.Validator;
 import com.google.gson.Gson;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,7 +68,8 @@ public final class World {
         if (renderingService == null)
             return;
         if (!renderingService.isCrossFading() && fadeToBlack) {
-            renderingService.fadeToBlack(1000);
+            if (!renderingService.isFading())
+                renderingService.fadeToBlack(1000);
             try {
                 renderingService.waitForFade();
             } catch (InterruptedException e) {
@@ -261,6 +263,11 @@ public final class World {
         removeDrawable(drawable, null);
     }
 
+    public void toWorldSpace(Vector2f vector2f) {
+        vector2f.x *= tiledData.getTileWidth();
+        vector2f.y *= tiledData.getTileHeight();
+    }
+
     public void removeDrawable(final Drawable drawable, final Runnable runnable) {
         if (renderingService == null)
             throw new IllegalStateException("init() has not been called on this world!");
@@ -303,7 +310,8 @@ public final class World {
         if (renderingService == null)
             throw new IllegalStateException("init() has not been called on this world!");
         Validator.validateNotNull(sprite, "sprite");
-
+        if (sprite.getTexture() != null)
+            return;
         renderingService.runOnServiceThread(new Runnable() {
 
             @Override
@@ -391,9 +399,20 @@ public final class World {
                 }
             }
         }
-
         return objects;
+    }
 
+    public TiledObject getSpawn(String name) {
+        Layer[] objLayers = getLayers(LayerType.OBJECT_LAYER);
+        for (Layer layer : objLayers) {
+            for (TiledObject obj : layer.getObjectGroupData()) {
+                if (obj.isSpawn()) {
+                    if (obj.getName() != null && obj.getName().equalsIgnoreCase(name))
+                        return obj;
+                }
+            }
+        }
+        return null;
     }
 
     public Tile getTileAt(float x, float y, Layer layer) {

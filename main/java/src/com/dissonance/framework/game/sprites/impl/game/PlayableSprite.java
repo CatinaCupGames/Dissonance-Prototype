@@ -1,7 +1,6 @@
 package com.dissonance.framework.game.sprites.impl.game;
 
 import com.dissonance.framework.game.input.InputKeys;
-import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.render.Camera;

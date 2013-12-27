@@ -3,16 +3,21 @@ package com.dissonance.game;
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
-import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.ticker.Ticker;
+import com.dissonance.game.quests.DialogQuest;
+import com.dissonance.game.quests.MenuQuest;
+import com.dissonance.game.quests.PreviewQuest;
 import com.dissonance.game.quests.TestQuest;
+import com.dissonance.game.sprites.ImageSprite;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
     public static String DID;
+    public static String imagePath;
     private static final Ticker TICKER = new Ticker();
 
     static {
@@ -29,7 +34,6 @@ public class Main {
             lwjgl_folder += "solaris";
         System.setProperty("org.lwjgl.librarypath", new File(lwjgl_folder).getAbsolutePath());
         System.setProperty("net.java.games.input.librarypath", System.getProperty("org.lwjgl.librarypath"));
-        System.setProperty("java.library.path", System.getProperty("org.lwjgl.librarypath"));
     }
 
     public static void main(String[] args) throws Exception {
@@ -39,11 +43,29 @@ public class Main {
         InputKeys.initializeConfig();
         System.out.println("Loading game dialog");
         DialogFactory.loadDialog();
-        System.out.println("Loading sounds");
-        Sound.loadAllSounds();
+        //imagePreview();
         //dialogMenu();
         System.out.println("Starting TestQuest");
         GameService.beginQuest(new TestQuest());
+    }
+
+    private static void imagePreview() {
+        File fileObj;
+        Scanner scanner;
+        do {
+            System.out.print("Please type in image file to preview: ");
+            scanner = new Scanner(System.in);
+            String file = scanner.nextLine();
+            fileObj = new File(file);
+            if (fileObj.exists() && !fileObj.isDirectory())
+                break;
+            System.out.println("Invalid dialog file!");
+        } while (true);
+        System.out.println("Loading image \"" + fileObj.getName() + "\" to sprite object");
+        imagePath = fileObj.getAbsolutePath();
+        ImageSprite sprite = new ImageSprite();
+        System.out.println("Starting preview quest");
+        GameService.beginQuest(new PreviewQuest(sprite));
     }
 
     private static void dialogMenu() {

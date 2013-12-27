@@ -202,4 +202,8 @@ public class GameService {
             }
         }
     };
+
+    public static AbstractQuest getCurrentQuest() {
+        return currentQuest;
+    }
 }

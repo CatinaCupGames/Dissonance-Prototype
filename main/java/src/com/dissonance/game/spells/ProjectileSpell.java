@@ -137,6 +137,7 @@ public abstract class ProjectileSpell extends AnimatedSprite implements Spell {
                         combat.applyDamage(damage);
 
                         combat.applyStatusCondition(getEffect());
+                        onContact(combat);
                         destory();
                         setUpdateCanceled(true);
                         break;
@@ -171,4 +172,6 @@ public abstract class ProjectileSpell extends AnimatedSprite implements Spell {
     public abstract int getRange();
 
     public abstract StatusEffect getEffect();
+
+    public abstract void onContact(CombatSprite contact);
 }

@@ -37,6 +37,7 @@ public abstract class ForceFieldSpell implements Spell {
                     damage = 100;
                 c.applyDamage(damage);
                 c.applyStatusCondition(getEffect());
+                onContact(c);
             }
         }
     }
@@ -45,6 +46,8 @@ public abstract class ForceFieldSpell implements Spell {
     public CombatSprite getOwner() {
         return owner;
     }
+
+    public abstract void onContact(CombatSprite combat);
 
     public abstract StatusEffect getEffect();
 
