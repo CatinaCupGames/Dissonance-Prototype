@@ -4,8 +4,8 @@ import org.lwjgl.util.vector.Vector2f;
 
 public final class Position {
 
-    private float x;
-    private float y;
+    protected float x;
+    protected float y;
     private boolean shrunk;
 
     public Position(float x, float y) {
@@ -27,12 +27,12 @@ public final class Position {
 
     public Position expand() {
         shrunk = false;
-        return new Position(FastMath.fastFloor(getX() * 32), FastMath.fastFloor(getY() * 32));
+        return new Position(FastMath.fastFloor(x * 32), FastMath.fastFloor(y * 32));
     }
 
     public Position shrink() {
         shrunk = true;
-        return new Position(FastMath.fastFloor(getX() / 32), FastMath.fastFloor(getY() / 32));
+        return new Position(FastMath.fastFloor(x / 32), FastMath.fastFloor(y / 32));
     }
 
     public boolean isShrunk() {

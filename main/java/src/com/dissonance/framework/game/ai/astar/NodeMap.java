@@ -131,7 +131,7 @@ public final class NodeMap implements Serializable {
      * Gets the node at the specified position.
      */
     public Node getNode(Position position) {
-        return getNode((int) position.getX(), (int) position.getY());
+        return getNode((int) position.x, (int) position.y);
     }
 
     /**
@@ -155,7 +155,7 @@ public final class NodeMap implements Serializable {
 
         openList = new LinkedList<>();
         closedList = new LinkedList<>();
-        openList.add(nodes[FastMath.fastFloor(start.getX())][FastMath.fastFloor(start.getY())]);
+        openList.add(nodes[FastMath.fastFloor(start.x)][FastMath.fastFloor(start.y)]);
 
         Node currentNode;
 
@@ -165,14 +165,14 @@ public final class NodeMap implements Serializable {
             openList.remove(currentNode);
 
             if ((currentNode.getPosition().equals(goal))) {
-                return calcPath(nodes[FastMath.fastFloor(goal.getX())][FastMath.fastFloor(goal.getY())], currentNode);
+                return calcPath(nodes[FastMath.fastFloor(goal.x)][FastMath.fastFloor(goal.y)], currentNode);
             }
 
             List<Node> adjacentNodes = getAdjacent(currentNode);
             for (Node adjacent : adjacentNodes) {
                 if (!openList.contains(adjacent)) {
                     adjacent.setParent(currentNode);
-                    adjacent.setHCost(nodes[FastMath.fastFloor(goal.getX())][FastMath.fastFloor(goal.getY())]);
+                    adjacent.setHCost(nodes[FastMath.fastFloor(goal.x)][FastMath.fastFloor(goal.y)]);
                     adjacent.setGCost(currentNode);
                     openList.add(adjacent);
                 } else {
@@ -232,8 +232,8 @@ public final class NodeMap implements Serializable {
     }
 
     private List<Node> getAdjacent(Node node) {
-        int x = FastMath.fastFloor(node.getPosition().getX());
-        int y = FastMath.fastFloor(node.getPosition().getY());
+        int x = FastMath.fastFloor(node.getPosition().x);
+        int y = FastMath.fastFloor(node.getPosition().y);
         List<Node> adj = new LinkedList<>();
 
         Node temp;

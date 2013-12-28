@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.sprites;
 
+import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;
@@ -148,6 +149,10 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public Vector2f getVector() {
         return new Vector2f(x, y);
+    }
+
+    public Position getPosition() {
+        return new Position(x, y);
     }
 
     public void onLoad() {
