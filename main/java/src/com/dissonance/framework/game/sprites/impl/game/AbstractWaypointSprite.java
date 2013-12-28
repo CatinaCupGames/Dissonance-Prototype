@@ -36,7 +36,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         if (currentWaypoint != null && waypointList != null) {
 
             if (!WaypointMover.moveSpriteOneFrame(this)) {
-                if (waypointList.size() > 0) {
+                if (waypointList != null && waypointList.size() > 0) {
                     Position pos = waypointList.get(0);
                     if (pos.isShrunk())
                         pos.expand();
@@ -61,21 +61,23 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
     }
 
     public void setWaypoint(Position position, WaypointType type) {
+        clearWaypoints();
         if (type == WaypointType.SMART) {
             NodeMap map = getWorld().getNodeMap();
             waypointList = map.findPath(new Position(getX(), getY()).shrink(), position.shrink());
             if (waypointList.size() > 0)
                 currentWaypoint = waypointList.get(0).expand();
         } else {
-            if (waypointList == null)
-                waypointList = new ArrayList<Position>();
-            waypointList.add(position);
+            currentWaypoint = position;
         }
     }
 
-    public void appendWaypoint(Position position, WaypointType type) {
-        if (waypointList == null || type == WaypointType.SIMPLE) {
-            setWaypoint(position, type);
+    public void addWaypoint(Position position, WaypointType type) {
+        if (waypointList == null) {
+            waypointList = new ArrayList<Position>();
+        }
+        if (type == WaypointType.SIMPLE) {
+            waypointList.add(position);
             return;
         }
         if (type == WaypointType.SMART) {
@@ -85,6 +87,12 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
                 waypointList.addAll(points);
             }
         }
+    }
+
+    public void clearWaypoints() {
+        if (waypointList != null)
+            waypointList.clear();
+        currentWaypoint = null;
     }
 
     @Override
