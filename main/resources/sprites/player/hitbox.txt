@@ -1,4 +1,4 @@
-minX:9
-minY:16
+minX:10
+minY:20
 maxX:22
 maxY:29

@@ -72,15 +72,18 @@ public class HitBox {
      */
     public boolean checkForCollision(Sprite sprite) {
         float height;
+        float width;
         if (sprite.getTexture() instanceof SpriteTexture) {
             SpriteTexture temp = (SpriteTexture)sprite.getTexture();
             height = temp.getHeight();
+            width = temp.getWidth();
         } else {
             height = sprite.getHeight();
+            width = sprite.getWidth();
         }
 
-        float sX = sprite.getX();
-        float sY = sprite.getY() + (height / 4.0f);
+        float sX = sprite.getX() - (width / 2f);
+        float sY = sprite.getY() - (height / 2f);
 
         sX += minX;
         sY += minY;
@@ -90,15 +93,18 @@ public class HitBox {
 
     public boolean checkForCollision(Sprite sprite, float x, float y) {
         float height;
+        float width;
         if (sprite.getTexture() instanceof SpriteTexture) {
             SpriteTexture temp = (SpriteTexture)sprite.getTexture();
             height = temp.getHeight();
+            width = temp.getWidth();
         } else {
             height = sprite.getHeight();
+            width = sprite.getWidth();
         }
 
-        float sX = x;
-        float sY = y + (height / 4.0f);
+        float sX = x - (width / 2f);
+        float sY = y - (height / 2f);
 
         sX += minX;
         sY += minY;

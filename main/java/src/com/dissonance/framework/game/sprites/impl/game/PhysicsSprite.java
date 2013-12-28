@@ -3,6 +3,7 @@ package com.dissonance.framework.game.sprites.impl.game;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.tiled.TiledObject;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
@@ -18,6 +19,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
     private HitBox hb;
     private float heightC = -1;
     private float widthC = -1;
+    private boolean moving;
 
     @Override
     public HitBox getHitBox() {
@@ -37,16 +39,11 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             }
         }
 
-        float sX = getX();
-        float sY = getY() + (heightC / 4.0f);
+        float sX = getX() - (widthC / 2f);
+        float sY = getY() - (heightC / 2f);
 
-        sX += hb.getMinX();
-        sY += hb.getMinY();
-        float maxValue = sX + hb.getMaxX();
-        float maxValueY = sY + hb.getMaxY();
-        maxValue -= (widthC / 4.0f);
-        maxValueY -= (heightC / 2.0f);
-        return x > sX && x < maxValue && y > sY && y < maxValueY;
+        float minX = sX + hb.getMinX(), minY = sY + hb.getMinY(), maxX = sX + hb.getMaxX(), maxY = sY + hb.getMaxY();
+        return x > minX && y > minY && x <= maxX && y <= maxY;
     }
 
     @Override
@@ -91,6 +88,8 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                         super.setX(oX);
                         return;
                     }
+
+                    ((PlayableSprite)this).freeze();
                     new Thread(new Runnable() {
 
                         @Override
@@ -103,6 +102,8 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
 
                             PhysicsSprite.super.setX(spawn.getX());
                             PhysicsSprite.super.setY(spawn.getY());
+                            Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
+                            ((PlayableSprite)PhysicsSprite.this).unfreeze();
                         }
                     }).start();
 
@@ -171,7 +172,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
     public void onLoad() {
         super.onLoad();
 
-        float sX = 0, sY = 0, bX = 16, bY = 32;
+        float sX = 0, sY = 0, bX = 32, bY = 32;
         InputStream fIn = PhysicsSprite.class.getClassLoader().getResourceAsStream("sprites/" + getSpriteName() + "/hitbox.txt");
         if (fIn != null) {
             BufferedReader br = new BufferedReader(new InputStreamReader(fIn));

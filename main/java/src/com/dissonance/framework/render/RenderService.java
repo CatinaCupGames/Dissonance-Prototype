@@ -86,7 +86,11 @@ public class RenderService extends Service {
     }
 
     public void waitForFade() throws InterruptedException {
-        Thread.sleep((long) speed);
+        if (current_world == null)
+            return;
+        while (isFading) {
+            Thread.sleep((long) speed);
+        }
     }
 
     /**

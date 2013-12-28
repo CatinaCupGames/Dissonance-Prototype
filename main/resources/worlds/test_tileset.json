@@ -33,7 +33,7 @@
                  "y":327
                 }, 
                 {
-                 "height":41,
+                 "height":31,
                  "name":"",
                  "properties":
                     {
@@ -42,9 +42,9 @@
                     },
                  "type":"door",
                  "visible":true,
-                 "width":48,
-                 "x":199,
-                 "y":443
+                 "width":32,
+                 "x":207,
+                 "y":445
                 }],
          "opacity":1,
          "type":"objectgroup",

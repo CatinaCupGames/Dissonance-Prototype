@@ -1,6 +1,5 @@
 package com.dissonance.framework.game.world.tiled;
 
-import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
 import org.lwjgl.util.vector.Vector2f;
@@ -23,6 +22,8 @@ public class TiledObject implements Collidable {
     private boolean isBound;
     private Polygon javaPolygon;
     private HitBox hitBox;
+
+    private TiledObject() { }
 
     public String getProperty(String key) {
         if (properties == null)
@@ -73,10 +74,10 @@ public class TiledObject implements Collidable {
             return new Vector2f[0];
         } if (polygon == null) {
             polygon = new Vector2f[5];
-            polygon[0] = new Vector2f(0, 0);
-            polygon[1] = new Vector2f(width, 0);
-            polygon[2] = new Vector2f(width, height);
-            polygon[3] = new Vector2f(0, height);
+            polygon[0] = new Vector2f(x - 9, y - 9);
+            polygon[1] = new Vector2f(x + (width - 6), y - 9);
+            polygon[2] = new Vector2f(x + (width - 6), y + (height - 6));
+            polygon[3] = new Vector2f(x - 9, y + (height - 6));
             polygon[4] = polygon[0];
             isSquare = true;
 
@@ -114,18 +115,21 @@ public class TiledObject implements Collidable {
 
     @Override
     public boolean isPointInside(float x, float y) {
-        if (javaPolygon == null) {
-            Vector2f[] points = getPolygonPoints();
-            if (points.length == 0)
-                return false; //TODO Check for inside a circle
-            javaPolygon = new Polygon();
-            for (Vector2f point : points) {
-                javaPolygon.addPoint((int)point.x, (int)point.y);
-            }
-            javaPolygon.translate(FastMath.fastFloor(this.x), FastMath.fastFloor(this.y));
-        }
+        return isPointInside(new Vector2f(x, y));
+    }
 
-        return javaPolygon.contains(x, y);
+    public boolean isPointInside(Vector2f test) {
+        int i;
+        int j;
+        boolean result = false;
+        Vector2f[] points = getPolygonPoints();
+        for (i = 0, j = points.length - 1; i < points.length; j = i++) {
+            if ((points[i].y > test.y) != (points[j].y > test.y) &&
+                    (test.x < (points[j].x - points[i].x) * (test.y - points[i].y) / (points[j].y-points[i].y) + points[i].x)) {
+                result = !result;
+            }
+        }
+        return result;
     }
 
 
