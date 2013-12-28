@@ -12,3 +12,18 @@ magic1:24
 magic2:38
 menu:15
 pause:1
+cname:Controller (Xbox 360 Wireless Receiver for Windows)
+magic2:38
+magic1:24
+menu:15
+moveRight:32
+extendLook:23
+dodge:42
+jump:57
+pause:1
+moveDown:31
+strafe:29
+moveUp:17
+special:37
+attack:36
+moveLeft:30

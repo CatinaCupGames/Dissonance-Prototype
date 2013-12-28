@@ -13,9 +13,9 @@ defense,speed, vigor, and stamina) are accessible to every character. Each
 character will possess seven level-variable stats.
 
 The stats are as follows:
-  -Attack: determines the damage a physical attack by the player will deal,
+  -Attack: determines the value a physical attack by the player will deal,
 as well as the knockback the attack will cause to the enemy
-  -Defense: determines the damage taken by incoming attacks
+  -Defense: determines the value taken by incoming attacks
   -Speed: determines movement speed and the ability to dodge attacks
   -Vigor: determines how high the critical hit rate is for the player's
 attacks, as well as how low the critical hit rate is for attacks against
@@ -23,19 +23,19 @@ the player. Also determines the player's chance to survive an otherwise
 fatal blow
   -Stamina: used to perform dodges and special abilities(explained in the 
 combat section), depletes with use and replenishes over time
-  -Willpower: determines the damage magic attacks deal, as well as the 
-damage received from magic attacks
-  -Focus: determines the damage absorbed by magic shields, the HP 
+  -Willpower: determines the value magic attacks deal, as well as the
+value received from magic attacks
+  -Focus: determines the value absorbed by magic shields, the HP
 replenished by cure magic, the duration of spells' effects, and the
 effectiveness of buff/debuff spells
   -Marksmanship: determines recoil, reload speed, and jam frequency when
 using guns
-  -Magic resistance: For non-magic users, determines damage dealt by
+  -Magic resistance: For non-magic users, determines value dealt by
 incoming magic attacks
 
 There are two non-level-variable stats in the game, one of which is
 available to all characters. They are:
-  -HP: a value that falls when the player takes damage, killing the player
+  -HP: a value that falls when the player takes value, killing the player
 when it reaches zero. Fixed at 100 for all characters
   -MP: used to cast spells for magic users. Upgradeable through the use of
 items
@@ -67,14 +67,14 @@ executed with Bryce)
 
 -There are four main classes of attack:
   -One-handed melee: includes knives and gloves; generally have a shorter
-range and lower damage than two-handed melee weapons, but have a higher
+range and lower value than two-handed melee weapons, but have a higher
 attack rate. Counts as physical attack
   -Two-handed melee: includes swords and staves; generally slower than
-one-handed melee weapons, but have a longer range and higher damage. Counts
+one-handed melee weapons, but have a longer range and higher value. Counts
 as physical attack
   -Guns: pretty self-explanitory, includes any ranged weapon; attack rate
-and damage will vary greatly. Counts as physical attack
-  -Magic: includes offensive magic spells which can either cause damage
+and value will vary greatly. Counts as physical attack
+  -Magic: includes offensive magic spells which can either cause value
 instantly or over a period of time. Relies on vigor stat
 
 -Enemies fall into three categories:
@@ -87,7 +87,7 @@ privileged folks possess
 as follows:
   -Wound: inflicts a bleeding wound that drains HP, ineffective on machines
 and strong against humans
-  -Burn: inflicts heavy damage to the skin, lowering attack and defense, 
+  -Burn: inflicts heavy value to the skin, lowering attack and defense,
 ineffective on humans and strong against creatures
   -Stun: sends a shock that lowers speed and vigor, ineffective on creatures
 but strong against machines
@@ -108,7 +108,7 @@ only use one at a time
 time
 Magic:
 -There are a few different categories of spells:
- -Offensive: hits the target for direct damage
+ -Offensive: hits the target for direct value
  -Defensive: repels enemy attacks
  -Buff/Debuff: raises and lowers stats
  -Condition: inflicts the target with a status condition
