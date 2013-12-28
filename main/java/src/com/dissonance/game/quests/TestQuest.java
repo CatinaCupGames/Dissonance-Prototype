@@ -28,7 +28,20 @@ public class TestQuest extends AbstractQuest {
 
     @Override
     public void startQuest() throws Exception {
-        Sound.playSound("creepy");
+        Sound.playSound("creepy").setOnSoundFinishedListener(new Sound.OnSoundFinishedListener() {
+            @Override
+            public void onFinished(Sound.SoundFinishedType type) {
+                System.out.println("Creepy finished " + type);
+            }
+        });
+
+        Sound.getSound("dialogadvance").setOnSoundFinishedListener(new Sound.OnSoundFinishedListener() {
+            @Override
+            public void onFinished(Sound.SoundFinishedType type) {
+                System.out.println("Dialog advance finished " + type);
+            }
+        });
+
         World w = WorldFactory.getWorld("test_tileset");
         setWorld(w);
         w.waitForWorldLoaded();

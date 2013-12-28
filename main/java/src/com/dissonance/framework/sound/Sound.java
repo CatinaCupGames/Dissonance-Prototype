@@ -26,13 +26,13 @@ import static org.lwjgl.openal.AL10.*;
 public final class Sound {
     private static ArrayList<Sound> sounds = new ArrayList<>();
     private static volatile boolean running = false;
-
+    protected final float startTime;
+    protected final float endTime;
     private final String name;
     private final int bufferIndex;
     private final int sourceIndex;
-
-    protected final float startTime;
-    protected final float endTime;
+    protected int lastKnownState; //Used to check if non-looping sounds ended.
+    protected OnSoundFinishedListener listener;
 
     private Sound(String name, int bufferIndex, int sourceIndex, float startTime, float endTime) {
         this.name = name;
@@ -43,35 +43,8 @@ public final class Sound {
         this.endTime = endTime;
     }
 
-    /**
-     * Gets the name of the sound.
-     *
-     * @return The sound's name.
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets the index of the sound's bufferIndex.
-     *
-     * @return The index of the sound's bufferIndex.
-     */
-    public int getBufferIndex() {
-        return bufferIndex;
-    }
-
-    /**
-     * Gets the index of the sound's sourceIndex.
-     *
-     * @return The index of the sound's sourceIndex.
-     */
-    public int getSourceIndex() {
-        return sourceIndex;
-    }
-
     private static String getError(int error) {
-        switch(error) {
+        switch (error) {
             case AL_NO_ERROR:
                 return "AL_NO_ERROR";
             case AL_INVALID_NAME:
@@ -202,7 +175,7 @@ public final class Sound {
             public void run() {
                 while (running) {
                     for (Sound sound : sounds) {
-                        if (sound.endTime != -1f && sound.startTime != -1f) {
+                        if (sound.endTime != -1f && sound.startTime != -1f) { //Looping
                             float offset = alGetSourcef(sound.getSourceIndex(), AL11.AL_SEC_OFFSET);
 
                             if (offset >= sound.endTime) {
@@ -210,7 +183,19 @@ public final class Sound {
                                 alSourceStop(sound.getSourceIndex());
                                 alSourcePlay(sound.getSourceIndex());
 
-                                System.out.println("loopity");
+                                if (sound.listener != null) {
+                                    sound.listener.onFinished(SoundFinishedType.LOOPED);
+                                }
+                            }
+                        } else { //Non-looping
+                            int state = alGetSourcei(sound.getSourceIndex(), AL_SOURCE_STATE);
+
+                            if (state == AL_STOPPED && sound.lastKnownState != AL_STOPPED) {
+                                sound.lastKnownState = AL_STOPPED;
+
+                                if (sound.listener != null) {
+                                    sound.listener.onFinished(SoundFinishedType.ENDED);
+                                }
                             }
                         }
                     }
@@ -240,7 +225,6 @@ public final class Sound {
      * for custom operations that are not supported by the API.
      *
      * @param name The name of the sound.
-     *
      * @return The sound if found, otherwise null.
      */
     public static Sound getSound(String name) {
@@ -259,13 +243,20 @@ public final class Sound {
      * paused, it will be resumed.
      *
      * @param name The name of the sound to play.
+     * @return The sound if found, otherwise null.
      */
-    public static void playSound(String name) {
+    public static Sound playSound(String name) {
         Sound sound = getSound(name);
 
         if (sound != null) {
             alSourcePlay(sound.getSourceIndex());
+
+            if (sound.startTime == -1 && sound.endTime == -1) {
+                sound.lastKnownState = AL_PLAYING;
+            }
         }
+
+        return sound;
     }
 
     /**
@@ -274,13 +265,24 @@ public final class Sound {
      * to resume the sound.
      *
      * @param name The name of the sound to pause.
+     * @return The sound if found, otherwise null.
      */
-    public static void pauseSound(String name) {
+    public static Sound pauseSound(String name) {
         Sound sound = getSound(name);
 
         if (sound != null) {
             alSourcePause(sound.getSourceIndex());
+
+            if (sound.startTime == -1 && sound.endTime == -1) {
+                sound.lastKnownState = AL_PAUSED;
+            }
+
+            if (sound.listener != null) {
+                sound.listener.onFinished(SoundFinishedType.PAUSED);
+            }
         }
+
+        return sound;
     }
 
     /**
@@ -289,13 +291,24 @@ public final class Sound {
      * to play the sound.
      *
      * @param name The name of the sound to stop.
+     * @return The sound if found, otherwise null.
      */
-    public static void stopSound(String name) {
+    public static Sound stopSound(String name) {
         Sound sound = getSound(name);
 
         if (sound != null) {
             alSourceStop(sound.getSourceIndex());
+
+            if (sound.startTime == -1 && sound.endTime == -1) {
+                sound.lastKnownState = AL_STOPPED;
+            }
+
+            if (sound.listener != null) {
+                sound.listener.onFinished(SoundFinishedType.STOPPED);
+            }
         }
+
+        return sound;
     }
 
     /**
@@ -304,13 +317,13 @@ public final class Sound {
      * The specified pitch value should be between <code>0.5</code>
      * and <code>2.0</code>. The default value is 1.0
      *
-     * @param name The name of the sound.
+     * @param name  The name of the sound.
      * @param pitch The new pitch of the sound.
-     *
+     * @return The sound if found, otherwise null.
      * @throws java.security.InvalidParameterException If the specified
-     * pitch is out of range.
+     *                                                 pitch is out of range.
      */
-    public static void setPitch(String name, float pitch) {
+    public static Sound setPitch(String name, float pitch) {
         Validator.validateInRange(pitch, 0.5, 2.0, "pitch");
 
         Sound sound = getSound(name);
@@ -318,6 +331,8 @@ public final class Sound {
         if (sound != null) {
             alSourcef(sound.getSourceIndex(), AL_PITCH, pitch);
         }
+
+        return sound;
     }
 
     /**
@@ -327,12 +342,86 @@ public final class Sound {
      * two equals an amplification of <code>+6dB</code> while a division
      * by two equals an attenuation of <code>-6dB</code>. A value of
      * <code>0</code> will effectively disable the sound.
+     *
+     * @param name   The name of the sound.
+     * @param volume The new volume of the sound.
+     * @return The sound if found, otherwise null.
      */
-    public static void setVolume(String name, float volume) {
+    public static Sound setVolume(String name, float volume) {
         Sound sound = getSound(name);
 
         if (sound != null) {
             alSourcef(sound.getSourceIndex(), AL_GAIN, volume);
         }
+
+        return sound;
+    }
+
+    /**
+     * Gets the name of the sound.
+     *
+     * @return The sound's name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Gets the index of the sound's bufferIndex.
+     *
+     * @return The index of the sound's bufferIndex.
+     */
+    public int getBufferIndex() {
+        return bufferIndex;
+    }
+
+    /**
+     * Gets the index of the sound's sourceIndex.
+     *
+     * @return The index of the sound's sourceIndex.
+     */
+    public int getSourceIndex() {
+        return sourceIndex;
+    }
+
+    /**
+     * Sets the OnSoundFinishedListener for this sound.
+     *
+     * @param listener The new sound listener.
+     */
+    public void setOnSoundFinishedListener(OnSoundFinishedListener listener) {
+        this.listener = listener;
+    }
+
+    public enum SoundFinishedType {
+        /**
+         * A sound was stopped by using the {@link #stopSound(String)} function.
+         */
+        STOPPED,
+
+        /**
+         * A sound was stopped by using the {@link #pauseSound(String)} function.
+         */
+        PAUSED,
+
+        /**
+         * A looping sound ended and looped again.
+         */
+        LOOPED,
+
+        /**
+         * The non-looping sound ended.
+         */
+        ENDED
+    }
+
+    public interface OnSoundFinishedListener {
+        /**
+         * The onFinished method is called when a sound has finished playing.
+         * If a sound is looping it will be called after each loop.
+         *
+         * @param type Indicates how did the sound finish.
+         */
+        public void onFinished(SoundFinishedType type);
     }
 }
