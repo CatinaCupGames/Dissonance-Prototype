@@ -1,7 +1,6 @@
 package com.dissonance.framework.game.scene.dialog;
 
 import java.awt.*;
-import java.util.Arrays;
 
 public class CustomString {
     private String text;

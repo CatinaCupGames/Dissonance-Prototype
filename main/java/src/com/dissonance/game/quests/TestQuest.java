@@ -6,6 +6,7 @@ import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.sprites.Enemy;
 
 import java.util.Random;
@@ -27,10 +28,28 @@ public class TestQuest extends AbstractQuest {
 
     @Override
     public void startQuest() throws Exception {
+        Sound.playSound("creepy").setOnSoundFinishedListener(new Sound.OnSoundFinishedListener() {
+            @Override
+            public void onFinished(Sound.SoundFinishedType type) {
+                System.out.println("Creepy finished " + type);
+            }
+        });
+
+        Sound.getSound("dialogadvance").setOnSoundFinishedListener(new Sound.OnSoundFinishedListener() {
+            @Override
+            public void onFinished(Sound.SoundFinishedType type) {
+                System.out.println("Dialog advance finished " + type);
+            }
+        });
+
         World w = WorldFactory.getWorld("test_tileset");
         setWorld(w);
         w.waitForWorldLoaded();
         Thread.sleep(5000);
+        Dialog d = DialogFactory.getDialog("TEST");
+        DialogUI ui = new DialogUI("asdfas", d);
+        ui.displayUI(true, getWorld());
+        ui.waitForEnd();
         //RenderService.INSTANCE.provideData(true, RenderService.ENABLE_CROSS_FADE);
         //RenderService.INSTANCE.provideData(3000f, RenderService.CROSS_FADE_DURATION);
         //World world = WorldFactory.getWorld("test_tileset2");

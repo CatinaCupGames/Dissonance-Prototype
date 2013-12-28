@@ -1,7 +1,5 @@
 package com.dissonance.framework.game.sprites.impl.game;
 
-import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.tiled.TiledObject;
@@ -30,7 +28,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
     public boolean isPointInside(float x, float y) {
         if (heightC == -1 || widthC == -1) {
             if (getTexture() instanceof SpriteTexture) {
-                SpriteTexture temp = (SpriteTexture)getTexture();
+                SpriteTexture temp = (SpriteTexture) getTexture();
                 heightC = temp.getHeight();
                 widthC = temp.getWidth();
             } else {
@@ -65,7 +63,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                     super.setX(super.getX() + (add < 0 ? -1 : 1));
                 }
             } else if (c instanceof TiledObject) {
-                TiledObject to = (TiledObject)c;
+                TiledObject to = (TiledObject) c;
                 if (to.isHitbox())
                     super.setX(oX);
                 else if (to.isDoor() && this instanceof PlayableSprite) { //2meta4me
@@ -126,8 +124,8 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                 for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
                     super.setY(super.getY() + (add < 0 ? -1 : 1));
                 }
-            }  else if (c instanceof TiledObject) {
-                TiledObject to = (TiledObject)c;
+            } else if (c instanceof TiledObject) {
+                TiledObject to = (TiledObject) c;
                 if (to.isHitbox())
                     super.setY(oY);
                 else if (to.isDoor() && this instanceof PlayableSprite) { //2meta4me
