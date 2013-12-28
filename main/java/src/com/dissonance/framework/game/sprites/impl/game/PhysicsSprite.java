@@ -53,7 +53,6 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
 
     @Override
     public void setX(float x) {
-        System.out.println(getWorld().getName());
         float oX = super.getX();
         super.setX(x);
 
@@ -76,7 +75,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                         return;
                     }
                     String world = to.getDoorWorldTarget();
-                    World worldObj;
+                    final World worldObj;
                     if (world.equalsIgnoreCase("")) {
                         worldObj = getWorld();
                     } else {
@@ -89,20 +88,26 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                         }
                     }
 
-                    TiledObject spawn = worldObj.getSpawn(target);
+                    final TiledObject spawn = worldObj.getSpawn(target);
                     if (spawn == null) {
                         super.setX(oX);
                         return;
                     }
+                    new Thread(new Runnable() {
 
-                    if (worldObj != getWorld()) {
-                        RenderService.INSTANCE.fadeToBlack(300);
-                        WorldFactory.swapView(worldObj, true);
-                        setWorld(worldObj);
-                    }
+                        @Override
+                        public void run() {
+                            if (worldObj != getWorld()) {
+                                RenderService.INSTANCE.fadeToBlack(1000);
+                                WorldFactory.swapView(worldObj, true);
+                                setWorld(worldObj);
+                            }
 
-                    super.setX(spawn.getX());
-                    super.setY(spawn.getY());
+                            PhysicsSprite.super.setX(spawn.getX());
+                            PhysicsSprite.super.setY(spawn.getY());
+                        }
+                    }).start();
+
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.dissonance.framework.game.world;
 
 import com.dissonance.framework.game.GameService;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Validator;
 
@@ -102,7 +103,17 @@ public class WorldFactory {
      * @param newworld
      *                The new world to display. This parameter <b>cannot</b> be null.
      */
-    public static void swapView(World newworld, boolean fadetoblack) {
+    public static void swapView(final World newworld, final boolean fadetoblack) {
+        if (RenderService.isInRenderThread()) {
+            new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    swapView(newworld, fadetoblack);
+                }
+            }).start();
+            return;
+        }
         Validator.validateNotNull(newworld, "NewWorld");
         if (currentWorld != null) {
             WorldHolder w = getWorldHolder(currentWorld.getID());
