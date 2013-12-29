@@ -74,8 +74,8 @@ public class WeaponItem extends Item {
                             maxY = 0;
                             minX = 0;
                             maxX = swipe;
-                            y = getOwner().getY() - (height / 2);
-                            x = getOwner().getX() - (width / 2);
+                            y = getOwner().getY() - (height / 2f);
+                            x = getOwner().getX() - (width / 2f);
                             xadd = width / (float)(getOwner().getFrameCount() - 1);
                             yadd = 0;
                             break;

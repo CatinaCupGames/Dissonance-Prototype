@@ -1,5 +1,6 @@
 package com.dissonance.game.w;
 
+import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.scene.hud.HUD;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
@@ -25,6 +26,7 @@ public abstract class GameWorldLoader implements WorldLoader {
         if (wyatt == null) {
             wyatt = new Wyatt();
             w.loadAndAdd(wyatt);
+            wyatt.setCurrentWeapon(Weapon.getWeapon("test").createItem(wyatt));
             wyatt.select();
         } else {
             w.loadAndAdd(wyatt);
