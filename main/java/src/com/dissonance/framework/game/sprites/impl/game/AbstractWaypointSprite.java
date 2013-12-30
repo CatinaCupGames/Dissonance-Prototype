@@ -63,6 +63,9 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
 
     public void setWaypoint(Position position, WaypointType type) {
         clearWaypoints();
+        if (waypointList == null) {
+            waypointList = new ArrayList<Position>();
+        }
         if (type == WaypointType.SMART) {
             NodeMap map = getWorld().getNodeMap();
             waypointList = map.findPath(new Position(getX(), getY()).shrink(), position.shrink());
@@ -108,12 +111,12 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
     public synchronized void waitForWaypointReached() throws InterruptedException {
         if (RenderService.isInRenderThread())
             throw new IllegalAccessError("You cant access this method in the render thread!");
-        if (currentWaypoint == null)
+        if (currentWaypoint == null || RenderService.INSTANCE == null)
             return;
+        Position currentPos = currentWaypoint;
         while (true) {
-            if (RenderService.INSTANCE == null) {
+            if (currentWaypoint == null || currentWaypoint != currentPos || RenderService.INSTANCE == null)
                 break;
-            }
             super.wait(0L);
         }
     }

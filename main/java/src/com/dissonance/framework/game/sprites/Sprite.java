@@ -24,6 +24,7 @@ public abstract class Sprite implements Drawable, Serializable {
     protected Direction direction;
     protected float x, y, width, height;
 
+
     public static Sprite fromClass(Class<?> class_) {
         if (!class_.isAssignableFrom(Sprite.class))
             throw new InvalidParameterException("The class provided is not assignable to Sprite!");

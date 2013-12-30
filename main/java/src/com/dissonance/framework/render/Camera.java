@@ -2,6 +2,7 @@ package com.dissonance.framework.render;
 
 import com.dissonance.framework.game.GameSettings;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import org.lwjgl.util.vector.Vector2f;
 
 public final class Camera {
@@ -15,6 +16,7 @@ public final class Camera {
     private static long startTime;
     private static float duration;
     private static CameraMovementListener listener;
+    private static Sprite follower;
 
     public static float getX() {
         return posX;
@@ -77,6 +79,25 @@ public final class Camera {
         easeMovement(new Vector2f(newx, newy), duration);
     }
 
+    public static void followSprite(Sprite sprite) {
+        if (follower != null) {
+            follower.setSpriteMovedListener(null);
+        }
+        follower = sprite;
+        if (follower == null)
+            return;
+        follower.setSpriteMovedListener(new Sprite.SpriteEvent.SpriteMovedEvent() {
+            @Override
+            public void onSpriteMoved(Sprite sprite, float oldx, float oldy) {
+                setPos(translateToCameraCenter(sprite.getVector(), 32));
+            }
+        });
+    }
+
+    public static void stopFollowing() {
+        followSprite(null);
+    }
+
     public static void easeMovement(Vector2f newPos, float duration) {
         nextPos = newPos;
         oldPos = new Vector2f(getX(), getY());
@@ -108,7 +129,7 @@ public final class Camera {
     }
 
     private static final WhatAmIDoing uwot = new WhatAmIDoing();
-    public static void waitForEndOfEase() throws InterruptedException {
+    public static void waitForEndOfMovement() throws InterruptedException {
         uwot.waitForEnd();
     }
 
@@ -179,6 +200,10 @@ public final class Camera {
         return value;
     }
 
+    public static void followPlayer() {
+        followSprite(PlayableSprite.getCurrentlyPlayingSprite());
+    }
+
     public interface CameraMovementListener {
         public void onMovement(float x, float y, long time);
 
@@ -188,7 +213,7 @@ public final class Camera {
     private static class WhatAmIDoing {
         public synchronized void waitForEnd() throws InterruptedException {
             while (true) {
-                if (!isEasing)
+                if (!isEasing && !isLinear)
                     break;
                 super.wait(0L);
             }

@@ -8,7 +8,7 @@
         <header>mootykins</header>
         <message style="bold" type="new">Its to dangerous to go alone!</message>
 
-        <message type="append">Take this!</message>
+        <message type="append"> Take this!</message>
     </dialog>
 
     <dialog dialog_id="arrem">

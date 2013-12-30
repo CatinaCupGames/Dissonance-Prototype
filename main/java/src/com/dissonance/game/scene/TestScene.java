@@ -6,7 +6,6 @@ import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.scene.Scene;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
-import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.game.sprites.TestPlayer;
@@ -32,24 +31,20 @@ public class TestScene extends Scene {
         switch (part) {
             case 0: //After Hey wait!
                 Camera.linearMovement(Camera.translateToCameraCenter(moot.getVector(), 32), 1000);
-                Camera.waitForEndOfEase();
+                Camera.waitForEndOfMovement();
                 waitFor(0.3);
                 moot.setWaypoint(new Position((int) PlayableSprite.getCurrentlyPlayingSprite().getX() - 25, (int) PlayableSprite.getCurrentlyPlayingSprite().getY()), WaypointType.SIMPLE);
-                moot.setSpriteMovedListener(new Sprite.SpriteEvent.SpriteMovedEvent() {
-                    @Override
-                    public void onSpriteMoved(Sprite sprite, float oldx, float oldy) {
-                        Camera.setPos(Camera.translateToCameraCenter(sprite.getVector(), 32));
-                    }
-                });
+                Camera.followSprite(moot);
                 moot.waitForWaypointReached();
-                moot.setSpriteMovedListener(null);
                 queueDialog(DialogFactory.getDialog("testscene-p2"));
                 break;
             case 1: //After Take This!
+                Camera.stopFollowing();
                 moot.setWaypoint(new Position((int) PlayableSprite.getCurrentlyPlayingSprite().getX() - 500, (int) PlayableSprite.getCurrentlyPlayingSprite().getY()), WaypointType.SIMPLE);
                 moot.waitForWaypointReached();
                 Camera.easeMovement(Camera.translateToCameraCenter(PlayableSprite.getCurrentlyPlayingSprite().getVector(), 32), 1000);
-                Camera.waitForEndOfEase();
+                Camera.waitForEndOfMovement();
+                Camera.followPlayer();
                 break;
         }
     }
@@ -57,15 +52,16 @@ public class TestScene extends Scene {
     @Override
     protected void initScene() {
         moot = new TestPlayer();
-        moot.setY(PlayableSprite.getCurrentlyPlayingSprite().getY());
-        moot.setX(PlayableSprite.getCurrentlyPlayingSprite().getX() - 500);
-        GameService.getCurrentWorld().loadAnimatedTextureForSprite(moot);
-        GameService.getCurrentWorld().addSprite(moot);
+       moot.setY(PlayableSprite.getCurrentlyPlayingSprite().getY());
+    moot.setX(PlayableSprite.getCurrentlyPlayingSprite().getX() - 500);
+    GameService.getCurrentWorld().loadAnimatedTextureForSprite(moot);
+    GameService.getCurrentWorld().addSprite(moot);
+    PlayableSprite.getCurrentlyPlayingSprite().freeze(); //Freeze the player
 
 
-        Dialog d = DialogFactory.getDialog("testscene-p1");
-        queueDialog(d);
-    }
+    Dialog d = DialogFactory.getDialog("testscene-p1");
+    queueDialog(d);
+}
 
     @Override
     protected void onEndScene() {
