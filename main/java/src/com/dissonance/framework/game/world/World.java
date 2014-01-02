@@ -39,10 +39,10 @@ public final class World {
     private NodeMap nodeMap;
     private int ID;
     private transient RenderService renderingService;
-    private transient Texture texture;
     private boolean invalid = true;
     private boolean loaded = false;
     private WorldData tiledData;
+    private WorldLoader loader;
     private List<UpdatableDrawable> udrawables = new ArrayList<>();
     private List<CombatSprite> combatCache = new ArrayList<CombatSprite>();
 
@@ -61,6 +61,14 @@ public final class World {
 
     public void init() {
         renderingService = ServiceManager.createService(RenderService.class);
+    }
+
+    public void setWorldLoader(WorldLoader loader) {
+        this.loader = loader;
+    }
+
+    public WorldLoader getWorldLoader() {
+        return loader;
     }
 
     public void switchTo(boolean fadeToBlack) {
@@ -107,24 +115,28 @@ public final class World {
                         drawable.addAll(tiledData.createDrawables());
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
                         WorldLoader loader = null;
-                        System.out.println("Searching for loader..");
-                        if (tiledData.getProperty("loader") != null) {
-                            try {
-                                Class<?> class_ = Class.forName(tiledData.getProperty("loader"));
-                                if (WorldLoader.class.isAssignableFrom(class_)) {
-                                    loader = (WorldLoader)class_.newInstance();
+                        if (World.this.loader == null) {
+                            System.out.println("Searching for loader..");
+                            if (tiledData.getProperty("loader") != null) {
+                                try {
+                                    Class<?> class_ = Class.forName(tiledData.getProperty("loader"));
+                                    if (WorldLoader.class.isAssignableFrom(class_)) {
+                                        loader = (WorldLoader)class_.newInstance();
+                                    }
+                                } catch (Exception e) {
+                                    loader = attemptSearchForWorldLoader();
                                 }
-                            } catch (Exception e) {
+                            } else {
                                 loader = attemptSearchForWorldLoader();
                             }
-                        } else {
-                            loader = attemptSearchForWorldLoader();
-                        }
 
-                        if (loader != null) {
-                            loader.onLoad(World.this);
+                            if (loader != null) {
+                                loader.onLoad(World.this);
+                            } else {
+                                System.out.println("No loader found..");
+                            }
                         } else {
-                            System.out.println("No loader found..");
+                            World.this.loader.onLoad(World.this);
                         }
                         loaded = true;
                         _wakeLoadWaiters();
@@ -254,7 +266,6 @@ public final class World {
         drawable.clear();
         udrawables.clear();
         combatCache.clear();
-        texture.dispose();
         tiledData.dispose();
         renderingService = null;
     }

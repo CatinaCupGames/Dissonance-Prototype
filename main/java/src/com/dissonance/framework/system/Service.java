@@ -14,7 +14,7 @@ public abstract class Service {
 
     private boolean terminated;
 
-    private final Queue<Runnable> listToRun = new LinkedList<>();
+    private final Queue<ServiceRunnable> listToRun = new LinkedList<>();
 
     public void start() {
         runnable = new Runnable() {
@@ -26,14 +26,18 @@ public abstract class Service {
                 while (!terminated) {
 
                     // Flush all "Run on thread" actions //
+                    ArrayList<ServiceRunnable> temp = new ArrayList<ServiceRunnable>();
                     while (!listToRun.isEmpty()) {
-                        Runnable r = listToRun.poll();
+                        ServiceRunnable r = listToRun.poll();
+                        if (r.everyTick)
+                            temp.add(r);
                         try {
-                            r.run();
+                            r.runnable.run();
                         } catch (Throwable t) {
                             t.printStackTrace();
                         }
                     }
+                    listToRun.addAll(temp);
 
                     update();
                     try {
@@ -115,12 +119,19 @@ public abstract class Service {
     }
 
     public void runOnServiceThread(Runnable runnable, boolean force_next_frame) {
+        runOnServiceThread(runnable, force_next_frame, false);
+    }
+
+    public void runOnServiceThread(Runnable runnable, boolean force_next_frame, boolean every_tick) {
         Validator.validateNotNull(runnable, "runnable");
         if (Thread.currentThread().getId() == serviceThreadID && !force_next_frame) //Run the runnable if were already on the service thread
             runnable.run();
         else { //Otherwise queue it
             synchronized (listToRun) {
-                listToRun.offer(runnable);
+                ServiceRunnable runnable1 = new ServiceRunnable();
+                runnable1.runnable = runnable;
+                runnable1.everyTick = every_tick;
+                listToRun.offer(runnable1);
             }
         }
     }
@@ -134,5 +145,10 @@ public abstract class Service {
 
     public boolean isTerminated() {
         return terminated;
+    }
+
+    private class ServiceRunnable {
+        private boolean everyTick;
+        private Runnable runnable;
     }
 }

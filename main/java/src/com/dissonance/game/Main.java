@@ -35,16 +35,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        GameService.args = args;
-        System.out.println("Using libs folder " + System.getProperty("org.lwjgl.librarypath"));
-        System.out.println("Loading Input config");
-        InputKeys.initializeConfig();
-        System.out.println("Loading game dialog");
-        DialogFactory.loadDialog();
-        System.out.println("Loading sound");
-        Sound.loadAllSounds();
-        //imagePreview();
-        //dialogMenu();
+        GameService.loadEssentials(args);
         System.out.println("Starting TestQuest");
         GameService.beginQuest(new TestQuest());
     }
