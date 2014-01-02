@@ -42,7 +42,11 @@ public class MainQuest extends AbstractQuest {
         StringBuilder builder = new StringBuilder();
         builder.append("package com.dissonance.game.w;\n").append("\n");
         builder.append("import com.dissonance.framework.game.world.World;\n");
+        ArrayList<String> temp = new ArrayList<String>();
         for (Sprite sprite : sprites) {
+            if (temp.contains(sprite.getClass().getCanonicalName()))
+                continue;
+            temp.add(sprite.getClass().getCanonicalName());
             builder.append("import ").append(sprite.getClass().getCanonicalName()).append(";\n");
         }
         builder.append("\n\n").append("public class ").append(mapName).append(" extends GameWorldLoader {\n");
@@ -62,15 +66,19 @@ public class MainQuest extends AbstractQuest {
     }
 
     public void newSprite() {
-        String class_ = (String) JOptionPane.showInputDialog(EditorUI.FRAME, "Please enter the complete classpath for the Sprite object.", "Add Sprite", JOptionPane.PLAIN_MESSAGE);
+        String class_ = (String) JOptionPane.showInputDialog(EditorUI.FRAME, "Please enter name of the Sprite class\nor the complete classpath for the Sprite class.", "Add Sprite", JOptionPane.PLAIN_MESSAGE);
         if ((class_ != null) && (class_.length() > 0)) {
             Sprite sprite;
             try {
                 sprite = Sprite.fromClass(Class.forName(class_));
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(EditorUI.FRAME, "The specified Sprite could not be found", "Error adding Sprite", JOptionPane.WARNING_MESSAGE);
-                return;
+                class_ = "com.dissonance.game.sprites." + class_;
+                try {
+                    sprite = Sprite.fromClass(Class.forName(class_));
+                } catch (ClassNotFoundException e1) {
+                    JOptionPane.showMessageDialog(EditorUI.FRAME, "The specified Sprite could not be found", "Error adding Sprite", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(EditorUI.FRAME, "Exception occurred: " + e.getMessage(), "Error adding Sprite", JOptionPane.ERROR_MESSAGE);
@@ -134,7 +142,12 @@ public class MainQuest extends AbstractQuest {
                                     sprites.add((Sprite)updatableDrawable);
                                 }
                                 selectedSprite = null;
+                                EditorUI.INSTANCE.clearComboBox();
+                                EditorUI.INSTANCE.setComboBox(sprites);
                                 EditorUI.INSTANCE.setComboIndex(0);
+                                if (PlayableSprite.getCurrentlyPlayingSprite() != null) {
+                                    getWorld().removeSprite(PlayableSprite.getCurrentlyPlayingSprite()); //Remove player
+                                }
                             }
                         }
                     }, true);

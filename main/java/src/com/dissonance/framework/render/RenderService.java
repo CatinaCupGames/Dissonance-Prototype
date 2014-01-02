@@ -392,6 +392,10 @@ public class RenderService extends Service {
         }
     }
 
+    public World getCurrentDrawingWorld() {
+        return current_world;
+    }
+
     public boolean isFading() {
         return isFading;
     }

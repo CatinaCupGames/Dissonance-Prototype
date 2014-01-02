@@ -44,6 +44,9 @@ public abstract class AbstractQuest {
         if (PlayableSprite.getCurrentlyPlayingSprite() != null && PlayableSprite.getCurrentlyPlayingSprite().getWorld() != world) {
             world = PlayableSprite.getCurrentlyPlayingSprite().getWorld();
         }
+        if (world == null) {
+            world = RenderService.INSTANCE.getCurrentDrawingWorld();
+        }
         return world;
     }
 
