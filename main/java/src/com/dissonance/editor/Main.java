@@ -10,6 +10,8 @@ import com.dissonance.game.quests.TestQuest;
 
 import javax.swing.*;
 import java.io.File;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.util.Locale;
 
 public class Main {
@@ -30,6 +32,8 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
+        ClassLoader c = Main.class.getClassLoader();
+        System.out.println(ManagementFactory.getRuntimeMXBean().getSpecName());
         GameService.loadEssentials(args);
         System.out.println("Starting MainQuest");
         GameService.beginQuest(new MainQuest());

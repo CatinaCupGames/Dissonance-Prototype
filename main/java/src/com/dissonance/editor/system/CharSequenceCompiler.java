@@ -63,7 +63,7 @@ public class CharSequenceCompiler<T> {
     // Compiler requires source files with a ".java" extension:
     static final String JAVA_EXTENSION = ".java";
 
-    private final ClassLoaderImpl classLoader;
+    private ClassLoaderImpl classLoader;
 
     // The compiler instance that this facade uses.
     private final JavaCompiler compiler;
@@ -285,6 +285,10 @@ public class CharSequenceCompiler<T> {
      */
     public ClassLoader getClassLoader() {
         return javaFileManager.getClassLoader();
+    }
+
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = new ClassLoaderImpl(classLoader);
     }
 }
 

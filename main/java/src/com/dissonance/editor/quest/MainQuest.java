@@ -17,21 +17,35 @@ import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Direction;
 
 import javax.swing.*;
-import javax.tools.*;
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaFileObject;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
 public class MainQuest extends AbstractQuest {
     public static MainQuest INSTANCE;
+    public static ClassLoader loader = URLClassLoader.newInstance(new URL[] {}, MainQuest.class.getClassLoader());
+    private final CharSequenceCompiler<WorldLoader> stringCompiler = new CharSequenceCompiler<WorldLoader>(loader, Arrays.asList("-target", "1.7"));
+    private ArrayList<URL> urls = new ArrayList<URL>();
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
     private Sprite selectedSprite;
     private String mapName;
+    public boolean customCode = false;
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
         System.out.println("Displaying Editor UI");
-        EditorUI.displayForm();
+        try {
+            EditorUI.displayForm();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            RenderService.kill();
+            return;
+        }
         mapName = JOptionPane.showInputDialog(EditorUI.FRAME, "Please enter the map name to create a World Loader for", "World Loader Creator", JOptionPane.PLAIN_MESSAGE);
         World world = WorldFactory.getWorld(mapName);
         setWorld(world);
@@ -39,30 +53,92 @@ public class MainQuest extends AbstractQuest {
     }
 
     public String generateLoaderCode() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("package com.dissonance.game.w;\n").append("\n");
-        builder.append("import com.dissonance.framework.game.world.World;\n");
-        ArrayList<String> temp = new ArrayList<String>();
-        for (Sprite sprite : sprites) {
-            if (temp.contains(sprite.getClass().getCanonicalName()))
-                continue;
-            temp.add(sprite.getClass().getCanonicalName());
-            builder.append("import ").append(sprite.getClass().getCanonicalName()).append(";\n");
-        }
-        builder.append("\n\n").append("public class ").append(mapName).append(" extends GameWorldLoader {\n");
-        builder.append("    @Override\n").append("    public void onLoad(World w) {\n").append("        super.onLoad(w);\n");
-        int i = 0;
-        for (Sprite sprite : sprites) {
-            i++;
-            builder.append("\n");
-            builder.append("        ").append(sprite.getClass().getSimpleName()).append(" var").append(i).append(" = new ").append(sprite.getClass().getSimpleName()).append("();\n");
-            builder.append("        w.loadAndAdd(var").append(i).append(");\n");
-            builder.append("        var").append(i).append(".setX(").append(sprite.getX()).append("f);\n");
-            builder.append("        var").append(i).append(".setY(").append(sprite.getY()).append("f);\n");
-        }
-        builder.append("    }\n").append("}");
+        if (!customCode) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("package com.dissonance.game.w;\n").append("\n");
+            builder.append("import com.dissonance.framework.game.world.World;\n");
+            ArrayList<String> temp = new ArrayList<String>();
+            for (Sprite sprite : sprites) {
+                if (temp.contains(sprite.getClass().getCanonicalName()))
+                    continue;
+                temp.add(sprite.getClass().getCanonicalName());
+                builder.append("import ").append(sprite.getClass().getCanonicalName()).append(";\n");
+            }
+            builder.append("\n\n").append("public class ").append(mapName).append(" extends GameWorldLoader {\n");
+            builder.append("    @Override\n").append("    public void onLoad(World w) {\n").append("        super.onLoad(w);\n");
+            int i = 0;
+            for (Sprite sprite : sprites) {
+                i++;
+                builder.append("\n");
+                builder.append("        ").append(sprite.getClass().getSimpleName()).append(" var").append(i).append(" = new ").append(sprite.getClass().getSimpleName()).append("();\n");
+                builder.append("        w.loadAndAdd(var").append(i).append(");\n");
+                builder.append("        var").append(i).append(".setX(").append(sprite.getX()).append("f);\n");
+                builder.append("        var").append(i).append(".setY(").append(sprite.getY()).append("f);\n");
+            }
+            builder.append("    }\n").append("}");
 
-        return builder.toString();
+            return builder.toString();
+        } else {
+            String code = EditorUI.INSTANCE.codeTextArea.getText();
+            if (selectedSprite == null) return code;
+            String varName = getVarNameFor(sprites.indexOf(selectedSprite));
+            String[] lines = code.split("\n");
+            String newCode = "";
+            for (String line : lines) {
+                String s = line;
+                if (s.contains(varName + ".setX")) {
+                    s = "        " + varName + ".setX(" + selectedSprite.getX() + "f);";
+                } else if (s.contains(varName + ".setY")) {
+                    s = "        " + varName + ".setY(" + selectedSprite.getY() + "f);";
+                }
+                newCode += s + "\n";
+            }
+
+            return newCode;
+        }
+    }
+
+    public boolean checkBeforeCompile(String javaCode) {
+        String[] lines = javaCode.split("\n");
+        ArrayList<String> sprites = new ArrayList<>();
+        for (int i = 0; i < lines.length; i++) {
+            String s = lines[i];
+            if (s.contains("loadAndAdd")) {
+                String varName = s.trim().replace("w.loadAndAdd(", "").replace(" ", "").replace(");", "");
+                if (!sprites.contains(varName))
+                    sprites.add(varName);
+                else {
+                    Object[] options = { "Yes, continue compile", "No, abort compile" };
+                    int n = JOptionPane.showOptionDialog(EditorUI.FRAME, "The compiler has detected that you are adding a Sprite to the World more than once\nLine: " + i + " ('" + s.trim() + "')\nThis can cause errors in the Editor, do you want to continue?", "Compiler Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+                    if (n == 1) return false;
+                }
+            }
+            if (s.contains("loadAnimatedTextureForSprite") || s.contains("addSprite")) {
+                Object[] options = { "Yes, continue compile", "No, abort compile" };
+                int n = JOptionPane.showOptionDialog(EditorUI.FRAME, "The compiler has detected that you are using the deprecated method '" + s.trim() + "'\nIt is recommended that you instead use 'loadAndAdd(Sprite)'\nLine: " + i + " ('" + s.trim() + "')\nThis can cause errors in the Editor, do you want to continue?", "Compiler Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+                if (n == 1) return false;
+            }
+        }
+
+        return true;
+    }
+
+    public String getVarNameFor(int target) {
+        String code = EditorUI.INSTANCE.codeTextArea.getText();
+        String varName;
+        String[] lines = code.split("\n");
+        int i = 0;
+        for (String s : lines) {
+            if (s.contains("loadAndAdd")) {
+                if (target == i) {
+                    varName = s.trim().split("\\.")[1].replace("loadAndAdd(", "").replace(" ", "").replace(");", "");
+                    return varName;
+                } else {
+                    i++;
+                }
+            }
+        }
+        return "???";
     }
 
     public void newSprite() {
@@ -110,11 +186,14 @@ public class MainQuest extends AbstractQuest {
 
     }
 
-    private final CharSequenceCompiler<WorldLoader> stringCompiler = new CharSequenceCompiler<WorldLoader>(getClass().getClassLoader(), Arrays.asList("-target", "1.7"));
+    private int compileCount;
     public void compileAndShow(String javaCode) {
+        if (!checkBeforeCompile(javaCode)) return;
         final DiagnosticCollector<JavaFileObject> errs = new DiagnosticCollector<JavaFileObject>();
         try {
-            Class<WorldLoader> worldLoaderClass = stringCompiler.compile("com.dissonance.game.w." + mapName, javaCode, errs, WorldLoader.class);
+            javaCode = javaCode.replace("public class " + mapName, "public class " + mapName + compileCount);
+            Class<WorldLoader> worldLoaderClass = stringCompiler.compile("com.dissonance.game.w." + mapName + compileCount, javaCode, errs, WorldLoader.class);
+            compileCount++;
             final WorldLoader loader = worldLoaderClass.newInstance();
             log(errs);
             RenderService.INSTANCE.runOnServiceThread(new Runnable() {
@@ -139,7 +218,7 @@ public class MainQuest extends AbstractQuest {
                             while (ud.hasNext()) {
                                 UpdatableDrawable updatableDrawable = ud.next();
                                 if (updatableDrawable instanceof Sprite && updatableDrawable != PlayableSprite.getCurrentlyPlayingSprite()) {
-                                    sprites.add((Sprite)updatableDrawable);
+                                    sprites.add((Sprite) updatableDrawable);
                                 }
                                 selectedSprite = null;
                                 EditorUI.INSTANCE.clearComboBox();
@@ -154,7 +233,7 @@ public class MainQuest extends AbstractQuest {
                 }
             });
         } catch (CharSequenceCompilerException e) {
-            e.printStackTrace();
+            log(errs);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

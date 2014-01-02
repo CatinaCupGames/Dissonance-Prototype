@@ -217,6 +217,9 @@ public class RenderService extends Service {
         current_world = null;
         INSTANCE = null;
         Display.destroy();
+    }
+
+    private static void killAll() {
         //Kill any waiting threads
         for (Thread t : Thread.getAllStackTraces().keySet()) {
             if (t.getState() == Thread.State.WAITING && !t.getName().contains("Disposer")) {
@@ -365,10 +368,7 @@ public class RenderService extends Service {
                 fpsTime = 0;
             }
             if (Display.isCloseRequested()) {
-                GameService.handleKillRequest();
-                ServiceManager.getService(InputService.class).terminate();
-                terminate();
-                Main.getSystemTicker().stopTick();
+                kill();
             }
         } else {
             try {
@@ -398,6 +398,16 @@ public class RenderService extends Service {
 
     public boolean isFading() {
         return isFading;
+    }
+
+    public static void kill() {
+        GameService.handleKillRequest();
+        Service s = ServiceManager.getService(InputService.class);
+        if (s != null) s.terminate();
+        Service s2 = ServiceManager.getService(RenderService.class);
+        if (s2 != null) s2.terminate();
+        killAll();
+        Main.getSystemTicker().stopTick();
     }
 
     public static enum TransitionType {

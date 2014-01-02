@@ -1,10 +1,11 @@
 package com.dissonance.editor.ui;
 
-import com.dissonance.editor.Main;
 import com.dissonance.editor.quest.MainQuest;
 import com.dissonance.framework.game.sprites.Sprite;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,12 +17,16 @@ public class EditorUI {
     public static EditorUI INSTANCE;
     public static JFrame FRAME;
     private JButton newSpriteButton;
-    private JTextArea codeTextArea;
+    public JTextArea codeTextArea;
     private JButton exportWorldLoaderButton;
     private JButton compileJavaCodeButton;
 
     public static void displayForm() {
         INSTANCE = new EditorUI();
+        if (INSTANCE.contentPane == null)
+            throw new RuntimeException("The compiled method $$$setupUP$$$ was not executed.\n" +
+                    "This could be caused by running the editor inside an IDE other than Intellij\n" +
+                    "or the editor was compiled with an IDE other than Intellij.");
         FRAME = new JFrame("EditorUI");
         FRAME.setContentPane(INSTANCE.contentPane);
         FRAME.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -52,6 +57,29 @@ public class EditorUI {
             }
         });
 
+        INSTANCE.codeTextArea.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (EditorUI.INSTANCE.updatingCode)
+                    return;
+                MainQuest.INSTANCE.customCode = true;
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (EditorUI.INSTANCE.updatingCode)
+                    return;
+                MainQuest.INSTANCE.customCode = true;
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (EditorUI.INSTANCE.updatingCode)
+                    return;
+                MainQuest.INSTANCE.customCode = true;
+            }
+        });
+
         FRAME.setSize(800, 600);
         Color c1 = new Color(43, 43, 43);
         Color c = new Color(60, 63, 65);
@@ -70,7 +98,7 @@ public class EditorUI {
     public void setComboBox(ArrayList<Sprite> sprites) {
         comboBox1.addItem("None");
         for (int i = 0; i < sprites.size(); i++) {
-            comboBox1.addItem("var" + (i + 1));
+            comboBox1.addItem(MainQuest.INSTANCE.getVarNameFor(i));
         }
     }
 
@@ -82,8 +110,11 @@ public class EditorUI {
         comboBox1.removeAllItems();
     }
 
+    private boolean updatingCode = false;
     public void refreshCode() {
+        updatingCode = true;
         codeTextArea.setText(MainQuest.INSTANCE.generateLoaderCode());
+        updatingCode = false;
     }
 
     private JPanel contentPane;
