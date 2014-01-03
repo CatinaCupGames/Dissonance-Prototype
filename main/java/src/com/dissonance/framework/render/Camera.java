@@ -95,6 +95,8 @@ public final class Camera {
     }
 
     public static void stopFollowing() {
+        if (follower == null)
+            return;
         followSprite(null);
     }
 

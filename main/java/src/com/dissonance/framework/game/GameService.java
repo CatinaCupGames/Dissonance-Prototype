@@ -1,5 +1,7 @@
 package com.dissonance.framework.game;
 
+import com.dissonance.framework.game.input.InputKeys;
+import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.game.settings.SettingsLevelTest;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
@@ -16,6 +18,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,6 +58,17 @@ public class GameService {
         if (!alive)
             return;
         //...what do we do now..?
+    }
+
+    public static void loadEssentials(String[] args) throws IOException {
+        GameService.args = args;
+        System.out.println("Using libs folder " + System.getProperty("org.lwjgl.librarypath"));
+        System.out.println("Loading Input config");
+        InputKeys.initializeConfig();
+        System.out.println("Loading game dialog");
+        DialogFactory.loadDialog();
+        System.out.println("Loading sound");
+        Sound.loadAllSounds();
     }
 
     public static void handleKillRequest() {
