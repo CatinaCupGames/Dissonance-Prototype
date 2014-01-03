@@ -17,7 +17,6 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Direction;
-import com.sun.beans.finder.PropertyEditorFinder;
 import org.lwjgl.util.vector.Vector2f;
 
 import javax.swing.*;
