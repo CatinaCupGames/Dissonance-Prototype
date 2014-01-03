@@ -6,15 +6,18 @@ import com.dissonance.editor.ui.EditorUI;
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.sprites.UIElement;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.framework.render.Camera;
+import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Direction;
+import org.lwjgl.util.vector.Vector2f;
 
 import javax.swing.*;
 import javax.tools.Diagnostic;
@@ -29,11 +32,12 @@ import java.util.Iterator;
 public class MainQuest extends AbstractQuest {
     public static MainQuest INSTANCE;
     public static ClassLoader loader = URLClassLoader.newInstance(new URL[] {}, MainQuest.class.getClassLoader());
+    public static int SPEED = 5;
     private final CharSequenceCompiler<WorldLoader> stringCompiler = new CharSequenceCompiler<WorldLoader>(loader, Arrays.asList("-target", "1.7"));
-    private ArrayList<URL> urls = new ArrayList<URL>();
-    private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
-    private Sprite selectedSprite;
-    private String mapName;
+    private ArrayList<Drawable> sprites = new ArrayList<Drawable>();
+    private Drawable selectedSprite;
+    public String mapName;
+    private boolean adding = false;
     public boolean customCode = false;
     @Override
     public void startQuest() throws Exception {
@@ -53,12 +57,13 @@ public class MainQuest extends AbstractQuest {
     }
 
     public String generateLoaderCode() {
+        if (!customCode && EditorUI.INSTANCE.codeTextArea.getText().isEmpty()) customCode = false;
         if (!customCode) {
             StringBuilder builder = new StringBuilder();
             builder.append("package com.dissonance.game.w;\n").append("\n");
             builder.append("import com.dissonance.framework.game.world.World;\n");
             ArrayList<String> temp = new ArrayList<String>();
-            for (Sprite sprite : sprites) {
+            for (Drawable sprite : sprites) {
                 if (temp.contains(sprite.getClass().getCanonicalName()))
                     continue;
                 temp.add(sprite.getClass().getCanonicalName());
@@ -67,7 +72,7 @@ public class MainQuest extends AbstractQuest {
             builder.append("\n\n").append("public class ").append(mapName).append(" extends GameWorldLoader {\n");
             builder.append("    @Override\n").append("    public void onLoad(World w) {\n").append("        super.onLoad(w);\n");
             int i = 0;
-            for (Sprite sprite : sprites) {
+            for (Drawable sprite : sprites) {
                 i++;
                 builder.append("\n");
                 builder.append("        ").append(sprite.getClass().getSimpleName()).append(" var").append(i).append(" = new ").append(sprite.getClass().getSimpleName()).append("();\n");
@@ -79,22 +84,73 @@ public class MainQuest extends AbstractQuest {
 
             return builder.toString();
         } else {
+            if (getSpriteCount() != sprites.size()) {
+                EditorUI.FRAME.requestFocus();
+                JOptionPane.showMessageDialog(EditorUI.FRAME, "The Sprite list seems to be out of date!\nCompile the World Loader code and try again.", "Error moving Sprite", JOptionPane.WARNING_MESSAGE);
+                EditorUI.INSTANCE.setComboIndex(0);
+                return EditorUI.INSTANCE.codeTextArea.getText();
+            }
             String code = EditorUI.INSTANCE.codeTextArea.getText();
             if (selectedSprite == null) return code;
             String varName = getVarNameFor(sprites.indexOf(selectedSprite));
-            String[] lines = code.split("\n");
-            String newCode = "";
-            for (String line : lines) {
-                String s = line;
-                if (s.contains(varName + ".setX")) {
-                    s = "        " + varName + ".setX(" + selectedSprite.getX() + "f);";
-                } else if (s.contains(varName + ".setY")) {
-                    s = "        " + varName + ".setY(" + selectedSprite.getY() + "f);";
+            if (varName.equalsIgnoreCase("???") && adding) { //Assume we need to add it.
+                code = code.substring(0, code.lastIndexOf("}")); //Get rid of } closing onLoad
+                code = code.substring(0, code.lastIndexOf("}")); //Get rid of } closing class
+                code += "\n        " + selectedSprite.getClass().getSimpleName() + " var" + sprites.size() + " = new " + selectedSprite.getClass().getSimpleName() + "();\n" +
+                        "        w.loadAndAdd(var" + sprites.size() + ");\n" +
+                        "        var" + sprites.size() + ".setX(" + selectedSprite.getX() + "f);\n" +
+                        "        var" + sprites.size() + ".setY(" + selectedSprite.getY() + "f);\n" +
+                        "    }\n" +
+                        "}";
+                return code;
+            } else if (code.contains(varName + ".setX") && code.contains(varName + ".setY") && (selectedSprite instanceof Sprite || selectedSprite instanceof UIElement)) {
+                String[] lines = code.split("\n");
+                String newCode = "";
+                for (String line : lines) {
+                    String s = line;
+                    if (s.contains(varName + ".setX")) {
+                        s = "        " + varName + ".setX(" + selectedSprite.getX() + "f);";
+                    } else if (s.contains(varName + ".setY")) {
+                        s = "        " + varName + ".setY(" + selectedSprite.getY() + "f);";
+                    }
+                    newCode += s + "\n";
                 }
-                newCode += s + "\n";
-            }
+                return newCode;
+            } else if (selectedSprite instanceof Sprite || selectedSprite instanceof UIElement) {
+                boolean addX = !code.contains(varName + ".setX");
+                boolean addY = !code.contains(varName + ".setY");
+                String[] lines = code.split("\n");
+                String newCode = "";
+                int toAdd = 0;
+                toAdd += addX ? 1 : 0;
+                toAdd += addY ? 1 : 0;
+                int index = getLineNumberFor(sprites.indexOf(selectedSprite));
+                if (index == -1) {
+                    EditorUI.FRAME.requestFocus();
+                    JOptionPane.showMessageDialog(EditorUI.FRAME, "The Sprite list seems to be out of date!\nCompile the World Loader code and try again.", "Error moving Sprite", JOptionPane.WARNING_MESSAGE);
+                    EditorUI.INSTANCE.setComboIndex(0);
+                    return code;
+                }
+                for (int i = 0; i < lines.length + toAdd; i++) {
+                    if (i <= index) {
+                        newCode += lines[i] + "\n";
+                    } else if (i > index && i - 1 == index) {
+                        if (addX && addY) {
+                            newCode += "        " + varName + ".setX(" + selectedSprite.getX() + "f);\n        " + varName + ".setY(" + selectedSprite.getY() + "f);";
+                        } else if (addX) {
+                            newCode += "        " + varName + ".setX(" + selectedSprite.getX() + "f);\n";
+                        } else if (addY) {
+                            newCode +=  "         " + varName + ".setY(" + selectedSprite.getY() + "f);\n";
+                        }
+                    } else {
+                        newCode += lines[i - toAdd] + "\n";
+                    }
+                }
 
-            return newCode;
+                return newCode;
+            } else {
+                return code;
+            }
         }
     }
 
@@ -123,6 +179,35 @@ public class MainQuest extends AbstractQuest {
         return true;
     }
 
+    public int getSpriteCount() {
+        String code = EditorUI.INSTANCE.codeTextArea.getText();
+        int count = 0;
+        String[] lines = code.split("\n");
+        for (String s : lines) {
+            if (s.contains("loadAndAdd") || s.contains("displayUI") || s.contains("addSprite")) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getLineNumberFor(int target) {
+        String code = EditorUI.INSTANCE.codeTextArea.getText();
+        String[] lines = code.split("\n");
+        int i = 0;
+        for (int ii = 0; ii < lines.length; ii++) {
+            String s = lines[ii];
+            if (s.contains("loadAndAdd") || s.contains("displayUI") || s.contains("addSprite")) {
+                if (target == i) {
+                    return ii;
+                } else {
+                    i++;
+                }
+            }
+        }
+        return -1;
+    }
+
     public String getVarNameFor(int target) {
         String code = EditorUI.INSTANCE.codeTextArea.getText();
         String varName;
@@ -132,6 +217,20 @@ public class MainQuest extends AbstractQuest {
             if (s.contains("loadAndAdd")) {
                 if (target == i) {
                     varName = s.trim().split("\\.")[1].replace("loadAndAdd(", "").replace(" ", "").replace(");", "");
+                    return varName;
+                } else {
+                    i++;
+                }
+            } else if (s.contains("displayUI")) {
+                if (target == i) {
+                    varName = s.trim().split("\\.")[0].replace(" ", "");
+                    return varName;
+                } else {
+                    i++;
+                }
+            } else if (s.contains("addSprite")) {
+                if (target == i) {
+                    varName = s.trim().split("\\.")[1].replace("addSprite(", "").replace(" ", "").replace(");", "");
                     return varName;
                 } else {
                     i++;
@@ -152,11 +251,18 @@ public class MainQuest extends AbstractQuest {
                 try {
                     sprite = Sprite.fromClass(Class.forName(class_));
                 } catch (ClassNotFoundException e1) {
+                    EditorUI.FRAME.requestFocus();
                     JOptionPane.showMessageDialog(EditorUI.FRAME, "The specified Sprite could not be found", "Error adding Sprite", JOptionPane.WARNING_MESSAGE);
+                    return;
+                } catch (RuntimeException e1) {
+                    EditorUI.FRAME.requestFocus();
+                    JOptionPane.showMessageDialog(EditorUI.FRAME, "The specified Sprite throw an error!\nCheck the log for more info!", "Error adding Sprite", JOptionPane.ERROR_MESSAGE);
+                    e.printStackTrace();
                     return;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                EditorUI.FRAME.requestFocus();
                 JOptionPane.showMessageDialog(EditorUI.FRAME, "Exception occurred: " + e.getMessage(), "Error adding Sprite", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -168,8 +274,11 @@ public class MainQuest extends AbstractQuest {
             if (PlayableSprite.getCurrentlyPlayingSprite() != null)
                 PlayableSprite.getCurrentlyPlayingSprite().freeze();
             this.selectedSprite = sprite;
+            adding = true;
             EditorUI.INSTANCE.refreshCode();
-            Camera.followSprite(selectedSprite);
+            adding = false;
+            if (selectedSprite instanceof Sprite)
+                Camera.followSprite((Sprite)selectedSprite);
             EditorUI.INSTANCE.clearComboBox();
             EditorUI.INSTANCE.setComboBox(sprites);
             EditorUI.INSTANCE.setComboIndex(sprites.size());
@@ -187,8 +296,8 @@ public class MainQuest extends AbstractQuest {
     }
 
     private int compileCount;
-    public void compileAndShow(String javaCode) {
-        if (!checkBeforeCompile(javaCode)) return;
+    public boolean compileAndShow(String javaCode) {
+        if (!checkBeforeCompile(javaCode)) return false;
         final DiagnosticCollector<JavaFileObject> errs = new DiagnosticCollector<JavaFileObject>();
         try {
             javaCode = javaCode.replace("public class " + mapName, "public class " + mapName + compileCount);
@@ -217,8 +326,8 @@ public class MainQuest extends AbstractQuest {
                             Iterator<UpdatableDrawable> ud = getWorld().getUpdatables();
                             while (ud.hasNext()) {
                                 UpdatableDrawable updatableDrawable = ud.next();
-                                if (updatableDrawable instanceof Sprite && updatableDrawable != PlayableSprite.getCurrentlyPlayingSprite()) {
-                                    sprites.add((Sprite) updatableDrawable);
+                                if (updatableDrawable != PlayableSprite.getCurrentlyPlayingSprite()) {
+                                    sprites.add(updatableDrawable);
                                 }
                                 selectedSprite = null;
                                 EditorUI.INSTANCE.clearComboBox();
@@ -232,13 +341,21 @@ public class MainQuest extends AbstractQuest {
                     }, true);
                 }
             });
+            return true;
         } catch (CharSequenceCompilerException e) {
+            EditorUI.FRAME.requestFocus();
+            JOptionPane.showMessageDialog(EditorUI.FRAME, "Compilation failed. Check the console for more details.", "Error compiling", JOptionPane.ERROR_MESSAGE);
             log(errs);
         } catch (InstantiationException e) {
+            EditorUI.FRAME.requestFocus();
+            JOptionPane.showMessageDialog(EditorUI.FRAME, "Compilation failed. The World Loader compiled does not have a default constructor!", "Error loading", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
+            EditorUI.FRAME.requestFocus();
+            JOptionPane.showMessageDialog(EditorUI.FRAME, "Compilation failed. The World Loader compiled is private!\nCheck the console for more details.", "Error Loading", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+        return false;
     }
 
     public void selectSprite(int index) {
@@ -247,40 +364,74 @@ public class MainQuest extends AbstractQuest {
             return;
         }
         selectedSprite = sprites.get(index);
-        Camera.setPos(Camera.translateToCameraCenter(selectedSprite.getVector(), 32));
-        Camera.followSprite(selectedSprite);
+        Camera.setPos(Camera.translateToCameraCenter(new Vector2f(selectedSprite.getX(), selectedSprite.getY()), 32));
+        if (selectedSprite instanceof Sprite)
+            Camera.followSprite((Sprite)selectedSprite);
     }
 
+    private boolean tip = false;
     private void update() {
-        if (selectedSprite != null) {
-            boolean w = InputKeys.isButtonPressed(InputKeys.MOVEUP);
-            boolean d = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
-            boolean s = InputKeys.isButtonPressed(InputKeys.MOVEDOWN);
-            boolean a = InputKeys.isButtonPressed(InputKeys.MOVELEFT);
+        boolean w = InputKeys.isButtonPressed(InputKeys.MOVEUP);
+        boolean d = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
+        boolean s = InputKeys.isButtonPressed(InputKeys.MOVEDOWN);
+        boolean a = InputKeys.isButtonPressed(InputKeys.MOVELEFT);
+        if ((w || a || s || d) && selectedSprite != null && selectedSprite instanceof Sprite) {
+            Sprite ss = (Sprite)selectedSprite;
 
             if (w) {
-                selectedSprite.setY(selectedSprite.getY() - (5 * RenderService.TIME_DELTA));
-                selectedSprite.setFacing(Direction.UP);
+                ss.setY(selectedSprite.getY() - (SPEED * RenderService.TIME_DELTA));
+                ss.setFacing(Direction.UP);
                 EditorUI.INSTANCE.refreshCode();
             }
             if (s) {
-                selectedSprite.setY(selectedSprite.getY() + (5 * RenderService.TIME_DELTA));
-                selectedSprite.setFacing(Direction.DOWN);
+                ss.setY(selectedSprite.getY() + (SPEED * RenderService.TIME_DELTA));
+                ss.setFacing(Direction.DOWN);
                 EditorUI.INSTANCE.refreshCode();
             }
             if (a) {
-                selectedSprite.setX(selectedSprite.getX() - (5 * RenderService.TIME_DELTA));
-                selectedSprite.setFacing(Direction.LEFT);
+                ss.setX(selectedSprite.getX() - (SPEED * RenderService.TIME_DELTA));
+                ss.setFacing(Direction.LEFT);
                 EditorUI.INSTANCE.refreshCode();
             }
             if (d) {
-                selectedSprite.setX(selectedSprite.getX() + (5 * RenderService.TIME_DELTA));
-                selectedSprite.setFacing(Direction.RIGHT);
+                ss.setX(selectedSprite.getX() + (SPEED * RenderService.TIME_DELTA));
+                ss.setFacing(Direction.RIGHT);
                 EditorUI.INSTANCE.refreshCode();
             }
-        } else {
+        } else if ((w || a || s || d) && selectedSprite != null && selectedSprite instanceof UIElement) {
+            UIElement ss = (UIElement)selectedSprite;
+            if (w) {
+                ss.setY(selectedSprite.getY() - (SPEED * RenderService.TIME_DELTA));
+                EditorUI.INSTANCE.refreshCode();
+            }
+            if (s) {
+                ss.setY(selectedSprite.getY() + (SPEED * RenderService.TIME_DELTA));
+                EditorUI.INSTANCE.refreshCode();
+            }
+            if (a) {
+                ss.setX(selectedSprite.getX() - (SPEED * RenderService.TIME_DELTA));
+                EditorUI.INSTANCE.refreshCode();
+            }
+            if (d) {
+                ss.setX(selectedSprite.getX() + (SPEED * RenderService.TIME_DELTA));
+                EditorUI.INSTANCE.refreshCode();
+            }
+        } else if (selectedSprite == null) {
             Camera.stopFollowing();
+            if (!tip) {
+                tip = w || a || s || d;
+                if (tip) {
+                    EditorUI.FRAME.requestFocus();
+                    JOptionPane.showMessageDialog(EditorUI.FRAME, "No Sprite selected!\nTo move a Sprite, you must select it in the dropdown menu.", "Tip", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
         }
+    }
+
+    @Override
+    public void endQuest() throws IllegalAccessException {
+        super.endQuest();
+        EditorUI.FRAME.dispose();
     }
 
 

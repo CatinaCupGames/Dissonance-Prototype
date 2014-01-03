@@ -32,8 +32,6 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        ClassLoader c = Main.class.getClassLoader();
-        System.out.println(ManagementFactory.getRuntimeMXBean().getSpecName());
         GameService.loadEssentials(args);
         System.out.println("Starting MainQuest");
         GameService.beginQuest(new MainQuest());

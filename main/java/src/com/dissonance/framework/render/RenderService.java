@@ -407,7 +407,6 @@ public class RenderService extends Service {
         Service s2 = ServiceManager.getService(RenderService.class);
         if (s2 != null) s2.terminate();
         killAll();
-        Main.getSystemTicker().stopTick();
     }
 
     public static enum TransitionType {

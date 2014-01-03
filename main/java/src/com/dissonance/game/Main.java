@@ -1,10 +1,7 @@
 package com.dissonance.game;
 
 import com.dissonance.framework.game.GameService;
-import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
-import com.dissonance.framework.sound.Sound;
-import com.dissonance.framework.system.ticker.Ticker;
 import com.dissonance.game.quests.PreviewQuest;
 import com.dissonance.game.quests.TestQuest;
 import com.dissonance.game.sprites.ImageSprite;
@@ -16,7 +13,6 @@ import java.util.Scanner;
 public class Main {
     public static String DID;
     public static String imagePath;
-    private static final Ticker TICKER = new Ticker();
 
     static {
         String lwjgl_folder = "libs" + File.separator + "lwjgl_native" + File.separator;
@@ -87,9 +83,5 @@ public class Main {
         if (started)
             return;
         started = true;
-    }
-
-    public static Ticker getSystemTicker() {
-        return TICKER;
     }
 }
