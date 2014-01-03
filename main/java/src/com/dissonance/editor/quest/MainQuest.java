@@ -54,6 +54,7 @@ public class MainQuest extends AbstractQuest {
         mapName = JOptionPane.showInputDialog(EditorUI.FRAME, "Please enter the map name to create a World Loader for", "World Loader Creator", JOptionPane.PLAIN_MESSAGE);
         World world = WorldFactory.getWorld(mapName);
         setWorld(world);
+        world.waitForWorldLoaded();
         if (getWorld().getDrawableCount() == 0) {
             EditorUI.FRAME.requestFocus();
             JOptionPane.showMessageDialog(EditorUI.FRAME, "There was no Tiled map found for '" + mapName + "' so the World may appear blank.\nPlease ensure the Tiled map file is in the 'worlds' folder inside the editor's jar file\n or that your IDE can see the Tiled map file located in\n'resources/worlds/" + mapName + ".json'.", "Editor Warning", JOptionPane.WARNING_MESSAGE);
