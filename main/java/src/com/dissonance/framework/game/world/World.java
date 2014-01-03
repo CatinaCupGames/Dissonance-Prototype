@@ -482,4 +482,8 @@ public final class World {
     public WorldData getTiledData() {
         return tiledData;
     }
+
+    public int getDrawableCount() {
+        return drawable.size();
+    }
 }
