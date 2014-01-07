@@ -125,7 +125,7 @@ public class RenderService extends Service {
                             }
                         }
 
-                        // if we've found a match for bpp and frequence against the
+                        // if we've found a match for bpp and frequency against the
                         // original display mode then it's probably best to go for this one
                         // since it's most likely compatible with the monitor
                         if ((current.getBitsPerPixel() == Display.getDesktopDisplayMode().getBitsPerPixel()) &&
@@ -161,7 +161,7 @@ public class RenderService extends Service {
         try {
             setDisplayMode(GameSettings.Display.window_width, GameSettings.Display.window_height, GameSettings.Display.fullscreen);
             Display.create();
-
+		//ROBO //todo get all this changed to proper OGL
             glClearColor(0f, 0f, 0f, 1f);
             glClearDepth(1f);
             glViewport(0, 0, GameSettings.Display.window_width, GameSettings.Display.window_height);
@@ -276,12 +276,13 @@ public class RenderService extends Service {
                 glClearColor(1f, 1f, 1f, 1f);
             else
                 glClearColor(0f, 0f, 0f, 1f);
+		//ROBO //todo get this crap changed into proper ogl
             glMatrixMode(GL_MODELVIEW);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glLoadIdentity();
             glScalef(2f, 2f, 1f);
             glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
-
+	    //ROBO //todo change this crap into proper postprocess and per material shaders
             ShaderFactory.executePreRender();
 
 
@@ -293,6 +294,7 @@ public class RenderService extends Service {
             }
 
             glColor4f(1f, 1f, 1f, curAlpha);
+		//ROBO //todo get all these into proper batches
             Iterator<Drawable> sprites = current_world.getSortedDrawables();
             while (sprites.hasNext()) {
                 Drawable s = sprites.next();
