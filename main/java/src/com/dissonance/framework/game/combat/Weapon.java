@@ -38,6 +38,7 @@ public class Weapon {
     //If this weapon is not a spell, then play the normal sprite
     //attack animation
     private boolean isGun; //Whether this weapon is a gun
+    private String bullet = "Bullet"; //The name of the Bullet sprite.
     //TODO This may not be needed..
     private int animationRow; //The animation row to play on the sprite
     //TODO This may not be needed..
@@ -100,6 +101,8 @@ public class Weapon {
                                 w.swipeRange = Integer.parseInt(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("gun"))
                                 w.isGun = el.getFirstChild().getNodeValue().equalsIgnoreCase("true");
+                            else if (nodeName.equals("bulletName"))
+                                w.bullet = el.getFirstChild().getNodeValue();
                             else if (nodeName.equals("animationRow"))
                                 w.animationRow = Integer.parseInt(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("animationSpeed"))
@@ -132,6 +135,10 @@ public class Weapon {
 
     public WeaponItem createItem(CombatSprite holder) {
         return new WeaponItem(holder, this);
+    }
+
+    public String getBulletName() {
+        return bullet;
     }
 
     public String getName() {
