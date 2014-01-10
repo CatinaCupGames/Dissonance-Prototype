@@ -401,6 +401,10 @@ public abstract class CombatSprite extends PhysicsSprite {
         setCurrentWeapon(index);
     }
 
+    public void addWeapon(WeaponItem item) {
+        setCurrentWeapon(item);
+    }
+
     public void strike(CombatSprite attacker, WeaponItem with) {
         double defense = getDefense() + (getCurrentWeapon() != null ? getCurrentWeapon().getWeaponInfo().getDefense() : 0);
         double attack = attacker.getAttack() + with.getWeaponInfo().getAttack();

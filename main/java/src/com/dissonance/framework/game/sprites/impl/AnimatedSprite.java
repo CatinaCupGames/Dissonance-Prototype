@@ -108,6 +108,8 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         float bx = texture.getWidth() / 2;
         float by = texture.getHeight() / 2;
         final float x = getX(), y = getY();
+        float z = 0f;
+        //float z = (y - (by / 2));
 
         //glColor4f(0f, 0f, 0f, 1f); //DEBUG LINE FOR TEXTURES
         Vector2f bl = texture.getTextureCord(SpriteTexture.BOTTOM_LEFT);
@@ -116,13 +118,13 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         Vector2f ul = texture.getTextureCord(SpriteTexture.TOP_LEFT);
         glBegin(GL_QUADS);
         glTexCoord2f(bl.getX(), bl.getY()); //bottom left
-        glVertex3f(x - bx, y - by, 0f);
+        glVertex3f(x - bx, y - by, z);
         glTexCoord2f(br.getX(), br.getY()); //bottom right
-        glVertex3f(x + bx, y - by, 0f);
+        glVertex3f(x + bx, y - by, z);
         glTexCoord2f(ur.getX(), ur.getY()); //top right
-        glVertex3f(x + bx, y + by, 0f);
+        glVertex3f(x + bx, y + by, z);
         glTexCoord2f(ul.getX(), ul.getY()); //top left
-        glVertex3f(x - bx, y + by, 0f);
+        glVertex3f(x - bx, y + by, z);
         glEnd();
         texture.unbind();
         //glColor3f(1f, 1f, 1f);

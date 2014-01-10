@@ -191,6 +191,7 @@ public abstract class UIElement implements UpdatableDrawable {
             redrawTexture();
         else if (!valid)
             return;
+        glDisable(GL_DEPTH_TEST);
         UI.bind();
         float bx = width / 2;
         float by = height / 2;
@@ -206,6 +207,7 @@ public abstract class UIElement implements UpdatableDrawable {
         glVertex3f(x - bx, y + by, 0f);
         glEnd();
         UI.unbind();
+        glEnable(GL_DEPTH_TEST);
     }
 
     public abstract void draw(Graphics2D graphics2D);

@@ -169,16 +169,18 @@ public abstract class Sprite implements Drawable, Serializable {
         float bx = width / 2;
         float by = height / 2;
         final float x = getX(), y = getY();
+        float z = 0f;
+        //float z = -(y - (by / 2));
 
         glBegin(GL_QUADS);
         glTexCoord2f(0f, 0f); //bottom left
-        glVertex3f(x - bx, y - by, 0f);
+        glVertex3f(x - bx, y - by, z);
         glTexCoord2f(1f, 0f); //bottom right
-        glVertex3f(x + bx, y - by, 0f);
+        glVertex3f(x + bx, y - by, z);
         glTexCoord2f(1f, 1f); //top right
-        glVertex3f(x + bx, y + by, 0f);
+        glVertex3f(x + bx, y + by, z);
         glTexCoord2f(0f, 1f); //top left
-        glVertex3f(x - bx, y + by, 0f);
+        glVertex3f(x - bx, y + by, z);
         glEnd();
         getTexture().unbind();
     }

@@ -79,6 +79,7 @@ public class TileObject extends Sprite {
     public void render() {
         if (parentTileSet.getTexture() == null)
             return;
+        //if (isAlwaysAbove()) glDisable(GL_DEPTH_TEST);
         float alpha = parentLayer.getOpacity() - (1 - RenderService.getCurrentAlphaValue());
         if (alpha < 0)
             alpha = 0;
@@ -88,20 +89,23 @@ public class TileObject extends Sprite {
         float bx = parentTileSet.getTileWidth() / 2;
         float by = parentTileSet.getTileHeight() / 2;
         float x = getX(), y = getY();
+        float z = 0f;
+        //float z = isGroundLayer() ? 99999 : y - by;
 
         glBegin(GL_QUADS);
         glTexCoord2f(tex_cords.bottom_left.x, tex_cords.bottom_left.y); //bottom left
-        glVertex3f(x - bx, y - by, 0f);
+        glVertex3f(x - bx, y - by, z);
         glTexCoord2f(tex_cords.bottom_right.x, tex_cords.bottom_right.y); //bottom right
-        glVertex3f(x + bx, y - by, 0f);
+        glVertex3f(x + bx, y - by, z);
         glTexCoord2f(tex_cords.top_right.x, tex_cords.top_right.y); //top right
-        glVertex3f(x + bx, y + by, 0f);
+        glVertex3f(x + bx, y + by, z);
         glTexCoord2f(tex_cords.top_left.x, tex_cords.top_left.y); //top left
-        glVertex3f(x - bx, y + by, 0f);
+        glVertex3f(x - bx, y + by, z);
         glEnd();
         parentTileSet.getTexture().unbind();
 
         glColor4f(1.0f, 1.0f, 1.0f, RenderService.getCurrentAlphaValue());
+        //if (isAlwaysAbove()) glEnable(GL_DEPTH_TEST);
     }
 
     @Override

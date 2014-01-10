@@ -167,10 +167,12 @@ public class RenderService extends Service {
             glViewport(0, 0, GameSettings.Display.window_width, GameSettings.Display.window_height);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
+            //glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0f, -100000f);
             glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0f, -1f);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
+            //glEnable(GL_DEPTH_TEST);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glLoadIdentity();
             curAlpha = 1f;

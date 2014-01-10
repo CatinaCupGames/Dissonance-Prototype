@@ -46,9 +46,9 @@ public class TestQuest extends AbstractQuest {
         World w = WorldFactory.getWorld("test_tileset");
         setWorld(w);
         w.waitForWorldLoaded();
-        Thread.sleep(5000);
-        TestScene scene = new TestScene();
-        scene.beginScene();
+        //Thread.sleep(5000);
+        //TestScene scene = new TestScene();
+        //scene.beginScene();
         //RenderService.INSTANCE.provideData(true, RenderService.ENABLE_CROSS_FADE);
         //RenderService.INSTANCE.provideData(3000f, RenderService.CROSS_FADE_DURATION);
         //World world = WorldFactory.getWorld("test_tileset2");
