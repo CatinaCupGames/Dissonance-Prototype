@@ -10,6 +10,7 @@ import java.nio.IntBuffer;
 public class Framebuffer {
 
     public static int generateFramebuffer() {
+	//ROBO //todo change so it only generates one... shouldnt need all this bytebuffer crap
         IntBuffer buffer = ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder()).asIntBuffer();
         EXTFramebufferObject.glGenFramebuffersEXT(buffer);
         return buffer.get();
@@ -17,6 +18,7 @@ public class Framebuffer {
 
     public static void bindFramebuffer(int framebuffer, int textureID) {
         EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, framebuffer);
+	//ROBO //todo make this not rebind the texture to the FB every god damn time its called.
         EXTFramebufferObject.glFramebufferTexture2DEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, EXTFramebufferObject.GL_COLOR_ATTACHMENT0_EXT, GL11.GL_TEXTURE_2D, textureID, 0);
     }
 

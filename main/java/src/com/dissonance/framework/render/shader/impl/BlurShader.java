@@ -47,7 +47,7 @@ public class BlurShader
 
             int resolution_widthVar = GL20.glGetUniformLocation(program, "resolution_width");
             int radiusVar = GL20.glGetUniformLocation(program, "radius");
-
+//ROBO //todo no need to set uniforms every frame
             GL20.glUniform1f(resolution_widthVar, GameSettings.Display.window_width);
             GL20.glUniform1f(radiusVar, 1.2f);
         }
@@ -88,7 +88,7 @@ public class BlurShader
 
             int resolution_heightVar = GL20.glGetUniformLocation(program, "resolution_height");
             int radiusVar = GL20.glGetUniformLocation(program, "radius");
-
+//ROBO //todo no need to set uniforms every frame
             GL20.glUniform1f(resolution_heightVar, GameSettings.Display.window_height);
             GL20.glUniform1f(radiusVar, 1.2f);
         }

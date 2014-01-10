@@ -102,6 +102,7 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
 
     @Override
     public void render() {
+	    //ROBO //todo fix all this shit
         if (getTexture() == null)
             return;
         texture.bind();
