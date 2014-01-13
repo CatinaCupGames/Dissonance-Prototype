@@ -2,6 +2,7 @@ package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.impl.game.NPCSprite;
+import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 
 public final class TestNPC extends NPCSprite {
 
@@ -23,7 +24,7 @@ public final class TestNPC extends NPCSprite {
 
     @Override
     public String getSpriteName() {
-        return "player";
+        return "BulletExplosion";
     }
 
     @Override
