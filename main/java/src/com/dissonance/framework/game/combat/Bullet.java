@@ -48,16 +48,6 @@ public class Bullet extends PhysicsSprite {
         startX = getX();
         startY = getY();
 
-        if (direction == Direction.UP) {
-            setAnimation("shoot_top");
-        } else if (direction == Direction.DOWN) {
-            setAnimation("shoot_bottom");
-        } else if (direction == Direction.RIGHT) {
-            setAnimation("shoot_right");
-        } else if (direction == Direction.LEFT) {
-            setAnimation("shoot_left");
-        }
-
         this.direction = direction;
 
         angle = 10 * random.nextFloat() / weapon.getWeaponInfo().getAccuracy() / owner.getMarksmanship();
@@ -68,6 +58,21 @@ public class Bullet extends PhysicsSprite {
         }
 
         Sound.playSound("shotproto");
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+
+        if (direction == Direction.UP) {
+            setAnimation("shoot_top");
+        } else if (direction == Direction.DOWN) {
+            setAnimation("shoot_bottom");
+        } else if (direction == Direction.RIGHT) {
+            setAnimation("shoot_right");
+        } else if (direction == Direction.LEFT) {
+            setAnimation("shoot_left");
+        }
     }
 
     @Override

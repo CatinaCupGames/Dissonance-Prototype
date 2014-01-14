@@ -65,6 +65,9 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     @Override
     public void onLoad() {
         ANIMATION_FACTORY_ID = AnimationFactory.queueAnimator(this);
+        if (getTexture() != null) {
+            setAnimation(0);
+        }
     }
 
     @Override
