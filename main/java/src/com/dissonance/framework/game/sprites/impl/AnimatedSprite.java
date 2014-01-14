@@ -56,6 +56,8 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         if (texture instanceof SpriteTexture) {
             super.setTexture(texture);
             this.texture = (SpriteTexture)texture;
+            width = texture.getWidth();
+            height = texture.getHeight();
         } else
             throw new InvalidParameterException("An AnimatedSprite can only have a SpriteTexture!");
     }
@@ -63,9 +65,8 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     @Override
     public void onLoad() {
         ANIMATION_FACTORY_ID = AnimationFactory.queueAnimator(this);
-        if (getTexture() != null && ((SpriteTexture)getTexture()).getCurrentAnimation() != null) {
-            animation = ((SpriteTexture)getTexture()).getCurrentAnimation();
-            speed = (int)animation.getDefaultSpeed();
+        if (getTexture() != null) {
+            setAnimation(0);
         }
     }
 
@@ -76,24 +77,29 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
 
     public abstract String getSpriteName();
 
-    public void setAnimation(String name) {
+    public boolean setAnimation(String name) {
         if (texture != null) {
             SpriteAnimationInfo ani;
             if ((ani = texture.setCurrentAnimation(name)) != null) {
                 this.animation = ani;
                 speed = (int)ani.getDefaultSpeed();
+                return true;
             }
         }
+        return false;
     }
 
-    public void setAnimation(int row) {
+    public boolean setAnimation(int row) {
         if (texture != null) {
             SpriteAnimationInfo ani;
             if ((ani = texture.setCurrentAnimation(row)) != null) {
                 this.animation = ani;
                 speed = (int)ani.getDefaultSpeed();
+                AnimationFactory.resetAnimator(ANIMATION_FACTORY_ID);
+                return true;
             }
         }
+        return false;
     }
 
     public SpriteAnimationInfo getCurrentAnimation() {
@@ -106,8 +112,8 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         if (getTexture() == null)
             return;
         texture.bind();
-        float bx = texture.getWidth() / 2;
-        float by = texture.getHeight() / 2;
+        float bx = width / 2;
+        float by = height / 2;
         final float x = getX(), y = getY();
         float z = 0f;
         //float z = (y - (by / 2));

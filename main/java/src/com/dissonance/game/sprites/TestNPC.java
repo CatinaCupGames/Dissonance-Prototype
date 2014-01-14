@@ -2,6 +2,7 @@ package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.impl.game.NPCSprite;
+import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 
 public final class TestNPC extends NPCSprite {
 
@@ -30,4 +31,9 @@ public final class TestNPC extends NPCSprite {
     public void onSpeakingFinished() {
     }
 
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        setLayer(2);
+    }
 }

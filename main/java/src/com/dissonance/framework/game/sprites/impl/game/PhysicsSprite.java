@@ -190,10 +190,119 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
     }
 
     @Override
+    public boolean setAnimation(int index) {
+        boolean value = super.setAnimation(index);
+        if (value) {
+            InputStream fIn = PhysicsSprite.class.getClassLoader().getResourceAsStream("sprites/" + getSpriteName() + "/hitbox-" + getCurrentAnimation().getName() + ".txt");
+            if (fIn != null) {
+                float width = 32, height = 32;
+                if (getTexture() != null) {
+                    width = (int) getTexture().getWidth();
+                    height = (int) getTexture().getHeight();
+                }
+                float sX = 0, sY = 0, bX = width , bY = height;
+                BufferedReader br = new BufferedReader(new InputStreamReader(fIn));
+
+                String l;
+                try {
+                    while ((l = br.readLine()) != null) {
+                        if (l.split("\\:")[0].equals("minX")) {
+                            try {
+                                sX = Integer.parseInt(l.split("\\:")[1]);
+                            } catch (Throwable t) {
+                                t.printStackTrace();
+                            }
+                        } else if (l.split("\\:")[0].equals("minY")) {
+                            try {
+                                sY = Integer.parseInt(l.split("\\:")[1]);
+                            } catch (Throwable t) {
+                                t.printStackTrace();
+                            }
+                        } else if (l.split("\\:")[0].equals("maxX")) {
+                            try {
+                                bX = Integer.parseInt(l.split("\\:")[1]);
+                            } catch (Throwable t) {
+                                t.printStackTrace();
+                            }
+                        } else if (l.split("\\:")[0].equals("maxY")) {
+                            try {
+                                bY = Integer.parseInt(l.split("\\:")[1]);
+                            } catch (Throwable t) {
+                                t.printStackTrace();
+                            }
+                        }
+                    }
+                    hb = new HitBox(sX, sY, bX, bY);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return value;
+    }
+
+    @Override
+    public boolean setAnimation(String name) {
+        boolean value = super.setAnimation(name);
+        if (value) {
+            InputStream fIn = PhysicsSprite.class.getClassLoader().getResourceAsStream("sprites/" + getSpriteName() + "/hitbox-" + getCurrentAnimation().getName() + ".txt");
+            if (fIn != null) {
+                float width = 32, height = 32;
+                if (getTexture() != null) {
+                    width = (int) getTexture().getWidth();
+                    height = (int) getTexture().getHeight();
+                }
+                float sX = 0, sY = 0, bX = width , bY = height;
+                BufferedReader br = new BufferedReader(new InputStreamReader(fIn));
+
+                String l;
+                try {
+                    while ((l = br.readLine()) != null) {
+                        if (l.split("\\:")[0].equals("minX")) {
+                            try {
+                                sX = Integer.parseInt(l.split("\\:")[1]);
+                            } catch (Throwable t) {
+                                t.printStackTrace();
+                            }
+                        } else if (l.split("\\:")[0].equals("minY")) {
+                            try {
+                                sY = Integer.parseInt(l.split("\\:")[1]);
+                            } catch (Throwable t) {
+                                t.printStackTrace();
+                            }
+                        } else if (l.split("\\:")[0].equals("maxX")) {
+                            try {
+                                bX = Integer.parseInt(l.split("\\:")[1]);
+                            } catch (Throwable t) {
+                                t.printStackTrace();
+                            }
+                        } else if (l.split("\\:")[0].equals("maxY")) {
+                            try {
+                                bY = Integer.parseInt(l.split("\\:")[1]);
+                            } catch (Throwable t) {
+                                t.printStackTrace();
+                            }
+                        }
+                    }
+                    hb = new HitBox(sX, sY, bX, bY);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return value;
+    }
+
+    @Override
     public void onLoad() {
         super.onLoad();
+        float width = 32, height = 32;
+        if (getTexture() != null) {
+            width = getTexture().getWidth();
+            height = getTexture().getHeight();
+        }
 
-        float sX = 0, sY = 0, bX = 32, bY = 32;
+        float sX = 0, sY = 0, bX = width, bY = height;
         InputStream fIn = PhysicsSprite.class.getClassLoader().getResourceAsStream("sprites/" + getSpriteName() + "/hitbox.txt");
         if (fIn != null) {
             BufferedReader br = new BufferedReader(new InputStreamReader(fIn));

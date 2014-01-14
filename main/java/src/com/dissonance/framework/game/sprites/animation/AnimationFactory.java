@@ -41,6 +41,13 @@ public class AnimationFactory {
         return index != -1 && removeAnimator(index);
     }
 
+    public static void resetAnimator(int index) {
+        synchronized (animate) {
+            AnimatorData ad = animate.get(index);
+            ad.last_tick = System.currentTimeMillis();
+        }
+    }
+
     public static void executeTick() throws IllegalAccessException {
         if (Thread.currentThread().getId() != RenderService.RENDER_THREAD_ID)
             throw new IllegalAccessException("executeTick() can only be called by the RenderService thread!");
