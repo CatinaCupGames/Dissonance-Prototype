@@ -67,7 +67,7 @@ public class TestPlayer extends PlayableSprite {
     }
 
     @Override
-    public void Marksmanship(int markmanship) {
+    public void setMarksmanship(int marksmanship) {
 
     }
 
@@ -129,7 +129,7 @@ public class TestPlayer extends PlayableSprite {
 
     @Override
     public int getMarksmanship() {
-        return 1;
+        return 5;
     }
 
     @Override

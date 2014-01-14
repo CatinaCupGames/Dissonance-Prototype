@@ -451,7 +451,7 @@ public abstract class CombatSprite extends PhysicsSprite {
 
     public abstract void setFocus(int focus);
 
-    public abstract void Marksmanship(int markmanship);
+    public abstract void setMarksmanship(int marksmanship);
 
     public abstract void setMagicResistance(int magicResistance);
 

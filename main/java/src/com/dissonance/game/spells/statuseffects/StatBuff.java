@@ -39,7 +39,7 @@ public class StatBuff extends StatusEffect {
         owner.setStamina(owner.getStamina() + st);
         owner.setWillpower(owner.getWillPower() + w);
         owner.setFocus(owner.getFocus() + f);
-        owner.Marksmanship(owner.getMarksmanship() + m);
+        owner.setMarksmanship(owner.getMarksmanship() + m);
         owner.setMagicResistance(owner.getMagicResistance() + mr);
 
     }
@@ -56,7 +56,7 @@ public class StatBuff extends StatusEffect {
         owner.setStamina(ost);
         owner.setWillpower(ow);
         owner.setFocus(of);
-        owner.Marksmanship(om);
+        owner.setMarksmanship(om);
         owner.setMagicResistance(omr);
     }
 }

@@ -66,6 +66,10 @@ public class AnimationFactory {
         public long last_tick;
         public int current_frame_number;
 
+        public AnimatorData() {
+            last_tick = System.currentTimeMillis();
+        }
+
         @Override
         public int hashCode() {
             return animator.hashCode();
@@ -74,10 +78,10 @@ public class AnimationFactory {
         @Override
         public boolean equals(Object obj) {
             if (obj instanceof AnimatorData) {
-                AnimatorData ad = (AnimatorData)obj;
+                AnimatorData ad = (AnimatorData) obj;
                 return ad.animator.equals(animator);
             } else if (obj instanceof Animator) {
-                Animator a = (Animator)obj;
+                Animator a = (Animator) obj;
                 return a.equals(animator);
             } else {
                 return false;

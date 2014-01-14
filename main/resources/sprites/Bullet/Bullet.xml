@@ -1,0 +1,39 @@
+<animations
+        width="16"
+        height="16">
+
+    <animation
+            name="shoot_top"
+            loop="false"
+            frames="1"
+            row="0"
+            default_speed="100ms"/>
+
+    <animation
+            name="shoot_right"
+            loop="false"
+            frames="1"
+            row="1"
+            default_speed="100ms"/>
+
+    <animation
+            name="shoot_bottom"
+            loop="false"
+            frames="1"
+            row="2"
+            default_speed="100ms"/>
+
+    <animation
+            name="shoot_left"
+            loop="false"
+            frames="1"
+            row="3"
+            default_speed="100ms"/>
+
+    <animation
+            name="explode"
+            loop="false"
+            frames="3"
+            row="4"
+            default_speed="100ms"/>
+</animations>

@@ -1,10 +1,8 @@
 package com.dissonance.framework.game.combat;
 
 import com.dissonance.framework.game.item.impl.WeaponItem;
-import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
-import com.dissonance.framework.system.utils.Direction;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -14,8 +12,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 public class Weapon {
@@ -34,10 +30,18 @@ public class Weapon {
     private int range;
     private int swipeRange;
 
+    //==Gun specific stuff==
+    private long lastShot;
+    private long firingSpeed;
+    private long bulletSpeed;
+    private double bulletDamage;
+    private float accuracy;
+
     //==Spell Animation Stuff==
     //If this weapon is not a spell, then play the normal sprite
     //attack animation
     private boolean isGun; //Whether this weapon is a gun
+
     //TODO This may not be needed..
     private int animationRow; //The animation row to play on the sprite
     //TODO This may not be needed..
@@ -59,7 +63,7 @@ public class Weapon {
             if (in == null)
                 return null;
             else {
-                DocumentBuilder db = null;
+                DocumentBuilder db;
                 try {
                     db = SpriteTexture.DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
                     Document dom = db.parse(in);
@@ -92,7 +96,7 @@ public class Weapon {
                                 w.focus = Integer.parseInt(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("marksmanship"))
                                 w.marksmanship = Integer.parseInt(el.getFirstChild().getNodeValue());
-                            else if (nodeName.equals("magicresistance"))
+                            else if (nodeName.equals("magicResistance"))
                                 w.magicResistance = Integer.parseInt(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("range"))
                                 w.range = Integer.parseInt(el.getFirstChild().getNodeValue());
@@ -106,6 +110,14 @@ public class Weapon {
                                 w.animationSpeed = Integer.parseInt(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("name"))
                                 w.name = el.getFirstChild().getNodeValue();
+                            else if (nodeName.equals("firingSpeed"))
+                                w.firingSpeed = Long.parseLong(el.getFirstChild().getNodeValue());
+                            else if (nodeName.equals("bulletSpeed"))
+                                w.bulletSpeed = Long.parseLong(el.getFirstChild().getNodeValue());
+                            else if (nodeName.equals("bulletDamage"))
+                                w.bulletDamage = Long.parseLong(el.getFirstChild().getNodeValue());
+                            else if (nodeName.equals("accuracy"))
+                                w.accuracy = Float.parseFloat(el.getFirstChild().getNodeValue());
                         }
                     }
 
@@ -113,6 +125,7 @@ public class Weapon {
 
                     if (w.name == null)
                         w.name = weapon;
+
                     weapons.put(weapon, w);
 
                     return w;
@@ -192,5 +205,29 @@ public class Weapon {
 
     public int getSwipeRange() {
         return swipeRange;
+    }
+
+    public long getLastShot() {
+        return lastShot;
+    }
+
+    public void setLastShot(long lastShot) {
+        this.lastShot = lastShot;
+    }
+
+    public long getFiringSpeed() {
+        return firingSpeed;
+    }
+
+    public long getBulletSpeed() {
+        return bulletSpeed;
+    }
+
+    public double getBulletDamage() {
+        return bulletDamage;
+    }
+
+    public float getAccuracy() {
+        return accuracy;
     }
 }

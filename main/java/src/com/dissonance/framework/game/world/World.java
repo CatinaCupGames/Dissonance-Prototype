@@ -13,7 +13,6 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
-import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Timer;
@@ -121,7 +120,7 @@ public final class World {
                                 try {
                                     Class<?> class_ = Class.forName(tiledData.getProperty("loader"));
                                     if (WorldLoader.class.isAssignableFrom(class_)) {
-                                        loader = (WorldLoader)class_.newInstance();
+                                        loader = (WorldLoader) class_.newInstance();
                                     }
                                 } catch (Exception e) {
                                     loader = attemptSearchForWorldLoader();
@@ -180,7 +179,8 @@ public final class World {
             if (WorldLoader.class.isAssignableFrom(class_)) {
                 return (WorldLoader) class_.newInstance();
             }
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         return null;
     }
 
@@ -223,6 +223,7 @@ public final class World {
 
     /**
      * Add this renderer to the list of Drawable objects to render on the screen
+     *
      * @param draw
      */
     public void addDrawable(final Drawable draw) {
@@ -328,7 +329,7 @@ public final class World {
             @Override
             public void run() {
                 try {
-                    SpriteTexture t = SpriteTexture.retriveSpriteTexture(sprite.getSpriteName());
+                    SpriteTexture t = SpriteTexture.retrieveSpriteTexture(sprite.getSpriteName());
                     sprite.setTexture(t);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -371,7 +372,7 @@ public final class World {
      *
      * @param name The search term
      * @return An {@link AnimatedSprite} object with a similar name. <br></br>
-     *         This method will return null if no {@link AnimatedSprite} was found <b>or</b> if 2 or more sprites were found with the given search term.
+     * This method will return null if no {@link AnimatedSprite} was found <b>or</b> if 2 or more sprites were found with the given search term.
      */
     public AnimatedSprite findAnimatedSprite(String name) {
         AnimatedSprite toreturn = null;
@@ -393,12 +394,10 @@ public final class World {
      * inside a polygon in this world, then that polygon is added to the list of polygon's to return.<br></br>
      * <b>NOTE: This method only work for the square tool and the triangle tool in Tiled. However, the triangle tool can
      * make complex polygons.</b>
-     * @param x
-     *         The x-coordinate to check against
-     * @param y
-     *         The y-coordinate to check against
-     * @return
-     *        A {@link List} of {@link TiledObject} that intersect with the point specified.
+     *
+     * @param x The x-coordinate to check against
+     * @param y The y-coordinate to check against
+     * @return A {@link List} of {@link TiledObject} that intersect with the point specified.
      */
     public List<TiledObject> getPolygonsAt(float x, float y) {
         ArrayList<TiledObject> objects = new ArrayList<TiledObject>();

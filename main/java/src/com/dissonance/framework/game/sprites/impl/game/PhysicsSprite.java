@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.sprites.impl.game;
 
+import com.dissonance.framework.game.combat.Bullet;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.tiled.TiledObject;
@@ -68,6 +69,12 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
 
     protected void onCollideX(float oldX, float newX, Collidable hit) {
         Collidable c = hb.getLastCollide();
+
+        if (c instanceof Bullet) {
+            //In Soviet Russia, bullets collide with YOU!
+            return;
+        }
+
         if (c instanceof PhysicsSprite) {
             super.setX(oldX);
             float add = getX() - c.getX();
@@ -104,7 +111,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                     return;
                 }
 
-                ((PlayableSprite)this).freeze();
+                ((PlayableSprite) this).freeze();
                 new Thread(new Runnable() {
 
                     @Override
@@ -118,7 +125,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                         PhysicsSprite.super.setX(spawn.getX());
                         PhysicsSprite.super.setY(spawn.getY());
                         Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
-                        ((PlayableSprite)PhysicsSprite.this).unfreeze();
+                        ((PlayableSprite) PhysicsSprite.this).unfreeze();
                     }
                 }).start();
 
@@ -128,6 +135,12 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
 
     protected void onCollideY(float oldY, float newY, Collidable hit) {
         Collidable c = hb.getLastCollide();
+
+        if (c instanceof Bullet) {
+            //In Soviet Russia, bullets collide with YOU!
+            return;
+        }
+
         if (c instanceof PhysicsSprite) {
             super.setY(oldY);
             float add = getY() - hb.getLastCollide().getY();

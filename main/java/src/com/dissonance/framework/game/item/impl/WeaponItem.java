@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.item.impl;
 
+import com.dissonance.framework.game.combat.Bullet;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.item.Item;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
@@ -20,6 +21,7 @@ public class WeaponItem extends Item {
 
     public WeaponItem(CombatSprite owner, Weapon w) {
         super(owner);
+
         this.weapon = w;
     }
 
@@ -40,7 +42,18 @@ public class WeaponItem extends Item {
     @Override
     public void use(Object... parameters) {
         if (weapon.isGun()) {
-            //TODO Code for guns
+            //TODO animate shooter
+            long time = System.currentTimeMillis();
+
+            if (weapon.getLastShot() + weapon.getFiringSpeed() >= time) {
+                return;
+            }
+
+            weapon.setLastShot(time);
+
+            Direction direction = getOwner().getDirection();
+
+            new Bullet(this).fire(direction);
         } else {
             final Direction facingDirection = getOwner().getDirection();
             if (parameters.length > 0) {
@@ -49,7 +62,7 @@ public class WeaponItem extends Item {
 
                     /**
                      * =========================================================
-                     * This chunk of code is the sword swipping detection code
+                     * This chunk of code is the sword swiping detection code
                      * =========================================================
                      */
                     getOwner().setAnimation("sword_swipe");

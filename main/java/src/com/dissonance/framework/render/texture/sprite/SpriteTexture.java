@@ -25,7 +25,7 @@ public class SpriteTexture extends Texture {
     private int sprite_height;
 
 
-    public static SpriteTexture retriveSpriteTexture(String sprite_name) throws IOException {
+    public static SpriteTexture retrieveSpriteTexture(String sprite_name) throws IOException {
         SpriteTexture texture = new SpriteTexture(Texture.retriveTexture("sprites/" + sprite_name + "/" + sprite_name + "_sheet.png"));
         InputStream in = texture.getClass().getClassLoader().getResourceAsStream("sprites/" + sprite_name + "/" + sprite_name + ".xml");
         if (in != null) {
@@ -214,7 +214,7 @@ public class SpriteTexture extends Texture {
         int y;
         y = sprite_height * row;
         x = sprite_width * step;
-        return new float[] { x, y };
+        return new float[]{x, y};
     }
 
     public Vector2f getTextureCord(int type) {
@@ -230,7 +230,7 @@ public class SpriteTexture extends Texture {
             x += sprite_width;
         } else if (type == 1) { //Top right
             x += sprite_width;
-        }  else if (type != 0) { //We start with the Top Left, ignore_movement pos 3
+        } else if (type != 0) { //We start with the Top Left, ignore_movement pos 3
             throw new InvalidParameterException("The parameter \"type\"'s value can only be 0, 1, 2, or 3");
         }
 

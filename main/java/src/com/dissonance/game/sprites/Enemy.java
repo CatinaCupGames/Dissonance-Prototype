@@ -123,7 +123,7 @@ public class Enemy extends CombatSprite {
     }
 
     @Override
-    public void Marksmanship(int markmanship) {
+    public void setMarksmanship(int marksmanship) {
 
     }
 

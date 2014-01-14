@@ -1,13 +1,14 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.scene.dialog.Dialog;
-import com.dissonance.framework.game.scene.dialog.DialogFactory;
-import com.dissonance.framework.game.scene.dialog.DialogUI;
+import com.dissonance.framework.game.combat.Weapon;
+import com.dissonance.framework.game.item.impl.WeaponItem;
+import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
+import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.sound.Sound;
-import com.dissonance.game.scene.TestScene;
 import com.dissonance.game.sprites.Enemy;
 
 import java.util.Random;
@@ -46,6 +47,29 @@ public class TestQuest extends AbstractQuest {
         World w = WorldFactory.getWorld("test_tileset");
         setWorld(w);
         w.waitForWorldLoaded();
+
+        PlayableSprite player = PlayableSprite.getCurrentlyPlayingSprite();
+        player.setMarksmanship(2);
+
+        System.out.println(player.getMarksmanship());
+        player.setWorld(w);
+        player.setX(0);
+        player.setY(100);
+        WeaponItem item = new WeaponItem(player, Weapon.getWeapon("Revolver"));
+        player.setCurrentWeapon(item);
+
+        Enemy enemy = new Enemy("enemy1", Enemy.StatType.MAGIC, CombatSprite.CombatType.HUMAN, new Enemy.AIInterface() {
+            @Override
+            public void onUpdate(Enemy enemy) {
+
+            }
+        });
+
+        TextureLoader.setFastRedraw(false);
+        player.setWorld(w);
+        enemy.setX(350);
+        enemy.setY(100);
+        w.loadAndAdd(enemy);
         //Thread.sleep(5000);
         //TestScene scene = new TestScene();
         //scene.beginScene();
