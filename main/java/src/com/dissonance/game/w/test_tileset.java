@@ -22,8 +22,8 @@ public class test_tileset extends GameWorldLoader {
         TextureLoader.setFastRedraw(false);
         TestNPC var1 = new TestNPC();
         w.loadAndAdd(var1);
-        var1.setX(0f);
-        var1.setY(20f);
+        var1.setX(400f);
+        var1.setY(600f);
         TextureLoader.setFastRedraw(true);
     }
 }

@@ -9,6 +9,7 @@ import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.utils.Direction;
+import com.sun.istack.internal.NotNull;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.io.Serializable;
@@ -23,7 +24,7 @@ public abstract class Sprite implements Drawable, Serializable {
     protected transient World world;
     protected Direction direction;
     protected float x, y, width, height;
-
+    protected int layer = 1;
 
     public static Sprite fromClass(Class<?> class_) {
         if (!Sprite.class.isAssignableFrom(class_))
@@ -60,6 +61,14 @@ public abstract class Sprite implements Drawable, Serializable {
         this.texture = texture;
         width = texture.getTextureWidth();
         height = texture.getTextureHeight();
+    }
+
+    public void setLayer(int layer) {
+        this.layer = layer;
+    }
+
+    public int getLayer() {
+       return layer;
     }
 
     public World getWorld() {
@@ -190,16 +199,14 @@ public abstract class Sprite implements Drawable, Serializable {
         if (o instanceof UIElement)
             return Drawable.BEFORE;
         else if (o instanceof Sprite) {
-            Sprite s = (Sprite) o;
-            if (s instanceof TileObject && ((TileObject)o).isGroundLayer())
-                return Drawable.AFTER;
-            else if (s instanceof TileObject && ((TileObject)o).isAlwaysAbove())
-                return Drawable.BEFORE;
-            float by = (getTexture() != null ? getTexture().getTextureHeight() / (this instanceof TileObject ? 2 : 4) : 0);
-            float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / (s instanceof TileObject ? 2 : 4) : 0);
-            if (getY() - by < s.getY() - sy) return Drawable.BEFORE;
-            else if (getY() - by > s.getY() - sy) return Drawable.AFTER;
-            else return Drawable.EQUAL;
+            Sprite s = (Sprite)o;
+            if (s.getLayer() > getLayer()) return Drawable.BEFORE;
+            else if (s.getLayer() < getLayer()) return Drawable.AFTER;
+            else {
+                float by = (getTexture() != null ? getTexture().getTextureHeight() / (this instanceof TileObject ? 2 : 4) : 0);
+                float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / (s instanceof TileObject ? 2 : 4) : 0);
+                return (int)((getY() - by) - (s.getY() - sy));
+            }
         }
         return Drawable.AFTER;
     }

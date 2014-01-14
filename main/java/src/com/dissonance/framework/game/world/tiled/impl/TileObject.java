@@ -55,9 +55,16 @@ public class TileObject extends Sprite {
 
             cache.put(ID, tex_cords);
         }
+
+        if (isGroundLayer())
+            setLayer(0);
+        else if (isAlwaysAbove())
+            setLayer(getWorld().getTiledData().getLayers().length);
+        else
+            setLayer(getTiledLayer().getLayerNumber());
     }
 
-    public Layer getLayer() {
+    public Layer getTiledLayer() {
         return parentLayer;
     }
 
@@ -108,14 +115,14 @@ public class TileObject extends Sprite {
         //if (isAlwaysAbove()) glEnable(GL_DEPTH_TEST);
     }
 
-    @Override
+    /*@Override
     public int compareTo(Drawable d) {
         if (isGroundLayer()) {
             if (d instanceof TileObject && ((TileObject)d).isGroundLayer()) {
                 TileObject t = (TileObject)d;
 
-                if (t.getLayer().getLayerNumber() > getLayer().getLayerNumber()) return UpdatableDrawable.BEFORE;
-                else if (t.getLayer().getLayerNumber() < getLayer().getLayerNumber()) return UpdatableDrawable.AFTER;
+                if (t.getTiledLayer().getLayerNumber() > getTiledLayer().getLayerNumber()) return UpdatableDrawable.BEFORE;
+                else if (t.getTiledLayer().getLayerNumber() < getTiledLayer().getLayerNumber()) return UpdatableDrawable.AFTER;
                 else return UpdatableDrawable.EQUAL;
             }
             return UpdatableDrawable.BEFORE;
@@ -123,10 +130,10 @@ public class TileObject extends Sprite {
         else if (isAlwaysAbove())
             return UpdatableDrawable.AFTER;
         return super.compareTo(d);
-    }
+    }*/
 
     public boolean isGroundLayer() {
-        return (getLayer().getProperty("ground") != null && getLayer().getProperty("ground").equalsIgnoreCase("true"));
+        return (getTiledLayer().getProperty("ground") != null && getTiledLayer().getProperty("ground").equalsIgnoreCase("true"));
     }
 
     public boolean isAlwaysAbove() {

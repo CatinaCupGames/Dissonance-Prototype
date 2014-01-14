@@ -56,6 +56,8 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         if (texture instanceof SpriteTexture) {
             super.setTexture(texture);
             this.texture = (SpriteTexture)texture;
+            width = texture.getWidth();
+            height = texture.getHeight();
         } else
             throw new InvalidParameterException("An AnimatedSprite can only have a SpriteTexture!");
     }
@@ -110,8 +112,8 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         if (getTexture() == null)
             return;
         texture.bind();
-        float bx = texture.getWidth() / 2;
-        float by = texture.getHeight() / 2;
+        float bx = width / 2;
+        float by = height / 2;
         final float x = getX(), y = getY();
         float z = 0f;
         //float z = (y - (by / 2));

@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.world.tiled.impl;
 
+import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
@@ -10,7 +11,7 @@ import java.io.IOException;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class ImageLayer implements Drawable {
+public class ImageLayer extends Sprite {
     private Texture texture;
     private String path;
     private Layer parentLayer;
@@ -20,7 +21,7 @@ public class ImageLayer implements Drawable {
         path = parentLayer.getImageLayerData();
     }
 
-    public Layer getlayer() {
+    public Layer getTiledLayer() {
         return parentLayer;
     }
 
@@ -44,12 +45,17 @@ public class ImageLayer implements Drawable {
         return texture.getTextureHeight();
     }
 
-    public void init() {
+    public void init() { }
+
+    @Override
+    public void onLoad() {
         try {
             texture = Texture.retriveTexture(path);
+            setTexture(texture);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        setLayer(getTiledLayer().getLayerNumber());
     }
 
     @Override
@@ -79,10 +85,5 @@ public class ImageLayer implements Drawable {
         texture.unbind();
 
         glColor4f(1.0f, 1.0f, 1.0f, RenderService.getCurrentAlphaValue());
-    }
-
-    @Override
-    public int compareTo(Drawable o) {
-        return UpdatableDrawable.BEFORE;
     }
 }

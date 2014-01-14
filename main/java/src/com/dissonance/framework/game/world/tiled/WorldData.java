@@ -75,7 +75,7 @@ public class WorldData {
 
     public void assignAllLayers() {
         for (int i = 0; i < layers.length; i++) {
-            layers[i].setLayerNumber(i);
+            layers[i].setLayerNumber(i + 1);
         }
     }
 

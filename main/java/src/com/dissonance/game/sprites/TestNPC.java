@@ -24,11 +24,16 @@ public final class TestNPC extends NPCSprite {
 
     @Override
     public String getSpriteName() {
-        return "BulletExplosion";
+        return "player";
     }
 
     @Override
     public void onSpeakingFinished() {
     }
 
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        setLayer(2);
+    }
 }

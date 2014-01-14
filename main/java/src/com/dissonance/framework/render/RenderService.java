@@ -167,12 +167,10 @@ public class RenderService extends Service {
             glViewport(0, 0, GameSettings.Display.window_width, GameSettings.Display.window_height);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            //glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0f, -100000f);
             glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0f, -1f);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
-            //glEnable(GL_DEPTH_TEST);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glLoadIdentity();
             curAlpha = 1f;
@@ -274,10 +272,7 @@ public class RenderService extends Service {
                 }
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            if (!isFading && curAlpha != 0)
-                glClearColor(1f, 1f, 1f, 1f);
-            else
-                glClearColor(0f, 0f, 0f, 1f);
+            glClearColor(0f, 0f, 0f, 1f);
 		//ROBO //todo get this crap changed into proper ogl
             glMatrixMode(GL_MODELVIEW);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
