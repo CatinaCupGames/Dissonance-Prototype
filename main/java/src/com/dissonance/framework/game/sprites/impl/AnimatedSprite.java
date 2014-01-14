@@ -65,9 +65,6 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     @Override
     public void onLoad() {
         ANIMATION_FACTORY_ID = AnimationFactory.queueAnimator(this);
-        if (getTexture() != null) {
-            setAnimation(0);
-        }
     }
 
     @Override
@@ -83,6 +80,7 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
             if ((ani = texture.setCurrentAnimation(name)) != null) {
                 this.animation = ani;
                 speed = (int)ani.getDefaultSpeed();
+                AnimationFactory.resetAnimator(ANIMATION_FACTORY_ID);
                 return true;
             }
         }
@@ -109,7 +107,7 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     @Override
     public void render() {
 	    //ROBO //todo fix all this shit
-        if (getTexture() == null)
+        if (texture == null)
             return;
         texture.bind();
         float bx = width / 2;
