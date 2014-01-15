@@ -31,7 +31,7 @@ public class Weapon {
     private int swipeRange;
 
     //==Gun specific stuff==
-    private long lastShot;
+    private String bulletName = "Bullet";
     private long firingSpeed;
     private long bulletSpeed;
     private double bulletDamage;
@@ -51,7 +51,8 @@ public class Weapon {
     private static HashMap<String, Weapon> weapons = new HashMap<String, Weapon>();
     private String name;
 
-    private Weapon() { }
+    private Weapon() {
+    }
 
     public static Weapon getWeapon(String weapon) {
         if (weapons.containsKey(weapon))
@@ -74,7 +75,7 @@ public class Weapon {
                         for (int i = 0; i < nl.getLength(); i++) {
                             if (!(nl.item(i) instanceof Element))
                                 continue;
-                            Element el = (Element)nl.item(i);
+                            Element el = (Element) nl.item(i);
 
                             String nodeName = el.getNodeName();
 
@@ -116,6 +117,8 @@ public class Weapon {
                                 w.bulletSpeed = Long.parseLong(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("bulletDamage"))
                                 w.bulletDamage = Long.parseLong(el.getFirstChild().getNodeValue());
+                            else if (nodeName.equals("bulletName"))
+                                w.bulletName = el.getFirstChild().getNodeValue();
                             else if (nodeName.equals("accuracy"))
                                 w.accuracy = Float.parseFloat(el.getFirstChild().getNodeValue());
                         }
@@ -207,12 +210,8 @@ public class Weapon {
         return swipeRange;
     }
 
-    public long getLastShot() {
-        return lastShot;
-    }
-
-    public void setLastShot(long lastShot) {
-        this.lastShot = lastShot;
+    public String getBulletName() {
+        return bulletName;
     }
 
     public long getFiringSpeed() {
