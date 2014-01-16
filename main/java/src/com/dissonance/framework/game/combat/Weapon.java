@@ -103,8 +103,6 @@ public class Weapon {
                                 w.range = Integer.parseInt(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("swipe"))
                                 w.swipeRange = Integer.parseInt(el.getFirstChild().getNodeValue());
-                            else if (nodeName.equals("gun"))
-                                w.isGun = el.getFirstChild().getNodeValue().equalsIgnoreCase("true");
                             else if (nodeName.equals("animationRow"))
                                 w.animationRow = Integer.parseInt(el.getFirstChild().getNodeValue());
                             else if (nodeName.equals("animationSpeed"))
@@ -128,7 +126,8 @@ public class Weapon {
 
                     if (w.name == null)
                         w.name = weapon;
-
+                        
+                    w.isGun = (w.type == WeaponType.GUN);
                     weapons.put(weapon, w);
 
                     return w;
