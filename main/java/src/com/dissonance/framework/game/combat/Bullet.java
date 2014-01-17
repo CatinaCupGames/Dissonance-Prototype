@@ -51,7 +51,7 @@ public class Bullet extends PhysicsSprite {
 
         this.direction = direction;
 
-        angle = 10 * random.nextFloat() / weapon.getWeaponInfo().getAccuracy() / owner.getMarksmanship();
+        angle = 3 * random.nextFloat() / weapon.getWeaponInfo().getAccuracy() / owner.getMarksmanship();
         damage = damageModifier * owner.getMarksmanship() * weapon.getWeaponInfo().getBulletDamage();
         range = weapon.getWeaponInfo().getRange() * rangeModifier;
 
