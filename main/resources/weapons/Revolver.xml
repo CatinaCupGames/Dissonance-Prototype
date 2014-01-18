@@ -1,15 +1,19 @@
 <weapon>
     <!--Wyatt the cowboy-->
     <name>Revolver</name>
+
+    <!--The name of the bullet sprite-->
+    <bulletName>Bullet</bulletName>
+
     <!--Just add these two-->
     <type>gun</type>
     <gun>true</gun>
 
     <!--Delay between shots-->
-    <firingSpeed>0</firingSpeed>
+    <firingSpeed>750</firingSpeed>
 
     <!--Speed of bullets-->
-    <bulletSpeed>10</bulletSpeed>
+    <bulletSpeed>55</bulletSpeed>
 
     <!--Self explanatory-->
     <bulletDamage>11</bulletDamage>

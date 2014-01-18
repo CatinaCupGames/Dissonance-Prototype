@@ -18,7 +18,7 @@ public class Bullet extends PhysicsSprite {
     private final static Random random = new Random();
 
     private final static double damageModifier = Math.PI;
-    private final static double rangeModifier = Math.E;
+    private final static float rangeModifier = (float) Math.E;
 
     private WeaponItem weapon;
     private CombatSprite owner;
@@ -27,6 +27,7 @@ public class Bullet extends PhysicsSprite {
     private float startX;
     private float startY;
     private float angle;
+    private float range;
     private double damage;
     private boolean exploded;
 
@@ -50,8 +51,9 @@ public class Bullet extends PhysicsSprite {
 
         this.direction = direction;
 
-        angle = 10 * random.nextFloat() / weapon.getWeaponInfo().getAccuracy() / owner.getMarksmanship();
+        angle = 3 * random.nextFloat() / weapon.getWeaponInfo().getAccuracy() / owner.getMarksmanship();
         damage = damageModifier * owner.getMarksmanship() * weapon.getWeaponInfo().getBulletDamage();
+        range = weapon.getWeaponInfo().getRange() * rangeModifier;
 
         if (random.nextBoolean()) {
             angle = -angle;
@@ -77,7 +79,7 @@ public class Bullet extends PhysicsSprite {
 
     @Override
     public String getSpriteName() {
-        return "Bullet"; //TODO: change to weapon's bullet name
+        return weapon.getWeaponInfo().getBulletName();
     }
 
     public void collide(CombatSprite target) {
@@ -138,13 +140,17 @@ public class Bullet extends PhysicsSprite {
         if (direction == Direction.UP) {
             setY(getY() - (weapon.getWeaponInfo().getBulletSpeed() * RenderService.TIME_DELTA));
 
-            if (startY - getY() >= weapon.getWeaponInfo().getRange()) {
+            setX(getX() + angle);
+
+            if (startY - getY() >= range) {
                 explode();
             }
         } else if (direction == Direction.DOWN) {
             setY(getY() + (weapon.getWeaponInfo().getBulletSpeed() * RenderService.TIME_DELTA));
 
-            if (getY() - startY >= weapon.getWeaponInfo().getRange()) {
+            setX(getX() + angle);
+
+            if (getY() - startY >= range) {
                 explode();
             }
         } else if (direction == Direction.RIGHT) {
@@ -152,13 +158,15 @@ public class Bullet extends PhysicsSprite {
 
             setY(getY() + angle);
 
-            if (getX() - startX >= weapon.getWeaponInfo().getRange()) {
+            if (getX() - startX >= range) {
                 explode();
             }
         } else if (direction == Direction.LEFT) {
             setX(getX() - (weapon.getWeaponInfo().getBulletSpeed() * RenderService.TIME_DELTA));
 
-            if (startX - getX() >= weapon.getWeaponInfo().getRange()) {
+            setY(getY() + angle);
+
+            if (startX - getX() >= range) {
                 explode();
             }
         }

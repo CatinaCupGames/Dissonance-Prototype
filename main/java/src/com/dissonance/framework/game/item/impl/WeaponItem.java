@@ -19,6 +19,8 @@ import java.util.List;
 public class WeaponItem extends Item {
     private Weapon weapon;
 
+    private long lastShot;
+
     public WeaponItem(CombatSprite owner, Weapon w) {
         super(owner);
 
@@ -43,13 +45,14 @@ public class WeaponItem extends Item {
     public void use(Object... parameters) {
         if (weapon.isGun()) {
             //TODO animate shooter
+
             long time = System.currentTimeMillis();
 
-            if (weapon.getLastShot() + weapon.getFiringSpeed() >= time) {
+            if (lastShot + weapon.getFiringSpeed() >= time) {
                 return;
             }
 
-            weapon.setLastShot(time);
+            lastShot = time;
 
             Direction direction = getOwner().getDirection();
 
@@ -67,7 +70,7 @@ public class WeaponItem extends Item {
                      */
                     getOwner().setAnimation("sword_swipe");
                     if (getOwner() instanceof PlayableSprite)
-                        ((PlayableSprite)getOwner()).freeze();
+                        ((PlayableSprite) getOwner()).freeze();
                     float height;
                     float width;
                     Texture texture = getOwner().getTexture();
@@ -89,7 +92,7 @@ public class WeaponItem extends Item {
                             maxX = swipe;
                             y = getOwner().getY() - (height / 2f);
                             x = getOwner().getX() - (width / 2f);
-                            xadd = width / (float)(getOwner().getFrameCount() - 1);
+                            xadd = width / (float) (getOwner().getFrameCount() - 1);
                             yadd = 0;
                             break;
                         case DOWN:
@@ -99,7 +102,7 @@ public class WeaponItem extends Item {
                             maxX = swipe;
                             y = getOwner().getY() + (height / 2);
                             x = getOwner().getX() - (width / 2);
-                            xadd = width / (float)(getOwner().getFrameCount() - 1);
+                            xadd = width / (float) (getOwner().getFrameCount() - 1);
                             yadd = 0;
                             break;
                         case LEFT:
@@ -109,7 +112,7 @@ public class WeaponItem extends Item {
                             maxX = 0;
                             y = getOwner().getY() - (height / 2);
                             x = getOwner().getX() - (width / 2);
-                            yadd = height / (float)(getOwner().getFrameCount() - 1);
+                            yadd = height / (float) (getOwner().getFrameCount() - 1);
                             xadd = 0;
                             break;
                         case RIGHT:
@@ -119,7 +122,7 @@ public class WeaponItem extends Item {
                             maxX = range;
                             y = getOwner().getY() - (height / 2);
                             x = getOwner().getX() + (width / 2);
-                            yadd = height / (float)(getOwner().getFrameCount() - 1);
+                            yadd = height / (float) (getOwner().getFrameCount() - 1);
                             xadd = 0;
                             break;
                         default:
@@ -145,7 +148,7 @@ public class WeaponItem extends Item {
                             List<Collidable> list = swordHitBox.checkAndRetrieve(sprite.getWorld(), swordHitBox.getX(), swordHitBox.getY(), sprite);
                             for (Collidable c : list) {
                                 if (c instanceof CombatSprite) {
-                                    CombatSprite combatSprite = (CombatSprite)c;
+                                    CombatSprite combatSprite = (CombatSprite) c;
                                     if (!hits.contains(combatSprite)) {
                                         System.out.println("HIT ON STEP: " + temp_step[0] + " @ (" + swordHitBox.getX() + "," + swordHitBox.getY() + ")");
                                         combatSprite.strike(getOwner(), WeaponItem.this);
@@ -169,8 +172,8 @@ public class WeaponItem extends Item {
                             sprite.setAnimationFinishedListener(null);
                             sprite.setAnimationFrameListener(null);
                             if (getOwner() instanceof PlayableSprite) {
-                                ((PlayableSprite)getOwner()).unfreeze();
-                                ((PlayableSprite)getOwner()).ignore_movement = false;
+                                ((PlayableSprite) getOwner()).unfreeze();
+                                ((PlayableSprite) getOwner()).ignore_movement = false;
                             }
                             sprite.setAnimation(0);
                             hits.clear();
@@ -192,13 +195,13 @@ public class WeaponItem extends Item {
                      */
                     getOwner().setAnimation("sword_stab");
                     if (getOwner() instanceof PlayableSprite)
-                        ((PlayableSprite)getOwner()).freeze();
+                        ((PlayableSprite) getOwner()).freeze();
 
                     HitBox swordHitbox = new HitBox(0, 0, (facingDirection == Direction.DOWN || facingDirection == Direction.UP ? weapon.getSwipeRange() : 3), (facingDirection == Direction.RIGHT || facingDirection == Direction.LEFT ? weapon.getSwipeRange() : 3));
                     swordHitbox.setX(getOwner().getX());
                     swordHitbox.setY(getOwner().getY());
                     final float finalRange = weapon.getRange();
-                    final float steps = finalRange / (float)(getOwner().getCurrentAnimation().size() - 1);
+                    final float steps = finalRange / (float) (getOwner().getCurrentAnimation().size() - 1);
                     final HitBox finalSwordHitbox = swordHitbox;
                     final ArrayList<CombatSprite> hits = new ArrayList<CombatSprite>();
                     getOwner().setAnimationFrameListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFrame() {
@@ -207,7 +210,7 @@ public class WeaponItem extends Item {
                             List<Collidable> list = finalSwordHitbox.checkAndRetrieve(sprite.getWorld(), finalSwordHitbox.getX(), finalSwordHitbox.getY(), sprite);
                             for (Collidable c : list) {
                                 if (c instanceof CombatSprite) {
-                                    CombatSprite combatSprite = (CombatSprite)c;
+                                    CombatSprite combatSprite = (CombatSprite) c;
                                     if (!hits.contains(combatSprite)) {
                                         combatSprite.strike(getOwner(), WeaponItem.this);
                                         hits.add(combatSprite);
@@ -239,8 +242,8 @@ public class WeaponItem extends Item {
                             sprite.setAnimationFinishedListener(null);
                             sprite.setAnimationFrameListener(null);
                             if (getOwner() instanceof PlayableSprite) {
-                                ((PlayableSprite)getOwner()).unfreeze();
-                                ((PlayableSprite)getOwner()).ignore_movement = false;
+                                ((PlayableSprite) getOwner()).unfreeze();
+                                ((PlayableSprite) getOwner()).ignore_movement = false;
                             }
                             sprite.setAnimation(0);
                             hits.clear();

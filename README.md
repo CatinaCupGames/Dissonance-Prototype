@@ -18,8 +18,9 @@ Meet the Team
 ###Programmers
 * hypereddie
 * Arrem
-* headdetect
+* headdetect **[INACTIVE]**
 * roboman2444
+* laurenclayberg
 
 ###Story Board
 * simplej978
@@ -31,9 +32,9 @@ Meet the Team
 * oyasunadev
 
 ###Artists
-* toakongu834 **[INACTIVE]**
+* toakongu834
 * TheDaringPastry
-* argaudreau
+* argaudreau **[INACTIVE]**
 * mattmudge
 * DavisM33
 * rfding
