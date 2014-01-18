@@ -70,6 +70,7 @@ public class TestQuest extends AbstractQuest {
         enemy.setX(350);
         enemy.setY(100);
         w.loadAndAdd(enemy);
+        TextureLoader.setFastRedraw(true);
         //Thread.sleep(5000);
         //TestScene scene = new TestScene();
         //scene.beginScene();

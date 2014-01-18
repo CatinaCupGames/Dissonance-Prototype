@@ -28,6 +28,12 @@
            end="1:17:0"/>
 
     <sound name="sword"/>
+	
+	<sound name="boltspell"
+		   soundEffect="true" />
+	
+	<sound name="firespell"
+		   soundEffect="true" />
 
     <sound name="town"
            start="0:7:619"

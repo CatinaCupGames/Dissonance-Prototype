@@ -19,28 +19,39 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.IntBuffer;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
 import static org.lwjgl.openal.AL10.*;
 
 public final class Sound {
     private static ArrayList<Sound> sounds = new ArrayList<>();
+    private static ArrayList<Integer> sources = new ArrayList<>();
+    private static ArrayList<Sound> addQueue = new ArrayList<>();
     private static volatile boolean running = false;
     protected final float startTime;
     protected final float endTime;
     private final String name;
     private final int bufferIndex;
-    private final int sourceIndex;
-    protected int lastKnownState; //Used to check if non-looping sounds ended.
+    private int sourceIndex;
+    private final boolean soundEffect;
+    private final boolean temp;
+    protected int lastKnownState = AL_STOPPED; //Used to check if non-looping sounds ended.
     protected OnSoundFinishedListener listener;
 
-    private Sound(String name, int bufferIndex, int sourceIndex, float startTime, float endTime) {
+    private Sound(String name, int bufferIndex, int sourceIndex, float startTime, float endTime, boolean soundEffect) {
+        this(name, bufferIndex, sourceIndex, startTime, endTime, soundEffect, false);
+    }
+
+    private Sound(String name, int bufferIndex, int sourceIndex, float startTime, float endTime, boolean soundEffect, boolean clone) {
         this.name = name;
         this.bufferIndex = bufferIndex;
         this.sourceIndex = sourceIndex;
 
         this.startTime = startTime;
         this.endTime = endTime;
+        this.soundEffect = soundEffect;
+        this.temp = clone;
     }
 
     private static String getError(int error) {
@@ -88,18 +99,57 @@ public final class Sound {
         return buffer.get(0);
     }
 
-    private static int loadSound(String name, String path, float startTime, float endTime) {
-        IntBuffer source = BufferUtils.createIntBuffer(1);
+    private static void loadSound(String name, String path, float startTime, float endTime, boolean soundEffect) {
         int buffer = loadALBuffer(path);
-
-        alGenSources(source);
         checkError();
+        sounds.add(new Sound(name, buffer, -1, startTime, endTime, soundEffect)); //Set source to -1, only give a source when the sound is played
+    }
 
-        alSourcei(source.get(0), AL10.AL_BUFFER, buffer);
-
-        sounds.add(new Sound(name, buffer, source.get(0), startTime, endTime));
-
+    private static int generateNewSource() {
+        IntBuffer source = BufferUtils.createIntBuffer(1);
+        alGenSources(source);
+        sources.add(source.get(0));
         return source.get(0);
+    }
+
+    private static int getFreeSource() {
+        for (Integer source : sources) {
+            int value = source;
+            boolean found = true;
+            for (Sound s : sounds) {
+                if (value == s.sourceIndex && (!s.isSoundEffect() || s.lastKnownState == AL_PLAYING || s.lastKnownState == AL_PAUSED)) {
+                    found = false;
+                    break;
+                } else if (value == s.sourceIndex && s.isSoundEffect() && s.lastKnownState == AL_STOPPED) {
+                    s.sourceIndex = -1; //Remove this source index to prevent conflict
+                }
+            }
+
+            for (Sound s : addQueue) { //Check the addQueue as well, however cannot steal from here
+                if (value == s.sourceIndex) {
+                    found = false;
+                    break;
+                }
+            }
+
+            if (!found)
+                continue;
+            return value;
+        }
+        return generateNewSource();
+    }
+
+    public static Sound cloneSound(Sound source) {
+        if (source.startTime != -1 || source.endTime != -1 || !source.isSoundEffect())
+            throw new InvalidParameterException("Only sound effects that don't loop can be cloned!");
+
+        Sound s = new Sound(source.name, source.bufferIndex, getFreeSource(), source.startTime, source.endTime, source.soundEffect, true);
+
+        alSourcei(s.sourceIndex, AL10.AL_BUFFER, s.bufferIndex);
+
+        addQueue.add(s);
+
+        return s;
     }
 
     /**
@@ -133,15 +183,16 @@ public final class Sound {
                     Element sound = (Element) soundNode;
 
                     String soundName = sound.getAttribute("name");
-
+                    float startTime = -1, endTime = -1;
+                    boolean soundEffect = false;
                     if (sound.hasAttribute("start") && sound.hasAttribute("end")) {
-                        float startTime = parseTime(sound.getAttribute("start"));
-                        float endTime = parseTime(sound.getAttribute("end"));
-
-                        loadSound(soundName, ("sounds/" + soundName + ".wav"), startTime, endTime);
-                    } else {
-                        loadSound(soundName, ("sounds/" + soundName + ".wav"), -1f, -1f);
+                        startTime = parseTime(sound.getAttribute("start"));
+                        endTime = parseTime(sound.getAttribute("end"));
                     }
+                    if (sound.hasAttribute("soundEffect")) {
+                        soundEffect = sound.getAttribute("soundEffect").toLowerCase().equals("true");
+                    }
+                    loadSound(soundName, ("sounds/" + soundName + ".wav"), startTime, endTime, soundEffect);
                 }
             }
         } catch (IOException | ParserConfigurationException | SAXException e) {
@@ -170,6 +221,8 @@ public final class Sound {
 
         running = true;
 
+        final ArrayList<Sound> toremove = new ArrayList<Sound>();
+
         Thread loopThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -196,8 +249,25 @@ public final class Sound {
                                 if (sound.listener != null) {
                                     sound.listener.onFinished(SoundFinishedType.ENDED);
                                 }
+
+                                if (sound.temp) //A cloned sound
+                                    toremove.add(sound);
                             }
                         }
+                    }
+
+
+                    if (toremove.size() > 0) {
+                        for (Sound s : toremove) {
+                            sounds.remove(s);
+                        }
+
+                        toremove.clear();
+                    }
+
+                    if (addQueue.size() > 0) {
+                        sounds.addAll(addQueue);
+                        addQueue.clear();
                     }
 
                     try {
@@ -229,6 +299,8 @@ public final class Sound {
      */
     public static Sound getSound(String name) {
         for (Sound sound : sounds) {
+            if (sound.temp)
+                continue;
             if (sound.getName().equals(name)) {
                 return sound;
             }
@@ -249,10 +321,24 @@ public final class Sound {
         Sound sound = getSound(name);
 
         if (sound != null) {
-            alSourcePlay(sound.getSourceIndex());
+            if (sound.sourceIndex == -1) {
+                sound.sourceIndex = getFreeSource();
+                alSourcei(sound.sourceIndex, AL10.AL_BUFFER, sound.bufferIndex);
+            }
 
-            if (sound.startTime == -1 && sound.endTime == -1) {
-                sound.lastKnownState = AL_PLAYING;
+            if (sound.lastKnownState == AL_PLAYING && sound.isSoundEffect()) {
+                Sound tempSound = cloneSound(sound);
+                alSourcePlay(tempSound.getSourceIndex());
+                if (tempSound.startTime == -1 && tempSound.endTime == -1) {
+                    tempSound.lastKnownState = AL_PLAYING;
+                }
+                return tempSound;
+            } else {
+                alSourcePlay(sound.getSourceIndex());
+
+                if (sound.startTime == -1 && sound.endTime == -1) {
+                    sound.lastKnownState = AL_PLAYING;
+                }
             }
         }
 
@@ -357,6 +443,58 @@ public final class Sound {
         return sound;
     }
 
+    public void setVolume(float volume) {
+        alSourcef(sourceIndex, AL_GAIN, volume);
+    }
+
+    public void setPitch(float pitch) {
+        alSourcef(sourceIndex, AL_PITCH, pitch);
+    }
+
+    public void stop() {
+        alSourceStop(sourceIndex);
+
+        if (startTime == -1 && endTime == -1) {
+            lastKnownState = AL_STOPPED;
+        }
+
+        if (listener != null) {
+            listener.onFinished(SoundFinishedType.STOPPED);
+        }
+    }
+
+    public void play() {
+        if (sourceIndex == -1) {
+            sourceIndex = getFreeSource();
+        }
+
+        if (lastKnownState == AL_PLAYING && isSoundEffect()) {
+            Sound tempSound = cloneSound(this);
+            alSourcePlay(tempSound.getSourceIndex());
+            if (tempSound.startTime == -1 && tempSound.endTime == -1) {
+                tempSound.lastKnownState = AL_PLAYING;
+            }
+        } else {
+            alSourcePlay(sourceIndex);
+
+            if (startTime == -1 && endTime == -1) {
+                lastKnownState = AL_PLAYING;
+            }
+        }
+    }
+
+    public void pause() {
+        alSourcePause(sourceIndex);
+
+        if (startTime == -1 && endTime == -1) {
+            lastKnownState = AL_PAUSED;
+        }
+
+        if (listener != null) {
+            listener.onFinished(SoundFinishedType.PAUSED);
+        }
+    }
+
     /**
      * Gets the name of the sound.
      *
@@ -382,6 +520,15 @@ public final class Sound {
      */
     public int getSourceIndex() {
         return sourceIndex;
+    }
+
+    /**
+     * Returns true if this Sound is a sound effect.
+     *
+     * @return True if this Sound is a sound effect.
+     */
+    public boolean isSoundEffect() {
+        return soundEffect;
     }
 
     /**

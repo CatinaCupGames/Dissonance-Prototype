@@ -3,6 +3,7 @@ package com.dissonance.game.spells;
 import com.dissonance.framework.game.combat.spells.Spell;
 import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.utils.Direction;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public abstract class BoltSpell implements Spell {
 
     @Override
     public void castSpell() {
+        Sound.playSound("boltspell");
+
         Direction direction = owner.getDirection();
         float x1, x2, y1, y2;
         switch (direction) {
