@@ -125,6 +125,14 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                         PhysicsSprite.super.setX(spawn.getX());
                         PhysicsSprite.super.setY(spawn.getY());
                         Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
+                        while (RenderService.getCurrentAlphaValue() != 1) {
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                                break;
+                            }
+                        }
                         ((PlayableSprite) PhysicsSprite.this).unfreeze();
                     }
                 }).start();
@@ -158,7 +166,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                     return;
                 }
                 String world = to.getDoorWorldTarget();
-                World worldObj;
+                final World worldObj;
                 if (world.equalsIgnoreCase("")) {
                     worldObj = getWorld();
                 } else {
@@ -171,20 +179,37 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                     }
                 }
 
-                TiledObject spawn = worldObj.getSpawn(target);
+                final TiledObject spawn = worldObj.getSpawn(target);
                 if (spawn == null) {
                     super.setY(oldY);
                     return;
                 }
 
-                if (worldObj != getWorld()) {
-                    RenderService.INSTANCE.fadeToBlack(300);
-                    WorldFactory.swapView(worldObj, true);
-                    setWorld(worldObj);
-                }
+                ((PlayableSprite) this).freeze();
+                new Thread(new Runnable() {
 
-                super.setX(spawn.getX());
-                super.setY(spawn.getY());
+                    @Override
+                    public void run() {
+                        if (worldObj != getWorld()) {
+                            RenderService.INSTANCE.fadeToBlack(1000);
+                            WorldFactory.swapView(worldObj, true);
+                            setWorld(worldObj);
+                        }
+
+                        PhysicsSprite.super.setX(spawn.getX());
+                        PhysicsSprite.super.setY(spawn.getY());
+                        Camera.setPos(Camera.translateToCameraCenter(getVector(), getHeight()));
+                        while (RenderService.getCurrentAlphaValue() != 1) {
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                                break;
+                            }
+                        }
+                        ((PlayableSprite) PhysicsSprite.this).unfreeze();
+                    }
+                }).start();
             }
         }
     }

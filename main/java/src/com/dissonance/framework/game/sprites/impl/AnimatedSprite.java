@@ -119,7 +119,17 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         float z = 0f;
         //float z = (y - (by / 2));
 
-        //glColor4f(0f, 0f, 0f, 1f); //DEBUG LINE FOR TEXTURES
+        if (hasTint) {
+            float alpha = 1;
+            if (a < 1) {
+                alpha = this.a - (1 - RenderService.getCurrentAlphaValue());
+                if (alpha < 0)
+                    alpha = 1;
+            }
+            glColor4f(r, g, b, alpha);
+        }
+
+
         Vector2f bl = texture.getTextureCord(SpriteTexture.BOTTOM_LEFT);
         Vector2f br = texture.getTextureCord(SpriteTexture.BOTTOM_RIGHT);
         Vector2f ur = texture.getTextureCord(SpriteTexture.TOP_RIGHT);

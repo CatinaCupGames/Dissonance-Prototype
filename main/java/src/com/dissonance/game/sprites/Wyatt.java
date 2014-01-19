@@ -105,6 +105,26 @@ public final class Wyatt extends PlayableSprite {
     }
 
     @Override
+    public void onMovement() {
+        if (isAnimationPaused()) {
+            super.setFrame(2);
+            playAnimation();
+        }
+    }
+
+    @Override
+    public void onNoMovement() {
+        super.setFrame(1);
+        pauseAnimation();
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        pauseAnimation();
+    }
+
+    @Override
     public String getSpriteName() {
         return "player";
     }

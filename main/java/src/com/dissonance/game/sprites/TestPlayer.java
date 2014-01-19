@@ -21,24 +21,14 @@ public class TestPlayer extends PlayableSprite {
     }
 
     @Override
-    public void update() {
-        super.update();
-        if (isAnimationPaused() && (w || a || s || d))
-            playAnimation();
-        else if (!w && !a && !s && !d && !ignore_movement) {
-            setFrame(0);
-            pauseAnimation();
-        }
+    public void onMovement() {
+        playAnimation();
+    }
 
-        if (isPlaying()) {
-            if (Keyboard.isKeyDown(Keyboard.KEY_8)) {
-                System.out.println(getX() + " " + getY());
-            }
-        } else {
-            if (Keyboard.isKeyDown(Keyboard.KEY_7)) {
-                System.out.println(getX() + " " + getY());
-            }
-        }
+    @Override
+    public void onNoMovement() {
+        super.setFrame(1);
+        pauseAnimation();
     }
 
     @Override

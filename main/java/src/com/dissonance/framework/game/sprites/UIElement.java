@@ -178,9 +178,11 @@ public abstract class UIElement implements UpdatableDrawable {
         graphics2D.fillRect(0,0, width, height);
         draw(graphics2D);
         graphics2D.dispose();
+        boolean old = TextureLoader.isFastRedraw();
         TextureLoader.setFastRedraw(true);
         UI = Texture.convertToTexture(name, UI_IMAGE);
         valid = true;
+        TextureLoader.setFastRedraw(old);
     }
 
     @Override

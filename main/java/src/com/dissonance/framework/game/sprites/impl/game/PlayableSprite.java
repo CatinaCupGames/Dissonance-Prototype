@@ -189,8 +189,19 @@ public abstract class PlayableSprite extends CombatSprite {
                 setX(getX() + (speed * RenderService.TIME_DELTA));
                 setFacing(Direction.RIGHT);
             }
+
+            if (!ignore_movement) {
+                if (!w && !d && !s && !a)
+                    onNoMovement();
+                else
+                    onMovement();
+            }
         }
     }
+
+    protected void onMovement() { }
+
+    protected void onNoMovement() { }
 
     protected void checkKeys() {
         if (!use_attack && !is_dodging) {

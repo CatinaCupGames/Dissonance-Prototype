@@ -86,6 +86,7 @@ public final class Camera {
         follower = sprite;
         if (follower == null)
             return;
+        Camera.setPos(Camera.translateToCameraCenter(sprite.getVector(), sprite.getHeight()));
         follower.setSpriteMovedListener(new Sprite.SpriteEvent.SpriteMovedEvent() {
             @Override
             public void onSpriteMoved(Sprite sprite, float oldx, float oldy) {

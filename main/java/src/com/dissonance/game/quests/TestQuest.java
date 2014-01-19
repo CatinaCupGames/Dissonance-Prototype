@@ -52,7 +52,6 @@ public class TestQuest extends AbstractQuest {
         player.setMarksmanship(2);
 
         System.out.println(player.getMarksmanship());
-        player.setWorld(w);
         player.setX(0);
         player.setY(100);
         WeaponItem item = new WeaponItem(player, Weapon.getWeapon("Revolver"));
@@ -65,12 +64,11 @@ public class TestQuest extends AbstractQuest {
             }
         });
 
+
         TextureLoader.setFastRedraw(false);
-        player.setWorld(w);
         enemy.setX(350);
         enemy.setY(100);
         w.loadAndAdd(enemy);
-        TextureLoader.setFastRedraw(true);
         //Thread.sleep(5000);
         //TestScene scene = new TestScene();
         //scene.beginScene();

@@ -7,11 +7,14 @@ import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Drawable;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.Validator;
 import com.sun.istack.internal.NotNull;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.security.InvalidParameterException;
 
@@ -24,6 +27,8 @@ public abstract class Sprite implements Drawable, Serializable {
     protected transient World world;
     protected Direction direction;
     protected float x, y, width, height;
+    protected float r = 1, g = 1, b = 1, a = 1;
+    protected boolean hasTint;
     protected int layer = 1;
 
     public static Sprite fromClass(Class<?> class_) {
@@ -51,6 +56,56 @@ public abstract class Sprite implements Drawable, Serializable {
         if (direction == null)
             direction = Direction.DOWN;
         return direction;
+    }
+
+    public void setTint(Color color) {
+        r = color.getRed() / 255f;
+        g = color.getGreen() / 255f;
+        b = color.getBlue() / 255f;
+        a = color.getAlpha() / 255f;
+        hasTint = !(r == 1 && g == 1 && b == 1 && a == 1);
+    }
+
+    public void setTint(int r, int g, int b, int a) {
+        Validator.validateInRange(r, 0, 255, "red");
+        Validator.validateInRange(g, 0, 255, "green");
+        Validator.validateInRange(b, 0, 255, "blue");
+        Validator.validateInRange(a, 0, 255, "alpha");
+
+        this.r = r / 255f;
+        this.g = g / 255f;
+        this.b = b / 255f;
+        this.a = a / 255f;
+        hasTint = !(r == 1 && g == 1 && b == 1 && a == 1);
+    }
+
+    public void setTint(float r, float g, float b, float a) {
+        Validator.validateInRange(r, 0, 1, "red");
+        Validator.validateInRange(g, 0, 1, "green");
+        Validator.validateInRange(b, 0, 1, "blue");
+        Validator.validateInRange(a, 0, 1, "alpha");
+
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
+        hasTint = !(r == 1 && g == 1 && b == 1 && a == 1);
+    }
+
+    public Color getTint() {
+        return new Color(r, g, b, a);
+    }
+
+    public boolean hasTint() {
+        return hasTint;
+    }
+
+    public void removeTint() {
+        this.r = 1;
+        this.g = 1;
+        this.b = 1;
+        this.a = 1;
+        hasTint = false;
     }
 
     public void setFacing(Direction direction) {
@@ -180,6 +235,16 @@ public abstract class Sprite implements Drawable, Serializable {
         final float x = getX(), y = getY();
         float z = 0f;
         //float z = -(y - (by / 2));
+
+        if (hasTint) {
+            float alpha = 1;
+            if (a < 1) {
+                alpha = this.a - (1 - RenderService.getCurrentAlphaValue());
+                if (alpha < 0)
+                    alpha = 1;
+            }
+            glColor4f(r, g, b, alpha);
+        }
 
         glBegin(GL_QUADS);
         glTexCoord2f(0f, 0f); //bottom left

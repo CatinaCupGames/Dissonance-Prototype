@@ -172,6 +172,7 @@ public class RenderService extends Service {
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
             glLoadIdentity();
             curAlpha = 1f;
             capabilities = GLContext.getCapabilities();

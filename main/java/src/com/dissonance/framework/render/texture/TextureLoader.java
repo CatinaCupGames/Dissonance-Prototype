@@ -287,4 +287,7 @@ public class TextureLoader {
     }
 
 
+    public static boolean isFastRedraw() {
+        return fastRedraw;
+    }
 }
