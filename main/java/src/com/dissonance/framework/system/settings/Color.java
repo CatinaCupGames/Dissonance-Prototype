@@ -1,4 +1,4 @@
-package com.dissonance.framework.game.settings;
+package com.dissonance.framework.system.settings;
 
 public class Color
 {

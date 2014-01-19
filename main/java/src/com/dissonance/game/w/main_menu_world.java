@@ -13,7 +13,7 @@ import org.lwjgl.util.vector.Vector2f;
 public class main_menu_world implements WorldLoader {
     @Override
     public void onLoad(World world) {
-        GameMenu gameMenu = new GameMenu("->menu<-");
+        GameMenu gameMenu = new GameMenu();
         gameMenu.displayUI(world);
     }
 }

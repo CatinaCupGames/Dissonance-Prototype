@@ -1,21 +1,15 @@
 package com.dissonance.game.menus;
 
-import com.dissonance.framework.game.GameSettings;
-import com.dissonance.framework.game.input.InputKeys;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.sprites.UIElement;
 import com.dissonance.framework.render.Camera;
-import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.system.utils.Direction;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
 
-import static org.lwjgl.opengl.GL11.*;
-
 public class GameMenu extends UIElement {
-    public GameMenu(String name) {
-        super(name);
+    public GameMenu() {
+        super();
     }
 
     @Override

@@ -58,4 +58,8 @@ public class Dialog {
     public CustomString[] getAllLines() {
         return lines;
     }
+
+    void reset() {
+        index = 0;
+    }
 }

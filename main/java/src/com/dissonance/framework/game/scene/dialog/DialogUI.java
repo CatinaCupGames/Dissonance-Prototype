@@ -1,6 +1,6 @@
 package com.dissonance.framework.game.scene.dialog;
 
-import com.dissonance.framework.game.GameSettings;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.UIElement;
 import com.dissonance.framework.render.Camera;
@@ -66,8 +66,8 @@ public class DialogUI extends UIElement {
         }
     }
 
-    public DialogUI(String name, com.dissonance.framework.game.scene.dialog.Dialog dialog) {
-        super(name);
+    public DialogUI(com.dissonance.framework.game.scene.dialog.Dialog dialog) {
+        super();
         this.dialog = dialog;
     }
 
@@ -299,6 +299,7 @@ public class DialogUI extends UIElement {
 
     public void endDialog() {
         ended = true;
+        dialog.reset();
         close();
         doWakeUp();
         currentdialog = null;

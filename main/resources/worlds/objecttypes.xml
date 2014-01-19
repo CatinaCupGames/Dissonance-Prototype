@@ -3,4 +3,5 @@
  <objecttype name="spawn" color="#aa0000"/>
  <objecttype name="door" color="#5500ff"/>
  <objecttype name="hitbox" color="#a0a0a4"/>
+ <objecttype name="trigger" color="#ffff00"/>
 </objecttypes>

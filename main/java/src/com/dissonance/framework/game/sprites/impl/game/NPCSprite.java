@@ -116,7 +116,7 @@ public abstract class NPCSprite extends PhysicsSprite implements Selectable {
         Dialog dialog = getNextDialog();
 
         if (dialog != null) {
-            dialogUI = new DialogUI("NPC-DIALOG-" + super.hashCode(), dialog);
+            dialogUI = new DialogUI(dialog);
 
             onSpeak();
             if (talkEvent != null) {

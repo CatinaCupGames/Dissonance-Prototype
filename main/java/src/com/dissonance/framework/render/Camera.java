@@ -1,6 +1,6 @@
 package com.dissonance.framework.render;
 
-import com.dissonance.framework.game.GameSettings;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import org.lwjgl.util.vector.Vector2f;

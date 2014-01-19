@@ -1,7 +1,7 @@
-package com.dissonance.framework.game;
+package com.dissonance.framework.system;
 
-import com.dissonance.framework.game.settings.Color;
-import com.dissonance.framework.game.settings.Resolution;
+import com.dissonance.framework.system.settings.Color;
+import com.dissonance.framework.system.settings.Resolution;
 
 public class GameSettings
 {

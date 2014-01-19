@@ -6,6 +6,7 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteAnimationInfo;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
+import com.dissonance.framework.system.utils.Direction;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.security.InvalidParameterException;
@@ -22,6 +23,9 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     protected transient int ANIMATION_FACTORY_ID;
     private transient SpriteAnimationInfo animation;
     private transient int speed;
+    private int nMovementCount = 0;
+    private boolean movementDetect = false;
+    private float oX, oY;
 
     /**
      * Sets this {@link AnimatedSprite AnimatedSprite's}
@@ -75,9 +79,37 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         AnimationFactory.removeAnimator(ANIMATION_FACTORY_ID);
     }
 
+    @Override
+    public void setX(float x) {
+        movementDetect = true;
+        if (this.x > x) { //Left
+            onMovement(Direction.LEFT);
+        } else if (this.x < x) {
+            onMovement(Direction.RIGHT);
+        }
+        super.setX(x);
+    }
+
+    @Override
+    public void setY(float y) {
+        movementDetect = true;
+        if (this.y > y) {
+            onMovement(Direction.UP);
+        } else if (this.y < y) {
+            onMovement(Direction.DOWN);
+        }
+        super.setY(y);
+    }
+
+    protected void onMovement(Direction direction1) { }
+
+    protected void onNoMovement() { }
+
     public abstract String getSpriteName();
 
     public boolean setAnimation(String name) {
+        if (animation != null && animation.getName().equals(name))
+            return true;
         if (texture != null) {
             SpriteAnimationInfo ani;
             if ((ani = texture.setCurrentAnimation(name)) != null) {
@@ -150,6 +182,31 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
 
     @Override
     public void init() {}
+
+    @Override
+    public void update() {
+        super.update();
+        if (isUpdateCanceled())
+            return;
+        if (movementDetect) {
+            if (oX == -1 && oY == -1) {
+                oX = this.x;
+                oY = this.y;
+            } else if (oX == this.x && oY == this.y) {
+                nMovementCount++;
+                if (nMovementCount >= 3) {
+                    movementDetect = false;
+                    onNoMovement();
+                    oX = -1;
+                    oY = -1;
+                }
+            } else {
+                nMovementCount = 0;
+                oX = -1;
+                oY = -1;
+            }
+        }
+    }
 
     private boolean paused;
     public void pauseAnimation() {

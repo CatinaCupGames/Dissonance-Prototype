@@ -16,6 +16,17 @@
         <message>Scootaloo is not a chicken Eddie!</message>
     </dialog>
 
+    <dialog dialog_id="testingTrigger">
+        <header>Mom</header>
+        <message style="bold">Hey! </message>
+        <message type="append">You can't be here!</message>
+    </dialog>
+
+    <dialog dialog_id="testTrigger2">
+        <header>Mom</header>
+        <message>Please don't do that......</message>
+    </dialog>
+
     <dialog dialog_id="shader-test">
         <header>SHADERS!!!</header>
         <message>ACTIVATE SHADER POWERS!!!!!!!</message>

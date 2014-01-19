@@ -1,7 +1,7 @@
 package com.dissonance.framework.render;
 
 import com.dissonance.framework.game.GameService;
-import com.dissonance.framework.game.GameSettings;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
@@ -10,7 +10,6 @@ import com.dissonance.framework.render.shader.ShaderFactory;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.utils.Validator;
-import com.dissonance.game.Main;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.Display;

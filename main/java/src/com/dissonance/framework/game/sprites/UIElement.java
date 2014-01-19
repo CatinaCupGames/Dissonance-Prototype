@@ -20,15 +20,19 @@ public abstract class UIElement implements UpdatableDrawable {
     private boolean complete_invalid;
     private int width;
     private int height;
+    private float dWidth, dHeight;
+    private float tX, tY;
     private Texture UI;
     private BufferedImage UI_IMAGE;
     private float x;
     private float y;
     private String name;
+    private static int instanceCount = 0;
     private boolean halted = false;
 
-    public UIElement(String name) {
-        setName(name);
+    public UIElement() {
+        setName(instanceCount + "-UIELEMENT-" + instanceCount);
+        instanceCount++;
     }
 
     public String getName() {
@@ -125,11 +129,8 @@ public abstract class UIElement implements UpdatableDrawable {
      * @param width
      *             The width to set UIElement to
      */
-    public void setWidth(float width) {
-        this.width = 2;
-        while (this.width < width) {
-            this.width *= 2;
-        }
+    public void setWidth(int width) {
+        this.width = width;
         completelyInvalidateView();
     }
 
@@ -140,12 +141,30 @@ public abstract class UIElement implements UpdatableDrawable {
      * @param height
      *             The height to set UIElement to
      */
-    public void setHeight(float height) {
-        this.height = 2;
-        while (this.height < height) {
-            this.height *= 2;
-        }
+    public void setHeight(int height) {
+        this.height = height;
         completelyInvalidateView();
+    }
+
+    /**
+     * Sets how big this UIElement is drawn on the screen. {@link org.lwjgl.opengl.GL11#GL_NEAREST} will be used when scaling up and down.
+     * @param width The draw width for this UIElement.
+     */
+    public void setDrawWidth(float width) {
+        this.dWidth = width;
+    }
+
+    /**
+     * Sets how big this UIElement is drawn on the screen. {@link org.lwjgl.opengl.GL11#GL_NEAREST} will be used when scaling up and down.
+     * @param height The draw height for this UIElement.
+     */
+    public void setDrawHeight(float height) {
+        this.dHeight = height;
+    }
+
+    public void resetDrawSize() {
+        this.dWidth = width;
+        this.dHeight = height;
     }
 
     /**
@@ -168,6 +187,7 @@ public abstract class UIElement implements UpdatableDrawable {
             return;
         if (UI_IMAGE == null || complete_invalid) {
             UI_IMAGE = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            resetDrawSize();
         }
         if (UI != null) {
             UI.dispose();
@@ -181,6 +201,8 @@ public abstract class UIElement implements UpdatableDrawable {
         boolean old = TextureLoader.isFastRedraw();
         TextureLoader.setFastRedraw(true);
         UI = Texture.convertToTexture(name, UI_IMAGE);
+        tX = UI.getWidth();
+        tY = UI.getHeight();
         valid = true;
         TextureLoader.setFastRedraw(old);
     }
@@ -193,23 +215,23 @@ public abstract class UIElement implements UpdatableDrawable {
             redrawTexture();
         else if (!valid)
             return;
-        glDisable(GL_DEPTH_TEST);
+        //glDisable(GL_DEPTH_TEST);
         UI.bind();
-        float bx = width / 2;
-        float by = height / 2;
+        float bx = dWidth / 2;
+        float by = dHeight / 2;
         final float x = getX(), y = getY();
         glBegin(GL_QUADS);
         glTexCoord2f(0f, 0f); //bottom left
         glVertex3f(x - bx, y - by, 0f);
-        glTexCoord2f(1f, 0f); //bottom right
+        glTexCoord2f(tX, 0f); //bottom right
         glVertex3f(x + bx, y - by, 0f);
-        glTexCoord2f(1f, 1f); //top right
+        glTexCoord2f(tX, tY); //top right
         glVertex3f(x + bx, y + by, 0f);
-        glTexCoord2f(0f, 1f); //top left
+        glTexCoord2f(0f, tY); //top left
         glVertex3f(x - bx, y + by, 0f);
         glEnd();
         UI.unbind();
-        glEnable(GL_DEPTH_TEST);
+        //glEnable(GL_DEPTH_TEST);
     }
 
     public abstract void draw(Graphics2D graphics2D);

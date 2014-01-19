@@ -2,6 +2,7 @@ package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.system.utils.Direction;
 import org.lwjgl.input.Keyboard;
 
 public class TestPlayer extends PlayableSprite {
@@ -21,7 +22,7 @@ public class TestPlayer extends PlayableSprite {
     }
 
     @Override
-    public void onMovement() {
+    public void onMovement(Direction direction) {
         playAnimation();
     }
 

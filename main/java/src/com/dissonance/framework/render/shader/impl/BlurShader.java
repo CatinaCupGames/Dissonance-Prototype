@@ -1,6 +1,6 @@
 package com.dissonance.framework.render.shader.impl;
 
-import com.dissonance.framework.game.GameSettings;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.render.shader.AbstractShader;
 import org.lwjgl.opengl.GL20;
 

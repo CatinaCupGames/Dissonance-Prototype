@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.world.tiled;
 
+import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.game.world.tiled.impl.ImageLayer;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Drawable;
@@ -99,6 +100,32 @@ public class WorldData {
             }
         }
         return tiles;
+    }
+
+    public void loadTriggers() {
+        for (Layer layer : layers) {
+            if (layer.isObjectLayer()) {
+                for (TiledObject object : layer.getObjectGroupData()) {
+                    if (object.isTrigger()) {
+                        String class_ = object.getProperty("triggerclass");
+                        if (class_ != null) {
+                            try {
+                                Class<?> trigger = Class.forName(class_);
+                                AbstractTrigger trigger1 = (AbstractTrigger) trigger.newInstance();
+                                trigger1.init(object);
+                                object.attachTrigger(trigger1);
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (InstantiationException e) {
+                                e.printStackTrace();
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void dispose() {

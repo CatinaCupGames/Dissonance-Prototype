@@ -4,6 +4,7 @@ import com.dissonance.framework.game.combat.Bullet;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.tiled.TiledObject;
+import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
@@ -85,7 +86,11 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             TiledObject to = (TiledObject) c;
             if (to.isHitbox())
                 super.setX(oldX);
-            else if (to.isDoor() && this instanceof PlayableSprite) { //2meta4me
+            else if (to.isTrigger() && this instanceof PlayableSprite && ((PlayableSprite)this).isSelected()) { //2meta4me
+                AbstractTrigger abstractTrigger = to.getTrigger();
+                abstractTrigger.onCollide((PlayableSprite)this);
+            }
+            else if (to.isDoor() && this instanceof PlayableSprite && ((PlayableSprite)this).isSelected()) { //3meta5me
                 String target = to.getDoorTarget();
                 if (target.equalsIgnoreCase("")) {
                     super.setX(oldX);
@@ -159,7 +164,11 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             TiledObject to = (TiledObject) c;
             if (to.isHitbox())
                 super.setY(oldY);
-            else if (to.isDoor() && this instanceof PlayableSprite) { //2meta4me
+            else if (to.isTrigger() && this instanceof PlayableSprite && ((PlayableSprite)this).isSelected()) { //2meta4me
+                AbstractTrigger abstractTrigger = to.getTrigger();
+                abstractTrigger.onCollide((PlayableSprite)this);
+            }
+            else if (to.isDoor() && this instanceof PlayableSprite && ((PlayableSprite)this).isSelected()) { //3meta5me
                 String target = to.getDoorTarget();
                 if (target.equalsIgnoreCase("")) {
                     super.setY(oldY);

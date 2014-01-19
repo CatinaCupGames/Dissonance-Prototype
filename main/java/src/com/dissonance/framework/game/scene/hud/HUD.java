@@ -1,6 +1,6 @@
 package com.dissonance.framework.game.scene.hud;
 
-import com.dissonance.framework.game.GameSettings;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.sprites.UIElement;
 import com.dissonance.framework.render.Camera;
 
@@ -111,9 +111,9 @@ public class HUD extends UIElement
             }
         }
     }
-    public HUD(String name)
+    public HUD()
     {
-        super(name);
+        super();
     }
 
 //    @Override
@@ -260,8 +260,8 @@ public class HUD extends UIElement
         setX(Camera.getX());
         setY(Camera.getY());
 
-        setWidth(256.0f);
-        setHeight(64.0f);
+        setWidth(256);
+        setHeight(64);
     }
 
     @Override

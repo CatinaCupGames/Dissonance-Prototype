@@ -2,6 +2,9 @@ package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.system.utils.Direction;
+
+import java.awt.*;
 
 public class Farrand extends PlayableSprite {
     //TODO Set default values for these
@@ -116,11 +119,15 @@ public class Farrand extends PlayableSprite {
     }
 
     @Override
-    public void onMovement() {
+    public void onMovement(Direction direction) {
         if (isAnimationPaused()) {
             super.setFrame(2);
             playAnimation();
         }
+        if (direction == Direction.UP)
+            setAnimation("walk_back");
+        else if (direction == Direction.DOWN)
+            setAnimation("walk_front");
     }
 
     @Override

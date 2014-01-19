@@ -45,6 +45,19 @@
                  "width":32,
                  "x":207,
                  "y":445
+                }, 
+                {
+                 "height":96,
+                 "name":"",
+                 "properties":
+                    {
+                     "triggerclass":"com.dissonance.game.triggers.TestTrigger"
+                    },
+                 "type":"trigger",
+                 "visible":true,
+                 "width":192,
+                 "x":352,
+                 "y":256
                 }],
          "opacity":1,
          "type":"objectgroup",

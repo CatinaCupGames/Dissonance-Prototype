@@ -9,6 +9,7 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.sound.Sound;
+import com.dissonance.game.scene.TestScene;
 import com.dissonance.game.sprites.Enemy;
 
 import java.util.Random;
@@ -69,9 +70,9 @@ public class TestQuest extends AbstractQuest {
         enemy.setX(350);
         enemy.setY(100);
         w.loadAndAdd(enemy);
-        //Thread.sleep(5000);
-        //TestScene scene = new TestScene();
-        //scene.beginScene();
+        Thread.sleep(5000);
+        TestScene scene = new TestScene();
+        scene.beginScene();
         //RenderService.INSTANCE.provideData(true, RenderService.ENABLE_CROSS_FADE);
         //RenderService.INSTANCE.provideData(3000f, RenderService.CROSS_FADE_DURATION);
         //World world = WorldFactory.getWorld("test_tileset2");

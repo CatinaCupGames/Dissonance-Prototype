@@ -1,6 +1,7 @@
 package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.system.utils.Direction;
 
 public final class Wyatt extends PlayableSprite {
 
@@ -105,7 +106,7 @@ public final class Wyatt extends PlayableSprite {
     }
 
     @Override
-    public void onMovement() {
+    public void onMovement(Direction direction) {
         if (isAnimationPaused()) {
             super.setFrame(2);
             playAnimation();

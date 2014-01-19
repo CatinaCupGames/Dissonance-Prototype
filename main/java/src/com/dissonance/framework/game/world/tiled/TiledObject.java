@@ -1,5 +1,7 @@
 package com.dissonance.framework.game.world.tiled;
 
+import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
 import org.lwjgl.util.vector.Vector2f;
@@ -22,6 +24,8 @@ public class TiledObject implements Collidable {
     private boolean isBound;
     private Polygon javaPolygon;
     private HitBox hitBox;
+
+    private AbstractTrigger trigger;
 
     private TiledObject() { }
 
@@ -97,6 +101,18 @@ public class TiledObject implements Collidable {
 
     public boolean isSpawn() {
         return type != null && type.toLowerCase().equals("spawn");
+    }
+
+    public boolean isTrigger() {
+        return type != null && type.toLowerCase().equals("trigger");
+    }
+
+    public AbstractTrigger getTrigger() {
+        return trigger;
+    }
+
+    void attachTrigger(AbstractTrigger trigger) {
+        this.trigger = trigger;
     }
 
     public String getDoorTarget() {

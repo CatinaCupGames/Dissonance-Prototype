@@ -113,6 +113,7 @@ public final class World {
                         long ms = System.currentTimeMillis();
                         drawable.addAll(tiledData.createDrawables());
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
+                        tiledData.loadTriggers();
                         WorldLoader loader = null;
                         if (World.this.loader == null) {
                             System.out.println("Searching for loader..");

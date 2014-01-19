@@ -52,16 +52,14 @@ public class TestScene extends Scene {
     @Override
     protected void initScene() {
         moot = new TestPlayer();
-       moot.setY(PlayableSprite.getCurrentlyPlayingSprite().getY());
-    moot.setX(PlayableSprite.getCurrentlyPlayingSprite().getX() - 500);
-    GameService.getCurrentWorld().loadAnimatedTextureForSprite(moot);
-    GameService.getCurrentWorld().addSprite(moot);
-    PlayableSprite.getCurrentlyPlayingSprite().freeze(); //Freeze the player
+        moot.setY(PlayableSprite.getCurrentlyPlayingSprite().getY());
+        moot.setX(PlayableSprite.getCurrentlyPlayingSprite().getX() - 500);
+        GameService.getCurrentWorld().loadAndAdd(moot);
 
 
-    Dialog d = DialogFactory.getDialog("testscene-p1");
-    queueDialog(d);
-}
+        Dialog d = DialogFactory.getDialog("testscene-p1");
+        queueDialog(d);
+    }
 
     @Override
     protected void onEndScene() {

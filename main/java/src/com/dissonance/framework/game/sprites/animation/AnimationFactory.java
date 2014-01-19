@@ -42,6 +42,8 @@ public class AnimationFactory {
     }
 
     public static void resetAnimator(int index) {
+        if (index < 0 || index >= animate.size())
+            return;
         synchronized (animate) {
             AnimatorData ad = animate.get(index);
             ad.last_tick = System.currentTimeMillis();

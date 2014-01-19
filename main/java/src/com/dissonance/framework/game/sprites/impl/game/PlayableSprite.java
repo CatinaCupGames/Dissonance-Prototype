@@ -86,7 +86,7 @@ public abstract class PlayableSprite extends CombatSprite {
         return party.toArray(new PlayableSprite[party.size()]);
     }
 
-    protected boolean w, a, s, d;
+    private boolean w, a, s, d;
     protected void checkMovement() {
         if (is_dodging) {
             float moveX, moveY;
@@ -194,14 +194,10 @@ public abstract class PlayableSprite extends CombatSprite {
                 if (!w && !d && !s && !a)
                     onNoMovement();
                 else
-                    onMovement();
+                    onMovement(w ? Direction.UP : s ? Direction.DOWN : a ? Direction.LEFT : d ? Direction.RIGHT : Direction.NONE);
             }
         }
     }
-
-    protected void onMovement() { }
-
-    protected void onNoMovement() { }
 
     protected void checkKeys() {
         if (!use_attack && !is_dodging) {
@@ -297,6 +293,7 @@ public abstract class PlayableSprite extends CombatSprite {
 
     public void freeze() {
         frozen = true;
+        onNoMovement();
     }
 
     public void unfreeze() {
