@@ -5,6 +5,7 @@ import com.dissonance.framework.game.scene.hud.HUD;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.framework.render.Camera;
+import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.TestPlayer;
 import com.dissonance.game.sprites.Wyatt;
 
@@ -15,7 +16,8 @@ import com.dissonance.game.sprites.Wyatt;
  */
 public abstract class GameWorldLoader implements WorldLoader {
     public static HUD hud;
-    public static Wyatt wyatt;
+    //public static Wyatt wyatt;
+    public static Farrand farrand;
     @Override
     public void onLoad(World w) {
         //TODO Always load any hud's that will be displayed during the game
@@ -23,14 +25,13 @@ public abstract class GameWorldLoader implements WorldLoader {
         //    hud = new HUD("->hud");
         //hud.displayUI(false, w);
 
-        if (wyatt == null) {
-            wyatt = new Wyatt();
-            w.loadAndAdd(wyatt);
-            wyatt.setCurrentWeapon(Weapon.getWeapon("test").createItem(wyatt));
-            wyatt.select();
+        if (farrand == null) {
+            farrand = new Farrand();
+            w.loadAndAdd(farrand);
+            farrand.select();
         } else {
-            w.loadAndAdd(wyatt);
-            Camera.setPos(Camera.translateToCameraCenter(wyatt.getVector(), 32));
+            w.loadAndAdd(farrand);
+            Camera.setPos(Camera.translateToCameraCenter(farrand.getVector(), farrand.getHeight()));
         }
     }
 }
