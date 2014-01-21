@@ -175,26 +175,26 @@ public abstract class PlayableSprite extends CombatSprite {
 
             if (w) {
                 setY(getY() - (speed * RenderService.TIME_DELTA));
-                setFacing(Direction.UP);
+                setFacing(a ? Direction.UP_LEFT : d ? Direction.UP_RIGHT : Direction.UP);
             }
             if (s) {
                 setY(getY() + (speed * RenderService.TIME_DELTA));
-                setFacing(Direction.DOWN);
+                setFacing(a ? Direction.DOWN_LEFT : d ? Direction.DOWN_RIGHT : Direction.DOWN);
             }
             if (a) {
                 setX(getX() - (speed * RenderService.TIME_DELTA));
-                setFacing(Direction.LEFT);
+                setFacing(w ? Direction.UP_LEFT : s ? Direction.DOWN_LEFT : Direction.LEFT);
             }
             if (d) {
                 setX(getX() + (speed * RenderService.TIME_DELTA));
-                setFacing(Direction.RIGHT);
+                setFacing(w ? Direction.UP_RIGHT : s ? Direction.DOWN_RIGHT : Direction.RIGHT);
             }
 
             if (!ignore_movement) {
                 if (!w && !d && !s && !a)
                     onNoMovement();
                 else
-                    onMovement(w ? Direction.UP : s ? Direction.DOWN : a ? Direction.LEFT : d ? Direction.RIGHT : Direction.NONE);
+                    onMovement(getDirection().simple());
             }
         }
     }

@@ -88,10 +88,8 @@ public class DialogUI extends UIElement {
         currentdialog = this;
         setWidth(512);
         setHeight(64);
-        Vector2f pos = new Vector2f(GameSettings.Display.window_width / 4, (GameSettings.Display.window_height / 2.0f) - ((getHeight() / 2.0f) + 8));
-        pos = Camera.translateToScreenCord(pos);
-        setX(pos.x);
-        setY(pos.y);
+        setX((float) (GameSettings.Display.resolution.getWidth() / 4f)); //TODO Get this to center of screen
+        setY((float) ((GameSettings.Display.resolution.getHeight() / 2f) - (getHeight() / 2f) - 8));
         cx = Camera.getX();
         cy = Camera.getY();
         if (events != null) {
@@ -160,10 +158,8 @@ public class DialogUI extends UIElement {
             i = 0;
 
         if (cx != Camera.getX() || cy != Camera.getY()) {
-            Vector2f pos = new Vector2f(GameSettings.Display.window_width / 4, (GameSettings.Display.window_height / 2.0f) - ((getHeight() / 2.0f) + 8));
-            pos = Camera.translateToScreenCord(pos);
-            setX(pos.x);
-            setY(pos.y);
+            setX((float) (GameSettings.Display.resolution.getWidth() / 4f)); //TODO Get this to center of screen
+            setY((float) ((GameSettings.Display.resolution.getHeight() / 2f) - (getHeight() / 2f) - 8));
             cx = Camera.getX();
             cy = Camera.getY();
             //completelyInvalidateView();

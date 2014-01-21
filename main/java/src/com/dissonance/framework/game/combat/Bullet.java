@@ -27,6 +27,7 @@ public class Bullet extends PhysicsSprite {
     private Direction direction;
     private float startX;
     private float startY;
+    private float xAdd, yAdd;
     private float angle;
     private float range;
     private double damage;
@@ -61,12 +62,67 @@ public class Bullet extends PhysicsSprite {
         }
 
         Sound.playSound("shotproto");
+
+        switch (this.direction) {
+            case UP:
+                yAdd = -(weapon.getWeaponInfo().getBulletSpeed());
+                xAdd = angle;
+                break;
+            case DOWN:
+                yAdd = (weapon.getWeaponInfo().getBulletSpeed());
+                xAdd = angle;
+                break;
+            case LEFT:
+                xAdd = -(weapon.getWeaponInfo().getBulletSpeed());
+                yAdd = angle;
+                break;
+            case RIGHT:
+                xAdd = (weapon.getWeaponInfo().getBulletSpeed());
+                yAdd = angle;
+                break;
+            case UP_LEFT:
+                yAdd = -(weapon.getWeaponInfo().getBulletSpeed());
+                xAdd = -(weapon.getWeaponInfo().getBulletSpeed());
+                yAdd /= 1.5f;
+                xAdd /= 1.5f;
+                yAdd += angle;
+                xAdd += angle;
+                break;
+            case UP_RIGHT:
+                yAdd = -(weapon.getWeaponInfo().getBulletSpeed());
+                xAdd = (weapon.getWeaponInfo().getBulletSpeed());
+                yAdd /= 1.5f;
+                xAdd /= 1.5f;
+                yAdd += angle;
+                xAdd += angle;
+                break;
+            case DOWN_LEFT:
+                yAdd = (weapon.getWeaponInfo().getBulletSpeed());
+                xAdd = -(weapon.getWeaponInfo().getBulletSpeed());
+                yAdd /= 1.5f;
+                xAdd /= 1.5f;
+                yAdd += angle;
+                xAdd += angle;
+                break;
+            case DOWN_RIGHT:
+                yAdd = (weapon.getWeaponInfo().getBulletSpeed());
+                xAdd = (weapon.getWeaponInfo().getBulletSpeed());
+                yAdd /= 1.5f;
+                xAdd /= 1.5f;
+                yAdd += angle;
+                xAdd += angle;
+                break;
+            default:
+                yAdd = -(weapon.getWeaponInfo().getBulletSpeed() * RenderService.TIME_DELTA);
+                xAdd = angle;
+                break;
+        }
     }
 
     @Override
     public void onLoad() {
         super.onLoad();
-
+        Direction direction = this.direction.simple();
         if (direction == Direction.UP) {
             setAnimation("shoot_top");
         } else if (direction == Direction.DOWN) {
@@ -117,7 +173,7 @@ public class Bullet extends PhysicsSprite {
         if (hit instanceof CombatSprite) {
             collide((CombatSprite) hit);
         } else if (hit instanceof TiledObject) {
-            if (((TiledObject)hit).isSpawn()) return;
+            if (((TiledObject)hit).isSpawn() || ((TiledObject)hit).isTrigger()) return;
             //TODO: play wall hit sound
             explode();
         }
@@ -142,36 +198,44 @@ public class Bullet extends PhysicsSprite {
         if (exploded)
             return;
 
+        float tX = xAdd;
+        float tY = yAdd;
+        if (tX != angle) tX *= RenderService.TIME_DELTA;
+        if (tY != angle) tY *= RenderService.TIME_DELTA;
+
+        setY(getY() + tY);
+        setX(getX() + tX);
+
         if (direction == Direction.UP) {
-            setY(getY() - (weapon.getWeaponInfo().getBulletSpeed() * RenderService.TIME_DELTA));
-
-            setX(getX() + angle);
-
             if (startY - getY() >= range) {
                 explode();
             }
         } else if (direction == Direction.DOWN) {
-            setY(getY() + (weapon.getWeaponInfo().getBulletSpeed() * RenderService.TIME_DELTA));
-
-            setX(getX() + angle);
-
             if (getY() - startY >= range) {
                 explode();
             }
         } else if (direction == Direction.RIGHT) {
-            setX(getX() + (weapon.getWeaponInfo().getBulletSpeed() * RenderService.TIME_DELTA));
-
-            setY(getY() + angle);
-
             if (getX() - startX >= range) {
                 explode();
             }
         } else if (direction == Direction.LEFT) {
-            setX(getX() - (weapon.getWeaponInfo().getBulletSpeed() * RenderService.TIME_DELTA));
-
-            setY(getY() + angle);
-
             if (startX - getX() >= range) {
+                explode();
+            }
+        } else if (direction == Direction.UP_LEFT) {
+            if (startX - getX() >= range || startY - getY() >= range) {
+                explode();
+            }
+        } else if (direction == Direction.UP_RIGHT) {
+            if (getX() - startX >= range || startY - getY() >= range) {
+                explode();
+            }
+        } else if (direction == Direction.DOWN_LEFT) {
+            if (startX - getX() >= range || getY() - startY >= range) {
+                explode();
+            }
+        } else if (direction == Direction.DOWN_RIGHT) {
+            if (getX() - startX >= range || getY() - startY >= range) {
                 explode();
             }
         }

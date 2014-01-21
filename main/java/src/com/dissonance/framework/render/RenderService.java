@@ -1,6 +1,7 @@
 package com.dissonance.framework.render;
 
 import com.dissonance.framework.game.GameService;
+import com.dissonance.framework.game.sprites.UIElement;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.Sprite;
@@ -278,6 +279,7 @@ public class RenderService extends Service {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glLoadIdentity();
             glScalef(2f, 2f, 1f);
+
             glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
 	    //ROBO //todo change this crap into proper postprocess and per material shaders
             ShaderFactory.executePreRender();
@@ -308,6 +310,20 @@ public class RenderService extends Service {
                     t.printStackTrace();
                 }
             }
+
+            glLoadIdentity();
+            glScalef(2f, 2f, 1f);
+
+            for (UIElement e : current_world.getElements()) {
+                if (e == null)
+                    return;
+                try {
+                    e.render();
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            }
+
 
             if (next_world != null) {
                 long time = System.currentTimeMillis() - fadeStartTime;

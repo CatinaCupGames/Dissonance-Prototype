@@ -2,6 +2,7 @@ package com.dissonance.framework.game.world;
 
 import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.sprites.UIElement;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.tiled.Layer;
@@ -42,6 +43,7 @@ public final class World {
     private boolean loaded = false;
     private WorldData tiledData;
     private WorldLoader loader;
+    private List<UIElement> uiElements = new ArrayList<UIElement>();
     private List<UpdatableDrawable> udrawables = new ArrayList<>();
     private List<CombatSprite> combatCache = new ArrayList<CombatSprite>();
 
@@ -68,6 +70,10 @@ public final class World {
 
     public WorldLoader getWorldLoader() {
         return loader;
+    }
+
+    public List<UIElement> getElements() {
+        return uiElements;
     }
 
     public void switchTo(boolean fadeToBlack) {
@@ -210,6 +216,13 @@ public final class World {
 
             @Override
             public void run() {
+                if (draw instanceof UIElement) {
+                    UIElement ue = (UIElement)draw;
+                    ue.init();
+                    uiElements.add(ue);
+                    udrawables.add(ue);
+                    return;
+                }
                 drawable.add(draw);
                 if (draw instanceof UpdatableDrawable) {
                     UpdatableDrawable ud = (UpdatableDrawable) draw;

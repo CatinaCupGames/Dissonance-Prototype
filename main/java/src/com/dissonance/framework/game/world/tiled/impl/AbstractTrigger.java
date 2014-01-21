@@ -17,10 +17,22 @@ public abstract class AbstractTrigger {
         this.parent = parent;
     }
 
-    public void onCollide(PlayableSprite sprite) {
+    public void onCollide(final PlayableSprite sprite) {
         if (System.currentTimeMillis() - lastTrigger < triggerTimeout() || !active) return;
         lastTrigger = System.currentTimeMillis();
-        onTrigger(sprite);
+        setActive(false);
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    onTrigger(sprite);
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+                setActive(true);
+            }
+        }).start();
     }
 
     protected void setActive(boolean value) {
@@ -35,7 +47,7 @@ public abstract class AbstractTrigger {
         return parent;
     }
 
-    protected abstract void onTrigger(PlayableSprite sprite);
+    protected abstract void onTrigger(PlayableSprite sprite) throws Throwable;
 
     protected abstract long triggerTimeout();
 }

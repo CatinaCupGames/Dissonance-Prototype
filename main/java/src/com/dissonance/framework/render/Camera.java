@@ -40,7 +40,7 @@ public final class Camera {
     }
 
     public static boolean isOffScreen(float x, float y, float width, float height, float scale) {
-        return (x + width) - posX < 0 || Math.abs(posX - (x - width))  > GameSettings.Display.window_width / scale || (y + height) - posY < 0 || Math.abs(posY - (y - height)) > GameSettings.Display.window_height / scale;
+        return (x + width) - posX < 0 || Math.abs(posX - (x - width))  > GameSettings.Display.resolution.getWidth() / scale || (y + height) - posY < 0 || Math.abs(posY - (y - height)) > GameSettings.Display.resolution.getHeight() / scale;
     }
 
     public static boolean isOffScreen(Sprite sprite, float scale) {
@@ -62,8 +62,8 @@ public final class Camera {
     }
 
     public static Vector2f translateToCameraCenter(Vector2f vec, float height) {
-        vec.x = (vec.x - (GameSettings.Display.window_width / 4f));
-        vec.y = (vec.y - (GameSettings.Display.window_height / 4f) + height);
+        vec.x = (float) (vec.x - (GameSettings.Display.resolution.getWidth() / 4f));
+        vec.y = (float) (vec.y - (GameSettings.Display.resolution.getHeight() / 4f) + height);
         return vec;
     }
 
