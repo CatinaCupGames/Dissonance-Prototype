@@ -221,6 +221,8 @@ public final class World {
                     ue.init();
                     uiElements.add(ue);
                     udrawables.add(ue);
+                    if (run != null)
+                        run.run();
                     return;
                 }
                 drawable.add(draw);
@@ -303,6 +305,13 @@ public final class World {
 
             @Override
             public void run() {
+                if (drawable instanceof UIElement) {
+                    uiElements.remove(drawable);
+                    udrawables.remove(drawable);
+                    if (runnable != null)
+                        runnable.run();
+                    return;
+                }
                 World.this.drawable.remove(drawable);
                 if (drawable instanceof UpdatableDrawable)
                     World.this.udrawables.remove(drawable);

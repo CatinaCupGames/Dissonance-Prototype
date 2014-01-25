@@ -25,6 +25,14 @@ public class WorldData {
         return width;
     }
 
+    public int getPixelWidth() {
+        return width * tilewidth;
+    }
+
+    public int getPixelHeight() {
+        return height * tileheight;
+    }
+
     public int getHeight() {
         return height;
     }

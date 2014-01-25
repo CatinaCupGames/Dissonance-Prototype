@@ -26,6 +26,7 @@ public class RenderService extends Service {
     public static final int WORLD_DATA_TYPE = 0;
     public static final int ENABLE_CROSS_FADE = 1;
     public static final int CROSS_FADE_DURATION = 2;
+    public static final float ZOOM_SCALE = 4f;
     public static RenderService INSTANCE;
 
     /****************************************************
@@ -161,7 +162,7 @@ public class RenderService extends Service {
         try {
             setDisplayMode(GameSettings.Display.window_width, GameSettings.Display.window_height, GameSettings.Display.fullscreen);
             Display.create();
-		//ROBO //todo get all this changed to proper OGL
+            //ROBO //todo get all this changed to proper OGL
             glClearColor(0f, 0f, 0f, 1f);
             glClearDepth(1f);
             glViewport(0, 0, GameSettings.Display.window_width, GameSettings.Display.window_height);
@@ -274,14 +275,14 @@ public class RenderService extends Service {
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glClearColor(0f, 0f, 0f, 1f);
-		//ROBO //todo get this crap changed into proper ogl
+            //ROBO //todo get this crap changed into proper ogl
             glMatrixMode(GL_MODELVIEW);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glLoadIdentity();
-            glScalef(2f, 2f, 1f);
+            glScalef(ZOOM_SCALE, ZOOM_SCALE, 1f);
 
             glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
-	    //ROBO //todo change this crap into proper postprocess and per material shaders
+            //ROBO //todo change this crap into proper postprocess and per material shaders
             ShaderFactory.executePreRender();
 
 
@@ -293,17 +294,19 @@ public class RenderService extends Service {
             }
 
             glColor4f(1f, 1f, 1f, curAlpha);
-		//ROBO //todo get all these into proper batches
+            //ROBO //todo get all these into proper batches
             Iterator<Drawable> sprites = current_world.getSortedDrawables();
             while (sprites.hasNext()) {
                 Drawable s = sprites.next();
                 if (s == null)
                     continue;
                 try {
-                    if (s instanceof Sprite) {
-                        if (Camera.isOffScreen((Sprite)s, 2))
-                            continue;
-                    } else if (Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2, 2)) //Assume everything is 32x32
+                        /*if (d instanceof Sprite) {
+                            if (Camera.isOffScreen((Sprite)d, 2))
+                                continue;
+                        } else if (Camera.isOffScreen(d.getX(), d.getY(), d.getWidth() / 2, d.getHeight() / 2, 2)) //Assume everything is 32x32
+                            continue;*/
+                    if (Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
                         continue;
                     s.render();
                 } catch (Throwable t) {
@@ -312,7 +315,7 @@ public class RenderService extends Service {
             }
 
             glLoadIdentity();
-            glScalef(2f, 2f, 1f);
+            glScalef(ZOOM_SCALE, ZOOM_SCALE, 1f);
 
             for (UIElement e : current_world.getElements()) {
                 if (e == null)
@@ -343,12 +346,27 @@ public class RenderService extends Service {
                     if (d == null)
                         continue;
                     try {
-                        if (d instanceof Sprite) {
+                        /*if (d instanceof Sprite) {
                             if (Camera.isOffScreen((Sprite)d, 2))
                                 continue;
                         } else if (Camera.isOffScreen(d.getX(), d.getY(), d.getWidth() / 2, d.getHeight() / 2, 2)) //Assume everything is 32x32
+                            continue;*/
+                        if (Camera.isOffScreen(d.getX(), d.getY(), d.getWidth() / 2, d.getHeight() / 2))
                             continue;
                         d.render();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
+                }
+
+                glLoadIdentity();
+                glScalef(ZOOM_SCALE, ZOOM_SCALE, 1f);
+
+                for (UIElement e : next_world.getElements()) {
+                    if (e == null)
+                        return;
+                    try {
+                        e.render();
                     } catch (Throwable t) {
                         t.printStackTrace();
                     }

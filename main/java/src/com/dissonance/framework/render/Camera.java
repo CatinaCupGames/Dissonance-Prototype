@@ -1,11 +1,14 @@
 package com.dissonance.framework.render;
 
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import org.lwjgl.util.vector.Vector2f;
 
 public final class Camera {
+    private static final float OFFSCREEN_THRESHOLD = 32;
+
     private static float posX;
     private static float posY;
     private static boolean isEasing;
@@ -23,7 +26,9 @@ public final class Camera {
     }
 
     public static void setX(float x) {
-        posX = x;
+        if (((GameService.getCurrentWorld() == null && x >= 0) || (GameService.getCurrentWorld() != null && x >= GameService.getCurrentWorld().getTiledData().getTileWidth())) &&
+                (GameService.getCurrentWorld() == null || x <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelWidth()) - (GameSettings.Display.resolution.getWidth() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileWidth()))
+            posX = x;
     }
 
     public static float getY() {
@@ -31,24 +36,31 @@ public final class Camera {
     }
 
     public static void setY(float y) {
-        posY = y;
+        if (((GameService.getCurrentWorld() == null && y >= 0) || (GameService.getCurrentWorld() != null && y >= -GameService.getCurrentWorld().getTiledData().getTileHeight())) &&
+                (GameService.getCurrentWorld() == null || y <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelHeight()) - (GameSettings.Display.resolution.getHeight() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileHeight()))
+            posY = y;
     }
 
     public static void setPos(Vector2f pos) {
-        posX = pos.x;
-        posY = pos.y;
+        if (((GameService.getCurrentWorld() == null && pos.x >= 0) || (GameService.getCurrentWorld() != null && pos.x >= GameService.getCurrentWorld().getTiledData().getTileWidth())) &&
+                (GameService.getCurrentWorld() == null || pos.x <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelWidth()) - (GameSettings.Display.resolution.getWidth() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileWidth()))
+            posX = pos.x;
+
+        if (((GameService.getCurrentWorld() == null && pos.y >= 0) || (GameService.getCurrentWorld() != null && pos.y >= -GameService.getCurrentWorld().getTiledData().getTileHeight())) &&
+                (GameService.getCurrentWorld() == null || pos.y <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelHeight()) - (GameSettings.Display.resolution.getHeight() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileHeight()))
+            posY = pos.y;
     }
 
-    public static boolean isOffScreen(float x, float y, float width, float height, float scale) {
-        return (x + width) - posX < 0 || Math.abs(posX - (x - width))  > GameSettings.Display.resolution.getWidth() / scale || (y + height) - posY < 0 || Math.abs(posY - (y - height)) > GameSettings.Display.resolution.getHeight() / scale;
+    public static boolean isOffScreen(float x, float y, float width, float height) {
+        return (x + width) - posX < -OFFSCREEN_THRESHOLD || Math.abs(posX - (x - width))  > OFFSCREEN_THRESHOLD + (GameSettings.Display.resolution.getWidth() / RenderService.ZOOM_SCALE) || (y + height) - posY < -OFFSCREEN_THRESHOLD || Math.abs(posY - (y - height)) > OFFSCREEN_THRESHOLD + (GameSettings.Display.resolution.getHeight() / RenderService.ZOOM_SCALE);
     }
 
-    public static boolean isOffScreen(Sprite sprite, float scale) {
-        return isOffScreen(sprite.getX(), sprite.getY(), sprite.getTexture().getTextureWidth() / 2, sprite.getTexture().getTextureHeight() / 2, scale);
+    public static boolean isOffScreen(Sprite sprite) {
+        return isOffScreen(sprite.getX(), sprite.getY(), sprite.getTexture().getTextureWidth() / 2, sprite.getTexture().getTextureHeight() / 2);
     }
 
-    public static boolean isOffScreen(float x, float y, float scale) {
-        return isOffScreen(x, y, 0, 0, scale);
+    public static boolean isOffScreen(float x, float y) {
+        return isOffScreen(x, y, 0, 0);
     }
 
     public static Vector2f translateToScreenCord(Vector2f vec) {
@@ -62,8 +74,8 @@ public final class Camera {
     }
 
     public static Vector2f translateToCameraCenter(Vector2f vec, float height) {
-        vec.x = (float) (vec.x - (GameSettings.Display.resolution.getWidth() / 4f));
-        vec.y = (float) (vec.y - (GameSettings.Display.resolution.getHeight() / 4f) + height);
+        vec.x = (float) (vec.x - (GameSettings.Display.resolution.getWidth() / (RenderService.ZOOM_SCALE * 2f)));
+        vec.y = (float) (vec.y - (GameSettings.Display.resolution.getHeight() / (RenderService.ZOOM_SCALE * 2f)) + height);
         return vec;
     }
 
