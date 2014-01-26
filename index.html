@@ -1,61 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<title>Dissonance</title>
-		<script language="javascript" type="text/javascript" src="js/jquery.min.js"></script>
-		<script language="javascript" type="text/javascript" src="js/magic.js"></script>
-		<script language="javascript" type="text/javascript" src="js/bootstrap.js"></script>
-		<script language="javascript" type="text/javascript" src="js/bootstrap-progressbar.js"></script>
-		
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-		<link rel="stylesheet" type="text/css" href="css/style.css"/>
-		<link rel="stylesheet" type="text/css" href="https://github.com/assets/github.css">
-		<link rel="stylesheet" type="text/css" href="css/index.css"/>
-		<link href='http://fonts.googleapis.com/css?family=Oxygen:400,300,700' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Coming Soon</title>
+		<link rel="stylesheet" href="css/foundation.min.css" type="text/css"/>
+		<link rel="stylesheet" href="css/main.css" type="text/css"/>
 	</head>
-
 	<body>
-		<!--[if IE 8]>
-		<script type="text/javascript">
-			window.location = "eddiep.me/ie.html";
-			console.log("pop");
-		</script>
-		<![endif]-->
-		<!--[if IE 7]>
-		<script type="text/javascript">
-			window.location = "eddiep.me/ie.html";
-		</script>
-		<![endif]-->
-		<!--[if IE 6]>
-		<script type="text/javascript">
-			window.location = "eddiep.me/ie.html";
-		</script>
-		<![endif]-->
-		<!--[if IE 5]>
-		<script type="text/javascript">
-			window.location = "eddiep.me/ie.html";
-		</script>
-		<![endif]-->
-		
-		<div class="page">
-			<div>
-				<img src="img/Dissonancetitlebanner.jpg" style="width: 664px; height: 159px; display: block; margin-left: auto; margin-right: auto; margin-top:40px;" />
-                                <span class="title_bar">Demo Progress</span>
-				<div id="progressbar" style="width:80%; margin-left:auto; margin-right:auto; margin-top:160px;"> </div>
-			</div>
-			<div>
-				<div class="commits" id="commit_box_stuff">
-					
-				</div>
-			</div>
-		</div>
-		
-		<script type="text/javascript">
-		$('#progressbar').progressbar();
-		</script>
-	
-	</body>
-	
-</html>
-         
+        <!--[if (lt IE 8)|(if gte IE 8)]>
+        <div id="ur-dead-2-me">
+            <h1>Seriously? You're really using an ancient browser?</h1>
+            <h3>
+                <a href="http://firefox.com">Use</a>
+                <a href="http://chrome.com">something</a>
+                <a href="http://windows.microsoft.com/en-us/internet-explorer/ie-11-worldwide-languages">better</a>
+            </h3>
+        </div>
+        <![endif]-->
+        <div class="row">
+            <div class="large-12 columns text-center">
+                <img src="img/logo.jpg" id="logo"/>
+                <h1>Coming Soon</h1>
 
+                <div class="progress large-12 dissonance radius">
+                    <span class="text" id="t">0%</span>
+                    <span class="meter" id="p" style="width:0;"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-8 medium-8 small-12 large-centered medium-centered columns">
+                <h3 class="text-center">Latest Commits</h3>
+                <div id="commits"></div>
+            </div>
+        </div>
+        <script src="js/jquery.js"></script>
+        <script src="js/foundation.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
