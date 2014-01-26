@@ -5,8 +5,11 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Validator;
 
+import java.util.Random;
+
 public class WorldFactory {
     private static final int WORLD_CACHE_LIMIT = 5;
+    private static final Random random = new Random();
     private static int worldCount;
     public static final int WORLD_ACCESS_LIMIT_SECONDS = 120;
     private static WorldHolder[] cacheWorlds = new WorldHolder[WORLD_CACHE_LIMIT];
@@ -54,6 +57,43 @@ public class WorldFactory {
 
 
         return worldHolder.world;
+    }
+
+    static World getWorld(String name, boolean cache) throws WorldLoadFailedException {
+        if (isWorldStillLoaded(name)) {
+            for (WorldHolder cacheWorld : cacheWorlds) {
+                if (cacheWorld.world.getName().equals(name))
+                    return cacheWorld.world;
+            }
+        }
+
+        int index = -1;
+        if (cache) {
+            if (worldCount >= WORLD_CACHE_LIMIT)
+                cleanCache(true);
+
+            index = nextOpenSpot();
+            if (nextOpenSpot() == -1) {
+                cleanCache(true);
+                index = nextOpenSpot();
+                if (index == -1)
+                    throw new WorldLoadFailedException("World Cache is full!");
+            }
+        }
+
+        World w = new World(index == -1 ? random.nextInt() : index);
+        w.init();
+        w.load(name);
+        if (cache) {
+            WorldHolder worldHolder = new WorldHolder();
+            worldHolder.world = w;
+            worldHolder.lastAccess = System.currentTimeMillis();
+            worldCount++;
+            cacheWorlds[index] = worldHolder;
+            return worldHolder.world;
+        }
+
+        return w;
     }
 
     private static int nextOpenSpot() {
@@ -174,7 +214,6 @@ public class WorldFactory {
         if (force) {
             if (!removed) {
                 for (int i = 0; i < WORLD_CACHE_LIMIT; i++) {
-                    long since = curr - cacheWorlds[i].lastAccess;
                     if (GameService.getCurrentWorld().getID() != cacheWorlds[i].world.getID()) {
                         cacheWorlds[i].world.onDispose();
                         cacheWorlds[i] = null;

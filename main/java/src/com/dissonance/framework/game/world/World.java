@@ -77,7 +77,6 @@ public final class World {
     }
 
     public void switchTo(boolean fadeToBlack) {
-        //TODO Move all playable sprites to this world maybe?
         if (renderingService == null)
             return;
         if (!renderingService.isCrossFading() && fadeToBlack) {

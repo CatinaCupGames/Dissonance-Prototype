@@ -26,7 +26,7 @@ public class RenderService extends Service {
     public static final int WORLD_DATA_TYPE = 0;
     public static final int ENABLE_CROSS_FADE = 1;
     public static final int CROSS_FADE_DURATION = 2;
-    public static final float ZOOM_SCALE = 4f;
+    public static final float ZOOM_SCALE = 2f;
     public static RenderService INSTANCE;
 
     /****************************************************
@@ -314,6 +314,8 @@ public class RenderService extends Service {
                 }
             }
 
+            ShaderFactory.executePostRender();
+
             glLoadIdentity();
             glScalef(ZOOM_SCALE, ZOOM_SCALE, 1f);
 
@@ -387,8 +389,6 @@ public class RenderService extends Service {
             }
 
             Camera.executeAnimation(); //Execute any interlop
-
-            ShaderFactory.executePostRender();
             exitOnGLError("RenderService.renderSprites");
 
             Display.update();

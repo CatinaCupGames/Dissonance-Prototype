@@ -37,20 +37,28 @@ public abstract class AbstractShader {
     public abstract String getName();
 
     private boolean check1;
-    void postRender() {
+    private boolean warn = false;
+    public void postRender() {
         check1 = false;
         onPostRender();
-        if (!check1)
-            throw new RuntimeException("super.onPostRender was not invoked! Try putting super.onPostRender at the top of your method!");
+        if (!check1 && !warn) {
+            System.out.println("[WARNING] This shader does not want to unbind!");
+            warn = true;
+        } else if (check1 && warn) {
+            warn = false;
+        }
     }
 
     protected void onPostRender() {
         check1 = true;
         ARBShaderObjects.glUseProgramObjectARB(0);
+        String log = getLogInfo(program);
+        if (!log.isEmpty())
+            System.out.println(log);
     }
 
     private boolean check2;
-    void preRender() {
+    public void preRender() {
         check2 = false;
         onPreRender();
         if (!check2)
@@ -61,6 +69,10 @@ public abstract class AbstractShader {
     protected void onPreRender() {
         check2 = true;
         ARBShaderObjects.glUseProgramObjectARB(program);
+    }
+
+    public String getLogInfo(int obj) {
+        return ARBShaderObjects.glGetInfoLogARB(obj, ARBShaderObjects.glGetObjectParameteriARB(obj, ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB));
     }
 
     protected void build() {

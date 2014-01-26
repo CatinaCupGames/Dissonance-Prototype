@@ -3,6 +3,7 @@ package com.dissonance.framework.render.shader;
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.shader.impl.BlurShader;
+import com.dissonance.framework.render.shader.impl.LightShader;
 import com.dissonance.framework.render.shader.impl.MainShader;
 import com.dissonance.game.Main;
 import org.lwjgl.opengl.ARBFragmentShader;
@@ -44,7 +45,7 @@ public class ShaderFactory {
 
             ARBShaderObjects.glLinkProgramARB(program);
             if(ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_LINK_STATUS_ARB) == GL11.GL_FALSE) {
-                throw new RuntimeException("Error linking shader!");
+                throw new RuntimeException("Error linking shader! - " + shader.getLogInfo(program));
             }
 
             ARBShaderObjects.glValidateProgramARB(program);
@@ -185,6 +186,9 @@ public class ShaderFactory {
 
     public static void buildAllShaders()
     {
+        new LightShader().build();
+
+
         new MainShader().build();
 
         for(String s : GameService.args)
