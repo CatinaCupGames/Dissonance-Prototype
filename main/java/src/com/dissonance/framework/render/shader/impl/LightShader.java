@@ -5,10 +5,8 @@ import com.dissonance.framework.render.shader.AbstractShader;
 import com.dissonance.framework.system.GameSettings;
 import org.lwjgl.opengl.GL20;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -17,6 +15,8 @@ import static org.lwjgl.opengl.GL20.*;
 public class LightShader extends AbstractShader {
     private ArrayList<Light> lights = new ArrayList<Light>();
     private float overallBrightness = 0.5f;
+    private int resolutionLocation = -1, overallBrightnessLocation = -1, countLocation = -1, windowLocation = -1, cameraLocation = -1, aspectLocation = -1;
+    private float oX, oY;
 
     @Override
     public String getVertexFile() {
@@ -35,14 +35,49 @@ public class LightShader extends AbstractShader {
 
     public void addAll(List<Light> lights) {
         this.lights.addAll(lights);
+        set = false;
+
+        if (lights.size() > 0)
+            setActive(true);
+        else
+            setActive(false);
     }
 
     public void add(Light l) {
         this.lights.add(l);
+        set = false;
+
+        if (lights.size() > 0)
+            setActive(true);
+        else
+            setActive(false);
     }
 
     public void clear() {
         this.lights.clear();
+
+        if (lights.size() > 0)
+            setActive(true);
+        else
+            setActive(false);
+    }
+
+    public void remove(Light l) {
+        this.lights.remove(l);
+
+        if (lights.size() > 0)
+            setActive(true);
+        else
+            setActive(false);
+    }
+
+    public void remove(int index) {
+        this.lights.remove(index);
+
+        if (lights.size() > 0)
+            setActive(true);
+        else
+            setActive(false);
     }
 
     public float getOverallBrightness() {
@@ -57,93 +92,58 @@ public class LightShader extends AbstractShader {
     @Override
     public void build() {
         super.build();
-        Random random = new Random();
-        int count = random.nextInt(10) + 1;
-        Light l = new Light(30, 300, 0.3f, 1.3f);
-
-        Light l2 = new Light(500, 300, 0.2f, 1.3f);
-
-        Light l3 = new Light(199, 300, 0.9f, 2f);
-
-        add(l);
-        add(l2);
-        add(l3);
-
-
-        setActive(true);
     }
 
-    private boolean set = false;
+    protected static boolean set = false;
     @Override
     public void onPreRender() {
         super.onPreRender();
         final int program = getProgramID();
-        int resolution = GL20.glGetUniformLocation(program, "iResolution");
-        int world_brightnessVar = GL20.glGetUniformLocation(program, "overall_brightness");
-        int countVar = GL20.glGetUniformLocation(program, "count");
+        if (oX != Camera.getX() || oY != Camera.getY()) {
+            if (cameraLocation == -1) {
+                cameraLocation = GL20.glGetUniformLocation(program, "cameraPos");
+            }
 
-        glUniform2f(resolution, (float) GameSettings.Display.resolution.getWidth(), (float) GameSettings.Display.resolution.getHeight());
-        glUniform1f(world_brightnessVar, overallBrightness);
-        glUniform1i(countVar, lights.size());
+            glUniform2f(cameraLocation, Camera.getX(), Camera.getY());
 
-        float camerax = Camera.getX();
-        float cameray = Camera.getY();
-        float cx = (float)GameSettings.Display.resolution.getWidth() - camerax;
-        cx /= 2f;
-        float cy = (float)GameSettings.Display.resolution.getHeight() - cameray;
-        cy /= 2f;
-        for (int i = 0; i < lights.size(); i++) {
-            Light l = lights.get(i);
-            int tempLightVar = GL20.glGetUniformLocation(program, "lights[" + i + "]");
-            glUniform4f(tempLightVar, ((l.x + (l.radius / 2f)) - camerax) / cx, 1.0f - (((l.y + (l.radius / 2f)) - cameray) / cy), l.brightness, l.radius);
-        }
-    }
-
-    public class Light {
-        private float x, y, radius, brightness;
-
-        public Light(float x, float y, float size, float brightness) {
-            this.x = x;
-            this.y = y;
-            this.radius = size;
-            this.brightness = brightness;
+            oX = Camera.getX();
+            oY = Camera.getY();
         }
 
-        public float getX() {
-            return x;
-        }
+        if (!set) {
+            if (resolutionLocation == -1) {
+                resolutionLocation = GL20.glGetUniformLocation(program, "iResolution");
+            }
+            if (overallBrightnessLocation == -1) {
+                overallBrightnessLocation = GL20.glGetUniformLocation(program, "overall_brightness");
+            }
+            if (countLocation == -1) {
+                countLocation = GL20.glGetUniformLocation(program, "count");
+            }
 
-        public float getY() {
-            return y;
-        }
+            if (windowLocation == -1) {
+                windowLocation = GL20.glGetUniformLocation(program, "window");
+            }
 
-        public float getRadius() {
-            return radius;
-        }
+            if (aspectLocation == -1) {
+                aspectLocation = GL20.glGetUniformLocation(program, "aspect");
+            }
 
-        public float getBrightness() {
-            return brightness;
-        }
+            glUniform2f(resolutionLocation, (float)GameSettings.Display.resolution.getWidth(), (float)GameSettings.Display.resolution.getHeight());
+            glUniform1f(overallBrightnessLocation, overallBrightness);
+            glUniform1i(countLocation, lights.size());
+            glUniform2f(windowLocation, GameSettings.Display.window_width, GameSettings.Display.window_height);
+            glUniform2f(aspectLocation, (float)GameSettings.Display.resolution.aspectRatio.arWidth, (float)GameSettings.Display.resolution.aspectRatio.arHeight);
 
+            for (int i = 0; i < lights.size(); i++) {
+                Light l = lights.get(i);
+                int tempLightVar = GL20.glGetUniformLocation(program, "lights[" + i + "]");
+                glUniform4f(tempLightVar, l.x, l.y, l.brightness, l.radius);
 
-        public void setX(float x) {
-            this.x = x;
-            set = false;
-        }
-
-        public void setY(float y) {
-            this.y = y;
-            set = false;
-        }
-
-        public void setRadius(float radius) {
-            this.radius = radius;
-            set = false;
-        }
-
-        public void setBrightness(float brightness) {
-            this.brightness = brightness;
-            set = false;
+                int tempColorVar = GL20.glGetUniformLocation(program, "colors[" + i + "]");
+                glUniform3f(tempColorVar, l.color.getRed() / 255f, l.color.getGreen() / 255f, l.color.getBlue() / 255f);
+            }
+            set = true;
         }
     }
 }

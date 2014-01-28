@@ -186,7 +186,6 @@ public class ShaderFactory {
 
     public static void buildAllShaders()
     {
-        new LightShader().build();
 
 
         new MainShader().build();

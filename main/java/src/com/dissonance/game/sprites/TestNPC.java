@@ -30,10 +30,4 @@ public final class TestNPC extends NPCSprite {
     @Override
     public void onSpeakingFinished() {
     }
-
-    @Override
-    public void onLoad() {
-        super.onLoad();
-        setLayer(2);
-    }
 }

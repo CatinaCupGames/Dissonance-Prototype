@@ -12,6 +12,8 @@ import com.dissonance.framework.game.world.tiled.WorldData;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
+import com.dissonance.framework.render.shader.impl.Light;
+import com.dissonance.framework.render.shader.impl.LightShader;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.ServiceManager;
@@ -33,6 +35,7 @@ import java.util.List;
 public final class World {
     private static final Gson GSON = new Gson();
     private static String wlpackage = "com.dissonance.game.w";
+    private static LightShader lightShader;
 
     private transient final ArrayList<Drawable> drawable = new ArrayList<>();
     private String name;
@@ -46,6 +49,8 @@ public final class World {
     private List<UIElement> uiElements = new ArrayList<UIElement>();
     private List<UpdatableDrawable> udrawables = new ArrayList<>();
     private List<CombatSprite> combatCache = new ArrayList<CombatSprite>();
+    private List<Light> lights = new ArrayList<Light>();
+    private float worldBrightness = 1f;
 
 
     World(int ID) {
@@ -112,6 +117,11 @@ public final class World {
                 renderingService.runOnServiceThread(new Runnable() {
                     @Override
                     public void run() {
+                        if (lightShader == null) { //Only build the shader on the render thread
+                            lightShader = new LightShader();
+                            lightShader.build();
+                        }
+
                         tiledData.loadAllTileSets();
                         tiledData.assignAllLayers();
                         System.out.println("Creating tiles..");
@@ -143,6 +153,10 @@ public final class World {
                         } else {
                             World.this.loader.onLoad(World.this);
                         }
+
+                        lightShader.addAll(lights);
+                        lightShader.setOverallBrightness(worldBrightness);
+
                         loaded = true;
                         _wakeLoadWaiters();
                     }
@@ -156,11 +170,26 @@ public final class World {
                 throw new WorldLoadFailedException("Error loading Tiled file!", e);
             }
         } else { //Find and invoke WorldLoader for this world
-            WorldLoader loader = attemptSearchForWorldLoader();
-            if (loader != null)
-                loader.onLoad(this);
-            loaded = true;
-            _wakeLoadWaiters();
+            renderingService.runOnServiceThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (lightShader == null) { //Only build the shader on the render thread
+                        lightShader = new LightShader();
+                        lightShader.build();
+                    }
+
+                    WorldLoader loader = attemptSearchForWorldLoader();
+                    if (loader != null)
+                        loader.onLoad(World.this);
+
+                    lightShader.addAll(lights);
+                    lightShader.setOverallBrightness(worldBrightness);
+
+                    loaded = true;
+                    _wakeLoadWaiters();
+                }
+            });
         }
 
         if (renderingService.isPaused())
@@ -204,6 +233,32 @@ public final class World {
 
     public void invalidateDrawableList() {
         invalid = true;
+    }
+
+    public List<Light> getLights() {
+        return lights;
+    }
+
+    public float getWorldBrightness() {
+        return worldBrightness;
+    }
+
+    public void setWorldBrightness(float brightness) {
+        this.worldBrightness = brightness;
+
+        lightShader.setOverallBrightness(brightness);
+    }
+
+    public void addLight(Light l) {
+        this.lights.add(l);
+
+        lightShader.add(l);
+    }
+
+    public void removeLight(Light l) {
+        this.lights.remove(l);
+
+        lightShader.remove(l);
     }
 
     private void addDrawable(final Drawable draw, final Runnable run) {
@@ -276,6 +331,10 @@ public final class World {
 
     public void onUnload() { //This method is called when the world is not shown but is still in memory
         //TODO Do stuff to save memory when this world is not shown
+        if (lightShader != null) {
+            lightShader.clear();
+            lightShader.setOverallBrightness(1f);
+        }
     }
 
     public void onDispose() {
