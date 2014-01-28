@@ -144,6 +144,7 @@ public class Farrand extends PlayableSprite {
     public void onLoad() {
         super.onLoad();
         pauseAnimation();
+        setTint(Color.GREEN);
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.dissonance.framework.system.utils.Validator;
 import com.google.gson.Gson;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -67,6 +68,10 @@ public final class World {
 
     public void init() {
         renderingService = ServiceManager.createService(RenderService.class);
+    }
+
+    public RenderService getRenderService() {
+        return renderingService;
     }
 
     public void setWorldLoader(WorldLoader loader) {
@@ -233,6 +238,24 @@ public final class World {
 
     public void invalidateDrawableList() {
         invalid = true;
+    }
+
+    public Light createLight(float x, float y, float brightness, float radius) {
+        Light l = new Light(x, y, radius, brightness);
+        addLight(l);
+        return l;
+    }
+
+    public Light createLight(float x, float y, float brightness, float radius, Color color) {
+        Light l = new Light(x, y, radius, brightness, color);
+        addLight(l);
+        return l;
+    }
+
+    public Light createLight(float x, float y, float brightness, float radius, float r, float g, float b) {
+        Light l = new Light(x, y, radius, brightness, new Color(r, g, b));
+        addLight(l);
+        return l;
     }
 
     public List<Light> getLights() {

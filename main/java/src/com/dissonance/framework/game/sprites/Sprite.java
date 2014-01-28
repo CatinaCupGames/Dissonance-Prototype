@@ -237,11 +237,11 @@ public abstract class Sprite implements Drawable, Serializable {
         //float z = -(y - (by / 2));
 
         if (hasTint) {
-            float alpha = 1;
+            float alpha = RenderService.getCurrentAlphaValue();
             if (a < 1) {
                 alpha = this.a - (1 - RenderService.getCurrentAlphaValue());
                 if (alpha < 0)
-                    alpha = 1;
+                    alpha = 0;
             }
             glColor4f(r, g, b, alpha);
         }
@@ -257,6 +257,7 @@ public abstract class Sprite implements Drawable, Serializable {
         glVertex3f(x - bx, y + by, z);
         glEnd();
         getTexture().unbind();
+        glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
     }
 
     @Override

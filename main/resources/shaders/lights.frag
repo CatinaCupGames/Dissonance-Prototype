@@ -17,6 +17,7 @@
  void main() {
      //Get the original pixel color
      gl_FragColor = texture2D(texture, gl_TexCoord[0].xy);
+     gl_FragColor.a = min(gl_FragColor.a, gl_Color.a);
      //Get the pixel location
      vec2 pos = gl_FragCoord.xy / iResolution.xy;
 
@@ -41,9 +42,8 @@
          float ydis = dis.y;
          float magnitude = sqrt((xdis * xdis) + (ydis * ydis));
          float percent = max((lights[i].w - magnitude) / lights[i].w, 0.0);
-         if (colors[i].rgb != vec3(0, 0, 0)) {
-             gl_FragColor.rgb = (gl_FragColor.rgb * (1.0 - percent)) + (colors[i].rgb * percent);
-         }
+         vec3 color = vec3(max(colors[i].r, gl_FragColor.r), max(colors[i].g, gl_FragColor.g), max(colors[i].b, gl_FragColor.b));
+         gl_FragColor.rgb = (gl_FragColor.rgb * (1.0 - percent)) + (color.rgb * percent);
          gl_FragColor.rgb *= (overall_brightness * (1.0 - percent)) + (lights[i].z * percent);
      }
  }
