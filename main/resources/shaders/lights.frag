@@ -18,6 +18,8 @@
      //Get the original pixel color
      gl_FragColor = texture2D(texture, gl_TexCoord[0].xy);
      gl_FragColor.a = min(gl_FragColor.a, gl_Color.a);
+     gl_FragColor.rgb *= gl_Color.rgb;
+
      //Get the pixel location
      vec2 pos = gl_FragCoord.xy / iResolution.xy;
 
