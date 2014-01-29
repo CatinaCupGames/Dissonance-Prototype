@@ -1,6 +1,8 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.ai.astar.Position;
+import com.dissonance.framework.game.ai.behaviors.BehaviorOffsetFollow;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
@@ -9,7 +11,6 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.sound.Sound;
-import com.dissonance.game.scene.TestScene;
 import com.dissonance.game.sprites.Enemy;
 
 import java.util.Random;
@@ -49,11 +50,11 @@ public class TestQuest extends AbstractQuest {
         setWorld(w);
         w.waitForWorldLoaded();
 
-        PlayableSprite player = PlayableSprite.getCurrentlyPlayingSprite();
+        final PlayableSprite player = PlayableSprite.getCurrentlyPlayingSprite();
         player.setMarksmanship(2);
 
         System.out.println(player.getMarksmanship());
-        player.setX(0);
+        player.setX(100);
         player.setY(100);
         WeaponItem item = new WeaponItem(player, Weapon.getWeapon("Revolver"));
         player.setCurrentWeapon(item);
@@ -61,7 +62,6 @@ public class TestQuest extends AbstractQuest {
         Enemy enemy = new Enemy("enemy1", Enemy.StatType.MAGIC, CombatSprite.CombatType.HUMAN, new Enemy.AIInterface() {
             @Override
             public void onUpdate(Enemy enemy) {
-
             }
         });
 
@@ -70,7 +70,8 @@ public class TestQuest extends AbstractQuest {
         enemy.setX(350);
         enemy.setY(100);
         w.loadAndAdd(enemy);
-        Thread.sleep(5000);
+        Thread.sleep(250);
+        enemy.setBehavior(new BehaviorOffsetFollow(enemy, player, new Position(25, 50)));
         //TestScene scene = new TestScene();
         //scene.beginScene();
         //RenderService.INSTANCE.provideData(true, RenderService.ENABLE_CROSS_FADE);

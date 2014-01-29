@@ -2,12 +2,12 @@ package com.dissonance.framework.game.sprites.impl.game;
 
 import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.ai.astar.Position;
+import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.ai.waypoint.WaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.render.RenderService;
-import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,8 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
 
     protected Position currentWaypoint;
     protected List<Position> waypointList;
+
+    private Behavior behavior;
 
     /**
      * Sets this {@link WaypointSprite WaypointSprite's}
@@ -33,21 +35,33 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         super.update();
         if (isUpdateCanceled())
             return;
+
+        if (behavior != null) {
+            behavior.update();
+        }
+
         if (currentWaypoint != null && waypointList != null) {
 
             if (!WaypointMover.moveSpriteOneFrame(this)) {
                 if (waypointList != null && waypointList.size() > 0) {
-                    Position pos = waypointList.get(0);
-                    if (pos.isShrunk())
-                        pos.expand();
+                    Position pos = waypointList.get(0).expand();
                     currentWaypoint = pos;
                     waypointList.remove(0);
+
+                    if (behavior != null) {
+                        behavior.waypointStepped();
+                    }
+
                     _wakeup();
                 } else {
                     currentWaypoint = null;
                     _wakeup();
                     if (waypointReachedEvent != null) {
                         waypointReachedEvent.onWaypointReached(this);
+
+                        if (behavior != null) {
+                            behavior.waypointReached();
+                        }
                     }
                 }
             }
@@ -64,13 +78,17 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
     public void setWaypoint(Position position, WaypointType type) {
         clearWaypoints();
         if (waypointList == null) {
-            waypointList = new ArrayList<Position>();
+            waypointList = new ArrayList<>();
         }
         if (type == WaypointType.SMART) {
             NodeMap map = getWorld().getNodeMap();
             waypointList = map.findPath(new Position(getX(), getY()).shrink(), position.shrink());
-            if (waypointList.size() > 0)
+            if (waypointList.size() > 1) {
+                currentWaypoint = waypointList.get(1).expand();
+                waypointList.remove(0);
+            } else if (waypointList.size() > 0) {
                 currentWaypoint = waypointList.get(0).expand();
+            }
         } else {
             currentWaypoint = position;
         }
@@ -102,6 +120,14 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
     @Override
     public Position getWaypoint() {
         return currentWaypoint;
+    }
+
+    public Behavior getBehavior() {
+        return behavior;
+    }
+
+    public void setBehavior(Behavior behavior) {
+        this.behavior = behavior;
     }
 
     private synchronized void _wakeup() {

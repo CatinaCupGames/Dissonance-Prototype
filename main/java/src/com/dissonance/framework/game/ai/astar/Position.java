@@ -3,10 +3,8 @@ package com.dissonance.framework.game.ai.astar;
 import org.lwjgl.util.vector.Vector2f;
 
 public final class Position {
-
     protected float x;
     protected float y;
-    private boolean shrunk;
 
     public Position(float x, float y) {
         this.x = x;
@@ -26,17 +24,11 @@ public final class Position {
     }
 
     public Position expand() {
-        shrunk = false;
         return new Position(FastMath.fastFloor(x * 32), FastMath.fastFloor(y * 32));
     }
 
     public Position shrink() {
-        shrunk = true;
         return new Position(FastMath.fastFloor(x / 32), FastMath.fastFloor(y / 32));
-    }
-
-    public boolean isShrunk() {
-        return shrunk;
     }
 
     public float getY() {
@@ -45,6 +37,14 @@ public final class Position {
 
     protected void setY(float y) {
         this.y = y;
+    }
+
+    public static Position add(Position a, Position b) {
+        return new Position(a.x + b.x, a.y + b.y);
+    }
+
+    public static Position subtract(Position a, Position b) {
+        return new Position(a.x - b.x, a.y - b.y);
     }
 
     @Override
@@ -56,5 +56,10 @@ public final class Position {
         Position pos = (Position) obj;
 
         return (pos.x == x && pos.y == y);
+    }
+
+    @Override
+    public String toString() {
+        return "[ x: " + x + ", y: " + y + " ]";
     }
 }

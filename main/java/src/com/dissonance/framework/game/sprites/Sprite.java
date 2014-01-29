@@ -11,7 +11,6 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.Validator;
-import com.sun.istack.internal.NotNull;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
@@ -123,7 +122,7 @@ public abstract class Sprite implements Drawable, Serializable {
     }
 
     public int getLayer() {
-       return layer;
+        return layer;
     }
 
     public World getWorld() {
@@ -156,8 +155,8 @@ public abstract class Sprite implements Drawable, Serializable {
         if (lowest == null)
             return null;
 
-        int x = (int)(getX() / 32);
-        int y = (int)(getY() / 32);
+        int x = (int) (getX() / 32);
+        int y = (int) (getY() / 32);
 
         return lowest.getTileAt(x, y, world);
     }
@@ -172,6 +171,11 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public void setX(float x) {
         float ox = this.x;
+
+        if (x < 0f) {
+            x = 0f;
+        }
+
         this.x = x;
         if (spriteMoved != null)
             spriteMoved.onSpriteMoved(this, ox, y);
@@ -183,6 +187,11 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public void setY(float y) {
         float oy = this.y;
+
+        if (y < 0f) {
+            y = 0f;
+        }
+
         if (y != this.y && getWorld() != null)
             getWorld().invalidateDrawableList();
         this.y = y;
@@ -264,13 +273,13 @@ public abstract class Sprite implements Drawable, Serializable {
         if (o instanceof UIElement)
             return Drawable.BEFORE;
         else if (o instanceof Sprite) {
-            Sprite s = (Sprite)o;
+            Sprite s = (Sprite) o;
             if (s.getLayer() > getLayer()) return Drawable.BEFORE;
             else if (s.getLayer() < getLayer()) return Drawable.AFTER;
             else {
                 float by = (getTexture() != null ? getTexture().getTextureHeight() / (this instanceof TileObject ? 2 : 4) : 0);
                 float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / (s instanceof TileObject ? 2 : 4) : 0);
-                return (int)((getY() - by) - (s.getY() - sy));
+                return (int) ((getY() - by) - (s.getY() - sy));
             }
         }
         return Drawable.AFTER;

@@ -4,7 +4,7 @@ import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.render.RenderService;
 
 public class WaypointMover {
-    private static final float SPEED = 10; //Maybe make this sprite specific?
+    public static final float SPEED = 10; //Maybe make this sprite specific?
 
     public static boolean moveSpriteOneFrame(WaypointSprite sprite) {
         Position dest = sprite.getWaypoint();
