@@ -3,8 +3,10 @@ package com.dissonance.framework.game;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
+import com.dissonance.framework.game.world.WorldPackage;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.exceptions.QuestNotFoundException;
+import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import javafx.animation.Transition;
 
 public abstract class AbstractQuest {
@@ -12,6 +14,7 @@ public abstract class AbstractQuest {
     private boolean ended;
     private World world;
     private boolean paused;
+    private WorldPackage worldMemory;
 
     public abstract void startQuest() throws Exception;
 
@@ -54,6 +57,39 @@ public abstract class AbstractQuest {
         WorldFactory.swapView(world, true);
         System.out.println("New world swapped to " + world.getID());
         this.world = world;
+    }
+
+    public void displayWorld(String world) {
+        displayWorld(world, true);
+    }
+
+    public void displayWorld(String world, boolean fadeToBlack) {
+        if (worldMemory != null) {
+            for (World w : worldMemory.getWorlds()) {
+                if (w.getName().equals(world)) {
+                    WorldFactory.swapView(w, fadeToBlack);
+                    System.out.println("New world swapped to " + w.getID());
+                    this.world = w;
+                    return;
+                }
+            }
+        }
+
+        try {
+            World w = WorldFactory.getWorld(world);
+            setWorld(w);
+        } catch (WorldLoadFailedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadWorldsIntoMemory(String... worlds) {
+        if (worldMemory != null) {
+            worldMemory.clear();
+            worldMemory = null;
+        }
+
+        worldMemory = WorldPackage.createWorldPackage(worlds);
     }
 
     protected void setWorld(World world, RenderService.TransitionType transitionType) {

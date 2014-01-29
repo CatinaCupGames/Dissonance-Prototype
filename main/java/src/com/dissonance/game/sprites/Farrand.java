@@ -1,5 +1,6 @@
 package com.dissonance.game.sprites;
 
+import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
@@ -132,6 +133,9 @@ public class Farrand extends PlayableSprite {
 
     @Override
     public void onNoMovement() {
+        if (InputKeys.isButtonPressed(InputKeys.MOVEUP) || InputKeys.isButtonPressed(InputKeys.MOVEDOWN) || InputKeys.isButtonPressed(InputKeys.MOVELEFT) || InputKeys.isButtonPressed(InputKeys.MOVERIGHT)) {
+            return;
+        }
         super.setFrame(1);
         pauseAnimation();
     }
@@ -140,6 +144,7 @@ public class Farrand extends PlayableSprite {
     public void onLoad() {
         super.onLoad();
         pauseAnimation();
+        setTint(Color.GREEN);
     }
 
     @Override
