@@ -5,13 +5,11 @@ import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
-import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.Validator;
-import com.sun.istack.internal.NotNull;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
@@ -172,6 +170,11 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public void setX(float x) {
         float ox = this.x;
+
+        if (x < 0) {
+            x = 0;
+        }
+
         this.x = x;
         if (spriteMoved != null)
             spriteMoved.onSpriteMoved(this, ox, y);
@@ -183,6 +186,10 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public void setY(float y) {
         float oy = this.y;
+
+        if (y < 0) {
+            y = 0;
+        }
         if (y != this.y && getWorld() != null)
             getWorld().invalidateDrawableList();
         this.y = y;
