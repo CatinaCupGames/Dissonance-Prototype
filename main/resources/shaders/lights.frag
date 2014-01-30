@@ -4,8 +4,8 @@
  varying vec4 texcoord;
 
  //Lighting vars
- uniform vec4 lights[255];
- uniform vec3 colors[255];
+ uniform vec4 lights[10];
+ uniform vec3 colors[10];
  uniform int count;
  uniform float overall_brightness;
 
