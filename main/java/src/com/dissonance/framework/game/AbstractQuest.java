@@ -1,5 +1,6 @@
 package com.dissonance.framework.game;
 
+import com.dissonance.framework.game.scene.Scene;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
@@ -81,6 +82,24 @@ public abstract class AbstractQuest {
         } catch (WorldLoadFailedException e) {
             e.printStackTrace();
         }
+    }
+
+    public Scene playScene(Class<? extends Scene> sceneClass) {
+        try {
+            Scene scene = sceneClass.newInstance();
+            scene.beginScene();
+            return scene;
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void playSceneAndWait(Class<? extends Scene> sceneClass) throws InterruptedException {
+        Scene scene = playScene(sceneClass);
+        scene.waitForSceneEnd();
     }
 
     public void loadWorldsIntoMemory(String... worlds) {

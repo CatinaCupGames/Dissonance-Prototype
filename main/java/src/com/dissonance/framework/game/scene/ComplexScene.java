@@ -8,7 +8,7 @@ import com.dissonance.framework.render.RenderService;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public abstract class ComplexScene {
+public abstract class ComplexScene implements Scene {
     private ArrayList<Dialog> current_dialog = new ArrayList<Dialog>();
     private boolean sceneStarted;
     private static boolean scenePlaying = false;

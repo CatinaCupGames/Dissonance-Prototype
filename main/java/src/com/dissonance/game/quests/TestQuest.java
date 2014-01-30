@@ -71,7 +71,7 @@ public class TestQuest extends AbstractQuest {
         enemy.setY(100);
         w.loadAndAdd(enemy);
         Thread.sleep(250);
-        enemy.setBehavior(new BehaviorOffsetFollow(enemy, player, new Position(25, 50)));
+        enemy.setBehavior(new BehaviorOffsetFollow(enemy, player, new Position(10, 10)));
         //TestScene scene = new TestScene();
         //scene.beginScene();
         //RenderService.INSTANCE.provideData(true, RenderService.ENABLE_CROSS_FADE);

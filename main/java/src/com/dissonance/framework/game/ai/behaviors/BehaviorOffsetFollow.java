@@ -85,4 +85,9 @@ public class BehaviorOffsetFollow implements Behavior {
     public void waypointReached() {
 
     }
+
+    @Override
+    public AbstractWaypointSprite ignoreSprite() {
+        return target;
+    }
 }
