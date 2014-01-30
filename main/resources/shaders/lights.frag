@@ -1,6 +1,7 @@
  #version 120
  //Texture vars
  uniform sampler2D texture;
+ varying vec4 texcoord;
 
  //Lighting vars
  uniform vec4 lights[255];
@@ -16,7 +17,7 @@
 
  void main() {
      //Get the original pixel color
-     gl_FragColor = texture2D(texture, gl_TexCoord[0].xy);
+     gl_FragColor = texture2D(texture, texcoord.xy);
      gl_FragColor.a = min(gl_FragColor.a, gl_Color.a);
      gl_FragColor.rgb *= gl_Color.rgb;
 
