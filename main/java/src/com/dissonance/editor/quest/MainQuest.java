@@ -62,7 +62,7 @@ public class MainQuest extends AbstractQuest {
     }
 
     public String generateLoaderCode() {
-        if (!customCode && EditorUI.INSTANCE.codeTextArea.getText().isEmpty()) customCode = false;
+        if (!customCode && EditorUI.INSTANCE.codeTextPane.getText().isEmpty()) customCode = false;
         if (!customCode) {
             StringBuilder builder = new StringBuilder();
             builder.append("package com.dissonance.game.w;\n").append("\n");
@@ -93,9 +93,9 @@ public class MainQuest extends AbstractQuest {
                 EditorUI.FRAME.requestFocus();
                 JOptionPane.showMessageDialog(EditorUI.FRAME, "The Sprite list seems to be out of date!\nCompile the World Loader code and try again.", "Error moving Sprite", JOptionPane.WARNING_MESSAGE);
                 EditorUI.INSTANCE.setComboIndex(0);
-                return EditorUI.INSTANCE.codeTextArea.getText();
+                return EditorUI.INSTANCE.codeTextPane.getText();
             }
-            String code = EditorUI.INSTANCE.codeTextArea.getText();
+            String code = EditorUI.INSTANCE.codeTextPane.getText();
             if (selectedSprite == null) return code;
             String varName = getVarNameFor(sprites.indexOf(selectedSprite));
             if (varName.equalsIgnoreCase("???") && adding) { //Assume we need to add it.
@@ -185,7 +185,7 @@ public class MainQuest extends AbstractQuest {
     }
 
     public int getSpriteCount() {
-        String code = EditorUI.INSTANCE.codeTextArea.getText();
+        String code = EditorUI.INSTANCE.codeTextPane.getText();
         int count = 0;
         String[] lines = code.split("\n");
         for (String s : lines) {
@@ -197,7 +197,7 @@ public class MainQuest extends AbstractQuest {
     }
 
     public int getLineNumberFor(int target) {
-        String code = EditorUI.INSTANCE.codeTextArea.getText();
+        String code = EditorUI.INSTANCE.codeTextPane.getText();
         String[] lines = code.split("\n");
         int i = 0;
         for (int ii = 0; ii < lines.length; ii++) {
@@ -214,7 +214,7 @@ public class MainQuest extends AbstractQuest {
     }
 
     public String getVarNameFor(int target) {
-        String code = EditorUI.INSTANCE.codeTextArea.getText();
+        String code = EditorUI.INSTANCE.codeTextPane.getText();
         String varName;
         String[] lines = code.split("\n");
         int i = 0;
@@ -280,7 +280,7 @@ public class MainQuest extends AbstractQuest {
                 PlayableSprite.getCurrentlyPlayingSprite().freeze();
             this.selectedSprite = sprite;
             adding = true;
-            EditorUI.INSTANCE.refreshCode();
+            EditorUI.INSTANCE.refreshCode(true);
             adding = false;
             if (selectedSprite instanceof Sprite)
                 Camera.followSprite((Sprite)selectedSprite);
@@ -386,40 +386,40 @@ public class MainQuest extends AbstractQuest {
             if (w) {
                 ss.setY(selectedSprite.getY() - (SPEED * RenderService.TIME_DELTA));
                 ss.setFacing(Direction.UP);
-                EditorUI.INSTANCE.refreshCode();
+                EditorUI.INSTANCE.refreshCode(false);
             }
             if (s) {
                 ss.setY(selectedSprite.getY() + (SPEED * RenderService.TIME_DELTA));
                 ss.setFacing(Direction.DOWN);
-                EditorUI.INSTANCE.refreshCode();
+                EditorUI.INSTANCE.refreshCode(false);
             }
             if (a) {
                 ss.setX(selectedSprite.getX() - (SPEED * RenderService.TIME_DELTA));
                 ss.setFacing(Direction.LEFT);
-                EditorUI.INSTANCE.refreshCode();
+                EditorUI.INSTANCE.refreshCode(false);
             }
             if (d) {
                 ss.setX(selectedSprite.getX() + (SPEED * RenderService.TIME_DELTA));
                 ss.setFacing(Direction.RIGHT);
-                EditorUI.INSTANCE.refreshCode();
+                EditorUI.INSTANCE.refreshCode(false);
             }
         } else if ((w || a || s || d) && selectedSprite != null && selectedSprite instanceof UIElement) {
             UIElement ss = (UIElement)selectedSprite;
             if (w) {
                 ss.setY(selectedSprite.getY() - (SPEED * RenderService.TIME_DELTA));
-                EditorUI.INSTANCE.refreshCode();
+                EditorUI.INSTANCE.refreshCode(false);
             }
             if (s) {
                 ss.setY(selectedSprite.getY() + (SPEED * RenderService.TIME_DELTA));
-                EditorUI.INSTANCE.refreshCode();
+                EditorUI.INSTANCE.refreshCode(false);
             }
             if (a) {
                 ss.setX(selectedSprite.getX() - (SPEED * RenderService.TIME_DELTA));
-                EditorUI.INSTANCE.refreshCode();
+                EditorUI.INSTANCE.refreshCode(false);
             }
             if (d) {
                 ss.setX(selectedSprite.getX() + (SPEED * RenderService.TIME_DELTA));
-                EditorUI.INSTANCE.refreshCode();
+                EditorUI.INSTANCE.refreshCode(false);
             }
         } else if (selectedSprite == null) {
             Camera.stopFollowing();
