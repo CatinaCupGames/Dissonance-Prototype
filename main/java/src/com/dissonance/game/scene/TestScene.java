@@ -3,6 +3,7 @@ package com.dissonance.game.scene;
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
+import com.dissonance.framework.game.scene.ComplexScene;
 import com.dissonance.framework.game.scene.Scene;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
@@ -10,7 +11,7 @@ import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.game.sprites.TestPlayer;
 
-public class TestScene extends Scene {
+public class TestScene extends ComplexScene {
     TestPlayer moot;
 
     @Override

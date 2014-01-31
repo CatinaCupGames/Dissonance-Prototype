@@ -48,11 +48,6 @@ public class ShaderFactory {
                 throw new RuntimeException("Error linking shader! - " + shader.getLogInfo(program));
             }
 
-            ARBShaderObjects.glValidateProgramARB(program);
-            if(ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_VALIDATE_STATUS_ARB) == GL11.GL_FALSE) {
-                throw new RuntimeException("Error validating shader!");
-            }
-
             shader.setProgram(program);
             shader.setShaders(new int[] { vi, fi });
             shaderList.put(shader.getName(), shader);

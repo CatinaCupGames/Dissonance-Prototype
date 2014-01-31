@@ -77,6 +77,10 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         }
 
         if (c instanceof PhysicsSprite) {
+            if (getBehavior() != null && c == getBehavior().ignoreSprite())
+                return;
+            if (((PhysicsSprite) c).getBehavior() != null && ((PhysicsSprite) c).getBehavior().ignoreSprite() == this)
+                return;
             super.setX(oldX);
             float add = getX() - c.getX();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
@@ -155,6 +159,10 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         }
 
         if (c instanceof PhysicsSprite) {
+            if (getBehavior() != null && c == getBehavior().ignoreSprite())
+                return;
+            if (((PhysicsSprite) c).getBehavior() != null && ((PhysicsSprite) c).getBehavior().ignoreSprite() == this)
+                return;
             super.setY(oldY);
             float add = getY() - hb.getLastCollide().getY();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {

@@ -274,14 +274,14 @@ public final class World {
 
     public void addLight(Light l) {
         this.lights.add(l);
-
-        lightShader.add(l);
+        if (loaded)
+            lightShader.add(l);
     }
 
     public void removeLight(Light l) {
         this.lights.remove(l);
-
-        lightShader.remove(l);
+        if (loaded)
+            lightShader.remove(l);
     }
 
     private void addDrawable(final Drawable draw, final Runnable run) {

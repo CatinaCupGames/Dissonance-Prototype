@@ -1,5 +1,5 @@
 #version 120
-
+varying vec4 texcoord;
 uniform sampler2D texture;
 
 uniform float brightness;
@@ -16,7 +16,7 @@ void performColorChange(float changeRed, float changeBlue, float changeGreen);
 
 void main(void)
 {
-    gl_FragColor = texture2D(texture, gl_TexCoord[0].xy);
+    gl_FragColor = texture2D(texture, texcoord.xy);
 
     performBrightnessChange(brightness);
     performContrastChange(contrast);

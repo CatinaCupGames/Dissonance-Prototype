@@ -1,11 +1,19 @@
 package com.dissonance.framework.render.shader.impl;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import com.dissonance.framework.render.Camera;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.shader.AbstractShader;
+import com.dissonance.framework.render.texture.Texture;
+import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.system.GameSettings;
-import org.lwjgl.opengl.GL20;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.*;
 
 import java.awt.*;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -15,8 +23,9 @@ import static org.lwjgl.opengl.GL20.*;
 public class LightShader extends AbstractShader {
     private ArrayList<Light> lights = new ArrayList<Light>();
     private float overallBrightness = 0.5f;
-    private int resolutionLocation = -1, overallBrightnessLocation = -1, countLocation = -1, windowLocation = -1, cameraLocation = -1, aspectLocation = -1;
+    private int resolutionLocation = -1, overallBrightnessLocation = -1, countLocation = -1, windowLocation = -1, cameraLocation = -1, aspectLocation = -1, texture2 = -1, texture3 = -1;
     private float oX, oY;
+    private int lightDataTexture = -1, colorDataTexture = -1;
 
     @Override
     public String getVertexFile() {
@@ -44,7 +53,8 @@ public class LightShader extends AbstractShader {
     }
 
     public void add(Light l) {
-        this.lights.add(l);
+        if (!this.lights.contains(l))
+            this.lights.add(l);
         set = false;
 
         if (lights.size() > 0)
@@ -63,7 +73,8 @@ public class LightShader extends AbstractShader {
     }
 
     public void remove(Light l) {
-        this.lights.remove(l);
+        if (this.lights.contains(l))
+            this.lights.remove(l);
 
         if (lights.size() > 0)
             setActive(true);
@@ -95,10 +106,23 @@ public class LightShader extends AbstractShader {
     }
 
     protected static boolean set = false;
+    protected static boolean lightUpdate = false;
     @Override
     public void onPreRender() {
         super.onPreRender();
         final int program = getProgramID();
+        if (!set) {
+            if (texture2 == -1) {
+                texture2 = GL20.glGetUniformLocation(program, "lightData");
+            }
+
+            if (texture3 == -1) {
+                texture3 = GL20.glGetUniformLocation(program, "colorData");
+            }
+            glUniform1i(texture2, 1);
+            glUniform1i(texture3, 2);
+        }
+
         if (oX != Camera.getX() || oY != Camera.getY()) {
             if (cameraLocation == -1) {
                 cameraLocation = GL20.glGetUniformLocation(program, "cameraPos");
@@ -129,21 +153,84 @@ public class LightShader extends AbstractShader {
                 aspectLocation = GL20.glGetUniformLocation(program, "aspect");
             }
 
+
+
             glUniform2f(resolutionLocation, (float)GameSettings.Display.resolution.getWidth(), (float)GameSettings.Display.resolution.getHeight());
             glUniform1f(overallBrightnessLocation, overallBrightness);
-            glUniform1i(countLocation, lights.size());
+            glUniform1f(countLocation, lights.size());
             glUniform2f(windowLocation, GameSettings.Display.window_width, GameSettings.Display.window_height);
             glUniform2f(aspectLocation, (float)GameSettings.Display.resolution.aspectRatio.arWidth, (float)GameSettings.Display.resolution.aspectRatio.arHeight);
-
-            for (int i = 0; i < lights.size(); i++) {
-                Light l = lights.get(i);
-                int tempLightVar = GL20.glGetUniformLocation(program, "lights[" + i + "]");
-                glUniform4f(tempLightVar, l.x, l.y, l.brightness, l.radius);
-
-                int tempColorVar = GL20.glGetUniformLocation(program, "colors[" + i + "]");
-                glUniform3f(tempColorVar, l.color.getRed() / 255f, l.color.getGreen() / 255f, l.color.getBlue() / 255f);
-            }
             set = true;
         }
+
+        if (!lightUpdate) {
+            if (lightDataTexture == -1) {
+                lightDataTexture = TextureLoader.createTextureID();
+
+            }
+            if (colorDataTexture == -1) {
+                colorDataTexture = TextureLoader.createTextureID();
+            }
+
+            int format, format2;
+            if (RenderService.getCapabilities().OpenGL30) {
+                format = GL30.GL_RGB32F;
+                format2 = GL30.GL_RGBA32F;
+            }
+            else if (RenderService.getCapabilities().GL_ARB_texture_float) {
+                format = ARBTextureFloat.GL_RGB32F_ARB;
+                format2 = ARBTextureFloat.GL_RGBA32F_ARB;
+            }
+            else if (RenderService.getCapabilities().GL_NV_float_buffer) {
+                format = NVFloatBuffer.GL_FLOAT_RGB32_NV;
+                format2 = NVFloatBuffer.GL_FLOAT_RGBA32_NV;
+            } else { //We can't do lighting..abort
+                RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        LightShader.this.setActive(false);
+                    }
+                }, true);
+                return;
+            }
+            FloatBuffer dataTexture = BufferUtils.createFloatBuffer(lights.size() * 3);
+            FloatBuffer colorTexture = BufferUtils.createFloatBuffer(lights.size() * 4);
+            for (Light l : lights) {
+                dataTexture.put(l.getX());
+                dataTexture.put(l.getY());
+                dataTexture.put(l.getRadius());
+
+                colorTexture.put(l.getColor().getRed() / 255f);
+                colorTexture.put(l.getColor().getGreen() / 255f);
+                colorTexture.put(l.getColor().getBlue() / 255f);
+                colorTexture.put(l.getBrightness());
+            }
+
+            dataTexture.flip();
+            colorTexture.flip();
+
+
+            glBindTexture(GL11.GL_TEXTURE_1D, lightDataTexture);
+
+            glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexImage1D(GL_TEXTURE_1D, 0, format, lights.size(), 0, GL_RGB, GL_FLOAT, dataTexture);
+
+            glBindTexture(GL_TEXTURE_1D, colorDataTexture);
+
+            glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexImage1D(GL_TEXTURE_1D, 0, format2, lights.size(), 0, GL_RGBA, GL_FLOAT, colorTexture);
+
+            glBindTexture(GL_TEXTURE_1D, 0);
+            lightUpdate = true;
+        }
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_1D, lightDataTexture);
+        GL13.glActiveTexture(GL13.GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_1D, colorDataTexture);
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
     }
 }

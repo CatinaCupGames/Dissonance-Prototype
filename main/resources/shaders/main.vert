@@ -1,7 +1,9 @@
 #version 120
 
+varying vec4 texcoord;
+
 void main(void)
 {
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-    gl_TexCoord[0] = gl_MultiTexCoord0;
+    texcoord = gl_MultiTexCoord0;
 }

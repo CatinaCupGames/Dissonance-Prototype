@@ -1,11 +1,12 @@
  #version 120
  //Texture vars
  uniform sampler2D texture;
+ uniform sampler1D lightData;
+ uniform sampler1D colorData;
+ varying vec4 texcoord;
 
  //Lighting vars
- uniform vec4 lights[255];
- uniform vec3 colors[255];
- uniform int count;
+ uniform float count;
  uniform float overall_brightness;
 
  //Screen vars
@@ -16,7 +17,7 @@
 
  void main() {
      //Get the original pixel color
-     gl_FragColor = texture2D(texture, gl_TexCoord[0].xy);
+     gl_FragColor = texture2D(texture, texcoord.xy);
      gl_FragColor.a = min(gl_FragColor.a, gl_Color.a);
      gl_FragColor.rgb *= gl_Color.rgb;
 
@@ -30,10 +31,15 @@
      scalex *= window.x / iResolution.x;
      scaley *= ysomething;
 
-     for (int i = 0; i < count; i++) {
+     for (float i = 0; i < count; i++) {
+         //extract data from texture
+         float t = (i / count) - 0.1;
+         vec3 light = texture1D(lightData, t).rgb;
+         vec4 color = texture1D(colorData, t);
+
 
          //Translate light's world space to screen space
-         vec2 lightPos = vec2(scalex * (lights[i].x - cameraPos.x), ysomething - (scaley * (lights[i].y - cameraPos.y)));
+         vec2 lightPos = vec2(scalex * (light.x - cameraPos.x), ysomething - (scaley * (light.y - cameraPos.y)));
 
          //Adjust for aspect ratio
          vec2 dis = vec2(abs(pos.x - lightPos.x), abs(pos.y - lightPos.y));
@@ -43,9 +49,10 @@
          float xdis = dis.x;
          float ydis = dis.y;
          float magnitude = sqrt((xdis * xdis) + (ydis * ydis));
-         float percent = max((lights[i].w - magnitude) / lights[i].w, 0.0);
-         vec3 color = vec3(max(colors[i].r, gl_FragColor.r), max(colors[i].g, gl_FragColor.g), max(colors[i].b, gl_FragColor.b));
+         float percent = max((light.b - magnitude) / light.b, 0.0);
+
+         color = vec4(max(color.r, gl_FragColor.r), max(color.g, gl_FragColor.g), max(color.b, gl_FragColor.b), color.a);
          gl_FragColor.rgb = (gl_FragColor.rgb * (1.0 - percent)) + (color.rgb * percent);
-         gl_FragColor.rgb *= (overall_brightness * (1.0 - percent)) + (lights[i].z * percent);
+         gl_FragColor.rgb *= (overall_brightness * (1.0 - percent)) + (color.a * percent);
      }
  }
