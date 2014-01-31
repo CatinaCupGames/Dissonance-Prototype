@@ -28,9 +28,9 @@ public class test_tileset extends GameWorldLoader {
         npc3.setY(100);
         final long start = System.currentTimeMillis();
 
-        w.createLight(50f, 50f, 1.6f, 0.3f);
+        w.createLight(500f, 500f, 1.6f, 0.3f);
 
-        final Light light = w.createLight(300, 300, 1.6f, 0.4f);
+        final Light light = w.createLight(300, 300, 1.6f, 0.4f, Color.GREEN);
         w.getRenderService().runOnServiceThread(new Runnable() {
 
             @Override
@@ -47,7 +47,7 @@ public class test_tileset extends GameWorldLoader {
             }
         }, true, true);
 
-        w.createLight(1f, 1f, 1.3f, 3f);
+        //w.createLight(1f, 1f, 1.3f, 3f);
         w.setWorldBrightness(0.7f);
     }
 }

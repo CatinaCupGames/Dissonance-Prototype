@@ -1,11 +1,11 @@
  #version 120
  //Texture vars
  uniform sampler2D texture;
+ uniform sampler1D lightData;
+ uniform sampler1D colorData;
  varying vec4 texcoord;
 
  //Lighting vars
- uniform vec4 lights[10];
- uniform vec3 colors[10];
  uniform int count;
  uniform float overall_brightness;
 
@@ -32,9 +32,13 @@
      scaley *= ysomething;
 
      for (int i = 0; i < count; i++) {
+         //extract data from texture
+         vec3 light = texture1D(lightData, float(i) / float(count)).rgb;
+         vec4 color = texture1D(colorData, float(i) / float(count));
+
 
          //Translate light's world space to screen space
-         vec2 lightPos = vec2(scalex * (lights[i].x - cameraPos.x), ysomething - (scaley * (lights[i].y - cameraPos.y)));
+         vec2 lightPos = vec2(scalex * (light.r - cameraPos.x), ysomething - (scaley * (light.g - cameraPos.y)));
 
          //Adjust for aspect ratio
          vec2 dis = vec2(abs(pos.x - lightPos.x), abs(pos.y - lightPos.y));
@@ -44,9 +48,10 @@
          float xdis = dis.x;
          float ydis = dis.y;
          float magnitude = sqrt((xdis * xdis) + (ydis * ydis));
-         float percent = max((lights[i].w - magnitude) / lights[i].w, 0.0);
-         vec3 color = vec3(max(colors[i].r, gl_FragColor.r), max(colors[i].g, gl_FragColor.g), max(colors[i].b, gl_FragColor.b));
+         float percent = max((light.b - magnitude) / light.b, 0.0);
+
+         color = vec4(max(color.r, gl_FragColor.r), max(color.g, gl_FragColor.g), max(color.b, gl_FragColor.b), color.a);
          gl_FragColor.rgb = (gl_FragColor.rgb * (1.0 - percent)) + (color.rgb * percent);
-         gl_FragColor.rgb *= (overall_brightness * (1.0 - percent)) + (lights[i].z * percent);
+         gl_FragColor.rgb *= (overall_brightness * (1.0 - percent)) + (color.a * percent);
      }
  }

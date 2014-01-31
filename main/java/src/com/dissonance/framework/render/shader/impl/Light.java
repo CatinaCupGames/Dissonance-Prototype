@@ -42,28 +42,28 @@ public final class Light {
 
     public void setX(float x) {
         this.x = x;
-        LightShader.set = false;
+        LightShader.lightUpdate = false;
     }
 
     public void setY(float y) {
         this.y = y;
-        LightShader.set = false;
+        LightShader.lightUpdate = false;
     }
 
     public void setRadius(float radius) {
         this.radius = radius;
-        LightShader.set = false;
+        LightShader.lightUpdate = false;
     }
 
     public void setBrightness(float brightness) {
         this.brightness = brightness;
-        LightShader.set = false;
+        LightShader.lightUpdate = false;
     }
 
     public void
 
     setColor(Color color) {
         this.color = color;
-        LightShader.set = false;
+        LightShader.lightUpdate = false;
     }
 }

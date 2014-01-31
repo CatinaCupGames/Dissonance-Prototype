@@ -1,6 +1,7 @@
 package com.dissonance.framework.render.shader;
 
 import org.lwjgl.opengl.ARBShaderObjects;
+import org.lwjgl.opengl.GL11;
 
 import java.security.InvalidParameterException;
 import static org.lwjgl.opengl.GL20.*;
@@ -61,6 +62,11 @@ public abstract class AbstractShader {
     public void preRender() {
         check2 = false;
         onPreRender();
+        ARBShaderObjects.glValidateProgramARB(program);
+        if(ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_VALIDATE_STATUS_ARB) == GL11.GL_FALSE) {
+            ARBShaderObjects.glUseProgramObjectARB(0);
+            throw new RuntimeException("Error validating shader! " + getLogInfo(program));
+        }
         if (!check2)
             throw new RuntimeException("super.onPreRender was not invoked! Try putting super.onPreRender at the top of your method!");
     }
