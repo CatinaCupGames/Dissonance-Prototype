@@ -6,7 +6,7 @@
  varying vec4 texcoord;
 
  //Lighting vars
- uniform int count;
+ uniform float count;
  uniform float overall_brightness;
 
  //Screen vars
@@ -31,14 +31,15 @@
      scalex *= window.x / iResolution.x;
      scaley *= ysomething;
 
-     for (int i = 0; i < count; i++) {
+     for (float i = 0; i < count; i++) {
          //extract data from texture
-         vec3 light = texture1D(lightData, float(i) / float(count)).rgb;
-         vec4 color = texture1D(colorData, float(i) / float(count));
+         float t = (i / count) - 0.1;
+         vec3 light = texture1D(lightData, t).rgb;
+         vec4 color = texture1D(colorData, t);
 
 
          //Translate light's world space to screen space
-         vec2 lightPos = vec2(scalex * (light.r - cameraPos.x), ysomething - (scaley * (light.g - cameraPos.y)));
+         vec2 lightPos = vec2(scalex * (light.x - cameraPos.x), ysomething - (scaley * (light.y - cameraPos.y)));
 
          //Adjust for aspect ratio
          vec2 dis = vec2(abs(pos.x - lightPos.x), abs(pos.y - lightPos.y));

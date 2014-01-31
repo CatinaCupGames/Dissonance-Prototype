@@ -3,15 +3,13 @@ package com.dissonance.framework.render.shader.impl;
 import static org.lwjgl.opengl.GL11.*;
 
 import com.dissonance.framework.render.Camera;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.shader.AbstractShader;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.system.GameSettings;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.*;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -55,7 +53,8 @@ public class LightShader extends AbstractShader {
     }
 
     public void add(Light l) {
-        this.lights.add(l);
+        if (!this.lights.contains(l))
+            this.lights.add(l);
         set = false;
 
         if (lights.size() > 0)
@@ -74,7 +73,8 @@ public class LightShader extends AbstractShader {
     }
 
     public void remove(Light l) {
-        this.lights.remove(l);
+        if (this.lights.contains(l))
+            this.lights.remove(l);
 
         if (lights.size() > 0)
             setActive(true);
@@ -157,7 +157,7 @@ public class LightShader extends AbstractShader {
 
             glUniform2f(resolutionLocation, (float)GameSettings.Display.resolution.getWidth(), (float)GameSettings.Display.resolution.getHeight());
             glUniform1f(overallBrightnessLocation, overallBrightness);
-            glUniform1i(countLocation, lights.size());
+            glUniform1f(countLocation, lights.size());
             glUniform2f(windowLocation, GameSettings.Display.window_width, GameSettings.Display.window_height);
             glUniform2f(aspectLocation, (float)GameSettings.Display.resolution.aspectRatio.arWidth, (float)GameSettings.Display.resolution.aspectRatio.arHeight);
             set = true;
@@ -172,6 +172,28 @@ public class LightShader extends AbstractShader {
                 colorDataTexture = TextureLoader.createTextureID();
             }
 
+            int format, format2;
+            if (RenderService.getCapabilities().OpenGL30) {
+                format = GL30.GL_RGB32F;
+                format2 = GL30.GL_RGBA32F;
+            }
+            else if (RenderService.getCapabilities().GL_ARB_texture_float) {
+                format = ARBTextureFloat.GL_RGB32F_ARB;
+                format2 = ARBTextureFloat.GL_RGBA32F_ARB;
+            }
+            else if (RenderService.getCapabilities().GL_NV_float_buffer) {
+                format = NVFloatBuffer.GL_FLOAT_RGB32_NV;
+                format2 = NVFloatBuffer.GL_FLOAT_RGBA32_NV;
+            } else { //We can't do lighting..abort
+                RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        LightShader.this.setActive(false);
+                    }
+                }, true);
+                return;
+            }
             FloatBuffer dataTexture = BufferUtils.createFloatBuffer(lights.size() * 3);
             FloatBuffer colorTexture = BufferUtils.createFloatBuffer(lights.size() * 4);
             for (Light l : lights) {
@@ -193,13 +215,13 @@ public class LightShader extends AbstractShader {
 
             glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, lights.size(), 0, GL_RGB, GL_FLOAT, dataTexture);
+            glTexImage1D(GL_TEXTURE_1D, 0, format, lights.size(), 0, GL_RGB, GL_FLOAT, dataTexture);
 
             glBindTexture(GL_TEXTURE_1D, colorDataTexture);
 
             glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA, lights.size(), 0, GL_RGBA, GL_FLOAT, colorTexture);
+            glTexImage1D(GL_TEXTURE_1D, 0, format2, lights.size(), 0, GL_RGBA, GL_FLOAT, colorTexture);
 
             glBindTexture(GL_TEXTURE_1D, 0);
             lightUpdate = true;

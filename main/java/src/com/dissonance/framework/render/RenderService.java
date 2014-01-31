@@ -254,6 +254,12 @@ public class RenderService extends Service {
         return "RenderService Thread";
     }
 
+    public static ContextCapabilities getCapabilities() {
+        if (!isInRenderThread())
+            throw new RuntimeException("You must be in the render thread to get capabilities!");
+        return GLContext.getCapabilities();
+    }
+
     private long fadeStartTime;
     private float fadeDuration;
     @Override
