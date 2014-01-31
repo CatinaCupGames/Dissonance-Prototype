@@ -59,6 +59,7 @@ public class MainQuest extends AbstractQuest {
             JOptionPane.showMessageDialog(EditorUI.FRAME, "There was no Tiled map found for '" + mapName + "' so the World may appear blank.\nPlease ensure the Tiled map file is in the 'worlds' folder inside the editor's jar file\n or that your IDE can see the Tiled map file located in\n'resources/worlds/" + mapName + ".json'.", "Editor Warning", JOptionPane.WARNING_MESSAGE);
         }
         RenderService.INSTANCE.runOnServiceThread(updateThread, true, true);
+        EditorUI.INSTANCE.highlighter.addClass(mapName);
     }
 
     public String generateLoaderCode() {
@@ -273,6 +274,7 @@ public class MainQuest extends AbstractQuest {
             }
 
             sprites.add(sprite);
+            EditorUI.INSTANCE.highlighter.addClass(sprite.getClass().getSimpleName());
             sprite.setX(0);
             sprite.setY(0);
             getWorld().loadAndAdd(sprite);
@@ -280,7 +282,7 @@ public class MainQuest extends AbstractQuest {
                 PlayableSprite.getCurrentlyPlayingSprite().freeze();
             this.selectedSprite = sprite;
             adding = true;
-            EditorUI.INSTANCE.refreshCode(true);
+            EditorUI.INSTANCE.refreshCode();
             adding = false;
             if (selectedSprite instanceof Sprite)
                 Camera.followSprite((Sprite)selectedSprite);
@@ -386,40 +388,40 @@ public class MainQuest extends AbstractQuest {
             if (w) {
                 ss.setY(selectedSprite.getY() - (SPEED * RenderService.TIME_DELTA));
                 ss.setFacing(Direction.UP);
-                EditorUI.INSTANCE.refreshCode(false);
+                EditorUI.INSTANCE.refreshCode();
             }
             if (s) {
                 ss.setY(selectedSprite.getY() + (SPEED * RenderService.TIME_DELTA));
                 ss.setFacing(Direction.DOWN);
-                EditorUI.INSTANCE.refreshCode(false);
+                EditorUI.INSTANCE.refreshCode();
             }
             if (a) {
                 ss.setX(selectedSprite.getX() - (SPEED * RenderService.TIME_DELTA));
                 ss.setFacing(Direction.LEFT);
-                EditorUI.INSTANCE.refreshCode(false);
+                EditorUI.INSTANCE.refreshCode();
             }
             if (d) {
                 ss.setX(selectedSprite.getX() + (SPEED * RenderService.TIME_DELTA));
                 ss.setFacing(Direction.RIGHT);
-                EditorUI.INSTANCE.refreshCode(false);
+                EditorUI.INSTANCE.refreshCode();
             }
         } else if ((w || a || s || d) && selectedSprite != null && selectedSprite instanceof UIElement) {
             UIElement ss = (UIElement)selectedSprite;
             if (w) {
                 ss.setY(selectedSprite.getY() - (SPEED * RenderService.TIME_DELTA));
-                EditorUI.INSTANCE.refreshCode(false);
+                EditorUI.INSTANCE.refreshCode();
             }
             if (s) {
                 ss.setY(selectedSprite.getY() + (SPEED * RenderService.TIME_DELTA));
-                EditorUI.INSTANCE.refreshCode(false);
+                EditorUI.INSTANCE.refreshCode();
             }
             if (a) {
                 ss.setX(selectedSprite.getX() - (SPEED * RenderService.TIME_DELTA));
-                EditorUI.INSTANCE.refreshCode(false);
+                EditorUI.INSTANCE.refreshCode();
             }
             if (d) {
                 ss.setX(selectedSprite.getX() + (SPEED * RenderService.TIME_DELTA));
-                EditorUI.INSTANCE.refreshCode(false);
+                EditorUI.INSTANCE.refreshCode();
             }
         } else if (selectedSprite == null) {
             Camera.stopFollowing();

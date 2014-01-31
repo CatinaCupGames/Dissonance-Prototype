@@ -48,7 +48,7 @@ public class EditorUI {
     private JButton exportWorldLoaderButton;
     private JButton compileJavaCodeButton;
     private JPopupMenu menu;
-    private Highlighter highlighter = new Highlighter(codeTextPane);
+    public Highlighter highlighter = new Highlighter(codeTextPane);
 
     public static void displayForm() {
         INSTANCE = new EditorUI();
@@ -172,12 +172,12 @@ public class EditorUI {
         INSTANCE.codeTextPane.setCaretColor(Color.WHITE);
 
         INSTANCE.highlighter = new Highlighter(INSTANCE.codeTextPane);
-        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream("hClass.dat")))) {
+        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(Highlighter.CLASS_DATA)))) {
             INSTANCE.highlighter.classes = stream.readUTF();
         } catch (IOException ignored) {
         }
 
-        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream("hInterf.dat")))) {
+        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(Highlighter.INTERFACE_DATA)))) {
             INSTANCE.highlighter.interfaces = stream.readUTF();
         } catch (IOException ignored) {
         }
@@ -189,7 +189,7 @@ public class EditorUI {
         INSTANCE.codeTextPane.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                INSTANCE.highlighter.matching(true);
+                INSTANCE.highlighter.matching();
             }
         });
 
@@ -247,11 +247,11 @@ public class EditorUI {
 
     private boolean updatingCode = false;
 
-    public void refreshCode(boolean color) {
+    public void refreshCode() {
         updatingCode = true;
         codeTextPane.setText(MainQuest.INSTANCE.generateLoaderCode());
 
-        highlighter.matching(color);
+        highlighter.matching();
 
         updatingCode = false;
     }
@@ -279,27 +279,27 @@ public class EditorUI {
         menu = new JPopupMenu();
         menu.setInvoker(codeTextPane);
 
-        JMenuItem item = new JMenuItem("Add class");
-        item.addActionListener(new ActionListener() {
+        JMenuItem classItem = new JMenuItem("Add class");
+        classItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 highlighter.addClass(codeTextPane.getSelectedText());
-                highlighter.matching(true);
+                highlighter.matching();
             }
         });
-        menu.add(item);
+        menu.add(classItem);
 
-        JMenuItem itt = new JMenuItem("Add interface");
-        itt.addActionListener(new ActionListener() {
+        JMenuItem interfItem = new JMenuItem("Add interface");
+        interfItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 highlighter.addInterface(codeTextPane.getSelectedText());
-                highlighter.matching(true);
+                highlighter.matching();
             }
         });
-        menu.add(itt);
+        menu.add(interfItem);
 
-        Action sendAction = new AbstractAction("Send") {
+        Action tabAction = new AbstractAction() {
             public void actionPerformed(ActionEvent ae) {
                 try {
                     codeTextPane.getStyledDocument().insertString(codeTextPane.getCaretPosition(), "    ", codeTextPane.getLogicalStyle());
@@ -308,7 +308,6 @@ public class EditorUI {
             }
         };
 
-        codeTextPane.registerKeyboardAction(sendAction,
-                KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), JComponent.WHEN_FOCUSED);
+        codeTextPane.registerKeyboardAction(tabAction, KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), JComponent.WHEN_FOCUSED);
     }
 }
