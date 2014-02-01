@@ -194,6 +194,12 @@ public class LightShader extends AbstractShader {
                 }, true);
                 return;
             }
+            int count = 0;
+            for (Light l : lights) {
+                if (Camera.isOffScreen(l.getX(), l.getY(), l.getRadius(), l.getRadius()))
+                    continue;
+                count++;
+            }
             FloatBuffer dataTexture = BufferUtils.createFloatBuffer(lights.size() * 3);
             FloatBuffer colorTexture = BufferUtils.createFloatBuffer(lights.size() * 4);
             for (Light l : lights) {

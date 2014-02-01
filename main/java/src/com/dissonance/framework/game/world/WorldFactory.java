@@ -28,47 +28,21 @@ public class WorldFactory {
      *                              If the world fails to load into memory
      */
     public static World getWorld(String name) throws WorldLoadFailedException {
-        if (isWorldStillLoaded(name)) {
-            for (WorldHolder cacheWorld : cacheWorlds) {
-                if (cacheWorld.world.getName().equals(name))
-                    return cacheWorld.world;
-            }
-        }
-
-        if (worldCount >= WORLD_CACHE_LIMIT) {
-            cleanCache(true);
-        }
-
-        int index = nextOpenSpot();
-        if (nextOpenSpot() == -1) {
-            cleanCache(true);
-            index = nextOpenSpot();
-            if (index == -1)
-                throw new WorldLoadFailedException("World Cache is full!");
-        }
-        World w = new World(index);
-        w.init();
-        w.load(name);
-        WorldHolder worldHolder = new WorldHolder();
-        worldHolder.world = w;
-        worldHolder.lastAccess = System.currentTimeMillis();
-        worldCount++;
-        cacheWorlds[index] = worldHolder;
-
-
-        return worldHolder.world;
+        return getWorld(name, true);
     }
 
     static World getWorld(String name, boolean cache) throws WorldLoadFailedException {
         if (isWorldStillLoaded(name)) {
             for (WorldHolder cacheWorld : cacheWorlds) {
-                if (cacheWorld.world.getName().equals(name))
+                if (cacheWorld.world.getName().equals(name)) {
+                    System.out.println("[World Factory] " + cacheWorld.world.getName() + " returned from cache.");
                     return cacheWorld.world;
+                }
             }
         }
-
         int index = -1;
         if (cache) {
+            System.out.println("[World Factory] Cache store requested for new World \"" + name + "\"");
             if (worldCount >= WORLD_CACHE_LIMIT)
                 cleanCache(true);
 
@@ -84,12 +58,15 @@ public class WorldFactory {
         World w = new World(index == -1 ? random.nextInt() : index);
         w.init();
         w.load(name);
+        System.out.println("[World Factory] " + w.getName() + " loaded into memory.");
         if (cache) {
             WorldHolder worldHolder = new WorldHolder();
             worldHolder.world = w;
             worldHolder.lastAccess = System.currentTimeMillis();
             worldCount++;
             cacheWorlds[index] = worldHolder;
+            System.out.println("[World Factory] Added " + w.getName() + " to factory cache.");
+            System.out.println("[World Factory] Placed world in cache index " + index + "/" + WORLD_CACHE_LIMIT);
             return worldHolder.world;
         }
 
@@ -155,13 +132,6 @@ public class WorldFactory {
             return;
         }
         Validator.validateNotNull(newworld, "NewWorld");
-        if (currentWorld != null) {
-            WorldHolder w = getWorldHolder(currentWorld.getID());
-            if (w != null) {
-                w.lastAccess = System.currentTimeMillis();
-            }
-            currentWorld.onUnload();
-        }
         WorldHolder w = getWorldHolder(newworld.getID());
         if (w != null) {
             w.lastAccess = System.currentTimeMillis();
@@ -174,9 +144,22 @@ public class WorldFactory {
             cacheWorlds[index] = w;
         }
         newworld.switchTo(fadetoblack);
+        if (currentWorld != null) {
+            w = getWorldHolder(currentWorld.getID());
+            if (w != null) {
+                w.lastAccess = System.currentTimeMillis();
+            }
+            currentWorld.onUnload();
+        }
+        try {
+            newworld.waitForWorldLoaded();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        newworld.onDisplay();
         lastWorld = currentWorld;
         currentWorld = newworld;
-        System.out.println("New World: " + currentWorld + ", Old World: " + lastWorld);
+        System.out.println("[World Factory] New World: " + currentWorld.getName() + ", Old World: " + (lastWorld == null ? "null" : lastWorld.getName()));
     }
 
     public static World getCurrentWorld() {
@@ -204,6 +187,7 @@ public class WorldFactory {
         for (int i = 0; i < WORLD_CACHE_LIMIT; i++) {
             long since = curr - cacheWorlds[i].lastAccess;
             if ((since / 1000) > WORLD_ACCESS_LIMIT_SECONDS && GameService.getCurrentWorld().getID() != cacheWorlds[i].world.getID()) {
+                System.out.println("[World Factory] Disposing " + cacheWorlds[i].world.getName() + ".");
                 cacheWorlds[i].world.onDispose();
                 cacheWorlds[i] = null;
                 removed = true;
@@ -211,15 +195,15 @@ public class WorldFactory {
             }
         }
 
-        if (force) {
-            if (!removed) {
-                for (int i = 0; i < WORLD_CACHE_LIMIT; i++) {
-                    if (GameService.getCurrentWorld().getID() != cacheWorlds[i].world.getID()) {
-                        cacheWorlds[i].world.onDispose();
-                        cacheWorlds[i] = null;
-                        worldCount--;
-                        break;
-                    }
+        if (force && !removed) {
+            System.out.println("[World Factory] Force cleanup requested.");
+            for (int i = 0; i < WORLD_CACHE_LIMIT; i++) {
+                if (GameService.getCurrentWorld().getID() != cacheWorlds[i].world.getID()) {
+                    System.out.println("[World Factory] Disposing " + cacheWorlds[i].world.getName() + ".");
+                    cacheWorlds[i].world.onDispose();
+                    cacheWorlds[i] = null;
+                    worldCount--;
+                    break;
                 }
             }
         }

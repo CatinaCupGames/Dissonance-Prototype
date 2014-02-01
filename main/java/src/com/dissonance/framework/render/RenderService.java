@@ -1,10 +1,9 @@
 package com.dissonance.framework.render;
 
 import com.dissonance.framework.game.GameService;
-import com.dissonance.framework.game.sprites.UIElement;
+import com.dissonance.framework.game.sprites.ui.UI;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.input.InputService;
-import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.shader.ShaderFactory;
@@ -325,7 +324,7 @@ public class RenderService extends Service {
             glLoadIdentity();
             glScalef(ZOOM_SCALE, ZOOM_SCALE, 1f);
 
-            for (UIElement e : current_world.getElements()) {
+            for (UI e : current_world.getElements()) {
                 if (e == null)
                     return;
                 try {
@@ -370,7 +369,7 @@ public class RenderService extends Service {
                 glLoadIdentity();
                 glScalef(ZOOM_SCALE, ZOOM_SCALE, 1f);
 
-                for (UIElement e : next_world.getElements()) {
+                for (UI e : next_world.getElements()) {
                     if (e == null)
                         return;
                     try {

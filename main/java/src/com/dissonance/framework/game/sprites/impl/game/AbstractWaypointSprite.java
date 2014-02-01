@@ -3,6 +3,7 @@ package com.dissonance.framework.game.sprites.impl.game;
 import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
+import com.dissonance.framework.game.ai.behaviors.BehaviorOffsetFollow;
 import com.dissonance.framework.game.ai.waypoint.WaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
@@ -44,8 +45,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
 
             if (!WaypointMover.moveSpriteOneFrame(this)) {
                 if (waypointList != null && waypointList.size() > 0) {
-                    Position pos = waypointList.get(0).expand();
-                    currentWaypoint = pos;
+                    currentWaypoint = waypointList.get(0).expand();
                     waypointList.remove(0);
 
                     if (behavior != null) {
@@ -115,6 +115,10 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         if (waypointList != null)
             waypointList.clear();
         currentWaypoint = null;
+    }
+
+    public void follow(AbstractWaypointSprite target) {
+        setBehavior(new BehaviorOffsetFollow(this, target, new Position((target.getWidth() / 2f) * 1.5f, (target.getHeight() / 2f) * 1.5f)));
     }
 
     @Override

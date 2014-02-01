@@ -66,6 +66,8 @@ public class ShaderFactory {
     static void decacheActiveShader(AbstractShader s) {
         if (!shaderList.containsKey(s.getName()))
             throw new InvalidParameterException("This shader is not registered! Try executing ShaderFactory.registerShader first.");
+        if (s.isBound())
+            s.postRender();
         activeShaders.remove(s);
     }
 
@@ -120,11 +122,7 @@ public class ShaderFactory {
         validateState();
         AbstractShader[] temp = activeShaders.toArray(new AbstractShader[activeShaders.size()]);
         for (AbstractShader a : temp) {
-            if (!a.isActive())
-                activeShaders.remove(a);
-            else {
-                a.postRender();
-            }
+            a.postRender();
         }
     }
 

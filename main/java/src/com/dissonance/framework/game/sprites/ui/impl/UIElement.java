@@ -1,4 +1,4 @@
-package com.dissonance.framework.game.sprites;
+package com.dissonance.framework.game.sprites.ui.impl;
 
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
@@ -15,7 +15,13 @@ import java.awt.image.BufferedImage;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public abstract class UIElement implements UpdatableDrawable {
+/**
+ * @deprecated UIElements are slow and buggy, please dont use it. <br></br>
+ * If you want to create Menu's or HUD's with text, then have your class implements {@link com.dissonance.framework.game.sprites.ui.UI} and
+ * use {@link org.newdawn.slick.TrueTypeFont} to draw text using OpenGL.
+ */
+@Deprecated
+public abstract class UIElement implements com.dissonance.framework.game.sprites.ui.UI {
     private boolean valid;
     private boolean complete_invalid;
     private int width;

@@ -1,8 +1,6 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.ai.astar.Position;
-import com.dissonance.framework.game.ai.behaviors.BehaviorOffsetFollow;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
@@ -71,7 +69,8 @@ public class TestQuest extends AbstractQuest {
         enemy.setY(100);
         w.loadAndAdd(enemy);
         Thread.sleep(250);
-        enemy.setBehavior(new BehaviorOffsetFollow(enemy, player, new Position(10, 10)));
+        enemy.follow(player);
+        //enemy.setBehavior(new BehaviorOffsetFollow(enemy, player, new Position(10, 10)));
         //TestScene scene = new TestScene();
         //scene.beginScene();
         //RenderService.INSTANCE.provideData(true, RenderService.ENABLE_CROSS_FADE);

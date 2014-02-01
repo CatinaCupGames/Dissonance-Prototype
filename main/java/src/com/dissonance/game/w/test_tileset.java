@@ -29,17 +29,17 @@ public class test_tileset extends GameWorldLoader {
         final long start = System.currentTimeMillis();
 
         w.createLight(0f, 0f, 1.6f, 0.3f);
-        w.createLight(100f, 0f, 1.7f, 0.3f);
-        w.createLight(200f, 0f, 1.8f, 0.3f);
-        w.createLight(300f, 0f, 1.9f, 0.3f);
+        w.createLight(100f, 0f, 1.8f, 0.3f);
+        w.createLight(200f, 0f, 2f, 0.3f);
+        w.createLight(300f, 0f, 2.2f, 0.3f);
 
-        final Light light = w.createLight(300, 300, 2f, 0.4f, Color.GREEN);
+        final Light light = w.createLight(300, 300, 2.4f, 0.4f, Color.GREEN);
         w.getRenderService().runOnServiceThread(new Runnable() {
 
             @Override
             public void run() {
                 long sec = System.currentTimeMillis() - start;
-                sec /= 500;
+                sec /= 100;
                 float r = Math.min(0.3f + 0.5f * (float) Math.cos(sec), 1f);
                 r = Math.max(r, 0f);
                 float g = Math.min(0.3f + 0.5f * (float) Math.sin(sec), 1f);
@@ -49,6 +49,6 @@ public class test_tileset extends GameWorldLoader {
                 light.setColor(new Color(r, g, 1f));
             }
         }, true, true);
-        w.setWorldBrightness(0.7f);
+        w.setWorldBrightness(0.8f);
     }
 }

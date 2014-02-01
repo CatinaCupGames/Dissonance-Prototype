@@ -2,11 +2,10 @@ package com.dissonance.framework.game.scene.dialog;
 
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.input.InputKeys;
-import com.dissonance.framework.game.sprites.UIElement;
+import com.dissonance.framework.game.sprites.ui.impl.UIElement;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
-import org.lwjgl.util.vector.Vector2f;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -33,20 +32,10 @@ public class DialogUI extends UIElement {
     private static BufferedImage dialog_header;
 
     static {
-        InputStream in = DialogUI.class.getClassLoader().getResourceAsStream("fonts/INFO56_0.ttf");
-        if (in != null) {
-            try {
-                font = Font.createFont(Font.TRUETYPE_FONT, in);
-                text_font = font.deriveFont(16f);
-                header_font = font.deriveFont(16f);
-                in.close();
-            } catch (FontFormatException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        in = DialogUI.class.getClassLoader().getResourceAsStream("IND/msgbox.png");
+        font = GameSettings.Display.GAME_FONT;
+        text_font = font.deriveFont(16f);
+        header_font = font.deriveFont(16f);
+        InputStream in = DialogUI.class.getClassLoader().getResourceAsStream("IND/msgbox.png");
         if (in != null) {
             try {
                 dialog_box = ImageIO.read(in);
@@ -195,6 +184,7 @@ public class DialogUI extends UIElement {
 
     int char_offset;
     int line_offset;
+    int line_start = 0;
     public void drawText(Graphics g) {
         ArrayList<SH> used = new ArrayList<SH>();
         int yoffset = (int)(dialog.getCurrentHeader().equals("") ? font.getSize2D() : ((font.getSize2D() * 31) + 5));

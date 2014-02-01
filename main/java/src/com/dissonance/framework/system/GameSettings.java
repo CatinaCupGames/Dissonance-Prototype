@@ -1,7 +1,12 @@
 package com.dissonance.framework.system;
 
+import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.system.settings.Color;
 import com.dissonance.framework.system.settings.Resolution;
+
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class GameSettings
 {
@@ -30,6 +35,8 @@ public class GameSettings
         {
         }
 
+        public static Font GAME_FONT;
+
         public static int window_width;
         public static int window_height;
 
@@ -49,6 +56,16 @@ public class GameSettings
             resolution = new Resolution(game_width, game_height);
 
             fullscreen = false;
+            InputStream in = GameSettings.class.getClassLoader().getResourceAsStream("fonts/INFO56_0.ttf");
+            if (in != null) {
+                try {
+                    GAME_FONT = Font.createFont(Font.TRUETYPE_FONT, in);
+                } catch (FontFormatException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
