@@ -1,9 +1,11 @@
 package com.dissonance.editor.quest;
 
+import com.dissonance.editor.Formation;
 import com.dissonance.editor.system.CharSequenceCompiler;
 import com.dissonance.editor.system.CharSequenceCompilerException;
 import com.dissonance.editor.ui.EditorUI;
 import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.UIElement;
@@ -28,6 +30,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Map;
 
 public class MainQuest extends AbstractQuest {
     public static MainQuest INSTANCE;
@@ -35,10 +38,12 @@ public class MainQuest extends AbstractQuest {
     public static int SPEED = 5;
     private final CharSequenceCompiler<WorldLoader> stringCompiler = new CharSequenceCompiler<WorldLoader>(loader, Arrays.asList("-target", "1.7"));
     private ArrayList<Drawable> sprites = new ArrayList<Drawable>();
+    private java.util.List<Formation> formations = new ArrayList<>();
     private Drawable selectedSprite;
     public String mapName;
     private boolean adding = false;
     public boolean customCode = false;
+
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
@@ -66,7 +71,7 @@ public class MainQuest extends AbstractQuest {
         if (!customCode && EditorUI.INSTANCE.codeTextPane.getText().isEmpty()) customCode = false;
         if (!customCode) {
             StringBuilder builder = new StringBuilder();
-            builder.append("package com.dissonance.game.w;\n").append("\n");
+            builder.append("package com.dissonance.game.w;\n\n");
             builder.append("import com.dissonance.framework.game.world.World;\n");
             ArrayList<String> temp = new ArrayList<String>();
             for (Drawable sprite : sprites) {
@@ -75,18 +80,35 @@ public class MainQuest extends AbstractQuest {
                 temp.add(sprite.getClass().getCanonicalName());
                 builder.append("import ").append(sprite.getClass().getCanonicalName()).append(";\n");
             }
-            builder.append("\n\n").append("public class ").append(mapName).append(" extends GameWorldLoader {\n");
-            builder.append("    @Override\n").append("    public void onLoad(World w) {\n").append("        super.onLoad(w);\n");
-            int i = 0;
-            for (Drawable sprite : sprites) {
-                i++;
-                builder.append("\n");
-                builder.append("        ").append(sprite.getClass().getSimpleName()).append(" var").append(i).append(" = new ").append(sprite.getClass().getSimpleName()).append("();\n");
-                builder.append("        w.loadAndAdd(var").append(i).append(");\n");
-                builder.append("        var").append(i).append(".setX(").append(sprite.getX()).append("f);\n");
-                builder.append("        var").append(i).append(".setY(").append(sprite.getY()).append("f);\n");
+            if (formations.size() > 0) {
+                builder.append("import com.dissonance.framework.game.ai.astar.Position;\n");
+                builder.append("import com.dissonance.framework.game.ai.behaviors.BehaviorOffsetFollow;\n");
             }
-            builder.append("    }\n").append("}");
+            builder.append("\npublic class ").append(mapName).append(" extends GameWorldLoader {\n");
+            builder.append("    @Override\n    public void onLoad(World w) {\n        super.onLoad(w);\n");
+
+            for (int i = 0; i < sprites.size(); i++) {
+                Drawable sprite = sprites.get(i);
+                builder.append("\n");
+                builder.append("        ").append(sprite.getClass().getSimpleName()).append(" var").append(i + 1).append(" = new ").append(sprite.getClass().getSimpleName()).append("();\n");
+                builder.append("        w.loadAndAdd(var").append(i + 1).append(");\n");
+                builder.append("        var").append(i + 1).append(".setX(").append(sprite.getX()).append("f);\n");
+                builder.append("        var").append(i + 1).append(".setY(").append(sprite.getY()).append("f);\n");
+            }
+
+            if (formations.size() > 0) {
+                builder.append("\n");
+            }
+
+            for (Formation formation : formations) {
+                for (Map.Entry<String, Position> entry : formation.getSprites().entrySet()) {
+                    builder.append("        ");
+                    builder.append(entry.getKey()).append(".setBehavior(new BehaviorOffsetFollow(").append(entry.getKey());
+                    builder.append(", ").append(formation.getTarget()).append(", new Position(").append(entry.getValue().getX());
+                    builder.append("d, ").append(entry.getValue().getY()).append("d)));\n");
+                }
+            }
+            builder.append("    }\n}");
 
             return builder.toString();
         } else {
@@ -291,6 +313,11 @@ public class MainQuest extends AbstractQuest {
             EditorUI.INSTANCE.setComboIndex(sprites.size());
         }
     }
+
+    public void addFormation(Formation formation) {
+        formations.add(formation);
+    }
+
 
     private void log(final DiagnosticCollector<JavaFileObject> diagnostics) {
         final StringBuilder msgs = new StringBuilder();

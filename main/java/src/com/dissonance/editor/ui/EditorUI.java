@@ -10,7 +10,6 @@ Date: $date
 package com.dissonance.editor.ui;
 
 import com.dissonance.editor.quest.MainQuest;
-import com.dissonance.editor.system.HighlightStyle;
 import com.dissonance.editor.system.Highlighter;
 import com.dissonance.framework.render.Drawable;
 
@@ -24,12 +23,12 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
+import java.io.File;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.zip.GZIPInputStream;
 
 public class EditorUI {
     private static final String HEADER = "/*\n" +
@@ -66,6 +65,14 @@ public class EditorUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainQuest.INSTANCE.newSprite();
+            }
+        });
+
+        INSTANCE.newFormationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormationDialog dialog = new FormationDialog();
+                dialog.setVisible(true);
             }
         });
 
@@ -172,24 +179,13 @@ public class EditorUI {
         INSTANCE.codeTextPane.setCaretColor(Color.WHITE);
 
         INSTANCE.highlighter = new Highlighter(INSTANCE.codeTextPane);
-        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(Highlighter.CLASS_DATA)))) {
-            INSTANCE.highlighter.classes = stream.readUTF();
-        } catch (IOException ignored) {
-        }
-
-        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(Highlighter.INTERFACE_DATA)))) {
-            INSTANCE.highlighter.interfaces = stream.readUTF();
-        } catch (IOException ignored) {
-        }
-
-        HighlightStyle.getStyle("Class").setPattern("\\b(" + INSTANCE.highlighter.classes + ")\\b");
-        HighlightStyle.getStyle("Interface").setPattern("\\b(" + INSTANCE.highlighter.interfaces + ")\\b");
+        INSTANCE.highlighter.readData();
 
         INSTANCE.codeTextPane.setFont(new Font("Consolas", Font.PLAIN, 12));
         INSTANCE.codeTextPane.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                INSTANCE.highlighter.matching();
+                INSTANCE.highlighter.highlight();
             }
         });
 
@@ -251,7 +247,7 @@ public class EditorUI {
         updatingCode = true;
         codeTextPane.setText(MainQuest.INSTANCE.generateLoaderCode());
 
-        highlighter.matching();
+        highlighter.highlight();
 
         updatingCode = false;
     }
@@ -266,6 +262,7 @@ public class EditorUI {
     private JPanel innerInnerInnerInnerField;
     private JSpinner speedSpinner;
     private JLabel label2;
+    private JButton newFormationButton;
 
     private void createUIComponents() {
         codeTextPane = new JTextPane();
@@ -284,20 +281,39 @@ public class EditorUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 highlighter.addClass(codeTextPane.getSelectedText());
-                highlighter.matching();
+                highlighter.highlight();
             }
         });
         menu.add(classItem);
 
-        JMenuItem interfItem = new JMenuItem("Add interface");
-        interfItem.addActionListener(new ActionListener() {
+        JMenuItem interfaceItem = new JMenuItem("Add interface");
+        interfaceItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 highlighter.addInterface(codeTextPane.getSelectedText());
-                highlighter.matching();
+                highlighter.highlight();
             }
         });
-        menu.add(interfItem);
+        menu.add(interfaceItem);
+
+        JMenuItem methodItem = new JMenuItem("Add method");
+        methodItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = codeTextPane.getSelectedText();
+                if (text.startsWith(".")) {
+                    text = text.substring(1);
+                }
+
+                if (text.endsWith("(")) {
+                    text = text.substring(0, text.length() - 1);
+                }
+
+                highlighter.addMethod(text);
+                highlighter.highlight();
+            }
+        });
+        menu.add(methodItem);
 
         Action tabAction = new AbstractAction() {
             public void actionPerformed(ActionEvent ae) {
