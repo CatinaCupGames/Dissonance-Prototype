@@ -10,8 +10,9 @@ Date: $date
 package com.dissonance.editor.ui;
 
 import com.dissonance.editor.quest.MainQuest;
+import com.dissonance.editor.system.HighlightStyle;
+import com.dissonance.editor.system.Highlighter;
 import com.dissonance.framework.render.Drawable;
-import com.dissonance.framework.render.RenderService;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -19,19 +20,16 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.awt.event.*;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.zip.GZIPInputStream;
 
 public class EditorUI {
     private static final String HEADER = "/*\n" +
@@ -46,9 +44,11 @@ public class EditorUI {
     public static EditorUI INSTANCE;
     public static JFrame FRAME;
     private JButton newSpriteButton;
-    public JTextArea codeTextArea;
+    public JTextPane codeTextPane;
     private JButton exportWorldLoaderButton;
     private JButton compileJavaCodeButton;
+    private JPopupMenu menu;
+    public Highlighter highlighter = new Highlighter(codeTextPane);
 
     public static void displayForm() {
         INSTANCE = new EditorUI();
@@ -72,9 +72,9 @@ public class EditorUI {
         INSTANCE.compileJavaCodeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (EditorUI.INSTANCE.codeTextArea.getText().isEmpty())
+                if (EditorUI.INSTANCE.codeTextPane.getText().isEmpty())
                     return;
-                MainQuest.INSTANCE.compileAndShow(EditorUI.INSTANCE.codeTextArea.getText());
+                MainQuest.INSTANCE.compileAndShow(EditorUI.INSTANCE.codeTextPane.getText());
             }
         });
 
@@ -86,7 +86,7 @@ public class EditorUI {
             }
         });
 
-        INSTANCE.codeTextArea.getDocument().addDocumentListener(new DocumentListener() {
+        INSTANCE.codeTextPane.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 if (EditorUI.INSTANCE.updatingCode)
@@ -112,15 +112,15 @@ public class EditorUI {
         INSTANCE.speedSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                MainQuest.SPEED = (int)INSTANCE.speedSpinner.getValue();
+                MainQuest.SPEED = (int) INSTANCE.speedSpinner.getValue();
             }
         });
 
         INSTANCE.exportWorldLoaderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!EditorUI.INSTANCE.codeTextArea.getText().isEmpty()) {
-                    boolean value = MainQuest.INSTANCE.compileAndShow(EditorUI.INSTANCE.codeTextArea.getText());
+                if (!EditorUI.INSTANCE.codeTextPane.getText().isEmpty()) {
+                    boolean value = MainQuest.INSTANCE.compileAndShow(EditorUI.INSTANCE.codeTextPane.getText());
                     if (!value)
                         return;
                 }
@@ -141,7 +141,7 @@ public class EditorUI {
                         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                         Calendar cal = Calendar.getInstance();
                         String date = dateFormat.format(cal.getTime());
-                        String text = INSTANCE.codeTextArea.getText();
+                        String text = INSTANCE.codeTextPane.getText();
                         text = HEADER.replace("$date", date) + "\n" + text;
                         PrintWriter out = new PrintWriter(file);
                         out.print(text);
@@ -167,24 +167,67 @@ public class EditorUI {
         INSTANCE.innerInnerInnerField.setBackground(c);
         INSTANCE.innerInnerInnerInnerField.setBackground(c);
         INSTANCE.speedSpinner.setValue(5);
-        INSTANCE.lable.setForeground(Color.WHITE);
-        INSTANCE.codeTextArea.setBackground(c1);
-        INSTANCE.codeTextArea.setForeground(Color.WHITE);
-        INSTANCE.codeTextArea.setCaretColor(Color.WHITE);
-        INSTANCE.lable2.setForeground(Color.WHITE);
-        INSTANCE.setComboBox(new ArrayList<Drawable>());
+        INSTANCE.label.setForeground(Color.WHITE);
+        INSTANCE.codeTextPane.setBackground(c1);
+        INSTANCE.codeTextPane.setCaretColor(Color.WHITE);
 
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
+        INSTANCE.highlighter = new Highlighter(INSTANCE.codeTextPane);
+        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(Highlighter.CLASS_DATA)))) {
+            INSTANCE.highlighter.classes = stream.readUTF();
+        } catch (IOException ignored) {
         }
+
+        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(Highlighter.INTERFACE_DATA)))) {
+            INSTANCE.highlighter.interfaces = stream.readUTF();
+        } catch (IOException ignored) {
+        }
+
+        HighlightStyle.getStyle("Class").setPattern("\\b(" + INSTANCE.highlighter.classes + ")\\b");
+        HighlightStyle.getStyle("Interface").setPattern("\\b(" + INSTANCE.highlighter.interfaces + ")\\b");
+
+        INSTANCE.codeTextPane.setFont(new Font("Consolas", Font.PLAIN, 12));
+        INSTANCE.codeTextPane.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                INSTANCE.highlighter.matching();
+            }
+        });
+
+        INSTANCE.codeTextPane.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    String title = INSTANCE.codeTextPane.getSelectedText();
+                    if (title == null) {
+                        return;
+                    }
+
+                    INSTANCE.menu.setBorder(BorderFactory.createTitledBorder(title));
+                    INSTANCE.menu.setLocation(e.getX() + 171, e.getY() + 62);
+                    INSTANCE.menu.setVisible(true);
+                } else {
+                    INSTANCE.menu.setVisible(false);
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    String title = INSTANCE.codeTextPane.getSelectedText();
+                    if (title == null) {
+                        return;
+                    }
+
+                    INSTANCE.menu.setBorder(BorderFactory.createTitledBorder(title));
+                    INSTANCE.menu.setLocation(e.getX() + 171, e.getY() + 62);
+                    INSTANCE.menu.setVisible(true);
+                } else {
+                    INSTANCE.menu.setVisible(false);
+                }
+            }
+        });
+        INSTANCE.label2.setForeground(Color.WHITE);
+        INSTANCE.setComboBox(new ArrayList<Drawable>());
     }
 
     public void setComboBox(ArrayList<Drawable> sprites) {
@@ -203,28 +246,68 @@ public class EditorUI {
     }
 
     private boolean updatingCode = false;
+
     public void refreshCode() {
         updatingCode = true;
-        codeTextArea.setText(MainQuest.INSTANCE.generateLoaderCode());
+        codeTextPane.setText(MainQuest.INSTANCE.generateLoaderCode());
+
+        highlighter.matching();
+
         updatingCode = false;
     }
 
     private JPanel contentPane;
     private JPanel innerField;
     private JPanel innerInnerField;
-    private JLabel lable;
+    private JLabel label;
     private JComboBox comboBox1;
     private JPanel innerInnerInnerField;
     private JScrollPane scrollPane1;
     private JPanel innerInnerInnerInnerField;
     private JSpinner speedSpinner;
-    private JLabel lable2;
+    private JLabel label2;
 
     private void createUIComponents() {
-        codeTextArea = new JTextArea();
-        DefaultCaret caret = (DefaultCaret)codeTextArea.getCaret();
+        codeTextPane = new JTextPane();
+        codeTextPane.setForeground(new Color(0xeeeeee));
+        DefaultCaret caret = (DefaultCaret) codeTextPane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+
         scrollPane1 = new JScrollPane();
-        scrollPane1.setViewportView(codeTextArea);
+        scrollPane1.setViewportView(codeTextPane);
+
+        menu = new JPopupMenu();
+        menu.setInvoker(codeTextPane);
+
+        JMenuItem classItem = new JMenuItem("Add class");
+        classItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                highlighter.addClass(codeTextPane.getSelectedText());
+                highlighter.matching();
+            }
+        });
+        menu.add(classItem);
+
+        JMenuItem interfItem = new JMenuItem("Add interface");
+        interfItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                highlighter.addInterface(codeTextPane.getSelectedText());
+                highlighter.matching();
+            }
+        });
+        menu.add(interfItem);
+
+        Action tabAction = new AbstractAction() {
+            public void actionPerformed(ActionEvent ae) {
+                try {
+                    codeTextPane.getStyledDocument().insertString(codeTextPane.getCaretPosition(), "    ", codeTextPane.getLogicalStyle());
+                } catch (BadLocationException ignored) {
+                }
+            }
+        };
+
+        codeTextPane.registerKeyboardAction(tabAction, KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), JComponent.WHEN_FOCUSED);
     }
 }

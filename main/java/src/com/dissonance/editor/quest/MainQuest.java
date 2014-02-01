@@ -60,10 +60,11 @@ public class MainQuest extends AbstractQuest {
             JOptionPane.showMessageDialog(EditorUI.FRAME, "There was no Tiled map found for '" + mapName + "' so the World may appear blank.\nPlease ensure the Tiled map file is in the 'worlds' folder inside the editor's jar file\n or that your IDE can see the Tiled map file located in\n'resources/worlds/" + mapName + ".json'.", "Editor Warning", JOptionPane.WARNING_MESSAGE);
         }
         RenderService.INSTANCE.runOnServiceThread(updateThread, true, true);
+        EditorUI.INSTANCE.highlighter.addClass(mapName);
     }
 
     public String generateLoaderCode() {
-        if (!customCode && EditorUI.INSTANCE.codeTextArea.getText().isEmpty()) customCode = false;
+        if (!customCode && EditorUI.INSTANCE.codeTextPane.getText().isEmpty()) customCode = false;
         if (!customCode) {
             StringBuilder builder = new StringBuilder();
             builder.append("package com.dissonance.game.w;\n").append("\n");
@@ -94,9 +95,9 @@ public class MainQuest extends AbstractQuest {
                 EditorUI.FRAME.requestFocus();
                 JOptionPane.showMessageDialog(EditorUI.FRAME, "The Sprite list seems to be out of date!\nCompile the World Loader code and try again.", "Error moving Sprite", JOptionPane.WARNING_MESSAGE);
                 EditorUI.INSTANCE.setComboIndex(0);
-                return EditorUI.INSTANCE.codeTextArea.getText();
+                return EditorUI.INSTANCE.codeTextPane.getText();
             }
-            String code = EditorUI.INSTANCE.codeTextArea.getText();
+            String code = EditorUI.INSTANCE.codeTextPane.getText();
             if (selectedSprite == null) return code;
             String varName = getVarNameFor(sprites.indexOf(selectedSprite));
             if (varName.equalsIgnoreCase("???") && adding) { //Assume we need to add it.
@@ -186,7 +187,7 @@ public class MainQuest extends AbstractQuest {
     }
 
     public int getSpriteCount() {
-        String code = EditorUI.INSTANCE.codeTextArea.getText();
+        String code = EditorUI.INSTANCE.codeTextPane.getText();
         int count = 0;
         String[] lines = code.split("\n");
         for (String s : lines) {
@@ -198,7 +199,7 @@ public class MainQuest extends AbstractQuest {
     }
 
     public int getLineNumberFor(int target) {
-        String code = EditorUI.INSTANCE.codeTextArea.getText();
+        String code = EditorUI.INSTANCE.codeTextPane.getText();
         String[] lines = code.split("\n");
         int i = 0;
         for (int ii = 0; ii < lines.length; ii++) {
@@ -215,7 +216,7 @@ public class MainQuest extends AbstractQuest {
     }
 
     public String getVarNameFor(int target) {
-        String code = EditorUI.INSTANCE.codeTextArea.getText();
+        String code = EditorUI.INSTANCE.codeTextPane.getText();
         String varName;
         String[] lines = code.split("\n");
         int i = 0;
@@ -274,6 +275,7 @@ public class MainQuest extends AbstractQuest {
             }
 
             sprites.add(sprite);
+            EditorUI.INSTANCE.highlighter.addClass(sprite.getClass().getSimpleName());
             sprite.setX(0);
             sprite.setY(0);
             getWorld().loadAndAdd(sprite);
