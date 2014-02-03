@@ -17,7 +17,9 @@ Meet the Team
 
 ###Programmers
 
-|![img1](https://s.gravatar.com/avatar/495b6295cfca5498d4dd95f36f7cd701?s=140)|![img1](https://2.gravatar.com/avatar/e80dae6a3769473c341315c43b051437?d=https%3A%2F%2Fidenticons.github.com%2F3d42aa2c7c05177f0cee9fad70d2fa15.png&r=x&s=140)|![img1](https://1.gravatar.com/avatar/c5fd729038a2107d5410ad63bd50e758?d=https%3A%2F%2Fidenticons.github.com%2Fcf71466f2aa69b27f153726b68442649.png&r=x&s=140)|![img1](https://0.gravatar.com/avatar/dc20c8d3bf6b54e4497df9ede5dec98d?d=https%3A%2F%2Fidenticons.github.com%2F3576d241ca719befea6f37b3065b4a1c.png&r=x&s=140)|![img1](https://www.hipchat.com/img/silhouette_125.png)|
+
+
+|![img1](https://s.gravatar.com/avatar/495b6295cfca5498d4dd95f36f7cd701?s=140)|![img1](https://1.gravatar.com/avatar/c5fd729038a2107d5410ad63bd50e758?d=https%3A%2F%2Fidenticons.github.com%2Fcf71466f2aa69b27f153726b68442649.png&r=x&s=140)|![img1](https://2.gravatar.com/avatar/e80dae6a3769473c341315c43b051437?d=https%3A%2F%2Fidenticons.github.com%2F3d42aa2c7c05177f0cee9fad70d2fa15.png&r=x&s=140)|![img1](https://0.gravatar.com/avatar/dc20c8d3bf6b54e4497df9ede5dec98d?d=https%3A%2F%2Fidenticons.github.com%2F3576d241ca719befea6f37b3065b4a1c.png&r=x&s=140)|![img1](https://www.hipchat.com/img/silhouette_125.png)|
 ------------------------|------------------------|------------------------|------------------------|------------------------|
 |Eddie|Alem Župa|headdetect|roboman2444|laurenclayberg|
 
