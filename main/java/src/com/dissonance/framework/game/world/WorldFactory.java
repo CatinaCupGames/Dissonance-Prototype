@@ -115,33 +115,40 @@ public class WorldFactory {
         return null;
     }
 
+    public static void swapView(World newWorld, boolean fadetoblack) {
+        swapView(newWorld, fadetoblack, true);
+    }
+
     /**
      * Change which world is currently being viewed.
      * @param newworld
      *                The new world to display. This parameter <b>cannot</b> be null.
      */
-    public static void swapView(final World newworld, final boolean fadetoblack) {
+    public static void swapView(final World newworld, final boolean fadetoblack, final boolean cache) {
         if (RenderService.isInRenderThread()) {
             new Thread(new Runnable() {
 
                 @Override
                 public void run() {
-                    swapView(newworld, fadetoblack);
+                    swapView(newworld, fadetoblack, cache);
                 }
             }).start();
             return;
         }
         Validator.validateNotNull(newworld, "NewWorld");
-        WorldHolder w = getWorldHolder(newworld.getID());
-        if (w != null) {
-            w.lastAccess = System.currentTimeMillis();
-        } else {
-            cleanCache(true);
-            int index = nextOpenSpot();
-            w = new WorldHolder();
-            w.lastAccess = System.currentTimeMillis();
-            w.world = newworld;
-            cacheWorlds[index] = w;
+        WorldHolder w;
+        if (cache) {
+            w = getWorldHolder(newworld.getID());
+            if (w != null) {
+                w.lastAccess = System.currentTimeMillis();
+            } else {
+                cleanCache(true);
+                int index = nextOpenSpot();
+                w = new WorldHolder();
+                w.lastAccess = System.currentTimeMillis();
+                w.world = newworld;
+                cacheWorlds[index] = w;
+            }
         }
         newworld.switchTo(fadetoblack);
         if (currentWorld != null) {
@@ -185,6 +192,7 @@ public class WorldFactory {
         long curr = System.currentTimeMillis();
         boolean removed = false;
         for (int i = 0; i < WORLD_CACHE_LIMIT; i++) {
+            if (cacheWorlds[i] == null) continue;
             long since = curr - cacheWorlds[i].lastAccess;
             if ((since / 1000) > WORLD_ACCESS_LIMIT_SECONDS && GameService.getCurrentWorld().getID() != cacheWorlds[i].world.getID()) {
                 System.out.println("[World Factory] Disposing " + cacheWorlds[i].world.getName() + ".");

@@ -16,14 +16,27 @@ import org.yaml.snakeyaml.Yaml;
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class GameService {
+    static {
+        String lwjgl_folder = "libs" + File.separator + "lwjgl_native" + File.separator;
+        final String OS = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
+
+        if (OS.contains("win"))
+            lwjgl_folder += "windows";
+        else if (OS.contains("mac"))
+            lwjgl_folder += "macosx";
+        else if (OS.contains("nix") || OS.contains("nux") || OS.contains("aix"))
+            lwjgl_folder += "linux";
+        else if (OS.contains("sunos"))
+            lwjgl_folder += "solaris";
+        System.setProperty("org.lwjgl.librarypath", new File(lwjgl_folder).getAbsolutePath());
+        System.setProperty("net.java.games.input.librarypath", System.getProperty("org.lwjgl.librarypath"));
+    }
     public static final String encryptAlgorithm = "PBEWithMD5AndDES";
 
     public static String[] args;
@@ -52,7 +65,7 @@ public class GameService {
                 e.printStackTrace();
             }
             quest = currentQuest.getNextQuest();
-            if (quest != null) {
+            if (quest != null && currentQuest.getWorld() != null) {
                 quest.setWorld(currentQuest.getWorld()); //Set the world to the last world used by the last quest
             }
         }

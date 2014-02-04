@@ -7,12 +7,12 @@ World Loader Editor
 Date: 2014/01/02 20:13:01
 =====================================
 */
-package com.dissonance.game.w;
+package com.dissonance.test.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.shader.impl.Light;
-import com.dissonance.framework.render.texture.TextureLoader;
-import com.dissonance.game.sprites.TestNPC;
+import com.dissonance.game.w.GameWorldLoader;
+import com.dissonance.test.sprites.TestNPC;
 
 import java.awt.*;
 

@@ -11,17 +11,11 @@ import java.util.Random;
 public class MenuQuest extends AbstractQuest {
     @Override
     public void startQuest() throws Exception {
-        World w = WorldFactory.getWorld("main_menu_world");
-        setWorld(w);
-        w.waitForWorldLoaded();
-        System.out.println("loaded!");
-        Thread.sleep(5000);
-        for (int i = 0; i < 3; i++) {
-            RenderService.INSTANCE.fadeToAlpha(300, 0.7f);
-            Thread.sleep(500);
-            RenderService.INSTANCE.fadeFromBlack(300);
-            Thread.sleep(500);
-        }
+        //TODO Display menu and wait for option to be chosen
+
+        //TODO Remove, temp code
+        setNextQuest(new Demo_Level1_Quest()); //Set the next quest
+        endQuest(); //End this quest
     }
 
     @Override

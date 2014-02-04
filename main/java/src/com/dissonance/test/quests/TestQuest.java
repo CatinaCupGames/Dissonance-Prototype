@@ -1,4 +1,4 @@
-package com.dissonance.game.quests;
+package com.dissonance.test.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.combat.Weapon;

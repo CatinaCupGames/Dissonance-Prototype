@@ -1,4 +1,4 @@
-package com.dissonance.game.sprites;
+package com.dissonance.test.sprites;
 
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
