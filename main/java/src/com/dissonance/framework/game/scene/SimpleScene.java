@@ -1,5 +1,7 @@
 package com.dissonance.framework.game.scene;
 
+import com.dissonance.framework.game.GameService;
+import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.RenderService;
 
 public abstract class SimpleScene implements Scene {
@@ -7,9 +9,17 @@ public abstract class SimpleScene implements Scene {
     @Override
     public void beginScene() {
         scenePlaying = true;
-        playScene();
+        try {
+            playScene();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         scenePlaying = false;
         _wakeup();
+    }
+
+    protected World getWorld() {
+        return GameService.getCurrentWorld();
     }
 
     @Override
@@ -37,5 +47,5 @@ public abstract class SimpleScene implements Scene {
         }
     }
 
-    protected abstract void playScene();
+    protected abstract void playScene() throws Throwable;
 }
