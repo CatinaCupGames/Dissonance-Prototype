@@ -10,17 +10,6 @@ import java.io.InputStream;
 
 public class GameSettings
 {
-    /**
-     * Notes:
-     *  - Remove the private constructors if you want.
-     */
-
-    public static class Controls
-    {
-        private Controls()
-        {
-        }
-    }
 
     public static class Audio
     {
@@ -35,15 +24,35 @@ public class GameSettings
         {
         }
 
+        /**
+         * The default font used by the game. <br></br>
+         * <b>Must restart game for value changes to take effect</b>
+         */
         public static Font GAME_FONT;
 
+        /**
+         * The width of the screen window, in pixels. <br></br>
+         * <b>Must restart game for value changes to take effect</b>
+         */
         public static int window_width;
+        /**
+         * The height of the screen window, in pixels. <br></br>
+         * <b>Must restart game for value changes to take effect</b>
+         */
         public static int window_height;
 
+        /**
+         * The {@link com.dissonance.framework.system.settings.Resolution} of the game window. <br></br>
+         * <b>Must restart game for value changes to take effect</b>
+         */
         public static Resolution resolution;
         private static int game_width;
         private static int game_height;
 
+        /**
+         * Whether the game is being played in fullscreen mode or not. <br></br>
+         * <b>Must restart game for value changes to take effect</b>
+         */
         public static boolean fullscreen;
 
         static
@@ -71,6 +80,11 @@ public class GameSettings
 
     public static class Graphics
     {
+        /**
+         * The maximum FPS the {@link com.dissonance.framework.render.RenderService} can exceeded. If the value is -1, then
+         * then there will be no FPS limit.
+         */
+        public static int FPSLimit;
         private Graphics()
         {
         }
@@ -79,6 +93,7 @@ public class GameSettings
 
         static
         {
+            FPSLimit = -1;
             color = new Color(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
         }
     }

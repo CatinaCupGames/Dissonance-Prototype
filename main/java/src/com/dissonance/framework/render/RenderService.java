@@ -53,7 +53,7 @@ public class RenderService extends Service {
     private float startAlpha;
 
     long next_tick;
-    long cur = System.currentTimeMillis();
+    long cur = getTime();
     long now;
     long started;
 
@@ -74,7 +74,7 @@ public class RenderService extends Service {
         newAlpha = alpha;
         startAlpha = curAlpha;
         this.speed = speed;
-        startTime = System.currentTimeMillis();
+        startTime = getTime();
     }
 
     public boolean isCrossFading() {
@@ -180,14 +180,16 @@ public class RenderService extends Service {
             System.out.println("OpenGL version: " + glGetString(GL_VERSION));
 
             System.out.println("Building shaders..");
-            long ms = System.currentTimeMillis();
+            long ms = getTime();
             ShaderFactory.buildAllShaders();
-            System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms.");
+            System.out.println("Done! Took " + (getTime() - ms) + "ms.");
 
         } catch (LWJGLException e) {
             e.printStackTrace();
+            System.exit(0);
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(0);
         } finally {
             if (looping) {
                 looping = false;
@@ -196,12 +198,12 @@ public class RenderService extends Service {
         }
 
         ServiceManager.createService(InputService.class);
-        started = System.currentTimeMillis();
-        next_tick = getTimeSinceStartMillis();
+        started = getTime();
+        next_tick = getTime();
     }
 
     private long getTimeSinceStartMillis() {
-        return System.currentTimeMillis() - started;
+        return getTime() - started;
     }
 
     @Override
@@ -239,7 +241,7 @@ public class RenderService extends Service {
                 this.current_world = (World) obj;
             else {
                 this.next_world = (World) obj;
-                fadeStartTime = System.currentTimeMillis();
+                fadeStartTime = getTime();
             }
         } else if (type == ENABLE_CROSS_FADE) {
             this.crossfade = (boolean)obj;
@@ -257,6 +259,10 @@ public class RenderService extends Service {
         if (!isInRenderThread())
             throw new RuntimeException("You must be in the render thread to get capabilities!");
         return GLContext.getCapabilities();
+    }
+
+    public static long getTime() {
+        return System.nanoTime() / 1000000;
     }
 
     private long fadeStartTime;
@@ -292,7 +298,7 @@ public class RenderService extends Service {
 
 
             if (isFading) {
-                long time = System.currentTimeMillis() - startTime;
+                long time = getTime() - startTime;
                 curAlpha = Camera.ease(startAlpha, newAlpha, speed, time);
                 if (curAlpha == newAlpha)
                     isFading = false;
@@ -336,7 +342,7 @@ public class RenderService extends Service {
 
 
             if (next_world != null) {
-                long time = System.currentTimeMillis() - fadeStartTime;
+                long time = getTime() - fadeStartTime;
                 float percent;
                 if (time > fadeDuration) {
                     percent = 1;
@@ -407,6 +413,10 @@ public class RenderService extends Service {
             }
             if (Display.isCloseRequested()) {
                 kill();
+            }
+
+            if (GameSettings.Graphics.FPSLimit != -1) {
+                Display.sync(GameSettings.Graphics.FPSLimit);
             }
         } else {
             try {
