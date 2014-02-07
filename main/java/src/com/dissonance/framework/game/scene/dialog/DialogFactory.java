@@ -47,6 +47,7 @@ public class DialogFactory {
                             String text = nodelist.item(ii).getFirstChild().getNodeValue();
                             Style style = Style.NORMAL;
                             Color color = Color.WHITE;
+                            long speed = 15L;
                             if (nodelist.item(ii).getAttributes().getNamedItem("style") != null) {
                                 String stype = nodelist.item(ii).getAttributes().getNamedItem("style").getNodeValue();
                                 for (Style l : Style.values()) {
@@ -65,11 +66,20 @@ public class DialogFactory {
                                     color = Color.WHITE;
                                 }
                             }
+
+                            if (nodelist.item(ii).getAttributes().getNamedItem("speed") != null) {
+                                String sSpeed = nodelist.item(ii).getAttributes().getNamedItem("speed").getNodeValue();
+                                try {
+                                    speed = Long.parseLong(sSpeed);
+                                } catch (Throwable t) {
+                                    speed = 15L;
+                                }
+                            }
                             boolean append = false;
                             if (nodelist.item(ii).getAttributes().getNamedItem("type") != null) {
                                 append = nodelist.item(ii).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase("append");
                             }
-                            lines[ii] = new CustomString(text, style, append, color);
+                            lines[ii] = new CustomString(text, style, append, color, speed);
                         }
                     } else {
                         lines = new CustomString[0];

@@ -1,6 +1,7 @@
 package com.dissonance.framework.render.texture;
 
 import org.lwjgl.BufferUtils;
+import sun.awt.image.BufferedImageDevice;
 
 import javax.swing.*;
 import java.awt.*;
@@ -103,6 +104,47 @@ public class TextureLoader {
 
     static void disposeTexture(Texture t) {
         glDeleteTextures(t.textureId);
+    }
+
+    static void drawToTexture(BufferedImage bufferedImage,
+                              int target,
+                              int dstPixelFormat,
+                              int minFilter,
+                              int magFilter,
+                              Texture targetTexture) {
+        int srcPixelFormat;
+
+        int textureID = targetTexture.textureId;
+        // bind this texture
+        glBindTexture(target, textureID);
+
+        targetTexture.setWidth(bufferedImage.getWidth());
+        targetTexture.setHeight(bufferedImage.getHeight());
+
+        if (bufferedImage.getColorModel().hasAlpha()) {
+            srcPixelFormat = GL_RGBA;
+        } else {
+            srcPixelFormat = GL_RGB;
+        }
+
+        // convert that image into a byte buffer of texture data
+        ByteBuffer textureBuffer = convertImageData(bufferedImage, targetTexture, false);
+
+        if (target == GL_TEXTURE_2D) {
+            glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter);
+            glTexParameteri(target, GL_TEXTURE_MAG_FILTER, magFilter);
+        }
+
+        // produce a texture from the byte buffer
+        glTexImage2D(target,
+                0,
+                dstPixelFormat,
+                get2Fold(bufferedImage.getWidth()),
+                get2Fold(bufferedImage.getHeight()),
+                0,
+                srcPixelFormat,
+                GL_UNSIGNED_BYTE,
+                textureBuffer );
     }
 
     static Texture convertToTexture(BufferedImage bufferedImage,

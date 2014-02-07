@@ -16,10 +16,13 @@
         <message>Scootaloo is not a chicken Eddie!</message>
     </dialog>
 
+
+
     <dialog dialog_id="testingTrigger">
-        <header>Mom</header>
-        <message style="bold">Hey! </message>
-        <message type="append">You can't be here!</message>
+        <header>Max Kek</header>
+        <message style="bold">Kek </message>
+        <message type = "append" speed="1">LITERALLY END UR LIFE XDDDDD REDIT</message>
+        <message speed="500">:^)</message>
     </dialog>
 
     <dialog dialog_id="testTrigger2">

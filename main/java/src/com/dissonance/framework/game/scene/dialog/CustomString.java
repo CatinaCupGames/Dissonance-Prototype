@@ -8,6 +8,7 @@ public class CustomString {
     private Style style;
     private boolean append;
     private Color color = Color.WHITE;
+    private long speed = 15L;
 
     public CustomString(String text) {
         this(text, Style.NORMAL);
@@ -39,6 +40,11 @@ public class CustomString {
         this.color = color;
     }
 
+    public CustomString(String text, Style style, boolean append, Color color, long speed) {
+        this(text, style, append, color);
+        this.speed = speed;
+    }
+
     public Style getStyle() {
         return style;
     }
@@ -53,6 +59,10 @@ public class CustomString {
 
     public String toString() {
         return text;
+    }
+
+    public long getSpeed() {
+        return speed;
     }
 
     public Font getFont() {

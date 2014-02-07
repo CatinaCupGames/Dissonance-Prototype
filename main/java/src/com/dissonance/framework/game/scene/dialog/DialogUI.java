@@ -30,6 +30,7 @@ public class DialogUI extends UIElement {
     private static Font header_font;
     private static BufferedImage dialog_box;
     private static BufferedImage dialog_header;
+    private long speed = 20L;
 
     static {
         font = GameSettings.Display.GAME_FONT;
@@ -102,6 +103,7 @@ public class DialogUI extends UIElement {
         ss.s = string;
         ss.line = nextLine(string);
         ss.ID = text.size();
+        ss.speed = string.getSpeed();
         text.add(ss);
     }
 
@@ -132,26 +134,25 @@ public class DialogUI extends UIElement {
     }
 
     private boolean pressed;
-    private int i;
+    private long lastUpdate = RenderService.getTime();
     private boolean done = false;
     @Override
     public void update() {
         boolean fast_moving = InputKeys.isButtonPressed(InputKeys.JUMP);
 
-        if (i % (fast_moving ? 3 : 13) == 0 && !done) {
+        long speed = this.speed / (fast_moving ? 2 : 1);
+        if (RenderService.getTime() - lastUpdate > speed && !done) {
+            lastUpdate = RenderService.getTime();
+
             char_offset++;
             completelyInvalidateView();
         }
-        i++;
-        if (i >= 500)
-            i = 0;
 
         if (cx != Camera.getX() || cy != Camera.getY()) {
             setX((float) (GameSettings.Display.resolution.getWidth() / 4f)); //TODO Get this to center of screen
             setY((float) ((GameSettings.Display.resolution.getHeight() / 2f) - (getHeight() / 2f) - 8));
             cx = Camera.getX();
             cy = Camera.getY();
-            //completelyInvalidateView();
         }
 
         if (!pressed) {
@@ -166,7 +167,6 @@ public class DialogUI extends UIElement {
                 line_offset = 0;
                 funOnTheBun();
                 done = false;
-                i = 0;
                 if (finished)
                     endDialog();
                 else {
@@ -215,6 +215,7 @@ public class DialogUI extends UIElement {
                         done = true;
                         break;
                     }
+                    this.speed = current.speed;
                     for (int z = 0; z < current.s.getString().toCharArray().length; z++) {
                         if (current_char_offset >= char_offset)
                             break;
@@ -319,6 +320,7 @@ public class DialogUI extends UIElement {
         public CustomString s;
         public int line;
         public int ID;
+        public long speed;
 
         @Override
         public int hashCode() {

@@ -195,10 +195,6 @@ public abstract class UIElement implements com.dissonance.framework.game.sprites
             UI_IMAGE = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             resetDrawSize();
         }
-        if (UI != null) {
-            UI.dispose();
-            UI = null;
-        }
         Graphics2D graphics2D = UI_IMAGE.createGraphics();
         graphics2D.setColor(new Color(0f,0f,0f,0f));
         graphics2D.fillRect(0,0, width, height);
@@ -206,7 +202,10 @@ public abstract class UIElement implements com.dissonance.framework.game.sprites
         graphics2D.dispose();
         boolean old = TextureLoader.isFastRedraw();
         TextureLoader.setFastRedraw(true);
-        UI = Texture.convertToTexture(name, UI_IMAGE);
+
+        if (UI == null) UI = Texture.convertToTexture(name, UI_IMAGE);
+        else Texture.redrawTexture(UI, UI_IMAGE);
+
         tX = UI.getWidth();
         tY = UI.getHeight();
         valid = true;

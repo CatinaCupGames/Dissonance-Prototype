@@ -55,6 +55,10 @@ public class Texture {
         return cache.get(name);
     }
 
+    public static void redrawTexture(Texture target, BufferedImage image) {
+        TextureLoader.drawToTexture(image, GL_TEXTURE_2D, GL_RGBA, GL_NEAREST, GL_NEAREST, target);
+    }
+
     private Texture() { }
 
     protected Texture(Texture texture) {
