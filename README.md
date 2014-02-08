@@ -29,7 +29,7 @@ Meet the Team
 |Thomas Gobeille|Davis|rfding|
 
 ###Story Board
-|![img1](https://s3.amazonaws.com/uploads.hipchat.com/16445/422604/smKtpC9WaERDFQB/me16bit.png)|![img1](https://www.hipchat.com/img/silhouette_125.png)|
+|![img1](https://s3.amazonaws.com/uploads.hipchat.com/16445/422604/wOeeMdNeIKD0mkZ/me16bit.png)|![img1](https://www.hipchat.com/img/silhouette_125.png)|
 |------------------------|------------------------|
 |John|viceroyvonsalsa|
 
