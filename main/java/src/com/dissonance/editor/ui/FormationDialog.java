@@ -122,20 +122,4 @@ public final class FormationDialog extends JDialog {
             }
         });
     }
-
-    /*
-private void InitializeComponent()
-        {
-            //
-            // btnGenerate
-            //
-            this.btnGenerate.Location = new System.Drawing.Point(26, 340);
-            this.btnGenerate.Name = "btnGenerate";
-            this.btnGenerate.Size = new System.Drawing.Size(178, 23);
-            this.btnGenerate.TabIndex = 4;
-            this.btnGenerate.Text = "Generate formation";
-            this.btnGenerate.UseVisualStyleBackColor = true;
-
-        }
-    * */
 }

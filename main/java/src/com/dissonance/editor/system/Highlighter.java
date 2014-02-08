@@ -97,7 +97,7 @@ public final class Highlighter {
 
         SimpleAttributeSet variable = new SimpleAttributeSet();
         variable.addAttribute(StyleConstants.Foreground, new Color(0xaa8aba));
-        String variableRegex = "\\b(var(\\d+))\\b";
+        String variableRegex = "\\b(var(\\d+)|w)\\b";
         HighlightStyle.addStyle(new HighlightStyle("Variable", variableRegex, variable));
 
         SimpleAttributeSet classes = new SimpleAttributeSet();
@@ -106,7 +106,7 @@ public final class Highlighter {
         HighlightStyle.addStyle(new HighlightStyle("Class", "", classes));
 
         SimpleAttributeSet interfaces = new SimpleAttributeSet();
-        interfaces.addAttribute(StyleConstants.Foreground, new Color(0x803079));
+        interfaces.addAttribute(StyleConstants.Foreground, new Color(0x80abae));
         interfaces.addAttribute(StyleConstants.Bold, true);
         HighlightStyle.addStyle(new HighlightStyle("Interface", "", interfaces));
 

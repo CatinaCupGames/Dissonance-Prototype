@@ -102,17 +102,22 @@ public class MainQuest extends AbstractQuest {
 
             for (Formation formation : formations) {
                 for (Map.Entry<String, Position> entry : formation.getSprites().entrySet()) {
+                    Drawable target = getDrawableFromVar(formation.getTarget());
+                    Drawable sprite = getDrawableFromVar(entry.getKey());
+                    float x = (target.getX() - sprite.getX());
+                    float y = (target.getY() - sprite.getY());
+
                     builder.append("        ");
                     builder.append(entry.getKey()).append(".setBehavior(new BehaviorOffsetFollow(").append(entry.getKey());
-                    builder.append(", ").append(formation.getTarget()).append(", new Position(").append(entry.getValue().getX());
-                    builder.append("d, ").append(entry.getValue().getY()).append("d)));\n");
+                    builder.append(", ").append(formation.getTarget()).append(", new Position(").append(x);
+                    builder.append("f, ").append(y).append("f)));\n");
                 }
             }
             builder.append("    }\n}");
 
             return builder.toString();
         } else {
-            if (getSpriteCount() != sprites.size()) {
+            if (getSpriteCount() + 1 != sprites.size()) {
                 EditorUI.FRAME.requestFocus();
                 JOptionPane.showMessageDialog(EditorUI.FRAME, "The Sprite list seems to be out of date!\nCompile the World Loader code and try again.", "Error moving Sprite", JOptionPane.WARNING_MESSAGE);
                 EditorUI.INSTANCE.setComboIndex(0);
@@ -140,6 +145,16 @@ public class MainQuest extends AbstractQuest {
                         s = "        " + varName + ".setX(" + selectedSprite.getX() + "f);";
                     } else if (s.contains(varName + ".setY")) {
                         s = "        " + varName + ".setY(" + selectedSprite.getY() + "f);";
+                    } else if (s.contains(".setBehavior")) {
+                        String spriteName = s.split("\\.")[0].trim();
+                        String targetName = s.split(",")[1].substring(1);
+                        System.out.println(spriteName + "   " + targetName);
+                        Drawable sprite = getDrawableFromVar(spriteName);
+                        Drawable target = getDrawableFromVar(targetName);
+
+                        s = "        " + spriteName + ".setBehavior(new BehaviorOffsetFollow(" + spriteName + ", ";
+                        s += targetName + ", new Position(" + (target.getX() - sprite.getX()) + "f, ";
+                        s += (target.getY() - sprite.getY()) + "f)));";
                     }
                     newCode += s + "\n";
                 }
@@ -266,6 +281,15 @@ public class MainQuest extends AbstractQuest {
             }
         }
         return "???";
+    }
+
+    public Drawable getDrawableFromVar(String varName) {
+        if (varName.startsWith("var")) {
+            //TODO: oh god... i don't even... (wtf)
+            return sprites.get(Integer.parseInt(String.valueOf(varName.charAt(3))) - 1);
+        }
+
+        throw new RuntimeException("\"I am going to hide/die in a hole now.\" - Arrem");
     }
 
     public void newSprite() {
