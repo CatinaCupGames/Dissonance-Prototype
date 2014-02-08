@@ -26,7 +26,7 @@ public final class FormationDialog extends JDialog {
         setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
         setResizable(false);
         setSize(236, 418);
-        setTitle("Formation");
+        setTitle("Create formation");
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int width = gd.getDisplayMode().getWidth();

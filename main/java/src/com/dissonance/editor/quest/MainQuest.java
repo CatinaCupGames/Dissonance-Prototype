@@ -8,9 +8,9 @@ import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.sprites.ui.UI;
 import com.dissonance.framework.game.sprites.ui.impl.UIElement;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.WorldLoader;
@@ -28,10 +28,7 @@ import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class MainQuest extends AbstractQuest {
     public static MainQuest INSTANCE;
@@ -102,7 +99,9 @@ public class MainQuest extends AbstractQuest {
             }
 
             for (Formation formation : formations) {
-                for (Map.Entry<String, Position> entry : formation.getSprites().entrySet()) {
+                List<Map.Entry<String, Position>> set = new ArrayList<>(formation.getSprites().entrySet());
+                Collections.reverse(set);
+                for (Map.Entry<String, Position> entry : set) {
                     Drawable target = getDrawableFromVar(formation.getTarget());
                     Drawable sprite = getDrawableFromVar(entry.getKey());
                     float x = (target.getX() - sprite.getX());
@@ -294,7 +293,7 @@ public class MainQuest extends AbstractQuest {
     }
 
     public void newSprite() {
-        String class_ = (String) JOptionPane.showInputDialog(EditorUI.FRAME, "Please enter name of the Sprite class\nor the complete classpath for the Sprite class.", "Add Sprite", JOptionPane.PLAIN_MESSAGE);
+        String class_ = JOptionPane.showInputDialog(EditorUI.FRAME, "Please enter name of the Sprite class\nor the complete classpath for the Sprite class.", "Add Sprite", JOptionPane.PLAIN_MESSAGE);
         if ((class_ != null) && (class_.length() > 0)) {
             Sprite sprite;
             try {
