@@ -24,7 +24,7 @@ Meet the Team
 |Eddie Penta|Alem Župa|headdetect|roboman2444|laurenclayberg|UclCommander|
 
 ###Artist
-|![img1](https://s3.amazonaws.com/uploads.hipchat.com/photos/468832/6jkX4IO5nTwdYXc_125.jpg)|![img1](https://www.hipchat.com/img/silhouette_125.png)|![img1](https://s3.amazonaws.com/uploads.hipchat.com/photos/568062/7QBRyxb6CwGra6X_125.png)|
+|![img1](https://s3.amazonaws.com/uploads.hipchat.com/16445/468832/PKkNwKekVn2lvbK/tomar.jpg)|![img1](https://www.hipchat.com/img/silhouette_125.png)|![img1](https://s3.amazonaws.com/uploads.hipchat.com/16445/422468/J2TY6ttRJXlTzO0/rita.png)|
 |------------------------|------------------------|------------------------|
 |Thomas Gobeille|Davis|rfding|
 
