@@ -1,4 +1,4 @@
-package com.dissonance.game.scene;
+package com.dissonance.test.scene;
 
 import com.dissonance.framework.game.scene.SimpleScene;
 import com.dissonance.framework.game.scene.dialog.Dialog;

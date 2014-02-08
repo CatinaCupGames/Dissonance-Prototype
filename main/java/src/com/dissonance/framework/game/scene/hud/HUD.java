@@ -1,7 +1,7 @@
 package com.dissonance.framework.game.scene.hud;
 
 import com.dissonance.framework.system.GameSettings;
-import com.dissonance.framework.game.sprites.UIElement;
+import com.dissonance.framework.game.sprites.ui.impl.UIElement;
 import com.dissonance.framework.render.Camera;
 
 import javax.imageio.ImageIO;

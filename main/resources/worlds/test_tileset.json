@@ -51,7 +51,7 @@
                  "name":"",
                  "properties":
                     {
-                     "triggerclass":"com.dissonance.game.triggers.TestTrigger"
+                     "triggerclass":"com.dissonance.test.triggers.TestTrigger"
                     },
                  "type":"trigger",
                  "visible":true,

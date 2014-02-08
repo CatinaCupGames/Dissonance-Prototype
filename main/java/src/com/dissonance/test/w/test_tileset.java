@@ -7,12 +7,12 @@ World Loader Editor
 Date: 2014/01/02 20:13:01
 =====================================
 */
-package com.dissonance.game.w;
+package com.dissonance.test.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.shader.impl.Light;
-import com.dissonance.framework.render.texture.TextureLoader;
-import com.dissonance.game.sprites.TestNPC;
+import com.dissonance.game.w.GameWorldLoader;
+import com.dissonance.test.sprites.TestNPC;
 
 import java.awt.*;
 
@@ -29,17 +29,17 @@ public class test_tileset extends GameWorldLoader {
         final long start = System.currentTimeMillis();
 
         w.createLight(0f, 0f, 1.6f, 0.3f);
-        w.createLight(100f, 0f, 1.7f, 0.3f);
-        w.createLight(200f, 0f, 1.8f, 0.3f);
-        w.createLight(300f, 0f, 1.9f, 0.3f);
+        w.createLight(100f, 0f, 1.8f, 0.3f);
+        w.createLight(200f, 0f, 2f, 0.3f);
+        w.createLight(300f, 0f, 2.2f, 0.3f);
 
-        final Light light = w.createLight(300, 300, 2f, 0.4f, Color.GREEN);
+        final Light light = w.createLight(300, 300, 2.4f, 0.4f, Color.GREEN);
         w.getRenderService().runOnServiceThread(new Runnable() {
 
             @Override
             public void run() {
                 long sec = System.currentTimeMillis() - start;
-                sec /= 500;
+                sec /= 100;
                 float r = Math.min(0.3f + 0.5f * (float) Math.cos(sec), 1f);
                 r = Math.max(r, 0f);
                 float g = Math.min(0.3f + 0.5f * (float) Math.sin(sec), 1f);
@@ -49,6 +49,6 @@ public class test_tileset extends GameWorldLoader {
                 light.setColor(new Color(r, g, 1f));
             }
         }, true, true);
-        w.setWorldBrightness(0.7f);
+        w.setWorldBrightness(0.8f);
     }
 }

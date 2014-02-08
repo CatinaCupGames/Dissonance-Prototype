@@ -1,4 +1,4 @@
-package com.dissonance.game.triggers;
+package com.dissonance.test.triggers;
 
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;

@@ -1,4 +1,4 @@
-package com.dissonance.game.sprites;
+package com.dissonance.test.sprites;
 
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.impl.game.NPCSprite;

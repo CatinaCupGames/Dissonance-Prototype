@@ -8,7 +8,8 @@ import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
-import com.dissonance.framework.game.sprites.UIElement;
+import com.dissonance.framework.game.sprites.ui.UI;
+import com.dissonance.framework.game.sprites.ui.impl.UIElement;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
@@ -457,7 +458,7 @@ public class MainQuest extends AbstractQuest {
                 EditorUI.INSTANCE.refreshCode();
             }
         } else if ((w || a || s || d) && selectedSprite != null && selectedSprite instanceof UIElement) {
-            UIElement ss = (UIElement)selectedSprite;
+            UI ss = (UI)selectedSprite;
             if (w) {
                 ss.setY(selectedSprite.getY() - (SPEED * RenderService.TIME_DELTA));
                 EditorUI.INSTANCE.refreshCode();

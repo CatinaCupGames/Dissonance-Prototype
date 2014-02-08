@@ -1,6 +1,8 @@
 package com.dissonance.framework.game.sprites;
 
 import com.dissonance.framework.game.ai.astar.Position;
+import com.dissonance.framework.game.sprites.ui.UI;
+import com.dissonance.framework.game.sprites.ui.impl.UIElement;
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;
@@ -269,7 +271,7 @@ public abstract class Sprite implements Drawable, Serializable {
 
     @Override
     public int compareTo(Drawable o) {
-        if (o instanceof UIElement)
+        if (o instanceof UI)
             return Drawable.BEFORE;
         else if (o instanceof Sprite) {
             Sprite s = (Sprite)o;

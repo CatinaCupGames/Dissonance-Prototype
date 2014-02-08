@@ -1,4 +1,4 @@
-package com.dissonance.game.w;
+package com.dissonance.test.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;

@@ -2,11 +2,10 @@ package com.dissonance.framework.game.scene.dialog;
 
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.input.InputKeys;
-import com.dissonance.framework.game.sprites.UIElement;
+import com.dissonance.framework.game.sprites.ui.impl.UIElement;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
-import org.lwjgl.util.vector.Vector2f;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -31,22 +30,13 @@ public class DialogUI extends UIElement {
     private static Font header_font;
     private static BufferedImage dialog_box;
     private static BufferedImage dialog_header;
+    private long speed = 20L;
 
     static {
-        InputStream in = DialogUI.class.getClassLoader().getResourceAsStream("fonts/INFO56_0.ttf");
-        if (in != null) {
-            try {
-                font = Font.createFont(Font.TRUETYPE_FONT, in);
-                text_font = font.deriveFont(16f);
-                header_font = font.deriveFont(16f);
-                in.close();
-            } catch (FontFormatException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        in = DialogUI.class.getClassLoader().getResourceAsStream("IND/msgbox.png");
+        font = GameSettings.Display.GAME_FONT;
+        text_font = font.deriveFont(16f);
+        header_font = font.deriveFont(16f);
+        InputStream in = DialogUI.class.getClassLoader().getResourceAsStream("IND/msgbox.png");
         if (in != null) {
             try {
                 dialog_box = ImageIO.read(in);
@@ -113,6 +103,7 @@ public class DialogUI extends UIElement {
         ss.s = string;
         ss.line = nextLine(string);
         ss.ID = text.size();
+        ss.speed = string.getSpeed();
         text.add(ss);
     }
 
@@ -143,26 +134,25 @@ public class DialogUI extends UIElement {
     }
 
     private boolean pressed;
-    private int i;
+    private long lastUpdate = RenderService.getTime();
     private boolean done = false;
     @Override
     public void update() {
         boolean fast_moving = InputKeys.isButtonPressed(InputKeys.JUMP);
 
-        if (i % (fast_moving ? 3 : 13) == 0 && !done) {
+        long speed = this.speed / (fast_moving ? 2 : 1);
+        if (RenderService.getTime() - lastUpdate > speed && !done) {
+            lastUpdate = RenderService.getTime();
+
             char_offset++;
             completelyInvalidateView();
         }
-        i++;
-        if (i >= 500)
-            i = 0;
 
         if (cx != Camera.getX() || cy != Camera.getY()) {
             setX((float) (GameSettings.Display.resolution.getWidth() / 4f)); //TODO Get this to center of screen
             setY((float) ((GameSettings.Display.resolution.getHeight() / 2f) - (getHeight() / 2f) - 8));
             cx = Camera.getX();
             cy = Camera.getY();
-            //completelyInvalidateView();
         }
 
         if (!pressed) {
@@ -177,7 +167,6 @@ public class DialogUI extends UIElement {
                 line_offset = 0;
                 funOnTheBun();
                 done = false;
-                i = 0;
                 if (finished)
                     endDialog();
                 else {
@@ -195,6 +184,7 @@ public class DialogUI extends UIElement {
 
     int char_offset;
     int line_offset;
+    int line_start = 0;
     public void drawText(Graphics g) {
         ArrayList<SH> used = new ArrayList<SH>();
         int yoffset = (int)(dialog.getCurrentHeader().equals("") ? font.getSize2D() : ((font.getSize2D() * 31) + 5));
@@ -225,6 +215,7 @@ public class DialogUI extends UIElement {
                         done = true;
                         break;
                     }
+                    this.speed = current.speed;
                     for (int z = 0; z < current.s.getString().toCharArray().length; z++) {
                         if (current_char_offset >= char_offset)
                             break;
@@ -329,6 +320,7 @@ public class DialogUI extends UIElement {
         public CustomString s;
         public int line;
         public int ID;
+        public long speed;
 
         @Override
         public int hashCode() {

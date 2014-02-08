@@ -2,7 +2,7 @@ package com.dissonance.framework.game.world;
 
 import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.sprites.Sprite;
-import com.dissonance.framework.game.sprites.UIElement;
+import com.dissonance.framework.game.sprites.ui.UI;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.tiled.Layer;
@@ -47,7 +47,7 @@ public final class World {
     private boolean loaded = false;
     private WorldData tiledData;
     private WorldLoader loader;
-    private List<UIElement> uiElements = new ArrayList<UIElement>();
+    private List<UI> uiElements = new ArrayList<UI>();
     private List<UpdatableDrawable> udrawables = new ArrayList<>();
     private List<CombatSprite> combatCache = new ArrayList<CombatSprite>();
     private List<Light> lights = new ArrayList<Light>();
@@ -82,7 +82,7 @@ public final class World {
         return loader;
     }
 
-    public List<UIElement> getElements() {
+    public List<UI> getElements() {
         return uiElements;
     }
 
@@ -158,9 +158,6 @@ public final class World {
                         } else {
                             World.this.loader.onLoad(World.this);
                         }
-
-                        lightShader.addAll(lights);
-                        lightShader.setOverallBrightness(worldBrightness);
 
                         loaded = true;
                         _wakeLoadWaiters();
@@ -293,8 +290,8 @@ public final class World {
 
             @Override
             public void run() {
-                if (draw instanceof UIElement) {
-                    UIElement ue = (UIElement)draw;
+                if (draw instanceof UI) {
+                    UI ue = (UI)draw;
                     ue.init();
                     uiElements.add(ue);
                     udrawables.add(ue);
@@ -352,6 +349,11 @@ public final class World {
         return Collections.unmodifiableList(combatCache);
     }
 
+    public void onDisplay() { //This method is called when the world is displayed on the screen
+        lightShader.addAll(lights);
+        lightShader.setOverallBrightness(worldBrightness);
+    }
+
     public void onUnload() { //This method is called when the world is not shown but is still in memory
         //TODO Do stuff to save memory when this world is not shown
         if (lightShader != null) {
@@ -386,7 +388,7 @@ public final class World {
 
             @Override
             public void run() {
-                if (drawable instanceof UIElement) {
+                if (drawable instanceof UI) {
                     uiElements.remove(drawable);
                     udrawables.remove(drawable);
                     if (runnable != null)

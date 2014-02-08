@@ -12,7 +12,7 @@ public class WorldPackage {
     private ArrayList<World> worlds = new ArrayList<World>();
     private WorldPackage() { }
 
-    public static WorldPackage createWorldPackage(String[] worlds) {
+    public static WorldPackage createWorldPackage(String... worlds) {
         WorldPackage worldPackage = new WorldPackage();
         for (String s : worlds) {
             try {

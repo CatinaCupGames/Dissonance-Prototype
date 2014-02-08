@@ -1,4 +1,4 @@
-package com.dissonance.framework.game.sprites;
+package com.dissonance.framework.game.sprites.ui.impl;
 
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
@@ -15,7 +15,13 @@ import java.awt.image.BufferedImage;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public abstract class UIElement implements UpdatableDrawable {
+/**
+ * @deprecated UIElements are slow and buggy, please dont use it. <br></br>
+ * If you want to create Menu's or HUD's with text, then have your class implements {@link com.dissonance.framework.game.sprites.ui.UI} and
+ * use {@link org.newdawn.slick.TrueTypeFont} to draw text using OpenGL.
+ */
+@Deprecated
+public abstract class UIElement implements com.dissonance.framework.game.sprites.ui.UI {
     private boolean valid;
     private boolean complete_invalid;
     private int width;
@@ -189,10 +195,6 @@ public abstract class UIElement implements UpdatableDrawable {
             UI_IMAGE = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             resetDrawSize();
         }
-        if (UI != null) {
-            UI.dispose();
-            UI = null;
-        }
         Graphics2D graphics2D = UI_IMAGE.createGraphics();
         graphics2D.setColor(new Color(0f,0f,0f,0f));
         graphics2D.fillRect(0,0, width, height);
@@ -200,7 +202,10 @@ public abstract class UIElement implements UpdatableDrawable {
         graphics2D.dispose();
         boolean old = TextureLoader.isFastRedraw();
         TextureLoader.setFastRedraw(true);
-        UI = Texture.convertToTexture(name, UI_IMAGE);
+
+        if (UI == null) UI = Texture.convertToTexture(name, UI_IMAGE);
+        else Texture.redrawTexture(UI, UI_IMAGE);
+
         tX = UI.getWidth();
         tY = UI.getHeight();
         valid = true;

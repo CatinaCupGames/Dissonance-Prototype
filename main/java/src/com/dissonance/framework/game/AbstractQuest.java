@@ -48,7 +48,7 @@ public abstract class AbstractQuest {
         if (PlayableSprite.getCurrentlyPlayingSprite() != null && PlayableSprite.getCurrentlyPlayingSprite().getWorld() != world) {
             world = PlayableSprite.getCurrentlyPlayingSprite().getWorld();
         }
-        if (world == null) {
+        if (world == null && RenderService.INSTANCE != null) {
             world = RenderService.INSTANCE.getCurrentDrawingWorld();
         }
         return world;
@@ -60,18 +60,18 @@ public abstract class AbstractQuest {
         this.world = world;
     }
 
-    public void displayWorld(String world) {
-        displayWorld(world, true);
+    public World displayWorld(String world) {
+        return displayWorld(world, true);
     }
 
-    public void displayWorld(String world, boolean fadeToBlack) {
+    public World displayWorld(String world, boolean fadeToBlack) {
         if (worldMemory != null) {
             for (World w : worldMemory.getWorlds()) {
                 if (w.getName().equals(world)) {
-                    WorldFactory.swapView(w, fadeToBlack);
+                    WorldFactory.swapView(w, fadeToBlack, false);
                     System.out.println("New world swapped to " + w.getID());
                     this.world = w;
-                    return;
+                    return w;
                 }
             }
         }
@@ -79,9 +79,11 @@ public abstract class AbstractQuest {
         try {
             World w = WorldFactory.getWorld(world);
             setWorld(w);
+            return w;
         } catch (WorldLoadFailedException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public Scene playScene(Class<? extends Scene> sceneClass) {
@@ -111,11 +113,41 @@ public abstract class AbstractQuest {
         worldMemory = WorldPackage.createWorldPackage(worlds);
     }
 
+    protected World displayWorld(String name, RenderService.TransitionType transitionType) {
+        World world;
+        if (worldMemory != null) {
+            for (World w : worldMemory.getWorlds()) {
+                if (w.getName().equals(name)) {
+                    setWorld(w, transitionType, false);
+                    return w;
+                }
+            }
+        }
+
+        try {
+            world = WorldFactory.getWorld(name);
+            if (world == null)
+                return null;
+        } catch (WorldLoadFailedException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        setWorld(world, transitionType, true);
+        return world;
+    }
+
     protected void setWorld(World world, RenderService.TransitionType transitionType) {
+        setWorld(world, transitionType, true);
+    }
+
+    protected void setWorld(World world, RenderService.TransitionType transitionType, boolean cache) {
         if (transitionType == RenderService.TransitionType.CROSSFADE) {
             RenderService.INSTANCE.provideData(true, RenderService.ENABLE_CROSS_FADE);
+        } else {
+            RenderService.INSTANCE.provideData(false, RenderService.ENABLE_CROSS_FADE);
         }
-        WorldFactory.swapView(world, transitionType == RenderService.TransitionType.FADETOBLACK);
+        WorldFactory.swapView(world, transitionType == RenderService.TransitionType.FADETOBLACK, cache);
         this.world = world;
     }
 

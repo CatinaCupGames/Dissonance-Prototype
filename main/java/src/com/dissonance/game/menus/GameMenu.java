@@ -1,7 +1,7 @@
 package com.dissonance.game.menus;
 
 import com.dissonance.framework.system.GameSettings;
-import com.dissonance.framework.game.sprites.UIElement;
+import com.dissonance.framework.game.sprites.ui.impl.UIElement;
 import com.dissonance.framework.render.Camera;
 import org.lwjgl.util.vector.Vector2f;
 
