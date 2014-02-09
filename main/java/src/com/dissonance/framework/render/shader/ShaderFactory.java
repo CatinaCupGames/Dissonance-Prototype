@@ -3,9 +3,7 @@ package com.dissonance.framework.render.shader;
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.shader.impl.BlurShader;
-import com.dissonance.framework.render.shader.impl.LightShader;
 import com.dissonance.framework.render.shader.impl.MainShader;
-import com.dissonance.game.Main;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
@@ -24,6 +22,7 @@ public class ShaderFactory {
         activeShaders = new ArrayList<>();
         shaderList = new HashMap<>();
     }
+
     private static final ArrayList<AbstractShader> activeShaders;
     private static final HashMap<String, AbstractShader> shaderList;
 
@@ -44,12 +43,12 @@ public class ShaderFactory {
             ARBShaderObjects.glAttachObjectARB(program, fi);
 
             ARBShaderObjects.glLinkProgramARB(program);
-            if(ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_LINK_STATUS_ARB) == GL11.GL_FALSE) {
+            if (ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_LINK_STATUS_ARB) == GL11.GL_FALSE) {
                 throw new RuntimeException("Error linking shader! - " + shader.getLogInfo(program));
             }
 
             shader.setProgram(program);
-            shader.setShaders(new int[] { vi, fi });
+            shader.setShaders(new int[]{vi, fi});
             shaderList.put(shader.getName(), shader);
         } catch (Throwable t) {
             t.printStackTrace();
@@ -85,11 +84,10 @@ public class ShaderFactory {
 
     /**
      * Get a shader with the given name. This method is case sensitive.
-     * @param name
-     *            The name of the shader (case sensitive)
-     * @return
-     *        An {@link AbstractShader} who's {@link com.dissonance.framework.render.shader.AbstractShader#getName()} method is equal to the parameter <b>name</b><br></br>
-     *        Null if no shader was found with the given name
+     *
+     * @param name The name of the shader (case sensitive)
+     * @return An {@link AbstractShader} who's {@link com.dissonance.framework.render.shader.AbstractShader#getName()} method is equal to the parameter <b>name</b><br></br>
+     * Null if no shader was found with the given name
      */
     public static AbstractShader getShaderByName(String name) {
         return shaderList.get(name);
@@ -98,6 +96,7 @@ public class ShaderFactory {
     /**
      * Search for a shader using a keyword. If more than one shader was found using the keyword given then this
      * method will return null
+     *
      * @param keyword A search term
      * @return An {@link AbstractShader} with a similar name. Null if no shader was found or if more than one shader
      * was found.
@@ -132,21 +131,20 @@ public class ShaderFactory {
     }
 
 
-
     public static int buildShader(int shaderType, String shaderFile) throws Exception {
         int shader = 0;
 
         try {
             shader = ARBShaderObjects.glCreateShaderObjectARB(shaderType);
 
-            if(shader == 0) {
+            if (shader == 0) {
                 return 0;
             }
 
             ARBShaderObjects.glShaderSourceARB(shader, readFileAsString(shaderFile));
             ARBShaderObjects.glCompileShaderARB(shader);
 
-            if(ARBShaderObjects.glGetObjectParameteriARB(shader, ARBShaderObjects.GL_OBJECT_COMPILE_STATUS_ARB) == GL11.GL_FALSE) {
+            if (ARBShaderObjects.glGetObjectParameteriARB(shader, ARBShaderObjects.GL_OBJECT_COMPILE_STATUS_ARB) == GL11.GL_FALSE) {
                 throw new RuntimeException("Error creating shader: " + getLogInfo(shader));
             }
 
@@ -167,7 +165,9 @@ public class ShaderFactory {
         BufferedReader br = new BufferedReader(isr);
 
         String line;
-        while((line = br.readLine()) != null) { sb.append(line).append("\n"); }
+        while ((line = br.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
 
         return sb.toString();
     }
@@ -177,20 +177,16 @@ public class ShaderFactory {
     }
 
 
-    public static void buildAllShaders()
-    {
+    public static void buildAllShaders() {
 
 
         new MainShader().build();
 
-        for(String s : GameService.args)
-        {
-            if(s.startsWith("blur"))
-            {
+        for (String s : GameService.args) {
+            if (s.startsWith("blur")) {
                 s = s.split("=")[1];
 
-                if(s.equalsIgnoreCase("shader") || s.equalsIgnoreCase("both"))
-                {
+                if (s.equalsIgnoreCase("shader") || s.equalsIgnoreCase("both")) {
                     new BlurShader().build();
                 }
             }

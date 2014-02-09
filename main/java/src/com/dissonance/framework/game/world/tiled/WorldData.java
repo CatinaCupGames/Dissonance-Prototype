@@ -5,7 +5,6 @@ import com.dissonance.framework.game.world.tiled.impl.ImageLayer;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.texture.TextureLoader;
-import org.lwjgl.opengl.GLContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;

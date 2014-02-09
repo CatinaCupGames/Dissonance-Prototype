@@ -1,12 +1,6 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.world.World;
-import com.dissonance.framework.game.world.WorldFactory;
-import com.dissonance.framework.render.RenderService;
-import com.dissonance.game.menus.GameMenu;
-
-import java.util.Random;
 
 public class MenuQuest extends AbstractQuest {
     @Override

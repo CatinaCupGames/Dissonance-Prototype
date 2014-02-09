@@ -1,7 +1,6 @@
 package com.dissonance.test.scene;
 
 import com.dissonance.framework.game.scene.SimpleScene;
-import com.dissonance.framework.game.scene.dialog.Dialog;
 
 public class SimpleSceneTest extends SimpleScene {
     @Override

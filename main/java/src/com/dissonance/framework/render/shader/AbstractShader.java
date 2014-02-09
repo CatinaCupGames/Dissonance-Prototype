@@ -4,9 +4,6 @@ import com.dissonance.framework.render.RenderService;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.GL11;
 
-import java.security.InvalidParameterException;
-import static org.lwjgl.opengl.GL20.*;
-
 public abstract class AbstractShader {
     private int[] shaderID;
     private int program;
@@ -41,6 +38,7 @@ public abstract class AbstractShader {
 
     private boolean check1;
     private boolean warn = false;
+
     public void postRender() {
         if (!RenderService.isInRenderThread()) {
             RenderService.INSTANCE.runOnServiceThread(new Runnable() {
@@ -72,6 +70,7 @@ public abstract class AbstractShader {
     }
 
     private boolean check2;
+
     public void preRender() {
         if (!RenderService.isInRenderThread()) {
             RenderService.INSTANCE.runOnServiceThread(new Runnable() {
@@ -86,7 +85,7 @@ public abstract class AbstractShader {
         check2 = false;
         onPreRender();
         ARBShaderObjects.glValidateProgramARB(program);
-        if(ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_VALIDATE_STATUS_ARB) == GL11.GL_FALSE) {
+        if (ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_VALIDATE_STATUS_ARB) == GL11.GL_FALSE) {
             ARBShaderObjects.glUseProgramObjectARB(0);
             throw new RuntimeException("Error validating shader! " + getLogInfo(program));
         }

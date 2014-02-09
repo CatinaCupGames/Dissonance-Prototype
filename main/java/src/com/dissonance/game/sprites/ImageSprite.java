@@ -1,9 +1,6 @@
 package com.dissonance.game.sprites;
 
-import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
-import com.dissonance.framework.render.Camera;
-import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.game.Main;

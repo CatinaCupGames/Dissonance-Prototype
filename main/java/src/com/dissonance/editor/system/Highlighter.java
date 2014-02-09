@@ -39,6 +39,10 @@ public final class Highlighter {
     }
 
     public void addClass(String string) {
+        if (classes.contains(string)) {
+            return;
+        }
+
         if (!classes.equals("")) {
             classes += "|";
         }
@@ -50,6 +54,10 @@ public final class Highlighter {
     }
 
     public void addInterface(String string) {
+        if (interfaces.contains(string)) {
+            return;
+        }
+
         if (!interfaces.equals("")) {
             interfaces += "|";
         }
@@ -61,6 +69,9 @@ public final class Highlighter {
     }
 
     public void addMethod(String string) {
+        if (methods.contains(string)) {
+            return;
+        }
         if (!methods.equals("")) {
             methods += "|";
         }

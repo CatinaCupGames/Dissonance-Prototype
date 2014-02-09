@@ -3,7 +3,6 @@ package com.dissonance.game.w;
 import com.dissonance.framework.game.scene.hud.HUD;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
-import com.dissonance.framework.render.Camera;
 import com.dissonance.game.sprites.Farrand;
 
 /**
@@ -17,13 +16,6 @@ public abstract class GameWorldLoader implements WorldLoader {
     public static Farrand farrand;
     @Override
     public void onLoad(World w) {
-        if (farrand == null) {
-            farrand = new Farrand();
-            w.loadAndAdd(farrand);
-            farrand.select();
-        } else {
-            w.loadAndAdd(farrand);
-            Camera.setPos(Camera.translateToCameraCenter(farrand.getVector(), farrand.getHeight()));
-        }
+
     }
 }

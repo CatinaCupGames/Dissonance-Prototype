@@ -60,9 +60,12 @@ public class MainQuest extends AbstractQuest {
         if (getWorld().getDrawableCount() == 0) {
             EditorUI.FRAME.requestFocus();
             JOptionPane.showMessageDialog(EditorUI.FRAME, "There was no Tiled map found for '" + mapName + "' so the World may appear blank.\nPlease ensure the Tiled map file is in the 'worlds' folder inside the editor's jar file\n or that your IDE can see the Tiled map file located in\n'resources/worlds/" + mapName + ".json'.", "Editor Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+            if (world.getName() != null) {
+                EditorUI.INSTANCE.highlighter.addClass(mapName);
+            }
         }
         RenderService.INSTANCE.runOnServiceThread(updateThread, true, true);
-        EditorUI.INSTANCE.highlighter.addClass(mapName);
     }
 
     public String generateLoaderCode() {
@@ -117,7 +120,8 @@ public class MainQuest extends AbstractQuest {
 
             return builder.toString();
         } else {
-            if (getSpriteCount() + 1 != sprites.size()) {
+            int spriteCount = getSpriteCount();
+            if (spriteCount != sprites.size() && ((spriteCount + 1) != sprites.size() && adding)) {
                 EditorUI.FRAME.requestFocus();
                 JOptionPane.showMessageDialog(EditorUI.FRAME, "The Sprite list seems to be out of date!\nCompile the World Loader code and try again.", "Error moving Sprite", JOptionPane.WARNING_MESSAGE);
                 EditorUI.INSTANCE.setComboIndex(0);
@@ -318,9 +322,10 @@ public class MainQuest extends AbstractQuest {
                 JOptionPane.showMessageDialog(EditorUI.FRAME, "Exception occurred: " + e.getMessage(), "Error adding Sprite", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
             sprites.add(sprite);
-            EditorUI.INSTANCE.highlighter.addClass(sprite.getClass().getSimpleName());
+            if (!EditorUI.INSTANCE.highlighter.classes.contains(sprite.getClass().getSimpleName())) {
+                EditorUI.INSTANCE.highlighter.addClass(sprite.getClass().getSimpleName());
+            }
             sprite.setX(0);
             sprite.setY(0);
             getWorld().loadAndAdd(sprite);
@@ -435,6 +440,7 @@ public class MainQuest extends AbstractQuest {
         boolean a = InputKeys.isButtonPressed(InputKeys.MOVELEFT);
         if ((w || a || s || d) && selectedSprite != null && selectedSprite instanceof Sprite) {
             Sprite ss = (Sprite)selectedSprite;
+
 
             if (w) {
                 ss.setY(selectedSprite.getY() - (SPEED * RenderService.TIME_DELTA));

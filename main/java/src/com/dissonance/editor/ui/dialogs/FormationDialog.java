@@ -1,15 +1,18 @@
-package com.dissonance.editor.ui;
+package com.dissonance.editor.ui.dialogs;
 
 import com.dissonance.editor.Formation;
 import com.dissonance.editor.quest.MainQuest;
+import com.dissonance.editor.ui.EditorUI;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Collections;
 
-public final class FormationDialog extends JDialog {
+public final class FormationDialog extends BaseDialog {
 
     private JLabel lblLeader;
     private JComboBox<String> boxLeader;
@@ -20,24 +23,11 @@ public final class FormationDialog extends JDialog {
     private JButton btnGenerate;
 
     public FormationDialog() {
-
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setLayout(null);
-        setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
-        setResizable(false);
-        setSize(236, 418);
-        setTitle("Create formation");
-
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        int width = gd.getDisplayMode().getWidth();
-        int height = gd.getDisplayMode().getHeight();
-        setLocation((width - getWidth()) / 2, (height - getHeight()) / 2);
-
-        initializeComponents();
-        initializeEvents();
+        super("Create formation", new Dimension(236, 418));
     }
 
-    private void initializeComponents() {
+    @Override
+    protected void initializeComponents() {
         // lblLeader
         lblLeader = new JLabel();
         lblLeader.setLocation(27, 25);
@@ -89,8 +79,8 @@ public final class FormationDialog extends JDialog {
 
     }
 
-    private void initializeEvents() {
-        // boxLeader
+    @Override
+    protected void initializeEvents() {
         boxLeader.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -102,6 +92,15 @@ public final class FormationDialog extends JDialog {
                     if (!item.equals(boxLeader.getSelectedItem())) {
                         ((DefaultListModel<String>) listFollowers.getModel()).addElement(item);
                     }
+                }
+            }
+        });
+
+        listFollowers.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    btnGenerate.getActionListeners()[0].actionPerformed(null);
                 }
             }
         });

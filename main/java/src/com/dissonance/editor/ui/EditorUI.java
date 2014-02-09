@@ -11,6 +11,8 @@ package com.dissonance.editor.ui;
 
 import com.dissonance.editor.quest.MainQuest;
 import com.dissonance.editor.system.Highlighter;
+import com.dissonance.editor.ui.dialogs.AlignmentDialog;
+import com.dissonance.editor.ui.dialogs.FormationDialog;
 import com.dissonance.framework.render.Drawable;
 
 import javax.swing.*;
@@ -42,11 +44,24 @@ public class EditorUI {
             "*/";
     public static EditorUI INSTANCE;
     public static JFrame FRAME;
-    private JButton newSpriteButton;
-    public JTextPane codeTextPane;
-    private JButton exportWorldLoaderButton;
     private JButton compileJavaCodeButton;
+    private JButton configurePositionsButton;
+    private JButton exportWorldLoaderButton;
+    private JButton newFormationButton;
+    private JButton newSpriteButton;
+    private JComboBox comboBox1;
+    private JLabel label;
+    private JLabel label2;
+    private JPanel contentPane;
+    private JPanel innerField;
+    private JPanel innerInnerField;
+    private JPanel innerInnerInnerField;
+    private JPanel innerInnerInnerInnerField;
     private JPopupMenu menu;
+    private JScrollPane scrollPane1;
+    private JSpinner speedSpinner;
+    public JTextPane codeTextPane;
+
     public Highlighter highlighter = new Highlighter(codeTextPane);
 
     public static void displayForm() {
@@ -72,6 +87,14 @@ public class EditorUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 FormationDialog dialog = new FormationDialog();
+                dialog.setVisible(true);
+            }
+        });
+
+        INSTANCE.configurePositionsButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AlignmentDialog dialog = new AlignmentDialog();
                 dialog.setVisible(true);
             }
         });
@@ -224,6 +247,29 @@ public class EditorUI {
         });
         INSTANCE.label2.setForeground(Color.WHITE);
         INSTANCE.setComboBox(new ArrayList<Drawable>());
+
+        INSTANCE.codeTextPane.registerKeyboardAction(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainQuest.INSTANCE.newSprite();
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        INSTANCE.codeTextPane.registerKeyboardAction(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormationDialog dialog = new FormationDialog();
+                dialog.setVisible(true);
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        INSTANCE.codeTextPane.registerKeyboardAction(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AlignmentDialog dialog = new AlignmentDialog();
+                dialog.setVisible(true);
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     public void setComboBox(ArrayList<Drawable> sprites) {
@@ -251,18 +297,6 @@ public class EditorUI {
 
         updatingCode = false;
     }
-
-    private JPanel contentPane;
-    private JPanel innerField;
-    private JPanel innerInnerField;
-    private JLabel label;
-    private JComboBox comboBox1;
-    private JPanel innerInnerInnerField;
-    private JScrollPane scrollPane1;
-    private JPanel innerInnerInnerInnerField;
-    private JSpinner speedSpinner;
-    private JLabel label2;
-    private JButton newFormationButton;
 
     private void createUIComponents() {
         codeTextPane = new JTextPane();
@@ -316,7 +350,7 @@ public class EditorUI {
         menu.add(methodItem);
 
         Action tabAction = new AbstractAction() {
-            public void actionPerformed(ActionEvent ae) {
+            public void actionPerformed(ActionEvent e) {
                 try {
                     codeTextPane.getStyledDocument().insertString(codeTextPane.getCaretPosition(), "    ", codeTextPane.getLogicalStyle());
                 } catch (BadLocationException ignored) {

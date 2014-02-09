@@ -1,0 +1,1 @@
+<animations        width="128"        height="64">    <animation            name="walk_front"            loop="true"            frames="1"            row="0"            default_speed="150ms"/></animations>		
