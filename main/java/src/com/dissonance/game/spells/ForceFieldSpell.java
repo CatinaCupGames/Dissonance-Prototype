@@ -3,14 +3,13 @@ package com.dissonance.game.spells;
 import com.dissonance.framework.game.combat.spells.Spell;
 import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
-import com.dissonance.framework.render.UpdatableDrawable;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
 
 public abstract class ForceFieldSpell implements Spell {
     protected CombatSprite owner;
+
     public ForceFieldSpell(CombatSprite owner) {
         this.owner = owner;
     }

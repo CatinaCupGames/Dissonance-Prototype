@@ -1,23 +1,18 @@
 package com.dissonance.framework.render.shader.impl;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.shader.AbstractShader;
-import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.system.GameSettings;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 
-import java.awt.*;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
 public class LightShader extends AbstractShader {
@@ -107,6 +102,7 @@ public class LightShader extends AbstractShader {
 
     protected static boolean set = false;
     protected static boolean lightUpdate = false;
+
     @Override
     public void onPreRender() {
         super.onPreRender();
@@ -154,12 +150,11 @@ public class LightShader extends AbstractShader {
             }
 
 
-
-            glUniform2f(resolutionLocation, (float)GameSettings.Display.resolution.getWidth(), (float)GameSettings.Display.resolution.getHeight());
+            glUniform2f(resolutionLocation, (float) GameSettings.Display.resolution.getWidth(), (float) GameSettings.Display.resolution.getHeight());
             glUniform1f(overallBrightnessLocation, overallBrightness);
             glUniform1f(countLocation, lights.size());
             glUniform2f(windowLocation, GameSettings.Display.window_width, GameSettings.Display.window_height);
-            glUniform2f(aspectLocation, (float)GameSettings.Display.resolution.aspectRatio.arWidth, (float)GameSettings.Display.resolution.aspectRatio.arHeight);
+            glUniform2f(aspectLocation, (float) GameSettings.Display.resolution.aspectRatio.arWidth, (float) GameSettings.Display.resolution.aspectRatio.arHeight);
             set = true;
         }
 
@@ -176,12 +171,10 @@ public class LightShader extends AbstractShader {
             if (RenderService.getCapabilities().OpenGL30) {
                 format = GL30.GL_RGB32F;
                 format2 = GL30.GL_RGBA32F;
-            }
-            else if (RenderService.getCapabilities().GL_ARB_texture_float) {
+            } else if (RenderService.getCapabilities().GL_ARB_texture_float) {
                 format = ARBTextureFloat.GL_RGB32F_ARB;
                 format2 = ARBTextureFloat.GL_RGBA32F_ARB;
-            }
-            else if (RenderService.getCapabilities().GL_NV_float_buffer) {
+            } else if (RenderService.getCapabilities().GL_NV_float_buffer) {
                 format = NVFloatBuffer.GL_FLOAT_RGB32_NV;
                 format2 = NVFloatBuffer.GL_FLOAT_RGBA32_NV;
             } else { //We can't do lighting..abort

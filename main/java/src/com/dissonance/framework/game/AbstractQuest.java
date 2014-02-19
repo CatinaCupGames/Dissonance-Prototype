@@ -8,7 +8,6 @@ import com.dissonance.framework.game.world.WorldPackage;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.exceptions.QuestNotFoundException;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
-import javafx.animation.Transition;
 
 public abstract class AbstractQuest {
     private AbstractQuest next;

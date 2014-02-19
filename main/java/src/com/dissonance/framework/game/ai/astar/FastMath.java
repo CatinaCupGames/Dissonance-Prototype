@@ -1,7 +1,5 @@
 package com.dissonance.framework.game.ai.astar;
 
-import java.security.InvalidParameterException;
-
 public final class FastMath {
     private static final int BIG_ENOUGH_INT = 16 * 1024;
     private static final double BIG_ENOUGH_FLOOR = BIG_ENOUGH_INT + 0.0000;

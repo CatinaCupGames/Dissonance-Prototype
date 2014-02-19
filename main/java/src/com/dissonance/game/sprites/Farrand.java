@@ -1,11 +1,8 @@
 package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.input.InputKeys;
-import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
-
-import java.awt.*;
 
 public class Farrand extends PlayableSprite {
     //TODO Set default values for these

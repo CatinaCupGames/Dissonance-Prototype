@@ -1,6 +1,5 @@
 package com.dissonance.framework.system;
 
-import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.system.settings.Color;
 import com.dissonance.framework.system.settings.Resolution;
 
@@ -8,20 +7,15 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class GameSettings
-{
+public class GameSettings {
 
-    public static class Audio
-    {
-        private Audio()
-        {
+    public static class Audio {
+        private Audio() {
         }
     }
 
-    public static class Display
-    {
-        private Display()
-        {
+    public static class Display {
+        private Display() {
         }
 
         /**
@@ -55,8 +49,7 @@ public class GameSettings
          */
         public static boolean fullscreen;
 
-        static
-        {
+        static {
             window_width = 1280;
             window_height = 720;
 
@@ -78,21 +71,19 @@ public class GameSettings
         }
     }
 
-    public static class Graphics
-    {
+    public static class Graphics {
         /**
          * The maximum FPS the {@link com.dissonance.framework.render.RenderService} can exceeded. If the value is -1, then
          * then there will be no FPS limit.
          */
         public static int FPSLimit;
-        private Graphics()
-        {
+
+        private Graphics() {
         }
 
         public static Color color;
 
-        static
-        {
+        static {
             FPSLimit = -1;
             color = new Color(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
         }

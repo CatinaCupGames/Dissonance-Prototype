@@ -7,7 +7,6 @@ import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.physics.Collidable;
@@ -173,7 +172,7 @@ public class Bullet extends PhysicsSprite {
         if (hit instanceof CombatSprite) {
             collide((CombatSprite) hit);
         } else if (hit instanceof TiledObject) {
-            if (((TiledObject)hit).isSpawn() || ((TiledObject)hit).isTrigger()) return;
+            if (((TiledObject) hit).isSpawn() || ((TiledObject) hit).isTrigger()) return;
             //TODO: play wall hit sound
             explode();
         }
@@ -186,7 +185,7 @@ public class Bullet extends PhysicsSprite {
                 collide((CombatSprite) hit);
             }
         } else if (hit instanceof TiledObject) {
-            if (((TiledObject)hit).isSpawn()) return;
+            if (((TiledObject) hit).isSpawn()) return;
             //TODO: play wall hit sound
             explode();
         }

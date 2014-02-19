@@ -14,8 +14,16 @@ public class BehaviorOffsetFollow implements Behavior {
     private long lastUpdate;
     private Direction direction;
 
-    private static final float cos45 = (float) Math.cos(0.785398163);
-
+    /**
+     * Creates a new OffsetFollow behavior. This behavior tries to keep the <code>sprite</code>
+     * from the <code>target</code> at the specified <code>offset</code>. After reaching the specified
+     * offset the <code>sprite</code>'s direction will be changed to the <code>target</code>'s direction.
+     *
+     * @param sprite The sprite that's following the target.
+     * @param target The target that the sprite is following.
+     * @param offset The offset between the two sprites. It will change
+     *               depending on the target's rotation.
+     */
     public BehaviorOffsetFollow(AbstractWaypointSprite sprite, AbstractWaypointSprite target, Position offset) {
         this.sprite = sprite;
         this.target = target;
@@ -25,7 +33,6 @@ public class BehaviorOffsetFollow implements Behavior {
     @Override
     public void update() {
         long now = System.currentTimeMillis();
-        direction = target.getDirection();
 
         if (now - lastUpdate > WaypointMover.SPEED * 2.5) {
             lastUpdate = now;
@@ -33,7 +40,7 @@ public class BehaviorOffsetFollow implements Behavior {
             float x;
             float y;
 
-            switch (direction) {
+            switch (target.getDirection()) {
                 case UP:
                 case UP_LEFT:
                 case LEFT:
@@ -83,7 +90,7 @@ public class BehaviorOffsetFollow implements Behavior {
 
     @Override
     public void waypointReached() {
-
+        sprite.setFacing(target.getDirection());
     }
 
     @Override

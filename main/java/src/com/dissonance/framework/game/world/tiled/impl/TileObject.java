@@ -3,9 +3,7 @@ package com.dissonance.framework.game.world.tiled.impl;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.TileSet;
-import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
 import org.lwjgl.util.vector.Vector2f;
 

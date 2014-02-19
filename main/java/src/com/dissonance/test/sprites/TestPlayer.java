@@ -3,7 +3,6 @@ package com.dissonance.test.sprites;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
-import org.lwjgl.input.Keyboard;
 
 public class TestPlayer extends PlayableSprite {
 

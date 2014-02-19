@@ -1,14 +1,16 @@
 package com.dissonance.editor.quest;
 
+import com.dissonance.editor.Formation;
 import com.dissonance.editor.system.CharSequenceCompiler;
 import com.dissonance.editor.system.CharSequenceCompilerException;
 import com.dissonance.editor.ui.EditorUI;
 import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.sprites.ui.UI;
 import com.dissonance.framework.game.sprites.ui.impl.UIElement;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.WorldLoader;
@@ -26,9 +28,7 @@ import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.*;
 
 public class MainQuest extends AbstractQuest {
     public static MainQuest INSTANCE;
@@ -36,10 +36,12 @@ public class MainQuest extends AbstractQuest {
     public static int SPEED = 5;
     private final CharSequenceCompiler<WorldLoader> stringCompiler = new CharSequenceCompiler<WorldLoader>(loader, Arrays.asList("-target", "1.7"));
     private ArrayList<Drawable> sprites = new ArrayList<Drawable>();
+    private java.util.List<Formation> formations = new ArrayList<>();
     private Drawable selectedSprite;
     public String mapName;
     private boolean adding = false;
     public boolean customCode = false;
+
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
@@ -58,16 +60,19 @@ public class MainQuest extends AbstractQuest {
         if (getWorld().getDrawableCount() == 0) {
             EditorUI.FRAME.requestFocus();
             JOptionPane.showMessageDialog(EditorUI.FRAME, "There was no Tiled map found for '" + mapName + "' so the World may appear blank.\nPlease ensure the Tiled map file is in the 'worlds' folder inside the editor's jar file\n or that your IDE can see the Tiled map file located in\n'resources/worlds/" + mapName + ".json'.", "Editor Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+            if (world.getName() != null) {
+                EditorUI.INSTANCE.highlighter.addClass(mapName);
+            }
         }
         RenderService.INSTANCE.runOnServiceThread(updateThread, true, true);
-        EditorUI.INSTANCE.highlighter.addClass(mapName);
     }
 
     public String generateLoaderCode() {
         if (!customCode && EditorUI.INSTANCE.codeTextPane.getText().isEmpty()) customCode = false;
         if (!customCode) {
             StringBuilder builder = new StringBuilder();
-            builder.append("package com.dissonance.game.w;\n").append("\n");
+            builder.append("package com.dissonance.game.w;\n\n");
             builder.append("import com.dissonance.framework.game.world.World;\n");
             ArrayList<String> temp = new ArrayList<String>();
             for (Drawable sprite : sprites) {
@@ -76,22 +81,47 @@ public class MainQuest extends AbstractQuest {
                 temp.add(sprite.getClass().getCanonicalName());
                 builder.append("import ").append(sprite.getClass().getCanonicalName()).append(";\n");
             }
-            builder.append("\n\n").append("public class ").append(mapName).append(" extends GameWorldLoader {\n");
-            builder.append("    @Override\n").append("    public void onLoad(World w) {\n").append("        super.onLoad(w);\n");
-            int i = 0;
-            for (Drawable sprite : sprites) {
-                i++;
-                builder.append("\n");
-                builder.append("        ").append(sprite.getClass().getSimpleName()).append(" var").append(i).append(" = new ").append(sprite.getClass().getSimpleName()).append("();\n");
-                builder.append("        w.loadAndAdd(var").append(i).append(");\n");
-                builder.append("        var").append(i).append(".setX(").append(sprite.getX()).append("f);\n");
-                builder.append("        var").append(i).append(".setY(").append(sprite.getY()).append("f);\n");
+            if (formations.size() > 0) {
+                builder.append("import com.dissonance.framework.game.ai.astar.Position;\n");
+                builder.append("import com.dissonance.framework.game.ai.behaviors.BehaviorOffsetFollow;\n");
             }
-            builder.append("    }\n").append("}");
+            builder.append("\npublic class ").append(mapName).append(" extends GameWorldLoader {\n");
+            builder.append("    @Override\n    public void onLoad(World w) {\n        super.onLoad(w);\n");
+
+            for (int i = 0; i < sprites.size(); i++) {
+                Drawable sprite = sprites.get(i);
+                builder.append("\n");
+                builder.append("        ").append(sprite.getClass().getSimpleName()).append(" var").append(i + 1).append(" = new ").append(sprite.getClass().getSimpleName()).append("();\n");
+                builder.append("        w.loadAndAdd(var").append(i + 1).append(");\n");
+                builder.append("        var").append(i + 1).append(".setX(").append(sprite.getX()).append("f);\n");
+                builder.append("        var").append(i + 1).append(".setY(").append(sprite.getY()).append("f);\n");
+            }
+
+            if (formations.size() > 0) {
+                builder.append("\n");
+            }
+
+            for (Formation formation : formations) {
+                List<Map.Entry<String, Position>> set = new ArrayList<>(formation.getSprites().entrySet());
+                Collections.reverse(set);
+                for (Map.Entry<String, Position> entry : set) {
+                    Drawable target = getDrawableFromVar(formation.getTarget());
+                    Drawable sprite = getDrawableFromVar(entry.getKey());
+                    float x = (target.getX() - sprite.getX());
+                    float y = (target.getY() - sprite.getY());
+
+                    builder.append("        ");
+                    builder.append(entry.getKey()).append(".setBehavior(new BehaviorOffsetFollow(").append(entry.getKey());
+                    builder.append(", ").append(formation.getTarget()).append(", new Position(").append(x);
+                    builder.append("f, ").append(y).append("f)));\n");
+                }
+            }
+            builder.append("    }\n}");
 
             return builder.toString();
         } else {
-            if (getSpriteCount() != sprites.size()) {
+            int spriteCount = getSpriteCount();
+            if (spriteCount != sprites.size() && ((spriteCount + 1) != sprites.size() && adding)) {
                 EditorUI.FRAME.requestFocus();
                 JOptionPane.showMessageDialog(EditorUI.FRAME, "The Sprite list seems to be out of date!\nCompile the World Loader code and try again.", "Error moving Sprite", JOptionPane.WARNING_MESSAGE);
                 EditorUI.INSTANCE.setComboIndex(0);
@@ -119,6 +149,16 @@ public class MainQuest extends AbstractQuest {
                         s = "        " + varName + ".setX(" + selectedSprite.getX() + "f);";
                     } else if (s.contains(varName + ".setY")) {
                         s = "        " + varName + ".setY(" + selectedSprite.getY() + "f);";
+                    } else if (s.contains(".setBehavior")) {
+                        String spriteName = s.split("\\.")[0].trim();
+                        String targetName = s.split(",")[1].substring(1);
+                        System.out.println(spriteName + "   " + targetName);
+                        Drawable sprite = getDrawableFromVar(spriteName);
+                        Drawable target = getDrawableFromVar(targetName);
+
+                        s = "        " + spriteName + ".setBehavior(new BehaviorOffsetFollow(" + spriteName + ", ";
+                        s += targetName + ", new Position(" + (target.getX() - sprite.getX()) + "f, ";
+                        s += (target.getY() - sprite.getY()) + "f)));";
                     }
                     newCode += s + "\n";
                 }
@@ -247,8 +287,17 @@ public class MainQuest extends AbstractQuest {
         return "???";
     }
 
+    public Drawable getDrawableFromVar(String varName) {
+        if (varName.startsWith("var")) {
+            //TODO: oh god... i don't even... (wtf)
+            return sprites.get(Integer.parseInt(String.valueOf(varName.charAt(3))) - 1);
+        }
+
+        throw new RuntimeException("\"I am going to hide/die in a hole now.\" - Arrem");
+    }
+
     public void newSprite() {
-        String class_ = (String) JOptionPane.showInputDialog(EditorUI.FRAME, "Please enter name of the Sprite class\nor the complete classpath for the Sprite class.", "Add Sprite", JOptionPane.PLAIN_MESSAGE);
+        String class_ = JOptionPane.showInputDialog(EditorUI.FRAME, "Please enter name of the Sprite class\nor the complete classpath for the Sprite class.", "Add Sprite", JOptionPane.PLAIN_MESSAGE);
         if ((class_ != null) && (class_.length() > 0)) {
             Sprite sprite;
             try {
@@ -273,9 +322,10 @@ public class MainQuest extends AbstractQuest {
                 JOptionPane.showMessageDialog(EditorUI.FRAME, "Exception occurred: " + e.getMessage(), "Error adding Sprite", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
             sprites.add(sprite);
-            EditorUI.INSTANCE.highlighter.addClass(sprite.getClass().getSimpleName());
+            if (!EditorUI.INSTANCE.highlighter.classes.contains(sprite.getClass().getSimpleName())) {
+                EditorUI.INSTANCE.highlighter.addClass(sprite.getClass().getSimpleName());
+            }
             sprite.setX(0);
             sprite.setY(0);
             getWorld().loadAndAdd(sprite);
@@ -292,6 +342,11 @@ public class MainQuest extends AbstractQuest {
             EditorUI.INSTANCE.setComboIndex(sprites.size());
         }
     }
+
+    public void addFormation(Formation formation) {
+        formations.add(formation);
+    }
+
 
     private void log(final DiagnosticCollector<JavaFileObject> diagnostics) {
         final StringBuilder msgs = new StringBuilder();
@@ -385,6 +440,7 @@ public class MainQuest extends AbstractQuest {
         boolean a = InputKeys.isButtonPressed(InputKeys.MOVELEFT);
         if ((w || a || s || d) && selectedSprite != null && selectedSprite instanceof Sprite) {
             Sprite ss = (Sprite)selectedSprite;
+
 
             if (w) {
                 ss.setY(selectedSprite.getY() - (SPEED * RenderService.TIME_DELTA));

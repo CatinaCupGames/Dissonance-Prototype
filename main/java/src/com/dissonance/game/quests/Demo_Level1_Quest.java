@@ -1,7 +1,6 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.world.WorldPackage;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.game.scenes.Demo_OpeningScene;
 

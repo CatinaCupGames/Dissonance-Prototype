@@ -1,6 +1,5 @@
 package com.dissonance.framework.game.world.tiled;
 
-import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
@@ -27,7 +26,8 @@ public class TiledObject implements Collidable {
 
     private AbstractTrigger trigger;
 
-    private TiledObject() { }
+    private TiledObject() {
+    }
 
     public String getProperty(String key) {
         if (properties == null)
@@ -76,7 +76,8 @@ public class TiledObject implements Collidable {
     public Vector2f[] getPolygonPoints() {
         if (ellipse) {
             return new Vector2f[0];
-        } if (polygon == null) {
+        }
+        if (polygon == null) {
             polygon = new Vector2f[5];
             polygon[0] = new Vector2f(x - 9, y - 9);
             polygon[1] = new Vector2f(x + (width - 6), y - 9);
@@ -141,13 +142,12 @@ public class TiledObject implements Collidable {
         Vector2f[] points = getPolygonPoints();
         for (i = 0, j = points.length - 1; i < points.length; j = i++) {
             if ((points[i].y > test.y) != (points[j].y > test.y) &&
-                    (test.x < (points[j].x - points[i].x) * (test.y - points[i].y) / (points[j].y-points[i].y) + points[i].x)) {
+                    (test.x < (points[j].x - points[i].x) * (test.y - points[i].y) / (points[j].y - points[i].y) + points[i].x)) {
                 result = !result;
             }
         }
         return result;
     }
-
 
 
     public boolean isSquare() {

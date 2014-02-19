@@ -2,9 +2,7 @@ package com.dissonance.framework.game.world.tiled.impl;
 
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.world.tiled.Layer;
-import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
 
 import java.io.IOException;
@@ -15,6 +13,7 @@ public class ImageLayer extends Sprite {
     private Texture texture;
     private String path;
     private Layer parentLayer;
+
     public ImageLayer(Layer parentLayer) {
         this.parentLayer = parentLayer;
 
@@ -45,7 +44,8 @@ public class ImageLayer extends Sprite {
         return texture.getTextureHeight();
     }
 
-    public void init() { }
+    public void init() {
+    }
 
     @Override
     public void onLoad() {

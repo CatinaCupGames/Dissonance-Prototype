@@ -2,7 +2,6 @@ package com.dissonance.framework.system.utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.security.InvalidParameterException;
 
 /**
  * A utility class for executing Timed events
@@ -20,7 +19,8 @@ public class Timer {
             public void run() {
                 try {
                     Thread.sleep(delay);
-                } catch (InterruptedException ignored) { }
+                } catch (InterruptedException ignored) {
+                }
 
                 try {
                     m.setAccessible(true);
@@ -45,7 +45,8 @@ public class Timer {
                 for (int i = 0; i < count; i++) {
                     try {
                         Thread.sleep(delay);
-                    } catch (InterruptedException ignored) { }
+                    } catch (InterruptedException ignored) {
+                    }
 
                     try {
                         m.setAccessible(true);

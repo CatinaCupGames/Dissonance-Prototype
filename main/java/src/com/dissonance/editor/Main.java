@@ -2,11 +2,8 @@ package com.dissonance.editor;
 
 import com.dissonance.editor.quest.MainQuest;
 import com.dissonance.framework.game.GameService;
-import com.dissonance.framework.render.texture.TextureLoader;
 
 import javax.swing.*;
-import java.io.File;
-import java.util.Locale;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -16,4 +13,26 @@ public class Main {
         System.out.println("Starting MainQuest");
         GameService.beginQuest(new MainQuest());
     }
+
+    /*
+    private static void setDefaultHighlightInfo() {
+        //run this if you mess up your highlight.dat cause i just messed up mine (badpokerface)
+        String classes = "Farrand|Wyatt|GameWorldLoader|World|BehaviorOffsetFollow|Position|System|String|Exception|" +
+                "ArrayList|HashMap|Object|Thread|Class|Date|Math|AbstractWaypointSprite|AnimatedSprite|Behavior|" +
+                "CombatSprite|Dialog|Enemy|NPCSprite|PhysicsSprite|PlayableSprite|Sound|Sprite|Weapon|WeaponItem";
+
+        String interfaces = "Drawable|List|Behavior|WaypointSprite";
+
+        String methods = "getDirection|setFacing|getWorld|setBehavior|setWorld|getX|setX|getY|setY|getPosition|" +
+                "setPos|getWidth|getHeight|addDrawable|addSprite|removeSprite|loadAndAdd|onLoad";
+
+        try (DataOutputStream stream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(Highlighter.DATA, false)))) {
+            stream.writeUTF(classes);
+            stream.writeUTF(interfaces);
+            stream.writeUTF(methods);
+        } catch (IOException ignored) {
+            ignored.printStackTrace();
+        }
+    }
+    */
 }

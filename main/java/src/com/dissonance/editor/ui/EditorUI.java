@@ -10,8 +10,9 @@ Date: $date
 package com.dissonance.editor.ui;
 
 import com.dissonance.editor.quest.MainQuest;
-import com.dissonance.editor.system.HighlightStyle;
 import com.dissonance.editor.system.Highlighter;
+import com.dissonance.editor.ui.dialogs.AlignmentDialog;
+import com.dissonance.editor.ui.dialogs.FormationDialog;
 import com.dissonance.framework.render.Drawable;
 
 import javax.swing.*;
@@ -24,12 +25,12 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
+import java.io.File;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.zip.GZIPInputStream;
 
 public class EditorUI {
     private static final String HEADER = "/*\n" +
@@ -43,11 +44,24 @@ public class EditorUI {
             "*/";
     public static EditorUI INSTANCE;
     public static JFrame FRAME;
-    private JButton newSpriteButton;
-    public JTextPane codeTextPane;
-    private JButton exportWorldLoaderButton;
     private JButton compileJavaCodeButton;
+    private JButton configurePositionsButton;
+    private JButton exportWorldLoaderButton;
+    private JButton newFormationButton;
+    private JButton newSpriteButton;
+    private JComboBox comboBox1;
+    private JLabel label;
+    private JLabel label2;
+    private JPanel contentPane;
+    private JPanel innerField;
+    private JPanel innerInnerField;
+    private JPanel innerInnerInnerField;
+    private JPanel innerInnerInnerInnerField;
     private JPopupMenu menu;
+    private JScrollPane scrollPane1;
+    private JSpinner speedSpinner;
+    public JTextPane codeTextPane;
+
     public Highlighter highlighter = new Highlighter(codeTextPane);
 
     public static void displayForm() {
@@ -66,6 +80,22 @@ public class EditorUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainQuest.INSTANCE.newSprite();
+            }
+        });
+
+        INSTANCE.newFormationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormationDialog dialog = new FormationDialog();
+                dialog.setVisible(true);
+            }
+        });
+
+        INSTANCE.configurePositionsButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AlignmentDialog dialog = new AlignmentDialog();
+                dialog.setVisible(true);
             }
         });
 
@@ -172,24 +202,13 @@ public class EditorUI {
         INSTANCE.codeTextPane.setCaretColor(Color.WHITE);
 
         INSTANCE.highlighter = new Highlighter(INSTANCE.codeTextPane);
-        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(Highlighter.CLASS_DATA)))) {
-            INSTANCE.highlighter.classes = stream.readUTF();
-        } catch (IOException ignored) {
-        }
-
-        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(Highlighter.INTERFACE_DATA)))) {
-            INSTANCE.highlighter.interfaces = stream.readUTF();
-        } catch (IOException ignored) {
-        }
-
-        HighlightStyle.getStyle("Class").setPattern("\\b(" + INSTANCE.highlighter.classes + ")\\b");
-        HighlightStyle.getStyle("Interface").setPattern("\\b(" + INSTANCE.highlighter.interfaces + ")\\b");
+        INSTANCE.highlighter.readData();
 
         INSTANCE.codeTextPane.setFont(new Font("Consolas", Font.PLAIN, 12));
         INSTANCE.codeTextPane.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                INSTANCE.highlighter.matching();
+                INSTANCE.highlighter.highlight();
             }
         });
 
@@ -228,6 +247,29 @@ public class EditorUI {
         });
         INSTANCE.label2.setForeground(Color.WHITE);
         INSTANCE.setComboBox(new ArrayList<Drawable>());
+
+        INSTANCE.codeTextPane.registerKeyboardAction(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainQuest.INSTANCE.newSprite();
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        INSTANCE.codeTextPane.registerKeyboardAction(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormationDialog dialog = new FormationDialog();
+                dialog.setVisible(true);
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        INSTANCE.codeTextPane.registerKeyboardAction(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AlignmentDialog dialog = new AlignmentDialog();
+                dialog.setVisible(true);
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     public void setComboBox(ArrayList<Drawable> sprites) {
@@ -251,21 +293,10 @@ public class EditorUI {
         updatingCode = true;
         codeTextPane.setText(MainQuest.INSTANCE.generateLoaderCode());
 
-        highlighter.matching();
+        highlighter.highlight();
 
         updatingCode = false;
     }
-
-    private JPanel contentPane;
-    private JPanel innerField;
-    private JPanel innerInnerField;
-    private JLabel label;
-    private JComboBox comboBox1;
-    private JPanel innerInnerInnerField;
-    private JScrollPane scrollPane1;
-    private JPanel innerInnerInnerInnerField;
-    private JSpinner speedSpinner;
-    private JLabel label2;
 
     private void createUIComponents() {
         codeTextPane = new JTextPane();
@@ -284,23 +315,42 @@ public class EditorUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 highlighter.addClass(codeTextPane.getSelectedText());
-                highlighter.matching();
+                highlighter.highlight();
             }
         });
         menu.add(classItem);
 
-        JMenuItem interfItem = new JMenuItem("Add interface");
-        interfItem.addActionListener(new ActionListener() {
+        JMenuItem interfaceItem = new JMenuItem("Add interface");
+        interfaceItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 highlighter.addInterface(codeTextPane.getSelectedText());
-                highlighter.matching();
+                highlighter.highlight();
             }
         });
-        menu.add(interfItem);
+        menu.add(interfaceItem);
+
+        JMenuItem methodItem = new JMenuItem("Add method");
+        methodItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = codeTextPane.getSelectedText();
+                if (text.startsWith(".")) {
+                    text = text.substring(1);
+                }
+
+                if (text.endsWith("(")) {
+                    text = text.substring(0, text.length() - 1);
+                }
+
+                highlighter.addMethod(text);
+                highlighter.highlight();
+            }
+        });
+        menu.add(methodItem);
 
         Action tabAction = new AbstractAction() {
-            public void actionPerformed(ActionEvent ae) {
+            public void actionPerformed(ActionEvent e) {
                 try {
                     codeTextPane.getStyledDocument().insertString(codeTextPane.getCaretPosition(), "    ", codeTextPane.getLogicalStyle());
                 } catch (BadLocationException ignored) {

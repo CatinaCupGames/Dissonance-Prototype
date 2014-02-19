@@ -2,7 +2,6 @@ package com.dissonance.framework.game.sprites;
 
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.sprites.ui.UI;
-import com.dissonance.framework.game.sprites.ui.impl.UIElement;
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;
@@ -123,7 +122,7 @@ public abstract class Sprite implements Drawable, Serializable {
     }
 
     public int getLayer() {
-       return layer;
+        return layer;
     }
 
     public World getWorld() {
@@ -156,8 +155,8 @@ public abstract class Sprite implements Drawable, Serializable {
         if (lowest == null)
             return null;
 
-        int x = (int)(getX() / 32);
-        int y = (int)(getY() / 32);
+        int x = (int) (getX() / 32);
+        int y = (int) (getY() / 32);
 
         return lowest.getTileAt(x, y, world);
     }
@@ -274,7 +273,7 @@ public abstract class Sprite implements Drawable, Serializable {
         if (o instanceof UI)
             return Drawable.BEFORE;
         else if (o instanceof Sprite) {
-            Sprite s = (Sprite)o;
+            Sprite s = (Sprite) o;
             if (s.getLayer() > getLayer()) return Drawable.BEFORE;
             else if (s.getLayer() < getLayer()) return Drawable.AFTER;
             else {
@@ -282,7 +281,7 @@ public abstract class Sprite implements Drawable, Serializable {
                 //float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / (s instanceof TileObject ? 2 : 4) : 0);
                 float by = getHeight();
                 float sy = s.getHeight();
-                return (int)((getY() - by) - (s.getY() - sy));
+                return (int) ((getY() - by) - (s.getY() - sy));
             }
         }
         return Drawable.AFTER;
