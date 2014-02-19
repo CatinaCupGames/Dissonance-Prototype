@@ -185,9 +185,6 @@ public final class World {
                     if (loader != null)
                         loader.onLoad(World.this);
 
-                    lightShader.addAll(lights);
-                    lightShader.setOverallBrightness(worldBrightness);
-
                     loaded = true;
                     _wakeLoadWaiters();
                 }

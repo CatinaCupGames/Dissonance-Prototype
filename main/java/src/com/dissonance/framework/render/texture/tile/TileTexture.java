@@ -1,5 +1,6 @@
 package com.dissonance.framework.render.texture.tile;
 
+import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.world.tiled.TileSet;
 import com.dissonance.framework.render.texture.Texture;
 import org.lwjgl.util.vector.Vector2f;
@@ -83,7 +84,12 @@ public class TileTexture extends Texture {
         float x = 0;
         float y = 0;
         int step = (pos - 1) % perrow;
-        int row = (pos - 1) / size;
+        int row = 0;
+        for (int i = 0; i != pos - 1; i++) {
+            if (i % perrow == 0 && i != 0)
+                row++;
+        }
+        //int row = FastMath.fastCeil((float)(pos - 1) / (float)size);
         x = tileWidth * step;
         y = tileHeight * row;
         return new float[] { x, y };

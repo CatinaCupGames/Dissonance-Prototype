@@ -28,16 +28,26 @@ public class TileSet {
     }
 
     public void loadTexture() {
-            Texture temp = null;
+            Texture temp;
             try {
                 temp = Texture.retriveTexture(image);
             } catch (IOException e) {
-                System.out.println("[WARNING] Texture not find for TileSet \"" + name + "\" (\"" + image + "\") ! ");
-                return;
+                try {
+                   temp = Texture.retriveTexture("worlds/" + image);
+                } catch (IOException e1) {
+                    System.out.println("[WARNING] Texture not found for TileSet \"" + name + "\" (\"" + image + "\") ! ");
+                    return;
+                }
             }
             if (temp == null) {
-                System.out.println("[WARNING] Texture not find for TileSet \"" + name + "\" (\"" + image + "\") ! ");
-                return;
+                try {
+                    temp = Texture.retriveTexture("worlds/" + image);
+                    if (temp == null)
+                        throw new IOException("Go to catch block pls"); //Living the easy life
+                } catch (IOException e1) {
+                    System.out.println("[WARNING] Texture not found for TileSet \"" + name + "\" (\"" + image + "\") ! ");
+                    return;
+                }
             }
             texture = new TileTexture(temp, tilewidth, tileheight, spacing, margin, getTilesPerRow(), getRowCount());
             Texture.replaceTexture(temp, texture);
