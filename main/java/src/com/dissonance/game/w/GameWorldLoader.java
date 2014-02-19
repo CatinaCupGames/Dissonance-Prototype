@@ -24,6 +24,8 @@ public abstract class GameWorldLoader implements WorldLoader {
         } else {
             w.loadAndAdd(farrand);
             Camera.setPos(Camera.translateToCameraCenter(farrand.getVector(), farrand.getHeight()));
+            if (!farrand.isSelected()) //Maybe remove
+                farrand.select();
         }
     }
 }

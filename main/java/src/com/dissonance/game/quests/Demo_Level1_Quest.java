@@ -8,12 +8,12 @@ import com.dissonance.game.scenes.Demo_OpeningScene;
 public class Demo_Level1_Quest extends AbstractQuest {
     @Override
     public void startQuest() throws Exception {
-        loadWorldsIntoMemory("demo_opening_world", "demo_city_level1");
-        displayWorld("demo_opening_world");
+        loadWorldsIntoMemory("demo_opening_world", "demo_opening_world_2", "demo_city_level1");
+        displayWorld("demo_city_level1");
 
-        playSceneAndWait(Demo_OpeningScene.class);
+        /*playSceneAndWait(Demo_OpeningScene.class);
 
-        displayWorld("demo_city_level1", RenderService.TransitionType.CROSSFADE).waitForWorldLoaded();
+        displayWorld("demo_city_level1", RenderService.TransitionType.CROSSFADE).waitForWorldLoaded();*/
     }
 
     @Override
