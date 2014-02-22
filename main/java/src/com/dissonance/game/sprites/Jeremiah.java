@@ -4,8 +4,8 @@ import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
 
-public final class Farrand extends PlayableSprite {
-    //TODO Set default values for these
+public final class Jeremiah extends PlayableSprite {
+    //TODO Set default values for these.
     private int attack;
     private int defense;
     private int speed;
@@ -126,10 +126,6 @@ public final class Farrand extends PlayableSprite {
             setAnimation("walk_back");
         else if (direction == Direction.DOWN)
             setAnimation("walk_front");
-        else if (direction == Direction.LEFT)
-            setAnimation("walk_left");
-        else if (direction == direction.RIGHT)
-            setAnimation("walk_right");
     }
 
     @Override
@@ -149,6 +145,6 @@ public final class Farrand extends PlayableSprite {
 
     @Override
     public String getSpriteName() {
-        return "farrand";
+        return "jeremiah";
     }
 }

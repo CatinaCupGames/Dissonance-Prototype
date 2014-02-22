@@ -1,0 +1,4 @@
+minX:8
+minY:20
+maxX:23
+maxY:31
