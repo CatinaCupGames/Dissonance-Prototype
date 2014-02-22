@@ -7,7 +7,10 @@ public class demo_opening_world_2 implements WorldLoader {
 
     @Override
     public void onLoad(World w) {
-        w.createLight(0f, 0f, 1f, 0.01f); //We need a light to activate the light shader
+        w.createLight(0f, 0f, 1f, 0.01f);
         w.setWorldBrightness(0.6f);
     }
+
+    @Override
+    public void onDisplay(World world) { }
 }

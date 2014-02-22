@@ -125,6 +125,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
 
                     @Override
                     public void run() {
+                        isTeleporting = true;
                         if (worldObj != getWorld()) {
                             RenderService.INSTANCE.fadeToBlack(1000);
                             WorldFactory.swapView(worldObj, true);
@@ -143,6 +144,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                             }
                         }
                         ((PlayableSprite) PhysicsSprite.this).unfreeze();
+                        isTeleporting = false;
                     }
                 }).start();
 
@@ -207,6 +209,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
 
                     @Override
                     public void run() {
+                        isTeleporting = true;
                         if (worldObj != getWorld()) {
                             RenderService.INSTANCE.fadeToBlack(1000);
                             WorldFactory.swapView(worldObj, true);
@@ -225,6 +228,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                             }
                         }
                         ((PlayableSprite) PhysicsSprite.this).unfreeze();
+                        isTeleporting = false;
                     }
                 }).start();
             }

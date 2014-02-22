@@ -2,12 +2,18 @@ package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
+import com.dissonance.framework.render.RenderService;
 
-public class demo_opening_world implements WorldLoader {
+public class demo_opening_world extends GameWorldLoader {
 
     @Override
     public void onLoad(World w) {
-        w.createLight(0f, 0f, 1f, 0.01f); //We need a light to activate the light shader
-        w.setWorldBrightness(0.6f);
+        super.onLoad(w);
+    }
+
+    @Override
+    public void onDisplay(World w) {
+        farrand.setY(40 * 16);
+        farrand.setX(16);
     }
 }

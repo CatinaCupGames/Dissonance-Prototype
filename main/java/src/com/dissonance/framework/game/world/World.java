@@ -134,8 +134,7 @@ public final class World {
                         drawable.addAll(tiledData.createDrawables());
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
                         tiledData.loadTriggers();
-                        WorldLoader loader = null;
-                        if (World.this.loader == null) {
+                        if (loader == null) {
                             System.out.println("Searching for loader..");
                             if (tiledData.getProperty("loader") != null) {
                                 try {
@@ -156,7 +155,7 @@ public final class World {
                                 System.out.println("No loader found..");
                             }
                         } else {
-                            World.this.loader.onLoad(World.this);
+                            loader.onLoad(World.this);
                         }
 
                         loaded = true;
@@ -181,9 +180,13 @@ public final class World {
                         lightShader.build();
                     }
 
-                    WorldLoader loader = attemptSearchForWorldLoader();
-                    if (loader != null)
+                    if (loader == null) {
+                        loader = attemptSearchForWorldLoader();
+                        if (loader != null)
+                            loader.onLoad(World.this);
+                    } else {
                         loader.onLoad(World.this);
+                    }
 
                     loaded = true;
                     _wakeLoadWaiters();
@@ -349,6 +352,8 @@ public final class World {
     public void onDisplay() { //This method is called when the world is displayed on the screen
         lightShader.addAll(lights);
         lightShader.setOverallBrightness(worldBrightness);
+        if (loader != null)
+            loader.onDisplay(this);
     }
 
     public void onUnload() { //This method is called when the world is not shown but is still in memory

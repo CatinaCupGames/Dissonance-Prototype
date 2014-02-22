@@ -29,6 +29,7 @@ public abstract class Sprite implements Drawable, Serializable {
     protected float r = 1, g = 1, b = 1, a = 1;
     protected boolean hasTint;
     protected int layer = 1;
+    protected boolean isTeleporting;
 
     public static Sprite fromClass(Class<?> class_) {
         if (!Sprite.class.isAssignableFrom(class_))
@@ -49,6 +50,10 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public Texture getTexture() {
         return texture;
+    }
+
+    public boolean isTeleporting() {
+        return isTeleporting;
     }
 
     public Direction getDirection() {

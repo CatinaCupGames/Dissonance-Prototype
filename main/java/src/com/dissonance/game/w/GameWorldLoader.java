@@ -28,4 +28,7 @@ public abstract class GameWorldLoader implements WorldLoader {
                 farrand.select();
         }
     }
+
+    @Override
+    public void onDisplay(World w) { }
 }

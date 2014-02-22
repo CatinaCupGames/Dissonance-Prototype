@@ -15,4 +15,7 @@ public class main_menu_world implements WorldLoader {
         GameMenu gameMenu = new GameMenu();
         gameMenu.displayUI(world);
     }
+
+    @Override
+    public void onDisplay(World world) { }
 }
