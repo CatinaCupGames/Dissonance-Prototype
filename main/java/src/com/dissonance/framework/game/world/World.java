@@ -20,6 +20,8 @@ import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Timer;
 import com.dissonance.framework.system.utils.Validator;
+import com.dissonance.framework.system.utils.openglsafe.OpenGLSafe;
+import com.dissonance.framework.system.utils.openglsafe.OpenGLSafeFactory;
 import com.google.gson.Gson;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -45,6 +47,7 @@ public final class World {
     private transient RenderService renderingService;
     private boolean invalid = true;
     private boolean loaded = false;
+    private boolean showing = false;
     private WorldData tiledData;
     private WorldLoader loader;
     private List<UI> uiElements = new ArrayList<UI>();
@@ -52,7 +55,6 @@ public final class World {
     private List<CombatSprite> combatCache = new ArrayList<CombatSprite>();
     private List<Light> lights = new ArrayList<Light>();
     private float worldBrightness = 1f;
-
 
     World(int ID) {
         this.ID = ID;
@@ -140,7 +142,8 @@ public final class World {
                                 try {
                                     Class<?> class_ = Class.forName(tiledData.getProperty("loader"));
                                     if (WorldLoader.class.isAssignableFrom(class_)) {
-                                        loader = (WorldLoader) class_.newInstance();
+                                        WorldLoader trueLoader = (WorldLoader) class_.newInstance();
+                                        loader = OpenGLSafeFactory.createSafeObject(trueLoader, WorldLoader.class);
                                     }
                                 } catch (Exception e) {
                                     loader = attemptSearchForWorldLoader();
@@ -214,7 +217,8 @@ public final class World {
         try {
             Class<?> class_ = Class.forName(wlpackage + "." + name);
             if (WorldLoader.class.isAssignableFrom(class_)) {
-                return (WorldLoader) class_.newInstance();
+                WorldLoader trueLoader = (WorldLoader) class_.newInstance();
+                return OpenGLSafeFactory.createSafeObject(trueLoader, WorldLoader.class);
             }
         } catch (Exception ignored) {
         }
@@ -266,18 +270,19 @@ public final class World {
     public void setWorldBrightness(float brightness) {
         this.worldBrightness = brightness;
 
-        lightShader.setOverallBrightness(brightness);
+        if (showing)
+            lightShader.setOverallBrightness(brightness);
     }
 
     public void addLight(Light l) {
         this.lights.add(l);
-        if (loaded)
+        if (showing)
             lightShader.add(l);
     }
 
     public void removeLight(Light l) {
         this.lights.remove(l);
-        if (loaded)
+        if (showing)
             lightShader.remove(l);
     }
 
@@ -350,6 +355,7 @@ public final class World {
     }
 
     public void onDisplay() { //This method is called when the world is displayed on the screen
+        showing = true;
         lightShader.addAll(lights);
         lightShader.setOverallBrightness(worldBrightness);
         if (loader != null)
