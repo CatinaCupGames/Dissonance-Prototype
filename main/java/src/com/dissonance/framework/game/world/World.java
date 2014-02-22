@@ -29,6 +29,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Proxy;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -295,8 +296,11 @@ public final class World {
 
             @Override
             public void run() {
+                //Drawable proxyDrawable = OpenGLSafeFactory.createSafeObject(draw, Drawable.class);
                 if (draw instanceof UI) {
                     UI ue = (UI)draw;
+                    //UI proxyUI = OpenGLSafeFactory.createSafeObject(ue, UI.class);
+                    //proxyUI.init();
                     ue.init();
                     uiElements.add(ue);
                     udrawables.add(ue);
@@ -307,6 +311,8 @@ public final class World {
                 drawable.add(draw);
                 if (draw instanceof UpdatableDrawable) {
                     UpdatableDrawable ud = (UpdatableDrawable) draw;
+                    //UpdatableDrawable proxyUd = OpenGLSafeFactory.createSafeObject(ud, UpdatableDrawable.class);
+                    //proxyUd.init();
                     ud.init();
                     udrawables.add(ud);
                 }
@@ -397,12 +403,15 @@ public final class World {
             @Override
             public void run() {
                 if (drawable instanceof UI) {
+                    //searchAndRemove(uiElements, (UI)drawable);
+                    //searchAndRemove(udrawables, (UpdatableDrawable)drawable);
                     uiElements.remove(drawable);
                     udrawables.remove(drawable);
                     if (runnable != null)
                         runnable.run();
                     return;
                 }
+                //searchAndRemove(World.this.drawable, drawable);
                 World.this.drawable.remove(drawable);
                 if (drawable instanceof UpdatableDrawable)
                     World.this.udrawables.remove(drawable);
@@ -410,6 +419,22 @@ public final class World {
                     runnable.run();
             }
         }, true);
+    }
+
+    private <T> void searchAndRemove(List<T> list, T object) {
+        T toremove = null;
+        for (T obj : list) {
+            T trueObject = OpenGLSafeFactory.unwrapObject(obj);
+            if (object.equals(trueObject)) {
+                toremove = obj;
+                break;
+            }
+        }
+        if (toremove != null) {
+            boolean success = list.remove(toremove);
+            if (!success)
+                System.out.println("uwotm8");
+        }
     }
 
     public void loadTextureForSprite(final String resource, final Sprite sprite) {

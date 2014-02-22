@@ -27,6 +27,15 @@ public class OpenGLSafeFactory {
         }
     }
 
+    public static <T> T unwrapObject(Object obj) {
+        if (Proxy.isProxyClass(obj.getClass())) {
+            InvocationHandler handler = Proxy.getInvocationHandler(obj);
+            if (handler instanceof SafeInvocationHandler)
+                return ((SafeInvocationHandler<T>)handler).object;
+        }
+        return (T)obj;
+    }
+
     public static <T> T createSafeObject(T object, Class<?>... interfaces_) {
         return (T) Proxy.newProxyInstance(OpenGLSafeFactory.class.getClassLoader(), interfaces_, new SafeInvocationHandler<T>(object));
     }

@@ -9,6 +9,7 @@ public class demo_opening_world extends GameWorldLoader {
     @Override
     public void onLoad(World w) {
         super.onLoad(w);
+        w.removeSprite(farrand);
     }
 
     @Override
