@@ -5,7 +5,7 @@ import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
 
 public final class Jeremiah extends PlayableSprite {
-    //TODO Set default values for these
+    //TODO Set default values for these.
     private int attack;
     private int defense;
     private int speed;
