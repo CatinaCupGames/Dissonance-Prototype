@@ -1,0 +1,4 @@
+minX:2
+minY:5
+maxX:30
+maxY:127
