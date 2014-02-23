@@ -70,6 +70,10 @@ public class RenderService extends Service {
     }
 
     public void fadeToAlpha(float speed, float alpha) {
+        if (speed < 5) {
+            curAlpha = alpha;
+            return;
+        }
         isFading = true;
         newAlpha = alpha;
         startAlpha = curAlpha;
