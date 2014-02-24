@@ -136,6 +136,7 @@ public class DialogUI extends UIElement {
     private boolean pressed;
     private long lastUpdate = RenderService.getTime();
     private boolean done = false;
+
     @Override
     public void update() {
         boolean fast_moving = InputKeys.isButtonPressed(InputKeys.JUMP);
