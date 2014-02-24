@@ -8,6 +8,7 @@ import org.lwjgl.util.vector.Vector2f;
 public class Demo_OpeningScene extends SimpleScene {
     @Override
     protected void playScene()throws Throwable {
+        Camera.setY(30 * 16);
         RenderService.INSTANCE.fadeToBlack(1);
         RenderService.INSTANCE.waitForFade();
         Camera.linearMovement(new Vector2f(800f, Camera.getY()), 14000f);

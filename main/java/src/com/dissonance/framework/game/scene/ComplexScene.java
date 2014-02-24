@@ -114,8 +114,6 @@ public abstract class ComplexScene implements Scene {
     }
 
     public synchronized void waitForSceneEnd() throws InterruptedException {
-        if (RenderService.isInRenderThread())
-            throw new IllegalAccessError("You cant access this method in the render thread!");
         while (true) {
             if (!sceneStarted)
                 break;

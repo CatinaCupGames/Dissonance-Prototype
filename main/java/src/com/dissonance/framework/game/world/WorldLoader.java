@@ -1,6 +1,6 @@
 package com.dissonance.framework.game.world;
 
-import com.dissonance.framework.system.utils.openglsafe.OpenGLSafe;
+import com.dissonance.framework.system.annotations.OpenglSafe;
 
 public interface WorldLoader {
 
@@ -11,7 +11,7 @@ public interface WorldLoader {
      * an OpenGL safe invocation.
      * @param world The World being loaded
      */
-    @OpenGLSafe
+    @OpenglSafe
     public void onLoad(World world);
 
     /**
@@ -21,7 +21,7 @@ public interface WorldLoader {
      * an OpenGL safe invocation.
      * @param world The World being displayed
      */
-    @OpenGLSafe
+    @OpenglSafe
     public void onDisplay(World world);
 
 }

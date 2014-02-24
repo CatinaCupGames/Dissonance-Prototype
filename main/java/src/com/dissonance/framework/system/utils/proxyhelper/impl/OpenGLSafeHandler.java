@@ -1,11 +1,12 @@
-package com.dissonance.framework.system.utils.openglsafe;
+package com.dissonance.framework.system.utils.proxyhelper.impl;
 
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.system.utils.proxyhelper.Handler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class DefaultHandler implements Handler {
+public class OpenGLSafeHandler implements Handler {
     @Override
     public boolean handleInvoke(final Method method, final Object caller, final Object[] args) {
         if (RenderService.INSTANCE == null)

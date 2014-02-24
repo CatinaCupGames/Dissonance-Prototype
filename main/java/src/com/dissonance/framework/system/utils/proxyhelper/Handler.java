@@ -1,4 +1,4 @@
-package com.dissonance.framework.system.utils.openglsafe;
+package com.dissonance.framework.system.utils.proxyhelper;
 
 import java.lang.reflect.Method;
 

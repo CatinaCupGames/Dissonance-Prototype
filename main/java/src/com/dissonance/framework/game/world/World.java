@@ -20,8 +20,7 @@ import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Timer;
 import com.dissonance.framework.system.utils.Validator;
-import com.dissonance.framework.system.utils.openglsafe.OpenGLSafe;
-import com.dissonance.framework.system.utils.openglsafe.OpenGLSafeFactory;
+import com.dissonance.framework.system.utils.proxyhelper.ProxyFactory;
 import com.google.gson.Gson;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -29,7 +28,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Proxy;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -144,7 +142,7 @@ public final class World {
                                     Class<?> class_ = Class.forName(tiledData.getProperty("loader"));
                                     if (WorldLoader.class.isAssignableFrom(class_)) {
                                         WorldLoader trueLoader = (WorldLoader) class_.newInstance();
-                                        loader = OpenGLSafeFactory.createSafeObject(trueLoader, WorldLoader.class);
+                                        loader = ProxyFactory.createSafeObject(trueLoader, WorldLoader.class);
                                     }
                                 } catch (Exception e) {
                                     loader = attemptSearchForWorldLoader();
@@ -219,7 +217,7 @@ public final class World {
             Class<?> class_ = Class.forName(wlpackage + "." + name);
             if (WorldLoader.class.isAssignableFrom(class_)) {
                 WorldLoader trueLoader = (WorldLoader) class_.newInstance();
-                return OpenGLSafeFactory.createSafeObject(trueLoader, WorldLoader.class);
+                return ProxyFactory.createSafeObject(trueLoader, WorldLoader.class);
             }
         } catch (Exception ignored) {
         }
@@ -296,10 +294,10 @@ public final class World {
 
             @Override
             public void run() {
-                //Drawable proxyDrawable = OpenGLSafeFactory.createSafeObject(draw, Drawable.class);
+                //Drawable proxyDrawable = ProxyFactory.createSafeObject(draw, Drawable.class);
                 if (draw instanceof UI) {
                     UI ue = (UI)draw;
-                    //UI proxyUI = OpenGLSafeFactory.createSafeObject(ue, UI.class);
+                    //UI proxyUI = ProxyFactory.createSafeObject(ue, UI.class);
                     //proxyUI.init();
                     ue.init();
                     uiElements.add(ue);
@@ -311,7 +309,7 @@ public final class World {
                 drawable.add(draw);
                 if (draw instanceof UpdatableDrawable) {
                     UpdatableDrawable ud = (UpdatableDrawable) draw;
-                    //UpdatableDrawable proxyUd = OpenGLSafeFactory.createSafeObject(ud, UpdatableDrawable.class);
+                    //UpdatableDrawable proxyUd = ProxyFactory.createSafeObject(ud, UpdatableDrawable.class);
                     //proxyUd.init();
                     ud.init();
                     udrawables.add(ud);
@@ -424,7 +422,7 @@ public final class World {
     private <T> void searchAndRemove(List<T> list, T object) {
         T toremove = null;
         for (T obj : list) {
-            T trueObject = OpenGLSafeFactory.unwrapObject(obj);
+            T trueObject = ProxyFactory.unwrapObject(obj);
             if (object.equals(trueObject)) {
                 toremove = obj;
                 break;

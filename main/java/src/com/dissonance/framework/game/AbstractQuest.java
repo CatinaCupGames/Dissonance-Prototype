@@ -8,6 +8,8 @@ import com.dissonance.framework.game.world.WorldPackage;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.exceptions.QuestNotFoundException;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
+import com.dissonance.framework.system.utils.proxyhelper.ProxyFactory;
+import sun.plugin2.message.helper.ProxyHelper;
 
 public abstract class AbstractQuest {
     private AbstractQuest next;
@@ -87,7 +89,7 @@ public abstract class AbstractQuest {
 
     public Scene playScene(Class<? extends Scene> sceneClass) {
         try {
-            Scene scene = sceneClass.newInstance();
+            Scene scene = ProxyFactory.createSafeObject(sceneClass.newInstance(), Scene.class);
             scene.beginScene();
             return scene;
         } catch (InstantiationException e) {
