@@ -32,18 +32,19 @@ public final class Sound {
     protected final float startTime;
     protected final float endTime;
     private final String name;
-    private final int bufferIndex;
+    private int bufferIndex;
     private int sourceIndex;
     private final boolean soundEffect;
     private final boolean temp;
+    private final String path;
     protected int lastKnownState = AL_STOPPED; //Used to check if non-looping sounds ended.
     protected OnSoundFinishedListener listener;
 
-    private Sound(String name, int bufferIndex, int sourceIndex, float startTime, float endTime, boolean soundEffect) {
-        this(name, bufferIndex, sourceIndex, startTime, endTime, soundEffect, false);
+    private Sound(String name, int bufferIndex, int sourceIndex, float startTime, float endTime, boolean soundEffect, String path) {
+        this(name, bufferIndex, sourceIndex, startTime, endTime, soundEffect, false, path);
     }
 
-    private Sound(String name, int bufferIndex, int sourceIndex, float startTime, float endTime, boolean soundEffect, boolean clone) {
+    private Sound(String name, int bufferIndex, int sourceIndex, float startTime, float endTime, boolean soundEffect, boolean clone, String path) {
         this.name = name;
         this.bufferIndex = bufferIndex;
         this.sourceIndex = sourceIndex;
@@ -52,6 +53,7 @@ public final class Sound {
         this.endTime = endTime;
         this.soundEffect = soundEffect;
         this.temp = clone;
+        this.path = path;
     }
 
     private static String getError(int error) {
@@ -100,9 +102,9 @@ public final class Sound {
     }
 
     private static void loadSound(String name, String path, float startTime, float endTime, boolean soundEffect) {
-        int buffer = loadALBuffer(path);
-        checkError();
-        sounds.add(new Sound(name, buffer, -1, startTime, endTime, soundEffect)); //Set source to -1, only give a source when the sound is played
+        //int buffer = loadALBuffer(path); Do not load buffers until requested
+        //checkError();
+        sounds.add(new Sound(name, -1, -1, startTime, endTime, soundEffect, path)); //Set source to -1, only give a source when the sound is played
     }
 
     private static int generateNewSource() {
@@ -143,7 +145,7 @@ public final class Sound {
         if (source.startTime != -1 || source.endTime != -1 || !source.isSoundEffect())
             throw new InvalidParameterException("Only sound effects that don't loop can be cloned!");
 
-        Sound s = new Sound(source.name, source.bufferIndex, getFreeSource(), source.startTime, source.endTime, source.soundEffect, true);
+        Sound s = new Sound(source.name, source.bufferIndex, getFreeSource(), source.startTime, source.endTime, source.soundEffect, true, source.path);
 
         alSourcei(s.sourceIndex, AL10.AL_BUFFER, s.bufferIndex);
 
@@ -321,6 +323,10 @@ public final class Sound {
         Sound sound = getSound(name);
 
         if (sound != null) {
+            if (sound.bufferIndex == -1) {
+                sound.bufferIndex = loadALBuffer(sound.path);
+                checkError();
+            }
             if (sound.sourceIndex == -1) {
                 sound.sourceIndex = getFreeSource();
                 alSourcei(sound.sourceIndex, AL10.AL_BUFFER, sound.bufferIndex);

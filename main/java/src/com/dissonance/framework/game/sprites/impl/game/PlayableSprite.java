@@ -10,6 +10,7 @@ import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.Timer;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -292,12 +293,45 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     public void freeze() {
-        frozen = true;
-        onNoMovement();
+        freeze(false, null);
     }
 
-    public void unfreeze() {
-        frozen = false;
+    private ArrayList<Class<?>> classLockers = new ArrayList<>();
+    /**
+     * Freeze this sprite and <b>prevent it from receiving input from a controller.</b> <br></br>
+     * The <b>lock</b> parameter specifies whether to lock the call to {@link com.dissonance.framework.game.sprites.impl.game.PlayableSprite#unfreeze(Class)} so only the class <b>classLocker</b> can
+     * unfreeze the player. <br></br>
+     * If another class already has a lock on the freeze, then a "list of locks" is created. In order for the player to unfreeze, all
+     * classes that requested the freeze must invoke {@link com.dissonance.framework.game.sprites.impl.game.PlayableSprite#unfreeze(Class)}.
+     * If the same class invokes this method with a lock request 2 times, then the same class must invoke {@link PlayableSprite#unfreeze()} 2 times respectively. <br></br>
+     * This is behavior is intended for cases such as where
+     * one menu class has a lock on the freeze, but then another menu appears and steals the lock. When that menu closes and the old menu remains open, the player will
+     * be unfrozen. This is also to prevent one menu class from opening up another menu where that class cannot receive a lock, and when it closes both menus, the player is stuck frozen. <br></br>
+     * To unlock the freeze, you <b>MUST</b> call {@link com.dissonance.framework.game.sprites.impl.game.PlayableSprite#unfreeze(Class)} passing the locker class as a parameter.
+     * @param lock Whether or not to request a lock to the call to {@link PlayableSprite#unfreeze()}
+     * @param classLocker The class that can unlock (unfreeze) the player. This is normally the calling class
+     */
+    public void freeze(boolean lock, Class<?> classLocker) {
+        frozen = true;
+        onNoMovement();
+        if (lock) {
+            if (classLocker == null)
+                throw new InvalidParameterException("The class locker cannot be null when requesting a lock!");
+            classLockers.add(classLocker);
+        }
+    }
+
+    public boolean unfreeze() {
+        return unfreeze(null);
+    }
+
+    public boolean unfreeze(Class<?> classLocker) {
+        if (classLocker != null) {
+            if (classLockers.contains(classLocker))
+                classLockers.remove(classLocker);
+        }
+        if (classLockers.size() == 0) frozen = false;
+        return classLockers.size() == 0;
     }
 
     /**

@@ -9,6 +9,7 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.TextureLoader;
+import com.dissonance.framework.system.GameSettings;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -41,6 +42,30 @@ public abstract class UIElement implements com.dissonance.framework.game.sprites
         instanceCount++;
     }
 
+    public void marginLeft(float value) {
+        this.x = value + (width / 2f);
+    }
+
+    public void marginRight(float value) {
+        this.x = ((GameSettings.Display.window_width / 2f) - value) - (width / 2f);
+    }
+
+    public void marginTop(float value) {
+        this.y = value + (height / 2f);
+    }
+
+    public void marginBottom(float value) {
+        this.y = ((GameSettings.Display.window_height / 2f) - value) - (height / 2f);
+    }
+
+    public void centerHorizontal() {
+        marginLeft((GameSettings.Display.window_width / 4f) - (width / 2f));
+    }
+
+    public void centerVertical() {
+        marginTop((GameSettings.Display.window_height / 4f) - (height / 2f));
+    }
+
     public String getName() {
         return name;
     }
@@ -60,14 +85,15 @@ public abstract class UIElement implements com.dissonance.framework.game.sprites
     public void displayUI(boolean halt, World world) {
         world.addDrawable(this);
         if (halt) {
-            PlayableSprite.haltMovement();
+           PlayableSprite.getCurrentlyPlayingSprite().freeze(true, UIElement.class);
+            //PlayableSprite.haltMovement();
             halted = true;
         }
     }
 
     private void _close() {
         if (halted) {
-            PlayableSprite.resumeMovement();
+            PlayableSprite.getCurrentlyPlayingSprite().unfreeze(UIElement.class);
         }
         GameService.getCurrentWorld().removeDrawable(this);
 
