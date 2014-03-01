@@ -51,7 +51,6 @@ public class HealthBar extends AbstractUI {
     @Override
     protected void onClose() { }
 
-    int temp = 0;
     @Override
     public void update() {
         if (ease) {
@@ -61,12 +60,6 @@ public class HealthBar extends AbstractUI {
             if (temp == target)
                 ease = false;
         }
-
-        temp++;
-        if (temp % 10 == 0) {
-            temp = 0;
-            setHealth(actualHealth - 5);
-        }
     }
 
     public void setHealth(float displayHealth) {
@@ -74,7 +67,7 @@ public class HealthBar extends AbstractUI {
             displayHealth = 0;
         if (displayHealth > 100)
             displayHealth = 100;
-        if (target == displayHealth) return;
+        if (target == displayHealth && ease) return;
 
         ease = true;
         target = displayHealth;

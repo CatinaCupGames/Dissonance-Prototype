@@ -1,6 +1,7 @@
 package com.dissonance.framework.render.text;
 
 import com.dissonance.framework.system.GameSettings;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.TextureImpl;
@@ -114,12 +115,14 @@ public final class RenderText {
     }
 
     public static TrueTypeFont getFont(Font font, int fontWeight) {
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
         FontStyle style = new FontStyle(font.getFontName(), fontWeight, font.getSize());
         if (fontCache.contains(style))
             return fontCache.get(style);
 
         TrueTypeFont ttf = new TrueTypeFont(font, ANTI_ALIAS);
         fontCache.put(style, ttf);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
         return ttf;
     }
 

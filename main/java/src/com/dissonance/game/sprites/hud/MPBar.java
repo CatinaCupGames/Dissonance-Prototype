@@ -19,6 +19,7 @@ public class MPBar extends AbstractUI {
     private static Texture texture;
     private float displayMP = 100f;
     private float actualMP = 100f;
+    private float maxMP = 100f;
     private MPTip tip;
 
     //Ease stuff
@@ -46,13 +47,12 @@ public class MPBar extends AbstractUI {
             tip.close();
 
         tip.display(world);
-        setMP(100f);
+        setMP(maxMP);
     }
 
     @Override
     protected void onClose() { }
 
-    int temp = 0;
     @Override
     public void update() {
         if (ease) {
@@ -62,33 +62,27 @@ public class MPBar extends AbstractUI {
             if (temp == target)
                 ease = false;
         }
-
-        temp++;
-        if (temp % 60 == 0) {
-            temp = 0;
-            setMP(displayMP - 3);
-        }
     }
 
     public void setMP(float MP) {
         if (MP < 0)
             MP = 0;
-        if (MP > 100)
-            MP = 100;
-        if (target == MP) return;
+        if (MP > maxMP)
+            MP = maxMP;
+        if (target == MP && ease) return;
 
         ease = true;
-        target = MP;
+        target = (MP / maxMP) * 100;
         startH = this.displayMP;
         start = RenderService.getTime();
 
-        this.actualMP = target;
+        this.actualMP = MP;
 
     }
 
     private void _setDisplayMP(float MP) {
         this.displayMP = MP;
-        if (MP <= 0 || MP >= 100)
+        if (MP <= 0 || MP >= maxMP)
             tip.setVisible(false);
         else {
             tip.setVisible(true);
@@ -98,6 +92,12 @@ public class MPBar extends AbstractUI {
 
     public float getMP() {
         return actualMP;
+    }
+
+    public float getMaxMP() { return maxMP; }
+
+    public void setMaxMP(float max) {
+        this.maxMP = max;
     }
 
     @Override
