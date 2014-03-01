@@ -74,11 +74,12 @@ public class WorldData {
     }
 
     public void loadAllTileSets() {
+        boolean old = TextureLoader.isFastRedraw();
         TextureLoader.setFastRedraw(false);
         for (TileSet tileSet : tilesets) {
             tileSet.loadTexture();
         }
-        TextureLoader.setFastRedraw(true);
+        TextureLoader.setFastRedraw(old);
     }
 
     public void assignAllLayers() {
