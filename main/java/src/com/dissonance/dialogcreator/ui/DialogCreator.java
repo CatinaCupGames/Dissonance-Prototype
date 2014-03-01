@@ -17,7 +17,7 @@ public final class DialogCreator extends JFrame {
         setLayout(null);
         setResizable(false);
 
-        setSize(500, 600);
+        setSize(500, 750);
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int width = gd.getDisplayMode().getWidth();
@@ -32,20 +32,20 @@ public final class DialogCreator extends JFrame {
         // dialogList
         dialogList = new DialogList();
         dialogList.setBackground(new Color(0xeff6ff));
-        dialogList.setSize(495, 400);
+        dialogList.setSize(495, 550);
         dialogList.setLocation(0, 0);
         JScrollPane pane = new JScrollPane(dialogList);
         pane.setSize(dialogList.getSize());
         pane.setLocation(dialogList.getLocation());
         pane.setBorder(null);
-        dialogList.setPane(pane);
         pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         add(pane);
 
         // dialogTextBox
         dialogTextBox = new DialogTextBox(dialogList);
         dialogTextBox.setSize(494, 200);
-        dialogTextBox.setLocation(0, 400);
+        dialogTextBox.setLocation(0, 550);
+        dialogList.linkBox(dialogTextBox);
         add(dialogTextBox);
     }
 
