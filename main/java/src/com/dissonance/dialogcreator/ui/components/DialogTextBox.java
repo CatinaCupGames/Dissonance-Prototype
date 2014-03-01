@@ -2,9 +2,13 @@ package com.dissonance.dialogcreator.ui.components;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.colorchooser.ColorChooserComponentFactory;
+import javax.swing.text.StyledDocument;
 import javax.swing.text.StyledEditorKit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -16,19 +20,19 @@ public final class DialogTextBox extends JPanel {
     private JPanel formatting;
     private JLabel controlBold;
     private JLabel controlItalic;
-    private JLabel controlUnderline;
     private JLabel controlColor;
 
     private JPanel controls;
     private JLabel controlNew;
-    private JLabel controlPush;
     private JLabel controlSave;
     private JLabel controlPreview;
 
-    private JTextPane title;
-    private JTextPane text;
+    protected JTextPane title;
+    protected JTextPane text;
 
     private DialogList list;
+
+    private JDialog colorChooser;
 
     private static Color borderColor = new Color(0xcccccc);
     private static Color headerBgColor = new Color(0xf0f0f0);
@@ -53,6 +57,23 @@ public final class DialogTextBox extends JPanel {
         setBorder(BorderFactory.createLineBorder(borderColor));
         setLayout(null);
 
+        final JColorChooser colorChooser = new JColorChooser();
+        AbstractColorChooserPanel[] panels = ColorChooserComponentFactory.getDefaultChooserPanels();
+        AbstractColorChooserPanel[] usedPanels = {panels[1], panels[3]};
+        colorChooser.setChooserPanels(usedPanels);
+        this.colorChooser = JColorChooser.createDialog(null, "Choose a color", true, colorChooser, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        new StyledEditorKit.ForegroundAction("", colorChooser.getColor()).actionPerformed(new ActionEvent(text, e.getID(), ""));
+                    }
+                }, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                    }
+                }
+        );
+
         initializeComponents();
         initializeEvents();
     }
@@ -70,7 +91,7 @@ public final class DialogTextBox extends JPanel {
         formatting = new JPanel();
         formatting.setBackground(headerBgColor);
         formatting.setBorder(new MatteBorder(0, 0, 1, 1, borderColor));
-        formatting.setSize(114, 25);
+        formatting.setSize(89, 25);
         formatting.setLocation(0, 0);
         formatting.setLayout(null);
         header.add(formatting);
@@ -90,17 +111,10 @@ public final class DialogTextBox extends JPanel {
         formatting.add(controlItalic);
         //endregion
 
-        //region controlUnderline
-        controlUnderline = new JLabel();
-        initializeLabel(controlUnderline, 0xf0cd);
-        controlUnderline.setLocation(57, 0);
-        formatting.add(controlUnderline);
-        //endregion
-
         //region controlColor
         controlColor = new JLabel();
         initializeLabel(controlColor, 0xf043);
-        controlColor.setLocation(82, 0);
+        controlColor.setLocation(57, 0);
         formatting.add(controlColor);
         //endregion
 
@@ -108,8 +122,8 @@ public final class DialogTextBox extends JPanel {
         controls = new JPanel();
         controls.setBackground(headerBgColor);
         controls.setBorder(new MatteBorder(0, 1, 1, 0, borderColor));
-        controls.setSize(114, 25);
-        controls.setLocation(378, 0);
+        controls.setSize(89, 25);
+        controls.setLocation(403, 0);
         controls.setLayout(null);
         header.add(controls);
         //endregion
@@ -121,31 +135,24 @@ public final class DialogTextBox extends JPanel {
         controls.add(controlNew);
         //endregion
 
-        //region controlPush
-        controlPush = new JLabel();
-        initializeLabel(controlPush, 0xf10d);
-        controlPush.setLocation(33, 0);
-        controls.add(controlPush);
-        //endregion
-
         //region controlSave
         controlSave = new JLabel();
         initializeLabel(controlSave, 0xf0c7);
-        controlSave.setLocation(58, 0);
+        controlSave.setLocation(33, 0);
         controls.add(controlSave);
         //endregion
 
         //region controlPreview
         controlPreview = new JLabel();
         initializeLabel(controlPreview, 0xf04b);
-        controlPreview.setLocation(83, 0);
+        controlPreview.setLocation(58, 0);
         controls.add(controlPreview);
         //endregion
 
         //region title
         title = new JTextPane();
-        title.setLocation(114, 0);
-        title.setSize(264, 25);
+        title.setLocation(89, 0);
+        title.setSize(314, 25);
         title.setText("Title");
         title.setFont(title.getFont().deriveFont((float) (title.getFont().getSize() + 3)));
 
@@ -199,10 +206,8 @@ public final class DialogTextBox extends JPanel {
 
         controlBold.addMouseListener(hoverAdapter);
         controlItalic.addMouseListener(hoverAdapter);
-        controlUnderline.addMouseListener(hoverAdapter);
         controlColor.addMouseListener(hoverAdapter);
         controlNew.addMouseListener(hoverAdapter);
-        controlPush.addMouseListener(hoverAdapter);
         controlSave.addMouseListener(hoverAdapter);
         controlPreview.addMouseListener(hoverAdapter);
 
@@ -210,6 +215,8 @@ public final class DialogTextBox extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                text.getSelectionStart();
+                text.getSelectionEnd();
                 new StyledEditorKit.BoldAction().actionPerformed(new ActionEvent(text, e.getID(), ""));
             }
         });
@@ -221,17 +228,10 @@ public final class DialogTextBox extends JPanel {
             }
         });
 
-        controlUnderline.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                new StyledEditorKit.UnderlineAction().actionPerformed(new ActionEvent(text, e.getID(), ""));
-            }
-        });
-
         controlColor.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                new StyledEditorKit.ForegroundAction("", Color.RED).actionPerformed(new ActionEvent(text, e.getID(), ""));
+                colorChooser.setVisible(true);
             }
         });
 
@@ -240,7 +240,9 @@ public final class DialogTextBox extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
 
-                text.setStyledDocument(list.addComponent());
+                StyledDocument[] docs = list.addComponent();
+                title.setStyledDocument(docs[0]);
+                text.setStyledDocument(docs[1]);
             }
         });
     }

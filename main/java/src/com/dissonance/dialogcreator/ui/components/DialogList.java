@@ -1,50 +1,146 @@
 package com.dissonance.dialogcreator.ui.components;
 
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.colorchooser.ColorChooserComponentFactory;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.event.*;
+import java.security.SecureRandom;
+import java.util.HashMap;
 
 public final class DialogList extends JPanel {
-    private List<JScrollPane> components = new ArrayList<>();
-    private int y = 5;
-    int i = 0;
-    private int[] colors = new int[]{
-            0xe52c2c, 0xf2ad36, 0xf2ec50, 0x7fd441, 0x5ac6e5, 0x605ae5, 0xbf66d5, 0x7bf1ce, 0xf5a0ec, 0x976712
-    };
-    private JScrollPane pane;
+    private static final SecureRandom colorRandom = new SecureRandom();
+    private static Color colorNormal = new Color(0xf0f0f0);
+    private static Color colorHighlight = new Color(0xfeffef);
 
-    public void setPane(JScrollPane pane) {
-        this.pane = pane;
-    }
+    private DialogTextBox box;
+    private DialogPanel clickedComponent;
+    private HashMap<String, Color> headers = new HashMap<>();
+
+    private int y = 5;
 
     public DialogList() {
         setLayout(null);
     }
 
-    public StyledDocument addComponent() {
-        JTextPane pane = new JTextPane();
-        pane.setLocation(5, y);
-        pane.setBackground(new Color(0xf0f0f0));
-        pane.setSize(468, 80);
-        pane.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(pane);
-        scrollPane.setLocation(5, y);
-        scrollPane.setSize(pane.getSize());
-        add(scrollPane);
+    public void linkBox(DialogTextBox box) {
+        this.box = box;
 
+        box.title.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                JTextPane source = ((JTextPane) e.getSource());
+                String text = source.getText();
+                if (text.length() == 0) {
+                    return;
+                }
+
+                headers.remove(text.substring(0, text.length() - 1));
+
+                if (!headers.containsKey(text)) {
+                    headers.put(text, generateRandomColor(Color.WHITE));
+                }
+
+                Color color = headers.get(text);
+                if (clickedComponent != null) {
+                    Border border = new CompoundBorder(BorderFactory.createLineBorder(color.darker()),
+                            BorderFactory.createLineBorder(color));
+                    clickedComponent.getScrollPane().setBorder(border);
+                }
+
+            }
+        });
+    }
+
+    private MouseAdapter clickAdapter = new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            super.mouseClicked(e);
+
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                clickedComponent.getDialogPane().setBackground(colorNormal);
+                clickedComponent = (DialogPanel) e.getSource();
+
+                box.text.setStyledDocument(clickedComponent.getDialogPane().getStyledDocument());
+                box.title.setStyledDocument(clickedComponent.getDialogHeader().getStyledDocument());
+                clickedComponent.getDialogPane().setBackground(colorHighlight);
+            } else if (SwingUtilities.isRightMouseButton(e)) {
+                final DialogPanel source = (DialogPanel) e.getSource();
+                final JColorChooser colorChooser = new JColorChooser();
+                AbstractColorChooserPanel[] panels = ColorChooserComponentFactory.getDefaultChooserPanels();
+                AbstractColorChooserPanel[] usedPanels = {panels[1], panels[3]};
+                colorChooser.setChooserPanels(usedPanels);
+                JDialog chooser = JColorChooser.createDialog(null, "Choose a color", true, colorChooser, new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                Color color = colorChooser.getColor();
+                                headers.put(source.getDialogHeader().getText(), color);
+
+                                for (Component component : DialogList.this.getComponents()) {
+                                    if (component instanceof JScrollPane) {
+                                        DialogPanel panel = (DialogPanel) ((JViewport) ((JScrollPane) component).getComponent(0)).getView();
+                                        if ((panel.getDialogHeader().getText().equals(source.getDialogHeader().getText()))) {
+                                            panel.getScrollPane().setBorder(new CompoundBorder(BorderFactory.createLineBorder(color.darker()),
+                                                    BorderFactory.createLineBorder(color)));
+                                        }
+                                    }
+                                }
+
+                            }
+                        }, new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+
+                            }
+                        }
+                );
+                chooser.setVisible(true);
+            }
+
+
+        }
+    };
+
+    public StyledDocument[] addComponent() {
+        DialogPanel panel = new DialogPanel();
+        if (clickedComponent != null) {
+            clickedComponent.getDialogPane().setBackground(colorNormal);
+        }
+        clickedComponent = panel;
+        panel.getDialogPane().setBackground(colorHighlight);
+        panel.setLocation(5, y);
         y += 85;
         setSize(getWidth(), y > 400 ? y : 400);
         setPreferredSize(getSize());
-        pane.setMargin(new Insets(7, 10, 7, 10));
-        scrollPane.setBorder(new MatteBorder(1, 1, 1, 1, new Color(colors[i])));
 
-        if (i < 9) {
-            i++;
+        panel.addMouseListener(clickAdapter);
+        JScrollPane pane = new JScrollPane(panel);
+        pane.setSize(panel.getSize());
+        pane.setLocation(panel.getLocation());
+        add(pane);
+
+        panel.linkScrollPane(pane);
+
+        return new StyledDocument[]{
+                panel.getDialogHeader().getStyledDocument(), panel.getDialogPane().getStyledDocument()
+        };
+    }
+
+    private Color generateRandomColor(Color mix) {
+        int red = colorRandom.nextInt(256);
+        int green = colorRandom.nextInt(256);
+        int blue = colorRandom.nextInt(256);
+
+        // mix the color
+        if (mix != null) {
+            red = (2 * red + mix.getRed()) / 3;
+            green = (2 * green + mix.getGreen()) / 3;
+            blue = (2 * blue + mix.getBlue()) / 3;
         }
 
-        return pane.getStyledDocument();
+        return new Color(red, green, blue);
     }
 }
