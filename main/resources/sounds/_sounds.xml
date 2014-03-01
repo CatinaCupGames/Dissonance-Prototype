@@ -38,4 +38,12 @@
     <sound name="town"
            start="0:7:619"
            end="2:9:0"/>
+
+    <sound name="waldobuilding"
+           start="0:0:0"
+           end="1:04:800"/>
+    
+    <sound name="introtheme"
+           start="0:13:333"
+           end="2:13:333"/>
 </sounds>

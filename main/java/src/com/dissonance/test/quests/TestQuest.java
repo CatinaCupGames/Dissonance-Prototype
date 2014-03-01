@@ -10,6 +10,8 @@ import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.sprites.Enemy;
+import com.dissonance.test.sprites.TestingUI;
+import com.dissonance.test.sprites.TestingUI2;
 
 import java.util.Random;
 
@@ -47,6 +49,12 @@ public class TestQuest extends AbstractQuest {
         World w = WorldFactory.getWorld("test_tileset");
         setWorld(w);
         w.waitForWorldLoaded();
+
+        TestingUI ui = new TestingUI();
+        ui.display();
+
+        TestingUI2 ui2 = new TestingUI2(ui);
+        ui2.display();
 
         final PlayableSprite player = PlayableSprite.getCurrentlyPlayingSprite();
         player.setMarksmanship(2);

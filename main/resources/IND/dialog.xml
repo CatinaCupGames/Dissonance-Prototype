@@ -20,8 +20,8 @@
 
     <dialog dialog_id="testingTrigger">
         <header>Max Kek</header>
-        <message style="bold">Kek </message>
-        <message type = "append" speed="1">LITERALLY END UR LIFE XDDDDD REDIT</message>
+        <message style="bold" color="#1d1d1d">Kek </message>
+        <message type = "append" speed="1" color="white">LITERALLY END UR LIFE XDDDDD REDIT</message>
         <message speed="500">:^)</message>
     </dialog>
 

@@ -78,8 +78,8 @@ public class DialogUI extends UIElement {
         currentdialog = this;
         setWidth(512);
         setHeight(64);
-        setX((float) (GameSettings.Display.resolution.getWidth() / 4f)); //TODO Get this to center of screen
-        setY((float) ((GameSettings.Display.resolution.getHeight() / 2f) - (getHeight() / 2f) - 8));
+        centerHorizontal();
+        marginBottom(8f);
         cx = Camera.getX();
         cy = Camera.getY();
         if (events != null) {
@@ -136,6 +136,7 @@ public class DialogUI extends UIElement {
     private boolean pressed;
     private long lastUpdate = RenderService.getTime();
     private boolean done = false;
+
     @Override
     public void update() {
         boolean fast_moving = InputKeys.isButtonPressed(InputKeys.JUMP);

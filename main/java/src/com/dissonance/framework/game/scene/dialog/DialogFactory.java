@@ -46,7 +46,7 @@ public class DialogFactory {
                                 continue;
                             String text = nodelist.item(ii).getFirstChild().getNodeValue();
                             Style style = Style.NORMAL;
-                            Color color = Color.WHITE;
+                            Color color = null;
                             long speed = 15L;
                             if (nodelist.item(ii).getAttributes().getNamedItem("style") != null) {
                                 String stype = nodelist.item(ii).getAttributes().getNamedItem("style").getNodeValue();
@@ -59,11 +59,18 @@ public class DialogFactory {
                             }
                             if (nodelist.item(ii).getAttributes().getNamedItem("color") != null) {
                                 String scolor = nodelist.item(ii).getAttributes().getNamedItem("color").getNodeValue();
-                                try {
-                                    Field field = Class.forName("java.awt.Color").getField(scolor);
-                                    color = (Color)field.get(null);
-                                } catch (Exception e) {
-                                    color = Color.WHITE;
+                                if (scolor.startsWith("#")) {
+                                    try {
+                                        color = Color.decode(scolor);
+                                    } catch (Throwable ignored) { }
+                                }
+                                if (color == null) {
+                                    try {
+                                        Field field = Class.forName("java.awt.Color").getField(scolor);
+                                        color = (Color)field.get(null);
+                                    } catch (Exception e) {
+                                        color = Color.WHITE;
+                                    }
                                 }
                             }
 

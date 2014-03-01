@@ -1,7 +1,9 @@
 package com.dissonance.framework.render.text;
 
+import com.dissonance.framework.system.GameSettings;
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.opengl.TextureImpl;
 
 import java.awt.*;
 import java.io.IOException;
@@ -13,7 +15,7 @@ import java.util.Hashtable;
 public final class RenderText {
 
     // I guess we can change this later if we want to //
-    private static final boolean ANTI_ALIAS = true;
+    public static final boolean ANTI_ALIAS = false;
 
     private static Hashtable<FontStyle, TrueTypeFont> fontCache;
 
@@ -111,12 +113,44 @@ public final class RenderText {
         return ttf;
     }
 
+    public static TrueTypeFont getFont(Font font, int fontWeight) {
+        FontStyle style = new FontStyle(font.getFontName(), fontWeight, font.getSize());
+        if (fontCache.contains(style))
+            return fontCache.get(style);
+
+        TrueTypeFont ttf = new TrueTypeFont(font, ANTI_ALIAS);
+        fontCache.put(style, ttf);
+        return ttf;
+    }
+
+    public static void drawString(String text, Vector2f position) {
+        TrueTypeFont ttf = getFont(GameSettings.Display.GAME_FONT, Font.PLAIN);
+        drawString(ttf, text, position.x, position.y);
+    }
+
+    public static void drawString(String text, float x, float y) {
+        TrueTypeFont ttf = getFont(GameSettings.Display.GAME_FONT, Font.PLAIN);
+        drawString(ttf, text, x, y);
+    }
+
+    public static void drawString(String text, Vector2f position, float size) {
+        Font font = GameSettings.Display.GAME_FONT.deriveFont(size);
+        TrueTypeFont ttf = getFont(font, Font.PLAIN);
+        drawString(ttf, text, position.x, position.y);
+    }
+
+    public static void drawString(String text, float x, float y, float size) {
+        Font font = GameSettings.Display.GAME_FONT.deriveFont(size);
+        TrueTypeFont ttf = getFont(font, Font.PLAIN);
+        drawString(ttf, text, x, y);
+    }
 
     public static void drawString(TrueTypeFont font, String text, Vector2f position) {
         drawString(font, text, position.x, position.y);
     }
 
     public static void drawString(TrueTypeFont font, String text, float x, float y) {
+        TextureImpl.bindNone(); //Tell Slick-Util there is no texture bound, so it will rebind the font texture again
         font.drawString(x, y, text);
     }
 }

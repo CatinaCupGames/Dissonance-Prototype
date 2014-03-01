@@ -32,6 +32,7 @@ public class InputKeys {
     public static final String EXTENDLOOK = "extendLook";
 
     private final static String DIR = "config" + File.separator;
+    private static boolean loaded = false;
     private final static String CONFIG_NAME = "keyconfig.txt";
     private final static String PATH = DIR + CONFIG_NAME; //move if ya want
     private final static HashMap<String, Integer> keys = new HashMap<>();
@@ -39,6 +40,7 @@ public class InputKeys {
     private static Controller controller;
 
     public static void initializeConfig() throws IOException {
+        loaded = true;
         FileUtils.createIfNotExist(DIR, CONFIG_NAME, createConfig());
         String[] lines = FileUtils.readAllLines(PATH);
 
@@ -137,6 +139,8 @@ public class InputKeys {
     }
 
     public static boolean isButtonPressed(String button) {
+        if (!loaded)
+            return false;
         if (usingController()) {
             if (button.equals(MOVEUP) || button.equals(MOVELEFT) || button.equals(MOVERIGHT) || button.equals(MOVELEFT)) {
                 throw new IllegalArgumentException("The player is using the controller! Use the axis!");
