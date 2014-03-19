@@ -3,9 +3,11 @@ package com.dissonance.game.sprites.hud;
 import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
 import com.dissonance.framework.render.text.RenderText;
 import com.dissonance.framework.system.GameSettings;
-import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.*;
+import org.newdawn.slick.Color;
 
 import java.awt.*;
+import java.awt.Font;
 
 public class MPText extends AbstractUI {
     private final BaseHUD baseHUD;
@@ -34,6 +36,8 @@ public class MPText extends AbstractUI {
 
     @Override
     public void render() {
-        RenderText.drawString(font, "MP:" + (int)baseHUD.getMP() + "/" + (int)baseHUD.getMaxMP(), getX(), getY());
+        super.render();
+        font.drawString(getX(), getY(), "MP:" + (int)baseHUD.getMP() + "/" + (int)baseHUD.getMaxMP(), new Color(1f, 1f, 1f, getAlpha()));
+        super.resetAlpha();
     }
 }

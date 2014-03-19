@@ -4,9 +4,10 @@ import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
 import com.dissonance.framework.render.text.RenderText;
 import com.dissonance.framework.system.GameSettings;
 import org.lwjgl.opengl.NVDrawTexture;
-import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.*;
 
 import java.awt.*;
+import java.awt.Font;
 
 public class HealthText extends AbstractUI {
     private final BaseHUD baseHUD;
@@ -35,6 +36,8 @@ public class HealthText extends AbstractUI {
 
     @Override
     public void render() {
-        RenderText.drawString(font, "HP:" + (int)baseHUD.getHealth() + "/" + 100, getX(), getY());
+        super.render();
+        font.drawString(getX(), getY(), "HP:" + (int)baseHUD.getHealth() + "/" + 100, new org.newdawn.slick.Color(1f, 1f, 1f, getAlpha()));
+        super.resetAlpha();
     }
 }

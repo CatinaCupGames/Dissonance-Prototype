@@ -3,11 +3,13 @@ package com.dissonance.game.sprites.hud;
 import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
 import com.dissonance.framework.render.text.RenderText;
 import com.dissonance.framework.system.GameSettings;
-import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.*;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureImpl;
 
 import java.awt.*;
+import java.awt.Font;
 import java.lang.reflect.Field;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -50,13 +52,15 @@ public class LevelText extends AbstractUI {
 
     @Override
     public void render() {
+        super.render();
         float x = level < 10 ? getX() + (font.getWidth("" + level) / 2f) : getX();
         if (level == 1)
             x += font.getWidth("1") / 1.5f;
         if (level >= 10 && level < 20)
             x += font.getWidth("" + level) / (level == 11 ? 4f : 8f);
 
-        RenderText.drawString(font, "" + level, x, getY());
+        font.drawString(x, getY(), "" + level, new Color(1f, 1f, 1f, getAlpha()));
+        super.resetAlpha();
     }
 
     public int getLevel() {

@@ -11,11 +11,14 @@ import com.dissonance.framework.system.GameSettings;
 import javax.swing.plaf.nimbus.AbstractRegionPainter;
 import java.util.ArrayList;
 
+import static org.lwjgl.opengl.GL11.glColor4f;
+
 public abstract class AbstractUI implements UI {
     private float x, y;
     protected float width, height;
     protected boolean opened;
     protected World world;
+    protected float alpha = 1f;
     private AbstractUI parent;
     private float[] alignment = new float[] { 0, 0, 0, 0 }; //Alignment for textures
     private ArrayList<UI> children = new ArrayList<>();
@@ -26,6 +29,29 @@ public abstract class AbstractUI implements UI {
 
     public AbstractUI(AbstractUI parent) {
         setParent(parent);
+    }
+
+    public float getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(float alpha) {
+        this.alpha = alpha;
+    }
+
+    @Override
+    public void render() {
+        float alpha = RenderService.getCurrentAlphaValue();
+        if (this.alpha < 1) {
+            alpha = this.alpha - (1 - RenderService.getCurrentAlphaValue());
+            if (alpha < 0)
+                alpha = 0;
+        }
+        glColor4f(1f, 1f, 1f, alpha);
+    }
+
+    protected void resetAlpha() {
+        glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
     }
 
     @Override

@@ -101,7 +101,14 @@ public class MPBar extends AbstractUI {
     }
 
     @Override
+    public void setAlpha(float alpha) {
+        super.setAlpha(alpha);
+        tip.setAlpha(alpha);
+    }
+
+    @Override
     public void render() {
+        super.render();
         if (texture == null)
             return;
         float x = getX(), y = getY(), bx = getWidth() / 2f, by = getHeight() / 2f, z = 0;
@@ -120,5 +127,6 @@ public class MPBar extends AbstractUI {
         glVertex3f(x - bx, y + by, z);
         glEnd();
         texture.unbind();
+        super.resetAlpha();
     }
 }
