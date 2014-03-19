@@ -14,6 +14,8 @@ import com.dissonance.framework.game.sprites.ui.impl.UIElement;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.WorldLoader;
+import com.dissonance.framework.game.world.tiled.impl.ImageLayer;
+import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
@@ -358,6 +360,19 @@ public class MainQuest extends AbstractQuest {
 
     }
 
+    private static final Class[] ignores = new Class[] {
+            TileObject.class,
+            ImageLayer.class
+    };
+
+    public boolean shouldIgnore(Drawable draw) {
+        for (Class<?> class_ : ignores) {
+            if (draw.getClass().isAssignableFrom(class_))
+                return true;
+        }
+        return false;
+    }
+
     private int compileCount;
     public boolean compileAndShow(String javaCode) {
         if (!checkBeforeCompile(javaCode)) return false;
@@ -386,19 +401,19 @@ public class MainQuest extends AbstractQuest {
                         @Override
                         public void run() {
                             sprites.clear();
-                            Iterator<UpdatableDrawable> ud = getWorld().getUpdatables();
+                            Iterator<Drawable> ud = getWorld().getSortedDrawables();
                             while (ud.hasNext()) {
-                                UpdatableDrawable updatableDrawable = ud.next();
-                                if (updatableDrawable != PlayableSprite.getCurrentlyPlayingSprite()) {
-                                    sprites.add(updatableDrawable);
+                                Drawable drawable = ud.next();
+                                if (drawable != PlayableSprite.getCurrentlyPlayingSprite() && !shouldIgnore(drawable)) {
+                                    sprites.add(drawable);
                                 }
-                                selectedSprite = null;
-                                EditorUI.INSTANCE.clearComboBox();
-                                EditorUI.INSTANCE.setComboBox(sprites);
-                                EditorUI.INSTANCE.setComboIndex(0);
-                                if (PlayableSprite.getCurrentlyPlayingSprite() != null) {
-                                    getWorld().removeSprite(PlayableSprite.getCurrentlyPlayingSprite()); //Remove player
-                                }
+                            }
+                            selectedSprite = null;
+                            EditorUI.INSTANCE.clearComboBox();
+                            EditorUI.INSTANCE.setComboBox(sprites);
+                            EditorUI.INSTANCE.setComboIndex(0);
+                            if (PlayableSprite.getCurrentlyPlayingSprite() != null) {
+                                getWorld().removeSprite(PlayableSprite.getCurrentlyPlayingSprite()); //Remove player
                             }
                         }
                     }, true);
