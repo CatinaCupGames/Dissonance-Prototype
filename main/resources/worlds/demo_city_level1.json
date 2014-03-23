@@ -65,7 +65,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"zesilia_tileset1.png",
+         "image":"zesilia_tileset.png",
          "imageheight":160,
          "imagewidth":100,
          "margin":0,
