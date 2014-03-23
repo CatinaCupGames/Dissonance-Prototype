@@ -38,7 +38,7 @@ public class AlignmentDialog extends BaseDialog {
     private static final int TEXTURE_SIZE = 25;
 
     static {
-        BufferedImage img = ((ToolkitImage) new ImageIcon(AlignmentDialog.class.getClassLoader().getResource("graphics/gui/alignButtons.png")).getImage()).getBufferedImage();
+        BufferedImage img = ((ToolkitImage) new ImageIcon(AlignmentDialog.class.getClassLoader().getResource("sprites/menu/gui/alignButtons.png")).getImage()).getBufferedImage();
         for (int i = 0; i < TEXTURE_WIDTH; i++) {
             for (int j = 0; j < TEXTURE_HEIGHT; j++) {
                 icons[i][j] = new ImageIcon(img.getSubimage(i * TEXTURE_SIZE, j * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE));
