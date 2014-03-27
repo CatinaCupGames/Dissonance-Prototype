@@ -90,6 +90,14 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         super.setX(x);
     }
 
+    public void rawSetX(float x) {
+        super.setX(x);
+    }
+
+    public void rawSetY(float y) {
+        super.setY(y);
+    }
+
     @Override
     public void setY(float y) {
         movementDetect = true;
