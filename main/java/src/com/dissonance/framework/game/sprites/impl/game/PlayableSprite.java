@@ -423,7 +423,6 @@ public abstract class PlayableSprite extends CombatSprite {
                 dodgeY = 0;
                 break;
             default:
-                ani = "dodge_up";
                 return;
         }
         setAnimation(ani);
