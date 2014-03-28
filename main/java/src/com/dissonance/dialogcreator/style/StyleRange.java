@@ -1,5 +1,6 @@
 package com.dissonance.dialogcreator.style;
 
+import com.dissonance.framework.game.scene.dialog.Style;
 import com.sun.istack.internal.NotNull;
 
 import java.awt.*;
@@ -11,24 +12,6 @@ import java.util.List;
  * applied to it.
  */
 public final class StyleRange implements Comparable<StyleRange> {
-
-    public enum Style {
-        NONE(""), BOLD("bold"), ITALIC("italic"), BOLD_ITALIC("bold|italic");
-
-        private final String id;
-
-        Style(String id) {
-            this.id = id;
-        }
-
-        /**
-         * Returns the .xml identifier of the style.
-         */
-        public String getId() {
-            return id;
-        }
-    }
-
     private final int start;
     private final int end;
 
@@ -51,11 +34,11 @@ public final class StyleRange implements Comparable<StyleRange> {
     }
 
     public StyleRange(int start, int end, Color color) {
-        this(start, end, StyleRange.Style.NONE, color);
+        this(start, end, Style.NORMAL, color);
     }
 
     public StyleRange(int start, int end) {
-        this(start, end, Style.NONE, null);
+        this(start, end, Style.NORMAL, null);
     }
 
     @Override
@@ -147,10 +130,10 @@ public final class StyleRange implements Comparable<StyleRange> {
         Style blendStyle;
         if ((sr.style == Style.BOLD && style == Style.ITALIC) || (style == Style.BOLD && sr.style == Style.ITALIC)) {
             blendStyle = Style.BOLD_ITALIC;
-        } else if (sr.style == Style.NONE) {
+        } else if (sr.style == Style.NORMAL) {
             blendStyle = style;
         } else if (sr.style == style) {
-            blendStyle = Style.NONE;
+            blendStyle = Style.NORMAL;
         } else if (style == Style.BOLD && sr.style == Style.BOLD_ITALIC) {
             blendStyle = Style.ITALIC;
         } else if (style == Style.ITALIC && sr.style == Style.BOLD_ITALIC) {

@@ -31,6 +31,9 @@ public class CustomString {
             case ITALIC:
                 font = DialogUI.text_font.deriveFont(Font.ITALIC);
                 break;
+            case BOLD_ITALIC:
+                font = DialogUI.text_font.deriveFont(Font.BOLD | Font.ITALIC);
+                break;
         }
         this.append = append;
     }

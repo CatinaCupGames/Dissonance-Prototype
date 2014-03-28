@@ -5,6 +5,7 @@ import com.dissonance.dialogcreator.style.StyleRange;
 import com.dissonance.dialogcreator.system.AdvanceDialogFactory;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
+import com.dissonance.framework.game.scene.dialog.Style;
 import org.w3c.dom.*;
 
 import javax.swing.*;
@@ -274,7 +275,7 @@ public final class DialogTextBox extends JPanel {
                     return;
                 }
 
-                styles.add(new StyleRange(selectionStart, --selectionEnd, StyleRange.Style.BOLD));
+                styles.add(new StyleRange(selectionStart, --selectionEnd, Style.BOLD));
 
                 new StyledEditorKit.BoldAction().actionPerformed(new ActionEvent(text, e.getID(), ""));
             }
@@ -290,7 +291,7 @@ public final class DialogTextBox extends JPanel {
                     return;
                 }
 
-                styles.add(new StyleRange(selectionStart, --selectionEnd, StyleRange.Style.ITALIC));
+                styles.add(new StyleRange(selectionStart, --selectionEnd, Style.ITALIC));
 
                 new StyledEditorKit.ItalicAction().actionPerformed(new ActionEvent(text, e.getID(), ""));
             }
@@ -512,7 +513,7 @@ public final class DialogTextBox extends JPanel {
                     StyleRange range = panel.getStyles().get(j);
                     String text = paneText.substring(range.getStart(), range.getEnd() + 1);
 
-                    if (range.getStyle() != StyleRange.Style.NONE) {
+                    if (range.getStyle() != Style.NORMAL) {
                         message.setAttribute("style", range.getStyle().getId());
                     }
 

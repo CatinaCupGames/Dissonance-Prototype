@@ -51,12 +51,7 @@ public class DialogFactory {
                             long speed = 15L;
                             if (nodelist.item(ii).getAttributes().getNamedItem("style") != null) {
                                 String stype = nodelist.item(ii).getAttributes().getNamedItem("style").getNodeValue();
-                                for (Style l : Style.values()) {
-                                    if (l.name().toLowerCase().equals(stype)) {
-                                        style = l;
-                                        break;
-                                    }
-                                }
+                                style = Style.forId(stype);
                             }
                             if (nodelist.item(ii).getAttributes().getNamedItem("color") != null) {
                                 String scolor = nodelist.item(ii).getAttributes().getNamedItem("color").getNodeValue();
