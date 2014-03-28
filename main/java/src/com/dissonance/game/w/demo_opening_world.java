@@ -1,6 +1,7 @@
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
+import com.dissonance.game.sprites.environment.LargeBuilding1;
 
 public class demo_opening_world extends GameWorldLoader {
 

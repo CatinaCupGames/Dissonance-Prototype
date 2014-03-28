@@ -1,10 +1,10 @@
 package com.dissonance.game.w;
 
-import com.dissonance.framework.game.scene.hud.HUD;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.game.sprites.Farrand;
+import com.dissonance.game.sprites.hud.BaseHUD;
 
 /**
  * This "World Loader" is an abstract World Loader that adds the Player and any HUD to the world.
@@ -12,11 +12,17 @@ import com.dissonance.game.sprites.Farrand;
  * World Loader.
  */
 public abstract class GameWorldLoader implements WorldLoader {
-    public static HUD hud;
+    public static BaseHUD hud;
+    //public static HUD hud;
     //public static Wyatt wyatt;
     public static Farrand farrand;
     @Override
     public void onLoad(World w) {
+        if (hud == null) {
+            hud = new BaseHUD();
+            hud.display(w);
+        }
+
         if (farrand == null) {
             farrand = new Farrand();
             w.loadAndAdd(farrand);

@@ -20,7 +20,7 @@ public class TextureLoader {
     public static final ColorModel glAlphaColorModel;
     public static final ColorModel glColorModel;
     private static final IntBuffer textureIDBuffer = BufferUtils.createIntBuffer(1);
-    private static boolean fastRedraw = true;
+    private static boolean fastRedraw = false;
 
     static {
 
@@ -243,6 +243,11 @@ public class TextureLoader {
             texHeight = h;
             texWidth = w;
         }
+
+        if (texWidth <= 1)
+            texWidth = 2;
+        if (texHeight <= 1)
+            texHeight = 2;
 
         texture.setTextureHeight(texHeight);
         texture.setTextureWidth(texWidth);

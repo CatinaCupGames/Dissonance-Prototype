@@ -5,18 +5,23 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.GameSettings;
 
 import javax.swing.plaf.nimbus.AbstractRegionPainter;
 import java.util.ArrayList;
+
+import static org.lwjgl.opengl.GL11.glColor4f;
 
 public abstract class AbstractUI implements UI {
     private float x, y;
     protected float width, height;
     protected boolean opened;
     protected World world;
+    protected float alpha = 1f;
     private AbstractUI parent;
-    private ArrayList<AbstractUI> children = new ArrayList<>();
+    private float[] alignment = new float[] { 0, 0, 0, 0 }; //Alignment for textures
+    private ArrayList<UI> children = new ArrayList<>();
 
     public AbstractUI() {
         this(null);
@@ -24,6 +29,29 @@ public abstract class AbstractUI implements UI {
 
     public AbstractUI(AbstractUI parent) {
         setParent(parent);
+    }
+
+    public float getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(float alpha) {
+        this.alpha = alpha;
+    }
+
+    @Override
+    public void render() {
+        float alpha = RenderService.getCurrentAlphaValue();
+        if (this.alpha < 1) {
+            alpha = this.alpha - (1 - RenderService.getCurrentAlphaValue());
+            if (alpha < 0)
+                alpha = 0;
+        }
+        glColor4f(1f, 1f, 1f, alpha);
+    }
+
+    protected void resetAlpha() {
+        glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
     }
 
     @Override
@@ -40,8 +68,8 @@ public abstract class AbstractUI implements UI {
     public void setX(float x) {
         float dif = this.x - x;
         this.x = x;
-        for (AbstractUI child : children) {
-            child.setX(child.x - dif);
+        for (UI child : children) {
+            child.setX(child.getX() - dif);
         }
     }
 
@@ -49,8 +77,8 @@ public abstract class AbstractUI implements UI {
     public void setY(float y) {
         float dif = this.y - y;
         this.y = y;
-        for (AbstractUI child : children) {
-            child.setY(child.y - dif);
+        for (UI child : children) {
+            child.setY(child.getY() - dif);
         }
     }
 
@@ -105,19 +133,32 @@ public abstract class AbstractUI implements UI {
             this.parent.children.add(this);
     }
 
+    public void setAlignment(float leftAdd, float topAdd, float bottomAdd, float rightAdd) {
+        this.alignment[0] = leftAdd;
+        this.alignment[1] = topAdd;
+        this.alignment[2] = bottomAdd;
+        this.alignment[3] = rightAdd;
+    }
+
+    public void alignToTexture(Texture texture) {
+        float bH = texture.getTextureHeight() - texture.getImageHeight();
+        float rW = texture.getTextureWidth() - texture.getImageWidth();
+        setAlignment(0f, 0f, bH, rW);
+    }
+
     public AbstractUI getParent() {
         return parent;
     }
 
-    public ArrayList<AbstractUI> getChildren() {
+    public ArrayList<UI> getChildren() {
         return children;
     }
 
     private float getLeftOfParent() {
         if (parent == null)
-            return 0;
+            return 0 + alignment[0];
         else
-            return parent.getX() - (parent.getWidth() / 2f);
+            return (parent.getX() - (parent.getWidth() / 2f)) + alignment[0];
     }
 
     private float getParentWidth() {
@@ -136,23 +177,23 @@ public abstract class AbstractUI implements UI {
 
     private float getRightOfParent() {
         if (parent == null)
-            return GameSettings.Display.window_width / 2f;
+            return (GameSettings.Display.window_width / 2f) + alignment[3];
         else
-            return parent.getX() + (parent.getWidth() / 2f);
+            return (parent.getX() + (parent.getWidth() / 2f)) + alignment[3];
     }
 
     private float getTopOfParent() {
         if (parent == null)
-            return 0;
+            return 0 + alignment[1];
         else
-            return parent.getY() - (parent.getHeight() / 2f);
+            return (parent.getY() - (parent.getHeight() / 2f)) + alignment[1];
     }
 
     private float getBottomOfParent() {
         if (parent == null)
-            return GameSettings.Display.window_height / 2f;
+            return (GameSettings.Display.window_height / 2f) + alignment[2];
         else
-            return parent.getY() + (parent.getHeight() / 2f);
+            return (parent.getY() + (parent.getHeight() / 2f)) + alignment[2];
     }
 
 
@@ -161,6 +202,14 @@ public abstract class AbstractUI implements UI {
         if (opened)
             return;
         world = WorldFactory.getCurrentWorld();
+        world.loadAndAdd(this);
+        opened = true;
+    }
+
+    public void display(World world) {
+        if (opened)
+            return;
+        this.world = world;
         world.loadAndAdd(this);
         opened = true;
     }

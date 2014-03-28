@@ -36,4 +36,6 @@ public final class TestNPC extends NPCSprite {
     @Override
     public void onSpeakingFinished() {
     }
+
+    TrueTypeFont font;
 }

@@ -50,12 +50,6 @@ public class TestQuest extends AbstractQuest {
         setWorld(w);
         w.waitForWorldLoaded();
 
-        TestingUI ui = new TestingUI();
-        ui.display();
-
-        TestingUI2 ui2 = new TestingUI2(ui);
-        ui2.display();
-
         final PlayableSprite player = PlayableSprite.getCurrentlyPlayingSprite();
         player.setMarksmanship(2);
 
