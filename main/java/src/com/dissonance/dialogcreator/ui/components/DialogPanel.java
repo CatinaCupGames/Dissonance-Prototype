@@ -1,5 +1,7 @@
 package com.dissonance.dialogcreator.ui.components;
 
+import com.dissonance.dialogcreator.style.StyleList;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -10,6 +12,8 @@ public final class DialogPanel extends JPanel {
     private JTextPane dialogHeader;
     private JTextPane dialogPane;
     private JScrollPane scrollPane;
+
+    private final StyleList styles = new StyleList();
 
     public DialogPanel() {
         setSize(468, 80);
@@ -23,7 +27,7 @@ public final class DialogPanel extends JPanel {
         this.scrollPane = scrollPane;
     }
 
-    public void initializeComponents() {
+    private void initializeComponents() {
         //region dialogHeader
         dialogHeader = new JTextPane();
         dialogHeader.setSize(464, 20);
@@ -48,7 +52,7 @@ public final class DialogPanel extends JPanel {
         //endregion
     }
 
-    public void initializeEvents() {
+    private void initializeEvents() {
         dialogHeader.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -78,5 +82,9 @@ public final class DialogPanel extends JPanel {
 
     public JScrollPane getScrollPane() {
         return scrollPane;
+    }
+
+    public StyleList getStyles() {
+        return styles;
     }
 }

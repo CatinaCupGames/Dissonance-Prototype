@@ -14,13 +14,14 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 
 public class DialogFactory {
-    private static final HashMap<String, Dialog>  text = new HashMap<String, Dialog>();
+    public static final HashMap<String, Dialog> text = new HashMap<String, Dialog>();
 
     public static boolean loadDialog(InputStream in) {
-        if (in == null)
+        if (in == null) {
             return false;
+        }
 
-        DocumentBuilder db = null;
+        DocumentBuilder db;
         try {
             db = SpriteTexture.DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
             Document dom = db.parse(in);
@@ -153,9 +154,11 @@ public class DialogFactory {
         return loadDialog(in);
     }
 
+    public static void unloadAll() {
+        text.clear();
+    }
+
     public static Dialog getDialog(String ID) {
-        if (!text.containsKey(ID))
-            return null;
         return text.get(ID);
     }
 }
