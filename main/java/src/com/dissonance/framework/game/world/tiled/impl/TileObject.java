@@ -30,7 +30,7 @@ public class TileObject extends Sprite {
         this.data_index = data_index;
 
         x = data_index % parentLayer.getWidth();
-        y = data_index / parentLayer.getHeight();
+        y = data_index / parentLayer.getWidth();
 
         x *= parentTileSet.getTileWidth();
         y *= parentTileSet.getTileHeight();
