@@ -1,9 +1,16 @@
 package com.dissonance.dialogcreator.ui;
 
+import com.dissonance.dialogcreator.style.StyleRange;
 import com.dissonance.dialogcreator.ui.components.DialogList;
+import com.dissonance.dialogcreator.ui.components.DialogPanel;
 import com.dissonance.dialogcreator.ui.components.DialogTextBox;
+import com.dissonance.framework.game.scene.dialog.CustomString;
+import com.dissonance.framework.game.scene.dialog.Dialog;
+import com.dissonance.framework.game.scene.dialog.DialogFactory;
 
 import javax.swing.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +31,7 @@ public final class DialogCreator extends JFrame {
     private JMenuItem clearDialogItem;
     private JMenuItem setExportFileItem;
     private JMenuItem setDialogIdItem;
+    private JMenuItem importDialogItem;
 
     private final MouseAdapter pinListener = new MouseAdapter() {
         @Override
@@ -85,6 +93,7 @@ public final class DialogCreator extends JFrame {
         clearDialogItem = menu.add(new JMenuItem("Clear dialog"));
         setExportFileItem = menu.add(new JMenuItem("Set export file"));
         setDialogIdItem = menu.add(new JMenuItem("Set dialog id"));
+        importDialogItem = menu.add(new JMenuItem("Import dialog"));
         menuBar.add(menu);
 
         pinMenu = new JMenu("Unpin");
@@ -135,8 +144,10 @@ public final class DialogCreator extends JFrame {
                 }
 
                 DialogCreator creator = DialogCreator.this;
-                creator.scrollPane.setSize(creator.scrollPane.getWidth(), creator.scrollPane.getHeight() + 20);
-                creator.scrollPane.setLocation(creator.scrollPane.getX(), creator.scrollPane.getY() - 20);
+                if (creator.scrollPane.getHeight() == 529) {
+                    creator.scrollPane.setSize(creator.scrollPane.getWidth(), creator.scrollPane.getHeight() + 20);
+                    creator.scrollPane.setLocation(creator.scrollPane.getX(), creator.scrollPane.getY() - 20);
+                }
                 creator.menuBar.setVisible(false);
             }
         });
@@ -146,10 +157,25 @@ public final class DialogCreator extends JFrame {
         clearDialogItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int result = JOptionPane.showConfirmDialog(null,
+                        "Are you sure you want to remove all the dialog boxes?",
+                        "Confirm", JOptionPane.YES_NO_OPTION);
+
+                if (result != JOptionPane.YES_OPTION) {
+                    return;
+                }
+
                 dialogList.clear();
                 dialogTextBox.getTitle().setText("");
                 dialogTextBox.getText().setText("");
                 repaint();
+
+                result = JOptionPane.showConfirmDialog(null, "Do you want to clear the dialog id too?",
+                        "Prompt", JOptionPane.YES_NO_OPTION);
+
+                if (result == JOptionPane.YES_OPTION) {
+                    dialogTextBox.setDialogId("");
+                }
             }
         });
         //endregion
@@ -160,6 +186,7 @@ public final class DialogCreator extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setMultiSelectionEnabled(false);
+                chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 chooser.showOpenDialog(null);
 
                 String dialogPath = chooser.getSelectedFile().getPath();
@@ -193,6 +220,83 @@ public final class DialogCreator extends JFrame {
             }
         });
         //endregion
+
+        //region importDialogItem
+        importDialogItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    importDialog();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        //endregion
+    }
+
+    private void importDialog() throws Exception {
+        String dialogId = JOptionPane.showInputDialog(null, "Enter an id for your dialog");
+
+        if (dialogId == null || dialogId.isEmpty()) {
+            return;
+        }
+
+        Dialog dialog = DialogFactory.getDialog(dialogId);
+
+        if (dialog == null) {
+            JOptionPane.showMessageDialog(null, "Can't find a dialog with the specified id",
+                    "Sad panda", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        dialogTextBox.setDialogId(dialogId);
+
+        CustomString[] strings = dialog.getAllLines();
+        String[] headers = dialog.getHeaders();
+        int index = 0;
+        boolean starting = true;
+        DialogPanel dialogPanel = null;
+
+        for (CustomString string : strings) {
+            if (!string.isAppend() || starting) {
+                dialogPanel = dialogList.addComponent();
+                dialogPanel.setMuted(true);
+                dialogPanel.getDialogHeader().setText(headers[index++]);
+                dialogTextBox.setStyles(dialogPanel.getStyles());
+
+                SimpleAttributeSet titleSet = new SimpleAttributeSet();
+                titleSet.addAttribute(StyleConstants.FontSize, dialogTextBox.getText().getFont().getSize());
+                dialogPanel.getDialogHeader().getStyledDocument().setCharacterAttributes(0, headers[index - 1].length(), titleSet, true);
+            }
+
+            SimpleAttributeSet set = new SimpleAttributeSet();
+            switch (string.getStyle()) {
+                case BOLD:
+                    set.addAttribute(StyleConstants.Bold, true);
+                    break;
+                case ITALIC:
+                    set.addAttribute(StyleConstants.Italic, true);
+                    break;
+                case BOLD_ITALIC:
+                    set.addAttribute(StyleConstants.Bold, true);
+                    set.addAttribute(StyleConstants.Italic, true);
+                    break;
+            }
+
+            if (string.getColor() != null && !string.getColor().equals(Color.WHITE)) {
+                set.addAttribute(StyleConstants.Foreground, string.getColor());
+            }
+
+            set.addAttribute(StyleConstants.FontSize, dialogTextBox.getText().getFont().getSize());
+
+            starting = false;
+            int start = dialogPanel.getDialogText().getText().length();
+            int end = start + string.getString().length() - 1;
+            dialogPanel.getDialogText().getStyledDocument().insertString(start, string.getString(), set);
+
+            dialogPanel.getStyles().add(new StyleRange(start, end, string.getStyle(), string.getColor()));
+        }
     }
 
     public JScrollPane getScrollPane() {

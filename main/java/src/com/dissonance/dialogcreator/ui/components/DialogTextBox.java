@@ -3,6 +3,7 @@ package com.dissonance.dialogcreator.ui.components;
 import com.dissonance.dialogcreator.style.StyleList;
 import com.dissonance.dialogcreator.style.StyleRange;
 import com.dissonance.dialogcreator.system.AdvanceDialogFactory;
+import com.dissonance.dialogcreator.ui.DialogCreator;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.game.scene.dialog.Style;
@@ -23,10 +24,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -265,6 +263,7 @@ public final class DialogTextBox extends JPanel {
         controlSave.addMouseListener(hoverAdapter);
         controlPreview.addMouseListener(hoverAdapter);
 
+        //region controlBold
         controlBold.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -280,7 +279,9 @@ public final class DialogTextBox extends JPanel {
                 new StyledEditorKit.BoldAction().actionPerformed(new ActionEvent(text, e.getID(), ""));
             }
         });
+        //endregion
 
+        //region controlItalic
         controlItalic.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -296,7 +297,9 @@ public final class DialogTextBox extends JPanel {
                 new StyledEditorKit.ItalicAction().actionPerformed(new ActionEvent(text, e.getID(), ""));
             }
         });
+        //endregion
 
+        //region controlColor
         controlColor.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -309,13 +312,15 @@ public final class DialogTextBox extends JPanel {
                 colorChooser.setVisible(true);
             }
         });
+        //endregion
 
+        //region controlRemove
         controlRemove.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (list != null && panel != null) {
                     int result = JOptionPane.showConfirmDialog(null,
-                            "Are you sure you want to clear the contents of the current dialog box?",
+                            "Are you sure you want to remove the current dialog box?",
                             "Confirm", JOptionPane.YES_NO_OPTION);
 
                     if (result != JOptionPane.YES_OPTION) {
@@ -326,7 +331,9 @@ public final class DialogTextBox extends JPanel {
                 }
             }
         });
+        //endregion
 
+        //region controlClear
         controlClear.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -340,7 +347,7 @@ public final class DialogTextBox extends JPanel {
                     }
 
                     panel.getDialogHeader().setText("");
-                    panel.getDialogPane().setText("");
+                    panel.getDialogText().setText("");
 
                     SimpleAttributeSet set = new SimpleAttributeSet();
                     set.addAttribute(StyleConstants.Foreground, Color.BLACK);
@@ -348,11 +355,13 @@ public final class DialogTextBox extends JPanel {
                     set.addAttribute(StyleConstants.Italic, false);
                     text.setCharacterAttributes(set, true);
 
-                    panel.getDialogPane().setCharacterAttributes(set, true);
+                    panel.getDialogText().setCharacterAttributes(set, true);
                 }
             }
         });
+        //endregion
 
+        //region controlNew
         controlNew.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -360,7 +369,7 @@ public final class DialogTextBox extends JPanel {
 
                 DialogPanel panel = list.addComponent();
                 title.setStyledDocument(panel.getDialogHeader().getStyledDocument());
-                text.setStyledDocument(panel.getDialogPane().getStyledDocument());
+                text.setStyledDocument(panel.getDialogText().getStyledDocument());
 
                 SimpleAttributeSet set = new SimpleAttributeSet();
                 set.addAttribute(StyleConstants.Foreground, Color.BLACK);
@@ -373,6 +382,16 @@ public final class DialogTextBox extends JPanel {
             }
         });
 
+        controlNew.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK), "New");
+        controlNew.getActionMap().put("New", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controlNew.getMouseListeners()[2].mouseClicked(null);
+            }
+        });
+        //endregion
+
+        //region controlSave
         controlSave.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -384,6 +403,16 @@ public final class DialogTextBox extends JPanel {
             }
         });
 
+        controlSave.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), "Save");
+        controlSave.getActionMap().put("Save", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controlSave.getMouseListeners()[2].mouseClicked(null);
+            }
+        });
+        //endregion
+
+        //region controlPreview
         controlPreview.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -401,6 +430,15 @@ public final class DialogTextBox extends JPanel {
                 }
             }
         });
+
+        controlPreview.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK), "Preview");
+        controlPreview.getActionMap().put("Preview", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controlPreview.getMouseListeners()[2].mouseClicked(null);
+            }
+        });
+        //endregion
     }
 
     private void promptDialogId() {
@@ -408,9 +446,9 @@ public final class DialogTextBox extends JPanel {
             int choice = JOptionPane.showConfirmDialog(null, "You haven't specified an id for your dialog.\n" +
                     "Do you want to do it now?", "Pony", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
-                dialogId = JOptionPane.showInputDialog(null, "Enter an id for your dialog");
+                setDialogId(JOptionPane.showInputDialog(null, "Enter an id for your dialog"));
             } else {
-                dialogId = "dialog_" + new Random().nextInt(1_000_000);
+                setDialogId("dialog_" + new Random().nextInt(1_000_000));
             }
         }
     }
@@ -492,44 +530,43 @@ public final class DialogTextBox extends JPanel {
         dialog.setAttribute("dialog_id", dialogId);
         Text tab = document.createTextNode("\t");
 
-        Component[] components = list.getComponents();
-        for (int i = 0; i < components.length; i++) {
-            Component component = components[i];
-            if (component instanceof JScrollPane) {
-                DialogPanel panel = (DialogPanel) ((JScrollPane) component).getViewport().getView();
-                String paneText = panel.getDialogPane().getText();
-                Element header = document.createElement("header");
-                header.appendChild(document.createTextNode(panel.getDialogHeader().getText()));
+        java.util.List<JScrollPane> components = list.getPanels();
+        for (int i = 0; i < components.size(); i++) {
+            Component component = components.get(i);
 
-                dialog.appendChild(header);
+            DialogPanel panel = (DialogPanel) ((JScrollPane) component).getViewport().getView();
+            String paneText = panel.getDialogText().getText();
+            Element header = document.createElement("header");
+            header.appendChild(document.createTextNode(panel.getDialogHeader().getText()));
 
-                for (int j = 0; j < panel.getStyles().size(); j++) {
-                    Element message = document.createElement("message");
+            dialog.appendChild(header);
 
-                    if (j != 0) {
-                        message.setAttribute("type", "append");
-                    }
+            for (int j = 0; j < panel.getStyles().size(); j++) {
+                Element message = document.createElement("message");
 
-                    StyleRange range = panel.getStyles().get(j);
-                    String text = paneText.substring(range.getStart(), range.getEnd() + 1);
-
-                    if (range.getStyle() != Style.NORMAL) {
-                        message.setAttribute("style", range.getStyle().getId());
-                    }
-
-                    if (range.getColor() != null && !range.getColor().equals(Color.WHITE)) {
-                        message.setAttribute("color", range.getHexColor());
-                    }
-
-                    message.appendChild(document.createTextNode(text));
-                    dialog.appendChild(document.createTextNode("\n\t\t"));
-                    dialog.appendChild(message);
-
+                if (j != 0) {
+                    message.setAttribute("type", "append");
                 }
 
-                if (i != components.length - 1) {
-                    dialog.appendChild(document.createTextNode("\n\n\t\t"));
+                StyleRange range = panel.getStyles().get(j);
+                String text = paneText.substring(range.getStart(), range.getEnd() + 1);
+
+                if (range.getStyle() != Style.NORMAL) {
+                    message.setAttribute("style", range.getStyle().getId());
                 }
+
+                if (range.getColor() != null && !range.getColor().equals(Color.WHITE)) {
+                    message.setAttribute("color", range.getHexColor());
+                }
+
+                message.appendChild(document.createTextNode(text));
+                dialog.appendChild(document.createTextNode("\n\t\t"));
+                dialog.appendChild(message);
+
+            }
+
+            if (i != components.size() - 1) {
+                dialog.appendChild(document.createTextNode("\n\n\t\t"));
             }
         }
 
@@ -568,6 +605,18 @@ public final class DialogTextBox extends JPanel {
 
     public void setDialogId(String dialogId) {
         this.dialogId = dialogId;
+
+        DialogCreator creator = (DialogCreator) getTopLevelAncestor();
+
+        creator.setTitle(dialogId != null && !dialogId.isEmpty() ? "Dialog creator - " + dialogId : "Dialog creator");
+    }
+
+    public String getDialogId() {
+        return dialogId;
+    }
+
+    public void setStyles(StyleList styles) {
+        this.styles = styles;
     }
 
     public void setDialogPath(String dialogPath) {

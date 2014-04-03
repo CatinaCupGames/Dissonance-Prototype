@@ -94,6 +94,10 @@ public class Dialog {
         return lines;
     }
 
+    public String[] getHeaders() {
+        return header;
+    }
+
     void reset() {
         index = 0;
     }
