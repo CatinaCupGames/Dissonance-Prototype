@@ -26,8 +26,8 @@ public final class Camera {
     }
 
     public static void setX(float x) {
-        if (((GameService.getCurrentWorld() == null && x >= 0) || (GameService.getCurrentWorld() != null && x >= GameService.getCurrentWorld().getTiledData().getTileWidth())) &&
-                (GameService.getCurrentWorld() == null || x <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelWidth()) - (GameSettings.Display.resolution.getWidth() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileWidth()))
+       // if (((GameService.getCurrentWorld() == null && x >= 0) || (GameService.getCurrentWorld() != null && x >= GameService.getCurrentWorld().getTiledData().getTileWidth())) &&
+       //         (GameService.getCurrentWorld() == null || x <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelWidth()) - (GameSettings.Display.resolution.getWidth() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileWidth()))
             posX = x;
     }
 
@@ -36,18 +36,18 @@ public final class Camera {
     }
 
     public static void setY(float y) {
-        if (((GameService.getCurrentWorld() == null && y >= 0) || (GameService.getCurrentWorld() != null && y >= -GameService.getCurrentWorld().getTiledData().getTileHeight())) &&
-                (GameService.getCurrentWorld() == null || y <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelHeight()) - (GameSettings.Display.resolution.getHeight() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileHeight()))
+       // if (((GameService.getCurrentWorld() == null && y >= 0) || (GameService.getCurrentWorld() != null && y >= -GameService.getCurrentWorld().getTiledData().getTileHeight())) &&
+        //        (GameService.getCurrentWorld() == null || y <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelHeight()) - (GameSettings.Display.resolution.getHeight() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileHeight()))
             posY = y;
     }
 
     public static void setPos(Vector2f pos) {
-        if (((GameService.getCurrentWorld() == null && pos.x >= 0) || (GameService.getCurrentWorld() != null && pos.x >= GameService.getCurrentWorld().getTiledData().getTileWidth())) &&
-                (GameService.getCurrentWorld() == null || pos.x <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelWidth()) - (GameSettings.Display.resolution.getWidth() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileWidth()))
+       // if (((GameService.getCurrentWorld() == null && pos.x >= 0) || (GameService.getCurrentWorld() != null && pos.x >= GameService.getCurrentWorld().getTiledData().getTileWidth())) &&
+        //        (GameService.getCurrentWorld() == null || pos.x <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelWidth()) - (GameSettings.Display.resolution.getWidth() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileWidth()))
             posX = pos.x;
 
-        if (((GameService.getCurrentWorld() == null && pos.y >= 0) || (GameService.getCurrentWorld() != null && pos.y >= -GameService.getCurrentWorld().getTiledData().getTileHeight())) &&
-                (GameService.getCurrentWorld() == null || pos.y <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelHeight()) - (GameSettings.Display.resolution.getHeight() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileHeight()))
+       // if (((GameService.getCurrentWorld() == null && pos.y >= 0) || (GameService.getCurrentWorld() != null && pos.y >= -GameService.getCurrentWorld().getTiledData().getTileHeight())) &&
+       //         (GameService.getCurrentWorld() == null || pos.y <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelHeight()) - (GameSettings.Display.resolution.getHeight() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileHeight()))
             posY = pos.y;
     }
 
