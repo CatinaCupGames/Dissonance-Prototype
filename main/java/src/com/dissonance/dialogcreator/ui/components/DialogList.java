@@ -15,7 +15,9 @@ import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.awt.event.*;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public final class DialogList extends JPanel {
 
@@ -26,6 +28,8 @@ public final class DialogList extends JPanel {
     private DialogTextBox box;
     private DialogPanel clickedComponent;
     private final HashMap<String, Color> headers = new HashMap<>();
+
+    private List<JScrollPane> panels = new ArrayList<>();
 
     private int y = 5;
 
@@ -42,8 +46,10 @@ public final class DialogList extends JPanel {
                         return;
                     }
 
-                    scrollPane.setSize(scrollPane.getWidth(), scrollPane.getHeight() - 20);
-                    scrollPane.setLocation(scrollPane.getX(), scrollPane.getY() + 20);
+                    if (scrollPane.getHeight() == 549) {
+                        scrollPane.setSize(scrollPane.getWidth(), scrollPane.getHeight() - 20);
+                        scrollPane.setLocation(scrollPane.getX(), scrollPane.getY() + 20);
+                    }
                     creator.menuBar.setVisible(true);
                 }
             }
@@ -85,15 +91,15 @@ public final class DialogList extends JPanel {
             super.mouseClicked(e);
 
             if (SwingUtilities.isLeftMouseButton(e)) {
-                clickedComponent.getDialogPane().setBackground(colorNormal);
+                clickedComponent.getDialogText().setBackground(colorNormal);
                 clickedComponent = (DialogPanel) e.getSource();
 
-                box.text.setStyledDocument(clickedComponent.getDialogPane().getStyledDocument());
+                box.text.setStyledDocument(clickedComponent.getDialogText().getStyledDocument());
 
                 box.title.setStyledDocument(clickedComponent.getDialogHeader().getStyledDocument());
                 box.styles = clickedComponent.getStyles();
 
-                clickedComponent.getDialogPane().setBackground(colorHighlight);
+                clickedComponent.getDialogText().setBackground(colorHighlight);
             } else if (SwingUtilities.isRightMouseButton(e)) {
                 final DialogPanel source = (DialogPanel) e.getSource();
                 final JColorChooser colorChooser = new JColorChooser();
@@ -127,25 +133,78 @@ public final class DialogList extends JPanel {
         }
     };
 
+    public List<JScrollPane> getPanels() {
+        return panels;
+    }
+
     public DialogPanel addComponent() {
         final DialogPanel panel = new DialogPanel();
         if (clickedComponent != null) {
-            clickedComponent.getDialogPane().setBackground(colorNormal);
+            clickedComponent.getDialogText().setBackground(colorNormal);
         }
         clickedComponent = panel;
-        panel.getDialogPane().setBackground(colorHighlight);
+        panel.getDialogText().setBackground(colorHighlight);
         panel.setLocation(5, y);
         y += 85;
         setSize(getWidth(), y > 400 ? y : 400);
         setPreferredSize(getSize());
 
         panel.addMouseListener(clickAdapter);
-        JScrollPane pane = new JScrollPane(panel);
+        final JScrollPane pane = new JScrollPane(panel);
         pane.setSize(panel.getSize());
         pane.setLocation(panel.getLocation());
-        panel.getDialogPane().getStyledDocument().addDocumentListener(new DocumentListener() {
+
+        KeyAdapter adapter = new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    int index = panels.indexOf(pane);
+
+                    if (index == 0) {
+                        return;
+                    }
+
+                    JScrollPane current = panels.get(index);
+                    JScrollPane previous = panels.get(index - 1);
+                    panels.set(index - 1, current);
+                    panels.set(index, previous);
+
+                    int y = current.getY();
+                    current.setLocation(current.getX(), previous.getY());
+                    previous.setLocation(previous.getX(), y);
+
+                    repaint();
+                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    int index = panels.indexOf(pane);
+
+                    if (index == panels.size() - 1) {
+                        return;
+                    }
+
+                    JScrollPane current = panels.get(index);
+                    JScrollPane next = panels.get(index + 1);
+                    panels.set(index + 1, current);
+                    panels.set(index, next);
+
+                    int y = current.getY();
+                    current.setLocation(current.getX(), next.getY());
+                    next.setLocation(next.getX(), y);
+
+                    repaint();
+                }
+            }
+        };
+        panel.addKeyListener(adapter);
+        pane.addKeyListener(adapter);
+        panel.getDialogHeader().addKeyListener(adapter);
+        panel.getDialogText().addKeyListener(adapter);
+        panel.getDialogText().getStyledDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
+                if (panel.isMuted()) {
+                    return;
+                }
+
                 int start = e.getOffset();
                 int end = e.getOffset() + e.getLength() - 1;
                 box.styles.insert(new StyleRange(start, end));
@@ -153,14 +212,18 @@ public final class DialogList extends JPanel {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
+                if (panel.isMuted()) {
+                    return;
+                }
+
                 box.styles.remove(e.getOffset(), e.getLength() + e.getOffset() - 1);
 
-                if (panel.getDialogPane().getText().length() == 0) {
+                if (panel.getDialogText().getText().length() == 0) {
                     SimpleAttributeSet set = new SimpleAttributeSet();
                     set.addAttribute(StyleConstants.Foreground, Color.BLACK);
                     set.addAttribute(StyleConstants.Bold, false);
                     set.addAttribute(StyleConstants.Italic, false);
-                    panel.getDialogPane().setCharacterAttributes(set, true);
+                    panel.getDialogText().setCharacterAttributes(set, true);
                     DialogList.this.box.text.setCharacterAttributes(set, true);
                 }
             }
@@ -173,6 +236,7 @@ public final class DialogList extends JPanel {
         add(pane);
 
         panel.linkScrollPane(pane);
+        panels.add(pane);
 
         return panel;
     }
@@ -192,6 +256,7 @@ public final class DialogList extends JPanel {
     public void clear() {
         removeAll();
         headers.clear();
+        panels.clear();
         clickedComponent = null;
         y = 5;
     }

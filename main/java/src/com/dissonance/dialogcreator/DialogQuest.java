@@ -16,9 +16,11 @@ public final class DialogQuest extends AbstractQuest {
     public void startQuest() throws Exception {
         World world = WorldFactory.getWorld("demo_opening_world");
         setWorld(world);
+        world.waitForWorldLoaded();
 
         DialogCreator creator = new DialogCreator();
         creator.setVisible(true);
         creator.requestFocus();
+        creator.toFront();
     }
 }

@@ -10,10 +10,12 @@ import java.awt.event.MouseEvent;
 public final class DialogPanel extends JPanel {
 
     private JTextPane dialogHeader;
-    private JTextPane dialogPane;
+    private JTextPane dialogText;
     private JScrollPane scrollPane;
 
     private final StyleList styles = new StyleList();
+
+    private volatile boolean muted = false;
 
     public DialogPanel() {
         setSize(468, 80);
@@ -37,16 +39,16 @@ public final class DialogPanel extends JPanel {
         add(dialogHeader);
         //endregion
 
-        //region dialogPane
-        dialogPane = new JTextPane();
-        dialogPane.setSize(464, 56);
-        dialogPane.setLocation(0, 21);
-        dialogPane.setEditable(false);
-        dialogPane.setMargin(new Insets(7, 10, 7, 10));
-        dialogHeader.setFont(dialogPane.getFont());
-        JScrollPane pane = new JScrollPane(dialogPane);
-        pane.setLocation(dialogPane.getLocation());
-        pane.setSize(dialogPane.getSize());
+        //region dialogText
+        dialogText = new JTextPane();
+        dialogText.setSize(464, 56);
+        dialogText.setLocation(0, 21);
+        dialogText.setEditable(false);
+        dialogText.setMargin(new Insets(7, 10, 7, 10));
+        dialogHeader.setFont(dialogText.getFont());
+        JScrollPane pane = new JScrollPane(dialogText);
+        pane.setLocation(dialogText.getLocation());
+        pane.setSize(dialogText.getSize());
         pane.setBorder(BorderFactory.createEmptyBorder());
         add(pane);
         //endregion
@@ -62,7 +64,7 @@ public final class DialogPanel extends JPanel {
             }
         });
 
-        dialogPane.addMouseListener(new MouseAdapter() {
+        dialogText.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
@@ -72,8 +74,8 @@ public final class DialogPanel extends JPanel {
         });
     }
 
-    public JTextPane getDialogPane() {
-        return dialogPane;
+    public JTextPane getDialogText() {
+        return dialogText;
     }
 
     public JTextPane getDialogHeader() {
@@ -86,5 +88,13 @@ public final class DialogPanel extends JPanel {
 
     public StyleList getStyles() {
         return styles;
+    }
+
+    public boolean isMuted() {
+        return muted;
+    }
+
+    public void setMuted(boolean muted) {
+        this.muted = muted;
     }
 }

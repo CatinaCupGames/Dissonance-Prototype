@@ -191,6 +191,10 @@ public final class StyleList {
 
             if (current.getEnd() + 1 == following.getStart() || current.getEnd() == following.getStart()) {
                 if (current.getColor() == null && following.getColor() == null) {
+                    if (current.getStyle() != following.getStyle()) {
+                        continue;
+                    }
+
                     styleRanges.add(current.derive(current.getStart(), following.getEnd()));
                     styleRanges.remove(current);
                     styleRanges.remove(following);
@@ -217,5 +221,10 @@ public final class StyleList {
         if (performed) {
             optimize();
         }
+    }
+
+    @Override
+    public String toString() {
+        return styleRanges.toString();
     }
 }
