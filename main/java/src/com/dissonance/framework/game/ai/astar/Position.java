@@ -23,12 +23,12 @@ public final class Position {
         this.x = x;
     }
 
-    public Position expand() {
-        return new Position(FastMath.fastFloor(x * 32), FastMath.fastFloor(y * 32));
+    public Position expand(float xfactor, float yfactor) {
+        return new Position(FastMath.fastFloor(x * xfactor), FastMath.fastFloor(y * yfactor));
     }
 
-    public Position shrink() {
-        return new Position(FastMath.fastFloor(x / 32), FastMath.fastFloor(y / 32));
+    public Position shrink(float xfactor, float yfactor) {
+        return new Position(FastMath.fastFloor(x / xfactor), FastMath.fastFloor(y / yfactor));
     }
 
     public float getY() {

@@ -31,7 +31,7 @@ public class Layer {
         if (!isTiledLayer())
             throw new InvalidParameterException("This layer is not a Tile Layer!");
 
-        int index = (int) (x + (y * height));
+        int index = (int) (x + (y * width));
 
         if (cache.containsKey(index))
             return cache.get(index);

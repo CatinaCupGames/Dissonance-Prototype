@@ -69,18 +69,19 @@ public final class NodeMap implements Serializable {
         new File(fileName).delete();
 
         Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
-        for (int x = 0; x < nodes.length; x++) {
-            for (int y = 0; y < nodes[x].length; y++) {
+        for (int x = 0; x < world.getTiledData().getWidth(); x++) {
+            for (int y = 0; y < world.getTiledData().getHeight(); y++) {
                 for (Layer layer : layers) {
-                    Tile tile = world.getTileAt(x, y, layer);
-                    if (tile != null) {
-                        nodes[x][y].setPassable(tile.isPassable());
-                        nodes[x][y].setExtraCost(tile.getExtraCost());
+                    Tile t = world.getTileAt(x, y, layer);
+                    if (t != null) {
+                        nodes[x][y].setPassable(t.isPassable());
+                        nodes[x][y].setExtraCost(t.getExtraCost());
                     } else {
                         if (nodes[x][y] == null) {
                             nodes[x][y] = new Node(new Position(x, y));
                             nodes[x][y].setPassable(false);
                         }
+                        nodes[x][y].setPassable(false); //No tile should default to unpassable..always
                     }
                 }
             }
@@ -234,6 +235,7 @@ public final class NodeMap implements Serializable {
     private List<Node> getAdjacent(Node node) {
         int x = FastMath.fastFloor(node.getPosition().x);
         int y = FastMath.fastFloor(node.getPosition().y);
+        System.out.println(node.getPosition().x + " : " + x + "         " + node.getPosition().y + " : " + y);
         List<Node> adj = new LinkedList<>();
 
         Node temp;

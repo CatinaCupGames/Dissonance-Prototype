@@ -45,7 +45,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
 
             if (!WaypointMover.moveSpriteOneFrame(this)) {
                 if (waypointList != null && waypointList.size() > 0) {
-                    currentWaypoint = waypointList.get(0).expand();
+                    currentWaypoint = waypointList.get(0).expand(getWorld().getTiledData().getTileWidth(), getWorld().getTiledData().getTileHeight());
                     waypointList.remove(0);
 
                     if (behavior != null) {
@@ -82,12 +82,12 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         }
         if (type == WaypointType.SMART) {
             NodeMap map = getWorld().getNodeMap();
-            waypointList = map.findPath(new Position(getX(), getY()).shrink(), position.shrink());
+            waypointList = map.findPath(new Position(getX(), getY()).shrink(getWorld().getTiledData().getTileWidth(), getWorld().getTiledData().getTileHeight()), position.shrink(getWorld().getTiledData().getTileWidth(), getWorld().getTiledData().getTileHeight()));
             if (waypointList.size() > 1) {
-                currentWaypoint = waypointList.get(1).expand();
+                currentWaypoint = waypointList.get(1).expand(getWorld().getTiledData().getTileWidth(), getWorld().getTiledData().getTileHeight());
                 waypointList.remove(0);
             } else if (waypointList.size() > 0) {
-                currentWaypoint = waypointList.get(0).expand();
+                currentWaypoint = waypointList.get(0).expand(getWorld().getTiledData().getTileWidth(), getWorld().getTiledData().getTileHeight());
             }
         } else {
             currentWaypoint = position;
@@ -104,7 +104,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         }
         if (type == WaypointType.SMART) {
             NodeMap map = getWorld().getNodeMap();
-            List<Position> points = map.findPath(new Position(getX(), getY()).shrink(), position.shrink());
+            List<Position> points = map.findPath(new Position(getX(), getY()).shrink(getWorld().getTiledData().getTileWidth(), getWorld().getTiledData().getTileHeight()), position.shrink(getWorld().getTiledData().getTileWidth(), getWorld().getTiledData().getTileHeight()));
             if (points.size() > 0) {
                 waypointList.addAll(points);
             }
