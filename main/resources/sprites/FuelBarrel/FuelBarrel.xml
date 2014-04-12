@@ -1,0 +1,1 @@
+<animations        width="32"        height="64">    <animation            name="be_a_barrel"            loop="false"            frames="1"            row="0"            default_speed="10ms"/></animations>		
