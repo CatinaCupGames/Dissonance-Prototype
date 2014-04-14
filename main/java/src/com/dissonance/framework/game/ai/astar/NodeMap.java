@@ -185,7 +185,6 @@ public final class NodeMap implements Serializable {
             }
 
             if (openList.isEmpty()) {
-                System.out.println("empty");
                 for (int x = 0; x < width; x++) {
                     for (int y = 0; y < height; y++) {
                         nodes[x][y].reset();
@@ -235,7 +234,6 @@ public final class NodeMap implements Serializable {
     private List<Node> getAdjacent(Node node) {
         int x = FastMath.fastFloor(node.getPosition().x);
         int y = FastMath.fastFloor(node.getPosition().y);
-        System.out.println(node.getPosition().x + " : " + x + "         " + node.getPosition().y + " : " + y);
         List<Node> adj = new LinkedList<>();
 
         Node temp;
