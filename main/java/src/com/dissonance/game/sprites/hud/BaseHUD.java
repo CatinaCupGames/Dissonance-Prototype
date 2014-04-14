@@ -34,6 +34,7 @@ public class BaseHUD extends AbstractUI {
     }
     @Override
     protected void onOpen() {
+        scale(false);
         try {
             if (texture == null)
                 texture = Texture.retriveTexture("sprites/menu/player_hud/base.png");
@@ -43,7 +44,7 @@ public class BaseHUD extends AbstractUI {
 
             alignToTexture(texture);
 
-            marginBottom(8f);
+            marginBottom(-8f);
             marginLeft(8f);
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,6 +65,11 @@ public class BaseHUD extends AbstractUI {
         mpText.display(world);
         healthText.display(world);
         levelText.display(world);
+        levelText.scale(false);
+        healthText.scale(false);
+        mpText.scale(false);
+        mpBar.scale(false);
+        healthBar.scale(false);
     }
 
     @Override
@@ -77,7 +83,7 @@ public class BaseHUD extends AbstractUI {
     private float start;
     @Override
     public void update() {
-        float minX = 0f, maxX = 480f, minY = 0, maxY = 270f;
+        float minX = 0f, maxX = 480f / 2f, minY = 0, maxY = 270f / 2f;
         float mx = Mouse.getX(), my = Mouse.getY();
 
         if (mx > minX && mx < maxX && my > minY && my < maxY) {
@@ -136,8 +142,7 @@ public class BaseHUD extends AbstractUI {
     }
 
     @Override
-    public void render() {
-        super.render();
+    public void onRender() {
         if (texture == null)
             return;
         float x = getX(), y = getY(), bx = getWidth() / 2f, by = getHeight() / 2f, z = 0;
@@ -154,7 +159,6 @@ public class BaseHUD extends AbstractUI {
         glVertex3f(x - bx, y + by, z);
         glEnd();
         texture.unbind();
-        super.resetAlpha();
     }
 
     public float getMaxMP() {

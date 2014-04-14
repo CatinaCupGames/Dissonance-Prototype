@@ -51,16 +51,14 @@ public class LevelText extends AbstractUI {
     }
 
     @Override
-    public void render() {
-        super.render();
+    public void onRender() {
         float x = level < 10 ? getX() + (font.getWidth("" + level) / 2f) : getX();
         if (level == 1)
             x += font.getWidth("1") / 1.5f;
         if (level >= 10 && level < 20)
             x += font.getWidth("" + level) / (level == 11 ? 4f : 8f);
-
-        font.drawString(x, getY(), "" + level, new Color(1f, 1f, 1f, getAlpha()));
-        super.resetAlpha();
+        RenderText.drawString(font, "" + level, x, getY(), new Color(1f, 1f, 1f, getAlpha()));
+        //font.drawString(x, getY(), "" + level, new Color(1f, 1f, 1f, getAlpha()));
     }
 
     public int getLevel() {

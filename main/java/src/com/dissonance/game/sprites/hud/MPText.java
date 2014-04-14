@@ -5,6 +5,7 @@ import com.dissonance.framework.render.text.RenderText;
 import com.dissonance.framework.system.GameSettings;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
+import sun.font.TextRecord;
 
 import java.awt.*;
 import java.awt.Font;
@@ -35,9 +36,8 @@ public class MPText extends AbstractUI {
     public void update() { }
 
     @Override
-    public void render() {
-        super.render();
-        font.drawString(getX(), getY(), "MP:" + (int)baseHUD.getMP() + "/" + (int)baseHUD.getMaxMP(), new Color(1f, 1f, 1f, getAlpha()));
-        super.resetAlpha();
+    public void onRender() {
+        RenderText.drawString(font, "MP:" + (int)baseHUD.getMP() + "/" + (int)baseHUD.getMaxMP(), getX(), getY(), new Color(1f, 1f, 1f, getAlpha()));
+        //font.drawString(getX(), getY(), "MP:" + (int)baseHUD.getMP() + "/" + (int)baseHUD.getMaxMP(), new Color(1f, 1f, 1f, getAlpha()));
     }
 }
