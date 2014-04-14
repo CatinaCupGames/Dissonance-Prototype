@@ -235,6 +235,21 @@ public class RenderService extends Service {
         }
     }
 
+    private static boolean scaled = true;
+    public static void removeScale() {
+        if (scaled) {
+            glScalef(0.5f, 0.5f, 1f);
+            scaled = false;
+        }
+    }
+
+    public static void resetScale() {
+        if (!scaled) {
+            glScalef(2f, 2f, 1f);
+            scaled = true;
+        }
+    }
+
     @Override
     public void provideData(Object obj, int type) {
         Validator.validateNotNull(obj, "object");
