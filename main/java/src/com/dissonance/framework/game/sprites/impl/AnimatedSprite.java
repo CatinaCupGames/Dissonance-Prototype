@@ -247,12 +247,13 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         if (paused)
             return;
         if (texture != null) {
+            int lastFrame = getCurrentFrame();
             texture.step();
             if (animationFrame != null) {
                 animationFrame.onAnimationFrame(this);
             }
             if (animationFinished != null) {
-                if (getCurrentFrame() == 0 || getCurrentFrame() == getFrameCount() - 1)
+                if (getCurrentFrame() == 0 || getCurrentFrame() == lastFrame) //If it looped back or if it didn't advance
                     animationFinished.onAnimationFinished(this);
             }
         }
