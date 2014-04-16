@@ -360,7 +360,7 @@ public abstract class PlayableSprite extends CombatSprite {
         if (deselectedEvent != null) {
             deselectedEvent.onDeselectedEvent(this);
         }
-
+        Camera.followSprite(null);
         onDeselect();
         if (currentlyPlaying != null)
             throw new RuntimeException("super.onDeselect was not executed! Try putting super.onDeselect at the top of your method!");
