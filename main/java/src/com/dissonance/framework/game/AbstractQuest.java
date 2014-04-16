@@ -56,7 +56,8 @@ public abstract class AbstractQuest {
     }
 
     public void setWorld(World world) {
-        WorldFactory.swapView(world, true);
+        RenderService.INSTANCE.provideData(false, RenderService.ENABLE_CROSS_FADE);
+        WorldFactory.swapView(world, false);
         System.out.println("New world swapped to " + world.getID());
         this.world = world;
     }
