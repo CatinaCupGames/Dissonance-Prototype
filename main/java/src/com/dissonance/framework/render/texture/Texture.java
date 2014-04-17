@@ -72,7 +72,7 @@ public class Texture {
         this.height = texture.height;
     }
 
-    protected Texture(int targetId, int textureId) {
+    public Texture(int targetId, int textureId) {
         this.targetId = targetId;
         this.textureId = textureId;
     }

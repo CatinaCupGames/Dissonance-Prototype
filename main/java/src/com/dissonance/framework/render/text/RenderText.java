@@ -1,22 +1,14 @@
 package com.dissonance.framework.render.text;
 
-import com.dissonance.framework.game.ai.astar.FastMath;
-import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.GameSettings;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
-import org.newdawn.slick.*;
-import org.newdawn.slick.opengl.TextureImpl;
+import org.newdawn.slick.TrueTypeFont;
 
 import java.awt.*;
-import java.awt.Font;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Hashtable;
-
-import static org.lwjgl.opengl.GL11.glTranslatef;
 
 /**
  * Utils to easily render text with specified fonts
@@ -161,14 +153,12 @@ public final class RenderText {
     }
 
     public static void drawString(TrueTypeFont font, String text, float x, float y) {
-        TextureImpl.bindNone(); //Tell Slick-Util there is no texture bound, so it will rebind the font texture again
         RenderService.removeScale(); //Do not scale the font up
         font.drawString((int)x, (int)y, text);
         RenderService.resetScale(); //Reset the scale for other sprites
     }
 
     public static void drawString(TrueTypeFont font, String text, float x, float y, org.newdawn.slick.Color color) {
-        TextureImpl.bindNone(); //Tell Slick-Util there is no texture bound, so it will rebind the font texture again
         RenderService.removeScale(); //Do not scale the font up
         font.drawString((int)x, (int)y, text, color);
         RenderService.resetScale(); //Reset the scale for other sprites

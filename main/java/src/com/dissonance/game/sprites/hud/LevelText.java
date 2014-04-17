@@ -5,15 +5,7 @@ import com.dissonance.framework.render.text.RenderText;
 import com.dissonance.framework.system.GameSettings;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureImpl;
-
-import java.awt.*;
 import java.awt.Font;
-import java.lang.reflect.Field;
-
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBindTexture;
 
 public class LevelText extends AbstractUI {
     public LevelText(BaseHUD hud) {

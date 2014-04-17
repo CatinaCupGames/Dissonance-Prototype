@@ -1,7 +1,5 @@
 package com.dissonance.framework.render.text;
 
-import org.newdawn.slick.util.ResourceLoader;
-
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,11 +25,11 @@ public final class FontStyle {
         return new Font(fontName, fontWeight, fontSize);
     }
 
-    public Font getFileFont() throws IOException, FontFormatException {
+    /*public Font getFileFont() throws IOException, FontFormatException {
         InputStream inputStream = ResourceLoader.getResourceAsStream(fontName);
         Font awtFont2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
         return awtFont2.deriveFont(fontWeight, 24f);
-    }
+    }*/
 
 
 
