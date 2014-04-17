@@ -4,13 +4,19 @@ import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.system.utils.Validator;
 import org.lwjgl.util.vector.Vector2f;
+
+import java.awt.*;
+import java.security.InvalidParameterException;
 
 public final class Camera {
     private static final float OFFSCREEN_THRESHOLD = 32;
 
     private static float posX;
     private static float posY;
+    private static float[] bounds = new float[4];
+    private static boolean ignoreBounds = true;
     private static boolean isEasing;
     private static boolean isMoving;
     private static boolean isLinear;
@@ -21,14 +27,47 @@ public final class Camera {
     private static CameraMovementListener listener;
     private static Sprite follower;
 
+    static {
+        removeBounds();
+    }
+
+    public static void setBounds(int minx, int miny, int maxx, int maxy) {
+        setBounds((float)minx, (float)miny, (float)maxx, (float)maxy);
+    }
+
+    public static void setBounds(float minx, float miny, float maxx, float maxy) {
+        if (minx > maxx)
+            throw new InvalidParameterException("The parameter \"minx\" is should not be greater than the parameter \"maxx\"");
+        if (miny > maxy)
+            throw new InvalidParameterException("The parameter \"miny\" is should not be greater than the parameter \"maxy\"");
+
+        bounds[0] = minx;
+        bounds[1] = miny;
+        bounds[2] = maxx;
+        bounds[3] = maxy;
+        ignoreBounds = false;
+    }
+
+    public static void setBounds(Rectangle bounds) {
+        setBounds(bounds.x, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height);
+    }
+
+    public static void removeBounds() {
+        ignoreBounds = true;
+    }
+
     public static float getX() {
         return posX;
     }
 
     public static void setX(float x) {
-       // if (((GameService.getCurrentWorld() == null && x >= 0) || (GameService.getCurrentWorld() != null && x >= GameService.getCurrentWorld().getTiledData().getTileWidth())) &&
-       //         (GameService.getCurrentWorld() == null || x <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelWidth()) - (GameSettings.Display.resolution.getWidth() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileWidth()))
+        if (x >= bounds[0] && x <= bounds[2]) {
             posX = x;
+        } else if (x < bounds[0]) {
+            posX = bounds[0];
+        } else if (x > bounds[2]) {
+            posX = bounds[2];
+        }
     }
 
     public static float getY() {
@@ -36,19 +75,31 @@ public final class Camera {
     }
 
     public static void setY(float y) {
-       // if (((GameService.getCurrentWorld() == null && y >= 0) || (GameService.getCurrentWorld() != null && y >= -GameService.getCurrentWorld().getTiledData().getTileHeight())) &&
-        //        (GameService.getCurrentWorld() == null || y <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelHeight()) - (GameSettings.Display.resolution.getHeight() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileHeight()))
+        if ((y >= bounds[1] && y <= bounds[3]) || ignoreBounds) {
             posY = y;
+        } else if (y < bounds[1]) {
+            posY = bounds[1];
+        } else if (y > bounds[3]) {
+            posY = bounds[3];
+        }
     }
 
     public static void setPos(Vector2f pos) {
-       // if (((GameService.getCurrentWorld() == null && pos.x >= 0) || (GameService.getCurrentWorld() != null && pos.x >= GameService.getCurrentWorld().getTiledData().getTileWidth())) &&
-        //        (GameService.getCurrentWorld() == null || pos.x <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelWidth()) - (GameSettings.Display.resolution.getWidth() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileWidth()))
-            posX = pos.x;
+       if ((pos.x >= bounds[0] && pos.x <= bounds[2]) || ignoreBounds) {
+           posX = pos.x;
+       } else if (pos.x < bounds[0]) {
+           posX = bounds[0];
+       } else if (pos.x > bounds[2]) {
+           posX = bounds[2];
+       }
 
-       // if (((GameService.getCurrentWorld() == null && pos.y >= 0) || (GameService.getCurrentWorld() != null && pos.y >= -GameService.getCurrentWorld().getTiledData().getTileHeight())) &&
-       //         (GameService.getCurrentWorld() == null || pos.y <= ( ((float)(GameService.getCurrentWorld().getTiledData().getPixelHeight()) - (GameSettings.Display.resolution.getHeight() / RenderService.ZOOM_SCALE))) - GameService.getCurrentWorld().getTiledData().getTileHeight()))
+        if ((pos.y >= bounds[1] && pos.y <= bounds[3]) || ignoreBounds) {
             posY = pos.y;
+        } else if (pos.y < bounds[1]) {
+            posY = bounds[1];
+        } else if (pos.y > bounds[3]) {
+            posY = bounds[3];
+        }
     }
 
     public static boolean isOffScreen(float x, float y, float width, float height) {

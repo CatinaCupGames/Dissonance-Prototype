@@ -9,6 +9,7 @@ import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.game.world.tiled.WorldData;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
@@ -16,6 +17,7 @@ import com.dissonance.framework.render.shader.impl.Light;
 import com.dissonance.framework.render.shader.impl.LightShader;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Timer;
@@ -364,6 +366,34 @@ public final class World {
         lightShader.setOverallBrightness(worldBrightness);
         if (loader != null)
             loader.onDisplay(this);
+        if (tiledData != null) {
+
+            float minX = 0f, minY = 0f;
+            float tWidth = (tiledData.getWidth() * tiledData.getTileWidth());
+            float tHeight = (tiledData.getHeight() * tiledData.getTileHeight());
+            float removeX = 0f, removeY = 0f;
+            if (tWidth > (GameSettings.Display.game_width / 2f) + 16f)
+                removeX = (GameSettings.Display.game_width / 2f) + 16f;
+            else {
+                minX = -(GameSettings.Display.game_width / 4f) + 64f;
+                tWidth = -(GameSettings.Display.game_width / 4f) + 64f;
+            }
+            if (tHeight > (GameSettings.Display.game_height / 2f) + 16f)
+                removeY = (GameSettings.Display.game_height / 2f) + 16f;
+            else {
+                minY = -(GameSettings.Display.game_height / 4f) + 64f;
+                tHeight = -(GameSettings.Display.game_height / 4f) + 64f;
+            }
+
+            Camera.setBounds(
+                    minX,
+                    minY,
+                    tWidth - removeX,
+                    tHeight - removeY
+            );
+        } else {
+            Camera.removeBounds();
+        }
     }
 
     public void onUnload() { //This method is called when the world is not shown but is still in memory

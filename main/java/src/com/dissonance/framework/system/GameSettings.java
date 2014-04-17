@@ -40,8 +40,8 @@ public class GameSettings {
          * <b>Must restart game for value changes to take effect</b>
          */
         public static Resolution resolution;
-        private static int game_width;
-        private static int game_height;
+        public static int game_width;
+        public static int game_height;
 
         /**
          * Whether the game is being played in fullscreen mode or not. <br></br>
