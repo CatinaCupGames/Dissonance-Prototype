@@ -88,12 +88,16 @@ public class MainQuest extends AbstractQuest {
                 builder.append("import com.dissonance.framework.game.ai.behaviors.BehaviorOffsetFollow;\n");
             }
             builder.append("\npublic class ").append(mapName).append(" extends GameWorldLoader {\n");
+            for (int i = 0; i < sprites.size(); i++) {
+                Drawable sprite = sprites.get(i);
+                builder.append("    public static ").append(sprite.getClass().getSimpleName()).append(" var").append(i + 1).append(";\n");
+            }
             builder.append("    @Override\n    public void onLoad(World w) {\n        super.onLoad(w);\n");
 
             for (int i = 0; i < sprites.size(); i++) {
                 Drawable sprite = sprites.get(i);
                 builder.append("\n");
-                builder.append("        ").append(sprite.getClass().getSimpleName()).append(" var").append(i + 1).append(" = new ").append(sprite.getClass().getSimpleName()).append("();\n");
+                builder.append("        ").append("var").append(i + 1).append(" = new ").append(sprite.getClass().getSimpleName()).append("();\n");
                 builder.append("        w.loadAndAdd(var").append(i + 1).append(");\n");
                 builder.append("        var").append(i + 1).append(".setX(").append(sprite.getX()).append("f);\n");
                 builder.append("        var").append(i + 1).append(".setY(").append(sprite.getY()).append("f);\n");
