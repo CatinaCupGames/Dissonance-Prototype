@@ -38,6 +38,7 @@ public class MainQuest extends AbstractQuest {
     public static int SPEED = 5;
     private final CharSequenceCompiler<WorldLoader> stringCompiler = new CharSequenceCompiler<WorldLoader>(loader, Arrays.asList("-target", "1.7"));
     private ArrayList<Drawable> sprites = new ArrayList<Drawable>();
+    private ArrayList<String> sprites_name = new ArrayList<String>();
     private java.util.List<Formation> formations = new ArrayList<>();
     private Drawable selectedSprite;
     public String mapName;
@@ -89,18 +90,24 @@ public class MainQuest extends AbstractQuest {
             }
             builder.append("\npublic class ").append(mapName).append(" extends GameWorldLoader {\n");
             for (int i = 0; i < sprites.size(); i++) {
+                String addName = sprites_name.get(i);
                 Drawable sprite = sprites.get(i);
-                builder.append("    public static ").append(sprite.getClass().getSimpleName()).append(" var").append(i + 1).append(";\n");
+                builder.append("    public static ").append(sprite.getClass().getSimpleName());
+                if (addName != null && !addName.equals(""))
+                    builder.append(" ").append(addName).append(";\n");
+                else
+                    builder.append(" var").append(i + 1).append(";\n");
             }
             builder.append("    @Override\n    public void onLoad(World w) {\n        super.onLoad(w);\n");
 
             for (int i = 0; i < sprites.size(); i++) {
                 Drawable sprite = sprites.get(i);
+                String addName = sprites_name.get(i);
                 builder.append("\n");
-                builder.append("        ").append("var").append(i + 1).append(" = new ").append(sprite.getClass().getSimpleName()).append("();\n");
-                builder.append("        w.loadAndAdd(var").append(i + 1).append(");\n");
-                builder.append("        var").append(i + 1).append(".setX(").append(sprite.getX()).append("f);\n");
-                builder.append("        var").append(i + 1).append(".setY(").append(sprite.getY()).append("f);\n");
+                builder.append("        ").append((addName != null && !addName.trim().equals("") ? addName : "var" + (i + 1))).append(" = new ").append(sprite.getClass().getSimpleName()).append("();\n");
+                builder.append("        w.loadAndAdd(").append((addName != null && !addName.trim().equals("") ? addName : "var" + (i + 1))).append(");\n");
+                builder.append("        ").append((addName != null && !addName.trim().equals("") ? addName : "var" + (i + 1))).append(".setX(").append(sprite.getX()).append("f);\n");
+                builder.append("        ").append((addName != null && !addName.trim().equals("") ? addName : "var" + (i + 1))).append(".setY(").append(sprite.getY()).append("f);\n");
             }
 
             if (formations.size() > 0) {
@@ -137,12 +144,26 @@ public class MainQuest extends AbstractQuest {
             if (selectedSprite == null) return code;
             String varName = getVarNameFor(sprites.indexOf(selectedSprite));
             if (varName.equalsIgnoreCase("???") && adding) { //Assume we need to add it.
+                int index = code.indexOf("public class");
+                char[] array = code.toCharArray();
+                while (array[index] != '{') {
+                    index++;
+                }
+                if (array[index + 1] == '\n')
+                    index++;
+
+                String addName = sprites_name.get(sprites_name.size() - 1);
+                String beginning = code.substring(0, index + 1);
+                code = code.substring(index);
+                code = "    public static " + selectedSprite.getClass().getSimpleName() + " " + (addName != null && !addName.trim().equals("") ? addName : "var" + sprites.size()) + ";" + code;
+                code = beginning + code;
+
                 code = code.substring(0, code.lastIndexOf("}")); //Get rid of } closing onLoad
                 code = code.substring(0, code.lastIndexOf("}")); //Get rid of } closing class
-                code += "\n        " + selectedSprite.getClass().getSimpleName() + " var" + sprites.size() + " = new " + selectedSprite.getClass().getSimpleName() + "();\n" +
-                        "        w.loadAndAdd(var" + sprites.size() + ");\n" +
-                        "        var" + sprites.size() + ".setX(" + selectedSprite.getX() + "f);\n" +
-                        "        var" + sprites.size() + ".setY(" + selectedSprite.getY() + "f);\n" +
+                code += "\n        " + (addName != null && !addName.trim().equals("") ? addName : "var" + sprites.size()) + " = new " + selectedSprite.getClass().getSimpleName() + "();\n" +
+                        "        w.loadAndAdd(" + (addName != null && !addName.trim().equals("") ? addName : "var" + sprites.size()) + ");\n" +
+                        "        " + (addName != null && !addName.trim().equals("") ? addName : "var" + sprites.size()) + ".setX(" + selectedSprite.getX() + "f);\n" +
+                        "        " + (addName != null && !addName.trim().equals("") ? addName : "var" + sprites.size()) + ".setY(" + selectedSprite.getY() + "f);\n" +
                         "    }\n" +
                         "}";
                 return code;
@@ -328,6 +349,8 @@ public class MainQuest extends AbstractQuest {
                 JOptionPane.showMessageDialog(EditorUI.FRAME, "Exception occurred: " + e.getMessage(), "Error adding Sprite", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            String name = JOptionPane.showInputDialog(EditorUI.FRAME, "What would you like to name this variable?\n(Leave blank for to generate a name)", "Add Sprite", JOptionPane.PLAIN_MESSAGE);
+            sprites_name.add(name);
             sprites.add(sprite);
             if (!EditorUI.INSTANCE.highlighter.classes.contains(sprite.getClass().getSimpleName())) {
                 EditorUI.INSTANCE.highlighter.addClass(sprite.getClass().getSimpleName());
