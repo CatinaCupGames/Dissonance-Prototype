@@ -27,17 +27,19 @@ public abstract class Service {
 
                     // Flush all "Run on thread" actions //
                     ArrayList<ServiceRunnable> temp = new ArrayList<ServiceRunnable>();
-                    while (!listToRun.isEmpty()) {
-                        ServiceRunnable r = listToRun.poll();
-                        if (r.everyTick)
-                            temp.add(r);
-                        try {
-                            r.runnable.run();
-                        } catch (Throwable t) {
-                            t.printStackTrace();
+                    synchronized (listToRun) {
+                        while (!listToRun.isEmpty()) {
+                            ServiceRunnable r = listToRun.poll();
+                            if (r.everyTick)
+                                temp.add(r);
+                            try {
+                                r.runnable.run();
+                            } catch (Throwable t) {
+                                t.printStackTrace();
+                            }
                         }
+                        listToRun.addAll(temp);
                     }
-                    listToRun.addAll(temp);
 
                     update();
                     try {
