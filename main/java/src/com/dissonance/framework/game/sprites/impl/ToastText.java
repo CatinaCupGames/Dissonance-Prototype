@@ -14,51 +14,85 @@ public class ToastText extends UpdatableSprite {
     private Sprite parent;
     private String text;
 
-    private float targetY;
     private long start;
-    private float startY;
     private float duration;
+    private final float target;
 
     public ToastText(Sprite parent, String text, float duration) {
         super();
         this.parent = parent;
         this.text = text;
-
-        startY = parent.getY();
-        targetY = startY - 50f; //TODO Find a good value for this
         this.duration = duration;
+
+        target = (parent.getHeight() / 2f) + 9f;
     }
 
+    public Sprite getToastParent() {
+        return parent;
+    }
+
+    public String getToastString() {
+        return text;
+    }
+
+    public float getToastDuration() {
+        return duration;
+    }
+
+    private float fSize = 12f;
     @Override
     public void init() {
-        font = RenderText.getFont(GameSettings.Display.GAME_FONT.deriveFont(24f), Font.BOLD);
+        font = RenderText.getFont(GameSettings.Display.GAME_FONT.deriveFont(fSize), Font.BOLD);
     }
 
     @Override
     public void onLoad() {
         super.onLoad();
         start = RenderService.getTime();
+        setLayer(2);
+    }
+
+    @Override
+    public float getWidth() {
+        return font.getWidth(text);
+    }
+
+    @Override
+    public float getHeight() {
+        return font.getHeight(text);
+    }
+
+    public float getToastFontSize() {
+        return fSize;
+    }
+
+    public void setToastFontSize(float size) {
+        this.fSize = size;
+        init(); //Recreate font object
     }
 
     boolean fadeOut = false;
-    float alpha = 1f;
+    float alpha = 0f;
     @Override
     public void update() {
         super.update();
         if (isUpdateCanceled())
             return;
 
-        setX(parent.getX());
-
         if (!fadeOut) {
-            float target = Camera.ease(startY, targetY, duration, (RenderService.getTime() - start));
-            setY(target);
-            if (target == targetY) {
+            setX(parent.getX() - (getWidth() / 2f) + 3f);
+
+            float targetAlpha = Camera.ease(0f, 1f, (duration - 200), (RenderService.getTime() - (start + 100L)));
+            float target = Camera.ease(0f, this.target, duration, (RenderService.getTime() - (start + 100L)));
+            setY(parent.getY() - target);
+            alpha = targetAlpha;
+            if (target == this.target) {
                 fadeOut = true;
+                alpha = 1f;
                 start = RenderService.getTime(); //Reuse the start var
             }
         } else {
-            alpha = Camera.ease(1f, 0f, 150f, (RenderService.getTime() - start));
+            alpha = Camera.ease(1f, 0f, 350f, (RenderService.getTime() - start));
         }
     }
 

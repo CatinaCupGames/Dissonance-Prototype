@@ -9,6 +9,7 @@ import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.utils.Direction;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.awt.*;
 import java.security.InvalidParameterException;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -137,6 +138,28 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
 
     public SpriteAnimationInfo getCurrentAnimation() {
         return animation;
+    }
+
+    public ToastText toastText(String text) {
+        ToastText toast = new ToastText(this, text, 750);
+        getWorld().loadAndAdd(toast);
+
+        return toast;
+    }
+
+    public ToastText toastText(String text, float duration) {
+        ToastText toast = new ToastText(this, text, duration);
+        getWorld().loadAndAdd(toast);
+
+        return toast;
+    }
+
+    public ToastText toastText(String text, float duration, Color color) {
+        ToastText toast = new ToastText(this, text, duration);
+        toast.setTint(color);
+        getWorld().loadAndAdd(toast);
+
+        return toast;
     }
 
     @Override

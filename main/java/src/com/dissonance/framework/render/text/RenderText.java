@@ -153,15 +153,15 @@ public final class RenderText {
     }
 
     public static void drawString(TrueTypeFont font, String text, float x, float y) {
-        RenderService.removeScale(); //Do not scale the font up
+        //RenderService.removeScale(); //Do not scale the font up
         font.drawString((int)x, (int)y, text);
-        RenderService.resetScale(); //Reset the scale for other sprites
+        //RenderService.resetScale(); //Reset the scale for other sprites
     }
 
     public static void drawString(TrueTypeFont font, String text, float x, float y, org.newdawn.slick.Color color) {
-        RenderService.removeScale(); //Do not scale the font up
+        //RenderService.removeScale(); //Do not scale the font up
         font.drawString((int)x, (int)y, text, color);
-        RenderService.resetScale(); //Reset the scale for other sprites
+        //RenderService.resetScale(); //Reset the scale for other sprites
     }
 }
 
