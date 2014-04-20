@@ -55,6 +55,18 @@ public abstract class PlayableSprite extends CombatSprite {
         return sprite instanceof PlayableSprite && party.contains(sprite);
     }
 
+    public boolean isMoving() {
+        if (!InputKeys.usingController())
+            return InputKeys.isButtonPressed(InputKeys.MOVEUP) ||
+                    InputKeys.isButtonPressed(InputKeys.MOVEDOWN) ||
+                    InputKeys.isButtonPressed(InputKeys.MOVELEFT) ||
+                    InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
+        else {
+            Vector2f values = new Vector2f(InputKeys.getJoypadValue(InputKeys.MOVEX), InputKeys.getJoypadValue(InputKeys.MOVEY));
+            return values.lengthSquared() >= 0.25f;
+        }
+    }
+
     @Override
     public void update() {
         super.update();
@@ -205,7 +217,10 @@ public abstract class PlayableSprite extends CombatSprite {
             if (InputKeys.isButtonPressed(InputKeys.ATTACK)) {
                 boolean skip = checkSelect();
                 if (!skip && getCurrentWeapon() != null) {
-                    getCurrentWeapon().use("swipe");
+                    if (isMoving())
+                        getCurrentWeapon().use("stab");
+                    else
+                        getCurrentWeapon().use("swipe");
                     ignore_movement = true;
                 }
                 use_attack = true;
