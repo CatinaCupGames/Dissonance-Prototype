@@ -2,6 +2,7 @@ package com.dissonance.framework.render;
 
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.sprites.ui.UI;
+import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
@@ -16,7 +17,11 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GLContext;
 
+import javax.xml.soap.Text;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Iterator;
+import java.util.Locale;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
@@ -156,11 +161,38 @@ public class RenderService extends Service {
         }
     }
 
+    ByteBuffer[] icons;
+    private void loadIcons() throws IOException {
+        final String OS = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
+
+        if (OS.contains("win")) {  //Expects one 32x32 and one 16x16
+            icons = new ByteBuffer[2];
+            icons[0] = TextureLoader.convertImageData(TextureLoader.loadImage("icon_32.png"), null, true);
+            icons[1] = TextureLoader.convertImageData(TextureLoader.loadImage("icon_16.png"), null, true);
+        }
+        else if (OS.contains("mac")) { //Expects one 128x128
+            icons = new ByteBuffer[1];
+            icons[0] = TextureLoader.convertImageData(TextureLoader.loadImage("icon_128.png"), null, true);
+        }
+        else {  //Expects one 32x32
+            icons = new ByteBuffer[1];
+            icons[0] = TextureLoader.convertImageData(TextureLoader.loadImage("icon_32.png"), null, true);
+        }
+    }
+
+
     @Override
     protected void onStart() {
         INSTANCE = this;
 
         RENDER_THREAD_ID = Thread.currentThread().getId();
+
+        try {
+            loadIcons();
+            Display.setIcon(icons);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             setDisplayMode(GameSettings.Display.window_width, GameSettings.Display.window_height, GameSettings.Display.fullscreen);

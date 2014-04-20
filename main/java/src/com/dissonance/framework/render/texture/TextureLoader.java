@@ -218,7 +218,7 @@ public class TextureLoader {
      * @param texture       The texture to store the data into
      * @return A buffer containing the data
      */
-    private static ByteBuffer convertImageData(BufferedImage bufferedImage, Texture texture, boolean forceredraw) {
+    public static ByteBuffer convertImageData(BufferedImage bufferedImage, Texture texture, boolean forceredraw) {
         ByteBuffer imageBuffer;
         WritableRaster raster;
         BufferedImage texImage;
@@ -249,8 +249,10 @@ public class TextureLoader {
         if (texHeight <= 1)
             texHeight = 2;
 
-        texture.setTextureHeight(texHeight);
-        texture.setTextureWidth(texWidth);
+        if (texture != null) {
+            texture.setTextureHeight(texHeight);
+            texture.setTextureWidth(texWidth);
+        }
 
         byte[] data;
         if (redraw || !(bufferedImage.getRaster().getDataBuffer() instanceof DataBufferByte)) {
@@ -313,7 +315,7 @@ public class TextureLoader {
      * @return The loaded buffered image
      * @throws IOException Indicates a failure to find a resource
      */
-    private static BufferedImage loadImage(String ref) throws IOException {
+    public static BufferedImage loadImage(String ref) throws IOException {
         URL url = TextureLoader.class.getClassLoader().getResource(ref);
 
         if (url == null) {
