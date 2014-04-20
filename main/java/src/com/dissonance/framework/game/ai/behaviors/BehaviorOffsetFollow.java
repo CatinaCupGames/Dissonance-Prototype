@@ -1,7 +1,7 @@
 package com.dissonance.framework.game.ai.behaviors;
 
 import com.dissonance.framework.game.ai.astar.Position;
-import com.dissonance.framework.game.ai.waypoint.WaypointMover;
+import com.dissonance.framework.game.ai.waypoint.SimpleWaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.system.utils.Direction;
@@ -34,7 +34,7 @@ public class BehaviorOffsetFollow implements Behavior {
     public void update() {
         long now = System.currentTimeMillis();
 
-        if (now - lastUpdate > WaypointMover.SPEED * 2.5) {
+        if (now - lastUpdate > sprite.getWaypointMover().getSpeed() * 2.5) {
             lastUpdate = now;
             Position destination;
             float x;

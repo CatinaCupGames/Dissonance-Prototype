@@ -4,6 +4,7 @@ import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.ai.behaviors.BehaviorOffsetFollow;
+import com.dissonance.framework.game.ai.waypoint.SimpleWaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public abstract class AbstractWaypointSprite extends AnimatedSprite implements WaypointSprite {
     private WaypointSpriteEvent.OnWaypointReachedEvent waypointReachedEvent;
-
+    protected WaypointMover waypointMover = WaypointMover.Simple;
     protected Position currentWaypoint;
     protected List<Position> waypointList;
 
@@ -31,6 +32,14 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         this.waypointReachedEvent = waypointReachedListener;
     }
 
+    public void setWaypointMover(WaypointMover mover) {
+        this.waypointMover = mover;
+    }
+
+    public WaypointMover getWaypointMover() {
+        return waypointMover;
+    }
+
     @Override
     public void update() {
         super.update();
@@ -43,7 +52,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
 
         if (currentWaypoint != null && waypointList != null) {
 
-            if (!WaypointMover.moveSpriteOneFrame(this)) {
+            if (!waypointMover.moveSpriteOneFrame(this)) {
                 if (waypointList != null && waypointList.size() > 0) {
                     currentWaypoint = waypointList.get(0).expand(getWorld().getTiledData().getTileWidth(), getWorld().getTiledData().getTileHeight());
                     waypointList.remove(0);
