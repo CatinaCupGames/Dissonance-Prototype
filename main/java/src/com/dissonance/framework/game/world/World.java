@@ -134,7 +134,7 @@ public final class World {
                         tiledData.assignAllLayers();
                         System.out.println("Creating tiles..");
                         long ms = System.currentTimeMillis();
-                        drawable.addAll(tiledData.createDrawables());
+                        drawable.addAll(tiledData.createDrawables(World.this));
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
                         tiledData.loadTriggers();
                         if (loader == null) {
@@ -568,6 +568,8 @@ public final class World {
      */
     public List<TiledObject> getPolygonsAt(float x, float y) {
         ArrayList<TiledObject> objects = new ArrayList<TiledObject>();
+        if (tiledData == null)
+            return objects;
         Layer[] objLayers = getLayers(LayerType.OBJECT_LAYER);
         for (Layer layer : objLayers) {
             for (TiledObject obj : layer.getObjectGroupData()) {
@@ -580,6 +582,8 @@ public final class World {
     }
 
     public TiledObject getSpawn(String name) {
+        if (tiledData == null)
+            return null;
         Layer[] objLayers = getLayers(LayerType.OBJECT_LAYER);
         for (Layer layer : objLayers) {
             for (TiledObject obj : layer.getObjectGroupData()) {
@@ -600,6 +604,8 @@ public final class World {
     }
 
     public Tile getTileAt(float x, float y, int layernumber) {
+        if (tiledData == null)
+            return null;
         Validator.validateNotBelow(layernumber, 0, "layer");
         Validator.validateNotOver(layernumber, tiledData.getLayers().length, "layer");
         Layer l = tiledData.getLayers()[layernumber];
@@ -608,6 +614,8 @@ public final class World {
     }
 
     public Layer[] getLayers(LayerType type) {
+        if (tiledData == null)
+            return new Layer[0];
         List<Layer> layers = new ArrayList<Layer>();
         for (Layer l : tiledData.getLayers()) {
             if (l.getLayerType() == type)
@@ -619,6 +627,42 @@ public final class World {
 
     public Layer[] getLayers() {
         return tiledData.getLayers();
+    }
+
+    public Layer getLowestGroundLayer() {
+        if (tiledData == null)
+            return null;
+
+        Layer lowestLayer = null;
+        Layer[] layers = getLayers(LayerType.TILE_LAYER);
+        for (Layer l : layers) {
+            if (!l.isGroundLayer())
+                continue;
+            if (lowestLayer == null) {
+                lowestLayer = l;
+            } else if (lowestLayer.getLayerNumber() > l.getLayerNumber())
+                lowestLayer = l;
+        }
+
+        return lowestLayer;
+    }
+
+    public Layer getHighestGroundLayer() {
+        if (tiledData == null)
+            return null;
+
+        Layer highestLayer = null;
+        Layer[] layers = getLayers(LayerType.TILE_LAYER);
+        for (Layer l : layers) {
+            if (!l.isGroundLayer())
+                continue;
+            if (highestLayer == null) {
+                highestLayer = l;
+            } else if (highestLayer.getLayerNumber() < l.getLayerNumber())
+                highestLayer = l;
+        }
+
+        return highestLayer;
     }
 
     public int getWidth() {

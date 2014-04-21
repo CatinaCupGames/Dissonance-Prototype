@@ -1,7 +1,10 @@
 package com.dissonance.framework.render;
 
 import com.dissonance.framework.game.GameService;
+import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.ui.UI;
+import com.dissonance.framework.game.world.tiled.TiledObject;
+import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.input.InputService;
@@ -368,7 +371,7 @@ public class RenderService extends Service {
                                 continue;
                         } else if (Camera.isOffScreen(d.getX(), d.getY(), d.getWidth() / 2, d.getHeight() / 2, 2)) //Assume everything is 32x32
                             continue;*/
-                    if (Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
+                    if ((!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
                         continue;
                     s.render();
                 } catch (Throwable t) {

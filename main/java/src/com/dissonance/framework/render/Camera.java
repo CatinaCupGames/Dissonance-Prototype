@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 
 public final class Camera {
     private static final float OFFSCREEN_THRESHOLD = 32;

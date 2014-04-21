@@ -44,6 +44,11 @@ public class Layer {
         return t;
     }
 
+
+    public boolean isGroundLayer() {
+        return (getProperty("ground") != null && getProperty("ground").equalsIgnoreCase("true"));
+    }
+
     public int getLayerNumber() {
         return layer_number;
     }
@@ -121,5 +126,9 @@ public class Layer {
         data = null;
         objects = null;
         properties = null;
+    }
+
+    public boolean isParallaxLayer() {
+        return (getProperty("parallax") != null && getProperty("parallax").equalsIgnoreCase("true"));
     }
 }

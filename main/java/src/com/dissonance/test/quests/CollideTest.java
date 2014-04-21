@@ -16,22 +16,9 @@ import java.util.Random;
 public class CollideTest extends AbstractQuest {
     @Override
     public void startQuest() throws Exception {
-        World w = WorldFactory.getWorld("test");
+        World w = WorldFactory.getWorld("parallax_test");
         setWorld(w, RenderService.TransitionType.FADETOBLACK);
         w.waitForWorldLoaded();
-
-        Random rand = new Random();
-        while (true) {
-            if (test.farrand.getWorld() == null) {
-                Thread.sleep(500);
-                continue;
-            }
-            int num = rand.nextInt(500);
-            ToastText text = test.farrand.toastText("-" + num);
-            text.setTint(new Color(217,17,17));
-
-            Thread.sleep(350);
-        }
     }
 
     @Override

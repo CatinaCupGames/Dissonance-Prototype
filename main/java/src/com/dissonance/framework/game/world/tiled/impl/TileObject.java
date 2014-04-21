@@ -3,10 +3,12 @@ package com.dissonance.framework.game.world.tiled.impl;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.TileSet;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -18,6 +20,8 @@ public class TileObject extends Sprite {
     TileSet parentTileSet;
     private int data_index;
     private final int ID;
+    private boolean paralax_effect;
+    private float parallax_speed = 0.5f;
     private Layer parentLayer;
 
     private int x;
@@ -54,12 +58,29 @@ public class TileObject extends Sprite {
             cache.put(ID, tex_cords);
         }
 
-        if (isGroundLayer())
+
+        if (!isGroundLayer()) {
+            Layer high = getWorld().getHighestGroundLayer();
+            Layer low = getWorld().getLowestGroundLayer();
+            if (high.getLayerNumber() < getTiledLayer().getLayerNumber())
+                setLayer(getTiledLayer().getLayerNumber() - high.getLayerNumber());
+            else if (low.getLayerNumber() > getTiledLayer().getLayerNumber())
+                setLayer(getTiledLayer().getLayerNumber() - low.getLayerNumber());
+            else
+                throw new InvalidParameterException("There is a non-ground layer in between 2 ground layers! (INVALID LAYER: " + getTiledLayer().getLayerNumber() + ")");
+        } else
             setLayer(0);
-        else if (isAlwaysAbove())
-            setLayer(getWorld().getTiledData().getLayers().length);
-        else
-            setLayer(getTiledLayer().getLayerNumber());
+
+        paralax_effect = getTiledLayer().isParallaxLayer();
+        if (paralax_effect) {
+            if (getTiledLayer().getProperty("parallax_speed") != null) {
+                try {
+                    parallax_speed = Float.parseFloat(getTiledLayer().getProperty("parallax_speed"));
+                } catch (Throwable t) {
+                    parallax_speed = 0.5f;
+                }
+            }
+        }
     }
 
     public Layer getTiledLayer() {
@@ -91,6 +112,12 @@ public class TileObject extends Sprite {
         glColor4f(1.0f, 1.0f, 1.0f, alpha);
 
         parentTileSet.getTexture().bind();
+        if (paralax_effect) {
+            float difx = (-Camera.getX() * parallax_speed) - -Camera.getX();
+            float dify = (-Camera.getY() * parallax_speed) - -Camera.getY();
+            glTranslatef(difx, dify, 0f);
+            //this.y -= dify;
+        }
         float bx = parentTileSet.getTileWidth() / 2;
         float by = parentTileSet.getTileHeight() / 2;
         float x = getX(), y = getY();
@@ -110,6 +137,11 @@ public class TileObject extends Sprite {
         parentTileSet.getTexture().unbind();
 
         glColor4f(1.0f, 1.0f, 1.0f, RenderService.getCurrentAlphaValue());
+        if (paralax_effect) {
+            float difx = -Camera.getX() - (-Camera.getX() * parallax_speed);
+            float dify = -Camera.getY() - (-Camera.getY() * parallax_speed);
+            glTranslatef(difx, dify, 0f);
+        }
         //if (isAlwaysAbove()) glEnable(GL_DEPTH_TEST);
     }
 
@@ -131,7 +163,11 @@ public class TileObject extends Sprite {
     }*/
 
     public boolean isGroundLayer() {
-        return (getTiledLayer().getProperty("ground") != null && getTiledLayer().getProperty("ground").equalsIgnoreCase("true"));
+        return getTiledLayer().isGroundLayer();
+    }
+
+    public boolean isParallaxLayer() {
+        return paralax_effect;
     }
 
     public boolean isAlwaysAbove() {

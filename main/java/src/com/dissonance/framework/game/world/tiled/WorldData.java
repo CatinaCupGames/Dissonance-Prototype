@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.world.tiled;
 
+import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.game.world.tiled.impl.ImageLayer;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
@@ -88,7 +89,7 @@ public class WorldData {
         }
     }
 
-    public List<Drawable> createDrawables() {
+    public List<Drawable> createDrawables(World w) {
         ArrayList<Drawable> tiles = new ArrayList<Drawable>();
         for (Layer layer : layers) {
             if (layer.isTiledLayer()) {
@@ -99,6 +100,7 @@ public class WorldData {
                     TileSet set = findTileSetFromID(id);
                     TileObject t = new TileObject(id, set, layer, i);
                     tiles.add(t);
+                    t.setWorld(w);
                     t.init();
                 }
             } else if (layer.isImageLayer()) {
