@@ -73,7 +73,7 @@ public class RenderService extends Service {
         fadeToAlpha(speed, 0f);
     }
 
-    public void fadeFromBlack(int speed) {
+    public void fadeFromBlack(float speed) {
         fadeToAlpha(speed, 1f);
     }
 
