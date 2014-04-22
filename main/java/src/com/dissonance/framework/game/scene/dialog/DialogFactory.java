@@ -47,7 +47,7 @@ public class DialogFactory {
                                 continue;
                             String text = nodelist.item(ii).getFirstChild().getNodeValue();
                             Style style = Style.NORMAL;
-                            Color color = null;
+                            Color color = Color.WHITE;
                             long speed = 15L;
                             if (nodelist.item(ii).getAttributes().getNamedItem("style") != null) {
                                 String stype = nodelist.item(ii).getAttributes().getNamedItem("style").getNodeValue();
