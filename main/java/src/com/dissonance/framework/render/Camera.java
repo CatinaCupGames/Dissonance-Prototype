@@ -4,7 +4,9 @@ import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.Validator;
+import org.lwjgl.Sys;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
@@ -27,6 +29,14 @@ public final class Camera {
     private static float duration;
     private static CameraMovementListener listener;
     private static Sprite follower;
+
+    private static boolean isShaking;
+    private static Direction shakeDir;
+    private static long started;
+    private static long shakeDuration;
+    private static double shakeWidth;
+    private static double shakeIntensity;
+    private static float xShake, yShake;
 
     static {
         removeBounds();
@@ -58,7 +68,7 @@ public final class Camera {
     }
 
     public static float getX() {
-        return posX;
+        return posX + xShake;
     }
 
     public static void setX(float x) {
@@ -72,7 +82,7 @@ public final class Camera {
     }
 
     public static float getY() {
-        return posY;
+        return posY + yShake;
     }
 
     public static void setY(float y) {
@@ -187,6 +197,77 @@ public final class Camera {
         isLinear = true;
     }
 
+    /**
+     * Shake the camera.
+     * This event is ran asynchronously on the render thread and the invokation of this method does not mean the completion of it.
+     * To wait for this event to complete, invoke {@link Camera#waitForShakeEnd} <br></br>
+     * This method invokes {@link Camera#shake(com.dissonance.framework.system.utils.Direction, long, double, double)} with the direction being {@link com.dissonance.framework.system.utils.Direction#UP}, the duration being <b>1.7 seconds</b>, the width being <b>20</b> and the intensity being <b>2</b>
+     */
+    public static void shake() {
+        shake(Direction.UP, 1700L, 20, 2);
+    }
+
+    /**
+     * Shake the camera.
+     * This event is ran asynchronously on the render thread and the invokation of this method does not mean the completion of it.
+     * To wait for this event to complete, invoke {@link Camera#waitForShakeEnd} <br></br>
+     * This method invokes {@link Camera#shake(com.dissonance.framework.system.utils.Direction, long, double, double)} with the duration being <b>1.7 seconds</b>, the width being <b>20</b> and the intensity being <b>2</b>
+     * @param direction The direction in which to shake the camera. The {@link com.dissonance.framework.system.utils.Direction#simple()} direction is used.
+     */
+    public static void shake(Direction direction) {
+        shake(direction, 1700L, 20, 2);
+    }
+
+    /**
+     * Shake the camera.
+     * This event is ran asynchronously on the render thread and the invokation of this method does not mean the completion of it.
+     * To wait for this event to complete, invoke {@link Camera#waitForShakeEnd} <br></br>
+     * This method invokes {@link Camera#shake(com.dissonance.framework.system.utils.Direction, long, double, double)} with the width being <b>20</b> and the intensity being <b>2</b>
+     * @param direction The direction in which to shake the camera. The {@link com.dissonance.framework.system.utils.Direction#simple()} direction is used.
+     * @param duration How long to shake the camera, in ms.
+     */
+    public static void shake(Direction direction, long duration) {
+        shake(direction, duration, 20, 2);
+    }
+
+    /**
+     * Shake the camera.
+     * This event is ran asynchronously on the render thread and the invokation of this method does not mean the completion of it.
+     * To wait for this event to complete, invoke {@link Camera#waitForShakeEnd} <br></br>
+     * This method invokes {@link Camera#shake(com.dissonance.framework.system.utils.Direction, long, double, double)} with the intensity being <b>2</b>
+     * @param direction The direction in which to shake the camera. The {@link com.dissonance.framework.system.utils.Direction#simple()} direction is used.
+     * @param duration How long to shake the camera, in ms.
+     * @param width How wide the camera should shake, the higher the number, the shorter the width.
+     */
+    public static void shake(Direction direction, long duration, double width) {
+        shake(direction, duration, width, 2);
+    }
+
+    /**
+     * Shake the camera.
+     * This event is ran asynchronously on the render thread and the invokation of this method does not mean the completion of it.
+     * To wait for this event to complete, invoke {@link Camera#waitForShakeEnd}
+     * @param direction The direction in which to shake the camera. The {@link com.dissonance.framework.system.utils.Direction#simple()} direction is used.
+     * @param duration How long to shake the camera, in ms.
+     * @param width How wide the camera should shake, the higher the number, the shorter the width.
+     * @param intensity How intense the camera should shake, the higher the number, the lower the intensity.
+     */
+    public static void shake(Direction direction, long duration, double width, double intensity) {
+        shakeDuration = duration;
+        shakeDir = direction.simple();
+        shakeWidth = width;
+        shakeIntensity = intensity;
+
+        started = RenderService.getTime();
+        isShaking = true;
+    }
+
+    public static synchronized void waitForShakeEnd() throws InterruptedException {
+        if (RenderService.isInRenderThread())
+            throw new IllegalAccessError("You cant access this method in the render thread!");
+        pls.waitForEnd();
+    }
+
     public static void easeMovementY(float newPos, float duration) {
         easeMovement(new Vector2f(getX(), newPos), duration);
     }
@@ -196,7 +277,10 @@ public final class Camera {
     }
 
     private static final WhatAmIDoing uwot = new WhatAmIDoing();
+    private static final SHAKEIT pls = new SHAKEIT();
     public static void waitForEndOfMovement() throws InterruptedException {
+        if (RenderService.isInRenderThread())
+            throw new IllegalAccessError("You cant access this method in the render thread!");
         uwot.waitForEnd();
     }
 
@@ -204,7 +288,35 @@ public final class Camera {
         uwot.wakeUp();
     }
 
+    private static void doneShake() {
+        pls.wakeUp();
+    }
+
     static void executeAnimation() {
+        if (isShaking) {
+            float xadd = 0, yadd = 0;
+            switch (shakeDir) {
+                case UP:
+                case DOWN:
+                    yadd = (float) (Math.cos(System.currentTimeMillis() * shakeWidth) / shakeIntensity);
+                    break;
+                case LEFT:
+                case RIGHT:
+                    xadd = (float) (Math.cos(System.currentTimeMillis() * shakeWidth) / shakeIntensity);
+                    break;
+                default:
+                    return;
+            }
+
+            xShake = xadd;
+            yShake = yadd;
+            if (RenderService.getTime() - started >= duration) {
+                isShaking = false;
+                xShake = 0f;
+                yShake = 0f;
+                doneShake();
+            }
+        }
         if (!isMoving)
             return;
         if (isLinear) {
@@ -281,6 +393,20 @@ public final class Camera {
         public synchronized void waitForEnd() throws InterruptedException {
             while (true) {
                 if (!isEasing && !isLinear)
+                    break;
+                super.wait(0L);
+            }
+        }
+
+        public synchronized void wakeUp() {
+            super.notifyAll();
+        }
+    }
+
+    private static class SHAKEIT {
+        public synchronized void waitForEnd() throws InterruptedException {
+            while (true) {
+                if (!isShaking)
                     break;
                 super.wait(0L);
             }
