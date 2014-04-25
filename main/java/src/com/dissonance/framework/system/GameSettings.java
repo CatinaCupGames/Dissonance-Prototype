@@ -28,11 +28,19 @@ public class GameSettings {
          * The width of the screen window, in pixels. <br></br>
          * <b>Must restart game for value changes to take effect</b>
          */
+        @Setting(
+                name = "resolution_width",
+                defaultValue = "1280"
+        )
         public static int window_width;
         /**
          * The height of the screen window, in pixels. <br></br>
          * <b>Must restart game for value changes to take effect</b>
          */
+        @Setting(
+                name = "resolution_height",
+                defaultValue = "720"
+        )
         public static int window_height;
 
         /**
@@ -76,6 +84,10 @@ public class GameSettings {
          * The maximum FPS the {@link com.dissonance.framework.render.RenderService} can exceeded. If the value is -1, then
          * then there will be no FPS limit.
          */
+        @Setting(
+                name = "fps_limit",
+                defaultValue = "-1"
+        )
         public static int FPSLimit;
 
         private Graphics() {
