@@ -8,6 +8,7 @@ import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.Validator;
 import org.lwjgl.Sys;
 import org.lwjgl.util.vector.Vector2f;
+import sun.plugin.dom.exception.InvalidAccessException;
 
 import java.awt.*;
 import java.security.InvalidParameterException;
@@ -292,7 +293,10 @@ public final class Camera {
         pls.wakeUp();
     }
 
-    static void executeAnimation() {
+    public static void executeAnimation() {
+        if (!RenderService.isInRenderThread())
+            throw new InvalidParameterException("The invoking thread is not the render thread!");
+
         if (isShaking) {
             float xadd = 0, yadd = 0;
             switch (shakeDir) {

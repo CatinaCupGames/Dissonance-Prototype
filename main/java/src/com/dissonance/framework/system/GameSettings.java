@@ -78,6 +78,8 @@ public class GameSettings {
          */
         public static int FPSLimit;
 
+        public static String rendererClass;
+
         private Graphics() {
         }
 
@@ -86,6 +88,7 @@ public class GameSettings {
         static {
             FPSLimit = -1;
             color = new Color(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+            rendererClass = "com.dissonance.framework.render.impl.OpenGL1Render";
         }
     }
 }

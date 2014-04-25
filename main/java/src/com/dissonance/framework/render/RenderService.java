@@ -33,6 +33,7 @@ public class RenderService extends Service {
     public static final int WORLD_DATA_TYPE = 0;
     public static final int ENABLE_CROSS_FADE = 1;
     public static final int CROSS_FADE_DURATION = 2;
+    public static final int RENDERER_DATA_TYPE = 4;
     public static final float ZOOM_SCALE = 2f;
     public static RenderService INSTANCE;
 
@@ -45,25 +46,7 @@ public class RenderService extends Service {
 
     public static float TIME_DELTA;
     public static long RENDER_THREAD_ID;
-    private World current_world;
-    private boolean looping;
-    private float fpsCount;
-    private float fpsTime;
-    private boolean crossfade;
-    private World next_world;
-    private ContextCapabilities capabilities;
-
-    private long startTime;
-    private boolean isFading;
-    private float speed;
-    private static float curAlpha;
-    private float newAlpha;
-    private float startAlpha;
-
-    long next_tick;
-    long cur = getTime();
-    long now;
-    long started;
+    private Renderer renderer;
 
     public static boolean isInRenderThread() {
         return Thread.currentThread().getId() == RENDER_THREAD_ID;
@@ -78,31 +61,23 @@ public class RenderService extends Service {
     }
 
     public void fadeToAlpha(float speed, float alpha) {
-        if (speed < 5) {
-            curAlpha = alpha;
-            return;
-        }
-        isFading = true;
-        newAlpha = alpha;
-        startAlpha = curAlpha;
-        this.speed = speed;
-        startTime = getTime();
+        if (renderer != null)
+            renderer.fadeToAlpha(speed, alpha);
     }
 
     public boolean isCrossFading() {
-        return crossfade;
+        return renderer != null && renderer.isCrossFading();
     }
 
     public static float getCurrentAlphaValue() {
-        return curAlpha;
+        if (INSTANCE != null && INSTANCE.renderer != null)
+            return INSTANCE.renderer.getCurrentAlphaValue();
+        return 1f;
     }
 
     public void waitForFade() throws InterruptedException {
-        if (current_world == null)
-            return;
-        while (isFading) {
-            Thread.sleep((long) speed);
-        }
+        if (renderer != null)
+            renderer.waitForFade();
     }
 
     /**
@@ -193,57 +168,24 @@ public class RenderService extends Service {
         try {
             loadIcons();
             Display.setIcon(icons);
+            setDisplayMode(GameSettings.Display.window_width, GameSettings.Display.window_height, GameSettings.Display.fullscreen);
+
+            try {
+                renderer = (Renderer)Class.forName(GameSettings.Graphics.rendererClass).newInstance();
+                renderer.start();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        try {
-            setDisplayMode(GameSettings.Display.window_width, GameSettings.Display.window_height, GameSettings.Display.fullscreen);
-            Display.create();
-            //ROBO //todo get all this changed to proper OGL
-            glClearColor(0f, 0f, 0f, 1f);
-            glClearDepth(1f);
-            glViewport(0, 0, GameSettings.Display.window_width, GameSettings.Display.window_height);
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0f, -1f);
-            glMatrixMode(GL_MODELVIEW);
-            glEnable(GL_TEXTURE_2D);
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
-            glLoadIdentity();
-            curAlpha = 1f;
-            capabilities = GLContext.getCapabilities();
-
-            System.out.println("OpenGL version: " + glGetString(GL_VERSION));
-
-            System.out.println("Building shaders..");
-            long ms = getTime();
-            ShaderFactory.buildAllShaders();
-            System.out.println("Done! Took " + (getTime() - ms) + "ms.");
-
-        } catch (LWJGLException e) {
-            e.printStackTrace();
-            System.exit(0);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(0);
-        } finally {
-            if (looping) {
-                looping = false;
-                Display.destroy();
-            }
-        }
-
-        ServiceManager.createService(InputService.class);
-        started = getTime();
-        next_tick = getTime();
     }
 
-    private long getTimeSinceStartMillis() {
-        return getTime() - started;
-    }
+
 
     @Override
     protected void onPause() {
@@ -256,9 +198,11 @@ public class RenderService extends Service {
     @Override
     protected void onTerminated() {
         //GameService.getSoundSystem().unloadAllSounds();
-        current_world = null;
+        if (renderer != null)
+            renderer.terminate();
+
+        renderer = null;
         INSTANCE = null;
-        Display.destroy();
     }
 
     private static void killAll() {
@@ -270,37 +214,27 @@ public class RenderService extends Service {
         }
     }
 
-    private static boolean scaled = true;
     public static void removeScale() {
-        if (scaled) {
-            glScalef(0.5f, 0.5f, 1f);
-            scaled = false;
-        }
+        if (INSTANCE != null && INSTANCE.renderer != null)
+            INSTANCE.renderer.removeScale();
     }
 
     public static void resetScale() {
-        if (!scaled) {
-            glScalef(2f, 2f, 1f);
-            scaled = true;
-        }
+        if (INSTANCE != null && INSTANCE.renderer != null)
+            INSTANCE.renderer.resetScale();
     }
 
     @Override
     public void provideData(Object obj, int type) {
         Validator.validateNotNull(obj, "object");
-        if (type == WORLD_DATA_TYPE) {
-            Validator.validateClass(obj, World.class);
+        if (type == RENDERER_DATA_TYPE) {
+            Validator.validateClass(obj, Renderer.class);
 
-            if (!crossfade)
-                this.current_world = (World) obj;
-            else {
-                this.next_world = (World) obj;
-                fadeStartTime = getTime();
-            }
-        } else if (type == ENABLE_CROSS_FADE) {
-            this.crossfade = (boolean)obj;
-        } else if (type == CROSS_FADE_DURATION && crossfade) {
-            this.fadeDuration = (float)obj;
+            this.renderer.terminate();
+            this.renderer = (Renderer)obj;
+            this.renderer.start();
+        } else if (renderer != null) {
+            renderer.provideData(obj, type);
         }
     }
 
@@ -319,187 +253,27 @@ public class RenderService extends Service {
         return System.nanoTime() / 1000000;
     }
 
-    private long fadeStartTime;
-    private float fadeDuration;
     @Override
     public void onUpdate() {
-        cur = now;
-        now = getTimeSinceStartMillis();
-        TIME_DELTA = (now - cur) / 100.0f;
-        if (current_world != null && !isPaused()) {
-            Iterator<UpdatableDrawable> updates = current_world.getUpdatables();
-            while (updates.hasNext()) {
-                UpdatableDrawable s = updates.next();
-                if (s == null)
-                    continue;
-                try {
-                    s.update();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glClearColor(0f, 0f, 0f, 1f);
-            //ROBO //todo get this crap changed into proper ogl
-            glMatrixMode(GL_MODELVIEW);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glLoadIdentity();
-            glScalef(ZOOM_SCALE, ZOOM_SCALE, 1f);
-
-            glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
-            //ROBO //todo change this crap into proper postprocess and per material shaders
-            ShaderFactory.executePreRender();
-
-
-            if (isFading) {
-                long time = getTime() - startTime;
-                curAlpha = Camera.ease(startAlpha, newAlpha, speed, time);
-                if (curAlpha == newAlpha)
-                    isFading = false;
-            }
-
-            glColor4f(1f, 1f, 1f, curAlpha);
-            //ROBO //todo get all these into proper batches
-            Iterator<Drawable> sprites = current_world.getSortedDrawables();
-            while (sprites.hasNext()) {
-                Drawable s = sprites.next();
-                if (s == null)
-                    continue;
-                try {
-                        /*if (d instanceof Sprite) {
-                            if (Camera.isOffScreen((Sprite)d, 2))
-                                continue;
-                        } else if (Camera.isOffScreen(d.getX(), d.getY(), d.getWidth() / 2, d.getHeight() / 2, 2)) //Assume everything is 32x32
-                            continue;*/
-                    if ((!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
-                        continue;
-                    s.render();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
-
-            ShaderFactory.executePostRender();
-
-            glLoadIdentity();
-            glScalef(ZOOM_SCALE, ZOOM_SCALE, 1f);
-
-            for (UI e : current_world.getElements()) {
-                if (e == null)
-                    return;
-                try {
-                    e.render();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
-
-
-            if (next_world != null) {
-                long time = getTime() - fadeStartTime;
-                float percent;
-                if (time > fadeDuration) {
-                    percent = 1;
-                } else {
-                    percent = time / fadeDuration;
-                }
-                float emu = curAlpha;
-                curAlpha = percent; //Some drawables require the curAlpha to be set, so we save what it use to be and set it
-                glColor4f(1f, 1f, 1f, curAlpha);
-
-                Iterator<Drawable> next_sprites = next_world.getSortedDrawables();
-                while (next_sprites.hasNext()) {
-                    Drawable d = next_sprites.next();
-                    if (d == null)
-                        continue;
-                    try {
-                        /*if (d instanceof Sprite) {
-                            if (Camera.isOffScreen((Sprite)d, 2))
-                                continue;
-                        } else if (Camera.isOffScreen(d.getX(), d.getY(), d.getWidth() / 2, d.getHeight() / 2, 2)) //Assume everything is 32x32
-                            continue;*/
-                        if (Camera.isOffScreen(d.getX(), d.getY(), d.getWidth() / 2, d.getHeight() / 2))
-                            continue;
-                        d.render();
-                    } catch (Throwable t) {
-                        t.printStackTrace();
-                    }
-                }
-
-                glLoadIdentity();
-                glScalef(ZOOM_SCALE, ZOOM_SCALE, 1f);
-
-                for (UI e : next_world.getElements()) {
-                    if (e == null)
-                        return;
-                    try {
-                        e.render();
-                    } catch (Throwable t) {
-                        t.printStackTrace();
-                    }
-                }
-
-                curAlpha = emu;
-
-                if (percent == 1) {
-                    current_world = next_world;
-                    next_world = null;
-                }
-            }
-
+        if (isPaused() || renderer == null) {
             try {
-                AnimationFactory.executeTick(); //Execute any animation
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-            Camera.executeAnimation(); //Execute any interlop
-            exitOnGLError("RenderService.renderSprites");
-
-            Display.update();
-
-            fpsTime += TIME_DELTA;
-            fpsCount++;
-            if (fpsCount == 100) {
-                fpsCount = 0;
-                Display.setTitle("FPS: " + (1000f/fpsTime));
-                fpsTime = 0;
-            }
-            if (Display.isCloseRequested()) {
-                kill();
-            }
-
-            if (GameSettings.Graphics.FPSLimit != -1) {
-                Display.sync(GameSettings.Graphics.FPSLimit);
-            }
-        } else {
-            try {
-                Thread.sleep(15); //Keep the thread busy
+                Thread.sleep(15);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-
-    private void exitOnGLError(String errorMessage) {
-        int errorValue = glGetError();
-
-        if (errorValue != GL_NO_ERROR) {
-            String errorString = gluErrorString(errorValue);
-            System.err.println("ERROR AT: " + errorMessage + " - " + errorString);
-
-            if (Display.isCreated()) Display.destroy();
-            System.exit(-1);
+        } else {
+            renderer.render();
         }
     }
 
     public World getCurrentDrawingWorld() {
-        return current_world;
+        if (renderer != null)
+            return renderer.getCurrentDrawingWorld();
+        return null;
     }
 
     public boolean isFading() {
-        return isFading;
+        return renderer != null && renderer.isFading();
     }
 
     public static void kill() {
