@@ -1,13 +1,10 @@
 package com.dissonance.framework.render;
 
 import com.dissonance.framework.game.GameService;
-import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.ui.UI;
-import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.system.GameSettings;
-import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.shader.ShaderFactory;
@@ -20,7 +17,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GLContext;
 
-import javax.xml.soap.Text;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
@@ -236,7 +232,6 @@ public class RenderService extends Service {
             }
         }
 
-        ServiceManager.createService(InputService.class);
         started = getTime();
         next_tick = getTime();
     }
@@ -504,8 +499,6 @@ public class RenderService extends Service {
 
     public static void kill() {
         GameService.handleKillRequest();
-        Service s = ServiceManager.getService(InputService.class);
-        if (s != null) s.terminate();
         Service s2 = ServiceManager.getService(RenderService.class);
         if (s2 != null) s2.terminate();
         killAll();
