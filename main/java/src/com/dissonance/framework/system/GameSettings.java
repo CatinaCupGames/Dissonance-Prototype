@@ -1,13 +1,60 @@
 package com.dissonance.framework.system;
 
 import com.dissonance.framework.system.settings.Color;
+import com.dissonance.framework.system.settings.ConfigItem;
+import com.dissonance.framework.system.settings.ReflectionConfig;
 import com.dissonance.framework.system.settings.Resolution;
+import com.sun.corba.se.impl.orbutil.graph.Graph;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class GameSettings {
+public class GameSettings extends ReflectionConfig {
+
+    @ConfigItem
+    protected int resolution_width = 1280;
+    @ConfigItem
+    protected int resolution_height = 720;
+    @ConfigItem
+    protected boolean fullscreen = false;
+    @ConfigItem
+    protected int fps_limit = -1;
+    @ConfigItem
+    protected Color color = new Color(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+    public static void loadGameSettings() throws IOException {
+        if (!new File("config/settings.dat").exists()) {
+            System.err.println("No settings found!");
+            System.err.println("Saving them now..");
+            saveGameSettings();
+        }
+        GameSettings settings = new GameSettings();
+        settings.parseFile(new File("config/settings.dat"));
+
+        Display.window_width = settings.resolution_width;
+        Display.window_height = settings.resolution_height;
+        Display.fullscreen = settings.fullscreen;
+
+        Graphics.FPSLimit = settings.fps_limit;
+        Graphics.color = settings.color;
+    }
+
+    public static void saveGameSettings() throws IOException {
+        System.out.println("Saving game settings..");
+        GameSettings settings = new GameSettings();
+        settings.resolution_width = Display.window_width;
+        settings.resolution_height = Display.window_height;
+        settings.fullscreen = Display.fullscreen;
+
+        settings.fps_limit = Graphics.FPSLimit;
+        settings.color = Graphics.color;
+
+        settings.saveToFile("settings.dat");
+        System.out.println("Done!");
+    }
+
 
     public static class Audio {
         private Audio() {
@@ -28,19 +75,11 @@ public class GameSettings {
          * The width of the screen window, in pixels. <br></br>
          * <b>Must restart game for value changes to take effect</b>
          */
-        @Setting(
-                name = "resolution_width",
-                defaultValue = "1280"
-        )
         public static int window_width;
         /**
          * The height of the screen window, in pixels. <br></br>
          * <b>Must restart game for value changes to take effect</b>
          */
-        @Setting(
-                name = "resolution_height",
-                defaultValue = "720"
-        )
         public static int window_height;
 
         /**
@@ -84,10 +123,6 @@ public class GameSettings {
          * The maximum FPS the {@link com.dissonance.framework.render.RenderService} can exceeded. If the value is -1, then
          * then there will be no FPS limit.
          */
-        @Setting(
-                name = "fps_limit",
-                defaultValue = "-1"
-        )
         public static int FPSLimit;
 
         private Graphics() {

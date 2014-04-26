@@ -79,6 +79,8 @@ public class GameService {
         System.out.println("Using libs folder " + System.getProperty("org.lwjgl.librarypath"));
         System.out.println("Loading Input config");
         InputKeys.initializeConfig();
+        System.out.println("Loading game settings");
+        GameSettings.loadGameSettings();
         System.out.println("Loading game dialog");
         DialogFactory.loadDialog();
         System.out.println("Loading sound");
@@ -86,12 +88,6 @@ public class GameService {
     }
 
     public static void handleKillRequest() {
-        try {
-            saveGame();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         alive = false;
         try {
             questThread.interrupt();
@@ -118,7 +114,7 @@ public class GameService {
         return questThread;
     }
 
-    public static void saveGame() throws Exception
+    /*public static void saveGame() throws Exception
     {
         Map<Object, Object> topLevel;
         Map<Object, Object> settingsLevel;
@@ -215,7 +211,7 @@ public class GameService {
         fis.close();
         cos.flush();
         cos.close();
-    }
+    }*/
 
 
     private static final Runnable questRun = new Runnable() {

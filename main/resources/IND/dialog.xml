@@ -1,10 +1,10 @@
 <game_dialog>
-    <dialog dialog_id="testscene-p1" >
+    <dialog dialog_id="testscene-p1">
         <header>mootykins</header>
         <message>POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP </message>
     </dialog>
 
-    <dialog dialog_id="testscene-p2" >
+    <dialog dialog_id="testscene-p2">
         <header>mootykins</header>
         <message style="bold" type="new">Its to dangerous to go alone!</message>
 
@@ -20,8 +20,8 @@
 
     <dialog dialog_id="testingTrigger">
         <header>Max Kek</header>
-        <message style="bold" color="#1d1d1d">Kek </message>
-        <message type = "append" speed="1" color="white">LITERALLY END UR LIFE XDDDDD REDIT</message>
+        <message color="#1d1d1d" style="bold">Kek </message>
+        <message color="white" speed="1" type="append">LITERALLY END UR LIFE XDDDDD REDIT</message>
         <message speed="500">:^)</message>
     </dialog>
 
@@ -36,19 +36,19 @@
     </dialog>
 
 
-    <dialog dialog_id="TEST" >
+    <dialog dialog_id="TEST">
         <header>The Old Man</header>
         <message color="red" style="italic">Hello...</message>
         <message type="append"> my name is Alexander..</message>
         <message style="bold">AAAAAAAAA BBBBBBBBBBBBB CCCCCCCCCCC APPLE SAUCE</message>
-        <message type="append" style="italic">WHAT IS GOING ON, I DONT EVEN KNOW ANYMORE..</message>
+        <message style="italic" type="append">WHAT IS GOING ON, I DONT EVEN KNOW ANYMORE..</message>
         <header>The Old Man</header>
         <message>How's it going...</message>
 
         <message>...Be..Because I'm fine...</message>
     </dialog>
 
-    <dialog dialog_id="TEST2" >
+    <dialog dialog_id="TEST2">
         <header>TEST1</header>
         <message>Hello...</message>
 
