@@ -47,6 +47,10 @@ public final class Position {
         return new Position(a.x - b.x, a.y - b.y);
     }
 
+    public Vector vector() {
+        return new Vector(x, y);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Position)) {

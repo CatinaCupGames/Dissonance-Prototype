@@ -78,10 +78,6 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         }
 
         if (c instanceof PhysicsSprite) {
-            if (getBehavior() != null && c == getBehavior().ignoreSprite())
-                return;
-            if (((PhysicsSprite) c).getBehavior() != null && ((PhysicsSprite) c).getBehavior().ignoreSprite() == this)
-                return;
             super.setX(oldX);
             float add = getX() - c.getX();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
@@ -97,11 +93,10 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             TiledObject to = (TiledObject) c;
             if (to.isHitbox())
                 super.setX(oldX);
-            else if (to.isTrigger() && this instanceof PlayableSprite && ((PlayableSprite)this).isSelected()) { //2meta4me
+            else if (to.isTrigger() && this instanceof PlayableSprite && ((PlayableSprite) this).isSelected()) { //2meta4me
                 AbstractTrigger abstractTrigger = to.getTrigger();
-                abstractTrigger.onCollide((PlayableSprite)this);
-            }
-            else if (to.isDoor() && this instanceof PlayableSprite && ((PlayableSprite)this).isSelected()) { //3meta5me
+                abstractTrigger.onCollide((PlayableSprite) this);
+            } else if (to.isDoor() && this instanceof PlayableSprite && ((PlayableSprite) this).isSelected()) { //3meta5me
                 String target = to.getDoorTarget();
                 if (target.equalsIgnoreCase("")) {
                     super.setX(oldX);
@@ -168,10 +163,6 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         }
 
         if (c instanceof PhysicsSprite) {
-            if (getBehavior() != null && c == getBehavior().ignoreSprite())
-                return;
-            if (((PhysicsSprite) c).getBehavior() != null && ((PhysicsSprite) c).getBehavior().ignoreSprite() == this)
-                return;
             super.setY(oldY);
             float add = getY() - hb.getLastCollide().getY();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
@@ -187,11 +178,10 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             TiledObject to = (TiledObject) c;
             if (to.isHitbox())
                 super.setY(oldY);
-            else if (to.isTrigger() && this instanceof PlayableSprite && ((PlayableSprite)this).isSelected()) { //2meta4me
+            else if (to.isTrigger() && this instanceof PlayableSprite && ((PlayableSprite) this).isSelected()) { //2meta4me
                 AbstractTrigger abstractTrigger = to.getTrigger();
-                abstractTrigger.onCollide((PlayableSprite)this);
-            }
-            else if (to.isDoor() && this instanceof PlayableSprite && ((PlayableSprite)this).isSelected()) { //3meta5me
+                abstractTrigger.onCollide((PlayableSprite) this);
+            } else if (to.isDoor() && this instanceof PlayableSprite && ((PlayableSprite) this).isSelected()) { //3meta5me
                 String target = to.getDoorTarget();
                 if (target.equalsIgnoreCase("")) {
                     super.setY(oldY);
@@ -259,7 +249,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                     width = (int) getTexture().getWidth();
                     height = (int) getTexture().getHeight();
                 }
-                float sX = 0, sY = 0, bX = width , bY = height;
+                float sX = 0, sY = 0, bX = width, bY = height;
                 BufferedReader br = new BufferedReader(new InputStreamReader(fIn));
 
                 String l;
@@ -311,7 +301,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                     width = (int) getTexture().getWidth();
                     height = (int) getTexture().getHeight();
                 }
-                float sX = 0, sY = 0, bX = width , bY = height;
+                float sX = 0, sY = 0, bX = width, bY = height;
                 BufferedReader br = new BufferedReader(new InputStreamReader(fIn));
 
                 String l;
