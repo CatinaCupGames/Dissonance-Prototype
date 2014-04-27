@@ -30,6 +30,7 @@ public class RenderService extends Service {
     public static final int ENABLE_CROSS_FADE = 1;
     public static final int CROSS_FADE_DURATION = 2;
     public static final float ZOOM_SCALE = 2f;
+    public static float FPS = 0f;
     public static RenderService INSTANCE;
 
     /****************************************************
@@ -457,7 +458,8 @@ public class RenderService extends Service {
             fpsCount++;
             if (fpsCount == 100) {
                 fpsCount = 0;
-                Display.setTitle("FPS: " + (1000f/fpsTime));
+                FPS = (1000f/fpsTime);
+                Display.setTitle("FPS: " + FPS);
                 fpsTime = 0;
             }
             if (Display.isCloseRequested()) {
