@@ -10,8 +10,6 @@ import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.sprites.Enemy;
-import com.dissonance.test.sprites.TestingUI;
-import com.dissonance.test.sprites.TestingUI2;
 
 import java.util.Random;
 
@@ -71,7 +69,6 @@ public class TestQuest extends AbstractQuest {
         enemy.setY(100);
         w.loadAndAdd(enemy);
         Thread.sleep(250);
-        enemy.follow(player);
         //enemy.setBehavior(new BehaviorOffsetFollow(enemy, player, new Position(10, 10)));
         //TestScene scene = new TestScene();
         //scene.beginScene();

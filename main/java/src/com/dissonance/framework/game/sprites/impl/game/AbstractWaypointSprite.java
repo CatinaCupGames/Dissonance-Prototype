@@ -2,9 +2,8 @@ package com.dissonance.framework.game.sprites.impl.game;
 
 import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.ai.astar.Position;
+import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
-import com.dissonance.framework.game.ai.behaviors.BehaviorOffsetFollow;
-import com.dissonance.framework.game.ai.waypoint.SimpleWaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
@@ -21,6 +20,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
     protected List<Position> waypointList;
 
     private Behavior behavior;
+    private Vector steeringVelocity = new Vector(0, 0);
 
     /**
      * Sets this {@link WaypointSprite WaypointSprite's}
@@ -56,21 +56,12 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
                 if (waypointList != null && waypointList.size() > 0) {
                     currentWaypoint = waypointList.get(0).expand(getWorld().getTiledData().getTileWidth(), getWorld().getTiledData().getTileHeight());
                     waypointList.remove(0);
-
-                    if (behavior != null) {
-                        behavior.waypointStepped();
-                    }
-
                     _wakeup();
                 } else {
                     currentWaypoint = null;
                     _wakeup();
                     if (waypointReachedEvent != null) {
                         waypointReachedEvent.onWaypointReached(this);
-
-                        if (behavior != null) {
-                            behavior.waypointReached();
-                        }
                     }
                 }
             }
@@ -126,10 +117,6 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         currentWaypoint = null;
     }
 
-    public void follow(AbstractWaypointSprite target) {
-        setBehavior(new BehaviorOffsetFollow(this, target, new Position((target.getWidth() / 2f) * 1.5f, (target.getHeight() / 2f) * 1.5f)));
-    }
-
     @Override
     public Position getWaypoint() {
         return currentWaypoint;
@@ -141,6 +128,18 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
 
     public void setBehavior(Behavior behavior) {
         this.behavior = behavior;
+    }
+
+    public final void setSteeringVelocity(Vector steeringVelocity) {
+        this.steeringVelocity = steeringVelocity;
+    }
+
+    public final Vector getSteeringVelocity() {
+        return steeringVelocity;
+    }
+
+    public final Vector getPositionVector() {
+        return new Vector(x, y);
     }
 
     private synchronized void _wakeup() {
