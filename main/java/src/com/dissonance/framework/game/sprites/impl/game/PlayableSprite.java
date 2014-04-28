@@ -185,7 +185,6 @@ public abstract class PlayableSprite extends CombatSprite {
             d = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
             s = InputKeys.isButtonPressed(InputKeys.MOVEDOWN);
             a = InputKeys.isButtonPressed(InputKeys.MOVELEFT);
-
             if (w) {
                 setY(getY() - (speed * RenderService.TIME_DELTA));
                 setFacing(a ? Direction.UP_LEFT : d ? Direction.UP_RIGHT : Direction.UP);
@@ -207,7 +206,7 @@ public abstract class PlayableSprite extends CombatSprite {
                 if (!w && !d && !s && !a)
                     onNoMovement();
                 else
-                    onMovement(getDirection().simple());
+                    onMovement(getDirection());
             }
         }
     }

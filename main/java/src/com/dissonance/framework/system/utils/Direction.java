@@ -58,4 +58,25 @@ public enum Direction {
                 return this;
         }
     }
+
+    public Direction add(Direction dir) {
+        if (this == Direction.UP && dir == Direction.LEFT)
+            return Direction.UP_LEFT;
+        else if (this == Direction.UP && dir == Direction.RIGHT)
+            return Direction.UP_RIGHT;
+        else if (this == Direction.DOWN && dir == Direction.LEFT)
+            return Direction.DOWN_LEFT;
+        else if (this == Direction.DOWN && dir == Direction.RIGHT)
+            return Direction.DOWN_RIGHT;
+        else if (this == Direction.LEFT && dir == Direction.UP)
+            return Direction.UP_LEFT;
+        else if (this == Direction.RIGHT && dir == Direction.UP)
+            return Direction.UP_RIGHT;
+        else if (this == Direction.LEFT && dir == Direction.DOWN)
+            return Direction.DOWN_LEFT;
+        else if (this == Direction.RIGHT && dir == Direction.DOWN)
+            return Direction.DOWN_RIGHT;
+        else
+            return this;
+    }
 }
