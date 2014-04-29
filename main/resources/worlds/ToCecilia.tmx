@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="50" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="Grass" tilewidth="16" tileheight="16">
+  <image source="grass_tileset.png" width="48" height="64"/>
+ </tileset>
+ <tileset firstgid="13" name="Shadows" tilewidth="16" tileheight="16">
+  <image source="shadow_tileset.png" width="64" height="32"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="100" height="50">
+  <properties>
+   <property name="ground" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt08EJADAIBLCTgvuP7AR9V0oeGSGVpAAAAAAAAAAA4OKwSrPK658AAAAAAAAAAADAfwYPehZF
+  </data>
+ </layer>
+</map>
