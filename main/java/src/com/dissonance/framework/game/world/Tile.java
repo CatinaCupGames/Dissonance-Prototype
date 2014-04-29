@@ -7,14 +7,14 @@ import com.dissonance.framework.system.utils.physics.HitBox;
 import org.lwjgl.util.vector.Vector2f;
 
 public class Tile implements Collidable {
-    private final int id;
+    private final long id;
     private final int cost;
     private boolean passable = true;
     private final float x, y;
     private final Layer containingLayer;
     private final World parent;
 
-    public Tile(int id, float x, float y, Layer layer, World world) {
+    public Tile(long id, float x, float y, Layer layer, World world) {
         this.parent = world;
         this.id = id;
 
@@ -39,7 +39,7 @@ public class Tile implements Collidable {
         this.containingLayer = layer;
     }
 
-    public int getID() {
+    public long getID() {
         return id;
     }
 

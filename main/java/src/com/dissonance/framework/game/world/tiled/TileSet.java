@@ -57,7 +57,7 @@ public class TileSet {
         return texture;
     }
 
-    public boolean containsID(int id) {
+    public boolean containsID(long id) {
         return id >= firstgid && id <= ((getTilesPerRow() * getRowCount()) + (firstgid - 1));
     }
 
@@ -105,7 +105,7 @@ public class TileSet {
         return tileheight;
     }
 
-    public String getTileProperty(int ID, String property) {
+    public String getTileProperty(long ID, String property) {
         if (tileproperties == null)
             return null;
         ID -= firstgid;

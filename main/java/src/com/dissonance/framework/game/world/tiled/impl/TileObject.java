@@ -26,6 +26,9 @@ public class TileObject extends Sprite {
 
     private int x;
     private int y;
+    private int flipType;
+    private float rotate;
+    private boolean flippedHorizontally, flippedVertically, flippedDiagonally;
 
     public TileObject(int ID, TileSet parentTileSet, Layer parentLayer, int data_index) {
         this.ID = ID;
@@ -38,6 +41,21 @@ public class TileObject extends Sprite {
 
         x *= parentTileSet.getTileWidth();
         y *= parentTileSet.getTileHeight();
+    }
+
+    public void setFlippedHorizontally(boolean value) {
+        this.flippedHorizontally = value;
+        calculateFlip();
+    }
+
+    public void setFlippedVertically(boolean value) {
+        this.flippedVertically = value;
+        calculateFlip();
+    }
+
+    public void setFlippedDiagonally(boolean value) {
+        this.flippedDiagonally = value;
+        calculateFlip();
     }
 
     @Override
@@ -83,6 +101,33 @@ public class TileObject extends Sprite {
         }
     }
 
+    private void calculateFlip() {
+        flipType = 0;
+        /*
+        0 = none
+        1 = horizontally
+        2 = vertically
+         */
+        if (flippedHorizontally)
+            flipType |= 1;  //Flip horizontally
+        if (flippedVertically)
+            flipType |= 2;  //Flip vertically
+
+        if (flippedDiagonally) {
+            if (flippedVertically && flippedHorizontally) {
+                rotate = 90f;
+                flipType ^= 2; //Don't flip vertically
+            } else if (flippedHorizontally) {
+                rotate = -90f;
+                flipType ^= 2; //Don't flip vertically
+            } else {
+                rotate = 90f;
+                flipType ^= 1; //Don't flip horizontally
+            }
+        } else
+            rotate = 0f;
+    }
+
     public Layer getTiledLayer() {
         return parentLayer;
     }
@@ -124,16 +169,26 @@ public class TileObject extends Sprite {
         float z = 0f;
         //float z = isGroundLayer() ? 99999 : y - by;
 
+        glPushMatrix(); //Save the current view matrix
+        glTranslatef(x, y, 0f); //Translate to the tile's position
+
+        glRotatef(rotate, 0f, 0f, 1f); //Rotate 90 degrees on the z axis..because..you know..we're in 2d
+        if ((flipType & 1) > 0) //Are we flipping horizontally?
+            glScalef(-1f, 1f, 1f);
+        if ((flipType & 2) > 0) //Are we flipping vertically?
+            glScalef(1f, -1f, 1f);
+
         glBegin(GL_QUADS);
         glTexCoord2f(tex_cords.bottom_left.x, tex_cords.bottom_left.y); //bottom left
-        glVertex3f(x - bx, y - by, z);
+        glVertex3f(-bx, -by, z);
         glTexCoord2f(tex_cords.bottom_right.x, tex_cords.bottom_right.y); //bottom right
-        glVertex3f(x + bx, y - by, z);
+        glVertex3f(bx, -by, z);
         glTexCoord2f(tex_cords.top_right.x, tex_cords.top_right.y); //top right
-        glVertex3f(x + bx, y + by, z);
+        glVertex3f(bx, by, z);
         glTexCoord2f(tex_cords.top_left.x, tex_cords.top_left.y); //top left
-        glVertex3f(x - bx, y + by, z);
+        glVertex3f(-bx, by, z);
         glEnd();
+        glPopMatrix(); //Reload the view matrix to original state
         parentTileSet.getTexture().unbind();
 
         glColor4f(1.0f, 1.0f, 1.0f, RenderService.getCurrentAlphaValue());

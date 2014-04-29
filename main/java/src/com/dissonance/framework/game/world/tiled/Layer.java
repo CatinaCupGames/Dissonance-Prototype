@@ -7,6 +7,10 @@ import java.security.InvalidParameterException;
 import java.util.HashMap;
 
 public class Layer {
+    private static final int FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
+    private static final int FLIPPED_VERTICALLY_FLAG   = 0x40000000;
+    private static final int FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
+
     private int height;
     private int width;
     private String name;
@@ -18,7 +22,7 @@ public class Layer {
     private HashMap<Object, Object> properties;
     private String image; //for type imagelayer
     private TiledObject[] objects; //for type objectgroup
-    private int[] data; //for type tilelayer
+    private long[] data; //for type tilelayer
     private HashMap<Integer, Tile> cache = new HashMap<Integer, Tile>();
 
     private int layer_number;
@@ -104,8 +108,21 @@ public class Layer {
         return type.equals("tilelayer");
     }
 
-    public int[] getTileLayerData() {
+    public long[] getTileLayerData() {
         return data;
+    }
+
+    public boolean[] stripTileRotationFlag(int index) {
+        long id = data[index];
+        //Check the rotation flags
+        boolean flipH = (id & FLIPPED_HORIZONTALLY_FLAG) > 0;
+        boolean flipL = (id & FLIPPED_VERTICALLY_FLAG)   > 0;
+        boolean flipD = (id & FLIPPED_DIAGONALLY_FLAG)   > 0;
+
+        //Clear the rotation flags
+        data[index] &= ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
+
+        return new boolean[] { flipH, flipL, flipD };
     }
 
     public String getImageLayerData() {
