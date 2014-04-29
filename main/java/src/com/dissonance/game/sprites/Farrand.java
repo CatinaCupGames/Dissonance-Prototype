@@ -129,14 +129,25 @@ public final class Farrand extends PlayableSprite {
             super.setFrame(2);
             playAnimation();
         }
-        if (direction == Direction.UP)
-            setAnimation("walk_back");
-        else if (direction == Direction.DOWN)
-            setAnimation("walk_front");
-        else if (direction == Direction.LEFT)
-            setAnimation("walk_left");
-        else if (direction == direction.RIGHT)
-            setAnimation("walk_right");
+
+        switch (direction) {
+            case UP:
+            case UP_LEFT:
+            case UP_RIGHT:
+                setAnimation("walk_back");
+                break;
+            case DOWN:
+            case DOWN_LEFT:
+            case DOWN_RIGHT:
+                setAnimation("walk_front");
+                break;
+            case LEFT:
+                setAnimation("walk_left");
+                break;
+            case RIGHT:
+                setAnimation("walk_right");
+                break;
+        }
     }
 
     @Override

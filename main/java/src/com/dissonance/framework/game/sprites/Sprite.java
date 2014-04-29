@@ -243,8 +243,8 @@ public abstract class Sprite implements Drawable, Serializable {
     @Override
     public void render() {
         getTexture().bind();
-        float bx = width / 2;
-        float by = height / 2;
+        float bx = width / 2f;
+        float by = height / 2f;
         final float x = getX(), y = getY();
         float z = 0f;
         //float z = -(y - (by / 2));

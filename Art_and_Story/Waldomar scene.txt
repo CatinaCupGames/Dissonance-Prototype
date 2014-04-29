@@ -1,0 +1,19 @@
+Dialogue:
+Waldomar and Farrand meet in the thing:
+** means will think of a better name later
+
+W:  Ah, Farrand, the man of the hour! I was starting to get worried you would keep us waiting! So, did my little crew here give you a warm welcome?
+F: ...
+W: ...Please, make yourself comfortable! Want a cigar?
+F: No thank you, I’d like to get Straight to the point. 
+W: Well then, by all means! Tell me, why have we gathered here today?
+F:  *sigh* I have come to order the halt of the Adlers' urban expansion project. As I am sure you are aware, industrialization poses a threat to both our environment and to our state of social well-being.
+W: You have come to “halt me and my expansion”? Why, whatever do you mean by that?
+F: You know as well as I do what it means... Your further expansion past the **east west line** is a clear violation of the **candidus treaty** that our fathers agreed upon all those years ago.
+W: Ah, but Farrand it would be selfish to keep all those resources to yourself! 
+F: What’s selfish is the lavish lifestyle you live while many of your followers starve!
+W: The state of my own followers is their doing. They are truly free to work and live as they please. They don’t have imposed reproduction rights or live in blasted huts eating leaves and berries like animals.
+F: The citizens of Isthmo do not live like animals! They are simply free of the corruption and destruction of mans old ways of living. I know your type Waldomar, your thirst for power is unquenchable, you won’t be satisfied until you have completely stipped this land of all of it’s resources in exchange for material wealth! It’s because of people like you in the **old world** that Isthmo Candidus was created as a safe haven in the first place and I'll be damned if I even let you have an inch more of it!
+W: How dare you insult me like this! Guards arrest them on charges of treason!
+
+*Jeremiah goes pshhhowwgg* initiate fight scene go

@@ -4,6 +4,7 @@ import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.system.GameSettings;
+import com.dissonance.framework.system.debug.Debug;
 import com.dissonance.framework.system.settings.SettingsLevelTest;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
@@ -76,6 +77,10 @@ public class GameService {
 
     public static void loadEssentials(String[] args) throws IOException {
         GameService.args = args;
+        for (String s : args) {
+            if (s.equals("--debug") || s.equals("-d"))
+                Debug.debugMode(true);
+        }
         System.out.println("Using libs folder " + System.getProperty("org.lwjgl.librarypath"));
         System.out.println("Loading Input config");
         InputKeys.initializeConfig();
