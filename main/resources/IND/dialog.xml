@@ -58,4 +58,11 @@
 
         <message>...Be..Because I'm fine...</message>
     </dialog>
+
+	<dialog dialog_id="test">
+        <header>Farnanddo</header>
+		<message>I'm</message>
+		<message style="bold" type="append"> hohhohihoiho</message>
+		<message type="append">&#13;</message>
+    </dialog>
 </game_dialog>
