@@ -252,7 +252,7 @@ public abstract class Sprite implements Drawable, Serializable {
         if (hasTint) {
             float alpha = RenderService.getCurrentAlphaValue();
             if (a < 1) {
-                alpha = this.a - (1 - RenderService.getCurrentAlphaValue());
+                alpha = this.a - (1f - RenderService.getCurrentAlphaValue());
                 if (alpha < 0)
                     alpha = 0;
             }

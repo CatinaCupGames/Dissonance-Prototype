@@ -354,7 +354,7 @@ public class RenderService extends Service {
                     isFading = false;
             }
 
-            glColor4f(1f, 1f, 1f, curAlpha);
+            glColor4f(curAlpha, curAlpha, curAlpha, 1f);
             //ROBO //todo get all these into proper batches
             Iterator<Drawable> sprites = current_world.getSortedDrawables();
             while (sprites.hasNext()) {
