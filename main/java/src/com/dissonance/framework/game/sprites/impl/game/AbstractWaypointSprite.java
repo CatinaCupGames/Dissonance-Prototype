@@ -4,6 +4,7 @@ import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
+import com.dissonance.framework.game.ai.behaviors.PathFollow;
 import com.dissonance.framework.game.ai.waypoint.WaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
@@ -12,6 +13,8 @@ import com.dissonance.framework.render.RenderService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public abstract class AbstractWaypointSprite extends AnimatedSprite implements WaypointSprite {
     private WaypointSpriteEvent.OnWaypointReachedEvent waypointReachedEvent;
@@ -49,7 +52,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         if (behavior != null) {
             behavior.update();
         }
-
+/*
         if (currentWaypoint != null && waypointList != null) {
 
             if (!waypointMover.moveSpriteOneFrame(this)) {
@@ -65,6 +68,24 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
                     }
                 }
             }
+        }*/
+    }
+
+    @Override
+    public void render() {
+        super.render();
+
+        if (behavior != null && behavior instanceof PathFollow) {
+            glLineWidth(3);
+            glColor3f(255, 0, 0);
+            glBegin(GL_LINE_STRIP);
+            glVertex2f(x, y);
+            for (Position p : ((PathFollow) behavior).getNodes()) {
+                glVertex2f(p.getX() * 16, p.getY() * 16);
+            }
+            glEnd();
+            glColor3f(255, 255, 255);
+            glLineWidth(1);
         }
     }
 
@@ -126,6 +147,9 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         currentWaypoint = null;
     }
 
+    public final List<Position> getWaypointList() {
+        return waypointList;
+    }
     @Override
     public Position getWaypoint() {
         return currentWaypoint;
@@ -148,7 +172,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
     }
 
     public final Vector getPositionVector() {
-        return new Vector(x, y);
+        return new Vector(x, y + height / 2);
     }
 
     private synchronized void _wakeup() {

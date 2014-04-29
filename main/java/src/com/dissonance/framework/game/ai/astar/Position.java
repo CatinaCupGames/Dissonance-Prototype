@@ -51,6 +51,10 @@ public final class Position {
         return new Vector(x, y);
     }
 
+    public float distance(Position other) {
+        return (float) Math.sqrt((x - other.x) * (x - other.x) + (x - other.x) * (y - other.y));
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Position)) {

@@ -4,7 +4,6 @@ import com.dissonance.framework.system.settings.Color;
 import com.dissonance.framework.system.settings.ConfigItem;
 import com.dissonance.framework.system.settings.ReflectionConfig;
 import com.dissonance.framework.system.settings.Resolution;
-import com.sun.corba.se.impl.orbutil.graph.Graph;
 
 import java.awt.*;
 import java.io.File;
