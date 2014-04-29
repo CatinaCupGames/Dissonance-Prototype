@@ -31,9 +31,8 @@ public final class Seek implements Behavior {
 
         sprite.setSteeringVelocity(sprite.getSteeringVelocity().add(steering).truncate(MAX_VELOCITY));
 
-        //TODO: change the *10 part if we ever make speed sprite-dependent
-        sprite.setX(sprite.getX() + sprite.getSteeringVelocity().x * RenderService.TIME_DELTA * 10);
-        sprite.setY(sprite.getY() + sprite.getSteeringVelocity().y * RenderService.TIME_DELTA * 10);
+        sprite.setX(sprite.getX() + sprite.getSteeringVelocity().x * RenderService.TIME_DELTA * sprite.getMovementSpeed());
+        sprite.setY(sprite.getY() + sprite.getSteeringVelocity().y * RenderService.TIME_DELTA * sprite.getMovementSpeed());
 
         if (Math.abs(sprite.getX() - target.x) <= 4.5f && Math.abs(sprite.getY() + sprite.getHeight() / 2 - target.y) <= 4.5f) {
             sprite.setBehavior(null);

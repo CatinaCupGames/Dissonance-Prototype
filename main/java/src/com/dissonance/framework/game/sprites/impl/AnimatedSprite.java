@@ -80,14 +80,21 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         AnimationFactory.removeAnimator(ANIMATION_FACTORY_ID);
     }
 
+    private long lastX, lastY;
+    private Direction lastDirX, lastDirY;
     @Override
     public void setX(float x) {
         movementDetect = true;
         if (this.x > x) { //Left
-            onMovement(Direction.LEFT);
+            long dur = System.currentTimeMillis() - lastY;
+            onMovement(dur < 50 ? Direction.LEFT.add(lastDirY) : Direction.LEFT);
+            lastDirX = Direction.LEFT;
         } else if (this.x < x) {
-            onMovement(Direction.RIGHT);
+            long dur = System.currentTimeMillis() - lastY;
+            onMovement(dur < 50 ? Direction.RIGHT.add(lastDirY) : Direction.RIGHT);
+            lastDirX = Direction.RIGHT;
         }
+        lastX = System.currentTimeMillis();
         super.setX(x);
     }
 
@@ -95,10 +102,15 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     public void setY(float y) {
         movementDetect = true;
         if (this.y > y) {
-            onMovement(Direction.UP);
+            long dur = System.currentTimeMillis() - lastX;
+            onMovement(dur < 50 ? Direction.UP.add(lastDirX) : Direction.UP);
+            lastDirY = Direction.UP;
         } else if (this.y < y) {
-            onMovement(Direction.DOWN);
+            long dur = System.currentTimeMillis() - lastX;
+            onMovement(dur < 50 ? Direction.DOWN.add(lastDirX) : Direction.DOWN);
+            lastDirY = Direction.DOWN;
         }
+        lastY = System.currentTimeMillis();
         super.setY(y);
     }
 
@@ -229,7 +241,8 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
                 oX = -1;
                 oY = -1;
             }
-        }
+        } else if (!isAnimationPaused() && !movementDetect)
+            movementDetect = true;
     }
 
     private boolean paused;

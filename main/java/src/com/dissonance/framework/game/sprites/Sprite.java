@@ -243,8 +243,8 @@ public abstract class Sprite implements Drawable, Serializable {
     @Override
     public void render() {
         getTexture().bind();
-        float bx = width / 2;
-        float by = height / 2;
+        float bx = width / 2f;
+        float by = height / 2f;
         final float x = getX(), y = getY();
         float z = 0f;
         //float z = -(y - (by / 2));
@@ -252,7 +252,7 @@ public abstract class Sprite implements Drawable, Serializable {
         if (hasTint) {
             float alpha = RenderService.getCurrentAlphaValue();
             if (a < 1) {
-                alpha = this.a - (1 - RenderService.getCurrentAlphaValue());
+                alpha = this.a - (1f - RenderService.getCurrentAlphaValue());
                 if (alpha < 0)
                     alpha = 0;
             }
@@ -284,8 +284,8 @@ public abstract class Sprite implements Drawable, Serializable {
             else {
                 //float by = (getTexture() != null ? getTexture().getTextureHeight() / (this instanceof TileObject ? 2 : 4) : 0);
                 //float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / (s instanceof TileObject ? 2 : 4) : 0);
-                float by = getHeight();
-                float sy = s.getHeight();
+                float by = getHeight() / 2f;
+                float sy = s.getHeight() / 2f;
                 return (int) ((getY() - by) - (s.getY() - sy));
             }
         }

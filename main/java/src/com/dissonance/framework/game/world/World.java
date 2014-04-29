@@ -19,6 +19,8 @@ import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.system.ServiceManager;
+import com.dissonance.framework.system.debug.Debug;
+import com.dissonance.framework.system.debug.DebugSprite;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Timer;
 import com.dissonance.framework.system.utils.Validator;
@@ -135,6 +137,10 @@ public final class World {
                         System.out.println("Creating tiles..");
                         long ms = System.currentTimeMillis();
                         drawable.addAll(tiledData.createDrawables(World.this));
+                        if (Debug.isDebugging()) {
+                            DebugSprite debug = new DebugSprite();
+                            debug.display(World.this);
+                        }
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
                         tiledData.loadTriggers();
                         if (loader == null) {
@@ -695,5 +701,9 @@ public final class World {
 
     public int getDrawableCount() {
         return drawable.size();
+    }
+
+    public int getUpdatableCount() {
+        return this.udrawables.size();
     }
 }

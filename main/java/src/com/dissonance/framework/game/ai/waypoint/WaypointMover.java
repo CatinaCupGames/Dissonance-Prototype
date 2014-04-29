@@ -10,10 +10,4 @@ public interface WaypointMover {
      * @return Whether or not the sprite has reached {@link WaypointSprite#getWaypoint()} or not.
      */
     public boolean moveSpriteOneFrame(WaypointSprite sprite);
-
-    /**
-     * Get how fast this WaypointMover moves the sprite. This is not used by the framework, but some implementations uses this.
-     * @return How fast this WaypointMover moves a sprite.
-     */
-    public float getSpeed();
 }
