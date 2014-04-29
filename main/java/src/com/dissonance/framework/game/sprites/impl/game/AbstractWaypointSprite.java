@@ -18,7 +18,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
     protected WaypointMover waypointMover = WaypointMover.Simple;
     protected Position currentWaypoint;
     protected List<Position> waypointList;
-
+    protected float movementSpeed = 10f;
     private Behavior behavior;
     private Vector steeringVelocity = new Vector(0, 0);
 
@@ -66,6 +66,15 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
                 }
             }
         }
+    }
+
+    @Override
+    public float getMovementSpeed() {
+        return movementSpeed;
+    }
+
+    public void setMovementSpeed(float value) {
+        this.movementSpeed = value;
     }
 
     @Override

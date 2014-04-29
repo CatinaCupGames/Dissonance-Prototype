@@ -35,8 +35,7 @@ public final class Wander implements Behavior {
         Vector steering = center.add(displacement).truncate(MAX_WANDER_FORCE).multiply(0.21186f);
         sprite.setSteeringVelocity(sprite.getSteeringVelocity().add(steering).truncate(MAX_WANDER_VELOCITY));
 
-        //TODO: change the *10 part if we ever make speed sprite-dependent
-        sprite.setX(sprite.getX() + sprite.getSteeringVelocity().x * RenderService.TIME_DELTA * 10);
-        sprite.setY(sprite.getY() + sprite.getSteeringVelocity().y * RenderService.TIME_DELTA * 10);
+        sprite.setX(sprite.getX() + sprite.getSteeringVelocity().x * RenderService.TIME_DELTA * sprite.getMovementSpeed());
+        sprite.setY(sprite.getY() + sprite.getSteeringVelocity().y * RenderService.TIME_DELTA * sprite.getMovementSpeed());
     }
 }

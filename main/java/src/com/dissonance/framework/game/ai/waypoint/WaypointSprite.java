@@ -13,4 +13,6 @@ public interface WaypointSprite {
     public void setY(float y);
 
     public Position getWaypoint();
+
+    public float getMovementSpeed();
 }
