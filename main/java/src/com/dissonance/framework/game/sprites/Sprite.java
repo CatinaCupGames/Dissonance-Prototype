@@ -284,8 +284,8 @@ public abstract class Sprite implements Drawable, Serializable {
             else {
                 //float by = (getTexture() != null ? getTexture().getTextureHeight() / (this instanceof TileObject ? 2 : 4) : 0);
                 //float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / (s instanceof TileObject ? 2 : 4) : 0);
-                float by = getHeight();
-                float sy = s.getHeight();
+                float by = getHeight() / 2f;
+                float sy = s.getHeight() / 2f;
                 return (int) ((getY() - by) - (s.getY() - sy));
             }
         }

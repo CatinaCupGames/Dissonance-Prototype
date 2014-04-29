@@ -2,6 +2,7 @@ package com.dissonance.test.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.ai.behaviors.Flee;
+import com.dissonance.framework.game.ai.behaviors.Seek;
 import com.dissonance.framework.game.ai.behaviors.Wander;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.world.World;
