@@ -1,0 +1,11 @@
+<animations
+        width="24"
+        height="10">
+
+    <animation
+            name="test"
+            loop="true"
+            frames="10"
+            row="0"
+            default_speed="200ms"/>
+</animations>
