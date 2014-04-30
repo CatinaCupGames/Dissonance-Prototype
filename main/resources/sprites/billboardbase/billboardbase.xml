@@ -5,7 +5,7 @@
     <animation
             name="test"
             loop="true"
-            frames="10"
+            frames="12"
             row="0"
-            default_speed="200ms"/>
+            default_speed="150ms"/>
 </animations>
