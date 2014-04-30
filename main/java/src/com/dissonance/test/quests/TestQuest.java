@@ -10,6 +10,8 @@ import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.sprites.Enemy;
+import com.dissonance.test.scene.SimpleSceneTest;
+import com.dissonance.test.scene.TestScene;
 
 import java.util.Random;
 
@@ -30,7 +32,7 @@ public class TestQuest extends AbstractQuest {
 
     @Override
     public void startQuest() throws Exception {
-        Sound.playSound("creepy").setOnSoundFinishedListener(new Sound.OnSoundFinishedListener() {
+       Sound.playSound("creepy").setOnSoundFinishedListener(new Sound.OnSoundFinishedListener() {
             @Override
             public void onFinished(Sound.SoundFinishedType type) {
                 System.out.println("Creepy finished " + type);
@@ -47,6 +49,7 @@ public class TestQuest extends AbstractQuest {
         World w = WorldFactory.getWorld("test_tileset");
         setWorld(w);
         w.waitForWorldLoaded();
+        playSceneAndWait(SimpleSceneTest.class);
 
         final PlayableSprite player = PlayableSprite.getCurrentlyPlayingSprite();
         player.setMarksmanship(2);
