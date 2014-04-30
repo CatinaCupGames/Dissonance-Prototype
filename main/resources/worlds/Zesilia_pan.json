@@ -5,6 +5,10 @@
          "height":50,
          "name":"Tile Layer 1",
          "opacity":1,
+         "properties":
+            {
+             "ground":"true"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":100,
@@ -16,6 +20,10 @@
          "height":50,
          "name":"Tile Layer 2",
          "opacity":1,
+         "properties":
+            {
+             "ground":"true"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":100,
@@ -57,6 +65,13 @@
             },
          "spacing":0,
          "tileheight":16,
+         "tileproperties":
+            {
+             "0":
+                {
+                 "frames":"36,37,38"
+                }
+            },
          "tilewidth":16
         }],
  "tilewidth":16,
