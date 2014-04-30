@@ -9,12 +9,15 @@ import com.dissonance.framework.render.texture.Texture;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class TileObject extends Sprite {
     private static final HashMap<Integer, TexCordHolder> cache = new HashMap<Integer, TexCordHolder>();
+    private static final ArrayList<TileObject> animtedTiles = new ArrayList<TileObject>();
+    private static boolean ran = false;
     TexCordHolder tex_cords;
 
     TileSet parentTileSet;
@@ -23,6 +26,10 @@ public class TileObject extends Sprite {
     private boolean paralax_effect;
     private float parallax_speed = 0.5f;
     private Layer parentLayer;
+
+    private boolean animated;
+    private int animate_index;
+    private TexCordHolder[] animate_tiles;
 
     private int x;
     private int y;
@@ -90,6 +97,7 @@ public class TileObject extends Sprite {
             setLayer(0);
 
         paralax_effect = getTiledLayer().isParallaxLayer();
+        animated = parentTileSet.getTileProperty(ID, "frames") != null;
         if (paralax_effect) {
             if (getTiledLayer().getProperty("parallax_speed") != null) {
                 try {
@@ -97,6 +105,26 @@ public class TileObject extends Sprite {
                 } catch (Throwable t) {
                     parallax_speed = 0.5f;
                 }
+            }
+        }
+
+        if (animated) {
+            String[] ids = parentTileSet.getTileProperty(ID, "frames").split(",");
+            animate_tiles = new TexCordHolder[ids.length];
+            for (int i = 0; i < ids.length; i++) {
+                int tID = Integer.parseInt(ids[i]);
+                animate_tiles[i] = new TexCordHolder();
+                animate_tiles[i].bottom_left = parentTileSet.getTexture().getTextureCord(Texture.BOTTOM_LEFT, tID, parentTileSet);
+                animate_tiles[i].bottom_right = parentTileSet.getTexture().getTextureCord(Texture.BOTTOM_RIGHT, tID, parentTileSet);
+                animate_tiles[i].top_left = parentTileSet.getTexture().getTextureCord(Texture.TOP_LEFT, tID, parentTileSet);
+                animate_tiles[i].top_right = parentTileSet.getTexture().getTextureCord(Texture.TOP_RIGHT, tID, parentTileSet);
+            }
+
+            animtedTiles.add(this);
+
+            if (!ran) {
+                RenderService.INSTANCE.runOnServiceThread(animtedRunnable, true, true);
+                ran = true;
             }
         }
     }
@@ -200,23 +228,6 @@ public class TileObject extends Sprite {
         //if (isAlwaysAbove()) glEnable(GL_DEPTH_TEST);
     }
 
-    /*@Override
-    public int compareTo(Drawable d) {
-        if (isGroundLayer()) {
-            if (d instanceof TileObject && ((TileObject)d).isGroundLayer()) {
-                TileObject t = (TileObject)d;
-
-                if (t.getTiledLayer().getLayerNumber() > getTiledLayer().getLayerNumber()) return UpdatableDrawable.BEFORE;
-                else if (t.getTiledLayer().getLayerNumber() < getTiledLayer().getLayerNumber()) return UpdatableDrawable.AFTER;
-                else return UpdatableDrawable.EQUAL;
-            }
-            return UpdatableDrawable.BEFORE;
-        }
-        else if (isAlwaysAbove())
-            return UpdatableDrawable.AFTER;
-        return super.compareTo(d);
-    }*/
-
     public boolean isGroundLayer() {
         return getTiledLayer().isGroundLayer();
     }
@@ -230,24 +241,7 @@ public class TileObject extends Sprite {
     }
 
     public boolean isAnimated() {
-        return parentTileSet.getTileProperty(ID, "animated").equalsIgnoreCase("true");
-    }
-
-    public int[] getAnimatedTiles() {
-        if (!isAnimated())
-            return new int[0];
-        String[] tiles = parentTileSet.getTileProperty(ID, "animated_ids").replaceAll(" ", "").split(",");
-
-        int[] IDS = new int[tiles.length];
-        for (int i = 0; i < tiles.length; i++) {
-            try {
-                IDS[i] = Integer.parseInt(tiles[i]);
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
-        }
-
-        return IDS;
+        return animated;
     }
 
     @Override
@@ -257,6 +251,25 @@ public class TileObject extends Sprite {
         hash = 71 * hash + this.y;
         return hash;
     }
+
+    private static long lastTick = 0L;
+    private static final long tickLength = 50L;
+    private static final Runnable animtedRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (RenderService.getTime() - lastTick > tickLength) {
+                lastTick = RenderService.getTime();
+
+                for (TileObject obj : animtedTiles) {
+                    obj.animate_index++;
+                    if (obj.animate_index >= obj.animate_tiles.length)
+                        obj.animate_index = 0;
+
+                    obj.tex_cords = obj.animate_tiles[obj.animate_index];
+                }
+            }
+        }
+    };
 
     private static class TexCordHolder {
         public Vector2f top_left;
