@@ -4,7 +4,7 @@
         <message>Farrand, we are about half way to Zeselia,</message>
         <message type="append">we should make it there within the next week.</message>
 
-        <header>poop</header>
+        <header>Farrand</header>
         <message>Good, Waldomar said this meeting will be peaceful but keep your wits about you, </message>
         <message type="append">I fear he may have bad intentions.</message>
 
@@ -12,12 +12,50 @@
         <message>Really?</message>
 
         <header>Farrand</header>
-        <message>Yes, his father was from the old world where man was left unchecked. </message>
-        <message type="append">Over the years man ravaged the world with nuclear war and ecological destruction in search of wealth and power. </message>
+        <message>Yes, his father was from the old world where man was left unchecked </message>
+        <message type="append">and humanity ravaged the world environmentally to the point of no return.</message>
+
+
 
         <header>Farrand</header>
-        <message>Isthmo is one of the only habitable areas left on earth that still has valuable resources </message>
-        <message type="append">I wouldn’t be surprised if he tries to take it all for himself.</message>
+        <message>Isthmo is one of the only habitable areas left on earth that still has </message>
+        <message type="append">valuable resources. I wouldn’t be surprised if he tries to take it all for himself.</message>
+
+        <header>Jeremiah</header>
+        <message>With an all out war? </message>
+        <message type="append">Do they really think they can stand up to us with our advanced magic and the spore thing?.</message>
+
+        <header>Farrand</header>
+        <message>We can’t be sure. They too have made progress with their weaponry since</message>
+        <message type="append">the last great war ended 20 years ago. Granted, they still use gunpowder.</message>
+
+        <header>Jeremiah</header>
+        <message>Interesting...</message>
+
+        <header>Farrand</header>
+        <message>But the fact remains that Waldomar II has been encroaching on our land  </message>
+        <message type="append">for the past 2 years now and believes we haven’t noticed.</message>
+
+        <header>Farrand</header>
+        <message>Our scouts have also reported his troops mobilizing along our borders. </message>
+
+        <header>Jeremiah</header>
+        <message>In that case I fear the worst may come of this meeting.</message>
+        <message type="append">Are you sure its a good idea?</message>
+
+        <header>Farrand</header>
+        <message>The chance to avoid a second war, however slim it may be, is worth the risk. </message>
+
+        <header>Jeremiah</header>
+        <message>Good point.</message>
+
+        <header>Jeremiah</header>
+        <message>There’s a stream up ahead. We can set up camp for the night there.</message>
+
+
+
+
+
 
 
 
