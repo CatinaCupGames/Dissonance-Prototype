@@ -7,7 +7,7 @@
          "opacity":1,
          "properties":
             {
-             "ground":"ground"
+             "ground":"true"
             },
          "type":"tilelayer",
          "visible":true,
@@ -22,7 +22,7 @@
          "opacity":1,
          "properties":
             {
-             "ground":""
+             "ground":"true"
             },
          "type":"tilelayer",
          "visible":true,
