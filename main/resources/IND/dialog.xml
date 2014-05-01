@@ -1,68 +1,32 @@
 <game_dialog>
-    <dialog dialog_id="testscene-p1">
-        <header>mootykins</header>
-        <message>POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP </message>
-    </dialog>
+    <dialog dialog_id = "Outdoor Scene">
+        <header>Jeremiah</header>
+        <message>Farrand, we are about half way to Zeselia,</message>
+        <message type="append">we should make it there within the next week.</message>
 
-    <dialog dialog_id="testscene-p2">
-        <header>mootykins</header>
-        <message style="bold" type="new">Its to dangerous to go alone!</message>
+        <header>poop</header>
+        <message>Good, Waldomar said this meeting will be peaceful but keep your wits about you, </message>
+        <message type="append">I fear he may have bad intentions.</message>
 
-        <message type="append"> Take this!</message>
-    </dialog>
+        <header>Jeremiah</header>
+        <message>Really?</message>
 
-    <dialog dialog_id="arrem">
-        <header>Arrem</header>
-        <message>Scootaloo is not a chicken Eddie!</message>
-    </dialog>
+        <header>Farrand</header>
+        <message>Yes, his father was from the old world where man was left unchecked. </message>
+        <message type="append">Over the years man ravaged the world with nuclear war and ecological destruction in search of wealth and power. </message>
+
+        <header>Farrand</header>
+        <message>Isthmo is one of the only habitable areas left on earth that still has valuable resources </message>
+        <message type="append">I wouldn’t be surprised if he tries to take it all for himself.</message>
 
 
 
-    <dialog dialog_id="testingTrigger">
-        <header>Max Kek</header>
-        <message color="#1d1d1d" style="bold">Kek </message>
-        <message color="white" speed="1" type="append">LITERALLY END UR LIFE XDDDDD REDIT</message>
-        <message speed="500">:^)</message>
-    </dialog>
 
-    <dialog dialog_id="testTrigger2">
-        <header>Mom</header>
-        <message>Please don't do that......</message>
-    </dialog>
 
-    <dialog dialog_id="shader-test">
-        <header>SHADERS!!!</header>
-        <message>ACTIVATE SHADER POWERS!!!!!!!</message>
     </dialog>
 
 
-    <dialog dialog_id="TEST">
-        <header>The Old Man</header>
-        <message color="red" style="italic">Hello...</message>
-        <message type="append"> my name is Alexander..</message>
-        <message style="bold">AAAAAAAAA BBBBBBBBBBBBB CCCCCCCCCCC APPLE SAUCE</message>
-        <message style="italic" type="append">WHAT IS GOING ON, I DONT EVEN KNOW ANYMORE..</message>
-        <header>The Old Man</header>
-        <message>How's it going...</message>
 
-        <message>...Be..Because I'm fine...</message>
-    </dialog>
 
-    <dialog dialog_id="TEST2">
-        <header>TEST1</header>
-        <message>Hello...</message>
 
-        <header>TEST2</header>
-        <message>How's it going..</message>
-        <image>reaction1.png</image>
-
-        <message>...Be..Because I'm fine...</message>
-    </dialog>
-
-	<dialog dialog_id="test">
-        <header>Farnanddo</header>
-		<message>I'm</message>
-		<message style="bold" type="append"> hohhohihoiho</message>
-		<message type="append">&#13;</message>
-    </dialog>
 </game_dialog>

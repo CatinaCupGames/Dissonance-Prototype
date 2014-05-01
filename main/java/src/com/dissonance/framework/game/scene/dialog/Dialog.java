@@ -66,13 +66,12 @@ public class Dialog {
     }
 
     public String getCurrentHeader() {
-        if (index >= header.length && header.length > 0) {
-            return header[header.length - 1];
-        } else if (index < header.length) {
-            return header[index];
-        } else {
-            return "";
+        int i = index;
+        while (i >= header.length || header[i] == null) {
+            i--;
         }
+
+        return header[i];
     }
 
     public String getCurrentImagePath() {
