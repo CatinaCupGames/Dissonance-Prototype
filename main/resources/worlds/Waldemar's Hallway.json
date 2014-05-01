@@ -5,6 +5,10 @@
          "height":13,
          "name":"Tile Layer 1",
          "opacity":1,
+         "properties":
+            {
+             "ground":"true"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":30,
@@ -16,6 +20,10 @@
          "height":13,
          "name":"Rug",
          "opacity":1,
+         "properties":
+            {
+             "ground":"true"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":30,
