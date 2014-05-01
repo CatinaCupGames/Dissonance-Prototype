@@ -3,17 +3,18 @@ package com.dissonance.game.quests;
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.game.scenes.Demo_OpeningScene;
+import com.dissonance.game.scenes.OutdoorScene;
 
 public class Demo_Level1_Quest extends AbstractQuest {
     @Override
     public void startQuest() throws Exception {
-        loadWorldsIntoMemory("demo_opening_world", "demo_opening_world_2", "demo_city_level1");
+        loadWorldsIntoMemory("Zesilia_pan", "ToZesilia");
         RenderService.INSTANCE.fadeToBlack(1); //Make screen black
-        displayWorld("demo_opening_world", false);
+        displayWorld("Zesilia_pan", false);
 
         playSceneAndWait(Demo_OpeningScene.class);
-
-        //displayWorld("demo_city_level1", RenderService.TransitionType.CROSSFADE).waitForWorldLoaded();
+        displayWorld("ToZesilia");
+        playSceneAndWait(OutdoorScene.class);
     }
 
     @Override
