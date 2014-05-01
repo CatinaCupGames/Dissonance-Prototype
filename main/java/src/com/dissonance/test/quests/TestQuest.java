@@ -32,7 +32,7 @@ public class TestQuest extends AbstractQuest {
 
     @Override
     public void startQuest() throws Exception {
-       Sound.playSound("creepy").setOnSoundFinishedListener(new Sound.OnSoundFinishedListener() {
+       Sound sound = Sound.fadeInSound("creepy", 4000).setOnSoundFinishedListener(new Sound.OnSoundFinishedListener() {
             @Override
             public void onFinished(Sound.SoundFinishedType type) {
                 System.out.println("Creepy finished " + type);
@@ -72,6 +72,9 @@ public class TestQuest extends AbstractQuest {
         enemy.setY(100);
         w.loadAndAdd(enemy);
         Thread.sleep(250);
+
+        Thread.sleep(3000);
+        sound.fadeOut(5000);
         //enemy.setBehavior(new BehaviorOffsetFollow(enemy, player, new Position(10, 10)));
         //TestScene scene = new TestScene();
         //scene.beginScene();

@@ -16,6 +16,8 @@ Release/*
 Debug/*
 x64/*
 
+main/resources/worlds/*.pdn
+
 
 *.pydevproject
 *.project

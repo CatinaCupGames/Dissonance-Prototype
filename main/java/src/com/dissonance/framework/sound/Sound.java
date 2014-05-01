@@ -1,6 +1,8 @@
 package com.dissonance.framework.sound;
 
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Validator;
+import com.sun.jndi.url.dns.dnsURLContext;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL;
@@ -31,6 +33,7 @@ public final class Sound {
     private static volatile boolean running = false;
     protected final float startTime;
     protected final float endTime;
+    protected float volume;
     private final String name;
     private int bufferIndex;
     private int sourceIndex;
@@ -256,6 +259,21 @@ public final class Sound {
                                     toremove.add(sound);
                             }
                         }
+
+                        if (sound.isFadingIn) {
+                            float time = RenderService.getTime() - sound.fade_startTime;
+                            float newVolume = (1f * (time / sound.fade_duration));
+                            if (newVolume >= 1f)
+                                sound.isFadingIn = false;
+                            sound.setVolume(newVolume);
+                        }
+                        if (sound.isFadingOut) {
+                            float time = RenderService.getTime() - sound.fade_startTime;
+                            float newVolume = (1f * (1- (time / sound.fade_duration)));
+                            if (newVolume <= 0f)
+                                sound.isFadingOut = false;
+                            sound.setVolume(newVolume);
+                        }
                     }
 
 
@@ -351,6 +369,20 @@ public final class Sound {
         return sound;
     }
 
+    public static Sound fadeInSound(String name, float duration) {
+        Sound sound = Sound.playSound(name);
+
+        if (sound != null) {
+            sound.fadeIn(duration);
+        }
+
+        return sound;
+    }
+
+    public static Sound fadeInSound(String name) {
+        return fadeInSound(name, 1700);
+    }
+
     /**
      * Pauses a sound with the specified name. If the sound
      * can't be found, nothing will happen. Use {@link #playSound(String)}
@@ -441,15 +473,50 @@ public final class Sound {
      */
     public static Sound setVolume(String name, float volume) {
         Sound sound = getSound(name);
+        if (volume > 1f)
+            volume = 1f;
+        else if (volume < 0f)
+            volume = 0f;
 
         if (sound != null) {
             alSourcef(sound.getSourceIndex(), AL_GAIN, volume);
+            sound.volume = volume;
         }
 
         return sound;
     }
 
+    private float fade_duration;
+    private boolean isFadingIn;
+    private boolean isFadingOut;
+    private long fade_startTime;
+    public void fadeIn() {
+        fadeIn(1700);
+    }
+
+    public void fadeIn(float duration) {
+        fade_duration = duration;
+        fade_startTime = RenderService.getTime();
+        isFadingIn = true;
+        setVolume(0f);
+    }
+
+    public void fadeOut() {
+        fadeOut(1700);
+    }
+
+    public void fadeOut(float duration) {
+        fade_duration = duration;
+        fade_startTime = RenderService.getTime();
+        isFadingOut = true;
+    }
+
+
     public void setVolume(float volume) {
+        if (volume > 1f)
+            volume = 1f;
+        else if (volume < 0f)
+            volume = 0f;
         alSourcef(sourceIndex, AL_GAIN, volume);
     }
 
@@ -542,8 +609,9 @@ public final class Sound {
      *
      * @param listener The new sound listener.
      */
-    public void setOnSoundFinishedListener(OnSoundFinishedListener listener) {
+    public Sound setOnSoundFinishedListener(OnSoundFinishedListener listener) {
         this.listener = listener;
+        return this;
     }
 
     public enum SoundFinishedType {
