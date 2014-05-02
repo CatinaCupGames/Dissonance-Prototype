@@ -7,6 +7,6 @@ import com.dissonance.framework.render.RenderService;
 public class SimpleSceneTest extends SimpleScene {
     @Override
     protected void playScene() throws Throwable {
-        Dialog.displayDialog("Outdoor Scene");
+        Dialog.displayDialog("road to waldos house");
     }
 }
