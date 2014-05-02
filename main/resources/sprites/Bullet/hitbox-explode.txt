@@ -1,4 +1,1 @@
-minX:8
-minY:8
-maxX:9
-maxY:9
+8:8:9:9
