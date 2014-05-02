@@ -51,31 +51,26 @@
 
         <header>Jeremiah</header>
         <message>There’s a stream up ahead. We can set up camp for the night there.</message>
+    </dialog>
 
 
-
-
+    <dialog dialog_id="entering_zesilia1">
         <header>Jeremiah</header>
         <message>Farrand, we have arrived at the Gates of Zeslia.</message>
 
         <header>Farrand</header>
         <message>Good.</message>
-
+    </dialog>
+    <dialog dialog_id="entering_zesilia2">
         <header>Guard</header>
         <message>You there! State you name and business in the city of Zeslia!</message>
 
         <header>Farrand</header>
-        <message>I am Farrand, Sage of Nuado, and this is Jeremiah,</message>
+        <message>I am Farrand, Sage of Nuado, and this is Jeremiah.</message>
         <message type="append">We are here on official business to speak with Waldomar II.</message>
 
         <header>Guard</header>
         <message>You are permitted to enter.</message>
-
-
-
-
-
-
     </dialog>
 
 

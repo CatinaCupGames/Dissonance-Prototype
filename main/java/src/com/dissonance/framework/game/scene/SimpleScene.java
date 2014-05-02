@@ -15,12 +15,12 @@ public abstract class SimpleScene implements Scene {
     private boolean scenePlaying = false;
     @Override
     public void beginScene() {
+        scenePlaying = true;
         new Thread(new Runnable() {
 
             @Override
             public void run() {
                 Thread.currentThread().setName("==SCENE " + new Random().nextLong() + "==");
-                scenePlaying = true;
                 try {
                     playScene();
                 } catch (Throwable throwable) {
