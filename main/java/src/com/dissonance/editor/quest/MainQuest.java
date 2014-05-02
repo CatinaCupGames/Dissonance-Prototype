@@ -508,11 +508,14 @@ public class MainQuest extends AbstractQuest {
         boolean s = InputKeys.isButtonPressed(InputKeys.MOVEDOWN);
         boolean a = InputKeys.isButtonPressed(InputKeys.MOVELEFT);
         if (enter && !pressed && selectedSprite != null) {
+            float oX = selectedSprite.getX();
+            float oWidth = selectedSprite.getWidth() / 2f;
+            float oY = selectedSprite.getY();
             pressed = true;
             addSprite(selectedSprite.getClass());
             if (selectedSprite instanceof Sprite) {
-                ((Sprite)selectedSprite).setX(selectedSprite.getX() + (selectedSprite.getWidth() / 2f));
-                ((Sprite)selectedSprite).setY(selectedSprite.getY());
+                ((Sprite)selectedSprite).setX(oX + oWidth);
+                ((Sprite)selectedSprite).setY(oY);
                 EditorUI.INSTANCE.refreshCode();
             }
         } else if (!enter && pressed) pressed = false;
