@@ -15,8 +15,6 @@
         <message>Yes, his father was from the old world where man was left unchecked </message>
         <message type="append">and humanity ravaged the world environmentally to the point of no return.</message>
 
-
-
         <header>Farrand</header>
         <message>Isthmo is one of the only habitable areas left on earth that still has </message>
         <message type="append">valuable resources. I wouldn’t be surprised if he tries to take it all for himself.</message>
@@ -73,6 +71,20 @@
         <message>You are permitted to enter.</message>
     </dialog>
 
+    <dialog dialog_id="road to waldos house">
+        <header>Jeremiah</header>
+        <message speed="600">....</message>
+
+        <header>Jeremiah</header>
+        <message speed="39">So... Mighty nice weather we are having today aren't we?</message>
+
+        <header>Guard</header>
+        <message>Waldomar has ordered we keep contact to a minimum.</message>
+
+        <header>Jeremiah</header>
+        <message>Oh ok then...</message>
+
+    </dialog>
 
 
 
