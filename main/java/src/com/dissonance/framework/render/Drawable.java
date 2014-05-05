@@ -1,7 +1,5 @@
 package com.dissonance.framework.render;
 
-import com.dissonance.framework.system.annotations.OpenglSafe;
-
 public interface Drawable extends Comparable<Drawable> {
     public static final int BEFORE = -1;
     public static final int EQUAL = 0;

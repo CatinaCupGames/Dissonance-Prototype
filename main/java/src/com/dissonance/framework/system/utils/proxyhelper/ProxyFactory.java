@@ -1,6 +1,6 @@
 package com.dissonance.framework.system.utils.proxyhelper;
 
-import com.dissonance.framework.system.annotations.OpenglSafe;
+import com.dissonance.framework.system.annotations.OpenGLSafe;
 import com.dissonance.framework.system.annotations.OpenglUnsafe;
 
 import java.lang.reflect.InvocationHandler;
@@ -19,13 +19,13 @@ public class ProxyFactory {
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             Method realMethod = object.getClass().getMethod(method.getName(), method.getParameterTypes());
 
-            OpenglSafe safe = realMethod.getAnnotation(OpenglSafe.class);
+            OpenGLSafe safe = realMethod.getAnnotation(OpenGLSafe.class);
             if (safe != null) {
                 boolean status = safe.handler().newInstance().handleInvoke(method, object, args);
                 if (!status)
                     return null;
             } else {
-                safe = method.getAnnotation(OpenglSafe.class);
+                safe = method.getAnnotation(OpenGLSafe.class);
                 if (safe != null) {
                     boolean status = safe.handler().newInstance().handleInvoke(method, object, args);
                     if (!status)
