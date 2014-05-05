@@ -32,6 +32,8 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
 
     @Override
     public boolean isPointInside(float x, float y) {
+        if (!visible)
+            return false;
         if (heightC == -1 || widthC == -1) {
             if (getTexture() instanceof SpriteTexture) {
                 SpriteTexture temp = (SpriteTexture) getTexture();

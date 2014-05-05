@@ -8,6 +8,7 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
 
 import java.awt.*;
+import java.awt.Font;
 import java.text.DecimalFormat;
 
 import static org.lwjgl.opengl.GL11.*;

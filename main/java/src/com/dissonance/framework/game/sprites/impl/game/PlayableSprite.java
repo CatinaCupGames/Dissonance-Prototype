@@ -22,6 +22,7 @@ public abstract class PlayableSprite extends CombatSprite {
     private boolean usespell1, usespell2;
     private boolean frozen;
     private boolean use_attack;
+    private static boolean use_switch;
     private boolean use_dodge;
     private float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
     private long dodgeStartTime;
@@ -211,7 +212,23 @@ public abstract class PlayableSprite extends CombatSprite {
         }
     }
 
+    private static int s_index = 0;
     protected void checkKeys() {
+        if (!use_switch && party.size() > 0) {
+            if (InputKeys.isButtonPressed(InputKeys.SWITCH)) {
+                use_switch = true;
+                setVisible(false);
+                PlayableSprite next = party.get(s_index);
+                next.teleportX(getX());
+                next.teleportY(getY());
+                s_index++;
+                if (s_index >= next.party.size())
+                    s_index = 0;
+                next.select();
+                next.setVisible(true);
+            }
+        } else if (!InputKeys.isButtonPressed(InputKeys.SWITCH) && use_switch) use_switch = false;
+
         if (!use_attack && !is_dodging) {
             if (InputKeys.isButtonPressed(InputKeys.ATTACK)) {
                 boolean skip = checkSelect();
@@ -365,9 +382,9 @@ public abstract class PlayableSprite extends CombatSprite {
         }
 
         currentlyPlaying = this;
+        isPlaying = true;
 
-        Camera.setCameraEaseListener(listener);
-        Camera.easeMovement(Camera.translateToCameraCenter(getVector(), 32), 800);
+        Camera.followSprite(this);
     }
 
     public void deselect() {
@@ -499,7 +516,6 @@ public abstract class PlayableSprite extends CombatSprite {
 
         @Override
         public void onMovementFinished() {
-            isPlaying = true;
             Camera.setCameraEaseListener(null); //Reset listener
             Camera.followSprite(PlayableSprite.this);
         }
