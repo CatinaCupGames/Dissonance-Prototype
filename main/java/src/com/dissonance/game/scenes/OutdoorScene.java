@@ -13,17 +13,17 @@ public class OutdoorScene extends SimpleScene {
     protected void playScene() throws Throwable {
         RenderService.INSTANCE.fadeFromBlack(10000f);
         Vector2f center = Camera.translateToCameraCenter(ToZesilia.farrand.getVector(), ToZesilia.farrand.getHeight());
-        center.x -= 330;
+        //center.x -= 330;
         Camera.setPos(center);
         center.x -= 400;
         Camera.linearMovement(center, 7500);
         Position farrandTarget = ToZesilia.farrand.getPosition();
-        Position jerymanglerTarget = ToZesilia.jeremiah.getPosition();
+        Position jeremiahTarget = ToZesilia.jeremiah.getPosition();
 
         ToZesilia.farrand.setMovementSpeed(8f);
         ToZesilia.farrand.setWaypoint(new Position(farrandTarget.getX() - 600, farrandTarget.getY()), WaypointType.SIMPLE);
         ToZesilia.jeremiah.setMovementSpeed(8f);
-        ToZesilia.jeremiah.setWaypoint(new Position(jerymanglerTarget.getX() - 700, jerymanglerTarget.getY()), WaypointType.SIMPLE);
+        ToZesilia.jeremiah.setWaypoint(new Position(jeremiahTarget.getX() - 700, jeremiahTarget.getY()), WaypointType.SIMPLE);
         Camera.waitForEndOfMovement();
     }
 }
