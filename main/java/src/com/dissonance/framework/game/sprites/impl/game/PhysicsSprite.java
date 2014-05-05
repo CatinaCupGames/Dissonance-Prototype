@@ -1,9 +1,12 @@
 package com.dissonance.framework.game.sprites.impl.game;
 
+import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.combat.Bullet;
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
+import com.dissonance.framework.game.world.tiled.Layer;
+import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.render.Camera;
@@ -98,11 +101,6 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                 super.setX(super.getX() + (add < 0 ? -1 : 1));
             }
         } else if (c instanceof Tile) {
-            if (((Tile)c).isTriggerTile()) {
-                Tile tile = (Tile)c;
-                tile.getTrigger().onCollide(this, tile);
-                return;
-            }
             super.setX(oldX);
             float add = getX() - c.getX();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
@@ -188,11 +186,6 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                 super.setY(super.getY() + (add < 0 ? -1 : 1));
             }
         } else if (c instanceof Tile) {
-            if (((Tile)c).isTriggerTile()) {
-                Tile tile = (Tile)c;
-                tile.getTrigger().onCollide(this, tile);
-                return;
-            }
             super.setY(oldY);
             float add = getY() - c.getY();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
@@ -384,6 +377,21 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             }
         }
         return value;
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (isUpdateCanceled())
+            return;
+        float x = getX() + 8.5f;
+        float y = getY() + (getHeight() / 2f) - 6f;
+        Layer[] layers = getWorld().getLayers(LayerType.TILE_LAYER);
+        for (Layer layer : layers) {
+            Tile tile = getWorld().getTileAt(x / 16f, FastMath.fastCeil((y - 8f) / 16f), layer);
+            if (tile.isTriggerTile())
+                tile.getTrigger().onCollide(this, tile);
+        }
     }
 
     @Override

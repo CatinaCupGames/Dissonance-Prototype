@@ -169,8 +169,8 @@ public abstract class Sprite implements Drawable, Serializable {
         if (lowest == null)
             return null;
 
-        int x = (int) (getX() / 32);
-        int y = (int) (getY() / 32);
+        int x = (int) (getX() / 16f);
+        int y = (int) (getY() / 16f);
 
         return lowest.getTileAt(x, y, world);
     }

@@ -24,7 +24,7 @@ public class Layer {
     private TiledObject[] objects; //for type objectgroup
     private long[] data; //for type tilelayer
     private HashMap<Integer, Tile> cache = new HashMap<Integer, Tile>();
-    private HashMap<Long, Boolean[]> fuckItInTheAsshole = new HashMap<Long, Boolean[]>();
+    private HashMap<Integer, Boolean[]> fuckItInTheAsshole = new HashMap<Integer, Boolean[]>();
 
     private int layer_number;
 
@@ -44,8 +44,8 @@ public class Layer {
         if (index < 0 || index >= data.length) {
             return null;
         }
-        if (fuckItInTheAsshole.containsKey(data[index])) {
-            Boolean[] values = fuckItInTheAsshole.get(data[index]);
+        if (fuckItInTheAsshole.containsKey(index)) {
+            Boolean[] values = fuckItInTheAsshole.get(index);
             Tile t = new Tile(data[index], x, y, this, world, values[0], values[1], values[2]);
             cache.put(index, t);
             return t;
@@ -129,7 +129,9 @@ public class Layer {
 
         //Clear the rotation flags
         data[index] &= ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
-        fuckItInTheAsshole.put(data[index], new Boolean[] { flipH, flipL, flipD });
+
+        if (flipH || flipL || flipD)
+            fuckItInTheAsshole.put(index, new Boolean[] { flipH, flipL, flipD });
 
         return new boolean[] { flipH, flipL, flipD };
     }

@@ -141,7 +141,7 @@ public class HitBox {
                 Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
                 for (Layer l : layers) {
                     Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), l);
-                    if (t != null && (!t.isPassable() || t.isTriggerTile())) {
+                    if (t != null && !t.isPassable()) {
                         lastCollide = t;
                         return true;
                     }
@@ -177,7 +177,7 @@ public class HitBox {
                 Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
                 for (Layer l : layers) {
                     Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), l);
-                    if (t != null && (!t.isPassable() || t.isTriggerTile())) {
+                    if (t != null && !t.isPassable()) {
                         if (collidables.contains(t))
                             continue;
                         collidables.add(t);
