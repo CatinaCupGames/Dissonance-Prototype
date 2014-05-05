@@ -49,7 +49,7 @@ public class TestQuest extends AbstractQuest {
         World w = WorldFactory.getWorld("test_tileset");
         setWorld(w);
         w.waitForWorldLoaded();
-
+        playSceneAndWait(SimpleSceneTest.class);
         final PlayableSprite player = PlayableSprite.getCurrentlyPlayingSprite();
         player.setMarksmanship(2);
 

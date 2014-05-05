@@ -88,25 +88,28 @@ first impressions as a sage.</message>
     </dialog>
     <dialog dialog_id="Waldos meeting">
         <header>Waldomar</header>
-        <message> Ah, Farrand, the man of the hour! I was starting to get worried you would keep us waiting!</message>
+        <message>Ah, Farrand, the man of the hour! I was worried you would keep us waiting!</message>
         <message type="append">So, did my little crew here give you a warm welcome?</message>
 
         <header>Farrand</header>
         <message>...</message>
 
         <header>Waldomar</header>
-        <message>...Please, make yourself comfortable! Want a cigar?</message>
+        <message>...Please, make yourself comfortable! </message>
+        <message type="append">Want a cigar?</message>
 
         <header>Farrand</header>
         <message>No thank you, I’d like to get Straight to the point.</message>
 
         <header>Waldomar</header>
-        <message>Well then, by all means! Tell me,</message>
-        <message type="append"> why have we gathered here today?</message>
+        <message>Well then, by all means! Tell me, why have we gathered here today?</message>
 
         <header>Farrand</header>
-        <message>I have come to order the halt of the Adlers' urban expansion project. As I am sure you are aware,</message>
-        <message type="append">industrialization poses a threat to both our environment and to our state of social well-being.</message>
+        <message>I have come to order the halt of the Adlers' urban expansion project.</message>
+        <message type="append">As I am sure you are aware, industrialization poses a threat to both</message>
+
+        <header>Faarrand</header>
+        <mesage>our environment and to our state of social well-being.</mesage>
 
         <header>Waldomar</header>
         <message>You have come to “halt me and my expansion”?</message>
@@ -115,30 +118,40 @@ first impressions as a sage.</message>
         <message>Why, whatever do you mean by that?</message>
 
         <header>Farrand</header>
-        <message>You know as well as I do what it means... Your further expansion past the **east west line** is a clear violation of the **candidus treaty** that our fathers agreed upon all those years ago.</message>
+        <message>You know as well as I do what it means... Your further expansion past</message>
+        <message type="append">the **east west line** is a clear violation of the **candidus treaty** that</message>
+
+        <header>Farrand</header>
+        <message>our fathers agreed upon all those years ago.</message>
 
         <header>Waldomar</header>
         <message>Ah, but Farrand it would be selfish to keep all that land to yourself!</message>
 
         <header>Farrand</header>
-        <message>What’s selfish is the lavish lifestyle you live</message>
-        <message type="append">while many of your followers starve!</message>
+        <message>What’s selfish is the lavish lifestyle you live while many of your followers </message>
+        <message type="append">starve!</message>
 
         <header>Waldomar</header>
-        <message>The state of my own followers is their doing. They are truly free to work and live as they please. </message>
-        <message type="append">They don’t have imposed reproduction rights or live in blasted huts eating leaves and berries like animals.</message>
-        
-        <header>Farrand</header>
-        <message>The citizens of Isthmo do not live like animals! They are simply free of the corruption and destruction of mans old ways of living. I know your type Waldomar, your thirst for power is unquenchable, you won’t be satisfied until you have completely stripped this land of all of it’s resources in exchange for material wealth!</message>
-        <message type="append"> It’s because of people like you in the **old world** that Isthmo Candidus was created as a safe haven from ecological destruction in the first place and I'll be damned if I even let you have an inch more of it!</message>
+        <message>The state of my own followers is their doing. They are truly free </message>
+        <message type="append">to work and live as they please.</message>
+
+        <header>Waldomar</header>
+        <message>They don’t have imposed reproduction rights or live in blasted huts </message>
+        <message type="append">eating leaves and berries like animals.</message>
 
         <header>Farrand</header>
-        <message>AAAHhh</message>
+        <message>The citizens of Isthmo do not live like animals! They are simply free of the corruption and destruction of mans old ways of living. I know your type Waldomar, your thirst for power is unquenchable, you won’t be satisfied until you have completely stripped this land of all of it’s resources in exchange for material wealth!</message>
+        <message type="append"></message>
+
+        <header>Farrand</header>
+        <message>It’s because of people like you in the **old world** that Isthmo Candidus was created as a safe haven from ecological destruction in the first place and I'll be damned if I even let you have an inch more of it!</message>
+
         <message type="append">BBRRAAEHHEERG</message>
 
 
         <header>Waldomar</header>
-        <message> I will not idly sit by and take these insults! Guards arrest them on charges of treason!</message>
+        <message>I will not idly sit by and take these insults! Guards arrest them on charges of</message>
+        <message type="append">treason!</message>
 
 
 
