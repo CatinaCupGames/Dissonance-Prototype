@@ -195,6 +195,8 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
 
     @Override
     public void render() {
+        if (!visible)
+            return;
 	    //ROBO //todo fix all this shit
         if (texture == null)
             return;

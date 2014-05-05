@@ -29,7 +29,7 @@ public class InputKeys {
     public static final String STRAFE     = "strafe";
     public static final String JUMP       = "jump";
     public static final String DODGE      = "dodge";
-    public static final String EXTENDLOOK = "extendLook";
+    public static final String SWITCH = "extendLook";
 
     private final static String DIR = "config" + File.separator;
     private static boolean loaded = false;
@@ -232,7 +232,7 @@ public class InputKeys {
     }
 
     public static int getExtendLookKey() {
-        return keys.get(EXTENDLOOK);
+        return keys.get(SWITCH);
     }
 
     public static int getStrafeKey() {

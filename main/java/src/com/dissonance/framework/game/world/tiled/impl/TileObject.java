@@ -101,6 +101,8 @@ public class TileObject extends Sprite {
         paralax_effect = getTiledLayer().isParallaxLayer();
         animated = parentTileSet.getTileProperty(ID, "frames") != null;
         if (paralax_effect) {
+            x *= 2f;
+            y *= 2f;
             if (getTiledLayer().getProperty("parallax_speed") != null) {
                 try {
                     parallax_speed = Float.parseFloat(getTiledLayer().getProperty("parallax_speed"));
