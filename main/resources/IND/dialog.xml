@@ -9,18 +9,19 @@
         
         <header>Jeremiah</header>
         <message>The whole "no mounts" thing. This trip took us, like, three days.</message>
-        <message style="italic">I don't think my feet even exist anymore.</message>
+        <message style="italic" type="append">I don't think my feet even exist anymore.</message>
 
         <header>Farrand</header>
         <message>Well, what do you want me to do about it? The rules are there for a reason.</message>
         
         <header>Jeremiah</header>
-        <message>What reason can you think of for us walking across the entire damn provence?</message>
-        <message style="italic">Tell me, Farrand.</message>
+        <message>What reason can you think of for us walking across the entire damn provence? </message>
+        <message style="italic" type ="append">Tell me, Farrand.</message>
 
         <header>Farrand</header>
         <message style="italic">Well, </message>
-        <message>for one, horses eat things they're not supposed to. They're invasive.</message>
+        <message type="append">for one, horses eat things they're not supposed to. </message>
+        <message type="append">They're invasive.</message>
         
         <header>Jeremiah</header>
         <message>Then we can bring some feed or something. You're a higher up now, why don't you bring the issue to a meeting?</message>
@@ -108,7 +109,7 @@ first impressions as a sage.</message>
         <message>I have come to order the halt of the Adlers' urban expansion project.</message>
         <message type="append">As I am sure you are aware, industrialization poses a threat to both</message>
 
-        <header>Faarrand</header>
+        <header>Farrand</header>
         <mesage>our environment and to our state of social well-being.</mesage>
 
         <header>Waldomar</header>
@@ -141,7 +142,7 @@ first impressions as a sage.</message>
 
         <header>Farrand</header>
         <message>The citizens of Isthmo do not live like animals! They are simply free of the corruption and destruction of mans old ways of living. I know your type Waldomar, your thirst for power is unquenchable, you won’t be satisfied until you have completely stripped this land of all of it’s resources in exchange for material wealth!</message>
-        <message type="append">asdf</message>
+        <message type="append">dfskjgshdfk</message>
 
         <header>Farrand</header>
         <message>It’s because of people like you in the **old world** that Isthmo Candidus was created as a safe haven from ecological destruction in the first place and I'll be damned if I even let you have an inch more of it!</message>

@@ -57,7 +57,7 @@ public class IntroCredits extends AbstractUI {
         setWidth(256);
         setHeight(128);
 
-        marginBottom(10f);
+        marginTop(10f);
         marginLeft(10f);
 
         setAlpha(0f);
