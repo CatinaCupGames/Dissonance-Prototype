@@ -17,16 +17,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public abstract class PhysicsSprite extends AbstractWaypointSprite implements Collidable {
-    private HitBox hb;
+    private HitBox[] hb;
     private float heightC = -1;
     private float widthC = -1;
     private boolean moving;
 
     @Override
     public HitBox getHitBox() {
-        return hb;
+        return hb[0];
     }
 
     @Override
@@ -44,9 +45,12 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
 
         float sX = getX() - (widthC / 2f);
         float sY = getY() - (heightC / 2f);
-
-        float minX = sX + hb.getMinX(), minY = sY + hb.getMinY(), maxX = sX + hb.getMaxX(), maxY = sY + hb.getMaxY();
-        return x > minX && y > minY && x <= maxX && y <= maxY;
+        for (HitBox hitBox : hb) {
+            float minX = sX + hitBox.getMinX(), minY = sY + hitBox.getMinY(), maxX = sX + hitBox.getMaxX(), maxY = sY + hitBox.getMaxY();
+            if (x > minX && y > minY && x <= maxX && y <= maxY)
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -54,8 +58,12 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         float oX = super.getX();
         super.setX(x);
 
-        if (hb != null && hb.checkForCollision(this)) {
-            onCollideX(oX, x, hb.getLastCollide());
+        if (hb == null)
+            return;
+        for (HitBox hitBox : hb) {
+            if (hitBox.checkForCollision(this)) {
+                onCollideX(oX, x, hitBox.getLastCollide(), hitBox);
+            }
         }
     }
 
@@ -64,12 +72,16 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         float oY = super.getY();
         super.setY(y);
 
-        if (hb != null && hb.checkForCollision(this)) {
-            onCollideY(oY, y, hb.getLastCollide());
+        if (hb == null)
+            return;
+        for (HitBox hitBox : hb) {
+            if (hitBox.checkForCollision(this)) {
+                onCollideY(oY, y, hitBox.getLastCollide(), hitBox);
+            }
         }
     }
 
-    protected void onCollideX(float oldX, float newX, Collidable hit) {
+    protected void onCollideX(float oldX, float newX, Collidable hit, HitBox hb) {
         Collidable c = hb.getLastCollide();
 
         if (c instanceof Bullet) {
@@ -154,7 +166,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         }
     }
 
-    protected void onCollideY(float oldY, float newY, Collidable hit) {
+    protected void onCollideY(float oldY, float newY, Collidable hit, HitBox hb) {
         Collidable c = hb.getLastCollide();
 
         if (c instanceof Bullet) {
@@ -253,9 +265,19 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                 BufferedReader br = new BufferedReader(new InputStreamReader(fIn));
 
                 String l;
+                ArrayList<HitBox> hitboxes = new ArrayList<HitBox>();
                 try {
                     while ((l = br.readLine()) != null) {
-                        if (l.split("\\:")[0].equals("minX")) {
+                        int minX, minY, maxX, maxY;
+                        String[] str = l.split("\\:");
+
+                        minX = Integer.parseInt(str[0]);
+                        minY = Integer.parseInt(str[1]);
+                        maxX = Integer.parseInt(str[2]);
+                        maxY = Integer.parseInt(str[3]);
+
+                        hitboxes.add(new HitBox(minX, minY, maxX, maxY));
+                        /*if (l.split("\\:")[0].equals("minX")) {
                             try {
                                 sX = Integer.parseInt(l.split("\\:")[1]);
                             } catch (Throwable t) {
@@ -279,9 +301,9 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                             } catch (Throwable t) {
                                 t.printStackTrace();
                             }
-                        }
+                        }*/
                     }
-                    hb = new HitBox(sX, sY, bX, bY);
+                    hb = hitboxes.toArray(new HitBox[hitboxes.size()]);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -305,9 +327,19 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                 BufferedReader br = new BufferedReader(new InputStreamReader(fIn));
 
                 String l;
+                ArrayList<HitBox> hitboxes = new ArrayList<HitBox>();
                 try {
                     while ((l = br.readLine()) != null) {
-                        if (l.split("\\:")[0].equals("minX")) {
+                        int minX, minY, maxX, maxY;
+                        String[] str = l.split("\\:");
+
+                        minX = Integer.parseInt(str[0]);
+                        minY = Integer.parseInt(str[1]);
+                        maxX = Integer.parseInt(str[2]);
+                        maxY = Integer.parseInt(str[3]);
+
+                        hitboxes.add(new HitBox(minX, minY, maxX, maxY));
+                        /*if (l.split("\\:")[0].equals("minX")) {
                             try {
                                 sX = Integer.parseInt(l.split("\\:")[1]);
                             } catch (Throwable t) {
@@ -331,9 +363,9 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                             } catch (Throwable t) {
                                 t.printStackTrace();
                             }
-                        }
+                        }*/
                     }
-                    hb = new HitBox(sX, sY, bX, bY);
+                    hb = hitboxes.toArray(new HitBox[hitboxes.size()]);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -352,6 +384,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         }
 
         float sX = 0, sY = 0, bX = width, bY = height;
+        ArrayList<HitBox> hitboxes = new ArrayList<HitBox>();
         InputStream fIn = PhysicsSprite.class.getClassLoader().getResourceAsStream("sprites/" + getSpriteName() + "/hitbox.txt");
         if (fIn != null) {
             BufferedReader br = new BufferedReader(new InputStreamReader(fIn));
@@ -359,38 +392,24 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             String l;
             try {
                 while ((l = br.readLine()) != null) {
-                    if (l.split("\\:")[0].equals("minX")) {
-                        try {
-                            sX = Integer.parseInt(l.split("\\:")[1]);
-                        } catch (Throwable t) {
-                            t.printStackTrace();
-                        }
-                    } else if (l.split("\\:")[0].equals("minY")) {
-                        try {
-                            sY = Integer.parseInt(l.split("\\:")[1]);
-                        } catch (Throwable t) {
-                            t.printStackTrace();
-                        }
-                    } else if (l.split("\\:")[0].equals("maxX")) {
-                        try {
-                            bX = Integer.parseInt(l.split("\\:")[1]);
-                        } catch (Throwable t) {
-                            t.printStackTrace();
-                        }
-                    } else if (l.split("\\:")[0].equals("maxY")) {
-                        try {
-                            bY = Integer.parseInt(l.split("\\:")[1]);
-                        } catch (Throwable t) {
-                            t.printStackTrace();
-                        }
-                    }
+                    int minX, minY, maxX, maxY;
+                    String[] str = l.split("\\:");
+
+                    minX = Integer.parseInt(str[0]);
+                    minY = Integer.parseInt(str[1]);
+                    maxX = Integer.parseInt(str[2]);
+                    maxY = Integer.parseInt(str[3]);
+
+                    hitboxes.add(new HitBox(minX, minY, maxX, maxY));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        if (hitboxes.size() == 0)
+            hitboxes.add(new HitBox(sX, sY, bX, bY));
 
-        hb = new HitBox(sX, sY, bX, bY);
+        hb = hitboxes.toArray(new HitBox[hitboxes.size()]);
 
         HitBox.registerSprite(this);
     }

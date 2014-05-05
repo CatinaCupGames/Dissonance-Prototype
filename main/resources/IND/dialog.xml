@@ -1,5 +1,5 @@
 <game_dialog>
-    <dialog dialog_id = "Outdoor Scene">
+    <dialog dialog_id = "Outdoor Scene Old">
         <header>Jeremiah</header>
         <message>Farrand, we are about half way to Zeselia,</message>
         <message type="append">we should make it there within the next week.</message>
@@ -50,6 +50,57 @@
         <header>Jeremiah</header>
         <message>There’s a stream up ahead. We can set up camp for the night there.</message>
     </dialog>
+    <dialog dialog_id = "Outdoor Scene">
+        <header>Jeremiah</header>
+        <message>This is ridiculous.</message>
+
+        <header>Farrand</header>
+        <message>What?</message>
+        
+        <header>Jeremiah</header>
+        <message>The whole "no mounts" thing. This trip took us, like, three days.</message>
+        <message style="italic">I don't think my feet even exist anymore.</message>
+
+        <header>Farrand</header>
+        <message>Well, what do you want me to do about it? The rules are there for a reason.</message>
+        
+        <header>Jeremiah</header>
+        <message>What reason can you think of for us walking across the entire damn provence?</message>
+        <message style="italic">Tell me, Farrand.</message>
+
+        <header>Farrand</header>
+        <message style="italic">Well, </message>
+        <message>for one, horses eat things they're not supposed to. They're invasive.</message>
+        
+        <header>Jeremiah</header>
+        <message>Then we can bring some feed or something. You're a higher up now, why don't you bring the issue to a meeting?</message>
+
+        <header>Farrand</header>
+        <message>Oh, so then I can be "Farrand: Patron of Sloth" for the rest of my life. Proposing amendments isn't taken lightly, you know.</message>
+        
+        <header>Jeremiah</header>
+        <message>Well, I guess so. Still... </message>
+        <message style="italic">three days</message>
+        <message>, man.</message> 
+
+        <header>Farrand</header>
+        <message>You shouldn't be calling me </message>
+        <message style="italic">man</message>
+        <message>, either. We need to get into the habit of being professional if I want to make good 
+first impressions as a sage.</message>
+
+        <header>Jeremiah</header>
+        <message>Yeah, whatever... What matters now is that we got here.</message>
+
+        <header>Farrand</header>
+        <message>Yes. Now let's try to make this go smoothly. Remember: weapons down, do not act out, and let me do the talking.</message>
+        <message type="append">Emphasis on "let me do the talking".</message>
+
+        
+    </dialog>
+    
+    
+    
 
 
     <dialog dialog_id="entering_zesilia1">

@@ -22,6 +22,7 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Direction;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector2f;
 
 import javax.swing.*;
@@ -373,6 +374,29 @@ public class MainQuest extends AbstractQuest {
         }
     }
 
+    public void addSprite(Class<?> class_) {
+        Sprite sprite = Sprite.fromClass(class_);
+        sprites_name.add("");
+        sprites.add(sprite);
+        if (!EditorUI.INSTANCE.highlighter.classes.contains(sprite.getClass().getSimpleName())) {
+            EditorUI.INSTANCE.highlighter.addClass(sprite.getClass().getSimpleName());
+        }
+        sprite.setX(0);
+        sprite.setY(0);
+        getWorld().loadAndAdd(sprite);
+        if (PlayableSprite.getCurrentlyPlayingSprite() != null)
+            PlayableSprite.getCurrentlyPlayingSprite().freeze();
+        this.selectedSprite = sprite;
+        adding = true;
+        EditorUI.INSTANCE.refreshCode();
+        adding = false;
+        if (selectedSprite instanceof Sprite)
+            Camera.followSprite((Sprite)selectedSprite);
+        EditorUI.INSTANCE.clearComboBox();
+        EditorUI.INSTANCE.setComboBox(sprites);
+        EditorUI.INSTANCE.setComboIndex(sprites.size());
+    }
+
     public void addFormation(Formation formation) {
         formations.add(formation);
     }
@@ -476,11 +500,25 @@ public class MainQuest extends AbstractQuest {
     }
 
     private boolean tip = false;
+    private boolean pressed = false;
     private void update() {
+        boolean enter = Keyboard.isKeyDown(Keyboard.KEY_RETURN);
         boolean w = InputKeys.isButtonPressed(InputKeys.MOVEUP);
         boolean d = InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
         boolean s = InputKeys.isButtonPressed(InputKeys.MOVEDOWN);
         boolean a = InputKeys.isButtonPressed(InputKeys.MOVELEFT);
+        if (enter && !pressed && selectedSprite != null) {
+            float oX = selectedSprite.getX();
+            float oWidth = selectedSprite.getWidth() / 2f;
+            float oY = selectedSprite.getY();
+            pressed = true;
+            addSprite(selectedSprite.getClass());
+            if (selectedSprite instanceof Sprite) {
+                ((Sprite)selectedSprite).setX(oX + oWidth);
+                ((Sprite)selectedSprite).setY(oY);
+                EditorUI.INSTANCE.refreshCode();
+            }
+        } else if (!enter && pressed) pressed = false;
         if ((w || a || s || d) && selectedSprite != null && selectedSprite instanceof Sprite) {
             Sprite ss = (Sprite)selectedSprite;
 
