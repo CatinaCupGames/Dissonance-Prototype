@@ -11,24 +11,24 @@ import com.dissonance.game.sprites.environment.Tree2;
 import java.util.Random;
 
 public class ToZesilia implements WorldLoader {
-    public static Farrand var1;
-    public static Jeremiah var2;
+    public static Farrand farrand;
+    public static Jeremiah jeremiah;
     @Override
     public void onLoad(World w) {
-        var1 = new Farrand();
-        w.loadAndAdd(var1);
-        var1.setX(1208.0275f);
-        var1.setY(338.1298f);
+        farrand = new Farrand();
+        w.loadAndAdd(farrand);
+        farrand.setX(2808.0275f);
+        farrand.setY(338.1298f);
 
-        var2 = new Jeremiah();
-        w.loadAndAdd(var2);
-        var2.setX(1256.2601f);
-        var2.setY(353.97f);
+        jeremiah = new Jeremiah();
+        w.loadAndAdd(jeremiah);
+        jeremiah.setX(2856.2601f);
+        jeremiah.setY(353.97f);
 
 
         final Random random = new Random();
         for (int y = 2; y <= 8; y++) {
-            for (int x = 5; x <= 75; x++) {
+            for (int x = 25; x <= 100; x++) {
                 int num = random.nextInt(2);
                 switch (num) {
                     case 0:
@@ -47,7 +47,7 @@ public class ToZesilia implements WorldLoader {
             }
         }
         for (int y = 15; y <= 18; y++) {
-            for (int x = 5; x <= 75; x++) {
+            for (int x = 25; x <= 100; x++) {
                 int num = random.nextInt(2);
                 switch (num) {
                     case 0:
