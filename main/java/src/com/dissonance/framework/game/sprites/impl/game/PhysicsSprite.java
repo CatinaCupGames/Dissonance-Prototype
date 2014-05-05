@@ -98,6 +98,11 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                 super.setX(super.getX() + (add < 0 ? -1 : 1));
             }
         } else if (c instanceof Tile) {
+            if (((Tile)c).isTriggerTile()) {
+                Tile tile = (Tile)c;
+                tile.getTrigger().onCollide(this, tile);
+                return;
+            }
             super.setX(oldX);
             float add = getX() - c.getX();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
@@ -183,6 +188,11 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                 super.setY(super.getY() + (add < 0 ? -1 : 1));
             }
         } else if (c instanceof Tile) {
+            if (((Tile)c).isTriggerTile()) {
+                Tile tile = (Tile)c;
+                tile.getTrigger().onCollide(this, tile);
+                return;
+            }
             super.setY(oldY);
             float add = getY() - c.getY();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {

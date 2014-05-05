@@ -2,19 +2,28 @@ package com.dissonance.framework.game.world;
 
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.TileSet;
+import com.dissonance.framework.game.world.tiled.impl.AbstractTileTrigger;
+import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.util.HashMap;
+
 public class Tile implements Collidable {
+    private static HashMap<String, AbstractTileTrigger> instances = new HashMap<String, AbstractTileTrigger>();
+
     private final long id;
     private final int cost;
     private boolean passable = true;
+    private boolean trigger_tile = false;
+    private AbstractTileTrigger triggerClass;
     private final float x, y;
     private final Layer containingLayer;
     private final World parent;
+    private final boolean flipH, flipD, flipL;
 
-    public Tile(long id, float x, float y, Layer layer, World world) {
+    public Tile(long id, float x, float y, Layer layer, World world, boolean flipH, boolean flipL, boolean flipD) {
         this.parent = world;
         this.id = id;
 
@@ -34,9 +43,51 @@ public class Tile implements Collidable {
             passable = getProperty("passable", world).toLowerCase().equals("true");
         }
 
+        if (hasProperty("triggerclass", world)) {
+            trigger_tile = true;
+            String tmp = getProperty("triggerclass", world);
+            if (instances.containsKey(tmp)) {
+                triggerClass = instances.get(tmp);
+            } else {
+                try {
+                    triggerClass = (AbstractTileTrigger) Class.forName(tmp).newInstance();
+                    instances.put(tmp, triggerClass);
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         this.x = x;
         this.y = y;
         this.containingLayer = layer;
+        this.flipH = flipH;
+        this.flipL = flipL;
+        this.flipD = flipD;
+    }
+
+    public boolean isFlippedHorizontal() {
+        return flipH;
+    }
+
+    public boolean isFlippedVertical() {
+        return flipL;
+    }
+
+    public boolean isFlippedDiegonally() {
+        return flipD;
+    }
+
+    public boolean isTriggerTile() {
+        return trigger_tile;
+    }
+
+    public AbstractTileTrigger getTrigger() {
+        return triggerClass;
     }
 
     public long getID() {

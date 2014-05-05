@@ -37,6 +37,7 @@ public class TileObject extends Sprite {
     private float rotate;
     private boolean flippedHorizontally, flippedVertically, flippedDiagonally;
 
+
     public TileObject(int ID, TileSet parentTileSet, Layer parentLayer, int data_index) {
         this.ID = ID;
         this.parentLayer = parentLayer;
@@ -101,8 +102,6 @@ public class TileObject extends Sprite {
         paralax_effect = getTiledLayer().isParallaxLayer();
         animated = parentTileSet.getTileProperty(ID, "frames") != null;
         if (paralax_effect) {
-            x *= 2f;
-            y *= 2f;
             if (getTiledLayer().getProperty("parallax_speed") != null) {
                 try {
                     parallax_speed = Float.parseFloat(getTiledLayer().getProperty("parallax_speed"));
@@ -136,7 +135,7 @@ public class TileObject extends Sprite {
     private void calculateFlip() {
         flipType = 0;
         /*
-        0 = none
+        0 = none conveyor belt
         1 = horizontally
         2 = vertically
          */

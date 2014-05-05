@@ -52,7 +52,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         if (behavior != null) {
             behavior.update();
         }
-/*
+
         if (currentWaypoint != null && waypointList != null) {
 
             if (!waypointMover.moveSpriteOneFrame(this)) {
@@ -68,7 +68,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
                     }
                 }
             }
-        }*/
+        }
     }
 
     @Override
