@@ -1,5 +1,5 @@
 <game_dialog>
-    <dialog dialog_id = "Outdoor Scene">
+    <dialog dialog_id = "Outdoor Scene Old">
         <header>Jeremiah</header>
         <message>Farrand, we are about half way to Zeselia,</message>
         <message type="append">we should make it there within the next week.</message>
@@ -50,7 +50,7 @@
         <header>Jeremiah</header>
         <message>There’s a stream up ahead. We can set up camp for the night there.</message>
     </dialog>
-    <dialog dialog_id = "Outdoor Scene Update">
+    <dialog dialog_id = "Outdoor Scene">
         <header>Jeremiah</header>
         <message>This is ridiculous.</message>
 
