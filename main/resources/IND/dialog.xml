@@ -1,55 +1,5 @@
 <game_dialog>
-    <dialog dialog_id = "Outdoor Scene Old">
-        <header>Jeremiah</header>
-        <message>Farrand, we are about half way to Zeselia,</message>
-        <message type="append">we should make it there within the next week.</message>
 
-        <header>Farrand</header>
-        <message>Good, Waldomar said this meeting will be peaceful but keep your wits about you, </message>
-        <message type="append">I fear he may have bad intentions.</message>
-
-        <header>Jeremiah</header>
-        <message>Really?</message>
-
-        <header>Farrand</header>
-        <message>Yes, his father was from the old world where man was left unchecked </message>
-        <message type="append">and humanity ravaged the world environmentally to the point of no return.</message>
-
-        <header>Farrand</header>
-        <message>Isthmo is one of the only habitable areas left on earth that still has </message>
-        <message type="append">valuable resources. I wouldn’t be surprised if he tries to take it all for himself.</message>
-
-        <header>Jeremiah</header>
-        <message>With an all out war? </message>
-        <message type="append">Do they really think they can stand up to us with our advanced magic and the spore thing?.</message>
-
-        <header>Farrand</header>
-        <message>We can’t be sure. They too have made progress with their weaponry since</message>
-        <message type="append">the last great war ended 20 years ago. Granted, they still use gunpowder.</message>
-
-        <header>Jeremiah</header>
-        <message>Interesting...</message>
-
-        <header>Farrand</header>
-        <message>But the fact remains that Waldomar II has been encroaching on our land  </message>
-        <message type="append">for the past 2 years now and believes we haven’t noticed.</message>
-
-        <header>Farrand</header>
-        <message>Our scouts have also reported his troops mobilizing along our borders. </message>
-
-        <header>Jeremiah</header>
-        <message>In that case I fear the worst may come of this meeting.</message>
-        <message type="append">Are you sure its a good idea?</message>
-
-        <header>Farrand</header>
-        <message>The chance to avoid a second war, however slim it may be, is worth the risk. </message>
-
-        <header>Jeremiah</header>
-        <message>Good point.</message>
-
-        <header>Jeremiah</header>
-        <message>There’s a stream up ahead. We can set up camp for the night there.</message>
-    </dialog>
     <dialog dialog_id = "Outdoor Scene">
         <header>Jeremiah</header>
         <message>This is ridiculous.</message>
@@ -134,6 +84,76 @@ first impressions as a sage.</message>
 
         <header>Jeremiah</header>
         <message>Oh ok then...</message>
+
+    </dialog>
+    <dialog dialog_id="Waldos meeting">
+        <header>Waldomar</header>
+        <message>Ah, Farrand, the man of the hour! I was worried you would keep us waiting!</message>
+        <message type="append">So, did my little crew here give you a warm welcome?</message>
+
+        <header>Farrand</header>
+        <message>...</message>
+
+        <header>Waldomar</header>
+        <message>...Please, make yourself comfortable! </message>
+        <message type="append">Want a cigar?</message>
+
+        <header>Farrand</header>
+        <message>No thank you, I’d like to get Straight to the point.</message>
+
+        <header>Waldomar</header>
+        <message>Well then, by all means! Tell me, why have we gathered here today?</message>
+
+        <header>Farrand</header>
+        <message>I have come to order the halt of the Adlers' urban expansion project.</message>
+        <message type="append">As I am sure you are aware, industrialization poses a threat to both</message>
+
+        <header>Faarrand</header>
+        <mesage>our environment and to our state of social well-being.</mesage>
+
+        <header>Waldomar</header>
+        <message>You have come to “halt me and my expansion”?</message>
+
+        <header>Waldomar</header>
+        <message>Why, whatever do you mean by that?</message>
+
+        <header>Farrand</header>
+        <message>You know as well as I do what it means... Your further expansion past</message>
+        <message type="append">the **east west line** is a clear violation of the **candidus treaty** that</message>
+
+        <header>Farrand</header>
+        <message>our fathers agreed upon all those years ago.</message>
+
+        <header>Waldomar</header>
+        <message>Ah, but Farrand it would be selfish to keep all that land to yourself!</message>
+
+        <header>Farrand</header>
+        <message>What’s selfish is the lavish lifestyle you live while many of your followers </message>
+        <message type="append">starve!</message>
+
+        <header>Waldomar</header>
+        <message>The state of my own followers is their doing. They are truly free </message>
+        <message type="append">to work and live as they please.</message>
+
+        <header>Waldomar</header>
+        <message>They don’t have imposed reproduction rights or live in blasted huts </message>
+        <message type="append">eating leaves and berries like animals.</message>
+
+        <header>Farrand</header>
+        <message>The citizens of Isthmo do not live like animals! They are simply free of the corruption and destruction of mans old ways of living. I know your type Waldomar, your thirst for power is unquenchable, you won’t be satisfied until you have completely stripped this land of all of it’s resources in exchange for material wealth!</message>
+        <message type="append"></message>
+
+        <header>Farrand</header>
+        <message>It’s because of people like you in the **old world** that Isthmo Candidus was created as a safe haven from ecological destruction in the first place and I'll be damned if I even let you have an inch more of it!</message>
+
+        <message type="append">BBRRAAEHHEERG</message>
+
+
+        <header>Waldomar</header>
+        <message>I will not idly sit by and take these insults! Guards arrest them on charges of</message>
+        <message type="append">treason!</message>
+
+
 
     </dialog>
 

@@ -36,7 +36,7 @@ public class GateScene extends SimpleScene{
 
         Camera.followSprite(EntryPart1.guard);
 
-        Dialog.displayDialog("entering_zesilia2");
+        Dialog.displayDialog("entering_zesilia2")        ;
 
         //open he gates
 

@@ -12,18 +12,18 @@ public class OutdoorScene extends SimpleScene {
     @Override
     protected void playScene() throws Throwable {
         RenderService.INSTANCE.fadeFromBlack(10000f);
-        Vector2f center = Camera.translateToCameraCenter(ToZesilia.var1.getVector(), ToZesilia.var1.getHeight());
-        center.x -= 330;
+        Vector2f center = Camera.translateToCameraCenter(ToZesilia.farrand.getVector(), ToZesilia.farrand.getHeight());
+        //center.x -= 330;
         Camera.setPos(center);
         center.x -= 400;
         Camera.linearMovement(center, 7500);
-        Position farrandTarget = ToZesilia.var1.getPosition();
-        Position jerymanglerTarget = ToZesilia.var2.getPosition();
+        Position farrandTarget = ToZesilia.farrand.getPosition();
+        Position jeremiahTarget = ToZesilia.jeremiah.getPosition();
 
-        ToZesilia.var1.setMovementSpeed(8f);
-        ToZesilia.var1.setWaypoint(new Position(farrandTarget.getX() - 600, farrandTarget.getY()), WaypointType.SIMPLE);
-        ToZesilia.var2.setMovementSpeed(8f);
-        ToZesilia.var2.setWaypoint(new Position(jerymanglerTarget.getX() - 700, jerymanglerTarget.getY()), WaypointType.SIMPLE);
+        ToZesilia.farrand.setMovementSpeed(8f);
+        ToZesilia.farrand.setWaypoint(new Position(farrandTarget.getX() - 600, farrandTarget.getY()), WaypointType.SIMPLE);
+        ToZesilia.jeremiah.setMovementSpeed(8f);
+        ToZesilia.jeremiah.setWaypoint(new Position(jeremiahTarget.getX() - 700, jeremiahTarget.getY()), WaypointType.SIMPLE);
         Camera.waitForEndOfMovement();
     }
 }
