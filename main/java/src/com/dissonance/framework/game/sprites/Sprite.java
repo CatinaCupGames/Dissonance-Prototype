@@ -23,6 +23,7 @@ public abstract class Sprite implements Drawable, Serializable {
     private SpriteEvent.SpriteMovedEvent spriteMoved;
 
     protected transient Texture texture;
+    protected boolean visible = true;
     protected transient World world;
     protected Direction direction;
     protected float x, y, width, height;
@@ -54,6 +55,14 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public boolean isTeleporting() {
         return isTeleporting;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     public Direction getDirection() {
@@ -242,6 +251,8 @@ public abstract class Sprite implements Drawable, Serializable {
 
     @Override
     public void render() {
+        if (!visible)
+            return;
         getTexture().bind();
         float bx = width / 2f;
         float by = height / 2f;
