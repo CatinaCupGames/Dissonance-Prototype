@@ -9,7 +9,6 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.exceptions.QuestNotFoundException;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.proxyhelper.ProxyFactory;
-import sun.plugin2.message.helper.ProxyHelper;
 
 public abstract class AbstractQuest {
     private AbstractQuest next;
