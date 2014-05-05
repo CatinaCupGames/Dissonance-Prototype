@@ -16,17 +16,17 @@ public class OutdoorScene extends SimpleScene {
         Vector2f center = Camera.translateToCameraCenter(ToZesilia.farrand.getVector(), ToZesilia.farrand.getHeight());
         center.x -= 330;
         Camera.setPos(center);
-        center.x -= 2000;
-        Camera.linearMovement(center, 31500);
+        center.x -= 2500;
+        Camera.linearMovement(center, 35000);
         Position farrandTarget = ToZesilia.farrand.getPosition();
         Position jeremiahTarget = ToZesilia.jeremiah.getPosition();
 
 
         ToZesilia.farrand.setMovementSpeed(8f);
-        ToZesilia.farrand.setWaypoint(new Position(farrandTarget.getX() - 2600, farrandTarget.getY()), WaypointType.SIMPLE);
+        ToZesilia.farrand.setWaypoint(new Position(farrandTarget.getX() - 2500, farrandTarget.getY()), WaypointType.SIMPLE);
         ToZesilia.jeremiah.setMovementSpeed(8f);
-        ToZesilia.jeremiah.setWaypoint(new Position(jeremiahTarget.getX() - 2700, jeremiahTarget.getY()), WaypointType.SIMPLE);
-        Dialog.displayDialog("Outdoor Scene");
+        ToZesilia.jeremiah.setWaypoint(new Position(jeremiahTarget.getX() - 2500, jeremiahTarget.getY()), WaypointType.SIMPLE);
+        Dialog.displayDialog("Outdoor Scene", true);
         Camera.waitForEndOfMovement();
     }
 }
