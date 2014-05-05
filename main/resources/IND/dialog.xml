@@ -141,7 +141,7 @@ first impressions as a sage.</message>
 
         <header>Farrand</header>
         <message>The citizens of Isthmo do not live like animals! They are simply free of the corruption and destruction of mans old ways of living. I know your type Waldomar, your thirst for power is unquenchable, you won’t be satisfied until you have completely stripped this land of all of it’s resources in exchange for material wealth!</message>
-        <message type="append"></message>
+        <message type="append">asdf</message>
 
         <header>Farrand</header>
         <message>It’s because of people like you in the **old world** that Isthmo Candidus was created as a safe haven from ecological destruction in the first place and I'll be damned if I even let you have an inch more of it!</message>

@@ -6,6 +6,7 @@ import com.dissonance.framework.game.sprites.ui.impl.UIElement;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
+import org.lwjgl.Sys;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -31,6 +32,7 @@ public class DialogUI extends UIElement {
     private static BufferedImage dialog_box;
     private static BufferedImage dialog_header;
     private long speed = 20L;
+    private boolean autoScroll = false;
 
     static {
         font = GameSettings.Display.GAME_FONT;
@@ -56,9 +58,14 @@ public class DialogUI extends UIElement {
         }
     }
 
-    public DialogUI(com.dissonance.framework.game.scene.dialog.Dialog dialog) {
+    public DialogUI(Dialog dialog) {
+        this(dialog, false);
+    }
+
+    public DialogUI(com.dissonance.framework.game.scene.dialog.Dialog dialog, boolean autoScroll) {
         super();
         this.dialog = dialog;
+        this.autoScroll = autoScroll;
     }
 
     @Override
@@ -136,10 +143,10 @@ public class DialogUI extends UIElement {
     private boolean pressed;
     private long lastUpdate = RenderService.getTime();
     private boolean done = false;
-
+    private long completedWhen;
     @Override
     public void update() {
-        boolean fast_moving = InputKeys.isButtonPressed(InputKeys.JUMP);
+        boolean fast_moving = InputKeys.isButtonPressed(InputKeys.JUMP) && !autoScroll;
 
         long speed = this.speed / (fast_moving ? 2 : 1);
         if (RenderService.getTime() - lastUpdate > speed && !done) {
@@ -156,30 +163,40 @@ public class DialogUI extends UIElement {
             cy = Camera.getY();
         }
 
+        if (autoScroll) {
+            if (done && System.currentTimeMillis() - completedWhen > 600) {
+                next();
+            }
+        }
+
         if (!pressed) {
             pressed = InputKeys.isButtonPressed(InputKeys.ATTACK) || InputKeys.isButtonPressed(InputKeys.JUMP);
             if (pressed && done) {
-                boolean finished = false;
-                for (SH ignored : text) {
-                    finished = dialog.advanceDialog();
-                }
-                text.clear();
-                char_offset = 0;
-                line_offset = 0;
-                funOnTheBun();
-                done = false;
-                if (finished)
-                    endDialog();
-                else {
-                    Sound.playSound("dialogadvance");
-                    completelyInvalidateView();
-                    if (events != null) {
-                        events.onDialogAdvance(dialog);
-                    }
-                }
+                next();
             }
         } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK) && !InputKeys.isButtonPressed(InputKeys.JUMP)) {
             pressed = false;
+        }
+    }
+
+    private void next() {
+        boolean finished = false;
+        for (SH ignored : text) {
+            finished = dialog.advanceDialog();
+        }
+        text.clear();
+        char_offset = 0;
+        line_offset = 0;
+        funOnTheBun();
+        done = false;
+        if (finished)
+            endDialog();
+        else {
+            Sound.playSound("dialogadvance");
+            completelyInvalidateView();
+            if (events != null) {
+                events.onDialogAdvance(dialog);
+            }
         }
     }
 
@@ -214,6 +231,7 @@ public class DialogUI extends UIElement {
                         break;
                     } else if (current == null) {
                         done = true;
+                        completedWhen = System.currentTimeMillis();
                         break;
                     }
                     this.speed = current.speed;

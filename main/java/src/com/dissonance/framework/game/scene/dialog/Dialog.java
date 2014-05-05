@@ -13,11 +13,15 @@ public class Dialog {
     private String id;
 
     public static void displayDialog(String dialog_id) {
+        displayDialog(dialog_id, false);
+    }
+
+    public static void displayDialog(String dialog_id, boolean autoScroll) {
         Dialog dialog = DialogFactory.getDialog(dialog_id);
         if (dialog == null)
             return;
 
-        DialogUI ui = new DialogUI(dialog);
+        DialogUI ui = new DialogUI(dialog, autoScroll);
 
         World world;
         PlayableSprite player = PlayableSprite.getCurrentlyPlayingSprite();
