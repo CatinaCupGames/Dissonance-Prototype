@@ -17,7 +17,7 @@ public class OutdoorScene extends SimpleScene {
         center.x -= 330;
         Camera.setPos(center);
         center.x -= 2000;
-        Camera.linearMovement(center, 42500);
+        Camera.linearMovement(center, 31500);
         Position farrandTarget = ToZesilia.farrand.getPosition();
         Position jeremiahTarget = ToZesilia.jeremiah.getPosition();
 
