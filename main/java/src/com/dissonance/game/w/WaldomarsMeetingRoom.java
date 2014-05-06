@@ -28,6 +28,7 @@ public class WaldomarsMeetingRoom extends GameWorldLoader {
     public void onLoad(World w) {
         super.onLoad(w);
 
+
         var1 = new Bookshelf1();
         w.loadAndAdd(var1);
         var1.setX(220.44997f);
@@ -67,5 +68,10 @@ public class WaldomarsMeetingRoom extends GameWorldLoader {
         w.loadAndAdd(waldomar);
         waldomar.setX(102.95f);
         waldomar.setY(203.85004f);
+
+        farrand.deselect();
+        farrand.setX(403.85f);
+        farrand.setY(120.95f);
+
     }
 }
