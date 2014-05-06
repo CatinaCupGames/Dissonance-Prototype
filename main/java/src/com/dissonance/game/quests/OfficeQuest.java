@@ -20,6 +20,9 @@ public class OfficeQuest extends AbstractQuest {
         WaldomarsMeetingRoom.waldomar.setAnimation("walk_back");
         WaldomarsMeetingRoom.waldomar.pauseAnimation();
         WaldomarsMeetingRoom.waldomar.setFrame(1);
+        WaldomarsMeetingRoom.farrand.setAnimation("walk_left");
+        WaldomarsMeetingRoom.farrand.pauseAnimation();
+        WaldomarsMeetingRoom.farrand.setFrame(1);
 
         RenderService.INSTANCE.fadeToAlpha(1, 0f);
         playSceneAndWait(OfficeScene.class);
