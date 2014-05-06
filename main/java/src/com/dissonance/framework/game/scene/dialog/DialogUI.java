@@ -22,6 +22,9 @@ import static org.lwjgl.opengl.GL11.*;
 public class DialogUI extends AbstractUI {
     public static Font original = GameSettings.Display.GAME_FONT;
     public static TrueTypeFont font;
+    public static TrueTypeFont bold_font;
+    public static TrueTypeFont italic_font;
+    public static TrueTypeFont bold_italic_font;
     private static Texture texture_background;
     private static Texture texture_header;
 
@@ -112,20 +115,34 @@ public class DialogUI extends AbstractUI {
                         ignore = true;
                         break;
                     } else if (current == null) {
+                        if (!done) completedWhen = System.currentTimeMillis();
                         done = true;
-                        completedWhen = System.currentTimeMillis();
                         break;
                     }
                     this.speed = current.speed;
                     char[] array = current.s.getString().toCharArray();
+                    TrueTypeFont font = DialogUI.font;
+                    switch (current.s.getStyle()) {
+                        case BOLD:
+                            font = DialogUI.bold_font;
+                            break;
+                        case ITALIC:
+                            font = DialogUI.italic_font;
+                            break;
+                        case BOLD_ITALIC:
+                            font = DialogUI.bold_italic_font;
+                            break;
+                        default:
+                            break;
+                    }
                     for (char anArray : array) {
                         if (current_char_offset >= char_offset)
                             break;
                         if (current_char_offset >= total_chars)
                             break;
-                        RenderText.drawString(current.s.getFont(), "" + anArray, xoffset, yoffset, new Color(current.s.getColor().getRed() / 255f, current.s.getColor().getGreen() / 255f, current.s.getColor().getBlue() / 255f));
+                        RenderText.drawString(font, "" + anArray, xoffset, yoffset, new Color(current.s.getColor().getRed() / 255f, current.s.getColor().getGreen() / 255f, current.s.getColor().getBlue() / 255f));
                         current_char_offset++;
-                        xoffset += current.s.getFont().getWidth("" + anArray);
+                        xoffset += font.getWidth("" + anArray);
                     }
                     used.add(current);
                     array = null;
@@ -144,10 +161,24 @@ public class DialogUI extends AbstractUI {
                     }
                     if (current == null)
                         break;
+                    TrueTypeFont font = DialogUI.font;
+                    switch (current.s.getStyle()) {
+                        case BOLD:
+                            font = DialogUI.bold_font;
+                            break;
+                        case ITALIC:
+                            font = DialogUI.italic_font;
+                            break;
+                        case BOLD_ITALIC:
+                            font = DialogUI.bold_italic_font;
+                            break;
+                        default:
+                            break;
+                    }
                     char[] array = current.s.getString().toCharArray();
                     for (char anArray : array) {
-                        RenderText.drawString(current.s.getFont(), "" + anArray, xoffset, yoffset, new Color(current.s.getColor().getRed() / 255f, current.s.getColor().getGreen() / 255f, current.s.getColor().getBlue() / 255f));
-                        xoffset += current.s.getFont().getWidth("" + anArray);
+                        RenderText.drawString(font, "" + anArray, xoffset, yoffset, new Color(current.s.getColor().getRed() / 255f, current.s.getColor().getGreen() / 255f, current.s.getColor().getBlue() / 255f));
+                        xoffset += font.getWidth("" + anArray);
                     }
                     used.add(current);
                     array = null;
@@ -216,6 +247,9 @@ public class DialogUI extends AbstractUI {
     protected void onOpen() {
         if (font == null) {
             font = RenderText.getFont(GameSettings.Display.GAME_FONT.deriveFont(16f), Font.PLAIN);
+            bold_font = RenderText.getFont(GameSettings.Display.GAME_FONT.deriveFont(16f).deriveFont(Font.BOLD), Font.BOLD);
+            italic_font = RenderText.getFont(GameSettings.Display.GAME_FONT.deriveFont(16f).deriveFont(Font.ITALIC), Font.ITALIC);
+            bold_italic_font = RenderText.getFont(GameSettings.Display.GAME_FONT.deriveFont(16f).deriveFont(Font.BOLD | Font.ITALIC), Font.BOLD | Font.ITALIC);
         }
 
         if (texture_background == null) {

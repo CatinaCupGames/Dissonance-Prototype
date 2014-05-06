@@ -10,7 +10,6 @@ import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.sprites.ui.UI;
-import com.dissonance.framework.game.sprites.ui.impl.UIElement;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.WorldLoader;
@@ -169,7 +168,7 @@ public class MainQuest extends AbstractQuest {
                         "    }\n" +
                         "}";
                 return code;
-            } else if (code.contains(varName + ".setX") && code.contains(varName + ".setY") && (selectedSprite instanceof Sprite || selectedSprite instanceof UIElement)) {
+            } else if (code.contains(varName + ".setX") && code.contains(varName + ".setY") && (selectedSprite instanceof Sprite || selectedSprite instanceof UI)) {
                 String[] lines = code.split("\n");
                 String newCode = "";
                 for (String line : lines) {
@@ -192,7 +191,7 @@ public class MainQuest extends AbstractQuest {
                     newCode += s + "\n";
                 }
                 return newCode;
-            } else if (selectedSprite instanceof Sprite || selectedSprite instanceof UIElement) {
+            } else if (selectedSprite instanceof Sprite || selectedSprite instanceof UI) {
                 boolean addX = !code.contains(varName + ".setX");
                 boolean addY = !code.contains(varName + ".setY");
                 String[] lines = code.split("\n");
@@ -543,7 +542,7 @@ public class MainQuest extends AbstractQuest {
                 ss.setFacing(Direction.RIGHT);
                 EditorUI.INSTANCE.refreshCode();
             }
-        } else if ((w || a || s || d) && selectedSprite != null && selectedSprite instanceof UIElement) {
+        } else if ((w || a || s || d) && selectedSprite != null && selectedSprite instanceof UI) {
             UI ss = (UI)selectedSprite;
             if (w) {
                 ss.setY(selectedSprite.getY() - (SPEED * RenderService.TIME_DELTA));

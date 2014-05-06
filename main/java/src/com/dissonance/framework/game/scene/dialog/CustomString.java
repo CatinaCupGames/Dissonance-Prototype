@@ -7,7 +7,6 @@ import java.awt.*;
 
 public class CustomString {
     private String text;
-    private TrueTypeFont font;
     private Style style;
     private boolean append;
     private Color color = Color.WHITE;
@@ -24,20 +23,6 @@ public class CustomString {
     public CustomString(String text, Style style, boolean append) {
         this.text = text;
         this.style = style;
-        switch (style) {
-            case NORMAL:
-                font = DialogUI.font;
-                break;
-            case BOLD:
-                font = RenderText.getFont(DialogUI.original.deriveFont(Font.BOLD), Font.BOLD);
-                break;
-            case ITALIC:
-                font = RenderText.getFont(DialogUI.original.deriveFont(Font.ITALIC), Font.ITALIC);
-                break;
-            case BOLD_ITALIC:
-                font = RenderText.getFont(DialogUI.original.deriveFont(Font.BOLD | Font.ITALIC), Font.BOLD | Font.ITALIC);
-                break;
-        }
         this.append = append;
     }
 
@@ -69,10 +54,6 @@ public class CustomString {
 
     public long getSpeed() {
         return speed;
-    }
-
-    public TrueTypeFont getFont() {
-        return font;
     }
 
     public boolean isAppend() {
