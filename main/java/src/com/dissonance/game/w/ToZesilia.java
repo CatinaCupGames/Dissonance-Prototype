@@ -48,6 +48,44 @@ public class ToZesilia implements WorldLoader {
                 }
             }
         }
+        for (int y = 2; y <= 8; y++) {
+            for (int x = 20; x <= 24; x++) {
+                int num = random.nextInt(4);
+                switch (num) {
+                    case 0:
+                        Tree1 tree = new Tree1();
+                        w.loadAndAdd(tree);
+                        tree.setX(x * 32);
+                        tree.setY(y * 32);
+                        break;
+                    case 1:
+                        Tree2 tree2 = new Tree2();
+                        w.loadAndAdd(tree2);
+                        tree2.setX(x * 32);
+                        tree2.setY(y * 32);
+                        break;
+                }
+            }
+        }
+        for (int y = 2; y <= 8; y++) {
+            for (int x = 10; x <= 19; x++) {
+                int num = random.nextInt(16);
+                switch (num) {
+                    case 0:
+                        Tree1 tree = new Tree1();
+                        w.loadAndAdd(tree);
+                        tree.setX(x * 32);
+                        tree.setY(y * 32);
+                        break;
+                    case 1:
+                        Tree2 tree2 = new Tree2();
+                        w.loadAndAdd(tree2);
+                        tree2.setX(x * 32);
+                        tree2.setY(y * 32);
+                        break;
+                }
+            }
+        }
         for (int y = 15; y <= 18; y++) {
             for (int x = 25; x <= 100; x++) {
                 int num = random.nextInt(2);
@@ -67,6 +105,46 @@ public class ToZesilia implements WorldLoader {
                 }
             }
         }
+
+        for (int y = 15; y <= 18; y++) {
+            for (int x = 20; x <= 24; x++) {
+                int num = random.nextInt(4);
+                switch (num) {
+                    case 0:
+                        Tree1 tree = new Tree1();
+                        w.loadAndAdd(tree);
+                        tree.setX(x * 32);
+                        tree.setY(y * 32);
+                        break;
+                    case 1:
+                        Tree2 tree2 = new Tree2();
+                        w.loadAndAdd(tree2);
+                        tree2.setX(x * 32);
+                        tree2.setY(y * 32);
+                        break;
+                }
+            }
+        }
+        for (int y = 15; y <= 18; y++) {
+            for (int x = 10; x <= 19; x++) {
+                int num = random.nextInt(16);
+                switch (num) {
+                    case 0:
+                        Tree1 tree = new Tree1();
+                        w.loadAndAdd(tree);
+                        tree.setX(x * 32);
+                        tree.setY(y * 32);
+                        break;
+                    case 1:
+                        Tree2 tree2 = new Tree2();
+                        w.loadAndAdd(tree2);
+                        tree2.setX(x * 32);
+                        tree2.setY(y * 32);
+                        break;
+                }
+            }
+        }
+
     }
 
     @Override

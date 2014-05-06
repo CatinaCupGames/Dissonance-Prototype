@@ -5,7 +5,7 @@
         <message>This is ridiculous.</message>
 
         <header>Farrand</header>
-        <message>What?</message>
+        <message speed="100">What?</message>
         
         <header>Jeremiah</header>
         <message>The whole "no mounts" thing. This trip took us, like, three days.</message>
