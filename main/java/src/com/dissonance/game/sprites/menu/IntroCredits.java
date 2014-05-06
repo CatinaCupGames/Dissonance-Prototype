@@ -92,13 +92,19 @@ public class IntroCredits extends AbstractUI {
             setAlpha(alpha);
             if (alpha <= 0f) {
                 state = (!continues ? 3 : 0);
+                if (continues)
+                    start = RenderService.getTime();
                 hIndex++;
                 sIndex++;
+                if (sIndex >= CREDIT_SUBTEXT.length) {
+                    close();
+                }
             }
         }
     }
 
     public void alwaysContinue() {
         this.continues = true;
+        continueIt();
     }
 }

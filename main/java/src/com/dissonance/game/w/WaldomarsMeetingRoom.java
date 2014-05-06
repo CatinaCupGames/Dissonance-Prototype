@@ -9,7 +9,11 @@ Date: 2014/05/06 18:38:59
 */
 package com.dissonance.game.w;
 
+
 import com.dissonance.framework.game.world.*;
+
+import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.sprites.*;
 import com.dissonance.game.sprites.office.*;
 
@@ -124,7 +128,7 @@ farrand.deselect();
         w.createLight(15f * 16, 2f * 16, 1.8f, 0.7f);
         w.createLight(0f, 0f, 0.5f, 0.1f);
     }
+
     @Override
-    public void onDisplay(World w){
-}
+    public void onDisplay(World w){ }
 }
