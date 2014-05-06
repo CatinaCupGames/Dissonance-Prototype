@@ -7,6 +7,7 @@ import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.framework.system.utils.Timer;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -20,6 +21,7 @@ public abstract class PlayableSprite extends CombatSprite {
 
     private boolean isPlaying = false;
     private boolean usespell1, usespell2;
+    private MovementType mType = MovementType.RUNNING;
     private boolean frozen;
     private boolean use_attack;
     private static boolean use_switch;
@@ -51,11 +53,25 @@ public abstract class PlayableSprite extends CombatSprite {
         this.deselectedEvent = deselectedListener;
     }
 
+    public MovementType getMovementType() {
+        return mType;
+    }
+
+    public void setMovementType(MovementType type) {
+        if (type == MovementType.FROZEN) {
+            oMType = this.mType;
+        }
+        this.mType = type;
+        if (mType == MovementType.FROZEN)
+            freeze();
+    }
+
     @Override
     public boolean isAlly(CombatSprite sprite) {
         return sprite instanceof PlayableSprite && party.contains(sprite);
     }
 
+    @Override
     public boolean isMoving() {
         if (!InputKeys.usingController())
             return InputKeys.isButtonPressed(InputKeys.MOVEUP) ||
@@ -80,7 +96,14 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     protected float movementSpeed() {
-        return 10 + (getSpeed() / 10);
+        switch (mType) {
+            case WALKING:
+                return 10 + (getSpeed() / 10);
+            case RUNNING:
+                return 15 + (getSpeed() / 10);
+            default:
+                return 0;
+        }
     }
 
     public void joinParty(PlayableSprite joiner) {
@@ -323,7 +346,9 @@ public abstract class PlayableSprite extends CombatSprite {
         return frozen;
     }
 
+    private MovementType oMType;
     public void freeze() {
+
         freeze(false, null);
     }
 
@@ -343,6 +368,10 @@ public abstract class PlayableSprite extends CombatSprite {
      * @param classLocker The class that can unlock (unfreeze) the player. This is normally the calling class
      */
     public void freeze(boolean lock, Class<?> classLocker) {
+        if (mType != MovementType.FROZEN) {
+            this.oMType = this.mType;
+            this.mType = MovementType.FROZEN;
+        }
         frozen = true;
         onNoMovement();
         if (lock) {
@@ -361,7 +390,12 @@ public abstract class PlayableSprite extends CombatSprite {
             if (classLockers.contains(classLocker))
                 classLockers.remove(classLocker);
         }
-        if (classLockers.size() == 0) frozen = false;
+        if (classLockers.size() == 0) {
+            if (this.mType == MovementType.FROZEN) {
+                this.mType = this.oMType;
+            }
+            frozen = false;
+        }
         return classLockers.size() == 0;
     }
 

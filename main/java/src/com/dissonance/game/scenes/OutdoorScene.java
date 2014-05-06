@@ -28,5 +28,8 @@ public class OutdoorScene extends SimpleScene {
         ToZesilia.jeremiah.setWaypoint(new Position(jeremiahTarget.getX() - 2500, jeremiahTarget.getY()), WaypointType.SIMPLE);
         Dialog.displayDialog("Outdoor Scene", true);
         Camera.waitForEndOfMovement();
+        RenderService.INSTANCE.fadeFromBlack(1700);
+        Dialog.displayDialog("Outdoor Scene p2", true);
+        Thread.sleep(1600);
     }
 }

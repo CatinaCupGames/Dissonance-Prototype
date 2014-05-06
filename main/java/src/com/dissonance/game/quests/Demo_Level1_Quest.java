@@ -26,7 +26,7 @@ public class Demo_Level1_Quest extends AbstractQuest {
         intro.display(world2);
         setWorld(world2);
         world2.waitForWorldLoaded();
-        intro.continueIt();
+        intro.alwaysContinue();
         RenderService.INSTANCE.fadeToBlack(1); //Make screen black
         playSceneAndWait(OutdoorScene.class);
     }

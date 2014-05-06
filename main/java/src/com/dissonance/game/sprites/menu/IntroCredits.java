@@ -18,6 +18,7 @@ public class IntroCredits extends AbstractUI {
     int hIndex, sIndex;
     int state = 0;
     long start;
+    boolean continues = false;
     private static final String[] CREDIT_HEADER = new String[] {
             "Written by:",
             "Level Design by:",
@@ -58,7 +59,7 @@ public class IntroCredits extends AbstractUI {
         setHeight(128);
 
         marginTop(10f);
-        marginLeft(10f);
+        marginLeft(6f);
 
         setAlpha(0f);
         start = RenderService.getTime();
@@ -90,10 +91,14 @@ public class IntroCredits extends AbstractUI {
             float alpha = Camera.ease(1f, 0f, FADE_OUT_TIME, (RenderService.getTime() - start));
             setAlpha(alpha);
             if (alpha <= 0f) {
-                state = 3;
+                state = (!continues ? 3 : 0);
                 hIndex++;
                 sIndex++;
             }
         }
+    }
+
+    public void alwaysContinue() {
+        this.continues = true;
     }
 }

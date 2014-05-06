@@ -25,7 +25,7 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     private transient SpriteAnimationInfo animation;
     private transient int speed;
     private int nMovementCount = 0;
-    private boolean movementDetect = false;
+    protected boolean movementDetect = false;
     private float oX, oY;
 
     /**

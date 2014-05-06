@@ -9,6 +9,7 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.sound.Sound;
+import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.game.sprites.Enemy;
 import com.dissonance.test.scene.SimpleSceneTest;
 import com.dissonance.test.scene.TestScene;
@@ -52,6 +53,7 @@ public class TestQuest extends AbstractQuest {
         playSceneAndWait(SimpleSceneTest.class);
         final PlayableSprite player = PlayableSprite.getCurrentlyPlayingSprite();
         player.setMarksmanship(2);
+        player.setMovementType(MovementType.RUNNING);
 
         System.out.println(player.getMarksmanship());
         player.setX(100);

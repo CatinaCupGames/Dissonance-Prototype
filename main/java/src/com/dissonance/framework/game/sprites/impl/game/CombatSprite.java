@@ -167,6 +167,10 @@ public abstract class CombatSprite extends PhysicsSprite {
             setUpdateCanceled(true);
     }
 
+    public boolean isMoving() {
+        return movementDetect;
+    }
+
     public void addSpell(Spell spell) {
         if (!spells.contains(spell))
             spells.add(spell);

@@ -297,7 +297,7 @@ public class DialogUI extends AbstractUI {
         }
 
         if (autoScroll) {
-            if (done && System.currentTimeMillis() - completedWhen > 600) {
+            if (done && System.currentTimeMillis() - completedWhen > 1400) {
                 next();
             }
         }

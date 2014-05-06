@@ -49,9 +49,11 @@
         <header>Farrand</header>
         <message>Yes. Now let's try to make this go smoothly. Remember: weapons down, </message>
         <message type="append">do not act out, and let me do the talking.</message>
-        <message>Emphasis on "let me do the talking".</message>
+    </dialog>
 
-        
+    <dialog dialog_id="Outdoor Scene p2">
+        <header>Farrand</header>
+        <message>Emphasis on "let me do the talking".</message>
     </dialog>
     
     

@@ -4,16 +4,20 @@
 This file was automatically generated with the
 World Loader Editor
 
-Date: 2014/05/05 14:20:38
+Date: 2014/05/06 11:34:55
 =====================================
 */
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
+import com.dissonance.game.sprites.*;
 import com.dissonance.game.sprites.office.*;
 
 
-public class WaldemarsMeetingRoom extends GameWorldLoader {
+public class WaldemarsMeetingroom extends GameWorldLoader {    
+    public static Waldomar waldomar;    
+    
+    public static WaldomarDesk var8;
     public static Sofa var7;
     public static Sofa var6;
     public static Sofa var5;
@@ -53,5 +57,15 @@ public class WaldemarsMeetingRoom extends GameWorldLoader {
         w.loadAndAdd(var7);
         var7.setX(418.80014f);
         var7.setY(69.350006f);
+    
+        var8 = new WaldomarDesk();
+        w.loadAndAdd(var8);
+        var8.setX(113.5f);
+        var8.setY(202.8f);
+    
+        waldomar = new Waldomar();
+        w.loadAndAdd(waldomar);
+        waldomar.setX(102.95f);
+        waldomar.setY(203.85004f);
     }
 }

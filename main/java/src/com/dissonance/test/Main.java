@@ -12,6 +12,6 @@ public class Main {
         World.setDefaultLoaderPackage("com.dissonance.test.w");
 
         GameService.loadEssentials(args);
-        GameService.beginQuest(new TestQuest());
+        GameService.beginQuest(new ConveyorTest());
     }
 }
