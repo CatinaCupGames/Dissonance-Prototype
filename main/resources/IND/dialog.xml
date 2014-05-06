@@ -106,33 +106,33 @@
         <message type="append">Want a cigar?</message>
 
         <header>Farrand</header>
-        <message>No thank you, I’d like to get Straight to the point.</message>
+        <message>No thank you, I'd like to get Straight to the point.</message>
 
         <header>Waldomar</header>
         <message>Well then, by all means! Tell me, why have we gathered here today?</message>
 
         <header>Farrand</header>
         <message>I have come to order the halt of the Adlers' urban expansion project.</message>
-        <message type="append">As I am sure you are aware, industrialization poses a threat to both</message>
+        <message type="append">As I am sure you are aware, industrialization poses a threat to </message>
 
         <header>Farrand</header>
-        <message>our environment and to our state of social well-being.</message>
+        <message>both our environment and to our state of social well-being.</message>
 
         <header>Waldomar</header>
-        <message>You have come to “halt me and my expansion”?</message>
+        <message>You have come to "halt me and my expansion"?</message>
 
         <header>Waldomar</header>
         <message>Why, whatever do you mean by that?</message>
 
         <header>Farrand</header>
         <message>You know as well as I do what it means... Your further expansion past</message>
-        <message type="append">the **east west line** is a clear violation of the **candidus treaty** that</message>
+        <message type="append">the East West Province is a clear violation of the Candidus Treaty that</message>
 
         <header>Farrand</header>
         <message>our fathers agreed upon all those years ago.</message>
 
         <header>Waldomar</header>
-        <message>Ah, but Farrand it would be selfish to keep all that land to yourself!</message>
+        <message>Ah, but Farrand it would be selfish to keep all that land to yourself.</message>
 
         <header>Farrand</header>
         <message>What’s selfish is the lavish lifestyle you live while many of your followers </message>
@@ -143,22 +143,22 @@
         <message type="append">to work and live as they please.</message>
 
         <header>Waldomar</header>
-        <message>They don’t have imposed reproduction rights or live in blasted huts eating </message>
+        <message>They don't have imposed reproduction rights or live in blasted huts eating </message>
         <message type="append">leaves and berries like animals!</message>
 
         <header>Farrand</header>
         <message>The citizens of Isthmo do not live like animals! They are simply free of the </message>
-        <message type="append">corruption and destruction of mans old ways of living. I know your type</message>
+        <message type="append">corruption and destruction of mans old ways of living. </message>
 
         <header>Farrand</header>
-        <message>Waldomar, your thirst for gatorade is unquenchable, you won’t be satisfied until </message>
-        <message type="append">you have completely stripped this land of all of it’s resources in exchange</message>
+        <message>I know your type Waldomar, your thirst for gatorade is unquenchable, </message>
+        <message type="append">you will not be satisfied until you have completely stripped  </message>
 
         <header>Farrand</header>
-        <message>for material wealth!</message>
+        <message>this land of all of it’s resources in exchange for material wealth!</message>
 
         <header>Farrand</header>
-        <message>It’s because of people like you in the **old world** that Isthmo Candidus was </message>
+        <message>It’s because of people like you in the old world that Isthmo Candidus was </message>
         <message type="append">created as a safe haven from ecological destruction in the first place and </message>
 
         <header>Farrand</header>
