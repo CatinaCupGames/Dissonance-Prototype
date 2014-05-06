@@ -32,13 +32,13 @@ public class DebugSprite extends AbstractUI {
         glVertex3f(x - bx, y + by, z);
         glEnd();
 
-        RenderText.drawString(bold_font, "Debug Panel:", (getX() - bx) + 10f, (getY() - by) + 5f, new Color(1f, 1f, 1f));
-        RenderText.drawString(font, "FPS: " + RenderService.FPS, (getX() - bx) + 10f, ((getY() - by) + bold_font.getHeight()) + 10f, new Color(1f, 1f, 1f));
-        RenderText.drawString(font, "Sprites: " + super.world.getDrawableCount(), (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight()) + 10f, new Color(1f, 1f, 1f));
-        RenderText.drawString(font, "USprites: " + super.world.getUpdatableCount(), (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight() * 2f) + 10f, new Color(1f, 1f, 1f));
+        RenderText.drawString(bold_font, "Debug Panel:", (getX() - bx) + 10f, (getY() - by) + 5f, Color.white);
+        RenderText.drawString(font, "FPS: " + RenderService.FPS, (getX() - bx) + 10f, ((getY() - by) + bold_font.getHeight()) + 10f, Color.white);
+        RenderText.drawString(font, "Sprites: " + super.world.getDrawableCount(), (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight()) + 10f, Color.white);
+        RenderText.drawString(font, "USprites: " + super.world.getUpdatableCount(), (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight() * 2f) + 10f, Color.white);
         DecimalFormat format = new DecimalFormat("#.0000");
-        RenderText.drawString(font, "Memory%: " + format.format(Debug.getPercentUsed()) + "%", (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight() * 3f) + 10f, new Color(1f, 1f, 1f));
-        RenderText.drawString(font, "Memory Free: " + format.format(Debug.getFreeMemory() * 9.53674e-7) + "mb", (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight() * 4f) + 10f, new Color(1f, 1f, 1f));
+        RenderText.drawString(font, "Memory%: " + format.format(Debug.getPercentUsed()) + "%", (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight() * 3f) + 10f, Color.white);
+        RenderText.drawString(font, "Memory Free: " + format.format(Debug.getFreeMemory() * 9.53674e-7) + "mb", (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight() * 4f) + 10f, Color.white);
 
         glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
 

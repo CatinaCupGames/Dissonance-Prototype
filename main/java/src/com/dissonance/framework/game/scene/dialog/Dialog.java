@@ -38,11 +38,18 @@ public class Dialog {
             halt = !player.isFrozen();
             world = player.getWorld();
         }
-        ui.displayUI(halt, world);
+        if (halt && PlayableSprite.getCurrentlyPlayingSprite() != null) {
+            PlayableSprite.getCurrentlyPlayingSprite().freeze(true, Dialog.class);
+        }
+        ui.display(world);
         try {
             ui.waitForEnd();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+
+        if (halt && PlayableSprite.getCurrentlyPlayingSprite() != null) {
+            PlayableSprite.getCurrentlyPlayingSprite().unfreeze(Dialog.class);
         }
     }
 
