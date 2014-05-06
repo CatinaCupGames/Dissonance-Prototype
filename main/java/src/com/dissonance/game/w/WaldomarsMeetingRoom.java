@@ -10,6 +10,7 @@ Date: 2014/05/06 11:34:55
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.sprites.*;
 import com.dissonance.game.sprites.office.*;
 
@@ -73,5 +74,10 @@ public class WaldomarsMeetingRoom extends GameWorldLoader {
         farrand.setX(403.85f);
         farrand.setY(120.95f);
 
+    }
+
+    @Override
+    public void onDisplay(World w) {
+        Sound.playSound("waldobuilding");
     }
 }
