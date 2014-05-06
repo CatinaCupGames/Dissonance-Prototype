@@ -84,7 +84,7 @@ public abstract class UIElement implements com.dissonance.framework.game.sprites
 
     public void displayUI(boolean halt, World world) {
         world.addDrawable(this);
-        if (halt) {
+        if (halt && PlayableSprite.getCurrentlyPlayingSprite() != null) {
            PlayableSprite.getCurrentlyPlayingSprite().freeze(true, UIElement.class);
             //PlayableSprite.haltMovement();
             halted = true;

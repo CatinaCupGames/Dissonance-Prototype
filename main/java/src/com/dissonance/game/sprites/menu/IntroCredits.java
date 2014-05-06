@@ -27,7 +27,7 @@ public class IntroCredits extends AbstractUI {
     };
 
     private static final String[] CREDIT_SUBTEXT = new String[] {
-            "Henry Walker\nJohn Merril",
+            "Henry Walker\nJohn Merrill",
             "AJ Goguen",
             "Eddie Penta\n" +
             "Alem Zupa\nheaddetect",

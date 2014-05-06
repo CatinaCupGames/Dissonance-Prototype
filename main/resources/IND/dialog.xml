@@ -24,28 +24,32 @@
         <message type="append">They're invasive.</message>
         
         <header>Jeremiah</header>
-        <message>Then we can bring some feed or something. You're a higher up now, why don't you bring the issue to a meeting?</message>
+        <message>Then we can bring some feed or something. You're a higher up now, </message>
+        <message type="append">why don't you bring the issue to a meeting?</message>
 
         <header>Farrand</header>
-        <message>Oh, so then I can be "Farrand: Patron of Sloth" for the rest of my life. Proposing amendments isn't taken lightly, you know.</message>
+        <message>Oh, so then I can be "Farrand: Patron of Sloth" for the rest of my life. </message>
+        <message type="append">Proposing amendments isn't taken lightly, you know.</message>
         
         <header>Jeremiah</header>
         <message>Well, I guess so. Still... </message>
-        <message style="italic">three days</message>
-        <message>, man.</message> 
+        <message style="italic" type="append">three days</message>
+        <message type="append">, man.</message>
 
         <header>Farrand</header>
         <message>You shouldn't be calling me </message>
-        <message style="italic">man</message>
-        <message>, either. We need to get into the habit of being professional if I want to make good 
-first impressions as a sage.</message>
+        <message style="italic" type="append">man</message>
+        <message type="append">, either. </message>
+        <message type="append"> We need to get into the habit of being professional</message>
+        <message>if I want to make good first impressions as a sage.</message>
 
         <header>Jeremiah</header>
         <message>Yeah, whatever... What matters now is that we got here.</message>
 
         <header>Farrand</header>
-        <message>Yes. Now let's try to make this go smoothly. Remember: weapons down, do not act out, and let me do the talking.</message>
-        <message type="append">Emphasis on "let me do the talking".</message>
+        <message>Yes. Now let's try to make this go smoothly. Remember: weapons down, </message>
+        <message type="append">do not act out, and let me do the talking.</message>
+        <message>Emphasis on "let me do the talking".</message>
 
         
     </dialog>
