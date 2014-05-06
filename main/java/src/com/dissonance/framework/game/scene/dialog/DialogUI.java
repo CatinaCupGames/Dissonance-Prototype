@@ -1,7 +1,10 @@
 package com.dissonance.framework.game.scene.dialog;
 
 import com.dissonance.framework.game.input.InputKeys;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
+import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.text.RenderText;
 import com.dissonance.framework.render.texture.Texture;
@@ -17,7 +20,8 @@ import java.util.ArrayList;
 import static org.lwjgl.opengl.GL11.*;
 
 public class DialogUI extends AbstractUI {
-    private static TrueTypeFont font;
+    public static Font original = GameSettings.Display.GAME_FONT;
+    public static TrueTypeFont font;
     private static Texture texture_background;
     private static Texture texture_header;
 
@@ -119,9 +123,9 @@ public class DialogUI extends AbstractUI {
                             break;
                         if (current_char_offset >= total_chars)
                             break;
-                        RenderText.drawString(font, "" + anArray, xoffset, yoffset, new Color(current.s.getColor().getRed() / 255f, current.s.getColor().getGreen() / 255f, current.s.getColor().getBlue() / 255f));
+                        RenderText.drawString(current.s.getFont(), "" + anArray, xoffset, yoffset, new Color(current.s.getColor().getRed() / 255f, current.s.getColor().getGreen() / 255f, current.s.getColor().getBlue() / 255f));
                         current_char_offset++;
-                        xoffset += font.getWidth("" + anArray);
+                        xoffset += current.s.getFont().getWidth("" + anArray);
                     }
                     used.add(current);
                     array = null;
@@ -142,8 +146,8 @@ public class DialogUI extends AbstractUI {
                         break;
                     char[] array = current.s.getString().toCharArray();
                     for (char anArray : array) {
-                        RenderText.drawString(font, "" + anArray, xoffset, yoffset, new Color(current.s.getColor().getRed() / 255f, current.s.getColor().getGreen() / 255f, current.s.getColor().getBlue() / 255f));
-                        xoffset += font.getWidth("" + anArray);
+                        RenderText.drawString(current.s.getFont(), "" + anArray, xoffset, yoffset, new Color(current.s.getColor().getRed() / 255f, current.s.getColor().getGreen() / 255f, current.s.getColor().getBlue() / 255f));
+                        xoffset += current.s.getFont().getWidth("" + anArray);
                     }
                     used.add(current);
                     array = null;
@@ -244,11 +248,6 @@ public class DialogUI extends AbstractUI {
         currentdialog = this;
     }
 
-    @Override
-    protected void onClose() {
-
-    }
-
     private boolean pressed;
     private long lastUpdate = RenderService.getTime();
     private boolean done = false;
@@ -333,6 +332,62 @@ public class DialogUI extends AbstractUI {
     public static DialogUI currentDialogBox() {
         return currentdialog;
     }
+
+    /*
+    Backwards compatiblity methods
+     */
+    @Override
+    protected void onClose() {
+        if (halted) {
+            PlayableSprite.getCurrentlyPlayingSprite().unfreeze(DialogUI.class);
+        }
+    }
+    private boolean halted = false;
+
+    /**
+     * Display this dialog box and freeze the player.
+     * @deprecated This method is deprecated. Please use {@link Dialog#displayDialog(String)}
+     */
+    @Deprecated
+    public void displayUI() {
+        displayUI(true);
+    }
+
+    /**
+     * Display this dialog box in world <b>world</b> and don't freeze the player.
+     * @param world The world to display the dialog box in.
+     * @deprecated This method is deprecated. Please use {@link Dialog#displayDialog(String)}
+     */
+    @Deprecated
+    public void displayUI(World world) {
+        displayUI(false, world);
+    }
+
+    /**
+     * Display this dialog box in the currently displaying world.
+     * @param halt Whether or not to freeze the player
+     * @deprecated This method is deprecated. Please use {@link Dialog#displayDialog(String)}
+     */
+    @Deprecated
+    public void displayUI(boolean halt) {
+        displayUI(halt, WorldFactory.getCurrentWorld());
+    }
+
+    /**
+     * Display this dialog box in the world <b>world</b>
+     * @param halt Whether or not to freeze the player
+     * @param world The world to display the dialog box in.
+     * @deprecated This method is deprecated. Please use {@link Dialog#displayDialog(String)}
+     */
+    @Deprecated
+    public void displayUI(boolean halt, World world) {
+        world.addDrawable(this);
+        if (halt && PlayableSprite.getCurrentlyPlayingSprite() != null) {
+            PlayableSprite.getCurrentlyPlayingSprite().freeze(true, DialogUI.class);
+            halted = true;
+        }
+    }
+
 
     private class SH {
         public CustomString s;
