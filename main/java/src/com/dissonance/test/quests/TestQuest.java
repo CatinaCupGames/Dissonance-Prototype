@@ -47,7 +47,7 @@ public class TestQuest extends AbstractQuest {
             }
         });
 
-        World w = WorldFactory.getWorld("test_tileset");
+        World w = WorldFactory.getWorld("WaldemarsMeetingRoom");
         setWorld(w);
         w.waitForWorldLoaded();
         playSceneAndWait(SimpleSceneTest.class);
