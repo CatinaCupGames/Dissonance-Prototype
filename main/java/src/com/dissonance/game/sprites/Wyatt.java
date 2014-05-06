@@ -127,6 +127,6 @@ public final class Wyatt extends PlayableSprite {
 
     @Override
     public String getSpriteName() {
-        return "player";
+        return "wyatt";
     }
 }

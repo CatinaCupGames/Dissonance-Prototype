@@ -124,6 +124,10 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         }
     }
 
+    public void setWaypoint(float x, float y, WaypointType type){
+        setWaypoint(new Position(x, y), type);
+    }
+
     public void addWaypoint(Position position, WaypointType type) {
         if (waypointList == null) {
             waypointList = new ArrayList<Position>();
@@ -139,6 +143,10 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
                 waypointList.addAll(points);
             }
         }
+    }
+
+    public void addWaypoint(float x, float y, WaypointType type){
+        addWaypoint(new Position(x, y), type);
     }
 
     public void clearWaypoints() {

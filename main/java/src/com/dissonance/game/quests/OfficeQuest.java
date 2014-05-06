@@ -5,6 +5,7 @@ import com.dissonance.framework.game.sprites.animation.AbstractAnimator;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.scenes.OfficeScene;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 
@@ -17,6 +18,7 @@ public class OfficeQuest extends AbstractQuest {
         World w = WorldFactory.getWorld("WaldomarsMeetingRoom");
         setWorld(w);
         w.waitForWorldLoaded();
+        Sound.playSound("waldobuilding");
         WaldomarsMeetingRoom.waldomar.setAnimation("walk_back");
         WaldomarsMeetingRoom.waldomar.pauseAnimation();
         WaldomarsMeetingRoom.waldomar.setFrame(1);

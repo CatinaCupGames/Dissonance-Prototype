@@ -310,7 +310,8 @@ public final class Camera {
 
             xShake = xadd;
             yShake = yadd;
-            if (RenderService.getTime() - started >= duration) {
+            System.out.println("yadd: " + yShake);
+            if (RenderService.getTime() - started >= shakeDuration) {
                 isShaking = false;
                 xShake = 0f;
                 yShake = 0f;
