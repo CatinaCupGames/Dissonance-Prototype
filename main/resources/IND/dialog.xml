@@ -114,7 +114,7 @@
         <message type="append">As I am sure you are aware, industrialization poses a threat to both</message>
 
         <header>Farrand</header>
-        <mesage>our environment and to our state of social well-being.</mesage>
+        <message>our environment and to our state of social well-being.</message>
 
         <header>Waldomar</header>
         <message>You have come to “halt me and my expansion”?</message>
@@ -141,18 +141,26 @@
         <message type="append">to work and live as they please.</message>
 
         <header>Waldomar</header>
-        <message>They don’t have imposed reproduction rights or live in blasted huts </message>
-        <message type="append">eating leaves and berries like animals.</message>
+        <message>They don’t have imposed reproduction rights or live in blasted huts eating </message>
+        <message type="append">leaves and berries like animals!</message>
 
         <header>Farrand</header>
-        <message>The citizens of Isthmo do not live like animals! They are simply free of the corruption and destruction of mans old ways of living. I know your type Waldomar, your thirst for power is unquenchable, you won’t be satisfied until you have completely stripped this land of all of it’s resources in exchange for material wealth!</message>
-        <message type="append">dfskjgshdfk</message>
+        <message>The citizens of Isthmo do not live like animals! They are simply free of the </message>
+        <message type="append">corruption and destruction of mans old ways of living. I know your type</message>
 
         <header>Farrand</header>
-        <message>It’s because of people like you in the **old world** that Isthmo Candidus was created as a safe haven from ecological destruction in the first place and I'll be damned if I even let you have an inch more of it!</message>
+        <message>Waldomar, your thirst for gatorade is unquenchable, you won’t be satisfied until </message>
+        <message type="append">you have completely stripped this land of all of it’s resources in exchange</message>
 
-        <message type="append">BBRRAAEHHEERG</message>
+        <header>Farrand</header>
+        <message>for material wealth!</message>
 
+        <header>Farrand</header>
+        <message>It’s because of people like you in the **old world** that Isthmo Candidus was </message>
+        <message type="append">created as a safe haven from ecological destruction in the first place and </message>
+
+        <header>Farrand</header>
+        <message>I'll be damned if I even let you have an inch more of it! </message>
 
         <header>Waldomar</header>
         <message>I will not idly sit by and take these insults! Guards arrest them on charges of</message>
