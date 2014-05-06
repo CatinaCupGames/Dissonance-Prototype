@@ -14,7 +14,7 @@ import com.dissonance.game.sprites.*;
 import com.dissonance.game.sprites.office.*;
 
 
-public class WaldemarsMeetingroom extends GameWorldLoader {    
+public class WaldomarsMeetingRoom extends GameWorldLoader {
     public static Waldomar waldomar;    
     
     public static WaldomarDesk var8;
