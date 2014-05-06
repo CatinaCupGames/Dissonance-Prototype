@@ -381,14 +381,14 @@ public final class World {
             if (tWidth > (GameSettings.Display.game_width / 2f) + 16f)
                 removeX = (GameSettings.Display.game_width / 2f) + 16f;
             else {
-                minX = -(GameSettings.Display.game_width / 4f) + 64f;
-                tWidth = -(GameSettings.Display.game_width / 4f) + 64f;
+                Camera.removeBounds();
+                return;
             }
             if (tHeight > (GameSettings.Display.game_height / 2f) + 16f)
                 removeY = (GameSettings.Display.game_height / 2f) + 16f;
             else {
-                minY = -(GameSettings.Display.game_height / 4f) + 64f;
-                tHeight = -(GameSettings.Display.game_height / 4f) + 64f;
+                Camera.removeBounds();
+                return;
             }
 
             Camera.setBounds(
