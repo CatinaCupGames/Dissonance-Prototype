@@ -18,7 +18,7 @@ public class DisclaimerQuest extends AbstractQuest {
             @Override
             public void run() {
                 try {
-                    DisclaimerQuest.super.setNextQuest(new Demo_Level1_Quest());
+                    DisclaimerQuest.super.setNextQuest(new IntroSceneQuest());
                     DisclaimerQuest.super.endQuest();
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();

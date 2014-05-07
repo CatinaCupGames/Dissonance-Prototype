@@ -18,8 +18,6 @@ public class GateScene extends SimpleScene{
         RenderService.INSTANCE.fadeFromBlack(800);
         RenderService.INSTANCE.waitForFade();
 
-        //TODO DIALOG!
-
-
+        Dialog.displayDialog("GateScene2");
     }
 }
