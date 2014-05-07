@@ -11,12 +11,17 @@ package com.dissonance.game.w;
 
 
 import com.dissonance.framework.game.world.World;
+
 import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.framework.render.shader.impl.Light;
 import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.Waldomar;
 import com.dissonance.game.sprites.Wyatt;
+import com.dissonance.framework.render.shader.impl.Light;
+import com.dissonance.framework.sound.Sound;
+import com.dissonance.game.sprites.*;
+
 import com.dissonance.game.sprites.office.*;
 
 import java.awt.*;
@@ -26,7 +31,7 @@ public class WaldomarsMeetingRoom implements WorldLoader {
     public static Waldomar waldomar;
     public static Jeremiah jeremiah;
     public static Farrand farrand;
-    
+
     public static WaldomarDesk var8;
     public static Sofa var7;
     public static Sofa var6;
@@ -62,22 +67,22 @@ public class WaldomarsMeetingRoom implements WorldLoader {
         w.loadAndAdd(var4);
         var4.setX(271.85007f);
         var4.setY(60.0f);
-    
+
         var5 = new Sofa();
         w.loadAndAdd(var5);
         var5.setX(374.40015f);
         var5.setY(69.350006f);
-    
+
         var6 = new Sofa();
         w.loadAndAdd(var6);
         var6.setX(396.70007f);
         var6.setY(69.350006f);
-    
+
         var7 = new Sofa();
         w.loadAndAdd(var7);
         var7.setX(418.80014f);
         var7.setY(69.350006f);
-    
+
         var8 = new WaldomarDesk();
         w.loadAndAdd(var8);
         var8.setX(113.5f);
@@ -88,15 +93,15 @@ public class WaldomarsMeetingRoom implements WorldLoader {
         var9.setX(600f);
         var9.setY(150f);
         var9.setLayer(3);
-    
+
         waldomar = new Waldomar();
         w.loadAndAdd(waldomar);
         waldomar.setX(102.95f);
         waldomar.setY(203.85004f);
 
-farrand = new Farrand();
-w.loadAndAdd(farrand);        
-farrand.deselect();
+        farrand = new Farrand();
+        w.loadAndAdd(farrand);
+        farrand.deselect();
         farrand.setX(548.3502f);
         farrand.setY(128.44998f);
 

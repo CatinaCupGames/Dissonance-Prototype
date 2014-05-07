@@ -175,7 +175,18 @@
         <header>Jeremiah</header>
         <message style="bold">Farrand!</message>
     </dialog>
+    <dialog dialog_id="GateScene2">
+        <header>Guard</header>
+        <message>You there! Are you the sage from Nuado?</message>
 
+        <header>Farrand</header>
+        <message>Yes and this is my body guard Jeremiah.</message>
+
+        <header>Guard</header>
+        <message>Chancellor Waldomar is expecting you, It is best not to keep him waiting. </message>
+
+
+    </dialog>
 
 
 
