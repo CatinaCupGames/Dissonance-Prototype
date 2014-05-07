@@ -325,7 +325,7 @@ public class DialogUI extends AbstractUI {
         if (finished)
             endDialog();
         else {
-            Sound.playSound("dialogadvance");
+            Sound.playSound("dialogadvance").setVolume(0.5f);
             if (events != null) {
                 events.onDialogAdvance(dialog);
             }

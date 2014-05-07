@@ -16,6 +16,8 @@ public abstract class Service {
 
     private final Queue<ServiceRunnable> listToRun = new LinkedList<>();
 
+    private final List<Runnable> toRemove = new ArrayList<>();
+
     public void start() {
         runnable = new Runnable() {
             @Override
@@ -38,6 +40,19 @@ public abstract class Service {
                                 t.printStackTrace();
                             }
                         }
+
+                        if (toRemove.size() > 0) {
+                            for (Runnable r : toRemove) {
+                                Iterator<ServiceRunnable> iterator = temp.iterator();
+                                while (iterator.hasNext()) {
+                                    ServiceRunnable sr = iterator.next();
+                                    if (sr.runnable == r)
+                                        iterator.remove();
+                                }
+                            }
+                            toRemove.clear();
+                        }
+
                         listToRun.addAll(temp);
                     }
 
@@ -137,6 +152,13 @@ public abstract class Service {
             }
         }
     }
+
+    public void removeServiceTick(Runnable runnable) {
+        Validator.validateNotNull(runnable, "runnable");
+
+        toRemove.add(runnable);
+    }
+
 
 
     // === Properties === //

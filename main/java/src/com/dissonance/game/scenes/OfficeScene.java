@@ -11,6 +11,8 @@ import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.awt.*;
+
 /**
  * Created by Jmerrill on 5/6/2014.
  */

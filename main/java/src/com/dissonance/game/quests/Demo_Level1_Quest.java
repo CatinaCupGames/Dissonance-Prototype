@@ -5,6 +5,7 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.game.scenes.Demo_OpeningScene;
+import com.dissonance.game.scenes.GateScene;
 import com.dissonance.game.scenes.OutdoorScene;
 import com.dissonance.game.sprites.menu.IntroCredits;
 
@@ -14,6 +15,7 @@ public class Demo_Level1_Quest extends AbstractQuest {
         IntroCredits intro = new IntroCredits();
         World world1 = WorldFactory.getWorld("Zesilia_pan");
         World world2 = WorldFactory.getWorld("ToZesilia");
+        World world3 = WorldFactory.getWorld("CityEntrySquare");
 
         setWorld(world1);
         world1.waitForWorldLoaded();
@@ -29,6 +31,9 @@ public class Demo_Level1_Quest extends AbstractQuest {
         intro.alwaysContinue();
         RenderService.INSTANCE.fadeToBlack(1); //Make screen black
         playSceneAndWait(OutdoorScene.class);
+        setWorld(world3);
+        world3.waitForWorldLoaded();
+        playSceneAndWait(GateScene.class);
     }
 
     @Override
