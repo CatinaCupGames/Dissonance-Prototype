@@ -10,12 +10,18 @@ Date: 2014/05/07 11:55:31
 package com.dissonance.game.w;
 
 
-import com.dissonance.framework.game.world.*;
-
 import com.dissonance.framework.game.world.World;
+
+import com.dissonance.framework.game.world.WorldLoader;
+import com.dissonance.framework.render.shader.impl.Light;
+import com.dissonance.game.sprites.Farrand;
+import com.dissonance.game.sprites.Jeremiah;
+import com.dissonance.game.sprites.Waldomar;
+import com.dissonance.game.sprites.Wyatt;
 import com.dissonance.framework.render.shader.impl.Light;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.sprites.*;
+
 import com.dissonance.game.sprites.office.*;
 
 import java.awt.*;
@@ -41,6 +47,8 @@ public class WaldomarsMeetingRoom implements WorldLoader {
     public static Wyatt guard3;
     public static Wyatt guard4;
     public static Wyatt guard5;
+
+    public static Light l;
 
     @Override
     public void onLoad(World w) {
@@ -136,7 +144,8 @@ public class WaldomarsMeetingRoom implements WorldLoader {
 
         w.setWorldBrightness(0.4f);
         w.createLight(15f * 16, 2f * 16, 1.8f, 0.7f);
-        w.createLight(0f, 0f, 0.5f, 0.1f);
+        //w.createLight(0f, 0f, 0.1f, 0.1f);
+        l = w.createLight(-200f, -200f, 8.2f, 0.01f, Color.RED);
     }
 
     @Override

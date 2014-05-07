@@ -122,7 +122,7 @@
         <message type="append">Want a cigar?</message>
 
         <header>Farrand</header>
-        <message>No thank you, I'd like to get Straight to the point.</message>
+        <message>No thank you, I'd like to get straight to the point.</message>
 
         <header>Waldomar</header>
         <message>Well then, by all means! Tell me, why have we gathered here today?</message>
@@ -178,14 +178,18 @@
         <message type="append">created as a safe haven from ecological destruction in the first place and </message>
 
         <header>Farrand</header>
-        <message>I'll be damned if I even let you have an inch more of it! </message>
+        <message>I'll be damned if I let you have an inch more of it! </message>
 
         <header>Waldomar</header>
-        <message>I will not idly sit by and take these insults! Guards arrest them on charges of</message>
-        <message type="append">treason!</message>
+        <message>...Farrand, you do realize that this is sounding like more and more of</message>
+        <message type="append">a threat on your part. I do not take kindly to threats...</message>
 
 
+    </dialog>
 
+    <dialog dialog_id="waldomeeting2">
+        <header>Jeremiah</header>
+        <message style="bold">Farrand!</message>
     </dialog>
     <dialog dialog_id="GateScene2">
         <header>Guard</header>
