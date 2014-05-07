@@ -58,7 +58,7 @@ public abstract class ReflectionConfig {
                                         f.set(this, Integer.parseInt(item.getFirstChild().getNodeValue()));
                                     } else if (Boolean.class.isAssignableFrom(f.getType()) || boolean.class.isAssignableFrom(f.getType())) {
                                         f.setAccessible(true);
-                                        f.set(this, item.getFirstChild().getNodeValue().toLowerCase().contains("y"));
+                                        f.set(this, item.getFirstChild().getNodeValue().toLowerCase().contains("true"));
                                     } else if (Float.class.isAssignableFrom(f.getType()) || float.class.isAssignableFrom(f.getType())) {
                                         f.setAccessible(true);
                                         f.set(this, Float.parseFloat(item.getFirstChild().getNodeValue()));

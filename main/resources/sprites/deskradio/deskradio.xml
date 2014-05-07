@@ -1,0 +1,11 @@
+<animations
+        width="15"
+        height="23">
+
+    <animation
+            name="radio"
+            loop="true"
+            frames="4"
+            row="0"
+            default_speed="115ms"/>
+</animations>
