@@ -22,7 +22,7 @@ public class HallwayScene extends SimpleScene {
         //guard 1, then guard 2, THEN farrand, then guards 3 and 4, then jeremiah, then guard 5
 
         WaldoHallway.guard1.setMovementSpeed(6f);
-        WaldoHallway.guard1.setWaypoint(0,5*16,WaypointType.SIMPLE);
+        WaldoHallway.guard1.setWaypoint(2,5*16,WaypointType.SIMPLE);
 
         WaldoHallway.guard2.setMovementSpeed(6f);
         WaldoHallway.guard2.setWaypoint(0,9*16,WaypointType.SIMPLE);
@@ -31,7 +31,7 @@ public class HallwayScene extends SimpleScene {
         WaldoHallway.farrand.setWaypoint(0,7*16,WaypointType.SIMPLE);
 
         WaldoHallway.guard3.setMovementSpeed(6f);
-        WaldoHallway.guard3.addWaypoint(0,5*16,WaypointType.SIMPLE);
+        WaldoHallway.guard3.setWaypoint(0,5*16,WaypointType.SIMPLE);
 
         WaldoHallway.guard4.setMovementSpeed(6f);
         WaldoHallway.guard4.setWaypoint(0,9*16,WaypointType.SIMPLE);
@@ -42,8 +42,8 @@ public class HallwayScene extends SimpleScene {
         WaldoHallway.guard5.setMovementSpeed(6f);
         WaldoHallway.guard5.setWaypoint(0,7*16,WaypointType.SIMPLE);
 
-        WaldoHallway.guard5.waitForWaypointReached();
-        RenderService.INSTANCE.fadeToBlack(3000);
+        WaldoHallway.guard1.waitForWaypointReached();
+        RenderService.INSTANCE.fadeToBlack(1000);
 
 
     }
