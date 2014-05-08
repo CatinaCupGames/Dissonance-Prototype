@@ -42,29 +42,56 @@ public class Framebuffer implements Drawable {
     }
 
     public void begin() {
-        glPushMatrix();
         glBindFramebuffer(GL_FRAMEBUFFER, fID);
+
+        glPushAttrib(GL_VIEWPORT_BIT);
         glViewport(0, 0, width, height);
+
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glLoadIdentity();
+        glOrtho(0, width, 0, height, -1, 1);
+
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+        glLoadIdentity();
     }
 
     public void end() {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        glMatrixMode(GL_PROJECTION);
         glPopMatrix();
+
+        glMatrixMode(GL_MODELVIEW);
+        glPopMatrix();
+
+        glPopAttrib();
     }
 
     public void render() {
+        float x = this.width / 2f;
+        float y = this.height / 2f;
+        float z = 0f;
+        float bx = (this.width)/2f;
+        float by = (this.height)/2f;
+
+        glPushMatrix();
+
         glBindTexture(GL_TEXTURE_2D, tID);
         glBegin(GL_QUADS);
         glTexCoord2f(0f, 0f); //bottom left
-        glVertex3f(0, 0, 0);
+        glVertex3f(x - bx, y - by, z);
         glTexCoord2f(1f, 0f); //bottom right
-        glVertex3f(width, 0, 0);
+        glVertex3f(x + bx, y - by, z);
         glTexCoord2f(1f, 1f); //top right
-        glVertex3f(width, height, 0);
+        glVertex3f(x + bx, y + by, z);
         glTexCoord2f(0f, 1f); //top left
-        glVertex3f(0, height, 0);
+        glVertex3f(x - bx, y + by, z);
         glEnd();
         glBindTexture(GL_TEXTURE_2D, 0);
+
+        glPopMatrix();
     }
 
     @Override

@@ -32,13 +32,13 @@ public abstract class Service {
                     synchronized (listToRun) {
                         while (!listToRun.isEmpty()) {
                             ServiceRunnable r = listToRun.poll();
-                            if (r.everyTick)
-                                temp.add(r);
                             try {
                                 r.runnable.run();
                             } catch (Throwable t) {
                                 t.printStackTrace();
                             }
+                            if (r.everyTick && !r.killed)
+                                temp.add(r);
                         }
 
                         if (toRemove.size() > 0) {
@@ -131,15 +131,15 @@ public abstract class Service {
 
     public abstract void provideData(Object obj, int type);
 
-    public void runOnServiceThread(Runnable runnable) {
-        runOnServiceThread(runnable, false);
+    public ServiceRunnable runOnServiceThread(Runnable runnable) {
+        return runOnServiceThread(runnable, false);
     }
 
-    public void runOnServiceThread(Runnable runnable, boolean force_next_frame) {
-        runOnServiceThread(runnable, force_next_frame, false);
+    public ServiceRunnable runOnServiceThread(Runnable runnable, boolean force_next_frame) {
+        return runOnServiceThread(runnable, force_next_frame, false);
     }
 
-    public void runOnServiceThread(Runnable runnable, boolean force_next_frame, boolean every_tick) {
+    public ServiceRunnable runOnServiceThread(Runnable runnable, boolean force_next_frame, boolean every_tick) {
         Validator.validateNotNull(runnable, "runnable");
         if (Thread.currentThread().getId() == serviceThreadID && !force_next_frame) //Run the runnable if were already on the service thread
             runnable.run();
@@ -149,8 +149,10 @@ public abstract class Service {
                 runnable1.runnable = runnable;
                 runnable1.everyTick = every_tick;
                 listToRun.offer(runnable1);
+                return runnable1;
             }
         }
+        return null;
     }
 
     public void removeServiceTick(Runnable runnable) {
@@ -171,8 +173,13 @@ public abstract class Service {
         return terminated;
     }
 
-    private class ServiceRunnable {
+    public class ServiceRunnable {
         private boolean everyTick;
         private Runnable runnable;
+        private boolean killed = false;
+
+        public void kill() {
+            killed = true;
+        }
     }
 }

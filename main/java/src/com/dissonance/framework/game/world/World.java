@@ -40,6 +40,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.lwjgl.opengl.GL11.glScalef;
+
 public final class World {
     private static final Gson GSON = new Gson();
     private static String wlpackage = "com.dissonance.game.w";
@@ -147,10 +149,11 @@ public final class World {
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
                         System.out.println("Attempting to generate frame buffer..");
 
-                        /*try {
+                        try {
                             Framebuffer frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
                             frame.generate();
                             frame.begin();
+                            //+glScalef(0.5f, 0.5f, 1f);
                             Iterator<Drawable> drawableIterator = getSortedDrawables();
                             while (drawableIterator.hasNext()) {
                                 Drawable d = drawableIterator.next();
@@ -164,9 +167,10 @@ public final class World {
                             }
                             frame.end();
                             System.out.println("Success!");
+                            addDrawable(frame);
                         } catch (RuntimeException e) {
                             System.out.println("Framebuffers are not supported!");
-                        }*/
+                        }
 
                         tiledData.loadTriggers();
                         if (loader == null) {
