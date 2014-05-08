@@ -85,7 +85,7 @@
     </dialog>
     <dialog dialog_id="entering_zesilia2">
         <header>Guard</header>
-        <message>You there! State you name and business in the city of Zeslia!</message>
+        <message>AHAHAHFUAHFUA</message>
 
         <header>Farrand</header>
         <message>I am Farrand, Sage of Nuado, and this is Jeremiah.</message>
@@ -115,14 +115,14 @@
         <message type="append">So, did my little crew here give you a warm welcome?</message>
 
         <header>Farrand</header>
-        <message>...</message>
+        <message>Sure...</message>
 
         <header>Waldomar</header>
         <message>...Please, make yourself comfortable! </message>
-        <message type="append">Want a cigar?</message>
+        <message type="append">Would you like a cigar?</message>
 
         <header>Farrand</header>
-        <message>No thank you, I'd like to get straight to the point.</message>
+        <message>No, thank you. I would rather get straight to the point.</message>
 
         <header>Waldomar</header>
         <message>Well then, by all means! Tell me, why have we gathered here today?</message>
@@ -141,21 +141,17 @@
         <message>Why, whatever do you mean by that?</message>
 
         <header>Farrand</header>
-        <message>You know as well as I do what it means... Your further expansion past</message>
-        <message type="append">the East West Province is a clear violation of the Candidus Treaty that</message>
-
-        <header>Farrand</header>
-        <message>our fathers agreed upon all those years ago.</message>
+        <message>You know as well as I do what it means... Your further expansion</message>
+        <message type="append">is a clear violation of the Candidus Treaty.</message>
 
         <header>Waldomar</header>
-        <message>Ah, but Farrand it would be selfish to keep all that land to yourself.</message>
+        <message>Ah, but Farrand, it would be selfish to keep all that land to yourself.</message>
 
         <header>Farrand</header>
-        <message>What’s selfish is the lavish lifestyle you live while many of your followers </message>
-        <message type="append">starve!</message>
+        <message>What’s selfish is the lavish lifestyle you live while your followers starve!</message>
 
         <header>Waldomar</header>
-        <message>The state of my own followers is their doing. They are truly free </message>
+        <message>The state of my own followers is their doing. They are free </message>
         <message type="append">to work and live as they please.</message>
 
         <header>Waldomar</header>
@@ -163,8 +159,8 @@
         <message type="append">leaves and berries like animals!</message>
 
         <header>Farrand</header>
-        <message>The citizens of Isthmo do not live like animals! They are simply free of the </message>
-        <message type="append">corruption and destruction of mans old ways of living. </message>
+        <message>The citizens of Isthmo do not live like animals! They are simply respecting </message>
+        <message type="append">the laws that uphold our survival. </message>
 
         <header>Farrand</header>
         <message>I know your type Waldomar, your thirst for gatorade is unquenchable, </message>
@@ -174,8 +170,8 @@
         <message>this land of all of it’s resources in exchange for material wealth!</message>
 
         <header>Farrand</header>
-        <message>It’s because of people like you in the old world that Isthmo Candidus was </message>
-        <message type="append">created as a safe haven from ecological destruction in the first place and </message>
+        <message>It was because of people like you in the old world that Isthmo Candidus was </message>
+        <message type="append">created as a safe haven from ecological destruction in the first place, and </message>
 
         <header>Farrand</header>
         <message>I'll be damned if I let you have an inch more of it! </message>
@@ -193,13 +189,23 @@
     </dialog>
     <dialog dialog_id="GateScene2">
         <header>Guard</header>
-        <message>You there! Are you the sage from Nuado?</message>
+        <message>Welcome. You two are with Nuado Provence, right?</message>
 
         <header>Farrand</header>
-        <message>Yes and this is my body guard Jeremiah.</message>
+        <message>I am. My name is Farrand.</message>
 
         <header>Guard</header>
-        <message>Chancellor Waldomar is expecting you, It is best not to keep him waiting. </message>
+        <message>Very well. And who's the commoner?</message>
+
+        <header>Jeremiah</header>
+        <message speed="10" style="italic">Hey, now you wait just a min-</message>
+
+        <header>Farrand</header>
+        <message>This is Jeremiah, my bodyguard.</message>
+
+        <header>Guard</header>
+        <message>Ah, okay. Step on the conveyor and let us lead the way.</message>
+
 
 
     </dialog>
