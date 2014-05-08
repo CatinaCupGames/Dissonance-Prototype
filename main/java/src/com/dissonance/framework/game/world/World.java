@@ -208,7 +208,7 @@ public final class World {
                 nodeMap.readMap();
                 in.close();
             } catch (Exception e) {
-                throw new WorldLoadFailedException("Error loading Tiled file!", e);
+                throw new WorldLoadFailedException("Error loading Tiled file! (" + name + ")", e);
             }
         } else { //Find and invoke WorldLoader for this world
             renderingService.runOnServiceThread(new Runnable() {

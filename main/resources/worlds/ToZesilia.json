@@ -20,6 +20,10 @@
          "height":50,
          "name":"Curb\/Wall",
          "opacity":1,
+         "properties":
+            {
+             "ground":"true"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":200,
@@ -31,6 +35,10 @@
          "height":50,
          "name":"Building",
          "opacity":1,
+         "properties":
+            {
+             "ground":"true"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":200,
