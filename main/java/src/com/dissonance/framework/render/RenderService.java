@@ -356,18 +356,28 @@ public class RenderService extends Service {
 
             glColor4f(curAlpha, curAlpha, curAlpha, 1f);
             //ROBO //todo get all these into proper batches
+
+            Iterator<Drawable> usprites = current_world.getUnsortedDrawables();
+            while (usprites.hasNext()) {
+                Drawable s = usprites.next();
+                if (s == null)
+                    continue;
+                try {
+                    if (!s.neverClip() && (!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
+                        continue;
+                    s.render();
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            }
+
             Iterator<Drawable> sprites = current_world.getSortedDrawables();
             while (sprites.hasNext()) {
                 Drawable s = sprites.next();
                 if (s == null)
                     continue;
                 try {
-                        /*if (d instanceof Sprite) {
-                            if (Camera.isOffScreen((Sprite)d, 2))
-                                continue;
-                        } else if (Camera.isOffScreen(d.getX(), d.getY(), d.getWidth() / 2, d.getHeight() / 2, 2)) //Assume everything is 32x32
-                            continue;*/
-                    if ((!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
+                    if (!s.neverClip() && (!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
                         continue;
                     s.render();
                 } catch (Throwable t) {

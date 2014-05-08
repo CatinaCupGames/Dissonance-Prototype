@@ -218,6 +218,17 @@ public class WorldFactory {
         }
     }
 
+    public static void clearCache() {
+        for (int i = 0; i < WORLD_CACHE_LIMIT; i++) {
+            if (cacheWorlds[i] == null || GameService.getCurrentWorld().getID() == cacheWorlds[i].world.getID())
+                continue;
+            System.out.println("[World Factory] Disposing " + cacheWorlds[i].world.getName() + ".");
+            cacheWorlds[i].world.onDispose();
+            cacheWorlds[i] = null;
+            worldCount--;
+        }
+    }
+
     private static class WorldHolder {
         public long lastAccess;
         public World world;

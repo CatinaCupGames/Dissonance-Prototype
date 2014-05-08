@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class WorldData {
+    public final HashMap<Integer, TileObject.TexCordHolder> tilesetCordCache = new HashMap<Integer, TileObject.TexCordHolder>();
+
     private int height;
     private int tileheight;
     private int tilewidth;
@@ -157,5 +159,7 @@ public class WorldData {
         for (TileSet sets : tilesets) {
             sets.dispose();
         }
+
+        tilesetCordCache.clear();
     }
 }

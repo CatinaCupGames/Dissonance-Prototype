@@ -17,6 +17,8 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static org.lwjgl.opengl.GL20.*;
+
 public class ShaderFactory {
     static {
         activeShaders = new ArrayList<>();
@@ -32,17 +34,17 @@ public class ShaderFactory {
         String fragFile = shader.getFragmentFile();
 
         try {
-            int vi = buildShader(ARBVertexShader.GL_VERTEX_SHADER_ARB, verFile);
-            int fi = buildShader(ARBFragmentShader.GL_FRAGMENT_SHADER_ARB, fragFile);
+            int vi = buildShader(GL_VERTEX_SHADER, verFile);
+            int fi = buildShader(GL_FRAGMENT_SHADER, fragFile);
 
-            int program = ARBShaderObjects.glCreateProgramObjectARB();
+            int program = glCreateProgram();
             if (program == 0)
                 throw new RuntimeException("Error binding shader to program!");
 
-            ARBShaderObjects.glAttachObjectARB(program, vi);
-            ARBShaderObjects.glAttachObjectARB(program, fi);
+            glAttachShader(program, vi);
+            glAttachShader(program, fi);
 
-            ARBShaderObjects.glLinkProgramARB(program);
+            glLinkProgram(program);
             if (ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_LINK_STATUS_ARB) == GL11.GL_FALSE) {
                 throw new RuntimeException("Error linking shader! - " + shader.getLogInfo(program));
             }
@@ -135,14 +137,14 @@ public class ShaderFactory {
         int shader = 0;
 
         try {
-            shader = ARBShaderObjects.glCreateShaderObjectARB(shaderType);
+            shader = glCreateShader(shaderType);
 
             if (shader == 0) {
                 return 0;
             }
 
-            ARBShaderObjects.glShaderSourceARB(shader, readFileAsString(shaderFile));
-            ARBShaderObjects.glCompileShaderARB(shader);
+            glShaderSource(shader, readFileAsString(shaderFile));
+            glCompileShader(shader);
 
             if (ARBShaderObjects.glGetObjectParameteriARB(shader, ARBShaderObjects.GL_OBJECT_COMPILE_STATUS_ARB) == GL11.GL_FALSE) {
                 throw new RuntimeException("Error creating shader: " + getLogInfo(shader));
