@@ -55,8 +55,8 @@
         <header>Farrand</header>
         <message>Emphasis on "let me do the talking".</message>
     </dialog>
-    
-    
+
+
     <dialog dialog_id="movement1">
         <header>Guard</header>
         <message>Come on now. I thought you guys knew how to use </message>

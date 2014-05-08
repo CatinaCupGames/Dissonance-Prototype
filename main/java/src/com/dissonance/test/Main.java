@@ -13,6 +13,6 @@ public class Main {
         World.setDefaultLoaderPackage("com.dissonance.test.w");
 
         GameService.loadEssentials(args);
-        GameService.beginQuest(new OfficeQuest());
+        GameService.beginQuest(new TestQuest());
     }
 }
