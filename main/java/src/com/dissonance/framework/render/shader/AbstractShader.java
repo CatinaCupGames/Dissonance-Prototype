@@ -1,8 +1,11 @@
 package com.dissonance.framework.render.shader;
 
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.system.debug.Debug;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.GL11;
+
+import static org.lwjgl.opengl.GL20.glUseProgram;
 
 public abstract class AbstractShader {
     private int[] shaderID;
@@ -62,11 +65,13 @@ public abstract class AbstractShader {
 
     protected void onPostRender() {
         check1 = true;
-        ARBShaderObjects.glUseProgramObjectARB(0);
+        glUseProgram(0);
         isBound = false;
-        String log = getLogInfo(program);
-        if (!log.isEmpty())
-            System.out.println(log);
+        if (Debug.isDebugging()) {
+            String log = getLogInfo(program);
+            if (!log.isEmpty())
+                System.out.println(log);
+        }
     }
 
     private boolean check2;
@@ -84,10 +89,12 @@ public abstract class AbstractShader {
         }
         check2 = false;
         onPreRender();
-        ARBShaderObjects.glValidateProgramARB(program);
-        if (ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_VALIDATE_STATUS_ARB) == GL11.GL_FALSE) {
-            ARBShaderObjects.glUseProgramObjectARB(0);
-            throw new RuntimeException("Error validating shader! " + getLogInfo(program));
+        if (Debug.isDebugging()) {
+            ARBShaderObjects.glValidateProgramARB(program);
+            if (ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_VALIDATE_STATUS_ARB) == GL11.GL_FALSE) {
+                ARBShaderObjects.glUseProgramObjectARB(0);
+                throw new RuntimeException("Error validating shader! " + getLogInfo(program));
+            }
         }
         isBound = true;
         if (!check2)
@@ -97,7 +104,7 @@ public abstract class AbstractShader {
 
     protected void onPreRender() {
         check2 = true;
-        ARBShaderObjects.glUseProgramObjectARB(program);
+        glUseProgram(program);
     }
 
     public String getLogInfo(int obj) {

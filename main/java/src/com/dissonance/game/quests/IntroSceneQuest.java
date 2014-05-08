@@ -1,6 +1,7 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
@@ -9,7 +10,7 @@ import com.dissonance.game.scenes.GateScene;
 import com.dissonance.game.scenes.OutdoorScene;
 import com.dissonance.game.sprites.menu.IntroCredits;
 
-public class Demo_Level1_Quest extends AbstractQuest {
+public class IntroSceneQuest extends AbstractQuest {
     @Override
     public void startQuest() throws Exception {
         IntroCredits intro = new IntroCredits();
@@ -17,9 +18,9 @@ public class Demo_Level1_Quest extends AbstractQuest {
         World world2 = WorldFactory.getWorld("ToZesilia");
         World world3 = WorldFactory.getWorld("CityEntrySquare");
 
+        RenderService.INSTANCE.fadeToBlack(1); //Make screen black
         setWorld(world1);
         world1.waitForWorldLoaded();
-        RenderService.INSTANCE.fadeToBlack(1); //Make screen black
         intro.display(world1);
         System.out.println("Play Scene");
         playSceneAndWait(Demo_OpeningScene.class);
@@ -32,8 +33,9 @@ public class Demo_Level1_Quest extends AbstractQuest {
         RenderService.INSTANCE.fadeToBlack(1); //Make screen black
         playSceneAndWait(OutdoorScene.class);
         setWorld(world3);
-        world3.waitForWorldLoaded();
-        playSceneAndWait(GateScene.class);
+        world3.waitForWorldDisplayed();
+        setNextQuest(new GateQuest());
+        endQuest();
     }
 
     @Override

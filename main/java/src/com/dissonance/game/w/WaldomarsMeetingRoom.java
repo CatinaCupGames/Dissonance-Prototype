@@ -4,7 +4,7 @@
 This file was automatically generated with the
 World Loader Editor
 
-Date: 2014/05/06 18:38:59
+Date: 2014/05/07 11:55:31
 =====================================
 */
 package com.dissonance.game.w;
@@ -28,6 +28,7 @@ import java.awt.*;
 
 
 public class WaldomarsMeetingRoom implements WorldLoader {
+    public static DeskRadio var17;
     public static Waldomar waldomar;
     public static Jeremiah jeremiah;
     public static Farrand farrand;
@@ -135,6 +136,12 @@ public class WaldomarsMeetingRoom implements WorldLoader {
         guard5.setX(622.5496f);
         guard5.setY(129.9f);
 
+        var17 = new DeskRadio();
+        w.loadAndAdd(var17);
+        var17.setX(117.45002f);
+        var17.setY(185.20001f);
+        var17.setLayer(2);
+
         w.setWorldBrightness(0.4f);
         w.createLight(15f * 16, 2f * 16, 1.8f, 0.7f);
         //w.createLight(0f, 0f, 0.1f, 0.1f);
@@ -142,5 +149,7 @@ public class WaldomarsMeetingRoom implements WorldLoader {
     }
 
     @Override
-    public void onDisplay(World w){ }
+    public void onDisplay(World w){ 
+    
+    }
 }

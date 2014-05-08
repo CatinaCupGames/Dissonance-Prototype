@@ -44,10 +44,10 @@ public abstract class AbstractQuest {
         //TODO Resume everything and get rid of pause menu
     }
 
-    public World getWorld() {
+    public World getWorld() {/*
         if (PlayableSprite.getCurrentlyPlayingSprite() != null && PlayableSprite.getCurrentlyPlayingSprite().getWorld() != world) {
             world = PlayableSprite.getCurrentlyPlayingSprite().getWorld();
-        }
+        }*/
         if (world == null && RenderService.INSTANCE != null) {
             world = RenderService.INSTANCE.getCurrentDrawingWorld();
         }

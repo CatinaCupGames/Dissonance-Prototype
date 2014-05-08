@@ -16,7 +16,7 @@ import org.lwjgl.util.vector.Vector2f;
 public class OfficeScene extends SimpleScene {
     @Override
     protected void playScene() throws Throwable {
-        RenderService.INSTANCE.fadeFromBlack(1500);
+       RenderService.INSTANCE.fadeFromBlack(1500);
         Vector2f center = Camera.translateToCameraCenter(WaldomarsMeetingRoom.farrand.getVector(), WaldomarsMeetingRoom.farrand.getHeight());
         Camera.setPos(center);
         Camera.followSprite(WaldomarsMeetingRoom.farrand);

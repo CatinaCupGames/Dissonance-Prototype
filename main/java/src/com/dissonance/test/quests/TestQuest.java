@@ -47,13 +47,14 @@ public class TestQuest extends AbstractQuest {
             }
         });
 
-        World w = WorldFactory.getWorld("WaldemarsMeetingRoom");
+        World w = WorldFactory.getWorld("test_tileset");
         setWorld(w);
         w.waitForWorldLoaded();
-        playSceneAndWait(SimpleSceneTest.class);
+        //playSceneAndWait(SimpleSceneTest.class);
         final PlayableSprite player = PlayableSprite.getCurrentlyPlayingSprite();
         player.setMarksmanship(2);
         player.setMovementType(MovementType.RUNNING);
+        player.glow();
 
         System.out.println(player.getMarksmanship());
         player.setX(100);

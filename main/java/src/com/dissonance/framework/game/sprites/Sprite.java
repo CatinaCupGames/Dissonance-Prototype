@@ -8,6 +8,7 @@ import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.render.shader.impl.EdgeGlowShader;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.Validator;
@@ -20,6 +21,7 @@ import java.security.InvalidParameterException;
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class Sprite implements Drawable, Serializable {
+    private static EdgeGlowShader EDGE_SHADER;
     private SpriteEvent.SpriteMovedEvent spriteMoved;
 
     protected transient Texture texture;
@@ -31,6 +33,7 @@ public abstract class Sprite implements Drawable, Serializable {
     protected boolean hasTint;
     protected int layer = 1;
     protected boolean isTeleporting;
+    protected boolean glowing;
 
     public static Sprite fromClass(Class<?> class_) {
         if (!Sprite.class.isAssignableFrom(class_))
@@ -69,6 +72,14 @@ public abstract class Sprite implements Drawable, Serializable {
         if (direction == null)
             direction = Direction.DOWN;
         return direction;
+    }
+
+    public void glow() {
+        glowing = true;
+    }
+
+    public void removeGlow() {
+        glowing = false;
     }
 
     public void setTint(Color color) {
@@ -250,9 +261,22 @@ public abstract class Sprite implements Drawable, Serializable {
     }
 
     @Override
+    public boolean neverClip() {
+        return false;
+    }
+
+    @Override
+    public boolean neverSort() {
+        return false;
+    }
+
+    @Override
     public void render() {
         if (!visible)
             return;
+        if (glowing) {
+            renderGlow();
+        }
         getTexture().bind();
         float bx = width / 2f;
         float by = height / 2f;
@@ -282,6 +306,34 @@ public abstract class Sprite implements Drawable, Serializable {
         glEnd();
         getTexture().unbind();
         glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
+    }
+
+    protected boolean glowPass = false;
+    protected void renderGlow() {
+        if (glowPass)
+            return;
+        if (EDGE_SHADER == null) {
+            EDGE_SHADER = new EdgeGlowShader();
+            EDGE_SHADER.build();
+        }
+        EDGE_SHADER.preRender();
+
+        float oWidth = getWidth();
+        float oHeight = getHeight();
+
+        setWidth(oWidth + 4);
+        setHeight(oHeight + 4);
+
+        glowPass = true;
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        render();
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glowPass = false;
+
+        setWidth(oWidth);
+        setHeight(oHeight);
+
+        EDGE_SHADER.postRender();
     }
 
     @Override

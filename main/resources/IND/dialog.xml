@@ -1,6 +1,6 @@
 <game_dialog>
 
-    <dialog dialog_id = "Outdoor Scene">
+    <dialog dialog_id="Outdoor Scene">
         <header>Jeremiah</header>
         <message>This is ridiculous.</message>
 
@@ -16,7 +16,7 @@
         
         <header>Jeremiah</header>
         <message>What reason can you think of for us walking across the entire damn provence? </message>
-        <message style="italic" type ="append">Tell me, Farrand.</message>
+        <message style="italic" type="append">Tell me, Farrand.</message>
 
         <header>Farrand</header>
         <message style="italic">Well, </message>
@@ -55,10 +55,26 @@
         <header>Farrand</header>
         <message>Emphasis on "let me do the talking".</message>
     </dialog>
-    
-    
-    
 
+
+    <dialog dialog_id="movement1">
+        <header>Guard</header>
+        <message>Come on now. I thought you guys knew how to use </message>
+        <message color="green" style="bold" type="append">WASD</message>
+    </dialog>
+
+    <dialog dialog_id="movement2">
+        <header>Guard</header>
+        <message>I'm really getting fed up now. </message>
+        <message style="bold|italic" type="append">Lets go.</message>
+    </dialog>
+
+    <dialog dialog_id="movement3">
+        <header>Guard</header>
+        <message>If you haven't figured it out yet..press </message>
+        <message style="bold" type="append">W A S D</message>
+        <message type="append"> on your keyyboard to move.</message>
+    </dialog>
 
     <dialog dialog_id="entering_zesilia1">
         <header>Jeremiah</header>
@@ -190,4 +206,9 @@
 
 
 
+
+	<dialog dialog_id="fds">
+        <header>poop</header>
+		<message>poop</message>
+    </dialog>
 </game_dialog>

@@ -9,10 +9,12 @@ import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.game.world.tiled.WorldData;
+import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
+import com.dissonance.framework.render.framebuffer.Framebuffer;
 import com.dissonance.framework.render.shader.impl.Light;
 import com.dissonance.framework.render.shader.impl.LightShader;
 import com.dissonance.framework.render.texture.Texture;
@@ -44,6 +46,7 @@ public final class World {
     private static LightShader lightShader;
 
     private transient final ArrayList<Drawable> drawable = new ArrayList<>();
+    private transient final ArrayList<Drawable> unsorted = new ArrayList<>();
     private String name;
     private NodeMap nodeMap;
     private int ID;
@@ -142,6 +145,29 @@ public final class World {
                             debug.display(World.this);
                         }
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
+                        System.out.println("Attempting to generate frame buffer..");
+
+                        /*try {
+                            Framebuffer frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
+                            frame.generate();
+                            frame.begin();
+                            Iterator<Drawable> drawableIterator = getSortedDrawables();
+                            while (drawableIterator.hasNext()) {
+                                Drawable d = drawableIterator.next();
+                                if (d instanceof TileObject) {
+                                    TileObject t = (TileObject)d;
+                                    if (t.isGroundLayer() && !t.isParallaxLayer() && !t.isAnimated()) {
+                                        t.render();
+                                        drawableIterator.remove();
+                                    }
+                                }
+                            }
+                            frame.end();
+                            System.out.println("Success!");
+                        } catch (RuntimeException e) {
+                            System.out.println("Framebuffers are not supported!");
+                        }*/
+
                         tiledData.loadTriggers();
                         if (loader == null) {
                             System.out.println("Searching for loader..");
@@ -216,6 +242,11 @@ public final class World {
         }
     }
 
+    private final DisplayWaiters waiter = new DisplayWaiters();
+    public synchronized void waitForWorldDisplayed() throws InterruptedException {
+        waiter._wait();
+    }
+
     private synchronized void _wakeLoadWaiters() {
         super.notifyAll();
     }
@@ -234,6 +265,7 @@ public final class World {
 
     public Iterator<Drawable> getSortedDrawables() {
         if (invalid) {
+            if (Debug.isDebugging()) System.err.println("Sorting Drawables!");
             Collections.sort(drawable);
             invalid = false;
         }
@@ -314,7 +346,10 @@ public final class World {
                         run.run();
                     return;
                 }
-                drawable.add(draw);
+                if (!draw.neverSort())
+                    drawable.add(draw);
+                else
+                    unsorted.add(draw);
                 if (draw instanceof UpdatableDrawable) {
                     UpdatableDrawable ud = (UpdatableDrawable) draw;
                     //UpdatableDrawable proxyUd = ProxyFactory.createSafeObject(ud, UpdatableDrawable.class);
@@ -372,6 +407,7 @@ public final class World {
         lightShader.setOverallBrightness(worldBrightness);
         if (loader != null)
             loader.onDisplay(this);
+        waiter._wakeAllWaiters();
         if (tiledData != null) {
 
             float minX = 0f, minY = 0f;
@@ -412,9 +448,12 @@ public final class World {
 
     public void onDispose() {
         drawable.clear();
+        unsorted.clear();
         udrawables.clear();
         combatCache.clear();
-        tiledData.dispose();
+
+        if (tiledData != null) tiledData.dispose();
+
         renderingService = null;
     }
 
@@ -705,5 +744,24 @@ public final class World {
 
     public int getUpdatableCount() {
         return this.udrawables.size();
+    }
+
+    public Iterator<Drawable> getUnsortedDrawables() {
+        return unsorted.iterator();
+    }
+
+    private class DisplayWaiters {
+
+        public synchronized void _wait() throws InterruptedException {
+            while (true) {
+                if (World.this.showing)
+                    break;
+                super.wait(0L);
+            }
+        }
+
+        public synchronized void _wakeAllWaiters() {
+            super.notifyAll();
+        }
     }
 }
