@@ -25,28 +25,23 @@ public class Framebuffer implements Drawable {
     public void generate() {
         fID = glGenFramebuffers();
         tID = glGenTextures();
-        checkError("Generate ids");
 
         glBindFramebuffer(GL_FRAMEBUFFER, fID);
         glBindTexture(GL_TEXTURE_2D, tID);
-        checkError("Bind");
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        checkError("Set texture settings");
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (ByteBuffer) null);
-        checkError("Pass NOTHING");
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tID, 0);
-        checkError("Attach texture to fbo");
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            checkError("Failed");
+            clearErrors("Configuration error");
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
             throw new RuntimeException("Framebuffer configuration error.");
         }
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
     public void begin() {
@@ -65,12 +60,13 @@ public class Framebuffer implements Drawable {
         glLoadIdentity();
     }
 
-    private void checkError(String place) {
+    private void clearErrors(String place) {
         int errorValue = glGetError();
 
-        if (errorValue != GL_NO_ERROR) {
+        while (errorValue != GL_NO_ERROR) {
             String errorString = gluErrorString(errorValue);
-            throw new RuntimeException("Error at (" + place + ") starting framebuffer: " + errorString);
+            System.err.println("Error at (" + place + ") starting framebuffer: " + errorString);
+            errorValue = glGetError();
         }
     }
 
