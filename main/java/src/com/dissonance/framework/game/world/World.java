@@ -169,7 +169,7 @@ public final class World {
                             System.out.println("Success!");
                             addDrawable(frame);
                         } catch (RuntimeException e) {
-                            System.out.println("Framebuffers are not supported!");
+                            System.err.println("Framebuffers are not supported! Legacy rendering will be used!");
                         }
 
                         tiledData.loadTriggers();

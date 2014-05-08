@@ -10,6 +10,7 @@ import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL14.*;
 import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.util.glu.GLU.gluErrorString;
 
 public class Framebuffer implements Drawable {
     private int fID, tID;
@@ -55,6 +56,12 @@ public class Framebuffer implements Drawable {
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
         glLoadIdentity();
+        int errorValue = glGetError();
+
+        if (errorValue != GL_NO_ERROR) {
+            String errorString = gluErrorString(errorValue);
+            throw new RuntimeException("Error starting framebuffer: " + errorString);
+        }
     }
 
     public void end() {
