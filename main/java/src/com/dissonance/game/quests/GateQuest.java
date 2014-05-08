@@ -3,9 +3,9 @@ package com.dissonance.game.quests;
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.Sprite;
-import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.Camera;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.game.scenes.GateScene;
 import com.dissonance.game.w.CityEntrySquare;
 
@@ -27,7 +27,26 @@ public class GateQuest extends AbstractQuest {
                 Camera.followSprite(CityEntrySquare.farrand);
             }
         });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true){
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    //System.out.println(CityEntrySquare.farrand.getX());
+                    if(CityEntrySquare.farrand.getX() <= 256f){
+                        //CityEntrySquare.farrand.freeze();
+                        RenderService.INSTANCE.fadeToBlack(1500);
+                        //setNextQuest(H);
+                        break;
+                    }
 
+                }
+            }
+        }).start();
         do {
             Thread.sleep(10000);
             if (moved[0]) break;
@@ -46,10 +65,13 @@ public class GateQuest extends AbstractQuest {
 
             Thread.sleep(60000);
         } while (true);
+
     }
 
     @Override
     public String getName() {
         return "player_movement_tutorial";
+
     }
+
 }
