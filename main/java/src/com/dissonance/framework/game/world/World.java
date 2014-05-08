@@ -149,27 +149,30 @@ public final class World {
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
                         System.out.println("Attempting to generate frame buffer..");
 
-                        try {
-                            Framebuffer frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
-                            frame.generate();
-                            frame.begin();
-                            Iterator<Drawable> drawableIterator = getSortedDrawables();
-                            while (drawableIterator.hasNext()) {
-                                Drawable d = drawableIterator.next();
-                                if (d instanceof TileObject) {
-                                    TileObject t = (TileObject)d;
-                                    if (t.isGroundLayer() && !t.isParallaxLayer() && !t.isAnimated()) {
-                                        t.render();
-                                        drawableIterator.remove();
+                        if (GameSettings.Graphics.useFBO) {
+                            try {
+                                Framebuffer frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
+                                frame.generate();
+                                frame.begin();
+                                Iterator<Drawable> drawableIterator = getSortedDrawables();
+                                while (drawableIterator.hasNext()) {
+                                    Drawable d = drawableIterator.next();
+                                    if (d instanceof TileObject) {
+                                        TileObject t = (TileObject)d;
+                                        if (t.isGroundLayer() && !t.isParallaxLayer() && !t.isAnimated()) {
+                                            t.render();
+                                            drawableIterator.remove();
+                                        }
                                     }
                                 }
+                                frame.end();
+                                System.out.println("Success!");
+                                addDrawable(frame);
+                            } catch (RuntimeException e) {
+                                e.printStackTrace();
+                                System.err.println("Framebuffers are not supported! Legacy rendering will be used!");
+                                GameSettings.Graphics.useFBO = false;
                             }
-                            frame.end();
-                            System.out.println("Success!");
-                            addDrawable(frame);
-                        } catch (RuntimeException e) {
-                            e.printStackTrace();
-                            System.err.println("Framebuffers are not supported! Legacy rendering will be used!");
                         }
 
                         tiledData.loadTriggers();
