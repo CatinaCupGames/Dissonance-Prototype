@@ -153,7 +153,6 @@ public final class World {
                             Framebuffer frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
                             frame.generate();
                             frame.begin();
-                            //+glScalef(0.5f, 0.5f, 1f);
                             Iterator<Drawable> drawableIterator = getSortedDrawables();
                             while (drawableIterator.hasNext()) {
                                 Drawable d = drawableIterator.next();
@@ -169,6 +168,7 @@ public final class World {
                             System.out.println("Success!");
                             addDrawable(frame);
                         } catch (RuntimeException e) {
+                            e.printStackTrace();
                             System.err.println("Framebuffers are not supported! Legacy rendering will be used!");
                         }
 
