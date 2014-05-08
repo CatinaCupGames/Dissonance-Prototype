@@ -1,7 +1,6 @@
 package com.dissonance.framework.render.framebuffer;
 
 import com.dissonance.framework.render.Drawable;
-import com.sun.xml.internal.ws.api.model.CheckedException;
 import org.lwjgl.opengl.GL14;
 
 import java.nio.ByteBuffer;
@@ -26,47 +25,44 @@ public class Framebuffer implements Drawable {
     public void generate() {
         fID = glGenFramebuffers();
         tID = glGenTextures();
+        checkError("Generate ids");
 
         glBindFramebuffer(GL_FRAMEBUFFER, fID);
         glBindTexture(GL_TEXTURE_2D, tID);
+        checkError("Bind");
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        checkError("Set texture settings");
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_INT, (ByteBuffer) null);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (ByteBuffer) null);
+        checkError("Pass NOTHING");
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tID, 0);
+        checkError("Attach texture to fbo");
 
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+            checkError("Failed");
             throw new RuntimeException("Framebuffer configuration error.");
+        }
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
     public void begin() {
         glBindFramebuffer(GL_FRAMEBUFFER, fID);
-        checkError("Bind fbo");
 
         glPushAttrib(GL_VIEWPORT_BIT);
-        checkError("Save viewport");
         glViewport(0, 0, width, height);
-        checkError("Set viewport");
 
         glMatrixMode(GL_PROJECTION);
-        checkError("Set to projection");
         glPushMatrix();
-        checkError("Save matrix");
         glLoadIdentity();
-        checkError("Load ID");
         glOrtho(0, width, 0, height, -1, 1);
-        checkError("Set ortho");
 
         glMatrixMode(GL_MODELVIEW);
-        checkError("Set to model view");
         glPushMatrix();
-        checkError("Push2");
         glLoadIdentity();
-        checkError("Finish");
     }
 
     private void checkError(String place) {
