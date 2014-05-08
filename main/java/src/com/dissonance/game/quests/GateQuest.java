@@ -40,7 +40,12 @@ public class GateQuest extends AbstractQuest {
                     if(CityEntrySquare.farrand.getX() <= 256f){
                         //CityEntrySquare.farrand.freeze();
                         RenderService.INSTANCE.fadeToBlack(1500);
-                        //setNextQuest(H);
+                        setNextQuest(new HallwayQuest());
+                        try {
+                            endQuest();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     }
 

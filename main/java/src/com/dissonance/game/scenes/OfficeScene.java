@@ -49,7 +49,7 @@ public class OfficeScene extends SimpleScene {
 
         WaldomarsMeetingRoom.guard1.waitForWaypointReached();
 
-        //Dialog.displayDialog("Waldos meeting");
+        Dialog.displayDialog("Waldos meeting");
 
         Thread.sleep(500);
 

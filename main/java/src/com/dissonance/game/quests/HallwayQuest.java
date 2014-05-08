@@ -6,7 +6,6 @@ import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.scenes.HallwayScene;
-import com.dissonance.game.scenes.OfficeScene;
 
 /**
  * Created by Henry on 5/7/2014.
@@ -21,6 +20,9 @@ public class HallwayQuest extends AbstractQuest {
 
         RenderService.INSTANCE.fadeToAlpha(1, 0f);
         playSceneAndWait(HallwayScene.class);
+
+        setNextQuest(new OfficeQuest());
+        endQuest();
 
     }
 
