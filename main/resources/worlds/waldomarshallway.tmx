@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="26" height="11" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="Office" tilewidth="16" tileheight="16">
+  <image source="indoor_tileset.png" width="112" height="80"/>
+  <tile id="6">
+   <properties>
+    <property name="passable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="passable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="passable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="passable" value="false"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="26" height="11">
+  <properties>
+   <property name="ground" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzdj7EKwDAIRNU4tF2SKfn/P60BhUNKxwwOjzPcnZJJRN0YxvI5WM4AfzM//P6jO3Mf4irGc4hmiKE+K7zZNbwGGU4d9h7DrLBPUpZTT6Efd7Aj4GeNPFO9/1S78wJfowbk
+  </data>
+ </layer>
+ <layer name="Rug" width="26" height="11">
+  <properties>
+   <property name="ground" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4B+gBWI2WiM2YGYB4h5aYz5oPbIALESjbAykj308I8wEIvQGIsCMQCaOQiO
+  </data>
+ </layer>
+ <layer name="Edge" width="26" height="11">
+  <data encoding="base64" compression="zlib">
+   eJwTZGBIEKQPpjkA2nFg1J5Re0btId8eCQhN07IAaEcCAIztHpU=
+  </data>
+ </layer>
+</map>

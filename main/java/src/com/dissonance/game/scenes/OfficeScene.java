@@ -64,6 +64,10 @@ public class OfficeScene extends SimpleScene {
                 float brightness = Camera.ease(1f, 8.2f, 1000, System.currentTimeMillis() - START_TIME);
                 WaldomarsMeetingRoom.l.setRadius(radius);
                 WaldomarsMeetingRoom.l.setBrightness(brightness);
+
+                if (radius == 0.1f && brightness == 8.2f){
+                    RenderService.INSTANCE.removeServiceTick(this);
+                }
             }
         }, false, true);
 

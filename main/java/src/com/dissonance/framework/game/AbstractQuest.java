@@ -1,7 +1,6 @@
 package com.dissonance.framework.game;
 
 import com.dissonance.framework.game.scene.Scene;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.WorldPackage;
