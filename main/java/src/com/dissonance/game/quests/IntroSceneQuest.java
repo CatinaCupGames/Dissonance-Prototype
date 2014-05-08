@@ -18,11 +18,10 @@ public class IntroSceneQuest extends AbstractQuest {
         World world2 = WorldFactory.getWorld("ToZesilia");
         World world3 = WorldFactory.getWorld("CityEntrySquare");
 
+        RenderService.INSTANCE.fadeToBlack(1); //Make screen black
         setWorld(world1);
         world1.waitForWorldLoaded();
-        RenderService.INSTANCE.fadeToBlack(1); //Make screen black
         intro.display(world1);
-        Dialog.displayDialog("fds");
         System.out.println("Play Scene");
         playSceneAndWait(Demo_OpeningScene.class);
         System.out.println("Close intro");
@@ -34,8 +33,7 @@ public class IntroSceneQuest extends AbstractQuest {
         RenderService.INSTANCE.fadeToBlack(1); //Make screen black
         playSceneAndWait(OutdoorScene.class);
         setWorld(world3);
-        world3.waitForWorldLoaded();
-        playSceneAndWait(GateScene.class);
+        world3.waitForWorldDisplayed();
         setNextQuest(new GateQuest());
         endQuest();
     }

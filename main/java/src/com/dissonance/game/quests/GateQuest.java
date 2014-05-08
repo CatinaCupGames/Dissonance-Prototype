@@ -2,27 +2,45 @@ package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.scene.dialog.Dialog;
+import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.WorldFactory;
+import com.dissonance.framework.render.Camera;
+import com.dissonance.game.scenes.GateScene;
 import com.dissonance.game.w.CityEntrySquare;
 
 public class GateQuest extends AbstractQuest {
     @Override
     public void startQuest() throws Exception {
-        float x = CityEntrySquare.farrand.getX();
-        float y = CityEntrySquare.farrand.getY();
+
+        CityEntrySquare.farrand.freeze();
+        CityEntrySquare.farrand.select();
+        playSceneAndWait(GateScene.class);
+        CityEntrySquare.farrand.unfreeze();
+        WorldFactory.clearCache();
+        final boolean[] moved = {false};
+        CityEntrySquare.farrand.setSpriteMovedListener(new Sprite.SpriteEvent.SpriteMovedEvent() {
+            @Override
+            public void onSpriteMoved(Sprite sprite, float oldx, float oldy) {
+                moved[0] = true;
+                CityEntrySquare.farrand.setSpriteMovedListener(null);
+                Camera.followSprite(CityEntrySquare.farrand);
+            }
+        });
 
         do {
             Thread.sleep(10000);
-            if (Math.abs(x - CityEntrySquare.farrand.getX()) >= 50 || Math.abs(y - CityEntrySquare.farrand.getY()) >= 50) break;
+            if (moved[0]) break;
 
             Dialog.displayDialog("movement1");
 
             Thread.sleep(30000);
-            if (Math.abs(x - CityEntrySquare.farrand.getX()) >= 50 || Math.abs(y - CityEntrySquare.farrand.getY()) >= 50) break;
+            if (moved[0]) break;
 
             Dialog.displayDialog("movement2");
 
             Thread.sleep(2 * 60000);
-            if (Math.abs(x - CityEntrySquare.farrand.getX()) >= 50 || Math.abs(y - CityEntrySquare.farrand.getY()) >= 50) break;
+            if (moved[0]) break;
 
             Dialog.displayDialog("movement3");
 

@@ -10,15 +10,13 @@ Date: 2014/05/07 11:31:09
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
-import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.Wyatt;
 
 public class CityEntrySquare extends GameWorldLoader {
     public static Wyatt guard5;
     public static Wyatt guard4;
-    public static Farrand var1;
-    public static Jeremiah var2;
+    public static Jeremiah jeremiah;
     public static Wyatt guard1;
     public static Wyatt guard2;
     public static Wyatt guard3;
@@ -26,15 +24,15 @@ public class CityEntrySquare extends GameWorldLoader {
     public void onLoad(World w) {
         super.onLoad(w);
 
-        var1 = new Farrand();
-        w.loadAndAdd(var1);
-        var1.setX(845.60016f);
-        var1.setY(785.5205f);
+        farrand.deselect();
+        farrand.setX(845.60016f);
+        farrand.setY(785.5205f);
 
-        var2 = new Jeremiah();
-        w.loadAndAdd(var2);
-        var2.setX(859.05994f);
-        var2.setY(760.96906f);
+        jeremiah = new Jeremiah();
+        w.loadAndAdd(jeremiah);
+        jeremiah.setX(859.05994f);
+        jeremiah.setY(760.96906f);
+        jeremiah.joinParty(farrand);
 
         guard1 = new Wyatt();
         w.loadAndAdd(guard1);
