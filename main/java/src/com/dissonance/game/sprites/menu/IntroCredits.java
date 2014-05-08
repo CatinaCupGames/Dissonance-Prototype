@@ -40,6 +40,8 @@ public class IntroCredits extends AbstractUI {
     private TrueTypeFont subtextFont;
     @Override
     protected void onRender() {
+        if (hIndex >= CREDIT_HEADER.length)
+            return;
         RenderText.drawString(headerFont, CREDIT_HEADER[hIndex], getX(), getY(), new Color(1f, 1f, 1f, getAlpha()));
         if (!CREDIT_SUBTEXT[sIndex].equals("")) {
             String[] splitter = CREDIT_SUBTEXT[sIndex].split("\n");

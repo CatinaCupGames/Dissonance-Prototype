@@ -15,7 +15,6 @@ import java.util.HashMap;
 import static org.lwjgl.opengl.GL11.*;
 
 public class TileObject extends Sprite {
-    private static final HashMap<Integer, TexCordHolder> cache = new HashMap<Integer, TexCordHolder>();
     private static final ArrayList<TileObject> animtedTiles = new ArrayList<TileObject>();
     private static boolean ran = false;
     TexCordHolder tex_cords;
@@ -72,8 +71,8 @@ public class TileObject extends Sprite {
     }
 
     public void init() {
-        if (cache.containsKey(ID)) {
-            tex_cords = cache.get(ID);
+        if (getWorld().getTiledData().tilesetCordCache.containsKey(ID)) {
+            tex_cords = getWorld().getTiledData().tilesetCordCache.get(ID);
         } else if (parentTileSet.getTexture() != null) {
             tex_cords = new TexCordHolder();
             tex_cords.bottom_left = parentTileSet.getTexture().getTextureCord(Texture.BOTTOM_LEFT, ID, parentTileSet);
@@ -81,7 +80,7 @@ public class TileObject extends Sprite {
             tex_cords.top_left = parentTileSet.getTexture().getTextureCord(Texture.TOP_LEFT, ID, parentTileSet);
             tex_cords.top_right = parentTileSet.getTexture().getTextureCord(Texture.TOP_RIGHT, ID, parentTileSet);
 
-            cache.put(ID, tex_cords);
+            getWorld().getTiledData().tilesetCordCache.put(ID, tex_cords);
         }
 
 
@@ -274,7 +273,7 @@ public class TileObject extends Sprite {
         }
     };
 
-    private static class TexCordHolder {
+    public static class TexCordHolder {
         public Vector2f top_left;
         public Vector2f top_right;
         public Vector2f bottom_left;

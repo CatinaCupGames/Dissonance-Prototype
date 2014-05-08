@@ -13,7 +13,6 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.shader.impl.Light;
 import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.w.GameWorldLoader;
-import com.dissonance.test.sprites.TestNPC;
 
 import java.awt.*;
 
@@ -29,6 +28,7 @@ public class test_tileset extends GameWorldLoader {
         j.setY(50);
         j.joinParty(farrand);
         j.setVisible(false);
+
 
         final long start = System.currentTimeMillis();
 

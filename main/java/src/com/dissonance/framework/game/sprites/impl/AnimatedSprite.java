@@ -200,6 +200,9 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
 	    //ROBO //todo fix all this shit
         if (texture == null)
             return;
+        if (glowing) {
+            super.renderGlow();
+        }
         texture.bind();
         float bx = width / 2;
         float by = height / 2;

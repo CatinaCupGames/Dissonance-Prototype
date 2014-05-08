@@ -9,9 +9,6 @@ import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.scenes.OfficeScene;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 
-/**
- * Created by Jmerrill on 5/6/2014.
- */
 public class OfficeQuest extends AbstractQuest {
     @Override
     public void startQuest() throws Exception {

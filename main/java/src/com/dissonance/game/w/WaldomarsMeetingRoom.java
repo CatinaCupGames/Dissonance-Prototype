@@ -4,25 +4,35 @@
 This file was automatically generated with the
 World Loader Editor
 
-Date: 2014/05/06 18:38:59
+Date: 2014/05/07 11:55:31
 =====================================
 */
 package com.dissonance.game.w;
 
 
-import com.dissonance.framework.game.world.*;
-
 import com.dissonance.framework.game.world.World;
+
+import com.dissonance.framework.game.world.WorldLoader;
+import com.dissonance.framework.render.shader.impl.Light;
+import com.dissonance.game.sprites.Farrand;
+import com.dissonance.game.sprites.Jeremiah;
+import com.dissonance.game.sprites.Waldomar;
+import com.dissonance.game.sprites.Wyatt;
+import com.dissonance.framework.render.shader.impl.Light;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.sprites.*;
+
 import com.dissonance.game.sprites.office.*;
+
+import java.awt.*;
 
 
 public class WaldomarsMeetingRoom implements WorldLoader {
+    public static DeskRadio var17;
     public static Waldomar waldomar;
     public static Jeremiah jeremiah;
     public static Farrand farrand;
-    
+
     public static WaldomarDesk var8;
     public static Sofa var7;
     public static Sofa var6;
@@ -37,6 +47,8 @@ public class WaldomarsMeetingRoom implements WorldLoader {
     public static Wyatt guard3;
     public static Wyatt guard4;
     public static Wyatt guard5;
+
+    public static Light l;
 
     @Override
     public void onLoad(World w) {
@@ -56,22 +68,22 @@ public class WaldomarsMeetingRoom implements WorldLoader {
         w.loadAndAdd(var4);
         var4.setX(271.85007f);
         var4.setY(60.0f);
-    
+
         var5 = new Sofa();
         w.loadAndAdd(var5);
         var5.setX(374.40015f);
         var5.setY(69.350006f);
-    
+
         var6 = new Sofa();
         w.loadAndAdd(var6);
         var6.setX(396.70007f);
         var6.setY(69.350006f);
-    
+
         var7 = new Sofa();
         w.loadAndAdd(var7);
         var7.setX(418.80014f);
         var7.setY(69.350006f);
-    
+
         var8 = new WaldomarDesk();
         w.loadAndAdd(var8);
         var8.setX(113.5f);
@@ -82,15 +94,15 @@ public class WaldomarsMeetingRoom implements WorldLoader {
         var9.setX(600f);
         var9.setY(150f);
         var9.setLayer(3);
-    
+
         waldomar = new Waldomar();
         w.loadAndAdd(waldomar);
         waldomar.setX(102.95f);
         waldomar.setY(203.85004f);
 
-farrand = new Farrand();
-w.loadAndAdd(farrand);        
-farrand.deselect();
+        farrand = new Farrand();
+        w.loadAndAdd(farrand);
+        farrand.deselect();
         farrand.setX(548.3502f);
         farrand.setY(128.44998f);
 
@@ -124,11 +136,20 @@ farrand.deselect();
         guard5.setX(622.5496f);
         guard5.setY(129.9f);
 
+        var17 = new DeskRadio();
+        w.loadAndAdd(var17);
+        var17.setX(117.45002f);
+        var17.setY(185.20001f);
+        var17.setLayer(2);
+
         w.setWorldBrightness(0.4f);
         w.createLight(15f * 16, 2f * 16, 1.8f, 0.7f);
-        w.createLight(0f, 0f, 0.5f, 0.1f);
+        //w.createLight(0f, 0f, 0.1f, 0.1f);
+        l = w.createLight(-200f, -200f, 8.2f, 0.01f, Color.RED);
     }
 
     @Override
-    public void onDisplay(World w){ }
+    public void onDisplay(World w){ 
+    
+    }
 }

@@ -8,7 +8,7 @@ public class MenuQuest extends AbstractQuest {
         //TODO Display menu and wait for option to be chosen
 
         //TODO Remove, temp code
-        setNextQuest(new Demo_Level1_Quest()); //Set the next quest
+        setNextQuest(new DisclaimerQuest()); //Set the next quest
         endQuest(); //End this quest
     }
 

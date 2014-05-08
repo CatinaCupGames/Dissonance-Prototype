@@ -324,7 +324,7 @@ public final class Camera {
             long time = System.currentTimeMillis() - startTime;
             float percent;
             if (time > duration) {
-                percent = 1;
+                percent = 1f;
             } else {
                 percent = time / duration;
             }

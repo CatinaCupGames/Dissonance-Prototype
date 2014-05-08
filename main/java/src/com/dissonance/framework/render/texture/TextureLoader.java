@@ -1,5 +1,6 @@
 package com.dissonance.framework.render.texture;
 
+import com.dissonance.framework.system.debug.Debug;
 import org.lwjgl.BufferUtils;
 
 import javax.swing.*;
@@ -102,6 +103,7 @@ public class TextureLoader {
     }
 
     static void disposeTexture(Texture t) {
+        if (Debug.isDebugging()) System.err.println("Disposing texture " + t.textureId);
         glDeleteTextures(t.textureId);
     }
 

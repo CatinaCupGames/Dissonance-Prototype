@@ -23,20 +23,17 @@ public class Dialog {
 
         DialogUI ui = new DialogUI(dialog, autoScroll);
 
-        World world;
+        World world = GameService.getCurrentWorld();
+        if (world == null) {
+            if (RenderService.INSTANCE != null)
+                world = RenderService.INSTANCE.getCurrentDrawingWorld();
+            else
+                throw new RuntimeException("No world could be found to bound the UI to!");
+        }
         PlayableSprite player = PlayableSprite.getCurrentlyPlayingSprite();
         boolean halt = true;
-        if (player == null) {
-            world = GameService.getCurrentWorld();
-            if (world == null) {
-                if (RenderService.INSTANCE != null)
-                    world = RenderService.INSTANCE.getCurrentDrawingWorld();
-                else
-                    throw new RuntimeException("No world could be found to bound the UI to!");
-            }
-        } else {
+        if (player != null) {
             halt = !player.isFrozen();
-            world = player.getWorld();
         }
         if (halt && PlayableSprite.getCurrentlyPlayingSprite() != null) {
             PlayableSprite.getCurrentlyPlayingSprite().freeze(true, Dialog.class);

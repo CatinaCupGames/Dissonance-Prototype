@@ -1,5 +1,6 @@
 package com.dissonance.game.scenes;
 
+import com.dissonance.framework.game.scene.SimpleScene;
 import com.dissonance.framework.game.scene.ComplexScene;
 import com.dissonance.framework.game.scene.SimpleScene;
 import com.dissonance.framework.game.scene.dialog.Dialog;
@@ -14,9 +15,7 @@ import org.lwjgl.util.vector.Vector2f;
 public class WalktoWaldoScene extends SimpleScene{
 
     @Override
-    protected void playScene() throws Throwable {/*
-        RenderService.INSTANCE.fadeFromBlack(10000f);
-        Vector2f center = Camera.translateToCameraCenter(ToZesilia.farrand.getVector(), RenderService*/
+    protected void playScene() throws Throwable {
 
     }
 }

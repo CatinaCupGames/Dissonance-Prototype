@@ -1,6 +1,5 @@
 package com.dissonance.game.scenes;
 
-import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.scene.SimpleScene;
 import com.dissonance.framework.game.scene.dialog.Dialog;
@@ -17,12 +16,10 @@ import org.lwjgl.util.vector.Vector2f;
 public class OfficeScene extends SimpleScene {
     @Override
     protected void playScene() throws Throwable {
-        RenderService.INSTANCE.fadeFromBlack(1500);
+       RenderService.INSTANCE.fadeFromBlack(1500);
         Vector2f center = Camera.translateToCameraCenter(WaldomarsMeetingRoom.farrand.getVector(), WaldomarsMeetingRoom.farrand.getHeight());
         Camera.setPos(center);
         Camera.followSprite(WaldomarsMeetingRoom.farrand);
-        Position farrandTarget = WaldomarsMeetingRoom.farrand.getPosition();
-        Position jeremiahTarget = WaldomarsMeetingRoom.jeremiah.getPosition();
 
         WaldomarsMeetingRoom.guard1.setMovementSpeed(4f);
         WaldomarsMeetingRoom.guard1.setWaypoint(4f * 16, 11f * 16, WaypointType.SIMPLE);
@@ -54,10 +51,32 @@ public class OfficeScene extends SimpleScene {
 
         Dialog.displayDialog("Waldos meeting");
 
+        Thread.sleep(500);
+
+        WaldomarsMeetingRoom.l.setX(WaldomarsMeetingRoom.waldomar.getX());
+        WaldomarsMeetingRoom.l.setY(WaldomarsMeetingRoom.waldomar.getY());
+
+        final long START_TIME = System.currentTimeMillis();
+        RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+            @Override
+            public void run() {
+                float radius = Camera.ease(0.01f, 0.1f, 1000, System.currentTimeMillis() - START_TIME);
+                float brightness = Camera.ease(1f, 8.2f, 1000, System.currentTimeMillis() - START_TIME);
+                WaldomarsMeetingRoom.l.setRadius(radius);
+                WaldomarsMeetingRoom.l.setBrightness(brightness);
+            }
+        }, false, true);
+
+        Thread.sleep(1500);
+
+        Dialog.displayDialog("waldomeeting2");
+
+        Thread.sleep(500);
+
         Camera.shake(Direction.DOWN, 4000L, 5, 0.5);
         Sound.playSound("firespell").setPitch(0.25f);
 
-        WaldomarsMeetingRoom.guard1.setMovementSpeed(20f);
+        WaldomarsMeetingRoom.guard1.setMovementSpeed(30f);
         WaldomarsMeetingRoom.guard1.setWaypoint(0, 11f * 16, WaypointType.SIMPLE);
 
 
