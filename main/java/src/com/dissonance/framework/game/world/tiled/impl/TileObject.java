@@ -166,10 +166,18 @@ public class TileObject extends Sprite {
 
     @Override
     public void render() {
+        _render(RenderService.getCurrentAlphaValue());
+    }
+
+    public void renderIgnoreFade() {
+        _render(1f);
+    }
+
+    private void _render(float oalpha) {
         if (parentTileSet.getTexture() == null)
             return;
         if (getWorld() == RenderService.INSTANCE.getCurrentDrawingWorld()) {
-            float alpha = parentLayer.getOpacity() - (1 - RenderService.getCurrentAlphaValue());
+            float alpha = parentLayer.getOpacity() - (1 - oalpha);
             if (alpha < 0)
                 alpha = 0;
             glColor4f(1.0f, 1.0f, 1.0f, alpha);
@@ -213,7 +221,7 @@ public class TileObject extends Sprite {
         glPopMatrix(); //Reload the view matrix to original state
         parentTileSet.getTexture().unbind();
 
-        glColor4f(1.0f, 1.0f, 1.0f, RenderService.getCurrentAlphaValue());
+        glColor4f(1.0f, 1.0f, 1.0f, oalpha);
         if (paralax_effect) {
             float difx = -Camera.getX() - (-Camera.getX() * parallax_speed);
             float dify = -Camera.getY() - (-Camera.getY() * parallax_speed);

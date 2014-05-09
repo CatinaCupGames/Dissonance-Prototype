@@ -202,23 +202,17 @@ public final class World {
                 frame.begin();
                 invalid = false;
 
-                float tAlpha = RenderService.getCurrentAlphaValue();
-                RenderService.INSTANCE.fadeToAlpha(1f, 1f); //Set the speed to anything < 5 will set the current alpha instantly
-
                 Iterator<Drawable> drawableIterator = getSortedDrawables();
                 while (drawableIterator.hasNext()) {
                     Drawable d = drawableIterator.next();
                     if (d instanceof TileObject) {
                         TileObject t = (TileObject) d;
                         if (t.isGroundLayer() && !t.isParallaxLayer() && !t.isAnimated()) {
-                            t.render();
+                            t.renderIgnoreFade();
                             drawableIterator.remove();
                         }
                     }
                 }
-
-                RenderService.INSTANCE.fadeToAlpha(1f, tAlpha);
-                glColor4f(1f, 1f, 1f, tAlpha);
 
                 frame.end();
                 System.out.println("Success!");
@@ -235,6 +229,8 @@ public final class World {
             }
         }
         //== OpenGL safe needed ==
+
+        invalidateDrawableList(); //Be sure to invalidate the drawable list
 
     }
     private void loadTiles() {
@@ -409,13 +405,18 @@ public final class World {
         prepareTiles();
 
         showing = true;
-        lightShader.addAll(lights);
-        lightShader.setOverallBrightness(worldBrightness);
+
+        if (lightShader != null) {
+            lightShader.addAll(lights);
+            lightShader.setOverallBrightness(worldBrightness);
+        }
+
         if (loader != null)
             loader.onDisplay(this);
-        waiter._wakeAllWaiters();
-        if (tiledData != null) {
 
+        waiter._wakeAllWaiters();
+
+        if (tiledData != null) {
             float minX = 0f, minY = 0f;
             float tWidth = (tiledData.getWidth() * tiledData.getTileWidth());
             float tHeight = (tiledData.getHeight() * tiledData.getTileHeight());
