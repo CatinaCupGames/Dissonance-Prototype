@@ -50,6 +50,7 @@ public final class World {
     private transient final ArrayList<Drawable> drawable = new ArrayList<>();
     private transient final ArrayList<Drawable> unsorted = new ArrayList<>();
     private String name;
+    private transient Framebuffer frame;
     private NodeMap nodeMap;
     private int ID;
     private transient RenderService renderingService;
@@ -151,7 +152,7 @@ public final class World {
 
                         if (GameSettings.Graphics.useFBO) {
                             try {
-                                Framebuffer frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
+                                frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
                                 frame.generate();
                                 frame.begin();
                                 Iterator<Drawable> drawableIterator = getSortedDrawables();
@@ -460,6 +461,7 @@ public final class World {
         combatCache.clear();
 
         if (tiledData != null) tiledData.dispose();
+        if (frame != null) frame.dispose();
 
         renderingService = null;
     }

@@ -83,6 +83,11 @@ public class OfficeScene extends SimpleScene {
         WaldomarsMeetingRoom.guard1.setMovementSpeed(30f);
         WaldomarsMeetingRoom.guard1.setWaypoint(0, 11f * 16, WaypointType.SIMPLE);
 
+        WaldomarsMeetingRoom.farrand.select();
+        WaldomarsMeetingRoom.farrand.setMovementSpeed(10f);
+
+
+
 
 
 

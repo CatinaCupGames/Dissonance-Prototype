@@ -187,6 +187,11 @@
         <header>Jeremiah</header>
         <message style="bold">Farrand!</message>
     </dialog>
+
+    <dialog dialog_id="waldomeeting3">
+        <header>Jeremiah</header>
+        <message speed="10">The window!</message>
+    </dialog>
     <dialog dialog_id="GateScene2">
         <header>Guard</header>
         <message>Welcome. You two are with Nuado Provence, right?</message>
@@ -205,9 +210,6 @@
 
         <header>Guard</header>
         <message>Ah, okay. Step on the conveyor and let us lead the way.</message>
-
-
-
     </dialog>
 
 

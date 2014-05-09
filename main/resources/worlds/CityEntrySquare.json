@@ -235,7 +235,7 @@
             {
              "0":
                 {
-                 "frames":"68,69,70",
+                 "frames":"44,45,46",
                  "triggerclass":"com.dissonance.game.triggers.ConveyorBelt"
                 }
             },
