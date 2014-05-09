@@ -1,6 +1,8 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.ai.astar.Vector;
+import com.dissonance.framework.game.ai.behaviors.LeaderFollow;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.world.World;
@@ -55,6 +57,16 @@ public class GateQuest extends AbstractQuest {
                 }
             }
         }).start();
+        CityEntrySquare.guard1.setBehavior(new LeaderFollow(CityEntrySquare.guard1, CityEntrySquare.farrand, new Vector(0f, 32f)));
+
+        CityEntrySquare.guard2.setBehavior(new LeaderFollow(CityEntrySquare.guard2, CityEntrySquare.farrand, new Vector(32f, 32f)));
+
+        CityEntrySquare.guard3.setBehavior(new LeaderFollow(CityEntrySquare.guard3, CityEntrySquare.farrand, new Vector(32f, 0f)));
+
+        CityEntrySquare.guard4.setBehavior(new LeaderFollow(CityEntrySquare.guard4, CityEntrySquare.farrand, new Vector(32f, -32f)));
+
+        CityEntrySquare.guard5.setBehavior(new LeaderFollow(CityEntrySquare.guard5, CityEntrySquare.farrand, new Vector(0f, -32f)));
+
         do {
             Thread.sleep(10000);
             if (moved[0]) break;
