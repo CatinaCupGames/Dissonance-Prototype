@@ -64,7 +64,7 @@ public class OfficeScene extends SimpleScene {
             @Override
             public void run() {
                 float radius = Camera.ease(0.01f, 0.1f, 1000, System.currentTimeMillis() - START_TIME);
-                float brightness = Camera.ease(1f, 8.2f, 1000, System.currentTimeMillis() - START_TIME);
+                float brightness = Camera.ease(0.1f, 8.2f, 1000, System.currentTimeMillis() - START_TIME);
                 WaldomarsMeetingRoom.l.setRadius(radius);
                 WaldomarsMeetingRoom.l.setBrightness(brightness);
 

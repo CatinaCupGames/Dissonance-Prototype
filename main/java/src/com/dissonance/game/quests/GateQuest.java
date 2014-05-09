@@ -15,6 +15,11 @@ import com.dissonance.game.w.CityEntrySquare;
 public class GateQuest extends AbstractQuest {
     @Override
     public void startQuest() throws Exception {
+        World world3 = WorldFactory.getWorld("CityEntrySquare");
+        setWorld(world3);
+        world3.waitForWorldDisplayed();
+        world3.invalidateDrawableList(); //Because fuck you
+
         CityEntrySquare.farrand.freeze();
         CityEntrySquare.farrand.select();
         playSceneAndWait(GateScene.class);
@@ -34,7 +39,7 @@ public class GateQuest extends AbstractQuest {
             public void run() {
                 while(true){
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(50);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

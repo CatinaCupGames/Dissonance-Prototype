@@ -145,7 +145,7 @@ public class WaldomarsMeetingRoom implements WorldLoader {
         w.setWorldBrightness(0.4f);
         w.createLight(15f * 16, 2f * 16, 1.8f, 0.7f);
         //w.createLight(0f, 0f, 0.1f, 0.1f);
-        l = w.createLight(-200f, -200f, 8.2f, 0.01f, Color.RED);
+        l = w.createLight(-200f, -200f, 0.01f, 0.01f, Color.RED);
     }
 
     @Override

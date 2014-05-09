@@ -7,6 +7,7 @@ import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteAnimationInfo;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.game.sprites.Farrand;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
@@ -197,7 +198,6 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     public void render() {
         if (!visible)
             return;
-	    //ROBO //todo fix all this shit
         if (texture == null)
             return;
         if (glowing) {

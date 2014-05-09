@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.lwjgl.opengl.GL11.glColor4f;
 import static org.lwjgl.opengl.GL11.glScalef;
 
 public final class World {
@@ -156,6 +157,10 @@ public final class World {
                                 frame.generate();
                                 frame.begin();
                                 invalid = false;
+
+                                float tAlpha = RenderService.getCurrentAlphaValue();
+                                RenderService.INSTANCE.fadeToAlpha(1f, 1f); //Set the speed to anything < 5 will set the current alpha instantly
+
                                 Iterator<Drawable> drawableIterator = getSortedDrawables();
                                 while (drawableIterator.hasNext()) {
                                     Drawable d = drawableIterator.next();
@@ -167,6 +172,10 @@ public final class World {
                                         }
                                     }
                                 }
+
+                                RenderService.INSTANCE.fadeToAlpha(1f, tAlpha);
+                                glColor4f(1f, 1f, 1f, tAlpha);
+
                                 frame.end();
                                 System.out.println("Success!");
                                 addDrawable(frame);

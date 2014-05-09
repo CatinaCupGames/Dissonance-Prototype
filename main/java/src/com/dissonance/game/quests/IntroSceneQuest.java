@@ -14,7 +14,6 @@ public class IntroSceneQuest extends AbstractQuest {
     @Override
     public void startQuest() throws Exception {
         IntroCredits intro = new IntroCredits();
-        World world3 = WorldFactory.getWorld("CityEntrySquare");
         World world1 = WorldFactory.getWorld("Zesilia_pan");
         World world2 = WorldFactory.getWorld("ToZesilia");
 
@@ -33,11 +32,6 @@ public class IntroSceneQuest extends AbstractQuest {
         RenderService.INSTANCE.fadeToBlack(1); //Make screen black
 
         playSceneAndWait(OutdoorScene.class);
-
-        setWorld(world3);
-        world3.waitForWorldDisplayed();
-        world3.invalidateDrawableList(); //Because fuck you
-
         setNextQuest(new GateQuest());
         endQuest();
     }
