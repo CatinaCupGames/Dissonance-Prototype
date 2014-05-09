@@ -15,6 +15,10 @@ public final class Position {
         this((int) vector.x, (int) vector.y);
     }
 
+    public Position(Vector vector) {
+        this(vector.x, vector.y);
+    }
+
     public float getX() {
         return x;
     }
