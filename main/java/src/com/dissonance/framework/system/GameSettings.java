@@ -22,6 +22,8 @@ public class GameSettings extends ReflectionConfig {
     protected int fps_limit = -1;
     @ConfigItem
     protected Color color = new Color(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+    @ConfigItem
+    protected boolean useFBO = false;
 
     public static void loadGameSettings() throws IOException {
         if (!new File("config/settings.dat").exists()) {
@@ -38,6 +40,7 @@ public class GameSettings extends ReflectionConfig {
 
         Graphics.FPSLimit = settings.fps_limit;
         Graphics.color = settings.color;
+        Graphics.useFBO = settings.useFBO;
     }
 
     public static void saveGameSettings() throws IOException {
@@ -49,6 +52,7 @@ public class GameSettings extends ReflectionConfig {
 
         settings.fps_limit = Graphics.FPSLimit;
         settings.color = Graphics.color;
+        settings.useFBO = Graphics.useFBO;
 
         settings.saveToFile("settings.dat");
         System.out.println("Done!");
@@ -123,6 +127,11 @@ public class GameSettings extends ReflectionConfig {
          * then there will be no FPS limit.
          */
         public static int FPSLimit;
+
+        /**
+         * Whether or not to render ground tiles to a framebuffer.
+         */
+        public static boolean useFBO;
 
         private Graphics() {
         }

@@ -1,11 +1,9 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.sprites.animation.AbstractAnimator;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.scenes.OfficeScene;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 
@@ -25,6 +23,18 @@ public class OfficeQuest extends AbstractQuest {
 
         RenderService.INSTANCE.fadeToAlpha(1, 0f);
         playSceneAndWait(OfficeScene.class);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true){
+                    if(WaldomarsMeetingRoom.farrand.getX() <= 10 && WaldomarsMeetingRoom.farrand.getX() >= 3 && WaldomarsMeetingRoom.farrand.getY() <= 5){
+                        WaldomarsMeetingRoom.farrand.deselect();
+
+                    }
+                }
+            }
+        }).start();
     }
 
     @Override
