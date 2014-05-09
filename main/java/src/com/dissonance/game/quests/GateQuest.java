@@ -36,10 +36,13 @@ public class GateQuest extends AbstractQuest {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    //System.out.println(CityEntrySquare.farrand.getX());
                     if(CityEntrySquare.farrand.getX() <= 256f){
-                        //CityEntrySquare.farrand.freeze();
                         RenderService.INSTANCE.fadeToBlack(1500);
+                        try {
+                            RenderService.INSTANCE.waitForFade();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         setNextQuest(new HallwayQuest());
                         try {
                             endQuest();
