@@ -381,6 +381,7 @@ public final class World {
             public void run() {
                 sprite.setWorld(World.this);
                 sprite.onLoad();
+                sprite.completeLoading();
                 if (sprite instanceof CombatSprite)
                     combatCache.add((CombatSprite) sprite);
             }
