@@ -28,7 +28,7 @@ public final class PathFollow implements Behavior {
         if (nodes != null && nodes.size() >= 1) {
             target = nodes.get(0).vector().multiply(16f);
 
-            if (sprite.getPositionVector().subtract(target).length() <= 20) {
+            if (sprite.getFeetVector().subtract(target).length() <= 20) {
                 if (nodes.size() >= 1) {
                     nodes.remove(0);
                 }
