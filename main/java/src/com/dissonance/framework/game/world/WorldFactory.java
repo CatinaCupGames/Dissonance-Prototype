@@ -158,12 +158,12 @@ public class WorldFactory {
             }
             currentWorld.onUnload();
         }
-        try {
-            newworld.waitForWorldLoaded();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        newworld.onDisplay();
+        RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+            @Override
+            public void run() {
+                newworld.onDisplay();
+            }
+        }, true);
         lastWorld = currentWorld;
         currentWorld = newworld;
         System.out.println("[World Factory] New World: " + currentWorld.getName() + ", Old World: " + (lastWorld == null ? "null" : lastWorld.getName()));

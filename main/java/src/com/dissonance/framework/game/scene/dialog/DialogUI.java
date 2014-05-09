@@ -254,7 +254,7 @@ public class DialogUI extends AbstractUI {
 
         if (texture_background == null) {
             try {
-                texture_background = Texture.retriveTexture("IND/msgbox.png");
+                texture_background = Texture.retrieveTexture("IND/msgbox.png");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -262,7 +262,7 @@ public class DialogUI extends AbstractUI {
 
         if (texture_header == null) {
             try {
-                texture_header = Texture.retriveTexture("IND/header.png");
+                texture_header = Texture.retrieveTexture("IND/header.png");
             } catch (IOException e) {
                 e.printStackTrace();
             }

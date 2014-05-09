@@ -25,7 +25,7 @@ public class Texture {
     private String resource;
     protected static final HashMap<String, Texture> cache = new HashMap<String, Texture>();
 
-    public static Texture retriveTexture(String resource) throws IOException {
+    public static Texture retrieveTexture(String resource) throws IOException {
         if (cache.containsKey(resource)) {
             if (Debug.isDebugging()) System.err.println("Getting texture from cache.. (" + resource + ")");
             return cache.get(resource);
