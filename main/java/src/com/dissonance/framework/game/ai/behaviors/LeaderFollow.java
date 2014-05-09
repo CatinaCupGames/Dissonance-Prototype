@@ -14,6 +14,7 @@ public final class LeaderFollow implements Behavior {
     private AbstractWaypointSprite sprite;
     private AbstractWaypointSprite leader;
     private Vector offset;
+    private Vector cOffset = new Vector();
     private Vector oldPos;
     private List<Position> nodes;
 
@@ -23,14 +24,30 @@ public final class LeaderFollow implements Behavior {
         this.offset = offset;
         oldPos = leader.getPositionVector();
 
+        switch (leader.getDirection().simple()) {
+            case UP:
+                cOffset.x = offset.x;
+                cOffset.y = offset.y;
+                break;
+            case DOWN:
+                cOffset.y = -offset.y;
+                break;
+            case RIGHT:
+                cOffset.x = -offset.y;
+                cOffset.y = offset.x + 0;
+                break;
+            case LEFT:
+                cOffset.x = offset.y + 0;
+                cOffset.y = offset.x + 0;
+                break;
+        }
+
         NodeMap map = sprite.getWorld().getNodeMap();
         int tw = sprite.getWorld().getTiledData().getTileWidth();
         int th = sprite.getWorld().getTiledData().getTileHeight();
-        Position ps = new Position(leader.getPositionVector().add(offset));
+        Position ps = new Position(leader.getPositionVector().add(cOffset));
         nodes = map.findPath(sprite.getPosition().shrink(tw, th), ps.shrink(tw, th));
         nodes.remove(0);
-
-        sprite.setTint(1, 1, 1, 0.2f);
     }
 
     public boolean shouldRecalculate() {
@@ -53,7 +70,25 @@ public final class LeaderFollow implements Behavior {
             int tw = sprite.getWorld().getTiledData().getTileWidth();
             int th = sprite.getWorld().getTiledData().getTileHeight();
 
-            Position ps = new Position(leader.getPositionVector().add(offset));
+            switch (leader.getDirection().simple()) {
+                case UP:
+                    cOffset.x = offset.x;
+                    cOffset.y = offset.y;
+                    break;
+                case DOWN:
+                    cOffset.y = -offset.y;
+                    break;
+                case RIGHT:
+                    cOffset.x = -offset.y;
+                    cOffset.y = offset.x + 0;
+                    break;
+                case LEFT:
+                    cOffset.x = offset.y + 0;
+                    cOffset.y = offset.x + 0;
+                    break;
+            }
+
+            Position ps = new Position(leader.getPositionVector().add(cOffset));
             nodes = map.findPath(sprite.getPosition().shrink(tw, th), ps.shrink(tw, th));
             nodes.remove(0);
         }
@@ -62,7 +97,7 @@ public final class LeaderFollow implements Behavior {
         if (nodes != null && nodes.size() >= 1) {
             target = nodes.get(0).vector().multiply(16f);
 
-            if (sprite.getPositionVector().subtract(target).length() <= 20) {
+            if (sprite.getPositionVector().subtract(target).length() <= 10) {
                 if (nodes.size() >= 1) {
                     nodes.remove(0);
                 }
