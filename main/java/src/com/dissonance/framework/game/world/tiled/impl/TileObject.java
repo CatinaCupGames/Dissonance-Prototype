@@ -84,19 +84,7 @@ public class TileObject extends Sprite {
         }
 
 
-        if (!isGroundLayer()) {
-            Layer high = getWorld().getHighestGroundLayer();
-            Layer low = getWorld().getLowestGroundLayer();
-            if (high == null || low == null)
-                throw new InvalidParameterException("There is no ground layer in this map!");
-            if (high.getLayerNumber() < getTiledLayer().getLayerNumber())
-                setLayer(getTiledLayer().getLayerNumber() - high.getLayerNumber());
-            else if (low.getLayerNumber() > getTiledLayer().getLayerNumber())
-                setLayer(getTiledLayer().getLayerNumber() - low.getLayerNumber());
-            else
-                throw new InvalidParameterException("There is a non-ground layer in between 2 ground layers! (INVALID LAYER: " + getTiledLayer().getLayerNumber() + ")");
-        } else
-            setLayer(0);
+        setLayer(getTiledLayer().getGameLayer(getWorld()));
 
         paralax_effect = getTiledLayer().isParallaxLayer();
         animated = parentTileSet.getTileProperty(ID, "frames") != null;

@@ -54,10 +54,10 @@ public abstract class AbstractQuest {
     }
 
     public void setWorld(World world) {
-        if(RenderService.INSTANCE == null){
-            try{
+        if (RenderService.INSTANCE == null) {
+            try {
                 world.waitForWorldLoaded();
-            } catch(InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

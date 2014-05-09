@@ -7,6 +7,7 @@ import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.utils.MovementType;
@@ -55,6 +56,7 @@ public class TestQuest extends AbstractQuest {
         player.setMarksmanship(2);
         player.setMovementType(MovementType.RUNNING);
         player.glow();
+        Camera.removeBounds();
 
         System.out.println(player.getMarksmanship());
         player.setX(100);
@@ -62,18 +64,6 @@ public class TestQuest extends AbstractQuest {
         WeaponItem item = new WeaponItem(player, Weapon.getWeapon("Revolver"));
         player.setCurrentWeapon(item);
 
-        Enemy enemy = new Enemy("enemy1", Enemy.StatType.MAGIC, CombatSprite.CombatType.HUMAN, new Enemy.AIInterface() {
-            @Override
-            public void onUpdate(Enemy enemy) {
-            }
-        });
-
-
-        TextureLoader.setFastRedraw(false);
-        enemy.setX(350);
-        enemy.setY(100);
-        w.loadAndAdd(enemy);
-        Thread.sleep(250);
 
         Thread.sleep(3000);
         sound.fadeOut(5000);

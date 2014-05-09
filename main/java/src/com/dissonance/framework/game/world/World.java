@@ -40,6 +40,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.lwjgl.opengl.GL11.glScalef;
+
 public final class World {
     private static final Gson GSON = new Gson();
     private static String wlpackage = "com.dissonance.game.w";
@@ -147,26 +149,31 @@ public final class World {
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
                         System.out.println("Attempting to generate frame buffer..");
 
-                        /*try {
-                            Framebuffer frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
-                            frame.generate();
-                            frame.begin();
-                            Iterator<Drawable> drawableIterator = getSortedDrawables();
-                            while (drawableIterator.hasNext()) {
-                                Drawable d = drawableIterator.next();
-                                if (d instanceof TileObject) {
-                                    TileObject t = (TileObject)d;
-                                    if (t.isGroundLayer() && !t.isParallaxLayer() && !t.isAnimated()) {
-                                        t.render();
-                                        drawableIterator.remove();
+                        if (GameSettings.Graphics.useFBO) {
+                            try {
+                                Framebuffer frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
+                                frame.generate();
+                                frame.begin();
+                                Iterator<Drawable> drawableIterator = getSortedDrawables();
+                                while (drawableIterator.hasNext()) {
+                                    Drawable d = drawableIterator.next();
+                                    if (d instanceof TileObject) {
+                                        TileObject t = (TileObject)d;
+                                        if (t.isGroundLayer() && !t.isParallaxLayer() && !t.isAnimated()) {
+                                            t.render();
+                                            drawableIterator.remove();
+                                        }
                                     }
                                 }
+                                frame.end();
+                                System.out.println("Success!");
+                                addDrawable(frame);
+                            } catch (RuntimeException e) {
+                                e.printStackTrace();
+                                System.err.println("Framebuffers are not supported! Legacy rendering will be used!");
+                                GameSettings.Graphics.useFBO = false;
                             }
-                            frame.end();
-                            System.out.println("Success!");
-                        } catch (RuntimeException e) {
-                            System.out.println("Framebuffers are not supported!");
-                        }*/
+                        }
 
                         tiledData.loadTriggers();
                         if (loader == null) {
@@ -204,7 +211,7 @@ public final class World {
                 nodeMap.readMap();
                 in.close();
             } catch (Exception e) {
-                throw new WorldLoadFailedException("Error loading Tiled file!", e);
+                throw new WorldLoadFailedException("Error loading Tiled file! (" + name + ")", e);
             }
         } else { //Find and invoke WorldLoader for this world
             renderingService.runOnServiceThread(new Runnable() {

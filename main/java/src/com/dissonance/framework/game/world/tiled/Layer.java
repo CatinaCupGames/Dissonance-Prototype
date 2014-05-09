@@ -56,6 +56,26 @@ public class Layer {
         }
     }
 
+    private int gLayer = Integer.MIN_VALUE;
+    public int getGameLayer(World world) {
+        if (gLayer == Integer.MIN_VALUE) {
+            if (!isGroundLayer()) {
+                Layer high = world.getHighestGroundLayer();
+                Layer low = world.getLowestGroundLayer();
+                if (high == null || low == null)
+                    throw new InvalidParameterException("There is no ground layer in this map!");
+                if (high.getLayerNumber() < getLayerNumber())
+                    gLayer = getLayerNumber() - high.getLayerNumber();
+                else if (low.getLayerNumber() > getLayerNumber())
+                    gLayer = getLayerNumber() - low.getLayerNumber();
+                else
+                    throw new InvalidParameterException("There is a non-ground layer in between 2 ground layers! (INVALID LAYER: " + getLayerNumber() + ")");
+            } else
+                gLayer = 0;
+        }
+        return gLayer;
+    }
+
 
     public boolean isGroundLayer() {
         return (getProperty("ground") != null && getProperty("ground").equalsIgnoreCase("true"));
@@ -158,5 +178,9 @@ public class Layer {
 
     public boolean isParallaxLayer() {
         return (getProperty("parallax") != null && getProperty("parallax").equalsIgnoreCase("true"));
+    }
+
+    public void setAlpha(float alpha) {
+        this.opacity = alpha;
     }
 }
