@@ -76,7 +76,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
     public void render() {
         super.render();
 
-        if (behavior != null && (behavior instanceof LeaderFollow || behavior instanceof PathFollow)) {
+        /*if (behavior != null && (behavior instanceof LeaderFollow || behavior instanceof PathFollow)) {
             glLineWidth(3);
             glColor3f(255, 0, 0);
             glBegin(GL_LINE_STRIP);
@@ -92,7 +92,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
             glEnd();
             glColor3f(255, 255, 255);
             glLineWidth(1);
-        }
+        }*/
     }
 
     @Override

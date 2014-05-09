@@ -377,34 +377,36 @@ public class RenderService extends Service {
 
             glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
 
-            glColor4f(curAlpha, curAlpha, curAlpha, 1f);
+            glColor4f(1f, 1f, 1f, curAlpha);
             //ROBO //todo get all these into proper batches
 
-            Iterator<Drawable> usprites = current_world.getUnsortedDrawables();
-            while (usprites.hasNext()) {
-                Drawable s = usprites.next();
-                if (s == null)
-                    continue;
-                try {
-                    if (!s.neverClip() && (!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
+            if (curAlpha > 0f) {
+                Iterator<Drawable> usprites = current_world.getUnsortedDrawables();
+                while (usprites.hasNext()) {
+                    Drawable s = usprites.next();
+                    if (s == null)
                         continue;
-                    s.render();
-                } catch (Throwable t) {
-                    t.printStackTrace();
+                    try {
+                        if (!s.neverClip() && (!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
+                            continue;
+                        s.render();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
                 }
-            }
 
-            Iterator<Drawable> sprites = current_world.getSortedDrawables();
-            while (sprites.hasNext()) {
-                Drawable s = sprites.next();
-                if (s == null)
-                    continue;
-                try {
-                    if (!s.neverClip() && (!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
+                Iterator<Drawable> sprites = current_world.getSortedDrawables();
+                while (sprites.hasNext()) {
+                    Drawable s = sprites.next();
+                    if (s == null)
                         continue;
-                    s.render();
-                } catch (Throwable t) {
-                    t.printStackTrace();
+                    try {
+                        if (!s.neverClip() && (!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
+                            continue;
+                        s.render();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
                 }
             }
 

@@ -163,7 +163,7 @@ public class WorldFactory {
             public void run() {
                 newworld.onDisplay();
             }
-        }, true);
+        });
         lastWorld = currentWorld;
         currentWorld = newworld;
         System.out.println("[World Factory] New World: " + currentWorld.getName() + ", Old World: " + (lastWorld == null ? "null" : lastWorld.getName()));

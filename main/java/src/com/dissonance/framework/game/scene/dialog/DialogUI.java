@@ -81,6 +81,8 @@ public class DialogUI extends AbstractUI {
 
         RenderText.drawString(font, dialog.getCurrentHeader(), (x - bx) + 10f, (y - by) + 5f, Color.white);
         drawText(x - bx, y - by);
+
+        glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
     }
 
     int char_offset;
