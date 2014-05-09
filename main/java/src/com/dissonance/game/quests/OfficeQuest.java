@@ -14,9 +14,6 @@ public class OfficeQuest extends AbstractQuest {
         setWorld(w);
         w.waitForWorldLoaded();
         //Sound.playSound("waldobuilding");
-        WaldomarsMeetingRoom.waldomar.setAnimation("walk_back");
-        WaldomarsMeetingRoom.waldomar.pauseAnimation();
-        WaldomarsMeetingRoom.waldomar.setFrame(1);
         WaldomarsMeetingRoom.farrand.setAnimation("walk_left");
         WaldomarsMeetingRoom.farrand.pauseAnimation();
         WaldomarsMeetingRoom.farrand.setFrame(1);
@@ -24,18 +21,19 @@ public class OfficeQuest extends AbstractQuest {
         RenderService.INSTANCE.fadeToAlpha(1, 0f);
         playSceneAndWait(OfficeScene.class);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        //new Thread(new Runnable() {
+        //    @Override
+        //    public void run() {
                 while(true){
                     if(WaldomarsMeetingRoom.farrand.getX() <= 10 && WaldomarsMeetingRoom.farrand.getX() >= 3 && WaldomarsMeetingRoom.farrand.getY() <= 5){
-                        WaldomarsMeetingRoom.farrand.deselect();
+                        //WaldomarsMeetingRoom.farrand.deselect();
+                        WaldomarsMeetingRoom.farrand.setMovementSpeed(20f);
 
                     }
                 }
             }
-        }).start();
-    }
+        //}).start();
+    //}
 
     @Override
     public String getName() {

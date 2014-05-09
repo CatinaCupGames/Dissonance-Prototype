@@ -1,7 +1,6 @@
 package com.dissonance.game.scenes;
 
 
-import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.scene.SimpleScene;
 import com.dissonance.framework.render.Camera;
@@ -44,6 +43,7 @@ public class HallwayScene extends SimpleScene {
 
         Thread.sleep(9350);
         RenderService.INSTANCE.fadeToBlack(1500);
+        RenderService.INSTANCE.waitForFade();
 
 
 
