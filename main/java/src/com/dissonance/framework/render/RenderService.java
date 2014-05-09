@@ -519,8 +519,8 @@ public class RenderService extends Service {
             String errorString = gluErrorString(errorValue);
             System.err.println("ERROR AT: " + errorMessage + " - " + errorString);
 
-            if (Display.isCreated()) Display.destroy();
-            System.exit(-1);
+            /*if (Display.isCreated()) Display.destroy();
+            System.exit(-1);*/
         }
     }
 
