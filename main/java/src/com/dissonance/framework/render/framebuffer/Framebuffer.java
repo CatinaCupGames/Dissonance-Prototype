@@ -46,6 +46,8 @@ public class Framebuffer extends Sprite {
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             throw new RuntimeException("Framebuffer configuration error.");
         }
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
         clearErrors("Final Check");
     }
 
@@ -53,7 +55,7 @@ public class Framebuffer extends Sprite {
         glBindFramebuffer(GL_FRAMEBUFFER, fID);
 
         glPushAttrib(GL_VIEWPORT_BIT);
-        glViewport(0, 0, width + 4, height + 4);
+        glViewport(0, 0, width, height);
 
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
@@ -90,14 +92,9 @@ public class Framebuffer extends Sprite {
     public void render() {
         float x = this.width / 2f;
         float y = this.height / 2f;
-        x -= 6;
-        y -= 6;
         float z = 0f;
         float bx = (this.width)/2f;
         float by = (this.height)/2f;
-        bx += 2;
-
-        glPushMatrix();
 
         glBindTexture(GL_TEXTURE_2D, tID);
         glBegin(GL_QUADS);
@@ -111,8 +108,6 @@ public class Framebuffer extends Sprite {
         glVertex3f(x - bx, y + by, z);
         glEnd();
         glBindTexture(GL_TEXTURE_2D, 0);
-
-        glPopMatrix();
     }
 
     @Override

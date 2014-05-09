@@ -56,7 +56,6 @@ public class WorldFactory {
         }
 
         World w = new World(index == -1 ? random.nextInt() : index);
-        //World w = new World(index == -1 ? random.nextInt() : index);
         w.init();
         w.load(name);
         System.out.println("[World Factory] " + w.getName() + " loaded into memory.");

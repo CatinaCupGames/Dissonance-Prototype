@@ -43,8 +43,6 @@ import java.util.List;
 import static org.lwjgl.opengl.GL11.glScalef;
 
 public final class World {
-    private static boolean useFBO = true;
-
     private static final Gson GSON = new Gson();
     private static String wlpackage = "com.dissonance.game.w";
     private static LightShader lightShader;
@@ -55,6 +53,7 @@ public final class World {
     private NodeMap nodeMap;
     private int ID;
     private transient RenderService renderingService;
+    private transient Framebuffer frame;
     private boolean invalid = true;
     private boolean loaded = false;
     private boolean showing = false;
@@ -151,11 +150,12 @@ public final class World {
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
                         System.out.println("Attempting to generate frame buffer..");
 
-                        if (useFBO) {
+                        if (GameSettings.Graphics.useFBO && tiledData.getPixelWidth() > GameSettings.Display.window_width / 2f && tiledData.getPixelHeight() > GameSettings.Display.window_height / 2f) {
                             try {
                                 Framebuffer frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
                                 frame.generate();
                                 frame.begin();
+                                invalid = false;
                                 Iterator<Drawable> drawableIterator = getSortedDrawables();
                                 while (drawableIterator.hasNext()) {
                                     Drawable d = drawableIterator.next();
@@ -173,7 +173,12 @@ public final class World {
                             } catch (RuntimeException e) {
                                 e.printStackTrace();
                                 System.err.println("Framebuffers are not supported! Legacy rendering will be used!");
-                                useFBO = false;
+                                GameSettings.Graphics.useFBO = false;
+                                try {
+                                    GameSettings.saveGameSettings();
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
                             }
                         }
 
@@ -462,6 +467,7 @@ public final class World {
         combatCache.clear();
 
         if (tiledData != null) tiledData.dispose();
+        if (frame != null) frame.dispose();
 
         renderingService = null;
     }

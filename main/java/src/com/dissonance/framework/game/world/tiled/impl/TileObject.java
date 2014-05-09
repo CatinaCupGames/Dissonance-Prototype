@@ -168,24 +168,28 @@ public class TileObject extends Sprite {
     public void render() {
         if (parentTileSet.getTexture() == null)
             return;
-        //if (isAlwaysAbove()) glDisable(GL_DEPTH_TEST);
-        float alpha = parentLayer.getOpacity() - (1 - RenderService.getCurrentAlphaValue());
-        if (alpha < 0)
-            alpha = 0;
-        glColor4f(1.0f, 1.0f, 1.0f, alpha);
+        if (getWorld() == RenderService.INSTANCE.getCurrentDrawingWorld()) {
+            float alpha = parentLayer.getOpacity() - (1 - RenderService.getCurrentAlphaValue());
+            if (alpha < 0)
+                alpha = 0;
+            glColor4f(1.0f, 1.0f, 1.0f, alpha);
+        } else {
+            float alpha = parentLayer.getOpacity();
+            if (alpha < 0)
+                alpha = 0;
+            glColor4f(1.0f, 1.0f, 1.0f, alpha);
+        }
 
         parentTileSet.getTexture().bind();
         if (paralax_effect) {
             float difx = (-Camera.getX() * parallax_speed) - -Camera.getX();
             float dify = (-Camera.getY() * parallax_speed) - -Camera.getY();
             glTranslatef(difx, dify, 0f);
-            //this.y -= dify;
         }
         float bx = parentTileSet.getTileWidth() / 2;
         float by = parentTileSet.getTileHeight() / 2;
         float x = getX(), y = getY();
         float z = 0f;
-        //float z = isGroundLayer() ? 99999 : y - by;
 
         glPushMatrix(); //Save the current view matrix
         glTranslatef(x, y, 0f); //Translate to the tile's position

@@ -3,6 +3,7 @@ package com.dissonance.game.quests;
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
@@ -12,7 +13,6 @@ import com.dissonance.game.w.CityEntrySquare;
 public class GateQuest extends AbstractQuest {
     @Override
     public void startQuest() throws Exception {
-
         CityEntrySquare.farrand.freeze();
         CityEntrySquare.farrand.select();
         playSceneAndWait(GateScene.class);
