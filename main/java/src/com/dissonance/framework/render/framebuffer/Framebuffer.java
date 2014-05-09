@@ -1,10 +1,14 @@
 package com.dissonance.framework.render.framebuffer;
 
+import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.render.Drawable;
+import com.dissonance.framework.render.RenderService;
 import org.lwjgl.opengl.GL14;
 
 import java.nio.ByteBuffer;
 
+import static org.lwjgl.opengl.EXTFramebufferObject.GL_FRAMEBUFFER_EXT;
+import static org.lwjgl.opengl.EXTFramebufferObject.glBindFramebufferEXT;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.GL13.*;
@@ -12,7 +16,7 @@ import static org.lwjgl.opengl.GL14.*;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
 
-public class Framebuffer implements Drawable {
+public class Framebuffer extends Sprite {
     private int fID, tID;
 
     protected int width, height;
@@ -37,18 +41,19 @@ public class Framebuffer implements Drawable {
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tID, 0);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            checkError("Failed");
+            clearErrors("Configuration error");
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
             throw new RuntimeException("Framebuffer configuration error.");
         }
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        clearErrors("Final Check");
     }
 
     public void begin() {
         glBindFramebuffer(GL_FRAMEBUFFER, fID);
 
         glPushAttrib(GL_VIEWPORT_BIT);
-        glViewport(0, 0, width, height);
+        glViewport(0, 0, width + 4, height + 4);
 
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
@@ -60,12 +65,12 @@ public class Framebuffer implements Drawable {
         glLoadIdentity();
     }
 
-    private void checkError(String place) {
+    private void clearErrors(String place) {
         int errorValue = glGetError();
 
         while (errorValue != GL_NO_ERROR) {
             String errorString = gluErrorString(errorValue);
-            System.err.println(errorString);
+            System.err.println("Error at (" + place + ") starting framebuffer: " + errorString);
             errorValue = glGetError();
         }
     }
@@ -85,9 +90,12 @@ public class Framebuffer implements Drawable {
     public void render() {
         float x = this.width / 2f;
         float y = this.height / 2f;
+        x -= 6;
+        y -= 6;
         float z = 0f;
         float bx = (this.width)/2f;
         float by = (this.height)/2f;
+        bx += 2;
 
         glPushMatrix();
 
@@ -105,6 +113,11 @@ public class Framebuffer implements Drawable {
         glBindTexture(GL_TEXTURE_2D, 0);
 
         glPopMatrix();
+    }
+
+    @Override
+    public void onLoad() {
+        setLayer(0);
     }
 
     @Override
@@ -128,17 +141,19 @@ public class Framebuffer implements Drawable {
     }
 
     @Override
-    public int compareTo(Drawable o) {
-        return 0;
-    }
-
-    @Override
     public boolean neverSort() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean neverClip() {
         return true;
+    }
+
+    public void dispose() {
+        glDeleteTextures(tID);
+        //Bind 0, which means render to back buffer, as a result, fb is unbound
+        glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
+        glDeleteFramebuffers(fID);
     }
 }
