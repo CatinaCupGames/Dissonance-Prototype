@@ -43,6 +43,8 @@ import java.util.List;
 import static org.lwjgl.opengl.GL11.glScalef;
 
 public final class World {
+    private static boolean useFBO = true;
+
     private static final Gson GSON = new Gson();
     private static String wlpackage = "com.dissonance.game.w";
     private static LightShader lightShader;
@@ -149,7 +151,7 @@ public final class World {
                         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
                         System.out.println("Attempting to generate frame buffer..");
 
-                        if (GameSettings.Graphics.useFBO) {
+                        if (useFBO) {
                             try {
                                 Framebuffer frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
                                 frame.generate();
@@ -158,7 +160,7 @@ public final class World {
                                 while (drawableIterator.hasNext()) {
                                     Drawable d = drawableIterator.next();
                                     if (d instanceof TileObject) {
-                                        TileObject t = (TileObject)d;
+                                        TileObject t = (TileObject) d;
                                         if (t.isGroundLayer() && !t.isParallaxLayer() && !t.isAnimated()) {
                                             t.render();
                                             drawableIterator.remove();
@@ -171,7 +173,7 @@ public final class World {
                             } catch (RuntimeException e) {
                                 e.printStackTrace();
                                 System.err.println("Framebuffers are not supported! Legacy rendering will be used!");
-                                GameSettings.Graphics.useFBO = false;
+                                useFBO = false;
                             }
                         }
 

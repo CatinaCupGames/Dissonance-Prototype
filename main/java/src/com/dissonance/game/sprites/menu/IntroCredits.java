@@ -61,7 +61,7 @@ public class IntroCredits extends AbstractUI {
         setHeight(128);
 
         marginTop(10f);
-        marginLeft(6f);
+        marginLeft(240f);
 
         setAlpha(0f);
         start = RenderService.getTime();

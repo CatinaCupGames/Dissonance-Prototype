@@ -73,7 +73,7 @@
         <header>Guard</header>
         <message>If you haven't figured it out yet..press </message>
         <message style="bold" type="append">W A S D</message>
-        <message type="append"> on your keyyboard to move.</message>
+        <message type="append"> on your keyboard to move.</message>
     </dialog>
 
     <dialog dialog_id="entering_zesilia1">
@@ -88,8 +88,7 @@
         <message>AHAHAHFUAHFUA</message>
 
         <header>Farrand</header>
-        <message>I am Farrand, Sage of Nuado, and this is Jeremiah.</message>
-        <message type="append">We are here on official business to speak with Waldomar II.</message>
+        <message>HOPAHAPAHAPAHPAHA</message>
 
         <header>Guard</header>
         <message>You are permitted to enter.</message>
@@ -163,7 +162,7 @@
         <message type="append">the laws that uphold our survival. </message>
 
         <header>Farrand</header>
-        <message>I know your type Waldomar, your thirst for gatorade is unquenchable, </message>
+        <message>I know your type Waldomar, your thirst for power is unquenchable, </message>
         <message type="append">you will not be satisfied until you have completely stripped  </message>
 
         <header>Farrand</header>
@@ -187,6 +186,11 @@
         <header>Jeremiah</header>
         <message style="bold">Farrand!</message>
     </dialog>
+
+    <dialog dialog_id="waldomeeting3">
+        <header>Jeremiah</header>
+        <message speed="10">The window!</message>
+    </dialog>
     <dialog dialog_id="GateScene2">
         <header>Guard</header>
         <message>Welcome. You two are with Nuado Provence, right?</message>
@@ -205,9 +209,6 @@
 
         <header>Guard</header>
         <message>Ah, okay. Step on the conveyor and let us lead the way.</message>
-
-
-
     </dialog>
 
 

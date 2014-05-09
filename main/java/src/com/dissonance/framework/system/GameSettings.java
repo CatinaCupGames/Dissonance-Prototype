@@ -23,7 +23,7 @@ public class GameSettings extends ReflectionConfig {
     @ConfigItem
     protected Color color = new Color(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
     @ConfigItem
-    protected boolean useFBO = true;
+    protected boolean useFBO = false;
 
     public static void loadGameSettings() throws IOException {
         if (!new File("config/settings.dat").exists()) {

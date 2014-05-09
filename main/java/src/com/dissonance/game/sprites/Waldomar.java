@@ -109,6 +109,16 @@ public class Waldomar extends CombatSprite {
     }
 
     @Override
+    public boolean setAnimation(String name) {
+        return super.setAnimation(name);
+    }
+
+    @Override
+    public boolean setAnimation(int index) {
+        return super.setAnimation(index);
+    }
+
+    @Override
     public String getSpriteName() {
         return "waldomar";
     }

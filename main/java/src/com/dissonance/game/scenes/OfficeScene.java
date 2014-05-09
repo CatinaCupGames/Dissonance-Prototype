@@ -29,7 +29,10 @@ public class OfficeScene extends SimpleScene {
         WaldomarsMeetingRoom.farrand.setMovementSpeed(4f);
         WaldomarsMeetingRoom.farrand.setWaypoint(102.95f, 8f*16, WaypointType.SIMPLE);
 
-
+        Thread.sleep(200);
+        WaldomarsMeetingRoom.waldomar.setAnimation("walk_back");
+        WaldomarsMeetingRoom.waldomar.pauseAnimation();
+        WaldomarsMeetingRoom.waldomar.setFrame(1);
 
         WaldomarsMeetingRoom.guard3.setMovementSpeed(4f);
         WaldomarsMeetingRoom.guard3.setWaypoint(14f * 16, 13f * 16, WaypointType.SIMPLE);
@@ -82,6 +85,13 @@ public class OfficeScene extends SimpleScene {
 
         WaldomarsMeetingRoom.guard1.setMovementSpeed(30f);
         WaldomarsMeetingRoom.guard1.setWaypoint(0, 11f * 16, WaypointType.SIMPLE);
+
+        WaldomarsMeetingRoom.farrand.select();
+        WaldomarsMeetingRoom.farrand.setMovementSpeed(10f);
+
+        Dialog.displayDialog("waldomeeting3");
+
+
 
 
 
