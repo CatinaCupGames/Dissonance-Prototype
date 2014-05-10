@@ -2,9 +2,9 @@ package com.dissonance.framework.game.world;
 
 import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.sprites.Sprite;
-import com.dissonance.framework.game.sprites.ui.UI;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
+import com.dissonance.framework.game.sprites.ui.UI;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
@@ -39,8 +39,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import static org.lwjgl.opengl.GL11.glColor4f;
 
 public final class World {
     private static final Gson GSON = new Gson();
@@ -718,12 +716,32 @@ public final class World {
         return highestLayer;
     }
 
+    /**
+     * Returns the width of the world in tiles.
+     */
     public int getWidth() {
         return tiledData.getWidth();
     }
 
+    /**
+     * Returns the width of the world in pixels.
+     */
+    public int getPixelWidth() {
+        return tiledData.getWidth() * tiledData.getTileWidth();
+    }
+
+    /**
+     * Returns the height of the world in tiles.
+     */
     public int getHeight() {
         return tiledData.getHeight();
+    }
+
+    /**
+     * Returns the height of the world in pixels.
+     */
+    public int getPixelHeight() {
+        return tiledData.getHeight() * tiledData.getTileHeight();
     }
 
     public String getName() {

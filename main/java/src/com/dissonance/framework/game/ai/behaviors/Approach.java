@@ -17,15 +17,27 @@ import java.util.Random;
  * You can use the {@link Approach#getRandomTarget(AbstractWaypointSprite, float)} to
  * get a random target to approach.
  */
-public final class Approach implements Behavior {
+public final class Approach implements FiniteBehavior {
+
+    private static final Vector offset = new Vector(0, -32);
+    private static final float SQRT2 = (float) Math.sqrt(2);
 
     private AbstractWaypointSprite sprite;
     private AbstractWaypointSprite target;
-    private static final Vector offset = new Vector(0, -32);
-    private static final float SQRT2 = (float) Math.sqrt(2);
+
     private Vector cOffset = new Vector();
     private static Random random = new Random();
     private List<Position> nodes = new ArrayList<>();
+
+    public FiniteBehaviorEvent.OnFinished getOnFinishedListener() {
+        return onFinishedListener;
+    }
+
+    public void setOnFinishedListener(FiniteBehaviorEvent.OnFinished onFinishedListener) {
+        this.onFinishedListener = onFinishedListener;
+    }
+
+    private FiniteBehaviorEvent.OnFinished onFinishedListener;
 
     public Approach(AbstractWaypointSprite sprite, AbstractWaypointSprite target) {
         this.sprite = sprite;
@@ -44,7 +56,7 @@ public final class Approach implements Behavior {
         float th = base.getWorld().getTiledData().getTileHeight();
 
         if (radius == -1) {
-            bounds = new float[]{0, base.getWorld().getWidth() * tw, 0, base.getWorld().getHeight() * th};
+            bounds = new float[] { 0, base.getWorld().getWidth() * tw, 0, base.getWorld().getHeight() * th };
         } else {
             if (radius < 0) {
                 throw new IllegalArgumentException("Radius must be positive!");
@@ -125,6 +137,9 @@ public final class Approach implements Behavior {
     @Override
     public void update() {
         if (target == null) {
+            if (onFinishedListener != null) {
+                onFinishedListener.onFinished(this);
+            }
             return;
         }
 
@@ -141,6 +156,9 @@ public final class Approach implements Behavior {
         }
 
         if (target == null) {
+            if (onFinishedListener != null) {
+                onFinishedListener.onFinished(this);
+            }
             return;
         }
 
@@ -165,6 +183,11 @@ public final class Approach implements Behavior {
         if (nodes.size() == 0) {
             if (Math.abs(sprite.getX() - target.x) <= 4.5f && Math.abs(sprite.getY() - target.y) <= 4.5f) {
                 sprite.setSteeringVelocity(new Vector(0, 0));
+
+                if (onFinishedListener != null) {
+                    onFinishedListener.onFinished(this);
+                }
+
                 //TODO: set direction opposite of target's
             }
         }

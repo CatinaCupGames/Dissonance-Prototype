@@ -21,6 +21,7 @@ public final class LeaderFollow implements Behavior {
     private AbstractWaypointSprite sprite;
     private AbstractWaypointSprite leader;
     private Vector offset;
+
     private Vector cOffset = new Vector();
     private Vector oldPos;
     private List<Position> nodes;

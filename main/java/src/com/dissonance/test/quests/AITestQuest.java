@@ -1,7 +1,7 @@
 package com.dissonance.test.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.ai.behaviors.Approach;
+import com.dissonance.framework.game.ai.behaviors.Idle;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
@@ -45,7 +45,9 @@ public final class AITestQuest extends AbstractQuest {
             public void run() {
                 while(true) {
                     if (InputKeys.isButtonPressed(InputKeys.JUMP)) {
-                        other.setBehavior(new Approach(other, Approach.getRandomTarget(other, 100)));
+                        if (other.getBehavior() == null) {
+                            other.setBehavior(new Idle(other));
+                        }
                     }
                 }
 

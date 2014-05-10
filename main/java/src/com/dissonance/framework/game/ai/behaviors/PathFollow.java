@@ -14,10 +14,20 @@ import java.util.List;
  * to these points using the {@link Seek} behavior, producing a smooth movement and avoiding
  * sudden route changes.
  */
-public final class PathFollow implements Behavior {
+public final class PathFollow implements FiniteBehavior {
 
     private AbstractWaypointSprite sprite;
     private List<Position> nodes;
+
+    private FiniteBehaviorEvent.OnFinished onFinishedListener;
+
+    public FiniteBehaviorEvent.OnFinished getOnFinishedListener() {
+        return onFinishedListener;
+    }
+
+    public void setOnFinishedListener(FiniteBehaviorEvent.OnFinished onFinishedListener) {
+        this.onFinishedListener = onFinishedListener;
+    }
 
     public PathFollow(AbstractWaypointSprite sprite, Position target) {
         this.sprite = sprite;
@@ -42,6 +52,9 @@ public final class PathFollow implements Behavior {
         }
 
         if (target == null) {
+            if (onFinishedListener != null) {
+                onFinishedListener.onFinished(this);
+            }
             return;
         }
 
@@ -55,6 +68,12 @@ public final class PathFollow implements Behavior {
 
         sprite.setX(sprite.getX() + sprite.getSteeringVelocity().x * RenderService.TIME_DELTA * sprite.getMovementSpeed());
         sprite.setY(sprite.getY() + sprite.getSteeringVelocity().y * RenderService.TIME_DELTA * sprite.getMovementSpeed());
+
+        if (nodes.size() == 0 && Math.abs(target.x - sprite.getX()) <= 2f && Math.abs(target.y - sprite.getY()) <= 2f) {
+            if (onFinishedListener != null) {
+                onFinishedListener.onFinished(this);
+            }
+        }
     }
 
     public List<Position> getNodes() {
