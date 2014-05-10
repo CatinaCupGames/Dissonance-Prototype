@@ -19,12 +19,12 @@ public final class PathFollow implements Behavior {
     private AbstractWaypointSprite sprite;
     private List<Position> nodes;
 
-    public PathFollow(AbstractWaypointSprite sprite, Position path) {
+    public PathFollow(AbstractWaypointSprite sprite, Position target) {
         this.sprite = sprite;
         NodeMap map = sprite.getWorld().getNodeMap();
         int tw = sprite.getWorld().getTiledData().getTileWidth();
         int th = sprite.getWorld().getTiledData().getTileHeight();
-        nodes = map.findPath(new Position(sprite.getX(), sprite.getY()).shrink(tw, th), path.shrink(tw, th));
+        nodes = map.findPath(new Position(sprite.getX(), sprite.getY()).shrink(tw, th), target.shrink(tw, th));
     }
 
     @Override
@@ -53,9 +53,8 @@ public final class PathFollow implements Behavior {
 
         sprite.setSteeringVelocity(sprite.getSteeringVelocity().add(steering).truncate(MAX_VELOCITY));
 
-        //TODO: change the *10 part if we ever make speed sprite-dependent
-        sprite.setX(sprite.getX() + sprite.getSteeringVelocity().x * RenderService.TIME_DELTA * 10);
-        sprite.setY(sprite.getY() + sprite.getSteeringVelocity().y * RenderService.TIME_DELTA * 10);
+        sprite.setX(sprite.getX() + sprite.getSteeringVelocity().x * RenderService.TIME_DELTA * sprite.getMovementSpeed());
+        sprite.setY(sprite.getY() + sprite.getSteeringVelocity().y * RenderService.TIME_DELTA * sprite.getMovementSpeed());
     }
 
     public List<Position> getNodes() {

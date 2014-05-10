@@ -33,9 +33,9 @@ public final class Arrive implements Behavior {
         desired = desired.normalize();
 
         if (distance <= slowingRadius) {
-            desired = desired.multiply(Behavior.MAX_VELOCITY * distance / slowingRadius);
+            desired = desired.multiply(MAX_VELOCITY * distance / slowingRadius);
         } else {
-            desired = desired.multiply(Behavior.MAX_VELOCITY);
+            desired = desired.multiply(MAX_VELOCITY);
         }
 
         Vector steering = desired.subtract(sprite.getSteeringVelocity());
