@@ -5,7 +5,7 @@ import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.item.Item;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;

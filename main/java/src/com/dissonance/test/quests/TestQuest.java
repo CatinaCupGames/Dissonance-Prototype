@@ -3,7 +3,7 @@ package com.dissonance.test.quests;
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.item.impl.WeaponItem;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.Camera;

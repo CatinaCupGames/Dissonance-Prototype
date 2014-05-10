@@ -1,17 +1,13 @@
 package com.dissonance.framework.render;
 
-import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.sprites.Sprite;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
-import com.dissonance.framework.system.utils.Validator;
-import org.lwjgl.Sys;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 
 public final class Camera {
     private static final float OFFSCREEN_THRESHOLD = 32;
@@ -167,6 +163,10 @@ public final class Camera {
                 setPos(translateToCameraCenter(sprite.getVector(), 32));
             }
         });
+    }
+
+    public static void addFollow(Sprite sprite) {
+        //TODO Follow all following sprites collectively.
     }
 
     public static void stopFollowing() {

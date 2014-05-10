@@ -1,7 +1,7 @@
 package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.input.InputKeys;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
 
 public final class Jeremiah extends PlayableSprite {

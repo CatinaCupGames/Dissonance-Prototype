@@ -1,7 +1,7 @@
 package com.dissonance.test.sprites;
 
 import com.dissonance.framework.game.combat.Weapon;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
 
 public class TestPlayer extends PlayableSprite {

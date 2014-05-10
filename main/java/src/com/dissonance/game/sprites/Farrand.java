@@ -1,15 +1,8 @@
 package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.input.InputKeys;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
-import com.dissonance.framework.render.text.RenderText;
-import com.dissonance.framework.system.GameSettings;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
-import org.newdawn.slick.*;
-import org.newdawn.slick.Color;
-
-import java.awt.*;
-import java.awt.Font;
 
 public final class Farrand extends PlayableSprite {
     //TODO Set default values for these

@@ -138,6 +138,7 @@ public class InputKeys {
         FileUtils.writeLines(PATH, config);
     }
 
+    @Deprecated
     public static boolean isButtonPressed(String button) {
         if (!loaded)
             return false;
@@ -160,9 +161,29 @@ public class InputKeys {
         return checkKeyboard(button);
     }
 
+    @Deprecated
     public static float getJoypadValue(String button) {
         if (!usingController())
             return 0f;
+        switch (button) {
+            case MOVEX:
+            case MOVELEFT:
+            case MOVERIGHT:
+                return controller.getComponent(getLeftPad()[0]).getPollData();
+            case MOVEY:
+            case MOVEUP:
+            case MOVEDOWN:
+                return controller.getComponent(getLeftPad()[1]).getPollData();
+            case EXTENDX:
+                return controller.getComponent(getRightPad()[0]).getPollData();
+            case EXTENDY:
+                return controller.getComponent(getRightPad()[1]).getPollData();
+            default:
+                return 0f;
+        }
+    }
+
+    public static float getJoypadValue(String button, Controller controller) {
         switch (button) {
             case MOVEX:
             case MOVELEFT:
@@ -189,14 +210,34 @@ public class InputKeys {
         return new Component.Identifier.Axis[] { Component.Identifier.Axis.RX, Component.Identifier.Axis.RY };
     }
 
-    private static boolean checkKeyboard(String button) {
+    public static boolean checkKeyboard(String button) {
         return Keyboard.isKeyDown(keys.get(button));
     }
 
+    public static boolean checkController(String button, Controller controller) {
+        if (button.equals(MOVEUP) || button.equals(MOVELEFT) || button.equals(MOVERIGHT) || button.equals(MOVELEFT)) {
+            throw new IllegalArgumentException("The player is using the controller! Use the axis!");
+        }
+
+        boolean valid = controller.poll();
+        if (!valid) {
+            checkKeyboard(button);
+        }
+        String cname = buttons.get(button);
+        for (Component c : controller.getComponents()) {
+            if (c.getName().equals(cname)) {
+                return cname.contains("Button") && c.getPollData() == 1.0f;
+            }
+        }
+        return false;
+    }
+
+    @Deprecated
     public static boolean usingController() {
         return controller != null && controllerConnected();
     }
 
+    @Deprecated
     private static boolean controllerConnected() {
         if (controller == null)
             return false;

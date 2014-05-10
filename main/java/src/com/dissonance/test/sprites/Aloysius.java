@@ -1,6 +1,6 @@
 package com.dissonance.test.sprites;
 
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 
 public class Aloysius extends PlayableSprite {
     @Override

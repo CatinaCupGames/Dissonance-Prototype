@@ -2,6 +2,7 @@ package com.dissonance.framework.game.sprites.impl.game;
 
 import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.combat.Bullet;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
