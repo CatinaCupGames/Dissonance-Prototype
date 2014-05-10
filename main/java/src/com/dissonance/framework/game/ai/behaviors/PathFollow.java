@@ -8,6 +8,12 @@ import com.dissonance.framework.render.RenderService;
 
 import java.util.List;
 
+/**
+ * PathFollow is a steering behavior that uses A* to move towards the path, avoiding any
+ * obstacles in the process by creating intermediate points to move to. The sprite will move
+ * to these points using the {@link Seek} behavior, producing a smooth movement and avoiding
+ * sudden route changes.
+ */
 public final class PathFollow implements Behavior {
 
     private AbstractWaypointSprite sprite;

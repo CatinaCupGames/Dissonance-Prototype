@@ -8,6 +8,11 @@ import com.dissonance.framework.render.RenderService;
 
 import java.util.List;
 
+/**
+ * Leader follow is a behavior that works similarly to the {@link PathFollow}
+ * behavior. It will make the target sprite follow a leader and make sure there's
+ * a certain offset between them.
+ */
 public final class LeaderFollow implements Behavior {
 
     static final float RECALCULATE_DISTANCE = 15f;
