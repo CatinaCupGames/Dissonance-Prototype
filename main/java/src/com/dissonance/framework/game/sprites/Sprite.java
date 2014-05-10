@@ -253,7 +253,27 @@ public abstract class Sprite implements Drawable, Serializable {
         return new Position(x, y);
     }
 
+    private boolean loaded = false;
     public void onLoad() {
+    }
+
+    public final void completeLoading() {
+        if (loaded)
+            throw new IllegalAccessError("This sprite has already been loaded!");
+        loaded = true;
+        _wakeLoaders();
+    }
+
+    public synchronized void waitForLoaded() throws InterruptedException {
+        while (true) {
+            if (loaded)
+                break;
+            super.wait(0L);
+        }
+    }
+
+    private synchronized void _wakeLoaders() {
+        super.notifyAll();
     }
 
     public void onUnload() {

@@ -4,7 +4,6 @@ import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
-import com.sun.accessibility.internal.resources.accessibility;
 
 import java.io.IOException;
 
@@ -31,7 +30,7 @@ public class MPBar extends AbstractUI {
     protected void onOpen() {
         try {
             if (texture == null)
-                texture = Texture.retriveTexture("sprites/menu/player_hud/mbar.png");
+                texture = Texture.retrieveTexture("sprites/menu/player_hud/mbar.png");
 
             setWidth(texture.getTextureWidth());
             setHeight(texture.getTextureHeight());

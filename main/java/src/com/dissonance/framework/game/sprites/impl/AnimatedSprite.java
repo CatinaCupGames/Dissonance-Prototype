@@ -74,6 +74,7 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         if (getTexture() != null) {
             setAnimation(0);
         }
+        super.onLoad();
     }
 
     @Override

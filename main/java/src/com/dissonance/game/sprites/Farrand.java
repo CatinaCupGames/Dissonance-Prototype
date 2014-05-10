@@ -160,11 +160,6 @@ public final class Farrand extends PlayableSprite {
     }
 
     @Override
-    public void render() {
-        super.render();
-    }
-
-    @Override
     public void onLoad() {
         super.onLoad();
         pauseAnimation();

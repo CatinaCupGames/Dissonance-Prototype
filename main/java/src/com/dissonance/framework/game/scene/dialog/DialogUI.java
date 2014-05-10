@@ -81,6 +81,8 @@ public class DialogUI extends AbstractUI {
 
         RenderText.drawString(font, dialog.getCurrentHeader(), (x - bx) + 10f, (y - by) + 5f, Color.white);
         drawText(x - bx, y - by);
+
+        glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
     }
 
     int char_offset;
@@ -254,7 +256,7 @@ public class DialogUI extends AbstractUI {
 
         if (texture_background == null) {
             try {
-                texture_background = Texture.retriveTexture("IND/msgbox.png");
+                texture_background = Texture.retrieveTexture("IND/msgbox.png");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -262,7 +264,7 @@ public class DialogUI extends AbstractUI {
 
         if (texture_header == null) {
             try {
-                texture_header = Texture.retriveTexture("IND/header.png");
+                texture_header = Texture.retrieveTexture("IND/header.png");
             } catch (IOException e) {
                 e.printStackTrace();
             }
