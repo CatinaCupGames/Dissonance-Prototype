@@ -46,7 +46,7 @@ public final class AITestQuest extends AbstractQuest {
                 while(true) {
                     if (InputKeys.isButtonPressed(InputKeys.JUMP)) {
                         if (other.getBehavior() == null) {
-                            other.setBehavior(new Idle(other));
+                            other.setBehavior(new Idle(other, 100));
                         }
                     }
                 }
