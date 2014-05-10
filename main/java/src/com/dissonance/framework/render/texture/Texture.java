@@ -1,6 +1,7 @@
 package com.dissonance.framework.render.texture;
 
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.system.debug.Debug;
 import com.dissonance.framework.system.utils.Validator;
 
 import java.awt.image.BufferedImage;
@@ -24,13 +25,16 @@ public class Texture {
     private String resource;
     protected static final HashMap<String, Texture> cache = new HashMap<String, Texture>();
 
-    public static Texture retriveTexture(String resource) throws IOException {
-        if (cache.containsKey(resource))
+    public static Texture retrieveTexture(String resource) throws IOException {
+        if (cache.containsKey(resource)) {
+            if (Debug.isDebugging()) System.err.println("Getting texture from cache.. (" + resource + ")");
             return cache.get(resource);
+        }
 
         Texture t = TextureLoader.getTexture(resource, GL_TEXTURE_2D, GL_RGBA, GL_NEAREST, GL_NEAREST);
         t.resource = resource;
         cache.put(resource, t);
+        if (Debug.isDebugging()) System.err.println("Saving texture in cache.. (" + resource + ")");
         return t;
     }
 
@@ -143,6 +147,7 @@ public class Texture {
     }
 
     public void dispose() {
+        if (Debug.isDebugging()) System.err.println("Texture dispose request for " + resource);
         if (cache.containsKey(resource))
             cache.remove(resource);
 

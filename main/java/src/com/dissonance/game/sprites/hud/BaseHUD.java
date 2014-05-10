@@ -3,14 +3,9 @@ package com.dissonance.game.sprites.hud;
 import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.render.text.RenderText;
 import com.dissonance.framework.render.texture.Texture;
-import com.dissonance.framework.render.texture.TextureLoader;
-import com.dissonance.framework.system.GameSettings;
 import org.lwjgl.input.Mouse;
-import org.newdawn.slick.TrueTypeFont;
 
-import java.awt.*;
 import java.io.IOException;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -37,7 +32,7 @@ public class BaseHUD extends AbstractUI {
         scale(false);
         try {
             if (texture == null)
-                texture = Texture.retriveTexture("sprites/menu/player_hud/base.png");
+                texture = Texture.retrieveTexture("sprites/menu/player_hud/base.png");
 
             setWidth(texture.getTextureWidth());
             setHeight(texture.getTextureHeight());

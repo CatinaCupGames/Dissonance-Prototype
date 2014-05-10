@@ -1,91 +1,212 @@
 package com.dissonance.framework.game.scene.dialog;
 
-import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.input.InputKeys;
-import com.dissonance.framework.game.sprites.ui.impl.UIElement;
-import com.dissonance.framework.render.Camera;
+import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
+import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.render.text.RenderText;
+import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.sound.Sound;
+import com.dissonance.framework.system.GameSettings;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.TrueTypeFont;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
-import static org.lwjgl.opengl.GL11.glColor4f;
+import static org.lwjgl.opengl.GL11.*;
 
-public class DialogUI extends UIElement {
-    private static DialogUI currentdialog;
+public class DialogUI extends AbstractUI {
+    public static Font original = GameSettings.Display.GAME_FONT;
+    public static TrueTypeFont font;
+    public static TrueTypeFont bold_font;
+    public static TrueTypeFont italic_font;
+    public static TrueTypeFont bold_italic_font;
+    private static Texture texture_background;
+    private static Texture texture_header;
 
     private com.dissonance.framework.game.scene.dialog.Dialog dialog;
     private boolean ended;
-    private float cx;
-    private float cy;
-    private boolean unfreeze;
     private ArrayList<SH> text = new ArrayList<SH>();
-    private static Font font;
-    static Font text_font;
-    private static Font header_font;
-    private static BufferedImage dialog_box;
-    private static BufferedImage dialog_header;
     private long speed = 20L;
+    private boolean autoScroll = false;
 
-    static {
-        font = GameSettings.Display.GAME_FONT;
-        text_font = font.deriveFont(16f);
-        header_font = font.deriveFont(16f);
-        InputStream in = DialogUI.class.getClassLoader().getResourceAsStream("IND/msgbox.png");
-        if (in != null) {
-            try {
-                dialog_box = ImageIO.read(in);
-                in.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        in = DialogUI.class.getClassLoader().getResourceAsStream("IND/header.png");
-        if (in != null) {
-            try {
-                dialog_header = ImageIO.read(in);
-                in.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public DialogUI(Dialog dialog) {
+        this(dialog, false);
     }
 
-    public DialogUI(com.dissonance.framework.game.scene.dialog.Dialog dialog) {
+    public DialogUI(Dialog dialog, boolean autoScroll) {
         super();
         this.dialog = dialog;
+        this.autoScroll = autoScroll;
     }
 
     @Override
-    public void draw(Graphics2D graphics2D) {
-        graphics2D.drawImage(dialog_box, 0, 0, dialog_box.getWidth(), dialog_box.getHeight(), null);
-        graphics2D.setColor(Color.WHITE);
-        if (!dialog.getCurrentHeader().equals("")) {
-            graphics2D.drawImage(dialog_header, 0, 0, dialog_header.getWidth(), dialog_header.getHeight(), null);
-            graphics2D.setFont(header_font);
-            graphics2D.drawString(dialog.getCurrentHeader(), 10, header_font.getSize2D());
-        }
-        drawText(graphics2D);
+    protected void onRender() {
+        glColor4f(1f, 1f, 1f, 1f);
+
+        float x = getX();
+        float y = getY();
+        float z = 0f;
+        float bx = getWidth() / 2f, by = getHeight() / 2f;
+
+        texture_background.bind();
+        glBegin(GL_QUADS);
+        glTexCoord2f(0f, 0f); //bottom left
+        glVertex3f(x - bx, y - by, z);
+        glTexCoord2f(1f, 0f); //bottom right
+        glVertex3f(x + bx, y - by, z);
+        glTexCoord2f(1f, 1f); //top right
+        glVertex3f(x + bx, y + by, z);
+        glTexCoord2f(0f, 1f); //top left
+        glVertex3f(x - bx, y + by, z);
+        glEnd();
+        texture_background.unbind();
+
+        texture_header.bind();
+        glBegin(GL_QUADS);
+        glTexCoord2f(0f, 0f); //bottom left
+        glVertex3f(x - bx, y - by, z);
+        glTexCoord2f(1f, 0f); //bottom right
+        glVertex3f(x + bx, y - by, z);
+        glTexCoord2f(1f, 1f); //top right
+        glVertex3f(x + bx, y + by, z);
+        glTexCoord2f(0f, 1f); //top left
+        glVertex3f(x - bx, y + by, z);
+        glEnd();
+        texture_header.unbind();
+
+        RenderText.drawString(font, dialog.getCurrentHeader(), (x - bx) + 10f, (y - by) + 5f, Color.white);
+        drawText(x - bx, y - by);
+
+        glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
     }
 
-    @Override
-    public void init() {
-        currentdialog = this;
-        setWidth(512);
-        setHeight(64);
-        centerHorizontal();
-        marginBottom(8f);
-        cx = Camera.getX();
-        cy = Camera.getY();
-        if (events != null) {
-            events.onDialogStarted(dialog);
+    int char_offset;
+    int line_offset;
+    int line_start = 0;
+    public void drawText(float x, float y) {
+        ArrayList<SH> used = new ArrayList<SH>();
+        float yoffset = (dialog.getCurrentHeader().equals("") ? 5f : 26f);
+        float xoffset = 10f;
+        xoffset = (x + xoffset);
+        yoffset = (y + yoffset);
+        for (int i = 0; i <= line_offset; i++) {
+            if (i >= 3)
+                break;
+            if (i == line_offset) {
+                int current_char_offset = 0;
+                final int total_chars = getTotalChars(i);
+                boolean ignore = false;
+                while (current_char_offset < char_offset) {
+                    SH current = null;
+                    for (SH s : text) {
+                        if (used.contains(s))
+                            continue;
+                        if (s.line == i && current == null)
+                            current = s;
+                        else if (s.line == i && s.ID < current.ID)
+                            current = s;
+                    }
+                    if (current == null && textOnLine(line_offset + 1)) {
+                        char_offset = 0;
+                        line_offset++;
+                        ignore = true;
+                        break;
+                    } else if (current == null) {
+                        if (!done) completedWhen = System.currentTimeMillis();
+                        done = true;
+                        break;
+                    }
+                    this.speed = current.speed;
+                    char[] array = current.s.getString().toCharArray();
+                    TrueTypeFont font = DialogUI.font;
+                    switch (current.s.getStyle()) {
+                        case BOLD:
+                            font = DialogUI.bold_font;
+                            break;
+                        case ITALIC:
+                            font = DialogUI.italic_font;
+                            break;
+                        case BOLD_ITALIC:
+                            font = DialogUI.bold_italic_font;
+                            break;
+                        default:
+                            break;
+                    }
+                    for (char anArray : array) {
+                        if (current_char_offset >= char_offset)
+                            break;
+                        if (current_char_offset >= total_chars)
+                            break;
+                        RenderText.drawString(font, "" + anArray, xoffset, yoffset, new Color(current.s.getColor().getRed() / 255f, current.s.getColor().getGreen() / 255f, current.s.getColor().getBlue() / 255f));
+                        current_char_offset++;
+                        xoffset += font.getWidth("" + anArray);
+                    }
+                    used.add(current);
+                    array = null;
+                }
+            }
+            else {
+                while (true) {
+                    SH current = null;
+                    for (SH s : text) {
+                        if (used.contains(s))
+                            continue;
+                        if (s.line == i && current == null)
+                            current = s;
+                        else if (s.line == i && s.ID < current.ID)
+                            current = s;
+                    }
+                    if (current == null)
+                        break;
+                    TrueTypeFont font = DialogUI.font;
+                    switch (current.s.getStyle()) {
+                        case BOLD:
+                            font = DialogUI.bold_font;
+                            break;
+                        case ITALIC:
+                            font = DialogUI.italic_font;
+                            break;
+                        case BOLD_ITALIC:
+                            font = DialogUI.bold_italic_font;
+                            break;
+                        default:
+                            break;
+                    }
+                    char[] array = current.s.getString().toCharArray();
+                    for (char anArray : array) {
+                        RenderText.drawString(font, "" + anArray, xoffset, yoffset, new Color(current.s.getColor().getRed() / 255f, current.s.getColor().getGreen() / 255f, current.s.getColor().getBlue() / 255f));
+                        xoffset += font.getWidth("" + anArray);
+                    }
+                    used.add(current);
+                    array = null;
+                }
+            }
+            yoffset += font.getHeight();
+            xoffset = (x + 10);
         }
-        funOnTheBun();
+        used.clear();
+    }
+
+    private int getTotalChars(int line) {
+        int toreturn = 0;
+        for (SH s : text) {
+            if (s.line == line)
+                toreturn += s.s.getString().length();
+        }
+        return toreturn;
+    }
+
+    private boolean textOnLine(int line) {
+        for (SH s : text) {
+            if (s.line == line)
+                return true;
+        }
+        return false;
     }
 
     private void funOnTheBun() {
@@ -119,160 +240,98 @@ public class DialogUI extends UIElement {
             text = text.substring(0, i);
         }
         int line = 0;
-        while (getTotalChars(line) + text.toCharArray().length >= 60)
+        while (getTotalChars(line) + text.length() >= 60)
             line++;
         return line;
     }
 
     @Override
-    public void render() {
-        //The dialog box should always be visible, regardless of the current alpha of the overall
-        //display
-        glColor4f(1f, 1f, 1f, 1f);
-        super.render();
-        glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
+    protected void onOpen() {
+        if (font == null) {
+            font = RenderText.getFont(GameSettings.Display.GAME_FONT.deriveFont(16f), Font.PLAIN);
+            bold_font = RenderText.getFont(GameSettings.Display.GAME_FONT.deriveFont(16f).deriveFont(Font.BOLD), Font.BOLD);
+            italic_font = RenderText.getFont(GameSettings.Display.GAME_FONT.deriveFont(16f).deriveFont(Font.ITALIC), Font.ITALIC);
+            bold_italic_font = RenderText.getFont(GameSettings.Display.GAME_FONT.deriveFont(16f).deriveFont(Font.BOLD | Font.ITALIC), Font.BOLD | Font.ITALIC);
+        }
+
+        if (texture_background == null) {
+            try {
+                texture_background = Texture.retrieveTexture("IND/msgbox.png");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (texture_header == null) {
+            try {
+                texture_header = Texture.retrieveTexture("IND/header.png");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        setWidth(512);
+        setHeight(64);
+        centerHorizontal();
+        marginBottom(8f);
+
+        funOnTheBun();
+
+        if (events != null) {
+            events.onDialogStarted(dialog);
+        }
+
+        currentdialog = this;
     }
 
     private boolean pressed;
     private long lastUpdate = RenderService.getTime();
     private boolean done = false;
-
+    private long completedWhen;
     @Override
     public void update() {
-        boolean fast_moving = InputKeys.isButtonPressed(InputKeys.JUMP);
+        boolean fast_moving = InputKeys.isButtonPressed(InputKeys.JUMP) && !autoScroll;
 
         long speed = this.speed / (fast_moving ? 2 : 1);
         if (RenderService.getTime() - lastUpdate > speed && !done) {
             lastUpdate = RenderService.getTime();
-
             char_offset++;
-            completelyInvalidateView();
         }
 
-        if (cx != Camera.getX() || cy != Camera.getY()) {
-            setX((float) (GameSettings.Display.resolution.getWidth() / 4f)); //TODO Get this to center of screen
-            setY((float) ((GameSettings.Display.resolution.getHeight() / 2f) - (getHeight() / 2f) - 8));
-            cx = Camera.getX();
-            cy = Camera.getY();
+        if (autoScroll) {
+            if (done && System.currentTimeMillis() - completedWhen > 1400) {
+                next();
+            }
         }
 
         if (!pressed) {
             pressed = InputKeys.isButtonPressed(InputKeys.ATTACK) || InputKeys.isButtonPressed(InputKeys.JUMP);
             if (pressed && done) {
-                boolean finished = false;
-                for (SH ignored : text) {
-                    finished = dialog.advanceDialog();
-                }
-                text.clear();
-                char_offset = 0;
-                line_offset = 0;
-                funOnTheBun();
-                done = false;
-                if (finished)
-                    endDialog();
-                else {
-                    Sound.playSound("dialogadvance");
-                    completelyInvalidateView();
-                    if (events != null) {
-                        events.onDialogAdvance(dialog);
-                    }
-                }
+                next();
             }
         } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK) && !InputKeys.isButtonPressed(InputKeys.JUMP)) {
             pressed = false;
         }
     }
 
-    int char_offset;
-    int line_offset;
-    int line_start = 0;
-    public void drawText(Graphics g) {
-        ArrayList<SH> used = new ArrayList<SH>();
-        int yoffset = (int)(dialog.getCurrentHeader().equals("") ? font.getSize2D() : ((font.getSize2D() * 31) + 5));
-        int xoffset = 10;
-        for (int i = 0; i <= line_offset; i++) {
-            if (i >= 3)
-                break;
-            if (i == line_offset) {
-                int current_char_offset = 0;
-                final int total_chars = getTotalChars(i);
-                boolean ignore = false;
-                while (current_char_offset < char_offset) {
-                    SH current = null;
-                    for (SH s : text) {
-                        if (used.contains(s))
-                            continue;
-                        if (s.line == i && current == null)
-                            current = s;
-                        else if (s.line == i && s.ID < current.ID)
-                            current = s;
-                    }
-                    if (current == null && textOnLine(line_offset + 1)) {
-                        char_offset = 0;
-                        line_offset++;
-                        ignore = true;
-                        break;
-                    } else if (current == null) {
-                        done = true;
-                        break;
-                    }
-                    this.speed = current.speed;
-                    for (int z = 0; z < current.s.getString().toCharArray().length; z++) {
-                        if (current_char_offset >= char_offset)
-                            break;
-                        if (current_char_offset  >= total_chars)
-                            break;
-                        g.setFont(current.s.getFont());
-                        g.setColor(current.s.getColor());
-                        g.drawString("" + current.s.getString().toCharArray()[z], xoffset, yoffset);
-                        current_char_offset++;
-                        xoffset += g.getFontMetrics().stringWidth("" + current.s.getString().toCharArray()[z]);
-                    }
-                    used.add(current);
-                }
+    private void next() {
+        boolean finished = false;
+        for (SH ignored : text) {
+            finished = dialog.advanceDialog();
+        }
+        text.clear();
+        char_offset = 0;
+        line_offset = 0;
+        funOnTheBun();
+        done = false;
+        if (finished)
+            endDialog();
+        else {
+            Sound.playSound("dialogadvance").setVolume(0.5f);
+            if (events != null) {
+                events.onDialogAdvance(dialog);
             }
-            else {
-                while (true) {
-                    SH current = null;
-                    for (SH s : text) {
-                        if (used.contains(s))
-                            continue;
-                        if (s.line == i && current == null)
-                            current = s;
-                        else if (s.line == i && s.ID < current.ID)
-                            current = s;
-                    }
-                    if (current == null)
-                        break;
-                    for (int z = 0; z < current.s.getString().toCharArray().length; z++) {
-                        g.setFont(current.s.getFont());
-                        g.setColor(current.s.getColor());
-                        g.drawString("" + current.s.getString().toCharArray()[z], xoffset, yoffset);
-                        xoffset += g.getFontMetrics().charWidth(current.s.getString().toCharArray()[z]);
-                    }
-                    used.add(current);
-                }
-            }
-            yoffset += g.getFontMetrics().getHeight();
-            xoffset = 10;
         }
-    }
-
-    private int getTotalChars(int line) {
-        int toreturn = 0;
-        for (SH s : text) {
-            if (s.line == line)
-                toreturn += s.s.getString().toCharArray().length;
-        }
-        return toreturn;
-    }
-
-    private boolean textOnLine(int line) {
-        for (SH s : text) {
-            if (s.line == line)
-                return true;
-        }
-        return false;
     }
 
     public synchronized void waitForEnd() throws InterruptedException {
@@ -305,17 +364,66 @@ public class DialogUI extends UIElement {
         super.notifyAll();
     }
 
+    private static DialogUI currentdialog;
     public static DialogUI currentDialogBox() {
         return currentdialog;
     }
 
-    public static interface DialogListener {
-        public void onDialogAdvance(Dialog dialog);
-
-        public void onDialogStarted(Dialog dialog);
-
-        public void onDialogEnded();
+    /*
+    Backwards compatiblity methods
+     */
+    @Override
+    protected void onClose() {
+        if (halted) {
+            PlayableSprite.getCurrentlyPlayingSprite().unfreeze(DialogUI.class);
+        }
     }
+    private boolean halted = false;
+
+    /**
+     * Display this dialog box and freeze the player.
+     * @deprecated This method is deprecated. Please use {@link Dialog#displayDialog(String)}
+     */
+    @Deprecated
+    public void displayUI() {
+        displayUI(true);
+    }
+
+    /**
+     * Display this dialog box in world <b>world</b> and don't freeze the player.
+     * @param world The world to display the dialog box in.
+     * @deprecated This method is deprecated. Please use {@link Dialog#displayDialog(String)}
+     */
+    @Deprecated
+    public void displayUI(World world) {
+        displayUI(false, world);
+    }
+
+    /**
+     * Display this dialog box in the currently displaying world.
+     * @param halt Whether or not to freeze the player
+     * @deprecated This method is deprecated. Please use {@link Dialog#displayDialog(String)}
+     */
+    @Deprecated
+    public void displayUI(boolean halt) {
+        displayUI(halt, WorldFactory.getCurrentWorld());
+    }
+
+    /**
+     * Display this dialog box in the world <b>world</b>
+     * @param halt Whether or not to freeze the player
+     * @param world The world to display the dialog box in.
+     * @deprecated This method is deprecated. Please use {@link Dialog#displayDialog(String)}
+     */
+    @Deprecated
+    public void displayUI(boolean halt, World world) {
+        world.addDrawable(this);
+        if (halt && PlayableSprite.getCurrentlyPlayingSprite() != null) {
+            PlayableSprite.getCurrentlyPlayingSprite().freeze(true, DialogUI.class);
+            halted = true;
+        }
+    }
+
 
     private class SH {
         public CustomString s;
@@ -327,5 +435,13 @@ public class DialogUI extends UIElement {
         public int hashCode() {
             return ID;
         }
+    }
+
+    public static interface DialogListener {
+        public void onDialogAdvance(Dialog dialog);
+
+        public void onDialogStarted(Dialog dialog);
+
+        public void onDialogEnded();
     }
 }

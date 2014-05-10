@@ -9,6 +9,8 @@ import com.dissonance.framework.system.utils.Validator;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -20,8 +22,8 @@ public final class NodeMap implements Serializable {
     private Node[][] nodes;
     private int width;
     private int height;
-    private List<Node> openList;
-    private List<Node> closedList;
+    private Queue<Node> openList;
+    private Queue<Node> closedList;
     private World world;
 
     /**
@@ -148,14 +150,14 @@ public final class NodeMap implements Serializable {
      * @param start The position to start from.
      * @param goal  The final position.
      */
-    public final List<Position> findPath(Position start, Position goal) {
+    public final synchronized List<Position> findPath(Position start, Position goal) {
         Validator.validateInRange(start.getX(), 0, width + 1, "start x");
         Validator.validateInRange(start.getY(), 0, height + 1, "start y");
         Validator.validateInRange(goal.getX(), 0, width + 1, "goal x");
         Validator.validateInRange(goal.getY(), 0, height + 1, "goal y");
 
-        openList = new LinkedList<>();
-        closedList = new LinkedList<>();
+        openList = new ConcurrentLinkedQueue<>();
+        closedList = new ConcurrentLinkedQueue<>();
         openList.add(nodes[FastMath.fastFloor(start.x)][FastMath.fastFloor(start.y)]);
 
         Node currentNode;
@@ -222,7 +224,7 @@ public final class NodeMap implements Serializable {
     }
 
     private Node lowestFInOpen() {
-        Node cheapest = openList.get(0);
+        Node cheapest = openList.peek();
         for (Node node : openList) {
             if (node.getFCost() < cheapest.getFCost()) {
                 cheapest = node;

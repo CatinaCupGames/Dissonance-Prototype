@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.world.tiled;
 
+import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.game.world.tiled.impl.ImageLayer;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
@@ -11,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class WorldData {
+    public final HashMap<Integer, TileObject.TexCordHolder> tilesetCordCache = new HashMap<Integer, TileObject.TexCordHolder>();
+
     private int height;
     private int tileheight;
     private int tilewidth;
@@ -62,7 +65,7 @@ public class WorldData {
         return tilesets;
     }
 
-    public TileSet findTileSetFromID(int id) {
+    public TileSet findTileSetFromID(long id) {
         for (TileSet tileSet : tilesets) {
             if (id >= tileSet.getFirstGrid()) {
                 if (tileSet.containsID(id)) {
@@ -88,17 +91,28 @@ public class WorldData {
         }
     }
 
-    public List<Drawable> createDrawables() {
+    public List<Drawable> createDrawables(World w) {
         ArrayList<Drawable> tiles = new ArrayList<Drawable>();
         for (Layer layer : layers) {
             if (layer.isTiledLayer()) {
                 for (int i = 0; i < layer.getTileLayerData().length; i++) {
-                    int id = layer.getTileLayerData()[i];
+                    long id = layer.getTileLayerData()[i];
                     if (id == 0)
                         continue;
+
+                    boolean[] flippedFlags = layer.stripTileRotationFlag(i);
+                    id = layer.getTileLayerData()[i]; //Get id again
+
                     TileSet set = findTileSetFromID(id);
-                    TileObject t = new TileObject(id, set, layer, i);
+                    TileObject t = new TileObject((int)id, set, layer, i);
+
+                    //Save rotation results
+                    t.setFlippedDiagonally(flippedFlags[2]);
+                    t.setFlippedHorizontally(flippedFlags[0]);
+                    t.setFlippedVertically(flippedFlags[1]);
+
                     tiles.add(t);
+                    t.setWorld(w);
                     t.init();
                 }
             } else if (layer.isImageLayer()) {
@@ -145,5 +159,7 @@ public class WorldData {
         for (TileSet sets : tilesets) {
             sets.dispose();
         }
+
+        tilesetCordCache.clear();
     }
 }

@@ -2,8 +2,9 @@ package com.dissonance.framework.render;
 
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.sprites.ui.UI;
+import com.dissonance.framework.game.world.tiled.impl.TileObject;
+import com.dissonance.framework.render.texture.TextureLoader;
 import com.dissonance.framework.system.GameSettings;
-import com.dissonance.framework.game.input.InputService;
 import com.dissonance.framework.game.sprites.animation.AnimationFactory;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.shader.ShaderFactory;
@@ -16,7 +17,10 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GLContext;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Iterator;
+import java.util.Locale;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
@@ -26,6 +30,7 @@ public class RenderService extends Service {
     public static final int ENABLE_CROSS_FADE = 1;
     public static final int CROSS_FADE_DURATION = 2;
     public static final float ZOOM_SCALE = 2f;
+    public static float FPS = 0f;
     public static RenderService INSTANCE;
 
     /****************************************************
@@ -47,6 +52,7 @@ public class RenderService extends Service {
 
     private long startTime;
     private boolean isFading;
+    private boolean isFadingBox;
     private float speed;
     private static float curAlpha;
     private float newAlpha;
@@ -61,11 +67,21 @@ public class RenderService extends Service {
         return Thread.currentThread().getId() == RENDER_THREAD_ID;
     }
 
+    public void fadeInBlackBox(float speed) {
+        if (speed < 5) {
+            curAlpha = 0f;
+            return;
+        }
+        isFadingBox = true;
+        this.speed = speed;
+        startTime = getTime();
+    }
+
     public void fadeToBlack(float speed) {
         fadeToAlpha(speed, 0f);
     }
 
-    public void fadeFromBlack(int speed) {
+    public void fadeFromBlack(float speed) {
         fadeToAlpha(speed, 1f);
     }
 
@@ -156,11 +172,38 @@ public class RenderService extends Service {
         }
     }
 
+    ByteBuffer[] icons;
+    private void loadIcons() throws IOException {
+        final String OS = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
+
+        if (OS.contains("win")) {  //Expects one 32x32 and one 16x16
+            icons = new ByteBuffer[2];
+            icons[0] = TextureLoader.convertImageData(TextureLoader.loadImage("icon_32.png"), null, true);
+            icons[1] = TextureLoader.convertImageData(TextureLoader.loadImage("icon_16.png"), null, true);
+        }
+        else if (OS.contains("mac")) { //Expects one 128x128
+            icons = new ByteBuffer[1];
+            icons[0] = TextureLoader.convertImageData(TextureLoader.loadImage("icon_128.png"), null, true);
+        }
+        else {  //Expects one 32x32
+            icons = new ByteBuffer[1];
+            icons[0] = TextureLoader.convertImageData(TextureLoader.loadImage("icon_32.png"), null, true);
+        }
+    }
+
+
     @Override
     protected void onStart() {
         INSTANCE = this;
 
         RENDER_THREAD_ID = Thread.currentThread().getId();
+
+        try {
+            loadIcons();
+            Display.setIcon(icons);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             setDisplayMode(GameSettings.Display.window_width, GameSettings.Display.window_height, GameSettings.Display.fullscreen);
@@ -171,7 +214,7 @@ public class RenderService extends Service {
             glViewport(0, 0, GameSettings.Display.window_width, GameSettings.Display.window_height);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0f, -1f);
+            glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0.1f, -1f);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
@@ -201,7 +244,6 @@ public class RenderService extends Service {
             }
         }
 
-        ServiceManager.createService(InputService.class);
         started = getTime();
         next_tick = getTime();
     }
@@ -311,7 +353,7 @@ public class RenderService extends Service {
             glLoadIdentity();
             glScalef(ZOOM_SCALE, ZOOM_SCALE, 1f);
 
-            glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
+
             //ROBO //todo change this crap into proper postprocess and per material shaders
             ShaderFactory.executePreRender();
 
@@ -319,28 +361,52 @@ public class RenderService extends Service {
             if (isFading) {
                 long time = getTime() - startTime;
                 curAlpha = Camera.ease(startAlpha, newAlpha, speed, time);
-                if (curAlpha == newAlpha)
+                if (curAlpha == newAlpha) {
                     isFading = false;
+                }
             }
+            if (isFadingBox) {
+                long time = getTime() - startTime;
+                float alpha = Camera.ease(0f, 1f, speed, time);
+                if (alpha == 1f) {
+                    isFadingBox = false;
+                }
+                glColor4f(1f, 1f, 1f, alpha);
+                renderBox();
+            }
+
+            glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
 
             glColor4f(1f, 1f, 1f, curAlpha);
             //ROBO //todo get all these into proper batches
-            Iterator<Drawable> sprites = current_world.getSortedDrawables();
-            while (sprites.hasNext()) {
-                Drawable s = sprites.next();
-                if (s == null)
-                    continue;
-                try {
-                        /*if (d instanceof Sprite) {
-                            if (Camera.isOffScreen((Sprite)d, 2))
-                                continue;
-                        } else if (Camera.isOffScreen(d.getX(), d.getY(), d.getWidth() / 2, d.getHeight() / 2, 2)) //Assume everything is 32x32
-                            continue;*/
-                    if (Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
+
+            if (curAlpha > 0f) {
+                Iterator<Drawable> usprites = current_world.getUnsortedDrawables();
+                while (usprites.hasNext()) {
+                    Drawable s = usprites.next();
+                    if (s == null)
                         continue;
-                    s.render();
-                } catch (Throwable t) {
-                    t.printStackTrace();
+                    try {
+                        if (!s.neverClip() && (!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
+                            continue;
+                        s.render();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
+                }
+
+                Iterator<Drawable> sprites = current_world.getSortedDrawables();
+                while (sprites.hasNext()) {
+                    Drawable s = sprites.next();
+                    if (s == null)
+                        continue;
+                    try {
+                        if (!s.neverClip() && (!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
+                            continue;
+                        s.render();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
                 }
             }
 
@@ -427,7 +493,8 @@ public class RenderService extends Service {
             fpsCount++;
             if (fpsCount == 100) {
                 fpsCount = 0;
-                Display.setTitle("FPS: " + (1000f/fpsTime));
+                FPS = (1000f/fpsTime);
+                Display.setTitle("FPS: " + FPS);
                 fpsTime = 0;
             }
             if (Display.isCloseRequested()) {
@@ -454,9 +521,35 @@ public class RenderService extends Service {
             String errorString = gluErrorString(errorValue);
             System.err.println("ERROR AT: " + errorMessage + " - " + errorString);
 
-            if (Display.isCreated()) Display.destroy();
-            System.exit(-1);
+            /*if (Display.isCreated()) Display.destroy();
+            System.exit(-1);*/
         }
+    }
+
+    private void renderBox() {
+        float w = GameSettings.Display.window_width;
+        float h = GameSettings.Display.window_height;
+        float x = w / 2f;
+        float y = h / 2f;
+        x -= 6;
+        y -= 6;
+        float z = 0f;
+        float bx = (w)/2f;
+        float by = (h)/2f;
+        bx += 2;
+
+        glPushMatrix();
+
+        glBegin(GL_QUADS);
+        glTexCoord2f(0f, 0f); //bottom left
+        glVertex3f(x - bx, y - by, z);
+        glTexCoord2f(1f, 0f); //bottom right
+        glVertex3f(x + bx, y - by, z);
+        glTexCoord2f(1f, 1f); //top right
+        glVertex3f(x + bx, y + by, z);
+        glTexCoord2f(0f, 1f); //top left
+        glVertex3f(x - bx, y + by, z);
+        glEnd();
     }
 
     public World getCurrentDrawingWorld() {
@@ -469,8 +562,6 @@ public class RenderService extends Service {
 
     public static void kill() {
         GameService.handleKillRequest();
-        Service s = ServiceManager.getService(InputService.class);
-        if (s != null) s.terminate();
         Service s2 = ServiceManager.getService(RenderService.class);
         if (s2 != null) s2.terminate();
         killAll();

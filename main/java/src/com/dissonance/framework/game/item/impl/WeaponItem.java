@@ -68,9 +68,25 @@ public class WeaponItem extends Item {
                      * This chunk of code is the sword swiping detection code
                      * =========================================================
                      */
-                    getOwner().setAnimation("sword_swipe");
-                    if (getOwner() instanceof PlayableSprite)
-                        ((PlayableSprite) getOwner()).freeze();
+
+                    if (getOwner() instanceof PlayableSprite) {
+                        ((PlayableSprite)getOwner()).freeze();
+                    }
+
+                    switch (getOwner().getDirection()) {
+                        case UP:
+                            getOwner().setAnimation("swipe_up");
+                            break;
+                        case LEFT:
+                            getOwner().setAnimation("swipe_left");
+                            break;
+                        case RIGHT:
+                            getOwner().setAnimation("swipe_right");
+                            break;
+                        case DOWN:
+                            getOwner().setAnimation("swipe_down");
+                            break;
+                    }
                     float height;
                     float width;
                     Texture texture = getOwner().getTexture();
@@ -172,7 +188,7 @@ public class WeaponItem extends Item {
                             sprite.setAnimationFinishedListener(null);
                             sprite.setAnimationFrameListener(null);
                             if (getOwner() instanceof PlayableSprite) {
-                                ((PlayableSprite) getOwner()).unfreeze();
+                                ((PlayableSprite)getOwner()).unfreeze();
                                 ((PlayableSprite) getOwner()).ignore_movement = false;
                             }
                             sprite.setAnimation(0);
@@ -193,9 +209,20 @@ public class WeaponItem extends Item {
                      * This chunk of code is the sword stabbing detection code
                      * =========================================================
                      */
-                    getOwner().setAnimation("sword_stab");
-                    if (getOwner() instanceof PlayableSprite)
-                        ((PlayableSprite) getOwner()).freeze();
+                    switch (getOwner().getDirection()) {
+                        case UP:
+                            getOwner().setAnimation("stap_up");
+                            break;
+                        case DOWN:
+                            getOwner().setAnimation("stab_down");
+                            break;
+                        case LEFT:
+                            getOwner().setAnimation("stab_left");
+                            break;
+                        case RIGHT:
+                            getOwner().setAnimation("stab_right");
+                            break;
+                    }
 
                     HitBox swordHitbox = new HitBox(0, 0, (facingDirection == Direction.DOWN || facingDirection == Direction.UP ? weapon.getSwipeRange() : 3), (facingDirection == Direction.RIGHT || facingDirection == Direction.LEFT ? weapon.getSwipeRange() : 3));
                     swordHitbox.setX(getOwner().getX());
@@ -242,7 +269,6 @@ public class WeaponItem extends Item {
                             sprite.setAnimationFinishedListener(null);
                             sprite.setAnimationFrameListener(null);
                             if (getOwner() instanceof PlayableSprite) {
-                                ((PlayableSprite) getOwner()).unfreeze();
                                 ((PlayableSprite) getOwner()).ignore_movement = false;
                             }
                             sprite.setAnimation(0);

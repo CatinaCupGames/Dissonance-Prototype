@@ -7,6 +7,10 @@ import java.security.InvalidParameterException;
 import java.util.HashMap;
 
 public class Layer {
+    private static final int FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
+    private static final int FLIPPED_VERTICALLY_FLAG   = 0x40000000;
+    private static final int FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
+
     private int height;
     private int width;
     private String name;
@@ -18,8 +22,9 @@ public class Layer {
     private HashMap<Object, Object> properties;
     private String image; //for type imagelayer
     private TiledObject[] objects; //for type objectgroup
-    private int[] data; //for type tilelayer
+    private long[] data; //for type tilelayer
     private HashMap<Integer, Tile> cache = new HashMap<Integer, Tile>();
+    private HashMap<Integer, Boolean[]> fuckItInTheAsshole = new HashMap<Integer, Boolean[]>();
 
     private int layer_number;
 
@@ -39,9 +44,41 @@ public class Layer {
         if (index < 0 || index >= data.length) {
             return null;
         }
-        Tile t = new Tile(data[index], x, y, this, world);
-        cache.put(index, t);
-        return t;
+        if (fuckItInTheAsshole.containsKey(index)) {
+            Boolean[] values = fuckItInTheAsshole.get(index);
+            Tile t = new Tile(data[index], x, y, this, world, values[0], values[1], values[2]);
+            cache.put(index, t);
+            return t;
+        } else {
+            Tile t = new Tile(data[index], x, y, this, world, false, false, false);
+            cache.put(index, t);
+            return t;
+        }
+    }
+
+    private int gLayer = Integer.MIN_VALUE;
+    public int getGameLayer(World world) {
+        if (gLayer == Integer.MIN_VALUE) {
+            if (!isGroundLayer()) {
+                Layer high = world.getHighestGroundLayer();
+                Layer low = world.getLowestGroundLayer();
+                if (high == null || low == null)
+                    throw new InvalidParameterException("There is no ground layer in this map!");
+                if (high.getLayerNumber() < getLayerNumber())
+                    gLayer = getLayerNumber() - high.getLayerNumber();
+                else if (low.getLayerNumber() > getLayerNumber())
+                    gLayer = getLayerNumber() - low.getLayerNumber();
+                else
+                    throw new InvalidParameterException("There is a non-ground layer in between 2 ground layers! (INVALID LAYER: " + getLayerNumber() + ")");
+            } else
+                gLayer = 0;
+        }
+        return gLayer;
+    }
+
+
+    public boolean isGroundLayer() {
+        return (getProperty("ground") != null && getProperty("ground").equalsIgnoreCase("true"));
     }
 
     public int getLayerNumber() {
@@ -99,8 +136,24 @@ public class Layer {
         return type.equals("tilelayer");
     }
 
-    public int[] getTileLayerData() {
+    public long[] getTileLayerData() {
         return data;
+    }
+
+    public boolean[] stripTileRotationFlag(int index) {
+        long id = data[index];
+        //Check the rotation flags
+        boolean flipH = (id & FLIPPED_HORIZONTALLY_FLAG) > 0;
+        boolean flipL = (id & FLIPPED_VERTICALLY_FLAG)   > 0;
+        boolean flipD = (id & FLIPPED_DIAGONALLY_FLAG)   > 0;
+
+        //Clear the rotation flags
+        data[index] &= ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
+
+        if (flipH || flipL || flipD)
+            fuckItInTheAsshole.put(index, new Boolean[] { flipH, flipL, flipD });
+
+        return new boolean[] { flipH, flipL, flipD };
     }
 
     public String getImageLayerData() {
@@ -121,5 +174,13 @@ public class Layer {
         data = null;
         objects = null;
         properties = null;
+    }
+
+    public boolean isParallaxLayer() {
+        return (getProperty("parallax") != null && getProperty("parallax").equalsIgnoreCase("true"));
+    }
+
+    public void setAlpha(float alpha) {
+        this.opacity = alpha;
     }
 }

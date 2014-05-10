@@ -1,0 +1,11 @@
+<animations
+        width="120"
+        height="70">
+
+    <animation
+            name="billboard1"
+            loop="true"
+            frames="13"
+            row="0"
+            default_speed="200ms"/>
+</animations>

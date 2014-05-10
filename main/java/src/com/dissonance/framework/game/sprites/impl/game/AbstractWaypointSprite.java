@@ -2,8 +2,8 @@ package com.dissonance.framework.game.sprites.impl.game;
 
 import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.ai.astar.Position;
+import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
-import com.dissonance.framework.game.ai.behaviors.BehaviorOffsetFollow;
 import com.dissonance.framework.game.ai.waypoint.WaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
@@ -15,11 +15,12 @@ import java.util.List;
 
 public abstract class AbstractWaypointSprite extends AnimatedSprite implements WaypointSprite {
     private WaypointSpriteEvent.OnWaypointReachedEvent waypointReachedEvent;
-
+    protected WaypointMover waypointMover = WaypointMover.Simple;
     protected Position currentWaypoint;
     protected List<Position> waypointList;
-
+    protected float movementSpeed = 10f;
     private Behavior behavior;
+    private Vector steeringVelocity = new Vector(0, 0);
 
     /**
      * Sets this {@link WaypointSprite WaypointSprite's}
@@ -29,6 +30,14 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
      */
     public void setWaypointReachedListener(WaypointSpriteEvent.OnWaypointReachedEvent waypointReachedListener) {
         this.waypointReachedEvent = waypointReachedListener;
+    }
+
+    public void setWaypointMover(WaypointMover mover) {
+        this.waypointMover = mover;
+    }
+
+    public WaypointMover getWaypointMover() {
+        return waypointMover;
     }
 
     @Override
@@ -43,29 +52,52 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
 
         if (currentWaypoint != null && waypointList != null) {
 
-            if (!WaypointMover.moveSpriteOneFrame(this)) {
+            if (!waypointMover.moveSpriteOneFrame(this)) {
                 if (waypointList != null && waypointList.size() > 0) {
                     currentWaypoint = waypointList.get(0).expand(getWorld().getTiledData().getTileWidth(), getWorld().getTiledData().getTileHeight());
                     waypointList.remove(0);
-
-                    if (behavior != null) {
-                        behavior.waypointStepped();
-                    }
-
                     _wakeup();
                 } else {
                     currentWaypoint = null;
                     _wakeup();
                     if (waypointReachedEvent != null) {
                         waypointReachedEvent.onWaypointReached(this);
-
-                        if (behavior != null) {
-                            behavior.waypointReached();
-                        }
                     }
                 }
             }
         }
+    }
+
+    /*@Override
+    public void render() {
+        super.render();
+
+        if (behavior != null && (behavior instanceof LeaderFollow || behavior instanceof PathFollow)) {
+            glLineWidth(3);
+            glColor3f(255, 0, 0);
+            glBegin(GL_LINE_STRIP);
+            glVertex2f(x, y);
+            for (Position p : (behavior instanceof LeaderFollow ? ((LeaderFollow) behavior).getNodes() : ((PathFollow) behavior).getNodes())) {
+                glVertex2f(p.getX() * 16, p.getY() * 16);
+            }
+            glEnd();
+            glColor3f(0, 255, 0);
+            glBegin(GL_LINE_STRIP);
+            glVertex2f(x, y);
+            glVertex2f(x + steeringVelocity.normalize().x * 25f, y + steeringVelocity.normalize().y * 25f);
+            glEnd();
+            glColor3f(255, 255, 255);
+            glLineWidth(1);
+        }
+    }*/
+
+    @Override
+    public float getMovementSpeed() {
+        return movementSpeed;
+    }
+
+    public void setMovementSpeed(float value) {
+        this.movementSpeed = value;
     }
 
     @Override
@@ -94,6 +126,10 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         }
     }
 
+    public void setWaypoint(float x, float y, WaypointType type){
+        setWaypoint(new Position(x, y), type);
+    }
+
     public void addWaypoint(Position position, WaypointType type) {
         if (waypointList == null) {
             waypointList = new ArrayList<Position>();
@@ -111,16 +147,19 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         }
     }
 
+    public void addWaypoint(float x, float y, WaypointType type){
+        addWaypoint(new Position(x, y), type);
+    }
+
     public void clearWaypoints() {
         if (waypointList != null)
             waypointList.clear();
         currentWaypoint = null;
     }
 
-    public void follow(AbstractWaypointSprite target) {
-        setBehavior(new BehaviorOffsetFollow(this, target, new Position((target.getWidth() / 2f) * 1.5f, (target.getHeight() / 2f) * 1.5f)));
+    public final List<Position> getWaypointList() {
+        return waypointList;
     }
-
     @Override
     public Position getWaypoint() {
         return currentWaypoint;
@@ -132,6 +171,22 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
 
     public void setBehavior(Behavior behavior) {
         this.behavior = behavior;
+    }
+
+    public final void setSteeringVelocity(Vector steeringVelocity) {
+        this.steeringVelocity = steeringVelocity;
+    }
+
+    public final Vector getSteeringVelocity() {
+        return steeringVelocity;
+    }
+
+    public final Vector getPositionVector() {
+        return new Vector(x, y);
+    }
+
+    public final Vector getFeetVector() {
+        return new Vector(x, y + height / 2);
     }
 
     private synchronized void _wakeup() {

@@ -8,6 +8,11 @@ import com.dissonance.framework.render.RenderService;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Represents a Complex Scene. <br></br>
+ *
+ * @see <a href="https://github.com/hypereddie/Dissonance/wiki/Programming%20Scenes#complex-scene">Complex Scenes in Wiki</a>
+ */
 public abstract class ComplexScene implements Scene {
     private ArrayList<Dialog> current_dialog = new ArrayList<Dialog>();
     private boolean sceneStarted;
@@ -84,11 +89,7 @@ public abstract class ComplexScene implements Scene {
         return current_dialog.size() > 0;
     }
 
-    /**
-     * Terminate this scene. <br></br>
-     * Invoking this method will not terminate the scene immediately. You can call {@link com.dissonance.framework.game.scene.Scene#waitForSceneEnd()} to wait for the end of
-     * the scene.
-     */
+
     public void terminateScene() {
         kill = true;
     }
@@ -101,6 +102,10 @@ public abstract class ComplexScene implements Scene {
             throw new RuntimeException("super.onEndScene was not invoked. Please add super.onEndScene to the top of your method.");
     }
 
+    /**
+     * This method is invoked when the scene ends. <br></br>
+     * If you are overriding this method, <b>you must invoke super.onEndScene!</b>
+     */
     protected void onEndScene() {
         scenePlaying = false;
         sceneStarted = false;
@@ -114,6 +119,9 @@ public abstract class ComplexScene implements Scene {
     }
 
     public synchronized void waitForSceneEnd() throws InterruptedException {
+        if (RenderService.isInRenderThread())
+            throw new IllegalAccessError("You cannot access this method in the render thread!");
+
         while (true) {
             if (!sceneStarted)
                 break;

@@ -15,6 +15,10 @@ public final class Position {
         this((int) vector.x, (int) vector.y);
     }
 
+    public Position(Vector vector) {
+        this(vector.x, vector.y);
+    }
+
     public float getX() {
         return x;
     }
@@ -45,6 +49,14 @@ public final class Position {
 
     public static Position subtract(Position a, Position b) {
         return new Position(a.x - b.x, a.y - b.y);
+    }
+
+    public Vector vector() {
+        return new Vector(x, y);
+    }
+
+    public float distance(Position other) {
+        return (float) Math.sqrt((x - other.x) * (x - other.x) + (x - other.x) * (y - other.y));
     }
 
     @Override

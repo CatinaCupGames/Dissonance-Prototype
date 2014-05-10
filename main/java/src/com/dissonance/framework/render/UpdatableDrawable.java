@@ -1,12 +1,12 @@
 package com.dissonance.framework.render;
 
-import com.dissonance.framework.system.annotations.OpenglSafe;
+import com.dissonance.framework.system.annotations.OpenGLSafe;
 
 public interface UpdatableDrawable extends Drawable {
 
-    @OpenglSafe
+    @OpenGLSafe
     public void init();
 
-    @OpenglSafe
+    @OpenGLSafe
     public void update();
 }

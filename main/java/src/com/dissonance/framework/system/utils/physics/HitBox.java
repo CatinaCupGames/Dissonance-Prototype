@@ -120,6 +120,8 @@ public class HitBox {
      * If no objects were found, then a null value is returned.
      */
     public boolean checkForCollision(World world, float startX, float startY, Sprite ignore) {
+        float halfx = (maxX - minX) / 2f;
+        float halfy = (maxY - minY) / 2f;
         for (float x = startX; x < startX + (maxX - minX); x++) {
             for (float y = startY; y < startY + (maxY - minY); y++) {
                 for (PhysicsSprite sprite : cache) {
@@ -138,7 +140,7 @@ public class HitBox {
 
                 Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
                 for (Layer l : layers) {
-                    Tile t = world.getTileAt(FastMath.fastFloor(x / 16f), FastMath.fastFloor(y / 16f), l);
+                    Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), l);
                     if (t != null && !t.isPassable()) {
                         lastCollide = t;
                         return true;
@@ -151,6 +153,8 @@ public class HitBox {
     }
 
     public List<Collidable> checkAndRetrieve(World world, float startX, float startY, Sprite ignore) {
+        float halfx = (maxX - minX) / 2f;
+        float halfy = (maxY - minY) / 2f;
         ArrayList<Collidable> collidables = new ArrayList<Collidable>();
         for (float x = minX + startX; x < startX + (maxX - minX); x++) {
             for (float y = minY + startY; y < startY + (maxY - minY); y++) {
@@ -172,7 +176,7 @@ public class HitBox {
 
                 Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
                 for (Layer l : layers) {
-                    Tile t = world.getTileAt(FastMath.fastFloor(x / 16f), FastMath.fastFloor(y / 16f), l);
+                    Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), l);
                     if (t != null && !t.isPassable()) {
                         if (collidables.contains(t))
                             continue;

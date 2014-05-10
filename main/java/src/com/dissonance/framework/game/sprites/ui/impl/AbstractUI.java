@@ -105,6 +105,16 @@ public abstract class AbstractUI implements UI {
         return height;
     }
 
+    @Override
+    public boolean neverClip() {
+        return false;
+    }
+
+    @Override
+    public boolean neverSort() {
+        return false;
+    }
+
     public void setWidth(float width) {
         this.width = width;
     }

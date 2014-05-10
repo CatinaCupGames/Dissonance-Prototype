@@ -115,14 +115,12 @@ public final class RenderText {
     }
 
     public static TrueTypeFont getFont(Font font, int fontWeight) {
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
         FontStyle style = new FontStyle(font.getFontName(), fontWeight, font.getSize());
         if (fontCache.contains(style))
             return fontCache.get(style);
 
         TrueTypeFont ttf = new TrueTypeFont(font, ANTI_ALIAS);
         fontCache.put(style, ttf);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
         return ttf;
     }
 
@@ -153,15 +151,15 @@ public final class RenderText {
     }
 
     public static void drawString(TrueTypeFont font, String text, float x, float y) {
-        RenderService.removeScale(); //Do not scale the font up
+        //RenderService.removeScale(); //Do not scale the font up
         font.drawString((int)x, (int)y, text);
-        RenderService.resetScale(); //Reset the scale for other sprites
+        //RenderService.resetScale(); //Reset the scale for other sprites
     }
 
     public static void drawString(TrueTypeFont font, String text, float x, float y, org.newdawn.slick.Color color) {
-        RenderService.removeScale(); //Do not scale the font up
+        //RenderService.removeScale(); //Do not scale the font up
         font.drawString((int)x, (int)y, text, color);
-        RenderService.resetScale(); //Reset the scale for other sprites
+        //RenderService.resetScale(); //Reset the scale for other sprites
     }
 }
 

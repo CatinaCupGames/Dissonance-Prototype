@@ -56,7 +56,6 @@ public class WorldFactory {
         }
 
         World w = new World(index == -1 ? random.nextInt() : index);
-        //World w = new World(index == -1 ? random.nextInt() : index);
         w.init();
         w.load(name);
         System.out.println("[World Factory] " + w.getName() + " loaded into memory.");
@@ -159,12 +158,12 @@ public class WorldFactory {
             }
             currentWorld.onUnload();
         }
-        try {
-            newworld.waitForWorldLoaded();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        newworld.onDisplay();
+        RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+            @Override
+            public void run() {
+                newworld.onDisplay();
+            }
+        });
         lastWorld = currentWorld;
         currentWorld = newworld;
         System.out.println("[World Factory] New World: " + currentWorld.getName() + ", Old World: " + (lastWorld == null ? "null" : lastWorld.getName()));
@@ -215,6 +214,17 @@ public class WorldFactory {
                     break;
                 }
             }
+        }
+    }
+
+    public static void clearCache() {
+        for (int i = 0; i < WORLD_CACHE_LIMIT; i++) {
+            if (cacheWorlds[i] == null || GameService.getCurrentWorld().getID() == cacheWorlds[i].world.getID())
+                continue;
+            System.out.println("[World Factory] Disposing " + cacheWorlds[i].world.getName() + ".");
+            cacheWorlds[i].world.onDispose();
+            cacheWorlds[i] = null;
+            worldCount--;
         }
     }
 

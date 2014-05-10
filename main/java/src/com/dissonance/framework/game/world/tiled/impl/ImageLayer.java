@@ -50,7 +50,7 @@ public class ImageLayer extends Sprite {
     @Override
     public void onLoad() {
         try {
-            texture = Texture.retriveTexture(path);
+            texture = Texture.retrieveTexture(path);
             setTexture(texture);
         } catch (IOException e) {
             e.printStackTrace();

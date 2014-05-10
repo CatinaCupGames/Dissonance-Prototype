@@ -1,10 +1,12 @@
 package com.dissonance.framework.game.scene.dialog;
 
+import com.dissonance.framework.render.text.RenderText;
+import org.newdawn.slick.TrueTypeFont;
+
 import java.awt.*;
 
 public class CustomString {
     private String text;
-    private Font font;
     private Style style;
     private boolean append;
     private Color color = Color.WHITE;
@@ -21,20 +23,6 @@ public class CustomString {
     public CustomString(String text, Style style, boolean append) {
         this.text = text;
         this.style = style;
-        switch (style) {
-            case NORMAL:
-                font = DialogUI.text_font;
-                break;
-            case BOLD:
-                font = DialogUI.text_font.deriveFont(Font.BOLD);
-                break;
-            case ITALIC:
-                font = DialogUI.text_font.deriveFont(Font.ITALIC);
-                break;
-            case BOLD_ITALIC:
-                font = DialogUI.text_font.deriveFont(Font.BOLD | Font.ITALIC);
-                break;
-        }
         this.append = append;
     }
 
@@ -66,10 +54,6 @@ public class CustomString {
 
     public long getSpeed() {
         return speed;
-    }
-
-    public Font getFont() {
-        return font;
     }
 
     public boolean isAppend() {
