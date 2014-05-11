@@ -1,61 +1,221 @@
 <game_dialog>
-    <dialog dialog_id="testscene-p1" >
-        <header>mootykins</header>
-        <message>POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP POOP </message>
+
+    <dialog dialog_id="Outdoor Scene">
+        <header>Jeremiah</header>
+        <message>This is ridiculous.</message>
+
+        <header>Farrand</header>
+        <message speed="100">What?</message>
+        
+        <header>Jeremiah</header>
+        <message>The whole "no mounts" thing. This trip took us, like, three days.</message>
+        <message style="italic" type="append">I don't think my feet even exist anymore.</message>
+
+        <header>Farrand</header>
+        <message>Well, what do you want me to do about it? The rules are there for a reason.</message>
+        
+        <header>Jeremiah</header>
+        <message>What reason can you think of for us walking across the entire damn provence? </message>
+        <message style="italic" type="append">Tell me, Farrand.</message>
+
+        <header>Farrand</header>
+        <message style="italic">Well, </message>
+        <message type="append">for one, horses eat things they're not supposed to. </message>
+        <message type="append">They're invasive.</message>
+        
+        <header>Jeremiah</header>
+        <message>Then we can bring some feed or something. You're a higher up now, </message>
+        <message type="append">why don't you bring the issue to a meeting?</message>
+
+        <header>Farrand</header>
+        <message>Oh, so then I can be "Farrand: Patron of Sloth" for the rest of my life. </message>
+        <message type="append">Proposing amendments isn't taken lightly, you know.</message>
+        
+        <header>Jeremiah</header>
+        <message>Well, I guess so. Still... </message>
+        <message style="italic" type="append">three days</message>
+        <message type="append">, man.</message>
+
+        <header>Farrand</header>
+        <message>You shouldn't be calling me </message>
+        <message style="italic" type="append">man</message>
+        <message type="append">, either. </message>
+        <message type="append"> We need to get into the habit of being professional</message>
+        <message>if I want to make good first impressions as a sage.</message>
+
+        <header>Jeremiah</header>
+        <message>Yeah, whatever... What matters now is that we got here.</message>
+
+        <header>Farrand</header>
+        <message>Yes. Now let's try to make this go smoothly. Remember: weapons down, </message>
+        <message type="append">do not act out, and let me do the talking.</message>
     </dialog>
 
-    <dialog dialog_id="testscene-p2" >
-        <header>mootykins</header>
-        <message style="bold" type="new">Its to dangerous to go alone!</message>
-
-        <message type="append"> Take this!</message>
-    </dialog>
-
-    <dialog dialog_id="arrem">
-        <header>Arrem</header>
-        <message>Scootaloo is not a chicken Eddie!</message>
+    <dialog dialog_id="Outdoor Scene p2">
+        <header>Farrand</header>
+        <message>Emphasis on "let me do the talking".</message>
     </dialog>
 
 
-
-    <dialog dialog_id="testingTrigger">
-        <header>Max Kek</header>
-        <message style="bold" color="#1d1d1d">Kek </message>
-        <message type = "append" speed="1" color="white">LITERALLY END UR LIFE XDDDDD REDIT</message>
-        <message speed="500">:^)</message>
+    <dialog dialog_id="movement1">
+        <header>Guard</header>
+        <message>Come on now. I thought you guys knew how to use </message>
+        <message color="green" style="bold" type="append">WASD</message>
     </dialog>
 
-    <dialog dialog_id="testTrigger2">
-        <header>Mom</header>
-        <message>Please don't do that......</message>
+    <dialog dialog_id="movement2">
+        <header>Guard</header>
+        <message>I'm really getting fed up now. </message>
+        <message style="bold|italic" type="append">Lets go.</message>
     </dialog>
 
-    <dialog dialog_id="shader-test">
-        <header>SHADERS!!!</header>
-        <message>ACTIVATE SHADER POWERS!!!!!!!</message>
+    <dialog dialog_id="movement3">
+        <header>Guard</header>
+        <message>If you haven't figured it out yet..press </message>
+        <message style="bold" type="append">W A S D</message>
+        <message type="append"> on your keyboard to move.</message>
+    </dialog>
+
+    <dialog dialog_id="entering_zesilia1">
+        <header>Jeremiah</header>
+        <message>Farrand, we have arrived at the Gates of Zeslia.</message>
+
+        <header>Farrand</header>
+        <message>Good.</message>
+    </dialog>
+    <dialog dialog_id="entering_zesilia2">
+        <header>Guard</header>
+        <message>AHAHAHFUAHFUA</message>
+
+        <header>Farrand</header>
+        <message>HOPAHAPAHAPAHPAHA</message>
+
+        <header>Guard</header>
+        <message>You are permitted to enter.</message>
+    </dialog>
+
+    <dialog dialog_id="road to waldos house">
+        <header>Jeremiah</header>
+        <message speed="600">....</message>
+
+        <header>Jeremiah</header>
+        <message speed="39">So... Mighty nice weather we are having today aren't we?</message>
+
+        <header>Guard</header>
+        <message>Waldomar has ordered we keep contact to a minimum.</message>
+
+        <header>Jeremiah</header>
+        <message>Oh ok then...</message>
+
+    </dialog>
+    <dialog dialog_id="Waldos meeting">
+        <header>Waldomar</header>
+        <message>Ah, Farrand, the man of the hour! I was worried you would keep us waiting!</message>
+        <message type="append">So, did my little crew here give you a warm welcome?</message>
+
+        <header>Farrand</header>
+        <message>Sure...</message>
+
+        <header>Waldomar</header>
+        <message>...Please, make yourself comfortable! </message>
+        <message type="append">Would you like a cigar?</message>
+
+        <header>Farrand</header>
+        <message>No, thank you. I would rather get straight to the point.</message>
+
+        <header>Waldomar</header>
+        <message>Well then, by all means! Tell me, why have we gathered here today?</message>
+
+        <header>Farrand</header>
+        <message>I have come to order the halt of the Adlers' urban expansion project.</message>
+        <message type="append">As I am sure you are aware, industrialization poses a threat to </message>
+
+        <header>Farrand</header>
+        <message>both our environment and to our state of social well-being.</message>
+
+        <header>Waldomar</header>
+        <message>You have come to "halt me and my expansion"?</message>
+
+        <header>Waldomar</header>
+        <message>Why, whatever do you mean by that?</message>
+
+        <header>Farrand</header>
+        <message>You know as well as I do what it means... Your further expansion</message>
+        <message type="append">is a clear violation of the Candidus Treaty.</message>
+
+        <header>Waldomar</header>
+        <message>Ah, but Farrand, it would be selfish to keep all that land to yourself.</message>
+
+        <header>Farrand</header>
+        <message>What’s selfish is the lavish lifestyle you live while your followers starve!</message>
+
+        <header>Waldomar</header>
+        <message>The state of my own followers is their doing. They are free </message>
+        <message type="append">to work and live as they please.</message>
+
+        <header>Waldomar</header>
+        <message>They don't have imposed reproduction rights or live in blasted huts eating </message>
+        <message type="append">leaves and berries like animals!</message>
+
+        <header>Farrand</header>
+        <message>The citizens of Isthmo do not live like animals! They are simply respecting </message>
+        <message type="append">the laws that uphold our survival. </message>
+
+        <header>Farrand</header>
+        <message>I know your type Waldomar, your thirst for power is unquenchable, </message>
+        <message type="append">you will not be satisfied until you have completely stripped  </message>
+
+        <header>Farrand</header>
+        <message>this land of all of it’s resources in exchange for material wealth!</message>
+
+        <header>Farrand</header>
+        <message>It was because of people like you in the old world that Isthmo Candidus was </message>
+        <message type="append">created as a safe haven from ecological destruction in the first place, and </message>
+
+        <header>Farrand</header>
+        <message>I'll be damned if I let you have an inch more of it! </message>
+
+        <header>Waldomar</header>
+        <message>...Farrand, you do realize that this is sounding like more and more of</message>
+        <message type="append">a threat on your part. I do not take kindly to threats...</message>
+
+
+    </dialog>
+
+    <dialog dialog_id="waldomeeting2">
+        <header>Jeremiah</header>
+        <message style="bold">Farrand!</message>
+    </dialog>
+
+    <dialog dialog_id="waldomeeting3">
+        <header>Jeremiah</header>
+        <message speed="10">The window!</message>
+    </dialog>
+    <dialog dialog_id="GateScene2">
+        <header>Guard</header>
+        <message>Welcome. You two are with Nuado Provence, right?</message>
+
+        <header>Farrand</header>
+        <message>I am. My name is Farrand.</message>
+
+        <header>Guard</header>
+        <message>Very well. And who's the commoner?</message>
+
+        <header>Jeremiah</header>
+        <message speed="10" style="italic">Hey, now you wait just a min-</message>
+
+        <header>Farrand</header>
+        <message>This is Jeremiah, my bodyguard.</message>
+
+        <header>Guard</header>
+        <message>Ah, okay. Step on the conveyor and let us lead the way.</message>
     </dialog>
 
 
-    <dialog dialog_id="TEST" >
-        <header>The Old Man</header>
-        <message color="red" style="italic">Hello...</message>
-        <message type="append"> my name is Alexander..</message>
-        <message style="bold">AAAAAAAAA BBBBBBBBBBBBB CCCCCCCCCCC APPLE SAUCE</message>
-        <message type="append" style="italic">WHAT IS GOING ON, I DONT EVEN KNOW ANYMORE..</message>
-        <header>The Old Man</header>
-        <message>How's it going...</message>
 
-        <message>...Be..Because I'm fine...</message>
-    </dialog>
 
-    <dialog dialog_id="TEST2" >
-        <header>TEST1</header>
-        <message>Hello...</message>
-
-        <header>TEST2</header>
-        <message>How's it going..</message>
-        <image>reaction1.png</image>
-
-        <message>...Be..Because I'm fine...</message>
+	<dialog dialog_id="fds">
+        <header>poop</header>
+		<message>poop</message>
     </dialog>
 </game_dialog>

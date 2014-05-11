@@ -8,6 +8,7 @@ import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.render.shader.impl.EdgeGlowShader;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.Validator;
@@ -20,9 +21,11 @@ import java.security.InvalidParameterException;
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class Sprite implements Drawable, Serializable {
+    private static EdgeGlowShader EDGE_SHADER;
     private SpriteEvent.SpriteMovedEvent spriteMoved;
 
     protected transient Texture texture;
+    protected boolean visible = true;
     protected transient World world;
     protected Direction direction;
     protected float x, y, width, height;
@@ -30,6 +33,7 @@ public abstract class Sprite implements Drawable, Serializable {
     protected boolean hasTint;
     protected int layer = 1;
     protected boolean isTeleporting;
+    protected boolean glowing;
 
     public static Sprite fromClass(Class<?> class_) {
         if (!Sprite.class.isAssignableFrom(class_))
@@ -56,10 +60,26 @@ public abstract class Sprite implements Drawable, Serializable {
         return isTeleporting;
     }
 
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
     public Direction getDirection() {
         if (direction == null)
             direction = Direction.DOWN;
         return direction;
+    }
+
+    public void glow() {
+        glowing = true;
+    }
+
+    public void removeGlow() {
+        glowing = false;
     }
 
     public void setTint(Color color) {
@@ -160,8 +180,8 @@ public abstract class Sprite implements Drawable, Serializable {
         if (lowest == null)
             return null;
 
-        int x = (int) (getX() / 32);
-        int y = (int) (getY() / 32);
+        int x = (int) (getX() / 16f);
+        int y = (int) (getY() / 16f);
 
         return lowest.getTileAt(x, y, world);
     }
@@ -233,7 +253,27 @@ public abstract class Sprite implements Drawable, Serializable {
         return new Position(x, y);
     }
 
+    private boolean loaded = false;
     public void onLoad() {
+    }
+
+    public final void completeLoading() {
+        if (loaded)
+            throw new IllegalAccessError("This sprite has already been loaded!");
+        loaded = true;
+        _wakeLoaders();
+    }
+
+    public synchronized void waitForLoaded() throws InterruptedException {
+        while (true) {
+            if (loaded)
+                break;
+            super.wait(0L);
+        }
+    }
+
+    private synchronized void _wakeLoaders() {
+        super.notifyAll();
     }
 
     public void onUnload() {
@@ -241,10 +281,25 @@ public abstract class Sprite implements Drawable, Serializable {
     }
 
     @Override
+    public boolean neverClip() {
+        return false;
+    }
+
+    @Override
+    public boolean neverSort() {
+        return false;
+    }
+
+    @Override
     public void render() {
+        if (!visible)
+            return;
+        if (glowing) {
+            renderGlow();
+        }
         getTexture().bind();
-        float bx = width / 2;
-        float by = height / 2;
+        float bx = width / 2f;
+        float by = height / 2f;
         final float x = getX(), y = getY();
         float z = 0f;
         //float z = -(y - (by / 2));
@@ -252,7 +307,7 @@ public abstract class Sprite implements Drawable, Serializable {
         if (hasTint) {
             float alpha = RenderService.getCurrentAlphaValue();
             if (a < 1) {
-                alpha = this.a - (1 - RenderService.getCurrentAlphaValue());
+                alpha = this.a - (1f - RenderService.getCurrentAlphaValue());
                 if (alpha < 0)
                     alpha = 0;
             }
@@ -273,6 +328,34 @@ public abstract class Sprite implements Drawable, Serializable {
         glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
     }
 
+    protected boolean glowPass = false;
+    protected void renderGlow() {
+        if (glowPass)
+            return;
+        if (EDGE_SHADER == null) {
+            EDGE_SHADER = new EdgeGlowShader();
+            EDGE_SHADER.build();
+        }
+        EDGE_SHADER.preRender();
+
+        float oWidth = getWidth();
+        float oHeight = getHeight();
+
+        setWidth(oWidth + 4);
+        setHeight(oHeight + 4);
+
+        glowPass = true;
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        render();
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glowPass = false;
+
+        setWidth(oWidth);
+        setHeight(oHeight);
+
+        EDGE_SHADER.postRender();
+    }
+
     @Override
     public int compareTo(Drawable o) {
         if (o instanceof UI)
@@ -284,8 +367,8 @@ public abstract class Sprite implements Drawable, Serializable {
             else {
                 //float by = (getTexture() != null ? getTexture().getTextureHeight() / (this instanceof TileObject ? 2 : 4) : 0);
                 //float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / (s instanceof TileObject ? 2 : 4) : 0);
-                float by = getHeight();
-                float sy = s.getHeight();
+                float by = getHeight() / 2f;
+                float sy = s.getHeight() / 2f;
                 return (int) ((getY() - by) - (s.getY() - sy));
             }
         }

@@ -1,5 +1,6 @@
 package com.dissonance.framework.system.utils.physics;
 
+import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.Tile;
@@ -119,6 +120,8 @@ public class HitBox {
      * If no objects were found, then a null value is returned.
      */
     public boolean checkForCollision(World world, float startX, float startY, Sprite ignore) {
+        float halfx = (maxX - minX) / 2f;
+        float halfy = (maxY - minY) / 2f;
         for (float x = startX; x < startX + (maxX - minX); x++) {
             for (float y = startY; y < startY + (maxY - minY); y++) {
                 for (PhysicsSprite sprite : cache) {
@@ -133,13 +136,14 @@ public class HitBox {
                 if (list.size() > 0) {
                     lastCollide = list.get(0);
                     return true;
-                } else {
-                    for (Layer l : world.getLayers(LayerType.TILE_LAYER)) {
-                        Tile t = world.getTileAt(x, y, l);
-                        if (t != null && !t.isPassable()) {
-                            lastCollide = t;
-                            return true;
-                        }
+                }
+
+                Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
+                for (Layer l : layers) {
+                    Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), l);
+                    if (t != null && !t.isPassable()) {
+                        lastCollide = t;
+                        return true;
                     }
                 }
             }
@@ -149,6 +153,8 @@ public class HitBox {
     }
 
     public List<Collidable> checkAndRetrieve(World world, float startX, float startY, Sprite ignore) {
+        float halfx = (maxX - minX) / 2f;
+        float halfy = (maxY - minY) / 2f;
         ArrayList<Collidable> collidables = new ArrayList<Collidable>();
         for (float x = minX + startX; x < startX + (maxX - minX); x++) {
             for (float y = minY + startY; y < startY + (maxY - minY); y++) {
@@ -166,12 +172,15 @@ public class HitBox {
                             continue;
                         collidables.add(t);
                     }
-                } else {
-                    for (Layer l : world.getLayers(LayerType.TILE_LAYER)) {
-                        Tile t = world.getTileAt(x, y, l);
-                        if (t != null && !t.isPassable() && !collidables.contains(t)) {
-                            collidables.add(t);
-                        }
+                }
+
+                Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
+                for (Layer l : layers) {
+                    Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), l);
+                    if (t != null && !t.isPassable()) {
+                        if (collidables.contains(t))
+                            continue;
+                        collidables.add(t);
                     }
                 }
             }

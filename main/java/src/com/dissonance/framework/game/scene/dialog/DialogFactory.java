@@ -14,13 +14,14 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 
 public class DialogFactory {
-    private static final HashMap<String, Dialog>  text = new HashMap<String, Dialog>();
+    public static final HashMap<String, Dialog> text = new HashMap<String, Dialog>();
 
     public static boolean loadDialog(InputStream in) {
-        if (in == null)
+        if (in == null) {
             return false;
+        }
 
-        DocumentBuilder db = null;
+        DocumentBuilder db;
         try {
             db = SpriteTexture.DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
             Document dom = db.parse(in);
@@ -37,6 +38,8 @@ public class DialogFactory {
                         continue;
                     }
 
+
+
                     NodeList nodelist = el.getElementsByTagName("message");
                     CustomString[] lines;
                     if (nodelist != null && nodelist.getLength() > 0) {
@@ -45,17 +48,13 @@ public class DialogFactory {
                             if (nodelist.item(ii) == null)
                                 continue;
                             String text = nodelist.item(ii).getFirstChild().getNodeValue();
+                            boolean auto = false;
                             Style style = Style.NORMAL;
-                            Color color = null;
+                            Color color = Color.WHITE;
                             long speed = 15L;
                             if (nodelist.item(ii).getAttributes().getNamedItem("style") != null) {
                                 String stype = nodelist.item(ii).getAttributes().getNamedItem("style").getNodeValue();
-                                for (Style l : Style.values()) {
-                                    if (l.name().toLowerCase().equals(stype)) {
-                                        style = l;
-                                        break;
-                                    }
-                                }
+                                style = Style.forId(stype);
                             }
                             if (nodelist.item(ii).getAttributes().getNamedItem("color") != null) {
                                 String scolor = nodelist.item(ii).getAttributes().getNamedItem("color").getNodeValue();
@@ -86,6 +85,9 @@ public class DialogFactory {
                             if (nodelist.item(ii).getAttributes().getNamedItem("type") != null) {
                                 append = nodelist.item(ii).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase("append");
                             }
+                            if (nodelist.item(ii).getAttributes().getNamedItem("autoEnd") != null) {
+                                auto = nodelist.item(ii).getAttributes().getNamedItem("autoEnd").getNodeValue().equalsIgnoreCase("true");
+                            }
                             lines[ii] = new CustomString(text, style, append, color, speed);
                         }
                     } else {
@@ -93,13 +95,27 @@ public class DialogFactory {
                     }
 
                     nodelist = el.getElementsByTagName("header");
+                    NodeList all = el.getElementsByTagName("*");
                     String[] headers;
                     if (nodelist != null && nodelist.getLength() > 0) {
-                        headers = new String[nodelist.getLength()];
+                        headers = new String[lines.length];
                         for (int ii = 0; ii < nodelist.getLength(); ii++) {
                             if (nodelist.item(ii) == null)
                                 continue;
-                            headers[ii] = nodelist.item(ii).getFirstChild().getNodeValue();
+                            int hi = 0;
+                            if (all != null && all.getLength() > 0) {
+                                for (int pew = 0; pew < all.getLength(); pew++) {
+                                    if (all.item(pew) == null)
+                                        continue;
+                                    String tit = all.item(pew).getNodeName();
+                                    if (tit.equalsIgnoreCase("message"))
+                                        hi++;
+                                    if (all.item(pew).isSameNode(nodelist.item(ii))) {
+                                        break;
+                                    }
+                                }
+                            }
+                            headers[hi] = nodelist.item(ii).getFirstChild().getNodeValue();
                         }
                     } else {
                         headers = new String[0];
@@ -153,9 +169,11 @@ public class DialogFactory {
         return loadDialog(in);
     }
 
+    public static void unloadAll() {
+        text.clear();
+    }
+
     public static Dialog getDialog(String ID) {
-        if (!text.containsKey(ID))
-            return null;
         return text.get(ID);
     }
 }

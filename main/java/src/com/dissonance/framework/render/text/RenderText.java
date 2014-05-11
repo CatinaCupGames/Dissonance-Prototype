@@ -1,10 +1,10 @@
 package com.dissonance.framework.render.text;
 
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.GameSettings;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.opengl.TextureImpl;
 
 import java.awt.*;
 import java.io.IOException;
@@ -115,14 +115,12 @@ public final class RenderText {
     }
 
     public static TrueTypeFont getFont(Font font, int fontWeight) {
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
         FontStyle style = new FontStyle(font.getFontName(), fontWeight, font.getSize());
         if (fontCache.contains(style))
             return fontCache.get(style);
 
         TrueTypeFont ttf = new TrueTypeFont(font, ANTI_ALIAS);
         fontCache.put(style, ttf);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
         return ttf;
     }
 
@@ -153,8 +151,15 @@ public final class RenderText {
     }
 
     public static void drawString(TrueTypeFont font, String text, float x, float y) {
-        TextureImpl.bindNone(); //Tell Slick-Util there is no texture bound, so it will rebind the font texture again
-        font.drawString(x, y, text);
+        //RenderService.removeScale(); //Do not scale the font up
+        font.drawString((int)x, (int)y, text);
+        //RenderService.resetScale(); //Reset the scale for other sprites
+    }
+
+    public static void drawString(TrueTypeFont font, String text, float x, float y, org.newdawn.slick.Color color) {
+        //RenderService.removeScale(); //Do not scale the font up
+        font.drawString((int)x, (int)y, text, color);
+        //RenderService.resetScale(); //Reset the scale for other sprites
     }
 }
 

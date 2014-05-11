@@ -7,8 +7,10 @@ import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteAnimationInfo;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.game.sprites.Farrand;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.awt.*;
 import java.security.InvalidParameterException;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -24,7 +26,7 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     private transient SpriteAnimationInfo animation;
     private transient int speed;
     private int nMovementCount = 0;
-    private boolean movementDetect = false;
+    protected boolean movementDetect = false;
     private float oX, oY;
 
     /**
@@ -72,6 +74,7 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         if (getTexture() != null) {
             setAnimation(0);
         }
+        super.onLoad();
     }
 
     @Override
@@ -79,14 +82,40 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         AnimationFactory.removeAnimator(ANIMATION_FACTORY_ID);
     }
 
+    private long lastX, lastY;
+    private Direction lastDirX, lastDirY;
+
+    /**
+     * Change the X position of this AnimatedSprite without checking for animation
+     * direction
+     * @param x The X position to set this animated sprites x to.
+     */
+    public void teleportX(float x) {
+        super.setX(x);
+    }
+
+    /**
+     * Change the Y position of this AnimatedSprite without checking for animation
+     * direction
+     * @param y The Y position to set this animated sprites x to.
+     */
+    public void teleportY(float y) {
+        super.setY(y);
+    }
+
     @Override
     public void setX(float x) {
         movementDetect = true;
         if (this.x > x) { //Left
-            onMovement(Direction.LEFT);
+            long dur = System.currentTimeMillis() - lastY;
+            onMovement(dur < 50 ? Direction.LEFT.add(lastDirY) : Direction.LEFT);
+            lastDirX = Direction.LEFT;
         } else if (this.x < x) {
-            onMovement(Direction.RIGHT);
+            long dur = System.currentTimeMillis() - lastY;
+            onMovement(dur < 50 ? Direction.RIGHT.add(lastDirY) : Direction.RIGHT);
+            lastDirX = Direction.RIGHT;
         }
+        lastX = System.currentTimeMillis();
         super.setX(x);
     }
 
@@ -102,10 +131,15 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     public void setY(float y) {
         movementDetect = true;
         if (this.y > y) {
-            onMovement(Direction.UP);
+            long dur = System.currentTimeMillis() - lastX;
+            onMovement(dur < 50 ? Direction.UP.add(lastDirX) : Direction.UP);
+            lastDirY = Direction.UP;
         } else if (this.y < y) {
-            onMovement(Direction.DOWN);
+            long dur = System.currentTimeMillis() - lastX;
+            onMovement(dur < 50 ? Direction.DOWN.add(lastDirX) : Direction.DOWN);
+            lastDirY = Direction.DOWN;
         }
+        lastY = System.currentTimeMillis();
         super.setY(y);
     }
 
@@ -147,11 +181,37 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         return animation;
     }
 
+    public ToastText toastText(String text) {
+        ToastText toast = new ToastText(this, text, 750);
+        getWorld().loadAndAdd(toast);
+
+        return toast;
+    }
+
+    public ToastText toastText(String text, float duration) {
+        ToastText toast = new ToastText(this, text, duration);
+        getWorld().loadAndAdd(toast);
+
+        return toast;
+    }
+
+    public ToastText toastText(String text, float duration, Color color) {
+        ToastText toast = new ToastText(this, text, duration);
+        toast.setTint(color);
+        getWorld().loadAndAdd(toast);
+
+        return toast;
+    }
+
     @Override
     public void render() {
-	    //ROBO //todo fix all this shit
+        if (!visible)
+            return;
         if (texture == null)
             return;
+        if (glowing) {
+            super.renderGlow();
+        }
         texture.bind();
         float bx = width / 2;
         float by = height / 2;
@@ -214,7 +274,8 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
                 oX = -1;
                 oY = -1;
             }
-        }
+        } else if (!isAnimationPaused() && !movementDetect)
+            movementDetect = true;
     }
 
     private boolean paused;
@@ -255,12 +316,13 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         if (paused)
             return;
         if (texture != null) {
+            int lastFrame = getCurrentFrame();
             texture.step();
             if (animationFrame != null) {
                 animationFrame.onAnimationFrame(this);
             }
             if (animationFinished != null) {
-                if (getCurrentFrame() == 0 || getCurrentFrame() == getFrameCount() - 1)
+                if (getCurrentFrame() == 0 || getCurrentFrame() == lastFrame) //If it looped back or if it didn't advance
                     animationFinished.onAnimationFinished(this);
             }
         }

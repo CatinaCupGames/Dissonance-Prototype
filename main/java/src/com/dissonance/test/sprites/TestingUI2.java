@@ -24,7 +24,7 @@ public class TestingUI2 extends AbstractUI {
     public void update() { }
 
     @Override
-    public void render() {
+    public void onRender() {
         float bx = width / 2f, by = height / 2f;
         float z = 0;
         float x = getX(), y = getY();

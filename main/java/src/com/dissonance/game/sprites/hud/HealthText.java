@@ -5,6 +5,7 @@ import com.dissonance.framework.render.text.RenderText;
 import com.dissonance.framework.system.GameSettings;
 import org.lwjgl.opengl.NVDrawTexture;
 import org.newdawn.slick.*;
+import sun.java2d.pipe.TextRenderer;
 
 import java.awt.*;
 import java.awt.Font;
@@ -35,9 +36,8 @@ public class HealthText extends AbstractUI {
     public void update() { }
 
     @Override
-    public void render() {
-        super.render();
-        font.drawString(getX(), getY(), "HP:" + (int)baseHUD.getHealth() + "/" + 100, new org.newdawn.slick.Color(1f, 1f, 1f, getAlpha()));
-        super.resetAlpha();
+    public void onRender() {
+        RenderText.drawString(font, "HP:" + (int)baseHUD.getHealth() + "/" + 100, getX(), getY(), new org.newdawn.slick.Color(1f, 1f, 1f, getAlpha()));
+        //font.drawString(getX(), getY(), "HP:" + (int)baseHUD.getHealth() + "/" + 100, new org.newdawn.slick.Color(1f, 1f, 1f, getAlpha()));
     }
 }

@@ -36,7 +36,7 @@ public class HealthBar extends AbstractUI {
     protected void onOpen() {
         try {
             if (texture == null)
-                texture = Texture.retriveTexture("sprites/menu/player_hud/hbar.png");
+                texture = Texture.retrieveTexture("sprites/menu/player_hud/hbar.png");
 
             setWidth(texture.getTextureWidth());
             setHeight(texture.getTextureHeight());
@@ -99,8 +99,7 @@ public class HealthBar extends AbstractUI {
     }
 
     @Override
-    public void render() {
-        super.render();
+    public void onRender() {
         if (texture == null)
             return;
         float x = getX(), y = getY(), bx = getWidth() / 2f, by = getHeight() / 2f, z = 0;
@@ -119,6 +118,5 @@ public class HealthBar extends AbstractUI {
         glVertex3f(x - bx, y + by, z);
         glEnd();
         texture.unbind();
-        super.resetAlpha();
     }
 }

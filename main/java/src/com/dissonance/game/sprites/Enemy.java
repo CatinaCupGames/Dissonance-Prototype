@@ -1,5 +1,6 @@
 package com.dissonance.game.sprites;
 
+import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 
 import java.util.Random;
@@ -11,7 +12,6 @@ public class Enemy extends CombatSprite {
     private final String spriteName;
     private final StatType statType;
     private final CombatType combatType;
-    private final AIInterface ai;
 
     private int attack;
     private int defense;
@@ -88,8 +88,6 @@ public class Enemy extends CombatSprite {
         super.update();
         if (isUpdateCanceled())
             return;
-
-        ai.onUpdate(this);
     }
 
     @Override
@@ -136,8 +134,8 @@ public class Enemy extends CombatSprite {
         MAGIC, NON_MAGIC
     }
 
-    private static int[] generateStats(int points, StatType type) { //in case someone else does enemies, remove docs
-        return getRandomStats(new int[STAT_COUNT], points, type, (points / 4)); //when done cause private method
+    private static int[] generateStats(int points, StatType type) {
+        return getRandomStats(new int[STAT_COUNT], points, type, (points / 4));
     }
 
     private static int[] getRandomStats(int[] statArray, int points, StatType type, int valueCap) {
@@ -173,12 +171,16 @@ public class Enemy extends CombatSprite {
         return spriteName;
     }
 
-    public Enemy(String spriteName, StatType statType, CombatType combatType, AIInterface ai) {
+    public Enemy(String spriteName, StatType statType, CombatType combatType) {
         this.spriteName = spriteName;
         this.statType = statType;
         this.combatType = combatType;
-        this.ai = ai;
         setLevel(1);
+    }
+
+    public Enemy(String spriteName, StatType statType, CombatType combatType, Behavior behavior) {
+        this(spriteName, statType, combatType);
+        setBehavior(behavior);
     }
 
     /**
@@ -213,10 +215,6 @@ public class Enemy extends CombatSprite {
                 "\n defense: " + defense + "\n speed: " + speed + "\n vigor: " + vigor + "\n stamina: " + stamina +
                 "\n willPower: " + willPower + "\n focus: " + focus + "\n marksmanship: " + marksmanship +
                 "\n magicResistance: " + magicResistance + "\n]\n]";
-    }
-
-    public interface AIInterface {
-        public void onUpdate(Enemy enemy);
     }
 
 }

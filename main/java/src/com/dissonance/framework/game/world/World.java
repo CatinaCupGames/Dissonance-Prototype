@@ -2,21 +2,27 @@ package com.dissonance.framework.game.world;
 
 import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.sprites.Sprite;
-import com.dissonance.framework.game.sprites.ui.UI;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
+import com.dissonance.framework.game.sprites.ui.UI;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.game.world.tiled.WorldData;
+import com.dissonance.framework.game.world.tiled.impl.TileObject;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
+import com.dissonance.framework.render.framebuffer.Framebuffer;
 import com.dissonance.framework.render.shader.impl.Light;
 import com.dissonance.framework.render.shader.impl.LightShader;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.system.ServiceManager;
+import com.dissonance.framework.system.debug.Debug;
+import com.dissonance.framework.system.debug.DebugSprite;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Timer;
 import com.dissonance.framework.system.utils.Validator;
@@ -40,10 +46,12 @@ public final class World {
     private static LightShader lightShader;
 
     private transient final ArrayList<Drawable> drawable = new ArrayList<>();
+    private transient final ArrayList<Drawable> unsorted = new ArrayList<>();
     private String name;
     private NodeMap nodeMap;
     private int ID;
     private transient RenderService renderingService;
+    private transient Framebuffer frame;
     private boolean invalid = true;
     private boolean loaded = false;
     private boolean showing = false;
@@ -112,104 +120,132 @@ public final class World {
     }
 
     public void load(final String world) throws WorldLoadFailedException {
-        if (renderingService == null)
-            throw new WorldLoadFailedException("The RenderService was not created! Try calling World.init() before loading a world.");
-
         name = world;
         InputStream in = getClass().getClassLoader().getResourceAsStream("worlds/" + world + ".json");
         if (in != null) {
             try {
                 tiledData = GSON.fromJson(new InputStreamReader(in), WorldData.class);
-                renderingService.runOnServiceThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (lightShader == null) { //Only build the shader on the render thread
-                            lightShader = new LightShader();
-                            lightShader.build();
-                        }
-
-                        tiledData.loadAllTileSets();
-                        tiledData.assignAllLayers();
-                        System.out.println("Creating tiles..");
-                        long ms = System.currentTimeMillis();
-                        drawable.addAll(tiledData.createDrawables());
-                        System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
-                        tiledData.loadTriggers();
-                        if (loader == null) {
-                            System.out.println("Searching for loader..");
-                            if (tiledData.getProperty("loader") != null) {
-                                try {
-                                    Class<?> class_ = Class.forName(tiledData.getProperty("loader"));
-                                    if (WorldLoader.class.isAssignableFrom(class_)) {
-                                        WorldLoader trueLoader = (WorldLoader) class_.newInstance();
-                                        loader = ProxyFactory.createSafeObject(trueLoader, WorldLoader.class);
-                                    }
-                                } catch (Exception e) {
-                                    loader = attemptSearchForWorldLoader();
-                                }
-                            } else {
-                                loader = attemptSearchForWorldLoader();
-                            }
-
-                            if (loader != null) {
-                                loader.onLoad(World.this);
-                            } else {
-                                System.out.println("No loader found..");
-                            }
-                        } else {
-                            loader.onLoad(World.this);
-                        }
-
-                        loaded = true;
-                        _wakeLoadWaiters();
-                    }
-                });
+                tiledData.loadTriggers();
 
                 nodeMap = new NodeMap(this, tiledData.getWidth(), tiledData.getHeight());
-
                 nodeMap.readMap();
-                in.close();
             } catch (Exception e) {
-                throw new WorldLoadFailedException("Error loading Tiled file!", e);
-            }
-        } else { //Find and invoke WorldLoader for this world
-            renderingService.runOnServiceThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (lightShader == null) { //Only build the shader on the render thread
-                        lightShader = new LightShader();
-                        lightShader.build();
-                    }
-
-                    if (loader == null) {
-                        loader = attemptSearchForWorldLoader();
-                        if (loader != null)
-                            loader.onLoad(World.this);
-                    } else {
-                        loader.onLoad(World.this);
-                    }
-
-                    loaded = true;
-                    _wakeLoadWaiters();
+                throw new WorldLoadFailedException("Error loading Tiled file! (" + name + ")", e);
+            } finally {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            });
+            }
         }
+        if (loader == null) {
+            System.out.println("Searching for loader..");
+            if (tiledData != null && tiledData.getProperty("loader") != null) {
+                try {
+                    Class<?> class_ = Class.forName(tiledData.getProperty("loader"));
+                    if (WorldLoader.class.isAssignableFrom(class_)) {
+                        WorldLoader trueLoader = (WorldLoader) class_.newInstance();
+                        loader = ProxyFactory.createSafeObject(trueLoader, WorldLoader.class);
+                    }
+                } catch (Exception e) {
+                    loader = attemptSearchForWorldLoader();
+                }
+            } else {
+                loader = attemptSearchForWorldLoader();
+            }
+
+            if (loader != null) {
+                loader.onLoad(World.this);
+            } else {
+                System.out.println("No loader found..");
+            }
+        } else {
+            loader.onLoad(World.this);
+        }
+
+        loaded = true;
 
         if (renderingService.isPaused())
             renderingService.resume();
     }
 
-    public synchronized void waitForWorldLoaded() throws InterruptedException {
-        while (true) {
-            if (loaded)
-                break;
-            super.wait(0L);
+    public void prepareTiles() {
+        if (!RenderService.isInRenderThread())
+            throw new IllegalAccessError("You must be on the render thread to prepare tiles!");
+        if (tiledData == null)
+            return;
+        if (lightShader == null) { //Only build the shader on the render thread
+            lightShader = new LightShader();
+            lightShader.build();
         }
+
+        tiledData.loadAllTileSets(); //OpenGL safe needed
+        tiledData.assignAllLayers();
+        System.out.println("Creating tiles..");
+        long ms = System.currentTimeMillis();
+        drawable.addAll(tiledData.createDrawables(World.this)); //OpenGL safe needed
+        if (Debug.isDebugging()) {
+            DebugSprite debug = new DebugSprite();
+            debug.display(World.this);
+        }
+        System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
+        System.out.println("Attempting to generate frame buffer..");
+
+        //== OpenGL safe needed ==
+        if (GameSettings.Graphics.useFBO && tiledData.getPixelWidth() > GameSettings.Display.window_width / 2f && tiledData.getPixelHeight() > GameSettings.Display.window_height / 2f) {
+            try {
+                Framebuffer frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
+                frame.generate();
+                frame.begin();
+                invalid = false;
+
+                Iterator<Drawable> drawableIterator = getSortedDrawables();
+                while (drawableIterator.hasNext()) {
+                    Drawable d = drawableIterator.next();
+                    if (d instanceof TileObject) {
+                        TileObject t = (TileObject) d;
+                        if (t.isGroundLayer() && !t.isParallaxLayer() && !t.isAnimated()) {
+                            t.renderIgnoreFade();
+                            drawableIterator.remove();
+                        }
+                    }
+                }
+
+                frame.end();
+                System.out.println("Success!");
+                addDrawable(frame);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+                System.err.println("Framebuffers are not supported! Legacy rendering will be used!");
+                GameSettings.Graphics.useFBO = false;
+                try {
+                    GameSettings.saveGameSettings();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        //== OpenGL safe needed ==
+
+        invalidateDrawableList(); //Be sure to invalidate the drawable list
+
+    }
+    private void loadTiles() {
+
     }
 
-    private synchronized void _wakeLoadWaiters() {
-        super.notifyAll();
+    /**
+     *
+     * @throws InterruptedException
+     * @deprecated This method is deprecated because worlds are now loaded in the same thread as the invoker.
+     */
+    @Deprecated
+    public synchronized void waitForWorldLoaded() throws InterruptedException { }
+
+    private final DisplayWaiters waiter = new DisplayWaiters();
+    public synchronized void waitForWorldDisplayed() throws InterruptedException {
+        waiter._wait();
     }
 
     private WorldLoader attemptSearchForWorldLoader() {
@@ -226,6 +262,7 @@ public final class World {
 
     public Iterator<Drawable> getSortedDrawables() {
         if (invalid) {
+            if (Debug.isDebugging()) System.err.println("Sorting Drawables!");
             Collections.sort(drawable);
             invalid = false;
         }
@@ -306,7 +343,10 @@ public final class World {
                         run.run();
                     return;
                 }
-                drawable.add(draw);
+                if (!draw.neverSort())
+                    drawable.add(draw);
+                else
+                    unsorted.add(draw);
                 if (draw instanceof UpdatableDrawable) {
                     UpdatableDrawable ud = (UpdatableDrawable) draw;
                     //UpdatableDrawable proxyUd = ProxyFactory.createSafeObject(ud, UpdatableDrawable.class);
@@ -335,6 +375,7 @@ public final class World {
             public void run() {
                 sprite.setWorld(World.this);
                 sprite.onLoad();
+                sprite.completeLoading();
                 if (sprite instanceof CombatSprite)
                     combatCache.add((CombatSprite) sprite);
             }
@@ -359,11 +400,47 @@ public final class World {
     }
 
     public void onDisplay() { //This method is called when the world is displayed on the screen
+        prepareTiles();
+
         showing = true;
-        lightShader.addAll(lights);
-        lightShader.setOverallBrightness(worldBrightness);
+
+        if (lightShader != null) {
+            lightShader.addAll(lights);
+            lightShader.setOverallBrightness(worldBrightness);
+        }
+
         if (loader != null)
             loader.onDisplay(this);
+
+        waiter._wakeAllWaiters();
+
+        if (tiledData != null) {
+            float minX = 0f, minY = 0f;
+            float tWidth = (tiledData.getWidth() * tiledData.getTileWidth());
+            float tHeight = (tiledData.getHeight() * tiledData.getTileHeight());
+            float removeX = 0f, removeY = 0f;
+            if (tWidth > (GameSettings.Display.game_width / 2f) + 16f)
+                removeX = (GameSettings.Display.game_width / 2f) + 16f;
+            else {
+                Camera.removeBounds();
+                return;
+            }
+            if (tHeight > (GameSettings.Display.game_height / 2f) + 16f)
+                removeY = (GameSettings.Display.game_height / 2f) + 16f;
+            else {
+                Camera.removeBounds();
+                return;
+            }
+
+            Camera.setBounds(
+                    minX,
+                    minY,
+                    tWidth - removeX,
+                    tHeight - removeY
+            );
+        } else {
+            Camera.removeBounds();
+        }
     }
 
     public void onUnload() { //This method is called when the world is not shown but is still in memory
@@ -376,9 +453,13 @@ public final class World {
 
     public void onDispose() {
         drawable.clear();
+        unsorted.clear();
         udrawables.clear();
         combatCache.clear();
-        tiledData.dispose();
+
+        if (tiledData != null) tiledData.dispose();
+        if (frame != null) frame.dispose();
+
         renderingService = null;
     }
 
@@ -446,7 +527,7 @@ public final class World {
             @Override
             public void run() {
                 try {
-                    Texture t = Texture.retriveTexture(resource);
+                    Texture t = Texture.retrieveTexture(resource);
                     sprite.setTexture(t);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -538,6 +619,8 @@ public final class World {
      */
     public List<TiledObject> getPolygonsAt(float x, float y) {
         ArrayList<TiledObject> objects = new ArrayList<TiledObject>();
+        if (tiledData == null)
+            return objects;
         Layer[] objLayers = getLayers(LayerType.OBJECT_LAYER);
         for (Layer layer : objLayers) {
             for (TiledObject obj : layer.getObjectGroupData()) {
@@ -550,6 +633,8 @@ public final class World {
     }
 
     public TiledObject getSpawn(String name) {
+        if (tiledData == null)
+            return null;
         Layer[] objLayers = getLayers(LayerType.OBJECT_LAYER);
         for (Layer layer : objLayers) {
             for (TiledObject obj : layer.getObjectGroupData()) {
@@ -570,6 +655,8 @@ public final class World {
     }
 
     public Tile getTileAt(float x, float y, int layernumber) {
+        if (tiledData == null)
+            return null;
         Validator.validateNotBelow(layernumber, 0, "layer");
         Validator.validateNotOver(layernumber, tiledData.getLayers().length, "layer");
         Layer l = tiledData.getLayers()[layernumber];
@@ -578,6 +665,8 @@ public final class World {
     }
 
     public Layer[] getLayers(LayerType type) {
+        if (tiledData == null)
+            return new Layer[0];
         List<Layer> layers = new ArrayList<Layer>();
         for (Layer l : tiledData.getLayers()) {
             if (l.getLayerType() == type)
@@ -591,12 +680,68 @@ public final class World {
         return tiledData.getLayers();
     }
 
+    public Layer getLowestGroundLayer() {
+        if (tiledData == null)
+            return null;
+
+        Layer lowestLayer = null;
+        Layer[] layers = getLayers(LayerType.TILE_LAYER);
+        for (Layer l : layers) {
+            if (!l.isGroundLayer())
+                continue;
+            if (lowestLayer == null) {
+                lowestLayer = l;
+            } else if (lowestLayer.getLayerNumber() > l.getLayerNumber())
+                lowestLayer = l;
+        }
+
+        return lowestLayer;
+    }
+
+    public Layer getHighestGroundLayer() {
+        if (tiledData == null)
+            return null;
+
+        Layer highestLayer = null;
+        Layer[] layers = getLayers(LayerType.TILE_LAYER);
+        for (Layer l : layers) {
+            if (!l.isGroundLayer())
+                continue;
+            if (highestLayer == null) {
+                highestLayer = l;
+            } else if (highestLayer.getLayerNumber() < l.getLayerNumber())
+                highestLayer = l;
+        }
+
+        return highestLayer;
+    }
+
+    /**
+     * Returns the width of the world in tiles.
+     */
     public int getWidth() {
         return tiledData.getWidth();
     }
 
+    /**
+     * Returns the width of the world in pixels.
+     */
+    public int getPixelWidth() {
+        return tiledData.getWidth() * tiledData.getTileWidth();
+    }
+
+    /**
+     * Returns the height of the world in tiles.
+     */
     public int getHeight() {
         return tiledData.getHeight();
+    }
+
+    /**
+     * Returns the height of the world in pixels.
+     */
+    public int getPixelHeight() {
+        return tiledData.getHeight() * tiledData.getTileHeight();
     }
 
     public String getName() {
@@ -621,5 +766,28 @@ public final class World {
 
     public int getDrawableCount() {
         return drawable.size();
+    }
+
+    public int getUpdatableCount() {
+        return this.udrawables.size();
+    }
+
+    public Iterator<Drawable> getUnsortedDrawables() {
+        return unsorted.iterator();
+    }
+
+    private class DisplayWaiters {
+
+        public synchronized void _wait() throws InterruptedException {
+            while (true) {
+                if (World.this.showing)
+                    break;
+                super.wait(0L);
+            }
+        }
+
+        public synchronized void _wakeAllWaiters() {
+            super.notifyAll();
+        }
     }
 }

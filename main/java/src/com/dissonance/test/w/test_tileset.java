@@ -11,8 +11,8 @@ package com.dissonance.test.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.shader.impl.Light;
+import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.w.GameWorldLoader;
-import com.dissonance.test.sprites.TestNPC;
 
 import java.awt.*;
 
@@ -22,10 +22,14 @@ public class test_tileset extends GameWorldLoader {
     public void onLoad(World w) {
         super.onLoad(w);
 
-        TestNPC npc3 = new TestNPC();
-        w.loadAndAdd(npc3);
-        npc3.setX(100);
-        npc3.setY(100);
+        Jeremiah j = new Jeremiah();
+        w.loadAndAdd(j);
+        j.setX(50);
+        j.setY(50);
+        j.joinParty(farrand);
+        j.setVisible(false);
+
+
         final long start = System.currentTimeMillis();
 
         w.createLight(0f, 0f, 1.6f, 0.3f);

@@ -26,7 +26,7 @@ public class SpriteTexture extends Texture {
 
 
     public static SpriteTexture retrieveSpriteTexture(String sprite_name) throws IOException {
-        SpriteTexture texture = new SpriteTexture(Texture.retriveTexture("sprites/" + sprite_name + "/" + sprite_name + "_sheet.png"));
+        SpriteTexture texture = new SpriteTexture(Texture.retrieveTexture("sprites/" + sprite_name + "/" + sprite_name + "_sheet.png"));
         InputStream in = texture.getClass().getClassLoader().getResourceAsStream("sprites/" + sprite_name + "/" + sprite_name + ".xml");
         if (in != null) {
             try {

@@ -18,7 +18,7 @@ public class MPTip extends AbstractUI {
     protected void onOpen() {
         try {
             if (texture == null)
-                texture = Texture.retriveTexture("sprites/menu/player_hud/mtip.png");
+                texture = Texture.retrieveTexture("sprites/menu/player_hud/mtip.png");
 
             setWidth(texture.getTextureWidth());
             setHeight(texture.getTextureHeight());
@@ -43,8 +43,7 @@ public class MPTip extends AbstractUI {
     }
 
     @Override
-    public void render() {
-        super.render();
+    public void onRender() {
         if (!visible)
             return;
         if (texture == null)
@@ -64,7 +63,6 @@ public class MPTip extends AbstractUI {
         glVertex3f(x - bx, y + by, z);
         glEnd();
         texture.unbind();
-        super.resetAlpha();
     }
 
     public boolean isVisible() {

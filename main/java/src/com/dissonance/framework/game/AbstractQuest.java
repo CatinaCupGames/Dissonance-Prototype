@@ -1,7 +1,6 @@
 package com.dissonance.framework.game;
 
 import com.dissonance.framework.game.scene.Scene;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.WorldPackage;
@@ -9,7 +8,6 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.exceptions.QuestNotFoundException;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.proxyhelper.ProxyFactory;
-import sun.plugin2.message.helper.ProxyHelper;
 
 public abstract class AbstractQuest {
     private AbstractQuest next;
@@ -45,10 +43,10 @@ public abstract class AbstractQuest {
         //TODO Resume everything and get rid of pause menu
     }
 
-    public World getWorld() {
+    public World getWorld() {/*
         if (PlayableSprite.getCurrentlyPlayingSprite() != null && PlayableSprite.getCurrentlyPlayingSprite().getWorld() != world) {
             world = PlayableSprite.getCurrentlyPlayingSprite().getWorld();
-        }
+        }*/
         if (world == null && RenderService.INSTANCE != null) {
             world = RenderService.INSTANCE.getCurrentDrawingWorld();
         }
@@ -56,7 +54,15 @@ public abstract class AbstractQuest {
     }
 
     public void setWorld(World world) {
-        WorldFactory.swapView(world, true);
+        if (RenderService.INSTANCE == null) {
+            try {
+                world.waitForWorldLoaded();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        RenderService.INSTANCE.provideData(false, RenderService.ENABLE_CROSS_FADE);
+        WorldFactory.swapView(world, false);
         System.out.println("New world swapped to " + world.getID());
         this.world = world;
     }

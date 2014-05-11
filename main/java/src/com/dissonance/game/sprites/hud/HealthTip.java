@@ -18,7 +18,7 @@ public class HealthTip extends AbstractUI {
     protected void onOpen() {
         try {
             if (texture == null)
-                texture = Texture.retriveTexture("sprites/menu/player_hud/htip.png");
+                texture = Texture.retrieveTexture("sprites/menu/player_hud/htip.png");
 
             setWidth(texture.getTextureWidth());
             setHeight(texture.getTextureHeight());
@@ -44,8 +44,7 @@ public class HealthTip extends AbstractUI {
 
     private float otemp = 0;
     @Override
-    public void render() {
-        super.render();
+    public void onRender() {
         if (!visible)
             return;
         if (texture == null)
@@ -65,7 +64,6 @@ public class HealthTip extends AbstractUI {
         glVertex3f(x - bx, y + by, z);
         glEnd();
         texture.unbind();
-        super.resetAlpha();
     }
 
     public boolean isVisible() {

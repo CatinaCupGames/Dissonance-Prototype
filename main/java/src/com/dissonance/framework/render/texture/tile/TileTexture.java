@@ -85,7 +85,7 @@ public class TileTexture extends Texture {
         float y = 0;
         int step = (pos - 1) % perrow;
         int row = 0;
-        for (int i = 0; i != pos - 1; i++) {
+        for (int i = 0; i != pos; i++) {
             if (i % perrow == 0 && i != 0)
                 row++;
         }

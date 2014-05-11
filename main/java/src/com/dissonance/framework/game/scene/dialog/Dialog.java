@@ -13,32 +13,40 @@ public class Dialog {
     private String id;
 
     public static void displayDialog(String dialog_id) {
+        displayDialog(dialog_id, false);
+    }
+
+    public static void displayDialog(String dialog_id, boolean autoScroll) {
         Dialog dialog = DialogFactory.getDialog(dialog_id);
         if (dialog == null)
             return;
 
-        DialogUI ui = new DialogUI(dialog);
+        DialogUI ui = new DialogUI(dialog, autoScroll);
 
-        World world;
+        World world = GameService.getCurrentWorld();
+        if (world == null) {
+            if (RenderService.INSTANCE != null)
+                world = RenderService.INSTANCE.getCurrentDrawingWorld();
+            else
+                throw new RuntimeException("No world could be found to bound the UI to!");
+        }
         PlayableSprite player = PlayableSprite.getCurrentlyPlayingSprite();
         boolean halt = true;
-        if (player == null) {
-            world = GameService.getCurrentWorld();
-            if (world == null) {
-                if (RenderService.INSTANCE != null)
-                    world = RenderService.INSTANCE.getCurrentDrawingWorld();
-                else
-                    throw new RuntimeException("No world could be found to bound the UI to!");
-            }
-        } else {
+        if (player != null) {
             halt = !player.isFrozen();
-            world = player.getWorld();
         }
-        ui.displayUI(halt, world);
+        if (halt && PlayableSprite.getCurrentlyPlayingSprite() != null) {
+            PlayableSprite.getCurrentlyPlayingSprite().freeze(true, Dialog.class);
+        }
+        ui.display(world);
         try {
             ui.waitForEnd();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+
+        if (halt && PlayableSprite.getCurrentlyPlayingSprite() != null) {
+            PlayableSprite.getCurrentlyPlayingSprite().unfreeze(Dialog.class);
         }
     }
 
@@ -66,13 +74,12 @@ public class Dialog {
     }
 
     public String getCurrentHeader() {
-        if (index >= header.length && header.length > 0) {
-            return header[header.length - 1];
-        } else if (index < header.length) {
-            return header[index];
-        } else {
-            return "";
+        int i = index;
+        while (i >= header.length || header[i] == null) {
+            i--;
         }
+
+        return header[i];
     }
 
     public String getCurrentImagePath() {
@@ -92,6 +99,10 @@ public class Dialog {
 
     public CustomString[] getAllLines() {
         return lines;
+    }
+
+    public String[] getHeaders() {
+        return header;
     }
 
     void reset() {

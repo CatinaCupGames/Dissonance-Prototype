@@ -60,9 +60,7 @@ public final class Light {
         LightShader.lightUpdate = false;
     }
 
-    public void
-
-    setColor(Color color) {
+    public void setColor(Color color) {
         this.color = color;
         LightShader.lightUpdate = false;
     }

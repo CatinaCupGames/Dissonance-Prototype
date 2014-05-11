@@ -15,6 +15,10 @@ public final class Position {
         this((int) vector.x, (int) vector.y);
     }
 
+    public Position(Vector vector) {
+        this(vector.x, vector.y);
+    }
+
     public float getX() {
         return x;
     }
@@ -23,12 +27,12 @@ public final class Position {
         this.x = x;
     }
 
-    public Position expand() {
-        return new Position(FastMath.fastFloor(x * 32), FastMath.fastFloor(y * 32));
+    public Position expand(float xfactor, float yfactor) {
+        return new Position(FastMath.fastFloor(x * xfactor), FastMath.fastFloor(y * yfactor));
     }
 
-    public Position shrink() {
-        return new Position(FastMath.fastFloor(x / 32), FastMath.fastFloor(y / 32));
+    public Position shrink(float xfactor, float yfactor) {
+        return new Position(FastMath.fastFloor(x / xfactor), FastMath.fastFloor(y / yfactor));
     }
 
     public float getY() {
@@ -45,6 +49,14 @@ public final class Position {
 
     public static Position subtract(Position a, Position b) {
         return new Position(a.x - b.x, a.y - b.y);
+    }
+
+    public Vector vector() {
+        return new Vector(x, y);
+    }
+
+    public float distance(Position other) {
+        return (float) Math.sqrt((x - other.x) * (x - other.x) + (x - other.x) * (y - other.y));
     }
 
     @Override

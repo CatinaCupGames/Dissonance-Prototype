@@ -7,8 +7,6 @@ import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.GameSettings;
-
-import javax.swing.plaf.nimbus.AbstractRegionPainter;
 import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.glColor4f;
@@ -22,6 +20,7 @@ public abstract class AbstractUI implements UI {
     private AbstractUI parent;
     private float[] alignment = new float[] { 0, 0, 0, 0 }; //Alignment for textures
     private ArrayList<UI> children = new ArrayList<>();
+    private boolean scale = true;
 
     public AbstractUI() {
         this(null);
@@ -29,6 +28,14 @@ public abstract class AbstractUI implements UI {
 
     public AbstractUI(AbstractUI parent) {
         setParent(parent);
+    }
+
+    public void scale(boolean value) {
+        this.scale = value;
+    }
+
+    public boolean isScaling() {
+        return scale;
     }
 
     public float getAlpha() {
@@ -40,7 +47,10 @@ public abstract class AbstractUI implements UI {
     }
 
     @Override
-    public void render() {
+    public final void render() {
+        if (!scale) {
+            RenderService.removeScale();
+        }
         float alpha = RenderService.getCurrentAlphaValue();
         if (this.alpha < 1) {
             alpha = this.alpha - (1 - RenderService.getCurrentAlphaValue());
@@ -48,11 +58,14 @@ public abstract class AbstractUI implements UI {
                 alpha = 0;
         }
         glColor4f(1f, 1f, 1f, alpha);
+        onRender();
+        glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
+        if (!scale) {
+            RenderService.resetScale();
+        }
     }
 
-    protected void resetAlpha() {
-        glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
-    }
+    protected abstract void onRender();
 
     @Override
     public float getX() {
@@ -92,6 +105,16 @@ public abstract class AbstractUI implements UI {
         return height;
     }
 
+    @Override
+    public boolean neverClip() {
+        return false;
+    }
+
+    @Override
+    public boolean neverSort() {
+        return false;
+    }
+
     public void setWidth(float width) {
         this.width = width;
     }
@@ -106,6 +129,8 @@ public abstract class AbstractUI implements UI {
 
     public void marginRight(float value) {
         setX((getRightOfParent() - value) - (width / 2f));
+        if (!scale && parent == null)
+            setY(getY() * 2f);
     }
 
     public void marginTop(float value) {
@@ -114,6 +139,8 @@ public abstract class AbstractUI implements UI {
 
     public void marginBottom(float value) {
         setY((getBottomOfParent() - value) - (height / 2f));
+        if (!scale && parent == null)
+            setY(getY() * 2f);
     }
 
     public void centerHorizontal() {
