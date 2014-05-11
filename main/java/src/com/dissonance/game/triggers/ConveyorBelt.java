@@ -10,21 +10,21 @@ public class ConveyorBelt extends AbstractTileTrigger {
     @Override
     public void onTrigger(AnimatedSprite sprite, Tile tile) {
         if (tile.isFlippedHorizontal() && !tile.isFlippedDiegonally() && !tile.isFlippedVertical()) { //Move right
-            sprite.teleportX(sprite.getX() + (RenderService.TIME_DELTA * SPEED));
+            sprite.rawSetX(sprite.getX() + (RenderService.TIME_DELTA * SPEED));
         } else if (tile.isFlippedVertical() && !tile.isFlippedDiegonally() && !tile.isFlippedHorizontal()) { //Move left
-            sprite.teleportX(sprite.getX() - (RenderService.TIME_DELTA * SPEED));
+            sprite.rawSetX(sprite.getX() - (RenderService.TIME_DELTA * SPEED));
         } else if (tile.isFlippedHorizontal() && tile.isFlippedVertical() && !tile.isFlippedDiegonally()) { //Move right
-            sprite.teleportX(sprite.getX() + (RenderService.TIME_DELTA * SPEED));
+            sprite.rawSetX(sprite.getX() + (RenderService.TIME_DELTA * SPEED));
         } else if (tile.isFlippedDiegonally()) {
             if (tile.isFlippedHorizontal() && tile.isFlippedVertical()) { //Move down
-                sprite.teleportY(sprite.getY() + (RenderService.TIME_DELTA * SPEED));
+                sprite.rawSetY(sprite.getY() + (RenderService.TIME_DELTA * SPEED));
             } else if (tile.isFlippedHorizontal()) { //Move up
-                sprite.teleportY(sprite.getY() - (RenderService.TIME_DELTA * SPEED));
+                sprite.rawSetY(sprite.getY() - (RenderService.TIME_DELTA * SPEED));
             } else { //Move down
-                sprite.teleportY(sprite.getY() + (RenderService.TIME_DELTA * SPEED));
+                sprite.rawSetY(sprite.getY() + (RenderService.TIME_DELTA * SPEED));
             }
         } else { //Move left
-            sprite.teleportX(sprite.getX() - (RenderService.TIME_DELTA * SPEED));
+            sprite.rawSetX(sprite.getX() - (RenderService.TIME_DELTA * SPEED));
         }
     }
 

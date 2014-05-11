@@ -238,8 +238,8 @@ public abstract class PlayableSprite extends CombatSprite {
                 use_switch = true;
                 setVisible(false);
                 PlayableSprite next = party.get(s_index);
-                next.teleportX(getX());
-                next.teleportY(getY());
+                next.rawSetX(getX());
+                next.rawSetY(getY());
                 s_index++;
                 if (s_index >= next.party.size())
                     s_index = 0;
