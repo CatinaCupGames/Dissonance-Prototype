@@ -4,8 +4,6 @@ import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
-import com.dissonance.framework.game.ai.behaviors.LeaderFollow;
-import com.dissonance.framework.game.ai.behaviors.PathFollow;
 import com.dissonance.framework.game.ai.waypoint.WaypointMover;
 import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
@@ -14,8 +12,6 @@ import com.dissonance.framework.render.RenderService;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.lwjgl.opengl.GL11.*;
 
 public abstract class AbstractWaypointSprite extends AnimatedSprite implements WaypointSprite {
     private WaypointSpriteEvent.OnWaypointReachedEvent waypointReachedEvent;
@@ -72,7 +68,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         }
     }
 
-    @Override
+    /*@Override
     public void render() {
         super.render();
 
@@ -93,7 +89,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
             glColor3f(255, 255, 255);
             glLineWidth(1);
         }
-    }
+    }*/
 
     @Override
     public float getMovementSpeed() {

@@ -21,16 +21,34 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class PhysicsSprite extends AbstractWaypointSprite implements Collidable {
     private HitBox[] hb;
     private float heightC = -1;
     private float widthC = -1;
     private boolean moving;
+    private List<PhysicsSprite> ignore = new ArrayList<>();
 
     @Override
     public HitBox getHitBox() {
         return hb[0];
+    }
+
+    public void ignoreCollisionWith(PhysicsSprite sprite) {
+        if (!ignore.contains(sprite))
+            ignore.add(sprite);
+    }
+
+    public void ignoreCollisionWith(PhysicsSprite... sprites) {
+        for (PhysicsSprite s : sprites) {
+            if (!ignore.contains(s))
+                ignore.add(s);
+        }
+    }
+
+    public void clearIgnore() {
+        ignore.clear();
     }
 
     @Override
@@ -94,7 +112,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             return;
         }
 
-        if (c instanceof PhysicsSprite) {
+        if (c instanceof PhysicsSprite && !ignore.contains(c)) {
             super.setX(oldX);
             float add = getX() - c.getX();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
@@ -179,7 +197,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             return;
         }
 
-        if (c instanceof PhysicsSprite) {
+        if (c instanceof PhysicsSprite && !ignore.contains(c)) {
             super.setY(oldY);
             float add = getY() - hb.getLastCollide().getY();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {

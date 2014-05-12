@@ -18,7 +18,7 @@ public class MPTip extends AbstractUI {
     protected void onOpen() {
         try {
             if (texture == null)
-                texture = Texture.retriveTexture("sprites/menu/player_hud/mtip.png");
+                texture = Texture.retrieveTexture("sprites/menu/player_hud/mtip.png");
 
             setWidth(texture.getTextureWidth());
             setHeight(texture.getTextureHeight());

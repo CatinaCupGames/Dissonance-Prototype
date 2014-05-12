@@ -8,12 +8,21 @@ import com.dissonance.framework.render.RenderService;
 
 import java.util.List;
 
+/**
+ * Leader follow is a behavior that works similarly to the {@link PathFollow}
+ * behavior. It will make the target sprite follow a leader and make sure there's
+ * a certain offset between them.
+ */
 public final class LeaderFollow implements Behavior {
 
     static final float RECALCULATE_DISTANCE = 15f;
+    private static final float SQRT2 = (float) Math.sqrt(2);
+
     private AbstractWaypointSprite sprite;
     private AbstractWaypointSprite leader;
     private Vector offset;
+
+    private Vector cOffset = new Vector();
     private Vector oldPos;
     private List<Position> nodes;
 
@@ -23,27 +32,14 @@ public final class LeaderFollow implements Behavior {
         this.offset = offset;
         oldPos = leader.getPositionVector();
 
+        calculateCOffset();
+
         NodeMap map = sprite.getWorld().getNodeMap();
         int tw = sprite.getWorld().getTiledData().getTileWidth();
         int th = sprite.getWorld().getTiledData().getTileHeight();
-        Position ps = new Position(leader.getPositionVector().add(offset));
+        Position ps = new Position(leader.getPositionVector().add(cOffset));
         nodes = map.findPath(sprite.getPosition().shrink(tw, th), ps.shrink(tw, th));
         nodes.remove(0);
-
-        sprite.setTint(1, 1, 1, 0.2f);
-    }
-
-    public boolean shouldRecalculate() {
-        Vector pos = leader.getPositionVector();
-        Vector newPos;
-        newPos = pos.subtract(oldPos);
-        boolean rc = (Math.abs(newPos.x) >= RECALCULATE_DISTANCE || Math.abs(newPos.y) >= RECALCULATE_DISTANCE);
-
-        if (rc) {
-            oldPos = pos;
-        }
-
-        return rc;
     }
 
     @Override
@@ -53,16 +49,19 @@ public final class LeaderFollow implements Behavior {
             int tw = sprite.getWorld().getTiledData().getTileWidth();
             int th = sprite.getWorld().getTiledData().getTileHeight();
 
-            Position ps = new Position(leader.getPositionVector().add(offset));
+            calculateCOffset();
+
+            Position ps = new Position(leader.getPositionVector().add(cOffset));
             nodes = map.findPath(sprite.getPosition().shrink(tw, th), ps.shrink(tw, th));
             nodes.remove(0);
         }
+
         Vector target = null;
 
         if (nodes != null && nodes.size() >= 1) {
             target = nodes.get(0).vector().multiply(16f);
 
-            if (sprite.getPositionVector().subtract(target).length() <= 20) {
+            if (sprite.getPositionVector().subtract(target).length() <= 5) {
                 if (nodes.size() >= 1) {
                     nodes.remove(0);
                 }
@@ -85,7 +84,59 @@ public final class LeaderFollow implements Behavior {
         sprite.setY(sprite.getY() + sprite.getSteeringVelocity().y * RenderService.TIME_DELTA * sprite.getMovementSpeed());
 
         if (nodes.size() == 0) {
-            sprite.setSteeringVelocity(new Vector());
+            if (Math.abs(sprite.getX() - target.x) <= 4.5f && Math.abs(sprite.getY() - target.y) <= 4.5f) {
+                sprite.setSteeringVelocity(new Vector(0, 0));
+                sprite.setFacing(leader.getDirection());
+            }
+        }
+    }
+
+    private boolean shouldRecalculate() {
+        Vector pos = leader.getPositionVector();
+        Vector newPos;
+        newPos = pos.subtract(oldPos);
+        boolean rc = (Math.abs(newPos.x) >= RECALCULATE_DISTANCE || Math.abs(newPos.y) >= RECALCULATE_DISTANCE);
+
+        if (rc) {
+            oldPos = pos;
+        }
+
+        return rc;
+    }
+
+    private void calculateCOffset() {
+        switch (leader.getDirection()) {
+            case UP:
+                cOffset.x = offset.x;
+                cOffset.y = offset.y;
+                break;
+            case DOWN_LEFT:
+                cOffset.x = (offset.x + offset.y) / SQRT2;
+                cOffset.y = (offset.x - offset.y) / SQRT2;
+                break;
+            case UP_RIGHT:
+                cOffset.x = (offset.x - offset.y) / SQRT2;
+                cOffset.y = (offset.x + offset.y) / SQRT2;
+                break;
+            case UP_LEFT:
+                cOffset.x = (offset.y + offset.x) / SQRT2;
+                cOffset.y = (offset.y - offset.x) / SQRT2;
+                break;
+            case DOWN_RIGHT:
+                cOffset.x = -(offset.y - offset.x) / SQRT2;
+                cOffset.y = -(offset.y + offset.x) / SQRT2;
+                break;
+            case DOWN:
+                cOffset.y = -offset.y;
+                break;
+            case RIGHT:
+                cOffset.x = -offset.y;
+                cOffset.y = offset.x + 0;
+                break;
+            case LEFT:
+                cOffset.x = offset.y + 0;
+                cOffset.y = offset.x + 0;
+                break;
         }
     }
 

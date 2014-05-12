@@ -36,7 +36,7 @@ public final class Seek implements Behavior {
 
         if (Math.abs(sprite.getX() - target.x) <= 4.5f && Math.abs(sprite.getY() - target.y) <= 4.5f) {
             sprite.setBehavior(null);
-            sprite.setSteeringVelocity(new Vector(0, 0));
+            sprite.setSteeringVelocity(new Vector());
         }
     }
 

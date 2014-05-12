@@ -1,14 +1,14 @@
 package com.dissonance.test.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.ai.astar.Vector;
-import com.dissonance.framework.game.ai.behaviors.LeaderFollow;
+import com.dissonance.framework.game.ai.behaviors.Idle;
 import com.dissonance.framework.game.input.InputKeys;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.game.sprites.Farrand;
 
 import javax.script.SimpleBindings;
+import java.util.Random;
 
 public final class AITestQuest extends AbstractQuest {
     @Override
@@ -30,20 +30,24 @@ public final class AITestQuest extends AbstractQuest {
         other.setY(756);
         w.loadAndAdd(other);
         bindings.put("other", other);
+        Random random = new Random();
+        for (int i = 0; i < 15; i++) {
+            Farrand c = new Farrand();
+            other.ignoreCollisionWith(c);
+            c.setX(random.nextInt(300) + 200);
+            c.setY(random.nextInt(300) + 200);
+            w.loadAndAdd(c);
+        }
 
-        final Farrand other2 = new Farrand();
-        other2.setX(632);
-        other2.setY(632);
-        w.loadAndAdd(other2);
-        bindings.put("other2", other);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while(true) {
                     if (InputKeys.isButtonPressed(InputKeys.JUMP)) {
-                        other.setBehavior(new LeaderFollow(other, farrand, new Vector(64, 64)));
-                        other2.setBehavior(new LeaderFollow(other2, farrand, new Vector(-64, 64)));
+                        if (other.getBehavior() == null) {
+                            other.setBehavior(new Idle(other, 100));
+                        }
                     }
                 }
 

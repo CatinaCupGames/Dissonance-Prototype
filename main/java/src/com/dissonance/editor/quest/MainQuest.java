@@ -59,7 +59,7 @@ public class MainQuest extends AbstractQuest {
         mapName = JOptionPane.showInputDialog(EditorUI.FRAME, "Please enter the map name to create a World Loader for", "World Loader Creator", JOptionPane.PLAIN_MESSAGE);
         World world = WorldFactory.getWorld(mapName);
         setWorld(world);
-        world.waitForWorldLoaded();
+        world.waitForWorldDisplayed();
         Camera.removeBounds(); //Do not add bounds to the camera.
         if (getWorld().getDrawableCount() == 0) {
             EditorUI.FRAME.requestFocus();
