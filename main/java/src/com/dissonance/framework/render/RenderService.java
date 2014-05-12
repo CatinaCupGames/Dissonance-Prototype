@@ -52,6 +52,7 @@ public class RenderService extends Service {
 
     private long startTime;
     private boolean isFading;
+    private boolean isFadingBox;
     private float speed;
     private static float curAlpha;
     private float newAlpha;
@@ -64,6 +65,16 @@ public class RenderService extends Service {
 
     public static boolean isInRenderThread() {
         return Thread.currentThread().getId() == RENDER_THREAD_ID;
+    }
+
+    public void fadeInBlackBox(float speed) {
+        if (speed < 5) {
+            curAlpha = 0f;
+            return;
+        }
+        isFadingBox = true;
+        this.speed = speed;
+        startTime = getTime();
     }
 
     public void fadeToBlack(float speed) {
@@ -342,7 +353,7 @@ public class RenderService extends Service {
             glLoadIdentity();
             glScalef(ZOOM_SCALE, ZOOM_SCALE, 1f);
 
-            glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
+
             //ROBO //todo change this crap into proper postprocess and per material shaders
             ShaderFactory.executePreRender();
 
@@ -350,38 +361,52 @@ public class RenderService extends Service {
             if (isFading) {
                 long time = getTime() - startTime;
                 curAlpha = Camera.ease(startAlpha, newAlpha, speed, time);
-                if (curAlpha == newAlpha)
+                if (curAlpha == newAlpha) {
                     isFading = false;
-            }
-
-            glColor4f(curAlpha, curAlpha, curAlpha, 1f);
-            //ROBO //todo get all these into proper batches
-
-            Iterator<Drawable> usprites = current_world.getUnsortedDrawables();
-            while (usprites.hasNext()) {
-                Drawable s = usprites.next();
-                if (s == null)
-                    continue;
-                try {
-                    if (!s.neverClip() && (!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
-                        continue;
-                    s.render();
-                } catch (Throwable t) {
-                    t.printStackTrace();
                 }
             }
+            if (isFadingBox) {
+                long time = getTime() - startTime;
+                float alpha = Camera.ease(0f, 1f, speed, time);
+                if (alpha == 1f) {
+                    isFadingBox = false;
+                }
+                glColor4f(1f, 1f, 1f, alpha);
+                renderBox();
+            }
 
-            Iterator<Drawable> sprites = current_world.getSortedDrawables();
-            while (sprites.hasNext()) {
-                Drawable s = sprites.next();
-                if (s == null)
-                    continue;
-                try {
-                    if (!s.neverClip() && (!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
+            glTranslatef(-Camera.getX(), -Camera.getY(), 0f);
+
+            glColor4f(1f, 1f, 1f, curAlpha);
+            //ROBO //todo get all these into proper batches
+
+            if (curAlpha > 0f) {
+                Iterator<Drawable> usprites = current_world.getUnsortedDrawables();
+                while (usprites.hasNext()) {
+                    Drawable s = usprites.next();
+                    if (s == null)
                         continue;
-                    s.render();
-                } catch (Throwable t) {
-                    t.printStackTrace();
+                    try {
+                        if (!s.neverClip() && (!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
+                            continue;
+                        s.render();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
+                }
+
+                Iterator<Drawable> sprites = current_world.getSortedDrawables();
+                while (sprites.hasNext()) {
+                    Drawable s = sprites.next();
+                    if (s == null)
+                        continue;
+                    try {
+                        if (!s.neverClip() && (!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
+                            continue;
+                        s.render();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
                 }
             }
 
@@ -499,6 +524,32 @@ public class RenderService extends Service {
             /*if (Display.isCreated()) Display.destroy();
             System.exit(-1);*/
         }
+    }
+
+    private void renderBox() {
+        float w = GameSettings.Display.window_width;
+        float h = GameSettings.Display.window_height;
+        float x = w / 2f;
+        float y = h / 2f;
+        x -= 6;
+        y -= 6;
+        float z = 0f;
+        float bx = (w)/2f;
+        float by = (h)/2f;
+        bx += 2;
+
+        glPushMatrix();
+
+        glBegin(GL_QUADS);
+        glTexCoord2f(0f, 0f); //bottom left
+        glVertex3f(x - bx, y - by, z);
+        glTexCoord2f(1f, 0f); //bottom right
+        glVertex3f(x + bx, y - by, z);
+        glTexCoord2f(1f, 1f); //top right
+        glVertex3f(x + bx, y + by, z);
+        glTexCoord2f(0f, 1f); //top left
+        glVertex3f(x - bx, y + by, z);
+        glEnd();
     }
 
     public World getCurrentDrawingWorld() {

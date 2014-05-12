@@ -13,7 +13,6 @@ public class OfficeQuest extends AbstractQuest {
     public void startQuest() throws Exception {
         World w = WorldFactory.getWorld("WaldomarsMeetingRoom");
         setWorld(w);
-        w.waitForWorldLoaded();
         //Sound.playSound("waldobuilding");
         WaldomarsMeetingRoom.farrand.setAnimation("walk_left");
         WaldomarsMeetingRoom.farrand.pauseAnimation();

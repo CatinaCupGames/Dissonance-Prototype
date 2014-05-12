@@ -25,6 +25,7 @@ public class CityEntrySquare extends GameWorldLoader {
     public void onLoad(World w) {
         super.onLoad(w);
 
+        farrand.deselect();
         farrand.setX(845.60016f);
         farrand.setY(785.5205f);
 

@@ -28,29 +28,29 @@ public class TileSet {
     }
 
     public void loadTexture() {
-            Texture temp;
+        Texture temp;
+        try {
+            temp = Texture.retrieveTexture(image);
+        } catch (IOException e) {
             try {
-                temp = Texture.retriveTexture(image);
-            } catch (IOException e) {
-                try {
-                   temp = Texture.retriveTexture("worlds/" + image);
-                } catch (IOException e1) {
-                    System.out.println("[WARNING] Texture not found for TileSet \"" + name + "\" (\"" + image + "\") ! ");
-                    return;
-                }
+                temp = Texture.retrieveTexture("worlds/" + image);
+            } catch (IOException e1) {
+                System.out.println("[WARNING] Texture not found for TileSet \"" + name + "\" (\"" + image + "\") ! ");
+                return;
             }
-            if (temp == null) {
-                try {
-                    temp = Texture.retriveTexture("worlds/" + image);
-                    if (temp == null)
-                        throw new IOException("Go to catch block pls"); //Living the easy life
-                } catch (IOException e1) {
-                    System.out.println("[WARNING] Texture not found for TileSet \"" + name + "\" (\"" + image + "\") ! ");
-                    return;
-                }
+        }
+        if (temp == null) {
+            try {
+                temp = Texture.retrieveTexture("worlds/" + image);
+                if (temp == null)
+                    throw new IOException("Go to catch block pls"); //Living the easy life
+            } catch (IOException e1) {
+                System.out.println("[WARNING] Texture not found for TileSet \"" + name + "\" (\"" + image + "\") ! ");
+                return;
             }
-            texture = new TileTexture(temp, tilewidth, tileheight, spacing, margin, getTilesPerRow(), getRowCount());
-            Texture.replaceTexture(temp, texture);
+        }
+        texture = new TileTexture(temp, tilewidth, tileheight, spacing, margin, getTilesPerRow(), getRowCount());
+        Texture.replaceTexture(temp, texture);
     }
 
     public TileTexture getTexture() {

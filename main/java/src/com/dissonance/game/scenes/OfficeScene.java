@@ -29,7 +29,7 @@ public class OfficeScene extends SimpleScene {
         WaldomarsMeetingRoom.farrand.setMovementSpeed(4f);
         WaldomarsMeetingRoom.farrand.setWaypoint(102.95f, 8f*16, WaypointType.SIMPLE);
 
-        Thread.sleep(200);
+        WaldomarsMeetingRoom.waldomar.waitForLoaded();
         WaldomarsMeetingRoom.waldomar.setAnimation("walk_back");
         WaldomarsMeetingRoom.waldomar.pauseAnimation();
         WaldomarsMeetingRoom.waldomar.setFrame(1);
@@ -64,7 +64,7 @@ public class OfficeScene extends SimpleScene {
             @Override
             public void run() {
                 float radius = Camera.ease(0.01f, 0.1f, 1000, System.currentTimeMillis() - START_TIME);
-                float brightness = Camera.ease(1f, 8.2f, 1000, System.currentTimeMillis() - START_TIME);
+                float brightness = Camera.ease(0.1f, 8.2f, 1000, System.currentTimeMillis() - START_TIME);
                 WaldomarsMeetingRoom.l.setRadius(radius);
                 WaldomarsMeetingRoom.l.setBrightness(brightness);
 

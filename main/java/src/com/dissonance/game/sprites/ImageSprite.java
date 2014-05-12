@@ -14,7 +14,7 @@ public class ImageSprite extends Sprite {
     @Override
     public void onLoad() {
         try {
-            setTexture(Texture.retriveTexture(image));
+            setTexture(Texture.retrieveTexture(image));
         } catch (IOException e) {
             e.printStackTrace();
         }

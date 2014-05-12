@@ -1,8 +1,11 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.ai.astar.Vector;
+import com.dissonance.framework.game.ai.behaviors.LeaderFollow;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
@@ -12,6 +15,10 @@ import com.dissonance.game.w.CityEntrySquare;
 public class GateQuest extends AbstractQuest {
     @Override
     public void startQuest() throws Exception {
+        World world3 = WorldFactory.getWorld("CityEntrySquare");
+        setWorld(world3);
+        world3.waitForWorldDisplayed();
+        world3.invalidateDrawableList(); //Because fuck you
 
         CityEntrySquare.farrand.freeze();
         CityEntrySquare.farrand.select();
@@ -32,13 +39,11 @@ public class GateQuest extends AbstractQuest {
             public void run() {
                 while(true){
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(50);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    //System.out.println(CityEntrySquare.farrand.getX());
                     if(CityEntrySquare.farrand.getX() <= 256f){
-                        //CityEntrySquare.farrand.freeze();
                         RenderService.INSTANCE.fadeToBlack(1500);
                         try {
                             RenderService.INSTANCE.waitForFade();
@@ -57,6 +62,9 @@ public class GateQuest extends AbstractQuest {
                 }
             }
         }).start();
+
+        followFarrand();
+
         do {
             Thread.sleep(10000);
             if (moved[0]) break;
@@ -82,6 +90,21 @@ public class GateQuest extends AbstractQuest {
     public String getName() {
         return "player_movement_tutorial";
 
+    }
+
+    private void followFarrand() {
+        CityEntrySquare.guard1.setBehavior(new LeaderFollow(CityEntrySquare.guard1, CityEntrySquare.farrand, new Vector(0f, 32f)));
+        CityEntrySquare.guard2.setBehavior(new LeaderFollow(CityEntrySquare.guard2, CityEntrySquare.farrand, new Vector(32f, 32f)));
+        CityEntrySquare.guard3.setBehavior(new LeaderFollow(CityEntrySquare.guard3, CityEntrySquare.farrand, new Vector(32f, 0f)));
+        CityEntrySquare.guard4.setBehavior(new LeaderFollow(CityEntrySquare.guard4, CityEntrySquare.farrand, new Vector(32f, -32f)));
+        CityEntrySquare.guard5.setBehavior(new LeaderFollow(CityEntrySquare.guard5, CityEntrySquare.farrand, new Vector(0f, -32f)));
+
+        CityEntrySquare.guard1.ignoreCollisionWith(CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard5, CityEntrySquare.farrand);
+        CityEntrySquare.guard2.ignoreCollisionWith(CityEntrySquare.guard1, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard5, CityEntrySquare.farrand);
+        CityEntrySquare.guard3.ignoreCollisionWith(CityEntrySquare.guard2, CityEntrySquare.guard1, CityEntrySquare.guard4, CityEntrySquare.guard5, CityEntrySquare.farrand);
+        CityEntrySquare.guard4.ignoreCollisionWith(CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard1, CityEntrySquare.guard5, CityEntrySquare.farrand);
+        CityEntrySquare.guard5.ignoreCollisionWith(CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard1, CityEntrySquare.farrand);
+        CityEntrySquare.farrand.ignoreCollisionWith(CityEntrySquare.guard1, CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard5);
     }
 
 }

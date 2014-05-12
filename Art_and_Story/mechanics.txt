@@ -118,11 +118,11 @@ Control scheme:
 -Spells can be mapped to the magic 1 and magic 2 buttons from the magic menu
 -Default keyboard layout:
   -W,S,A,D: move
-  -Space: jump
+  -Space: select
   -Shift(with movement key): dodge
   -I: cycle through party members
   -Ctrl: lock-on/strafe
-  -J: attack/select
+  -J: attack
   -K: special ability
   -O: magic 1
   -L: magic 2
@@ -131,12 +131,13 @@ Control scheme:
   -Arrow keys: extended look
 
 -Default gamepad layout(modeled after X360 controller):
-  -D-pad/left analog: Move
-  -B: Jump
-  -Y(with direction): dodge
-  -LB: cycle through party members
-  -RB: lock-on/strafe
-  -A: attack/select
+  -left analog: Move
+  -D-Pad: Select Party Members
+  -B: Select
+  -Y: Special Ability
+  -LB: Lock On
+  -RB: Quick Menu
+  -A: Dodge
   -X: special ability
   -LT: magic 1
   -RT: magic 2

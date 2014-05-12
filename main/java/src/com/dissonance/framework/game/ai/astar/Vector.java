@@ -78,6 +78,10 @@ public final class Vector {
         return new Vector((float) Math.cos(n) * length, (float) Math.sin(n) * length);
     }
 
+    public boolean inRange(float minX, float maxX, float minY, float maxY) {
+        return (x >= minX && x <= maxX && y >= minY && y <= maxY);
+    }
+
     @Override
     public String toString() {
         return "[ vx: " + x + ", vy: " + y + " ]";
