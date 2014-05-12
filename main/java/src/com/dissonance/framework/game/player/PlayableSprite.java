@@ -107,7 +107,7 @@ public abstract class PlayableSprite extends CombatSprite {
 
     @Override
     public boolean isMoving() {
-        return input.isMoving(this);
+        return input != null && input.isMoving(this);
     }
 
     @Override

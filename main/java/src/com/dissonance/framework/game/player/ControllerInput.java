@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.player;
 
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.player.input.joypad.Joypad;
 import com.dissonance.framework.render.Camera;
@@ -36,7 +37,7 @@ public class ControllerInput implements Input {
         playableSprite.d = false;
         playableSprite.a = false;
 
-        if (playableSprite.isPlayer1()) {
+        if (playableSprite.isPlayer1() && !GameService.coop_mode) {
             Input.KEYBOARD.checkMovement(playableSprite); //Check the keyboard as well as the gamepad.
             if (playableSprite.w || playableSprite.s || playableSprite.d || playableSprite.a)
                 return;
@@ -78,7 +79,7 @@ public class ControllerInput implements Input {
 
     @Override
     public void checkKeys(PlayableSprite playableSprite) {
-        if (playableSprite.isPlayer1())
+        if (playableSprite.isPlayer1() && !GameService.coop_mode)
             Input.KEYBOARD.checkKeys(playableSprite); //Check the keyboard as well as the gamepad.
 
         Vector2f values = new Vector2f(InputKeys.getJoypadValue(InputKeys.EXTENDX, controller.getController()), InputKeys.getJoypadValue(InputKeys.EXTENDY, controller.getController()));

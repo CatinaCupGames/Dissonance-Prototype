@@ -30,6 +30,7 @@ public class GameService {
         System.setProperty("org.lwjgl.librarypath", new File(lwjgl_folder).getAbsolutePath());
         System.setProperty("net.java.games.input.librarypath", System.getProperty("org.lwjgl.librarypath"));
     }
+    public static boolean coop_mode = false;
     public static final String encryptAlgorithm = "PBEWithMD5AndDES";
 
     public static String[] args;

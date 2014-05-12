@@ -441,6 +441,7 @@ public class MainQuest extends AbstractQuest {
                     getWorld().init();
                     try {
                         getWorld().load(mapName);
+                        getWorld().onDisplay();
                         if (PlayableSprite.getCurrentlyPlayingSprite() != null)
                             PlayableSprite.getCurrentlyPlayingSprite().freeze();
                     } catch (WorldLoadFailedException e) {

@@ -13,12 +13,12 @@ import javax.naming.ldap.Control;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        //World.setDefaultLoaderPackage("com.dissonance.test.w");
+        World.setDefaultLoaderPackage("com.dissonance.test.w");
 
         GameService.loadEssentials(args);
-        //GameService.beginQuest(new CoopQuest());
+        GameService.beginQuest(new CoopQuest());
 
-        Controller[] controller = ControllerEnvironment.getDefaultEnvironment().getControllers();
+        /*Controller[] controller = ControllerEnvironment.getDefaultEnvironment().getControllers();
 
         Controller temp = null;
         for (Controller c : controller) {
@@ -45,6 +45,6 @@ public class Main {
                 System.out.println(c.getIdentifier().getName() + " : " + c.getPollData());
             }
             Thread.sleep(1500);
-        }
+        }*/
     }
 }

@@ -1,5 +1,6 @@
 package com.dissonance.game.w;
 
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.World;
@@ -26,7 +27,7 @@ public abstract class GameWorldLoader implements WorldLoader {
             hud.display(w);
         }
 
-        if (player1 == null) {
+        if (player1 == null && !GameService.coop_mode) {
             player1 = Players.createPlayer1();
         }
 

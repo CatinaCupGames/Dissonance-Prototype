@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.player.input.joypad;
 
+import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.system.Service;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
@@ -27,6 +28,7 @@ public class JoypadService extends Service {
                 addController(c);
             }
         }
+        pause();
     }
 
     @Override
@@ -45,17 +47,41 @@ public class JoypadService extends Service {
         controllers.clear();
     }
 
+    private boolean keyboardJoin = false;
+    private ArrayList<Joypad> joypads = new ArrayList<>();
+    public void resetJoin() {
+        joypads.clear();
+        keyboardJoin = false;
+    }
+
     @Override
-    protected void onUpdate() { }
+    protected void onUpdate() {
+        Joypad[] joypads = controllers.toArray(new Joypad[controllers.size()]);
+        for (Joypad joypad : joypads) {
+            joypad.getController().poll();
+            if (joypad.isButtonPressed(InputKeys.MENU) && !this.joypads.contains(joypad)) {
+                this.joypads.add(joypad);
+                if (listener != null)
+                    listener.onJoypadJoin(joypad);
+            }
+        }
+
+        if (!keyboardJoin && InputKeys.checkKeyboard(InputKeys.MENU)) {
+            keyboardJoin = true;
+            if (listener != null)
+                listener.onKeyboardJoin();
+        }
+
+        try {
+            Thread.sleep(15);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void provideData(Object obj, int type) {
 
-    }
-
-    @Override
-    protected boolean hasUpdate() {
-        return false;
     }
 
     public Joypad[] getJoypads() {
@@ -98,5 +124,9 @@ public class JoypadService extends Service {
         public void onNewJoypad(Joypad joypad);
 
         public void onJoypadRemoved(Joypad joypad);
+
+        public void onJoypadJoin(Joypad joypad);
+
+        public void onKeyboardJoin();
     }
 }
