@@ -1,6 +1,6 @@
 package com.dissonance.framework.game;
 
-import com.dissonance.framework.game.input.InputKeys;
+import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.system.GameSettings;

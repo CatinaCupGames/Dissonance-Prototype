@@ -6,7 +6,7 @@ import com.dissonance.editor.system.CharSequenceCompilerException;
 import com.dissonance.editor.ui.EditorUI;
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.ai.astar.Position;
-import com.dissonance.framework.game.input.InputKeys;
+import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.sprites.ui.UI;

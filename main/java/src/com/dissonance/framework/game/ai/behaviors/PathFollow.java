@@ -21,14 +21,6 @@ public final class PathFollow implements FiniteBehavior {
 
     private FiniteBehaviorEvent.OnFinished onFinishedListener;
 
-    public FiniteBehaviorEvent.OnFinished getOnFinishedListener() {
-        return onFinishedListener;
-    }
-
-    public void setOnFinishedListener(FiniteBehaviorEvent.OnFinished onFinishedListener) {
-        this.onFinishedListener = onFinishedListener;
-    }
-
     public PathFollow(AbstractWaypointSprite sprite, Position target) {
         this.sprite = sprite;
         NodeMap map = sprite.getWorld().getNodeMap();
@@ -78,5 +70,13 @@ public final class PathFollow implements FiniteBehavior {
 
     public List<Position> getNodes() {
         return nodes;
+    }
+
+    public FiniteBehaviorEvent.OnFinished getOnFinishedListener() {
+        return onFinishedListener;
+    }
+
+    public void setOnFinishedListener(FiniteBehaviorEvent.OnFinished onFinishedListener) {
+        this.onFinishedListener = onFinishedListener;
     }
 }

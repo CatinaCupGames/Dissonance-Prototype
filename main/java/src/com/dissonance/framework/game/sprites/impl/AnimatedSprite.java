@@ -85,24 +85,6 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     private long lastX, lastY;
     private Direction lastDirX, lastDirY;
 
-    /**
-     * Change the X position of this AnimatedSprite without checking for animation
-     * direction
-     * @param x The X position to set this animated sprites x to.
-     */
-    public void teleportX(float x) {
-        super.setX(x);
-    }
-
-    /**
-     * Change the Y position of this AnimatedSprite without checking for animation
-     * direction
-     * @param y The Y position to set this animated sprites x to.
-     */
-    public void teleportY(float y) {
-        super.setY(y);
-    }
-
     @Override
     public void setX(float x) {
         movementDetect = true;
@@ -117,6 +99,24 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         }
         lastX = System.currentTimeMillis();
         super.setX(x);
+    }
+
+    /**
+     * Change the X position of this AnimatedSprite without checking for animation
+     * direction
+     * @param x The X position to set this animated sprites x to.
+     */
+    public void rawSetX(float x) {
+        super.setX(x);
+    }
+
+    /**
+     * Change the Y position of this AnimatedSprite without checking for animation
+     * direction
+     * @param y The Y position to set this animated sprites x to.
+     */
+    public void rawSetY(float y) {
+        super.setY(y);
     }
 
     @Override

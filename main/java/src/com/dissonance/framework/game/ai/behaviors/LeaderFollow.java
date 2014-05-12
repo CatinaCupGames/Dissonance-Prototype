@@ -42,55 +42,6 @@ public final class LeaderFollow implements Behavior {
         nodes.remove(0);
     }
 
-    private boolean shouldRecalculate() {
-        Vector pos = leader.getPositionVector();
-        Vector newPos;
-        newPos = pos.subtract(oldPos);
-        boolean rc = (Math.abs(newPos.x) >= RECALCULATE_DISTANCE || Math.abs(newPos.y) >= RECALCULATE_DISTANCE);
-
-        if (rc) {
-            oldPos = pos;
-        }
-
-        return rc;
-    }
-
-    private void calculateCOffset() {
-        switch (leader.getDirection()) {
-            case UP:
-                cOffset.x = offset.x;
-                cOffset.y = offset.y;
-                break;
-            case DOWN_LEFT:
-                cOffset.x = (offset.x + offset.y) / SQRT2;
-                cOffset.y = (offset.x - offset.y) / SQRT2;
-                break;
-            case UP_RIGHT:
-                cOffset.x = (offset.x - offset.y) / SQRT2;
-                cOffset.y = (offset.x + offset.y) / SQRT2;
-                break;
-            case UP_LEFT:
-                cOffset.x = (offset.y + offset.x) / SQRT2;
-                cOffset.y = (offset.y - offset.x) / SQRT2;
-                break;
-            case DOWN_RIGHT:
-                cOffset.x = -(offset.y - offset.x) / SQRT2;
-                cOffset.y = -(offset.y + offset.x) / SQRT2;
-                break;
-            case DOWN:
-                cOffset.y = -offset.y;
-                break;
-            case RIGHT:
-                cOffset.x = -offset.y;
-                cOffset.y = offset.x + 0;
-                break;
-            case LEFT:
-                cOffset.x = offset.y + 0;
-                cOffset.y = offset.x + 0;
-                break;
-        }
-    }
-
     @Override
     public void update() {
         if (shouldRecalculate()) {
@@ -137,6 +88,55 @@ public final class LeaderFollow implements Behavior {
                 sprite.setSteeringVelocity(new Vector(0, 0));
                 sprite.setFacing(leader.getDirection());
             }
+        }
+    }
+
+    private boolean shouldRecalculate() {
+        Vector pos = leader.getPositionVector();
+        Vector newPos;
+        newPos = pos.subtract(oldPos);
+        boolean rc = (Math.abs(newPos.x) >= RECALCULATE_DISTANCE || Math.abs(newPos.y) >= RECALCULATE_DISTANCE);
+
+        if (rc) {
+            oldPos = pos;
+        }
+
+        return rc;
+    }
+
+    private void calculateCOffset() {
+        switch (leader.getDirection()) {
+            case UP:
+                cOffset.x = offset.x;
+                cOffset.y = offset.y;
+                break;
+            case DOWN_LEFT:
+                cOffset.x = (offset.x + offset.y) / SQRT2;
+                cOffset.y = (offset.x - offset.y) / SQRT2;
+                break;
+            case UP_RIGHT:
+                cOffset.x = (offset.x - offset.y) / SQRT2;
+                cOffset.y = (offset.x + offset.y) / SQRT2;
+                break;
+            case UP_LEFT:
+                cOffset.x = (offset.y + offset.x) / SQRT2;
+                cOffset.y = (offset.y - offset.x) / SQRT2;
+                break;
+            case DOWN_RIGHT:
+                cOffset.x = -(offset.y - offset.x) / SQRT2;
+                cOffset.y = -(offset.y + offset.x) / SQRT2;
+                break;
+            case DOWN:
+                cOffset.y = -offset.y;
+                break;
+            case RIGHT:
+                cOffset.x = -offset.y;
+                cOffset.y = offset.x + 0;
+                break;
+            case LEFT:
+                cOffset.x = offset.y + 0;
+                cOffset.y = offset.x + 0;
+                break;
         }
     }
 

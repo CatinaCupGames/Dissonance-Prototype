@@ -4,10 +4,11 @@ import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
-import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.render.UpdatableDrawable;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -29,109 +30,12 @@ public final class Approach implements FiniteBehavior {
     private static Random random = new Random();
     private List<Position> nodes = new ArrayList<>();
 
-    public FiniteBehaviorEvent.OnFinished getOnFinishedListener() {
-        return onFinishedListener;
-    }
-
-    public void setOnFinishedListener(FiniteBehaviorEvent.OnFinished onFinishedListener) {
-        this.onFinishedListener = onFinishedListener;
-    }
-
     private FiniteBehaviorEvent.OnFinished onFinishedListener;
 
     public Approach(AbstractWaypointSprite sprite, AbstractWaypointSprite target) {
         this.sprite = sprite;
         this.target = target;
         calculateNodes();
-    }
-
-    public static AbstractWaypointSprite getRandomTarget(AbstractWaypointSprite base) {
-        return getRandomTarget(base, -1f);
-    }
-
-    public static AbstractWaypointSprite getRandomTarget(AbstractWaypointSprite base, float radius) {
-        float[] bounds;
-
-        float tw = base.getWorld().getTiledData().getTileWidth();
-        float th = base.getWorld().getTiledData().getTileHeight();
-
-        if (radius == -1) {
-            bounds = new float[] { 0, base.getWorld().getWidth() * tw, 0, base.getWorld().getHeight() * th };
-        } else {
-            if (radius < 0) {
-                throw new IllegalArgumentException("Radius must be positive!");
-            }
-
-            float xs = base.getX() - radius;
-            xs = (xs < 0 ? 0 : xs);
-            float xe = base.getX() + radius;
-            xe = (xe > base.getWorld().getWidth() * tw ? base.getWorld().getWidth() * tw : xe);
-            float ys = base.getY() - radius;
-            ys = (ys < 0 ? 0 : ys);
-            float ye = base.getY() + radius;
-            ye = (ye > base.getWorld().getHeight() * tw ? base.getWorld().getHeight() * tw : ye);
-
-            bounds = new float[]{xs, xe, ys, ye};
-        }
-
-        List<CombatSprite> sprites = base.getWorld().getAllCombatSprites();
-        List<AbstractWaypointSprite> inRange = new ArrayList<>();
-
-        for (CombatSprite next : sprites) {
-            if (next.getPositionVector().inRange(bounds[0], bounds[1], bounds[2], bounds[3])) {
-                inRange.add(next);
-            }
-        }
-
-        return inRange.get(random.nextInt(inRange.size()));
-    }
-
-    private void calculateNodes() {
-        NodeMap map = sprite.getWorld().getNodeMap();
-        int tw = sprite.getWorld().getTiledData().getTileWidth();
-        int th = sprite.getWorld().getTiledData().getTileHeight();
-
-        calculateCOffset();
-
-        Position ps = new Position(target.getPositionVector().add(cOffset));
-        nodes = map.findPath(sprite.getPosition().shrink(tw, th), ps.shrink(tw, th));
-        nodes.remove(0);
-    }
-
-    private void calculateCOffset() {
-        switch (target.getDirection()) {
-            case UP:
-                cOffset.x = offset.x;
-                cOffset.y = offset.y;
-                break;
-            case DOWN_LEFT:
-                cOffset.x = (offset.x + offset.y) / SQRT2;
-                cOffset.y = (offset.x - offset.y) / SQRT2;
-                break;
-            case UP_RIGHT:
-                cOffset.x = (offset.x - offset.y) / SQRT2;
-                cOffset.y = (offset.x + offset.y) / SQRT2;
-                break;
-            case UP_LEFT:
-                cOffset.x = (offset.y + offset.x) / SQRT2;
-                cOffset.y = (offset.y - offset.x) / SQRT2;
-                break;
-            case DOWN_RIGHT:
-                cOffset.x = -(offset.y - offset.x) / SQRT2;
-                cOffset.y = -(offset.y + offset.x) / SQRT2;
-                break;
-            case DOWN:
-                cOffset.y = -offset.y;
-                break;
-            case RIGHT:
-                cOffset.x = -offset.y;
-                cOffset.y = offset.x + 0;
-                break;
-            case LEFT:
-                cOffset.x = offset.y + 0;
-                cOffset.y = offset.x + 0;
-                break;
-        }
     }
 
     @Override
@@ -190,6 +94,122 @@ public final class Approach implements FiniteBehavior {
 
                 //TODO: set direction opposite of target's
             }
+        }
+    }
+
+    public static AbstractWaypointSprite getRandomTarget(AbstractWaypointSprite base) {
+        return getRandomTarget(base, -1f);
+    }
+
+    public static AbstractWaypointSprite getRandomTarget(AbstractWaypointSprite base, float radius) {
+        float[] bounds;
+
+        float tw = base.getWorld().getTiledData().getTileWidth();
+        float th = base.getWorld().getTiledData().getTileHeight();
+
+        if (radius == -1) {
+            bounds = new float[] { 0, base.getWorld().getWidth() * tw, 0, base.getWorld().getHeight() * th };
+        } else {
+            if (radius < 0) {
+                throw new IllegalArgumentException("Radius must be positive!");
+            }
+
+            float xs = base.getX() - radius;
+            xs = (xs < 0 ? 0 : xs);
+            float xe = base.getX() + radius;
+            xe = (xe > base.getWorld().getWidth() * tw ? base.getWorld().getWidth() * tw : xe);
+            float ys = base.getY() - radius;
+            ys = (ys < 0 ? 0 : ys);
+            float ye = base.getY() + radius;
+            ye = (ye > base.getWorld().getHeight() * th ? base.getWorld().getHeight() * th : ye);
+
+            bounds = new float[] { xs, xe, ys, ye };
+        }
+
+        return getRandomTarget(base, bounds);
+    }
+
+    public static AbstractWaypointSprite getRandomTarget(AbstractWaypointSprite base, float[] bounds) {
+        Iterator<UpdatableDrawable> drawables = base.getWorld().getUpdatables();
+        List<AbstractWaypointSprite> inRange = new ArrayList<>();
+
+        while(drawables.hasNext()) {
+            UpdatableDrawable next = drawables.next();
+
+            if (!(next instanceof AbstractWaypointSprite)) {
+                continue;
+            }
+
+            AbstractWaypointSprite s = (AbstractWaypointSprite) next;
+            if (s.getPositionVector().inRange(bounds[0], bounds[1], bounds[2], bounds[3]) && !s.equals(base)) {
+                inRange.add((AbstractWaypointSprite) next);
+            }
+        }
+
+        if (inRange.size() == 0) {
+            return null;
+        }
+
+        return inRange.get(random.nextInt(inRange.size()));
+    }
+
+    public FiniteBehaviorEvent.OnFinished getOnFinishedListener() {
+        return onFinishedListener;
+    }
+
+    public void setOnFinishedListener(FiniteBehaviorEvent.OnFinished onFinishedListener) {
+        this.onFinishedListener = onFinishedListener;
+    }
+
+    private void calculateNodes() {
+        NodeMap map = sprite.getWorld().getNodeMap();
+        int tw = sprite.getWorld().getTiledData().getTileWidth();
+        int th = sprite.getWorld().getTiledData().getTileHeight();
+
+        if (target == null) {
+            return;
+        }
+
+        calculateCOffset();
+
+        Position ps = new Position(target.getPositionVector().add(cOffset));
+        nodes = map.findPath(sprite.getPosition().shrink(tw, th), ps.shrink(tw, th));
+        nodes.remove(0);
+    }
+
+    private void calculateCOffset() {
+        switch (target.getDirection()) {
+            case UP:
+                cOffset.x = offset.x;
+                cOffset.y = offset.y;
+                break;
+            case DOWN_LEFT:
+                cOffset.x = (offset.x + offset.y) / SQRT2;
+                cOffset.y = (offset.x - offset.y) / SQRT2;
+                break;
+            case UP_RIGHT:
+                cOffset.x = (offset.x - offset.y) / SQRT2;
+                cOffset.y = (offset.x + offset.y) / SQRT2;
+                break;
+            case UP_LEFT:
+                cOffset.x = (offset.y + offset.x) / SQRT2;
+                cOffset.y = (offset.y - offset.x) / SQRT2;
+                break;
+            case DOWN_RIGHT:
+                cOffset.x = -(offset.y - offset.x) / SQRT2;
+                cOffset.y = -(offset.y + offset.x) / SQRT2;
+                break;
+            case DOWN:
+                cOffset.y = -offset.y;
+                break;
+            case RIGHT:
+                cOffset.x = -offset.y;
+                cOffset.y = offset.x + 0;
+                break;
+            case LEFT:
+                cOffset.x = offset.y + 0;
+                cOffset.y = offset.x + 0;
+                break;
         }
     }
 }

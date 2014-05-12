@@ -1,11 +1,9 @@
 package com.dissonance.framework.game.player;
 
-import com.dissonance.framework.game.input.InputKeys;
+import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.sprites.Selectable;
-import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.Camera;
-import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.MovementType;
@@ -120,6 +118,8 @@ public abstract class PlayableSprite extends CombatSprite {
         if (isUpdateCanceled())
             return;
         if (isPlaying) {
+            input.update();
+
             checkMovement();
             input.checkKeys(this);
         }
@@ -166,10 +166,8 @@ public abstract class PlayableSprite extends CombatSprite {
                     percent = dif / totalDodgeTime;
                 }
                 moveX = dodgeStartX + ((dodgeX - dodgeStartX) * percent);
-                setX(moveX);
+                rawSetX(moveX);
                 if (moveX == dodgeX) {
-                    setAnimationFinishedListener(null);
-                    setAnimationFrameListener(null);
                     unfreeze();
                     setAnimation(0);
                     ignore_movement = false;
@@ -192,10 +190,8 @@ public abstract class PlayableSprite extends CombatSprite {
                 }
                 moveY = dodgeStartY + ((dodgeY - dodgeStartY) * percent);
                 //moveY = Camera.ease(dodgeStartY, dodgeY, totalDodgeTime, ((System.currentTimeMillis() - dodgeStartTime)));
-                setY(moveY);
+                rawSetY(moveY);
                 if (moveY == dodgeY) {
-                    setAnimationFinishedListener(null);
-                    setAnimationFrameListener(null);
                     unfreeze();
                     setAnimation(0);
                     ignore_movement = false;
@@ -276,6 +272,7 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     private ArrayList<Class<?>> classLockers = new ArrayList<>();
+
     /**
      * Freeze this sprite and <b>prevent it from receiving input from a controller.</b> <br></br>
      * The <b>lock</b> parameter specifies whether to lock the call to {@link PlayableSprite#unfreeze(Class)} so only the class <b>classLocker</b> can
@@ -322,13 +319,36 @@ public abstract class PlayableSprite extends CombatSprite {
         return classLockers.size() == 0;
     }
 
+    private Player player;
+
+    void select(Player player) {
+        if (!isPlayable())
+            throw new InvalidParameterException("This sprite has no input controller!");
+
+        if (selectedEvent != null) {
+            selectedEvent.onSelectedEvent(this);
+        }
+
+        if (currentlyPlaying != null) {
+            currentlyPlaying.deselect();
+        }
+
+        currentlyPlaying = this;
+        isPlaying = true;
+
+        Camera.followSprite(this);
+
+        this.player = player;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
     /**
-     * Select this sprite to be the sprite the player will play as <br></br>
-     * If the player is currently playing as another Sprite, then the {@link PlayableSprite#onDeselect()} will be
-     * invoke on that sprite. <br></br>
-     *
-     * The Camera will pan to the newly selected sprite
+     * @deprecated This method is deprecated, please read the co-op wiki for more details. This method will be removed once all dependencies are resolved.
      */
+    @Deprecated
     public void select() {
         if (!isPlayable())
             throw new InvalidParameterException("This sprite has no input controller!");
@@ -370,10 +390,15 @@ public abstract class PlayableSprite extends CombatSprite {
 
     protected void dodge(Direction direction1) {
         frozen = true;
+        String ani;
+        float speed = movementSpeed() * 2.5f;
+        totalDodgeTime = 500;
+        int DISTANCE = (int) (speed * (totalDodgeTime / 150f));
         switch (direction1) {
             case UP:
+                ani = "dodge_up";
                 int i = 0;
-                for (; i < 80; i++) {
+                for (; i < DISTANCE; i++) {
                     if (getHitBox().checkForCollision(this, getX(), getY() - i))
                         break;
                 }
@@ -381,8 +406,9 @@ public abstract class PlayableSprite extends CombatSprite {
                 dodgeX = 0;
                 break;
             case DOWN:
+                ani = "dodge_down";
                 int ii = 0;
-                for (; ii < 80; ii++) {
+                for (; ii < DISTANCE; ii++) {
                     if (getHitBox().checkForCollision(this, getX(), getY() + ii))
                         break;
                 }
@@ -390,8 +416,9 @@ public abstract class PlayableSprite extends CombatSprite {
                 dodgeX = 0;
                 break;
             case LEFT:
+                ani = "dodge_left";
                 int iii = 0;
-                for (; iii < 80; iii++) {
+                for (; iii < DISTANCE; iii++) {
                     if (getHitBox().checkForCollision(this, getX() - iii, getY()))
                         break;
                 }
@@ -399,8 +426,9 @@ public abstract class PlayableSprite extends CombatSprite {
                 dodgeY = 0;
                 break;
             case RIGHT:
+                ani = "dodge_right";
                 int iiii = 0;
-                for (; iiii < 80; iiii++) {
+                for (; iiii < DISTANCE; iiii++) {
                     if (getHitBox().checkForCollision(this, getX() + iiii, getY()))
                         break;
                 }
@@ -410,35 +438,14 @@ public abstract class PlayableSprite extends CombatSprite {
             default:
                 return;
         }
-        setAnimation("dodge"); //TODO Set for multiple directions
-        totalDodgeTime = getAnimationSpeed() * (getFrameCount() - 1);
-        totalDodgeTime -= (getSpeed() + 20) * 15;
-        if (totalDodgeTime < 350)
-            totalDodgeTime = 350;
-        float timePerFrame = totalDodgeTime / (getFrameCount() - 1);
+        setAnimation(ani);
+        float timePerFrame = totalDodgeTime / (getFrameCount());
         setAnimationSpeed((int) timePerFrame);
         dodgeStartTime = System.currentTimeMillis();
         dodgeStartX = getX();
         dodgeStartY = getY();
         is_dodging = true;
         allow_dodge = false;
-        setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
-            @Override
-            public void onAnimationFinished(AnimatedSprite sprite) {
-                setAnimationFinishedListener(null);
-                setAnimationFrameListener(null);
-                unfreeze();
-                setAnimation(0);
-                ignore_movement = false;
-                is_dodging = false;
-                Timer.delayedInvokeRunnable(500, new Runnable() {
-                    @Override
-                    public void run() {
-                        allow_dodge = true;
-                    }
-                });
-            }
-        });
         ignore_movement = true;
         playAnimation();
         use_dodge = true;

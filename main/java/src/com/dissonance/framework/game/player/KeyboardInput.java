@@ -1,10 +1,13 @@
 package com.dissonance.framework.game.player;
 
-import com.dissonance.framework.game.input.InputKeys;
+import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
 
 public class KeyboardInput implements Input {
+
+    KeyboardInput() { }
+
     @Override
     public void checkMovement(PlayableSprite playableSprite) {
         float speed = playableSprite.movementSpeed();
@@ -46,8 +49,8 @@ public class KeyboardInput implements Input {
                 playableSprite.setVisible(false);
                 //TODO Find next open party member and switch to it.
                 /*PlayableSprite next = playableSprite.party.get(PlayableSprite.s_index);
-                next.teleportX(playableSprite.getX());
-                next.teleportY(playableSprite.getY());
+                next.rawSetX(getX());
+                next.rawSetY(getY());
                 PlayableSprite.s_index++;
                 if (s_index >= next.party.size())
                     s_index = 0;
@@ -103,4 +106,7 @@ public class KeyboardInput implements Input {
     public String getName() {
         return "Keyboard";
     }
+
+    @Override
+    public void update() { } //Do nothing
 }

@@ -1,0 +1,11 @@
+<animations
+        width="64"
+        height="64">
+    <animation
+            name="be_an_explosion"
+            loop="false"
+            frames="4"
+            row="0"
+            default_speed="100ms"/>
+</animations>
+		

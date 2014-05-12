@@ -25,7 +25,7 @@ public class Player {
         this.sprite = sprite;
         this.sprite.setInput(input);
         this.sprite.setVisible(true);
-        this.sprite.select();
+        this.sprite.select(this);
     }
 
     /**
@@ -50,7 +50,7 @@ public class Player {
             }
 
             Player[] players = Players.getPlayers();
-            for (Player p : Players.getPlayers()) {
+            for (Player p : players) {
                 if (p.getSprite() == sprite) {
                     throw new IllegalAccessError("You can't be the same sprite as another player!");
                 }
@@ -62,5 +62,33 @@ public class Player {
 
             changeSprite(sprite);
         }
+    }
+
+    /**
+     * Make this player join the game as the next open playablesprite in {@link com.dissonance.framework.game.player.Players#getPlayer1()} party. <br></br>
+     * If there are no sprites available, then a {@link java.lang.IllegalAccessError} is thrown.
+     * @throws java.lang.IllegalAccessError If no open sprite are available
+     */
+    public void join() {
+        Player player = Players.getPlayer1();
+        if (player == null)
+            throw new IllegalAccessError("There is no player 1!");
+        if (player.getSprite() == null)
+            throw new IllegalAccessError("Player 1 hasn't joined yet!");
+
+        PlayableSprite[] party = player.getSprite().getParty();
+        PlayableSprite selected = null;
+        for (PlayableSprite sprite : party) {
+            if (!sprite.isPlaying()) {
+                selected = sprite;
+                break;
+            }
+        }
+
+        joinAs(selected);
+    }
+
+    public Input getInput() {
+        return input;
     }
 }

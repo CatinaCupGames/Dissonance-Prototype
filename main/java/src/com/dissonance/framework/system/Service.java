@@ -19,6 +19,10 @@ public abstract class Service {
     private final List<Runnable> toRemove = new ArrayList<>();
 
     public void start() {
+        if (!hasUpdate()) {
+            onStart();
+            return; //This service does not need to update, it may handle it on it's own.
+        }
         runnable = new Runnable() {
             @Override
             public void run() {
@@ -124,6 +128,10 @@ public abstract class Service {
 
     protected String getName() {
         return getClass().getSimpleName();
+    }
+
+    protected boolean hasUpdate() {
+        return true;
     }
 
 

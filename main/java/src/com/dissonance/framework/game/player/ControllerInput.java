@@ -1,20 +1,25 @@
 package com.dissonance.framework.game.player;
 
-import com.dissonance.framework.game.input.InputKeys;
+import com.dissonance.framework.game.player.input.InputKeys;
+import com.dissonance.framework.game.player.input.joypad.Joypad;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
 import net.java.games.input.Controller;
 import org.lwjgl.util.vector.Vector2f;
 
 public class ControllerInput implements Input {
-    private Controller controller;
-    public ControllerInput(Controller controller) {
+    private Joypad controller;
+    public ControllerInput(Joypad controller) {
         this.controller = controller;
+    }
+
+    Controller getController() {
+        return controller.getController();
     }
     
     @Override
     public void checkMovement(PlayableSprite playableSprite) {
-        Vector2f values = new Vector2f(InputKeys.getJoypadValue(InputKeys.MOVEX, controller), InputKeys.getJoypadValue(InputKeys.MOVEY, controller));
+        Vector2f values = new Vector2f(InputKeys.getJoypadValue(InputKeys.MOVEX, controller.getController()), InputKeys.getJoypadValue(InputKeys.MOVEY, controller.getController()));
         if (values.lengthSquared() < 0.25f)
             values = new Vector2f(0,0);
 
@@ -39,23 +44,23 @@ public class ControllerInput implements Input {
     @Override
     public void checkKeys(PlayableSprite playableSprite) {
         if (!playableSprite.use_switch && playableSprite.party.size() > 0) {
-            if (InputKeys.checkController(InputKeys.SWITCH, controller)) {
+            if (controller.isButtonPressed(InputKeys.SWITCH)) {
                 playableSprite.use_switch = true;
                 playableSprite.setVisible(false);
                 //TODO Find next open party member and switch to it.
                 /*PlayableSprite next = playableSprite.party.get(PlayableSprite.s_index);
-                next.teleportX(playableSprite.getX());
-                next.teleportY(playableSprite.getY());
+                next.rawSetX(getX());
+                next.rawSetY(getY());
                 PlayableSprite.s_index++;
                 if (s_index >= next.party.size())
                     s_index = 0;
                 next.select();
                 next.setVisible(true);*/
             }
-        } else if (!InputKeys.checkController(InputKeys.SWITCH, controller) && playableSprite.use_switch) playableSprite.use_switch = false;
+        } else if (!controller.isButtonPressed(InputKeys.SWITCH) && playableSprite.use_switch) playableSprite.use_switch = false;
 
         if (!playableSprite.use_attack && !playableSprite.is_dodging) {
-            if (InputKeys.checkController(InputKeys.ATTACK, controller)) {
+            if (controller.isButtonPressed(InputKeys.ATTACK)) {
                 boolean skip = playableSprite.checkSelect();
                 if (!skip && playableSprite.getCurrentWeapon() != null) {
                     if (playableSprite.isMoving())
@@ -66,16 +71,16 @@ public class ControllerInput implements Input {
                 }
                 playableSprite.use_attack = true;
             }
-        } else if (!InputKeys.checkController(InputKeys.ATTACK, controller)) playableSprite.use_attack = false;
+        } else if (!controller.isButtonPressed(InputKeys.ATTACK)) playableSprite.use_attack = false;
 
         if (!playableSprite.use_dodge && !playableSprite.is_dodging && playableSprite.allow_dodge) {
-            if (InputKeys.checkController(InputKeys.DODGE, controller)) {
+            if (controller.isButtonPressed(InputKeys.DODGE)) {
                 playableSprite.dodge(playableSprite.getDirection());
             }
-        } else if (!InputKeys.checkController(InputKeys.DODGE, controller)) playableSprite.use_dodge = false;
+        } else if (!controller.isButtonPressed(InputKeys.DODGE)) playableSprite.use_dodge = false;
 
         if (!playableSprite.usespell1) {
-            if (InputKeys.checkController(InputKeys.MAGIC1, controller)) {
+            if (controller.isButtonPressed(InputKeys.MAGIC1)) {
                 if (playableSprite.hasSpell1())
                     playableSprite.useSpell1();
                 else {
@@ -83,10 +88,10 @@ public class ControllerInput implements Input {
                 }
                 playableSprite.usespell1 = true;
             }
-        } else if (!InputKeys.checkController(InputKeys.MAGIC1, controller)) playableSprite.usespell1 = false;
+        } else if (!controller.isButtonPressed(InputKeys.MAGIC1)) playableSprite.usespell1 = false;
 
         if (!playableSprite.usespell2) {
-            if (InputKeys.checkController(InputKeys.MAGIC2, controller)) {
+            if (controller.isButtonPressed(InputKeys.MAGIC2)) {
                 if (playableSprite.hasSpell2())
                     playableSprite.useSpell2();
                 else {
@@ -94,11 +99,25 @@ public class ControllerInput implements Input {
                 }
                 playableSprite.usespell2 = true;
             }
-        } else if (!InputKeys.checkController(InputKeys.MAGIC2, controller)) playableSprite.usespell2 = false;
+        } else if (!controller.isButtonPressed(InputKeys.MAGIC2)) playableSprite.usespell2 = false;
     }
 
     @Override
     public String getName() {
-        return controller.getName();
+        return controller.getController().getName();
+    }
+
+    @Override
+    public void update() {
+        controller.getController().poll();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ControllerInput) {
+            ControllerInput input = (ControllerInput)obj;
+            return input.controller.equals(controller);
+        }
+        return false;
     }
 }
