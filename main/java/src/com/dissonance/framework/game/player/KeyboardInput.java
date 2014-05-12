@@ -1,12 +1,21 @@
 package com.dissonance.framework.game.player;
 
 import com.dissonance.framework.game.player.input.InputKeys;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
 
 public class KeyboardInput implements Input {
 
     KeyboardInput() { }
+
+    @Override
+    public boolean isMoving(PlayableSprite player) {
+        return InputKeys.checkKeyboard(InputKeys.MOVEUP) ||
+                InputKeys.checkKeyboard(InputKeys.MOVERIGHT) ||
+                InputKeys.checkKeyboard(InputKeys.MOVEDOWN) ||
+                InputKeys.checkKeyboard(InputKeys.MOVELEFT);
+    }
 
     @Override
     public void checkMovement(PlayableSprite playableSprite) {
@@ -41,8 +50,42 @@ public class KeyboardInput implements Input {
         }
     }
 
+    private void checkExtend(PlayableSprite sprite) {
+        if (InputKeys.checkKeyboard(InputKeys.EXTENDUP) || InputKeys.checkKeyboard(InputKeys.EXTENDDOWN)) {
+            sprite.keyboard_extend = true;
+            if (InputKeys.checkKeyboard(InputKeys.EXTENDUP))
+                Camera.setExtendY(Camera.getExtendY() - (RenderService.TIME_DELTA * 32f));
+            else
+                Camera.setExtendY(Camera.getExtendY() + (RenderService.TIME_DELTA * 32f));
+        } else if (Camera.getExtendY() != 0f && !sprite.controller_extend) {
+            if (Math.abs(Camera.getExtendY() - 0f) < 4f)
+                Camera.setExtendY(0f);
+            else if (Camera.getExtendY() > 0f)
+                Camera.setExtendY(Camera.getExtendY() - (RenderService.TIME_DELTA * 64f));
+            else
+                Camera.setExtendY(Camera.getExtendY() + (RenderService.TIME_DELTA * 64f));
+        }
+
+        if (InputKeys.checkKeyboard(InputKeys.EXTENDLEFT) || InputKeys.checkKeyboard(InputKeys.EXTENDRIGHT)) {
+            sprite.keyboard_extend = true;
+            if (InputKeys.checkKeyboard(InputKeys.EXTENDLEFT))
+                Camera.setExtendX(Camera.getExtendX() - (RenderService.TIME_DELTA * 32f));
+            else
+                Camera.setExtendX(Camera.getExtendX() + (RenderService.TIME_DELTA * 32f));
+        } else if (Camera.getExtendX() != 0f && !sprite.controller_extend) {
+            if (Math.abs(Camera.getExtendX() - 0f) < 4f)
+                Camera.setExtendX(0f);
+            else if (Camera.getExtendX() > 0f)
+                Camera.setExtendX(Camera.getExtendX() - (RenderService.TIME_DELTA * 64f));
+            else
+                Camera.setExtendX(Camera.getExtendX() + (RenderService.TIME_DELTA * 64f));
+        }
+    }
+
     @Override
     public void checkKeys(PlayableSprite playableSprite) {
+        checkExtend(playableSprite);
+
         if (!playableSprite.use_switch && playableSprite.party.size() > 0) {
             if (InputKeys.checkKeyboard(InputKeys.SWITCH)) {
                 playableSprite.use_switch = true;

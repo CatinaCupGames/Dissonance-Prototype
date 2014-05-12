@@ -145,7 +145,7 @@ public final class Farrand extends PlayableSprite {
 
     @Override
     public void onNoMovement() {
-        if (InputKeys.isButtonPressed(InputKeys.MOVEUP) || InputKeys.isButtonPressed(InputKeys.MOVEDOWN) || InputKeys.isButtonPressed(InputKeys.MOVELEFT) || InputKeys.isButtonPressed(InputKeys.MOVERIGHT)) {
+        if (isMoving()) {
             return;
         }
         super.setFrame(1);

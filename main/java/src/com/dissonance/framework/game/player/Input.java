@@ -7,6 +7,8 @@ public interface Input {
 
     public void checkKeys(PlayableSprite playableSprite);
 
+    public boolean isMoving(PlayableSprite player);
+
     public String getName();
 
     public void update();

@@ -2,6 +2,7 @@ package com.dissonance.framework.game.player;
 
 import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.player.input.joypad.Joypad;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
 import net.java.games.input.Controller;
@@ -16,33 +17,81 @@ public class ControllerInput implements Input {
     Controller getController() {
         return controller.getController();
     }
-    
+
+    @Override
+    public boolean isMoving(PlayableSprite player) {
+        if (player.isPlayer1()) {
+            boolean value = Input.KEYBOARD.isMoving(player); //Check the keyboard as well as the gamepad.
+            if (value)
+                return true;
+        }
+        Vector2f values = new Vector2f(InputKeys.getJoypadValue(InputKeys.MOVEX, controller.getController()), InputKeys.getJoypadValue(InputKeys.MOVEY, controller.getController()));
+        return values.lengthSquared() >= 0.25f;
+    }
+
     @Override
     public void checkMovement(PlayableSprite playableSprite) {
+        playableSprite.w = false;
+        playableSprite.s = false;
+        playableSprite.d = false;
+        playableSprite.a = false;
+
+        if (playableSprite.isPlayer1()) {
+            Input.KEYBOARD.checkMovement(playableSprite); //Check the keyboard as well as the gamepad.
+            if (playableSprite.w || playableSprite.s || playableSprite.d || playableSprite.a)
+                return;
+        }
+
         Vector2f values = new Vector2f(InputKeys.getJoypadValue(InputKeys.MOVEX, controller.getController()), InputKeys.getJoypadValue(InputKeys.MOVEY, controller.getController()));
         if (values.lengthSquared() < 0.25f)
             values = new Vector2f(0,0);
 
-        playableSprite.setX(playableSprite.getX() + values.x * (playableSprite.movementSpeed() * RenderService.TIME_DELTA));
-        playableSprite.setY(playableSprite.getY() + values.y * (playableSprite.movementSpeed() * RenderService.TIME_DELTA));
+        playableSprite.rawSetX(playableSprite.getX() + values.x * (playableSprite.movementSpeed() * RenderService.TIME_DELTA));
+        playableSprite.rawSetY(playableSprite.getY() + values.y * (playableSprite.movementSpeed() * RenderService.TIME_DELTA));
         double angle = Math.toDegrees(Math.atan2(-values.y, values.x));
+
         if (angle < 0)
             angle += 360;
         if (angle != 0 && angle != -0) {
             if (angle > 315 || angle < 45) {
                 playableSprite.setFacing(Direction.RIGHT);
+                playableSprite.d = true;
             } else if (angle > 255 && angle <= 315) {
                 playableSprite.setFacing(Direction.DOWN);
+                playableSprite.s = true;
             } else if (angle > 135 && angle <= 225) {
                 playableSprite.setFacing(Direction.LEFT);
+                playableSprite.a = true;
             } else if (angle >= 45 && angle <= 135) {
                 playableSprite.setFacing(Direction.UP);
+                playableSprite.w = true;
             }
+        }
+
+        if (!playableSprite.ignore_movement) {
+            if (values.x == 0 && values.y == 0)
+                playableSprite._onNoMovement();
+            else
+                playableSprite._onMovement(playableSprite.getDirection());
         }
     }
 
     @Override
     public void checkKeys(PlayableSprite playableSprite) {
+        if (playableSprite.isPlayer1())
+            Input.KEYBOARD.checkKeys(playableSprite); //Check the keyboard as well as the gamepad.
+
+        Vector2f values = new Vector2f(InputKeys.getJoypadValue(InputKeys.EXTENDX, controller.getController()), InputKeys.getJoypadValue(InputKeys.EXTENDY, controller.getController()));
+        if (values.lengthSquared() < 0.03)
+            values = new Vector2f(0,0);
+
+        if (!playableSprite.keyboard_extend && values.x == 0f && values.y == 0f || values.x > 0f || values.y > 0f || values.x < 0f || values.y < 0f) {
+            Camera.setExtendX(values.x * Camera.MAX_EXTENDX);
+            Camera.setExtendY(values.y * Camera.MAX_EXTENDY);
+        }
+        playableSprite.controller_extend = values.x > 0f || values.y > 0f || values.x < 0f || values.y < 0f;
+
+
         if (!playableSprite.use_switch && playableSprite.party.size() > 0) {
             if (controller.isButtonPressed(InputKeys.SWITCH)) {
                 playableSprite.use_switch = true;

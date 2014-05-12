@@ -52,12 +52,22 @@ public class Players {
         return players[slot];
     }
 
+    public static Player createPlayer1() {
+        if (getPlayer1() != null)
+            return getPlayer1();
+        List<Joypad> joypads = getOpenControllers();
+        if (joypads.size() > 0) {
+            return createPlayer(joypads.get(0).createInput());
+        }
+        return createPlayer(Input.KEYBOARD);
+    }
+
     /**
      * Return a list of {@link com.dissonance.framework.game.player.input.joypad.Joypad} objects that are not being used by any
      * players.
      * @return An unmodifiable list of {@link com.dissonance.framework.game.player.input.joypad.Joypad} objects that are not in use.
      */
-    public List<Joypad> getOpenControllers() {
+    public static List<Joypad> getOpenControllers() {
         if (joypadService == null) {
             joypadService = ServiceManager.createService(JoypadService.class);
         }

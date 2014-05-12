@@ -26,6 +26,8 @@ public abstract class PlayableSprite extends CombatSprite {
     boolean use_attack;
     boolean use_switch;
     boolean use_dodge;
+    boolean controller_extend;
+    boolean keyboard_extend;
     float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
     long dodgeStartTime;
     boolean is_dodging, allow_dodge = true;
@@ -94,6 +96,10 @@ public abstract class PlayableSprite extends CombatSprite {
             freeze();
     }
 
+    public boolean isPlayer1() {
+        return player != null && player.getNumber() == 1;
+    }
+
     @Override
     public boolean isAlly(CombatSprite sprite) {
         return sprite instanceof PlayableSprite && party.contains(sprite);
@@ -101,15 +107,7 @@ public abstract class PlayableSprite extends CombatSprite {
 
     @Override
     public boolean isMoving() {
-        if (!InputKeys.usingController())
-            return InputKeys.isButtonPressed(InputKeys.MOVEUP) ||
-                    InputKeys.isButtonPressed(InputKeys.MOVEDOWN) ||
-                    InputKeys.isButtonPressed(InputKeys.MOVELEFT) ||
-                    InputKeys.isButtonPressed(InputKeys.MOVERIGHT);
-        else {
-            Vector2f values = new Vector2f(InputKeys.getJoypadValue(InputKeys.MOVEX), InputKeys.getJoypadValue(InputKeys.MOVEY));
-            return values.lengthSquared() >= 0.25f;
-        }
+        return input.isMoving(this);
     }
 
     @Override

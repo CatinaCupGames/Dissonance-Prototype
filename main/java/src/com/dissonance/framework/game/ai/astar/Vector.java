@@ -1,6 +1,8 @@
 package com.dissonance.framework.game.ai.astar;
 
 import java.security.InvalidParameterException;
+import java.util.Arrays;
+import java.util.List;
 
 public final class Vector {
     public float x;
@@ -84,30 +86,34 @@ public final class Vector {
         return (x >= minX && x <= maxX && y >= minY && y <= maxY);
     }
 
-    public static Vector centerOf(Vector... points) {
-        if (points.length == 0)
+    public static Vector centerOf(List<Vector> points) {
+        if (points.size() == 0)
             throw new InvalidParameterException("There must be at least 1 point to check against!");
 
         Vector center = new Vector(0, 0);
         float area = 0f;
         float x1, y1, x2, y2, a;
 
-        for (int i = 0; i < points.length - 1; i++) {
-            x1 = points[i].x;
-            y1 = points[i].y;
-            x2 = points[i + 1].x;
-            y2 = points[i + 1].y;
+        for (int i = 0; i < points.size() - 1; i++) {
+            Vector point1 = points.get(i);
+            Vector point2 = points.get(i + 1);
+            x1 = point1.x;
+            y1 = point1.y;
+            x2 = point2.x;
+            y2 = point2.y;
 
             a = (x1 * y2) - (x2 * y1);
             area += a;
             center.x += (x1 + x2) * a;
             center.y += (y1 + y2) * a;
         }
+        Vector point1 = points.get(points.size() - 1);
+        Vector point2 = points.get(0);
 
-        x1 = points[points.length - 1].x;
-        y1 = points[points.length - 1].y;
-        x2 = points[0].x;
-        y2 = points[0].y;
+        x1 = point1.x;
+        y1 = point1.y;
+        x2 = point2.x;
+        y2 = point2.y;
 
         a = (x1 * y2) - (x2 * y1);
         area += a;
@@ -119,6 +125,10 @@ public final class Vector {
         center.y /= (6f * area);
 
         return center;
+    }
+
+    public static Vector centerOf(Vector... points) {
+        return centerOf(Arrays.asList(points));
     }
 
     @Override

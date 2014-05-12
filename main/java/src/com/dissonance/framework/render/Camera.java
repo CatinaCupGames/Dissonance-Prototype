@@ -11,9 +11,14 @@ import java.security.InvalidParameterException;
 
 public final class Camera {
     private static final float OFFSCREEN_THRESHOLD = 32;
+    public static final float MAX_EXTENDX = GameSettings.Display.game_width / 8f;
+    public static final float MAX_EXTENDY = GameSettings.Display.game_height / 8f;
+
 
     private static float posX;
     private static float posY;
+    private static float extendX;
+    private static float extendY;
     private static float[] bounds = new float[4];
     private static boolean ignoreBounds = true;
     private static boolean isEasing;
@@ -63,8 +68,36 @@ public final class Camera {
         ignoreBounds = true;
     }
 
+    public static void setExtendX(float addx) {
+        extendX = addx;
+        if (extendX > MAX_EXTENDX)
+            extendX = MAX_EXTENDX;
+        if (extendX < -MAX_EXTENDX)
+            extendX = -MAX_EXTENDX;
+
+        while (getX() > bounds[2])
+            extendX = (int)extendX - 1;
+        while (getX() < bounds[0])
+            extendX = (int)extendX + 1;
+    }
+
+    public static void setExtendY(float addy) {
+        extendY = addy;
+        if (extendY > MAX_EXTENDY)
+            extendY = MAX_EXTENDY;
+        if (extendY < -MAX_EXTENDY)
+            extendY = -MAX_EXTENDY;
+
+        while (getY() < bounds[1]) {
+            extendY = (int)extendY + 1;
+        }
+        while (getY() > bounds[3]) {
+            extendY = (int)extendY - 1;
+        }
+    }
+
     public static float getX() {
-        return posX + xShake;
+        return posX + xShake + extendX;
     }
 
     public static void setX(float x) {
@@ -78,7 +111,7 @@ public final class Camera {
     }
 
     public static float getY() {
-        return posY + yShake;
+        return posY + yShake + extendY;
     }
 
     public static void setY(float y) {
@@ -110,7 +143,7 @@ public final class Camera {
     }
 
     public static boolean isOffScreen(float x, float y, float width, float height) {
-        return (x + width) - posX < -OFFSCREEN_THRESHOLD || Math.abs(posX - (x - width))  > OFFSCREEN_THRESHOLD + (GameSettings.Display.resolution.getWidth() / RenderService.ZOOM_SCALE) || (y + height) - posY < -OFFSCREEN_THRESHOLD || Math.abs(posY - (y - height)) > OFFSCREEN_THRESHOLD + (GameSettings.Display.resolution.getHeight() / RenderService.ZOOM_SCALE);
+        return (x + width) - getX() < -OFFSCREEN_THRESHOLD || Math.abs(getX() - (x - width))  > OFFSCREEN_THRESHOLD + (GameSettings.Display.resolution.getWidth() / RenderService.ZOOM_SCALE) || (y + height) - getY() < -OFFSCREEN_THRESHOLD || Math.abs(getY() - (y - height)) > OFFSCREEN_THRESHOLD + (GameSettings.Display.resolution.getHeight() / RenderService.ZOOM_SCALE);
     }
 
     public static boolean isOffScreen(Sprite sprite) {
@@ -381,6 +414,14 @@ public final class Camera {
 
     public static void followPlayer() {
         followSprite(PlayableSprite.getCurrentlyPlayingSprite());
+    }
+
+    public static float getExtendX() {
+        return extendX;
+    }
+
+    public static float getExtendY() {
+        return extendY;
     }
 
     public interface CameraMovementListener {

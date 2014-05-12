@@ -105,6 +105,34 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         }
     }
 
+    @Override
+    public void rawSetX(float x) {
+        float oX = super.getX();
+        super.rawSetX(x);
+
+        if (hb == null)
+            return;
+        for (HitBox hitBox : hb) {
+            if (hitBox.checkForCollision(this)) {
+                onCollideX(oX, x, hitBox.getLastCollide(), hitBox);
+            }
+        }
+    }
+
+    @Override
+    public void rawSetY(float y) {
+        float oY = super.getY();
+        super.rawSetY(y);
+
+        if (hb == null)
+            return;
+        for (HitBox hitBox : hb) {
+            if (hitBox.checkForCollision(this)) {
+                onCollideY(oY, y, hitBox.getLastCollide(), hitBox);
+            }
+        }
+    }
+
     protected void onCollideX(float oldX, float newX, Collidable hit, HitBox hb) {
         Collidable c = hb.getLastCollide();
 
@@ -408,7 +436,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         Layer[] layers = getWorld().getLayers(LayerType.TILE_LAYER);
         for (Layer layer : layers) {
             Tile tile = getWorld().getTileAt(x / 16f, FastMath.fastCeil((y - 8f) / 16f), layer);
-            if (tile.isTriggerTile())
+            if (tile != null && tile.isTriggerTile())
                 tile.getTrigger().onCollide(this, tile);
         }
     }
