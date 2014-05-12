@@ -78,6 +78,10 @@
              "7":
                 {
                  "passable":"false"
+                },
+             "9":
+                {
+                 "collidable":"true"
                 }
             },
          "tilewidth":16
