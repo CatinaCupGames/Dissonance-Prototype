@@ -35,6 +35,7 @@ public class InputKeys {
     public static final String DODGE      = "dodge";
     public static final String SWITCH     = "switch";
     public static final String GAMEMENU   = "menu";
+    public static final String QMENU      = "qmenu";
 
 
     private final static String DIR = "config" + File.separator;
