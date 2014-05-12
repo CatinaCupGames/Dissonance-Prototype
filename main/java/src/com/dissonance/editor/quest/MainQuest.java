@@ -21,6 +21,7 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.FileUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -28,6 +29,7 @@ import javax.swing.*;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
+import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -65,6 +67,14 @@ public class MainQuest extends AbstractQuest {
             EditorUI.FRAME.requestFocus();
             JOptionPane.showMessageDialog(EditorUI.FRAME, "There was no Tiled map found for '" + mapName + "' so the World may appear blank.\nPlease ensure the Tiled map file is in the 'worlds' folder inside the editor's jar file\n or that your IDE can see the Tiled map file located in\n'resources/worlds/" + mapName + ".json'.", "Editor Warning", JOptionPane.WARNING_MESSAGE);
         } else {
+            File defaultDir = new File("main/java/src/com/dissonance/game/w/" + world.getName() + ".java");
+            if (defaultDir.exists()) {
+                String[] lines = FileUtils.readAllLines(defaultDir.getAbsolutePath());
+                for (String s : lines) {
+                    EditorUI.INSTANCE.codeTextPane.setText(EditorUI.INSTANCE.codeTextPane.getText() + "\n" + s);
+                }
+                compileAndShow(EditorUI.INSTANCE.codeTextPane.getText());
+            }
             if (world.getName() != null) {
                 EditorUI.INSTANCE.highlighter.addClass(mapName);
             }
@@ -442,6 +452,7 @@ public class MainQuest extends AbstractQuest {
                     getWorld().init();
                     try {
                         getWorld().load(mapName);
+                        getWorld().onDisplay();
                         if (PlayableSprite.getCurrentlyPlayingSprite() != null)
                             PlayableSprite.getCurrentlyPlayingSprite().freeze();
                     } catch (WorldLoadFailedException e) {
