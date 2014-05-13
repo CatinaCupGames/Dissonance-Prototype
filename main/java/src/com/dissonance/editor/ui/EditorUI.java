@@ -12,9 +12,11 @@ package com.dissonance.editor.ui;
 import com.dissonance.editor.quest.MainQuest;
 import com.dissonance.editor.system.Highlighter;
 import com.dissonance.editor.ui.dialogs.AlignmentDialog;
+import com.dissonance.editor.ui.dialogs.FixSpriteDialog;
 import com.dissonance.editor.ui.dialogs.FormationDialog;
 import com.dissonance.framework.render.Drawable;
 
+import javax.print.attribute.HashAttributeSet;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -31,6 +33,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class EditorUI {
     private static final String HEADER = "/*\n" +
@@ -60,6 +63,7 @@ public class EditorUI {
     private JPopupMenu menu;
     private JScrollPane scrollPane1;
     private JSpinner speedSpinner;
+    private JButton fixSpritesButton;
     public JTextPane codeTextPane;
 
     public Highlighter highlighter = new Highlighter(codeTextPane);
@@ -111,7 +115,7 @@ public class EditorUI {
         INSTANCE.comboBox1.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                int index = INSTANCE.comboBox1.getSelectedIndex() - 1;
+                String index = (String)INSTANCE.comboBox1.getSelectedItem();
                 MainQuest.INSTANCE.selectSprite(index);
             }
         });
@@ -212,6 +216,15 @@ public class EditorUI {
             }
         });
 
+        INSTANCE.fixSpritesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FixSpriteDialog dialog = new FixSpriteDialog();
+                dialog.pack();
+                dialog.setVisible(true);
+            }
+        });
+
         INSTANCE.codeTextPane.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -272,11 +285,34 @@ public class EditorUI {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
+    private HashMap<String, Drawable> varNames = new HashMap<String, Drawable>();
     public void setComboBox(ArrayList<Drawable> sprites) {
         comboBox1.addItem("None");
         for (int i = 0; i < sprites.size(); i++) {
-            comboBox1.addItem(MainQuest.INSTANCE.getVarNameFor(i));
+            String var = MainQuest.INSTANCE.getVarNameFor(i);
+            comboBox1.addItem(var);
+            if (!varNames.containsKey(var)) varNames.put(var, sprites.get(i));
         }
+    }
+
+    public Drawable getDrawableFromVar(String varName) {
+        return varNames.get(varName);
+    }
+
+    public HashMap<String, Drawable> getVarNames() {
+        return varNames;
+    }
+
+    public void setVarNames(HashMap<String, Drawable> varNames) {
+        this.varNames = varNames;
+    }
+
+    public String getVarNameFor(Drawable d) {
+        for (String key : varNames.keySet()) {
+            if (varNames.get(key) == d)
+                return key;
+        }
+        return "???";
     }
 
     public void setComboIndex(int index) {
