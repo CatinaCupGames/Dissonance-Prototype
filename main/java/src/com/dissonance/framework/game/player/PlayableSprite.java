@@ -135,9 +135,9 @@ public abstract class PlayableSprite extends CombatSprite {
     protected float movementSpeed() {
         switch (mType) {
             case WALKING:
-                return 10 + (getSpeed() / 10);
+                return 10 + (getSpeed() / 2);
             case RUNNING:
-                return 15 + (getSpeed() / 10);
+                return 15 + (getSpeed());
             default:
                 return 0;
         }
@@ -441,8 +441,10 @@ public abstract class PlayableSprite extends CombatSprite {
         frozen = true;
         String ani;
         float speed = movementSpeed() * 2.5f;
-        totalDodgeTime = 500;
+        speed *= 1.5f;
+        totalDodgeTime = 300;
         int DISTANCE = (int) (speed * (totalDodgeTime / 150f));
+        DISTANCE *= 0.8f;
         switch (direction1) {
             case UP:
                 ani = "dodge_up";

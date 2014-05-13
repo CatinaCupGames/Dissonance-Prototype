@@ -8,7 +8,7 @@ public final class Farrand extends PlayableSprite {
     //TODO Set default values for these
     private int attack;
     private int defense;
-    private int speed;
+    private int speed = 16;
     private int vigor;
     private int stamina;
     private int willpower;
