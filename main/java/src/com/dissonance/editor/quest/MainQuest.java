@@ -581,13 +581,14 @@ public class MainQuest extends AbstractQuest {
             }
         } else if (selectedSprite == null) {
             Camera.stopFollowing();
-            if (!tip) {
-                tip = w || a || s || d;
-                if (tip) {
-                    EditorUI.FRAME.requestFocus();
-                    JOptionPane.showMessageDialog(EditorUI.FRAME, "No Sprite selected!\nTo move a Sprite, you must select it in the dropdown menu.", "Tip", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
+            if (s)
+                Camera.setY(Camera.getY() + (SPEED * RenderService.TIME_DELTA));
+            if (a)
+                Camera.setX(Camera.getX() - (SPEED * RenderService.TIME_DELTA));
+            if (w)
+                Camera.setY(Camera.getY() - (SPEED * RenderService.TIME_DELTA));
+            if (d)
+                Camera.setX(Camera.getX() + (SPEED * RenderService.TIME_DELTA));
         }
     }
 
