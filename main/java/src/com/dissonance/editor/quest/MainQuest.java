@@ -20,6 +20,7 @@ import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.FileUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -27,6 +28,7 @@ import javax.swing.*;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
+import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -58,12 +60,20 @@ public class MainQuest extends AbstractQuest {
         mapName = JOptionPane.showInputDialog(EditorUI.FRAME, "Please enter the map name to create a World Loader for", "World Loader Creator", JOptionPane.PLAIN_MESSAGE);
         World world = WorldFactory.getWorld(mapName);
         setWorld(world);
-        world.waitForWorldLoaded();
+        world.waitForWorldDisplayed();
         Camera.removeBounds(); //Do not add bounds to the camera.
         if (getWorld().getDrawableCount() == 0) {
             EditorUI.FRAME.requestFocus();
             JOptionPane.showMessageDialog(EditorUI.FRAME, "There was no Tiled map found for '" + mapName + "' so the World may appear blank.\nPlease ensure the Tiled map file is in the 'worlds' folder inside the editor's jar file\n or that your IDE can see the Tiled map file located in\n'resources/worlds/" + mapName + ".json'.", "Editor Warning", JOptionPane.WARNING_MESSAGE);
         } else {
+            File defaultDir = new File("main/java/src/com/dissonance/game/w/" + world.getName() + ".java");
+            if (defaultDir.exists()) {
+                String[] lines = FileUtils.readAllLines(defaultDir.getAbsolutePath());
+                for (String s : lines) {
+                    EditorUI.INSTANCE.codeTextPane.setText(EditorUI.INSTANCE.codeTextPane.getText() + "\n" + s);
+                }
+                compileAndShow(EditorUI.INSTANCE.codeTextPane.getText());
+            }
             if (world.getName() != null) {
                 EditorUI.INSTANCE.highlighter.addClass(mapName);
             }
@@ -142,7 +152,7 @@ public class MainQuest extends AbstractQuest {
             }
             String code = EditorUI.INSTANCE.codeTextPane.getText();
             if (selectedSprite == null) return code;
-            String varName = getVarNameFor(sprites.indexOf(selectedSprite));
+            String varName = getVarNameFor(selectedSprite);
             if (varName.equalsIgnoreCase("???") && adding) { //Assume we need to add it.
                 int index = code.indexOf("public class");
                 char[] array = code.toCharArray();
@@ -282,6 +292,10 @@ public class MainQuest extends AbstractQuest {
         return -1;
     }
 
+    public String getVarNameFor(Drawable d) {
+        return EditorUI.INSTANCE.getVarNameFor(d);
+    }
+
     public String getVarNameFor(int target) {
         String code = EditorUI.INSTANCE.codeTextPane.getText();
         String varName;
@@ -309,18 +323,20 @@ public class MainQuest extends AbstractQuest {
                 } else {
                     i++;
                 }
+            } else if (s.contains("//WLC DETECT")) {
+                if (target == i) {
+                    varName = s.trim().replace("//WLC DETECT", "").trim().replace(" ", "");
+                    return varName;
+                } else {
+                    i++;
+                }
             }
         }
         return "???";
     }
 
     public Drawable getDrawableFromVar(String varName) {
-        if (varName.startsWith("var")) {
-            //TODO: oh god... i don't even... (wtf)
-            return sprites.get(Integer.parseInt(String.valueOf(varName.charAt(3))) - 1);
-        }
-
-        throw new RuntimeException("\"I am going to hide/die in a hole now.\" - Arrem");
+        return EditorUI.INSTANCE.getDrawableFromVar(varName);
     }
 
     public void newSprite() {
@@ -437,7 +453,8 @@ public class MainQuest extends AbstractQuest {
                 @Override
                 public void run() {
                     getWorld().setWorldLoader(loader);
-                    getWorld().onDispose();
+                    getWorld().onUnload(); //Unload any data first
+                    getWorld().onDispose(); //Then dispose
                     getWorld().init();
                     try {
                         getWorld().load(mapName);
@@ -487,12 +504,13 @@ public class MainQuest extends AbstractQuest {
         return false;
     }
 
-    public void selectSprite(int index) {
-        if (index < 0 || index >= sprites.size()) {
+    public void selectSprite(String index) {
+        Drawable d = EditorUI.INSTANCE.getDrawableFromVar(index);
+        if (d == null) {
             selectedSprite = null;
             return;
         }
-        selectedSprite = sprites.get(index);
+        selectedSprite = d;
         Camera.setPos(Camera.translateToCameraCenter(new Vector2f(selectedSprite.getX(), selectedSprite.getY()), 32));
         if (selectedSprite instanceof Sprite)
             Camera.followSprite((Sprite)selectedSprite);
@@ -562,13 +580,14 @@ public class MainQuest extends AbstractQuest {
             }
         } else if (selectedSprite == null) {
             Camera.stopFollowing();
-            if (!tip) {
-                tip = w || a || s || d;
-                if (tip) {
-                    EditorUI.FRAME.requestFocus();
-                    JOptionPane.showMessageDialog(EditorUI.FRAME, "No Sprite selected!\nTo move a Sprite, you must select it in the dropdown menu.", "Tip", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
+            if (s)
+                Camera.setY(Camera.getY() + (SPEED * RenderService.TIME_DELTA));
+            if (a)
+                Camera.setX(Camera.getX() - (SPEED * RenderService.TIME_DELTA));
+            if (w)
+                Camera.setY(Camera.getY() - (SPEED * RenderService.TIME_DELTA));
+            if (d)
+                Camera.setX(Camera.getX() + (SPEED * RenderService.TIME_DELTA));
         }
     }
 

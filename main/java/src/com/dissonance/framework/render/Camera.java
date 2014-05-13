@@ -101,7 +101,7 @@ public final class Camera {
     }
 
     public static void setX(float x) {
-        if (x >= bounds[0] && x <= bounds[2]) {
+        if ((x >= bounds[0] && x <= bounds[2]) || ignoreBounds) {
             posX = x;
         } else if (x < bounds[0]) {
             posX = bounds[0];
