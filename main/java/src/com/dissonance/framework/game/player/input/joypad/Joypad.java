@@ -78,6 +78,8 @@ public class Joypad {
 
     public boolean isButtonPressed(String value) {
         Component component = getComponentFor(value);
+        if (component == null)
+            return false;
         if (analog.containsKey(ids.get(value))) {
             String temp = analog.get(ids.get(value));  //dubs
 

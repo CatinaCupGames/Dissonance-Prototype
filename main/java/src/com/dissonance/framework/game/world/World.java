@@ -171,7 +171,10 @@ public final class World {
             renderingService.resume();
     }
 
+    private boolean prepared = false;;
     public void prepareTiles() {
+        if (prepared)
+            return;
         if (!RenderService.isInRenderThread())
             throw new IllegalAccessError("You must be on the render thread to prepare tiles!");
         if (tiledData == null)
@@ -231,8 +234,7 @@ public final class World {
 
         invalidateDrawableList(); //Be sure to invalidate the drawable list
 
-    }
-    private void loadTiles() {
+        prepared = true;
 
     }
 

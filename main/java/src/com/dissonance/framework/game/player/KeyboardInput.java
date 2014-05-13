@@ -104,6 +104,16 @@ public class KeyboardInput implements Input {
             }
         } else if (!InputKeys.checkKeyboard(InputKeys.SWITCH) && playableSprite.use_switch) playableSprite.use_switch = false;
 
+        if (!playableSprite.use_lock) {
+            if (InputKeys.checkKeyboard(InputKeys.STRAFE)) {
+                playableSprite.use_lock = true;
+                playableSprite.findLock();
+            }
+        } else if (!InputKeys.checkKeyboard(InputKeys.STRAFE)) {
+            playableSprite.use_lock = false;
+            playableSprite.clearLock();
+        }
+
         if (!playableSprite.use_attack && !playableSprite.is_dodging) {
             if (InputKeys.checkKeyboard(InputKeys.ATTACK)) {
                 if (playableSprite.getCurrentWeapon() != null) {

@@ -1,18 +1,21 @@
 package com.dissonance.framework.game.player;
 
-import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.UpdatableDrawable;
+import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.framework.system.utils.Timer;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public abstract class PlayableSprite extends CombatSprite {
     private PlayableSpriteEvent.OnSelectedEvent selectedEvent;
@@ -35,9 +38,11 @@ public abstract class PlayableSprite extends CombatSprite {
     long dodgeStartTime;
     boolean is_dodging, allow_dodge = true;
     boolean usespell1, usespell2;
+    boolean use_lock;
     ArrayList<PlayableSprite> party = new ArrayList<PlayableSprite>();
 
     private static PlayableSprite currentlyPlaying;
+    private CombatSprite locked;
     public boolean ignore_movement = false;
 
     public PlayableSprite(Input input) {
@@ -216,6 +221,42 @@ public abstract class PlayableSprite extends CombatSprite {
 
     void _onMovement(Direction direction) { onMovement(direction); }
 
+    public void findLock() {
+        double lowest = 0;
+        CombatSprite lowestC = null;
+        Iterator<UpdatableDrawable> sprites = getWorld().getUpdatables();
+        while (sprites.hasNext()) {
+            UpdatableDrawable d = sprites.next();
+            if (d == this)
+                continue;
+            if (d instanceof CombatSprite) {
+                CombatSprite combatSprite = (CombatSprite)d;
+
+                if (isAlly(combatSprite))
+                    continue;
+
+                final Vector2f v2 = combatSprite.getVector();
+                final Vector2f v1 = getVector();
+                double distance = Math.sqrt(((v2.x - v1.x) * (v2.x - v1.x)) + ((v2.y - v1.y) * (v2.y - v1.y)));
+                if (distance <= 0.00001)
+                    distance = 0;
+
+                if (distance < 150) {
+                    if (distance < lowest || lowestC == null) {
+                        lowestC = combatSprite;
+                        lowest = distance;
+                    }
+                }
+            }
+        }
+
+        locked = lowestC;
+    }
+
+    public void clearLock() {
+        locked = null;
+    }
+
     protected boolean checkSelect() {
         Iterator<UpdatableDrawable> sprites = getWorld().getUpdatables(); //Sprites will always be Updatable
         while (sprites.hasNext()) {
@@ -340,6 +381,41 @@ public abstract class PlayableSprite extends CombatSprite {
         Camera.followSprite(this);
 
         this.player = player;
+    }
+
+    private Texture texture;
+    @Override
+    public void render() {
+        super.render();
+        if (locked != null) {
+            if (texture == null) {
+                try {
+                    texture = Texture.retrieveTexture("sprites/img/target.png");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            float x = locked.getX();
+            float y = locked.getY();
+            float z = 0f;
+            float bx = 32f / 2f;
+            float by = 32f / 2f;
+
+            texture.bind();
+            glBegin(GL_QUADS);
+            glTexCoord2f(0f, 0f); //bottom left
+            glVertex3f(x - bx, y - by, z);
+            glTexCoord2f(1f, 0f); //bottom right
+            glVertex3f(x + bx, y - by, z);
+            glTexCoord2f(1f, 1f); //top right
+            glVertex3f(x + bx, y + by, z);
+            glTexCoord2f(0f, 1f); //top left
+            glVertex3f(x - bx, y + by, z);
+            glEnd();
+            texture.unbind();
+
+        }
     }
 
     public Player getPlayer() {

@@ -110,6 +110,16 @@ public class ControllerInput implements Input {
             }
         } else if (!controller.isButtonPressed(InputKeys.SWITCH) && playableSprite.use_switch) playableSprite.use_switch = false;
 
+        if (!playableSprite.use_lock) {
+            if (controller.isButtonPressed(InputKeys.STRAFE)) {
+                playableSprite.use_lock = true;
+                playableSprite.findLock();
+            }
+        } else if (!controller.isButtonPressed(InputKeys.STRAFE)) {
+            playableSprite.use_lock = false;
+            playableSprite.clearLock();
+        }
+
         if (!playableSprite.use_attack && !playableSprite.is_dodging) {
             if (controller.isButtonPressed(InputKeys.ATTACK)) {
                 if (playableSprite.getCurrentWeapon() != null) {
