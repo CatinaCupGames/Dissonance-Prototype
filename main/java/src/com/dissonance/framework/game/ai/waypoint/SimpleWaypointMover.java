@@ -14,12 +14,12 @@ public class SimpleWaypointMover implements WaypointMover {
         float ydiff = sprite.getY() - dest.getY();
         float speed = sprite.getMovementSpeed();
         boolean moved = false;
-        if (xdiff <= -0.5f || xdiff >= 0.5f) {
+        if (xdiff <= -4.5f || xdiff >= 4.5f) {
             moved = true;
             sprite.setX(sprite.getX() + (xdiff > 0 ? -speed * RenderService.TIME_DELTA : speed * RenderService.TIME_DELTA));
         }
 
-        if (ydiff <= -0.5 || ydiff >= 0.5f) {
+        if (ydiff <= -4.5 || ydiff >= 4.5f) {
             moved = true;
             sprite.setY(sprite.getY() + (ydiff > 0 ? -speed * RenderService.TIME_DELTA : speed * RenderService.TIME_DELTA));
         }

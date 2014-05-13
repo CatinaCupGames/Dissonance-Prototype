@@ -39,7 +39,9 @@ public class LightShader extends AbstractShader {
 
     public void addAll(List<Light> lights) {
         this.lights.addAll(lights);
+
         set = false;
+        lightUpdate = false;
 
         if (lights.size() > 0)
             setActive(true);
@@ -50,7 +52,9 @@ public class LightShader extends AbstractShader {
     public void add(Light l) {
         if (!this.lights.contains(l))
             this.lights.add(l);
+
         set = false;
+        lightUpdate = false;
 
         if (lights.size() > 0)
             setActive(true);
@@ -60,6 +64,9 @@ public class LightShader extends AbstractShader {
 
     public void clear() {
         this.lights.clear();
+
+        set = false;
+        lightUpdate = false;
 
         if (lights.size() > 0)
             setActive(true);
@@ -71,6 +78,9 @@ public class LightShader extends AbstractShader {
         if (this.lights.contains(l))
             this.lights.remove(l);
 
+        set = false;
+        lightUpdate = false;
+
         if (lights.size() > 0)
             setActive(true);
         else
@@ -79,6 +89,9 @@ public class LightShader extends AbstractShader {
 
     public void remove(int index) {
         this.lights.remove(index);
+
+        set = false;
+        lightUpdate = false;
 
         if (lights.size() > 0)
             setActive(true);
