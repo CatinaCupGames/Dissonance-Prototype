@@ -12,6 +12,8 @@ public abstract class Service {
 
     private Runnable runnable;
 
+    private boolean started;
+
     private boolean terminated;
 
     private final Queue<ServiceRunnable> listToRun = new LinkedList<>();
@@ -28,6 +30,7 @@ public abstract class Service {
             public void run() {
                 serviceThreadID = Thread.currentThread().getId();
                 onStart();
+                started = true;
                 Thread.currentThread().setName(getName());
                 while (!terminated) {
 
@@ -179,6 +182,10 @@ public abstract class Service {
 
     public boolean isTerminated() {
         return terminated;
+    }
+
+    public boolean hasStarted() {
+        return started;
     }
 
     public class ServiceRunnable {

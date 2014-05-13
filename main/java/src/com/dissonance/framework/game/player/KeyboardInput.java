@@ -1,5 +1,7 @@
 package com.dissonance.framework.game.player;
 
+import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
@@ -143,6 +145,17 @@ public class KeyboardInput implements Input {
                 playableSprite.usespell2 = true;
             }
         } else if (!InputKeys.checkKeyboard(InputKeys.MAGIC2)) playableSprite.usespell2 = false;
+
+        if (GameService.getCurrentQuest() != null && !playableSprite.usepause) {
+            if (InputKeys.checkKeyboard(InputKeys.PAUSE)) {
+                AbstractQuest quest = GameService.getCurrentQuest();
+                playableSprite.usepause = true;
+                if (quest.isPaused())
+                    quest.resumeGame();
+                else
+                    quest.pauseGame();
+            }
+        } else if (playableSprite.usepause && !InputKeys.checkKeyboard(InputKeys.PAUSE)) playableSprite.usepause = false;
     }
 
     @Override

@@ -70,6 +70,13 @@ public class Players {
     public static List<Joypad> getOpenControllers() {
         if (joypadService == null) {
             joypadService = ServiceManager.createService(JoypadService.class);
+            while (!joypadService.hasStarted()) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         Joypad[] joypads = joypadService.getJoypads();

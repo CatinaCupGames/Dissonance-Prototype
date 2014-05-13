@@ -28,6 +28,8 @@ public abstract class PlayableSprite extends CombatSprite {
     boolean use_dodge;
     boolean controller_extend;
     boolean keyboard_extend;
+    boolean usepause;
+
     float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
     long dodgeStartTime;
     boolean is_dodging, allow_dodge = true;
