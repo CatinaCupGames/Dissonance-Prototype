@@ -172,7 +172,7 @@ public abstract class PlayableSprite extends CombatSprite {
                     setAnimation(0);
                     ignore_movement = false;
                     is_dodging = false;
-                    Timer.delayedInvokeRunnable(500, new Runnable() {
+                    Timer.delayedInvokeRunnable(100, new Runnable() {
                         @Override
                         public void run() {
                             allow_dodge = true;
@@ -196,7 +196,7 @@ public abstract class PlayableSprite extends CombatSprite {
                     setAnimation(0);
                     ignore_movement = false;
                     is_dodging = false;
-                    Timer.delayedInvokeRunnable(500, new Runnable() {
+                    Timer.delayedInvokeRunnable(100, new Runnable() {
                         @Override
                         public void run() {
                             allow_dodge = true;
