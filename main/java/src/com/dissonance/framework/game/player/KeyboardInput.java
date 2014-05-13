@@ -106,8 +106,7 @@ public class KeyboardInput implements Input {
 
         if (!playableSprite.use_attack && !playableSprite.is_dodging) {
             if (InputKeys.checkKeyboard(InputKeys.ATTACK)) {
-                boolean skip = playableSprite.checkSelect();
-                if (!skip && playableSprite.getCurrentWeapon() != null) {
+                if (playableSprite.getCurrentWeapon() != null) {
                     if (playableSprite.isMoving())
                         playableSprite.getCurrentWeapon().use("stab");
                     else
@@ -117,6 +116,13 @@ public class KeyboardInput implements Input {
                 playableSprite.use_attack = true;
             }
         } else if (!InputKeys.checkKeyboard(InputKeys.ATTACK)) playableSprite.use_attack = false;
+
+        if (!playableSprite.use_select) {
+            if (InputKeys.checkKeyboard(InputKeys.SELECT)) {
+                playableSprite.checkSelect();
+                playableSprite.use_select = false;
+            }
+        } else if (!InputKeys.checkKeyboard(InputKeys.SELECT)) playableSprite.use_select = false;
 
         if (!playableSprite.use_dodge && !playableSprite.is_dodging && playableSprite.allow_dodge) {
             if (InputKeys.checkKeyboard(InputKeys.DODGE)) {

@@ -112,17 +112,23 @@ public class ControllerInput implements Input {
 
         if (!playableSprite.use_attack && !playableSprite.is_dodging) {
             if (controller.isButtonPressed(InputKeys.ATTACK)) {
-                boolean skip = playableSprite.checkSelect();
-                if (!skip && playableSprite.getCurrentWeapon() != null) {
+                if (playableSprite.getCurrentWeapon() != null) {
                     if (playableSprite.isMoving())
                         playableSprite.getCurrentWeapon().use("stab");
                     else
                         playableSprite.getCurrentWeapon().use("swipe");
-                    playableSprite.ignore_movement = true;
                 }
+                playableSprite.ignore_movement = true;
                 playableSprite.use_attack = true;
             }
         } else if (!controller.isButtonPressed(InputKeys.ATTACK)) playableSprite.use_attack = false;
+
+        if (!playableSprite.use_select) {
+            if (controller.isButtonPressed(InputKeys.SELECT)) {
+                playableSprite.checkSelect();
+                playableSprite.use_select = false;
+            }
+        } else if (!controller.isButtonPressed(InputKeys.SELECT)) playableSprite.use_select = false;
 
         if (!playableSprite.use_dodge && !playableSprite.is_dodging && playableSprite.allow_dodge) {
             if (controller.isButtonPressed(InputKeys.DODGE)) {
