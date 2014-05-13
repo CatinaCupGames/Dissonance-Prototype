@@ -153,7 +153,7 @@ public class MainQuest extends AbstractQuest {
             }
             String code = EditorUI.INSTANCE.codeTextPane.getText();
             if (selectedSprite == null) return code;
-            String varName = getVarNameFor(sprites.indexOf(selectedSprite));
+            String varName = getVarNameFor(selectedSprite);
             if (varName.equalsIgnoreCase("???") && adding) { //Assume we need to add it.
                 int index = code.indexOf("public class");
                 char[] array = code.toCharArray();
@@ -293,6 +293,10 @@ public class MainQuest extends AbstractQuest {
         return -1;
     }
 
+    public String getVarNameFor(Drawable d) {
+        return EditorUI.INSTANCE.getVarNameFor(d);
+    }
+
     public String getVarNameFor(int target) {
         String code = EditorUI.INSTANCE.codeTextPane.getText();
         String varName;
@@ -320,18 +324,20 @@ public class MainQuest extends AbstractQuest {
                 } else {
                     i++;
                 }
+            } else if (s.contains("//WLC DETECT")) {
+                if (target == i) {
+                    varName = s.trim().replace("//WLC DETECT", "").trim().replace(" ", "");
+                    return varName;
+                } else {
+                    i++;
+                }
             }
         }
         return "???";
     }
 
     public Drawable getDrawableFromVar(String varName) {
-        if (varName.startsWith("var")) {
-            //TODO: oh god... i don't even... (wtf)
-            return sprites.get(Integer.parseInt(String.valueOf(varName.charAt(3))) - 1);
-        }
-
-        throw new RuntimeException("\"I am going to hide/die in a hole now.\" - Arrem");
+        return EditorUI.INSTANCE.getDrawableFromVar(varName);
     }
 
     public void newSprite() {
@@ -448,7 +454,8 @@ public class MainQuest extends AbstractQuest {
                 @Override
                 public void run() {
                     getWorld().setWorldLoader(loader);
-                    getWorld().onDispose();
+                    getWorld().onUnload(); //Unload any data first
+                    getWorld().onDispose(); //Then dispose
                     getWorld().init();
                     try {
                         getWorld().load(mapName);
@@ -498,12 +505,13 @@ public class MainQuest extends AbstractQuest {
         return false;
     }
 
-    public void selectSprite(int index) {
-        if (index < 0 || index >= sprites.size()) {
+    public void selectSprite(String index) {
+        Drawable d = EditorUI.INSTANCE.getDrawableFromVar(index);
+        if (d == null) {
             selectedSprite = null;
             return;
         }
-        selectedSprite = sprites.get(index);
+        selectedSprite = d;
         Camera.setPos(Camera.translateToCameraCenter(new Vector2f(selectedSprite.getX(), selectedSprite.getY()), 32));
         if (selectedSprite instanceof Sprite)
             Camera.followSprite((Sprite)selectedSprite);
