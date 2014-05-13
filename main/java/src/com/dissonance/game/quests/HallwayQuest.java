@@ -7,15 +7,12 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.scenes.HallwayScene;
 
-/**
- * Created by Henry on 5/7/2014.
- */
 public class HallwayQuest extends AbstractQuest {
     @Override
     public void startQuest() throws Exception {
         World w = WorldFactory.getWorld("WaldoHallway");
         setWorld(w);
-        w.waitForWorldLoaded();
+        w.waitForWorldDisplayed();
         Sound.playSound("waldobuilding");
 
         RenderService.INSTANCE.fadeToAlpha(1, 0f);

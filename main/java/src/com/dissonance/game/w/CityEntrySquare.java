@@ -58,5 +58,8 @@ public class CityEntrySquare extends GameWorldLoader {
         w.loadAndAdd(guard5);
         guard5.setX(764f);
         guard5.setY(865f);
+
+        w.setWorldBrightness(0.4f);
+        w.createLight(0, 0, 0.1f, 0.1f);
     }
 }

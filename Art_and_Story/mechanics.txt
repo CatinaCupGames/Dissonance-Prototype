@@ -30,8 +30,6 @@ replenished by cure magic, the duration of spells' effects, and the
 effectiveness of buff/debuff spells
   -Marksmanship: determines recoil, reload speed, and jam frequency when
 using guns
-  -Magic resistance: For non-magic users, determines damage dealt by
-incoming magic attacks
 
 There are two non-level-variable stats in the game, one of which is
 available to all characters. They are:
