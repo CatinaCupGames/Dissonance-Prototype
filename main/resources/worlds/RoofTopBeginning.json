@@ -111,32 +111,6 @@
                  "width":39,
                  "x":547,
                  "y":321
-                }, 
-                {
-                 "height":109,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "type":"",
-                 "visible":true,
-                 "width":236,
-                 "x":8,
-                 "y":352
-                }, 
-                {
-                 "height":0,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":261,
-                 "y":431
                 }],
          "opacity":1,
          "type":"objectgroup",
