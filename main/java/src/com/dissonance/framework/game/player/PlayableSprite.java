@@ -39,6 +39,7 @@ public abstract class PlayableSprite extends CombatSprite {
     boolean is_dodging, allow_dodge = true;
     boolean usespell1, usespell2;
     boolean use_lock;
+    boolean use_lock_controller;
     ArrayList<PlayableSprite> party = new ArrayList<PlayableSprite>();
 
     private static PlayableSprite currentlyPlaying;
@@ -251,9 +252,15 @@ public abstract class PlayableSprite extends CombatSprite {
         }
 
         locked = lowestC;
+        if (locked != null) {
+            locked.lockOn(this);
+        }
     }
 
     public void clearLock() {
+        if (locked != null) {
+            locked.removeLock(this);
+        }
         locked = null;
     }
 
@@ -381,41 +388,6 @@ public abstract class PlayableSprite extends CombatSprite {
         Camera.followSprite(this);
 
         this.player = player;
-    }
-
-    private Texture texture;
-    @Override
-    public void render() {
-        super.render();
-        if (locked != null) {
-            if (texture == null) {
-                try {
-                    texture = Texture.retrieveTexture("sprites/img/target.png");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            float x = locked.getX();
-            float y = locked.getY();
-            float z = 0f;
-            float bx = 32f / 2f;
-            float by = 32f / 2f;
-
-            texture.bind();
-            glBegin(GL_QUADS);
-            glTexCoord2f(0f, 0f); //bottom left
-            glVertex3f(x - bx, y - by, z);
-            glTexCoord2f(1f, 0f); //bottom right
-            glVertex3f(x + bx, y - by, z);
-            glTexCoord2f(1f, 1f); //top right
-            glVertex3f(x + bx, y + by, z);
-            glTexCoord2f(0f, 1f); //top left
-            glVertex3f(x - bx, y + by, z);
-            glEnd();
-            texture.unbind();
-
-        }
     }
 
     public Player getPlayer() {
@@ -563,6 +535,31 @@ public abstract class PlayableSprite extends CombatSprite {
             Camera.followSprite(PlayableSprite.this);
         }
     };
+
+    public CombatSprite getLocker() {
+        return locked;
+    }
+
+    public Direction getDirectionOf(CombatSprite locker) {
+        float ydif = locker.getY() - getY();
+        float xdif = locker.getX() - getX();
+        double angle = Math.toDegrees(Math.atan2(-ydif, xdif));
+        while (angle < 0)
+            angle += 360;
+        while (angle > 360)
+            angle -= 360;
+        Direction direction1 = getDirection();
+        if ((angle > 315 || angle < 45)) {
+            return Direction.RIGHT;
+        } else if (angle > 255 && angle <= 315) {
+            return Direction.DOWN;
+        } else if (angle > 135 && angle <= 225) {
+            return Direction.LEFT;
+        } else if (angle >= 45 && angle <= 135) {
+            return Direction.UP;
+        }
+        return Direction.NONE;
+    }
 
     public interface PlayableSpriteEvent {
         /**

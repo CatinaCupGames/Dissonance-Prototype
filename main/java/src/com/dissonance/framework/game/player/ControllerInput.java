@@ -50,6 +50,10 @@ public class ControllerInput implements Input {
 
         playableSprite.rawSetX(playableSprite.getX() + values.x * (playableSprite.movementSpeed() * RenderService.TIME_DELTA));
         playableSprite.rawSetY(playableSprite.getY() + values.y * (playableSprite.movementSpeed() * RenderService.TIME_DELTA));
+
+        if (playableSprite.getLocker() != null) {
+            playableSprite.setFacing(playableSprite.getDirectionOf(playableSprite.getLocker()));
+        }
         double angle = Math.toDegrees(Math.atan2(-values.y, values.x));
 
         if (angle < 0)
@@ -110,13 +114,13 @@ public class ControllerInput implements Input {
             }
         } else if (!controller.isButtonPressed(InputKeys.SWITCH) && playableSprite.use_switch) playableSprite.use_switch = false;
 
-        if (!playableSprite.use_lock) {
+        if (!playableSprite.use_lock_controller) {
             if (controller.isButtonPressed(InputKeys.STRAFE)) {
-                playableSprite.use_lock = true;
+                playableSprite.use_lock_controller = true;
                 playableSprite.findLock();
             }
         } else if (!controller.isButtonPressed(InputKeys.STRAFE)) {
-            playableSprite.use_lock = false;
+            playableSprite.use_lock_controller = false;
             playableSprite.clearLock();
         }
 
