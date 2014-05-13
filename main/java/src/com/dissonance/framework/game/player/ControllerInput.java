@@ -2,6 +2,7 @@ package com.dissonance.framework.game.player;
 
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.GameService;
+import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.player.input.joypad.Joypad;
 import com.dissonance.framework.render.Camera;
@@ -11,7 +12,7 @@ import net.java.games.input.Controller;
 import org.lwjgl.util.vector.Vector2f;
 
 public class ControllerInput implements Input {
-    private Joypad controller;
+    private final Joypad controller;
     public ControllerInput(Joypad controller) {
         this.controller = controller;
     }
@@ -48,29 +49,55 @@ public class ControllerInput implements Input {
         if (values.lengthSquared() < 0.25f)
             values = new Vector2f(0,0);
 
-        playableSprite.rawSetX(playableSprite.getX() + values.x * (playableSprite.movementSpeed() * RenderService.TIME_DELTA));
-        playableSprite.rawSetY(playableSprite.getY() + values.y * (playableSprite.movementSpeed() * RenderService.TIME_DELTA));
-
-        if (playableSprite.getLocker() != null) {
-            playableSprite.setFacing(playableSprite.getDirectionOf(playableSprite.getLocker()));
-        }
         double angle = Math.toDegrees(Math.atan2(-values.y, values.x));
 
         if (angle < 0)
             angle += 360;
-        if (angle != 0 && angle != -0) {
-            if (angle > 315 || angle < 45) {
-                playableSprite.setFacing(Direction.RIGHT);
-                playableSprite.d = true;
-            } else if (angle > 255 && angle <= 315) {
-                playableSprite.setFacing(Direction.DOWN);
-                playableSprite.s = true;
-            } else if (angle > 135 && angle <= 225) {
-                playableSprite.setFacing(Direction.LEFT);
-                playableSprite.a = true;
-            } else if (angle >= 45 && angle <= 135) {
-                playableSprite.setFacing(Direction.UP);
-                playableSprite.w = true;
+
+        if (playableSprite.getLocker() != null) {
+            playableSprite.setFacing(playableSprite.getDirectionOf(playableSprite.getLocker()));
+
+            double langle = playableSprite.getAngleOf(playableSprite.getLocker());
+            float x = values.x;
+            float y = values.y;
+
+            if (langle <= 180)
+                y = -y;
+
+            values.x = -(float) ((x*Math.cos(Math.toRadians(langle))) + (y*Math.sin(Math.toRadians(langle))));
+            values.y = (float) ((x*-Math.sin(Math.toRadians(langle)))+(y*Math.cos(Math.toRadians(langle))));
+
+            playableSprite.rawSetX(playableSprite.getX() + values.y * (playableSprite.movementSpeed() * RenderService.TIME_DELTA));
+            playableSprite.rawSetY(playableSprite.getY() + values.x * (playableSprite.movementSpeed() * RenderService.TIME_DELTA));
+
+            if (angle != 0 && angle != -0) {
+                if (angle > 315 || angle < 45) {
+                    playableSprite.d = true;
+                } else if (angle > 255 && angle <= 315) {
+                    playableSprite.s = true;
+                } else if (angle > 135 && angle <= 225) {
+                    playableSprite.a = true;
+                } else if (angle >= 45 && angle <= 135) {
+                    playableSprite.w = true;
+                }
+            }
+        } else {
+            playableSprite.rawSetX(playableSprite.getX() + values.x * (playableSprite.movementSpeed() * RenderService.TIME_DELTA));
+            playableSprite.rawSetY(playableSprite.getY() + values.y * (playableSprite.movementSpeed() * RenderService.TIME_DELTA));
+            if (angle != 0 && angle != -0) {
+                if (angle > 315 || angle < 45) {
+                    playableSprite.setFacing(Direction.RIGHT);
+                    playableSprite.d = true;
+                } else if (angle > 255 && angle <= 315) {
+                    playableSprite.setFacing(Direction.DOWN);
+                    playableSprite.s = true;
+                } else if (angle > 135 && angle <= 225) {
+                    playableSprite.setFacing(Direction.LEFT);
+                    playableSprite.a = true;
+                } else if (angle >= 45 && angle <= 135) {
+                    playableSprite.setFacing(Direction.UP);
+                    playableSprite.w = true;
+                }
             }
         }
 

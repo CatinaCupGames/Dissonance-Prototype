@@ -548,7 +548,6 @@ public abstract class PlayableSprite extends CombatSprite {
             angle += 360;
         while (angle > 360)
             angle -= 360;
-        Direction direction1 = getDirection();
         if ((angle > 315 || angle < 45)) {
             return Direction.RIGHT;
         } else if (angle > 255 && angle <= 315) {
@@ -559,6 +558,17 @@ public abstract class PlayableSprite extends CombatSprite {
             return Direction.UP;
         }
         return Direction.NONE;
+    }
+
+    public double getAngleOf(CombatSprite sprite) {
+        float ydif = sprite.getY() - getY();
+        float xdif = sprite.getX() - getX();
+        double angle = Math.toDegrees(Math.atan2(-ydif, xdif));
+        while (angle < 0)
+            angle += 360;
+        while (angle > 360)
+            angle -= 360;
+        return angle;
     }
 
     public interface PlayableSpriteEvent {
