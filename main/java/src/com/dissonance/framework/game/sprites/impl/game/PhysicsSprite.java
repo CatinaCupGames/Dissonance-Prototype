@@ -407,7 +407,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         Layer[] layers = getWorld().getLayers(LayerType.TILE_LAYER);
         for (Layer layer : layers) {
             Tile tile = getWorld().getTileAt(x / 16f, FastMath.fastCeil((y - 8f) / 16f), layer);
-            if (tile.isTriggerTile())
+            if (tile != null && tile.isTriggerTile())
                 tile.getTrigger().onCollide(this, tile);
         }
     }

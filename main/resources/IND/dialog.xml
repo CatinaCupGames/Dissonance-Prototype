@@ -211,6 +211,15 @@
         <message>Ah, okay. Step on the conveyor and let us lead the way.</message>
     </dialog>
 
+    <dialog dialog_id="gate2">
+        <header>Jeremiah</header>
+        <message style="italic">Wow, this place is a dump. Don't they have any-</message>
+        <header>Guard</header>
+        <message>Unless you don't want to make it out of here, I'd suggest you stop now.</message>
+        <header>Jeremiah</header>
+        <message speed="500">...</message>
+    </dialog>
+
 
 
 

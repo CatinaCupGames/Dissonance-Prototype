@@ -41,7 +41,7 @@ public class HallwayScene extends SimpleScene {
         WaldoHallway.guard5.setMovementSpeed(6f);
         WaldoHallway.guard5.setWaypoint(0,7*16,WaypointType.SIMPLE);
 
-        Thread.sleep(9350);
+        Thread.sleep(4350);
         RenderService.INSTANCE.fadeToBlack(1500);
         RenderService.INSTANCE.waitForFade();
 
