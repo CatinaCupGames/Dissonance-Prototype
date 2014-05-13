@@ -235,7 +235,6 @@ public final class World {
         invalidateDrawableList(); //Be sure to invalidate the drawable list
 
         prepared = true;
-
     }
 
     /**
@@ -463,6 +462,7 @@ public final class World {
         }
         combatCache.clear();
         lights.clear();
+        prepared = false;
 
         if (tiledData != null) tiledData.dispose();
         if (frame != null) frame.dispose();

@@ -2,6 +2,7 @@ package com.dissonance.test;
 
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.world.World;
+import com.dissonance.game.quests.OfficeQuest;
 import com.dissonance.test.quests.AITestQuest;
 import com.dissonance.test.quests.CoopQuest;
 import net.java.games.input.Component;
@@ -16,6 +17,7 @@ public class Main {
         World.setDefaultLoaderPackage("com.dissonance.test.w");
 
         GameService.loadEssentials(args);
+<<<<<<< HEAD
         GameService.beginQuest(new CoopQuest());
 
         /*Controller[] controller = ControllerEnvironment.getDefaultEnvironment().getControllers();
@@ -46,5 +48,8 @@ public class Main {
             }
             Thread.sleep(1500);
         }*/
+=======
+        GameService.beginQuest(new OfficeQuest());
+>>>>>>> master
     }
 }
