@@ -4,6 +4,7 @@ import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.game.quests.OfficeQuest;
 import com.dissonance.test.quests.AITestQuest;
+import com.dissonance.test.quests.TestQuest;
 
 public class Main {
 
@@ -11,6 +12,6 @@ public class Main {
         World.setDefaultLoaderPackage("com.dissonance.test.w");
 
         GameService.loadEssentials(args);
-        GameService.beginQuest(new OfficeQuest());
+        GameService.beginQuest(new TestQuest());
     }
 }

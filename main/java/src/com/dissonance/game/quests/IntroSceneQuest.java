@@ -1,12 +1,10 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.game.scenes.Demo_OpeningScene;
-import com.dissonance.game.scenes.GateScene;
 import com.dissonance.game.scenes.OutdoorScene;
 import com.dissonance.game.sprites.menu.IntroCredits;
 
@@ -19,6 +17,7 @@ public class IntroSceneQuest extends AbstractQuest {
 
         RenderService.INSTANCE.fadeToBlack(1); //Make screen black
         setWorld(world1);
+        //Sound.playSound("zesilia.wav");
         world1.waitForWorldLoaded();
         intro.display(world1);
         System.out.println("Play Scene");

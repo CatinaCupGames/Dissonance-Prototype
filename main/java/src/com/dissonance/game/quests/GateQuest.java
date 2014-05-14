@@ -105,6 +105,14 @@ public class GateQuest extends AbstractQuest {
         CityEntrySquare.guard4.ignoreCollisionWith(CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard1, CityEntrySquare.guard5, CityEntrySquare.farrand);
         CityEntrySquare.guard5.ignoreCollisionWith(CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard1, CityEntrySquare.farrand);
         CityEntrySquare.farrand.ignoreCollisionWith(CityEntrySquare.guard1, CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard5);
+
+        CityEntrySquare.guard1.setMovementSpeed(20f);
+        CityEntrySquare.guard2.setMovementSpeed(20f);
+        CityEntrySquare.guard3.setMovementSpeed(20f);
+        CityEntrySquare.guard4.setMovementSpeed(20f);
+        CityEntrySquare.guard5.setMovementSpeed(20f);
+
+
     }
 
 }

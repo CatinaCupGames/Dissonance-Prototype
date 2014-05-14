@@ -13,6 +13,9 @@ public class OfficeQuest extends AbstractQuest {
     public void startQuest() throws Exception {
         World w = WorldFactory.getWorld("WaldomarsMeetingRoom");
         setWorld(w);
+        w.waitForWorldDisplayed();
+        WaldomarsMeetingRoom.var26.setWidth(12f);
+        WaldomarsMeetingRoom.var26.setHeight(12f);
         //Sound.playSound("waldobuilding");
         WaldomarsMeetingRoom.farrand.setAnimation("walk_left");
         WaldomarsMeetingRoom.farrand.pauseAnimation();
@@ -25,7 +28,7 @@ public class OfficeQuest extends AbstractQuest {
             @Override
             public void run() {
                 while(true){
-                    System.out.println(String.valueOf(WaldomarsMeetingRoom.farrand.getX()) + String.valueOf(WaldomarsMeetingRoom.farrand.getY()));
+                    //System.out.println(String.valueOf(WaldomarsMeetingRoom.farrand.getX()) + String.valueOf(WaldomarsMeetingRoom.farrand.getY()));
                     if(WaldomarsMeetingRoom.farrand.getX() <= 10*16 && WaldomarsMeetingRoom.farrand.getX() >= 3*16 && WaldomarsMeetingRoom.farrand.getY() <= 5*16){
                         WaldomarsMeetingRoom.farrand.deselect();
                         WaldomarsMeetingRoom.farrand.setMovementSpeed(30f);

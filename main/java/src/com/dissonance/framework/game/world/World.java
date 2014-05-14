@@ -462,6 +462,7 @@ public final class World {
         }
         combatCache.clear();
         lights.clear();
+        prepared = false;
 
         if (tiledData != null) tiledData.dispose();
         if (frame != null) frame.dispose();
