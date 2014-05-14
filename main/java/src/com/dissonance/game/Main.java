@@ -2,7 +2,6 @@ package com.dissonance.game;
 
 import com.dissonance.framework.game.GameService;
 import com.dissonance.game.quests.DisclaimerQuest;
-import com.dissonance.game.quests.HallwayQuest;
 
 public class Main {
     public static String DID;
