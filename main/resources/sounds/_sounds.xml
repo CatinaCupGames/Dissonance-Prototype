@@ -46,4 +46,8 @@
     <sound name="introtheme"
            start="0:13:333"
            end="2:13:333"/>
+
+    <sound name="zesilia"
+           start="0:32:0"
+           end="2:08:0"/>
 </sounds>

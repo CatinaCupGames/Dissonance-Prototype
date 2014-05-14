@@ -10,6 +10,6 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         GameService.loadEssentials(args);
-        GameService.beginQuest(new GateQuest());
+        GameService.beginQuest(new DisclaimerQuest());
     }
 }

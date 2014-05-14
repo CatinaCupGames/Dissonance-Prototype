@@ -4,6 +4,7 @@ import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.scenes.Demo_OpeningScene;
 import com.dissonance.game.scenes.OutdoorScene;
 import com.dissonance.game.sprites.menu.IntroCredits;
@@ -17,7 +18,7 @@ public class IntroSceneQuest extends PauseQuest {
 
         RenderService.INSTANCE.fadeToBlack(1); //Make screen black
         setWorld(world1);
-        //Sound.playSound("zesilia.wav");
+        Sound.playSound("zesilia");
         world1.waitForWorldLoaded();
         intro.display(world1);
         System.out.println("Play Scene");
