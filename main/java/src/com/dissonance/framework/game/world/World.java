@@ -26,6 +26,7 @@ import com.dissonance.framework.system.debug.DebugSprite;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Timer;
 import com.dissonance.framework.system.utils.Validator;
+import com.dissonance.framework.system.utils.physics.HitBox;
 import com.dissonance.framework.system.utils.proxyhelper.ProxyFactory;
 import com.google.gson.Gson;
 import org.lwjgl.util.vector.Vector2f;
@@ -170,7 +171,10 @@ public final class World {
             renderingService.resume();
     }
 
+    private boolean prepared = false;
     public void prepareTiles() {
+        if (prepared)
+            return;
         if (!RenderService.isInRenderThread())
             throw new IllegalAccessError("You must be on the render thread to prepare tiles!");
         if (tiledData == null)
@@ -230,9 +234,7 @@ public final class World {
 
         invalidateDrawableList(); //Be sure to invalidate the drawable list
 
-    }
-    private void loadTiles() {
-
+        prepared = true;
     }
 
     /**
@@ -455,7 +457,12 @@ public final class World {
         drawable.clear();
         unsorted.clear();
         udrawables.clear();
+        for (CombatSprite c : combatCache) {
+            HitBox.unregisterSprite(c);
+        }
         combatCache.clear();
+        lights.clear();
+        prepared = false;
 
         if (tiledData != null) tiledData.dispose();
         if (frame != null) frame.dispose();

@@ -54,7 +54,9 @@ public class WaldoHallway implements WorldLoader {
        w.loadAndAdd(guard5);
        guard5.setX(46*16);
        guard5.setY(7*16);
-
+       w.setWorldBrightness(0.4f);
+       w.createLight(33*16, 6*16, 1.4f, 1.0f);
+       w.createLight(0, 0, 0.1f, 0.1f);
 
    }
 
