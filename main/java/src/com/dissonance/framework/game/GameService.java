@@ -1,26 +1,18 @@
 package com.dissonance.framework.game;
 
-import com.dissonance.framework.game.input.InputKeys;
+import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.system.debug.Debug;
-import com.dissonance.framework.system.settings.SettingsLevelTest;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.utils.Validator;
 import com.sun.istack.internal.NotNull;
-import org.yaml.snakeyaml.Yaml;
 
-import javax.crypto.Cipher;
-import javax.crypto.CipherOutputStream;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class GameService {
     static {
@@ -38,6 +30,7 @@ public class GameService {
         System.setProperty("org.lwjgl.librarypath", new File(lwjgl_folder).getAbsolutePath());
         System.setProperty("net.java.games.input.librarypath", System.getProperty("org.lwjgl.librarypath"));
     }
+    public static boolean coop_mode = false;
     public static final String encryptAlgorithm = "PBEWithMD5AndDES";
 
     public static String[] args;

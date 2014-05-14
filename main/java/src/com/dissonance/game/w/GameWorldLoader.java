@@ -1,5 +1,8 @@
 package com.dissonance.game.w;
 
+import com.dissonance.framework.game.GameService;
+import com.dissonance.framework.game.player.Player;
+import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.framework.render.Camera;
@@ -13,6 +16,7 @@ import com.dissonance.game.sprites.hud.BaseHUD;
  */
 public abstract class GameWorldLoader implements WorldLoader {
     public static BaseHUD hud;
+    public static Player player1;
     //public static HUD hud;
     //public static Wyatt wyatt;
     public static Farrand farrand;
@@ -23,15 +27,16 @@ public abstract class GameWorldLoader implements WorldLoader {
             hud.display(w);
         }
 
+        if (player1 == null && !GameService.coop_mode) {
+            player1 = Players.createPlayer1();
+        }
+
         if (farrand == null) {
             farrand = new Farrand();
             w.loadAndAdd(farrand);
-            farrand.select();
         } else {
             w.loadAndAdd(farrand);
             Camera.setPos(Camera.translateToCameraCenter(farrand.getVector(), farrand.getHeight()));
-            if (!farrand.isSelected()) //Maybe remove
-                farrand.select();
         }
     }
 

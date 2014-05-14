@@ -1,6 +1,6 @@
 package com.dissonance.test.sprites;
 
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 
 public class Aloysius extends PlayableSprite {
     @Override
@@ -49,11 +49,6 @@ public class Aloysius extends PlayableSprite {
     }
 
     @Override
-    public int getMagicResistance() {
-        return 0;
-    }
-
-    @Override
     public void setAttack(int attack) {
 
     }
@@ -95,11 +90,6 @@ public class Aloysius extends PlayableSprite {
 
     @Override
     public void setMarksmanship(int marksmanship) {
-
-    }
-
-    @Override
-    public void setMagicResistance(int magicResistance) {
 
     }
 

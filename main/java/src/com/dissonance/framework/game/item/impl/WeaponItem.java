@@ -5,7 +5,7 @@ import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.item.Item;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
@@ -71,6 +71,7 @@ public class WeaponItem extends Item {
 
                     if (getOwner() instanceof PlayableSprite) {
                         ((PlayableSprite)getOwner()).freeze();
+                        //((PlayableSprite)getOwner()).setAttacking(true);
                     }
 
                     switch (getOwner().getDirection()) {
@@ -195,6 +196,7 @@ public class WeaponItem extends Item {
                             hits.clear();
                         }
                     });
+                    getOwner().setAnimationSpeed(150);
                     getOwner().playAnimation();
 
                     /**

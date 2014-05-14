@@ -4,13 +4,16 @@ import com.dissonance.framework.game.combat.spells.Spell;
 import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.item.Item;
 import com.dissonance.framework.game.item.impl.WeaponItem;
+import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.utils.Validator;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public abstract class CombatSprite extends PhysicsSprite {
     private ArrayList<Item> inventory = new ArrayList<Item>();
@@ -19,6 +22,11 @@ public abstract class CombatSprite extends PhysicsSprite {
     private Spell spell2;
     private final ArrayList<StatusEffect> effects = new ArrayList<StatusEffect>();
     private int weaponIndex;
+
+    private transient ArrayList<PlayableSprite> lockers = new ArrayList<PlayableSprite>();
+    private transient ArrayList<Float[]> lockedOnColor = new ArrayList<Float[]>();
+    private transient ArrayList<Float> lockOnRotation = new ArrayList<Float>();
+
     private boolean isCastingSpell = false;
     //==FIXED STATS==//
     private double HP = 100; //This is a fixed stat
@@ -35,6 +43,55 @@ public abstract class CombatSprite extends PhysicsSprite {
         level++;
         HP = 100;
         onLevelUp();
+    }
+
+    public void lockOn(PlayableSprite sprite) {
+        Float[] colors = new Float[3];
+        switch (sprite.getPlayer().getNumber()) {
+            case 1:
+                colors[0] = 255f;
+                colors[1] = 0f;
+                colors[2] = 12f;
+                break;
+            case 2:
+                colors[0] = 73f;
+                colors[1] = 79f;
+                colors[2] = 255f;
+                break;
+            case 3:
+                colors[0] = 255f;
+                colors[1] = 223f;
+                colors[2] = 68f;
+                break;
+            case 4:
+                colors[0] = 29f;
+                colors[1] = 255f;
+                colors[2] = 0f;
+                break;
+            default:
+                final Random random = new Random();
+                colors[0] = (float) random.nextInt(255);
+                colors[1] = (float) random.nextInt(255);
+                colors[2] = (float) random.nextInt(255);
+                break;
+        }
+
+        colors[0] = colors[0] / 255f;
+        colors[1] = colors[1] / 255f;
+        colors[2] = colors[2] / 255f;
+
+        lockedOnColor.add(colors);
+        lockOnRotation.add(0f);
+        lockers.add(sprite);
+    }
+
+    public void removeLock(PlayableSprite sprite) {
+        if (lockers.contains(sprite)) {
+            int index = lockers.indexOf(sprite);
+            lockers.remove(index);
+            lockedOnColor.remove(index);
+            lockOnRotation.remove(index);
+        }
     }
 
     public abstract void onLevelUp();
@@ -119,15 +176,6 @@ public abstract class CombatSprite extends PhysicsSprite {
      */
     public abstract int getMarksmanship();
 
-    /**
-     * For non-magic users, determines value dealt by incoming magic attacks
-     *
-     * If this Sprite does not have this stat, then this method should return 0
-     * @return
-     *        The magic resistance stat, othwerwise 0
-     */
-    public abstract int getMagicResistance();
-
 
     public abstract void setAttack(int attack);
 
@@ -144,6 +192,48 @@ public abstract class CombatSprite extends PhysicsSprite {
      */
     public abstract CombatType getCombatType();
 
+    private transient Texture texture;
+    @Override
+    public void render() {
+        super.render();
+        for (int i = 0; i < lockers.size(); i++) {
+            if (texture == null) {
+                try {
+                    texture = Texture.retrieveTexture("sprites/img/target.png");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            float x = getX();
+            float y = getY();
+            float z = 0f;
+            float bx = 32f / 2f;
+            float by = 32f / 2f;
+
+            Float[] colors = lockedOnColor.get(i);
+            Float rotation = lockOnRotation.get(i);
+            glPushMatrix();
+            glTranslatef(x, y, 0f);
+            glRotatef(rotation, 0f, 0f, 1f);
+            glColor3f(colors[0], colors[1], colors[2]);
+            texture.bind();
+            glBegin(GL_QUADS);
+            glTexCoord2f(0f, 0f); //bottom left
+            glVertex3f(-bx, -by, z);
+            glTexCoord2f(1f, 0f); //bottom right
+            glVertex3f(bx, -by, z);
+            glTexCoord2f(1f, 1f); //top right
+            glVertex3f(bx, by, z);
+            glTexCoord2f(0f, 1f); //top left
+            glVertex3f(-bx, by, z);
+            glEnd();
+            texture.unbind();
+            glPopMatrix();
+            glColor3f(1f, 1f, 1f);
+        }
+    }
+
     @Override
     public void update() {
         super.update();
@@ -159,6 +249,15 @@ public abstract class CombatSprite extends PhysicsSprite {
                         effectIterator.remove();
                 }
             }
+        }
+
+        for (int i = 0; i < lockOnRotation.size(); i++) {
+            Float f = lockOnRotation.get(i);
+            f = (f + (5f * RenderService.TIME_DELTA));
+            if (f >= 360f)
+                f = 0f;
+
+            lockOnRotation.set(i, f);
         }
 
         if (isCastingSpell)
@@ -417,6 +516,8 @@ public abstract class CombatSprite extends PhysicsSprite {
         if (damage > 100)
             damage = 100;
 
+        toastText("-" + damage).setTint(255, 24, 38, 1);
+
         applyDamage(damage);
         if (HP <= 0) {
             //TODO Give attacker EXP
@@ -456,8 +557,6 @@ public abstract class CombatSprite extends PhysicsSprite {
     public abstract void setFocus(int focus);
 
     public abstract void setMarksmanship(int marksmanship);
-
-    public abstract void setMagicResistance(int magicResistance);
 
 
     public enum CombatType {

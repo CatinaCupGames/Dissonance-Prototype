@@ -1,7 +1,7 @@
 package com.dissonance.framework.game.scene.dialog;
 
-import com.dissonance.framework.game.input.InputKeys;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.input.InputKeys;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
@@ -290,7 +290,7 @@ public class DialogUI extends AbstractUI {
     private long completedWhen;
     @Override
     public void update() {
-        boolean fast_moving = InputKeys.isButtonPressed(InputKeys.JUMP) && !autoScroll;
+        boolean fast_moving = InputKeys.isButtonPressed(InputKeys.SELECT) && !autoScroll;
 
         long speed = this.speed / (fast_moving ? 2 : 1);
         if (RenderService.getTime() - lastUpdate > speed && !done) {
@@ -305,11 +305,11 @@ public class DialogUI extends AbstractUI {
         }
 
         if (!pressed) {
-            pressed = InputKeys.isButtonPressed(InputKeys.ATTACK) || InputKeys.isButtonPressed(InputKeys.JUMP);
+            pressed = InputKeys.isButtonPressed(InputKeys.ATTACK) || InputKeys.isButtonPressed(InputKeys.SELECT);
             if (pressed && done) {
                 next();
             }
-        } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK) && !InputKeys.isButtonPressed(InputKeys.JUMP)) {
+        } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK) && !InputKeys.isButtonPressed(InputKeys.SELECT)) {
             pressed = false;
         }
     }

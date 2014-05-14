@@ -2,6 +2,7 @@ package com.dissonance.framework.game.sprites.impl.game;
 
 import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.combat.Bullet;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
@@ -94,6 +95,34 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
     public void setY(float y) {
         float oY = super.getY();
         super.setY(y);
+
+        if (hb == null)
+            return;
+        for (HitBox hitBox : hb) {
+            if (hitBox.checkForCollision(this)) {
+                onCollideY(oY, y, hitBox.getLastCollide(), hitBox);
+            }
+        }
+    }
+
+    @Override
+    public void rawSetX(float x) {
+        float oX = super.getX();
+        super.rawSetX(x);
+
+        if (hb == null)
+            return;
+        for (HitBox hitBox : hb) {
+            if (hitBox.checkForCollision(this)) {
+                onCollideX(oX, x, hitBox.getLastCollide(), hitBox);
+            }
+        }
+    }
+
+    @Override
+    public void rawSetY(float y) {
+        float oY = super.getY();
+        super.rawSetY(y);
 
         if (hb == null)
             return;

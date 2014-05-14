@@ -2,7 +2,7 @@ package com.dissonance.framework.game.scene;
 
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogUI;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.render.RenderService;
 
 import java.util.ArrayList;
