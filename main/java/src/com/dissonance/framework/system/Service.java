@@ -12,6 +12,8 @@ public abstract class Service {
 
     private Runnable runnable;
 
+    private boolean started;
+
     private boolean terminated;
 
     private final Queue<ServiceRunnable> listToRun = new LinkedList<>();
@@ -19,11 +21,16 @@ public abstract class Service {
     private final List<Runnable> toRemove = new ArrayList<>();
 
     public void start() {
+        if (!hasUpdate()) {
+            onStart();
+            return; //This service does not need to update, it may handle it on it's own.
+        }
         runnable = new Runnable() {
             @Override
             public void run() {
                 serviceThreadID = Thread.currentThread().getId();
                 onStart();
+                started = true;
                 Thread.currentThread().setName(getName());
                 while (!terminated) {
 
@@ -126,6 +133,10 @@ public abstract class Service {
         return getClass().getSimpleName();
     }
 
+    protected boolean hasUpdate() {
+        return true;
+    }
+
 
     // === Functions === //
 
@@ -171,6 +182,10 @@ public abstract class Service {
 
     public boolean isTerminated() {
         return terminated;
+    }
+
+    public boolean hasStarted() {
+        return started;
     }
 
     public class ServiceRunnable {

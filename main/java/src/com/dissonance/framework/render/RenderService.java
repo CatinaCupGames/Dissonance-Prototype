@@ -214,7 +214,8 @@ public class RenderService extends Service {
             glViewport(0, 0, GameSettings.Display.window_width, GameSettings.Display.window_height);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0.1f, -1f);
+
+            //glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0.1f, -1f);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);

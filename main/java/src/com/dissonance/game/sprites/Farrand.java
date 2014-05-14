@@ -1,27 +1,19 @@
 package com.dissonance.game.sprites;
 
-import com.dissonance.framework.game.input.InputKeys;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
-import com.dissonance.framework.render.text.RenderText;
-import com.dissonance.framework.system.GameSettings;
+import com.dissonance.framework.game.player.input.InputKeys;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
-import org.newdawn.slick.*;
-import org.newdawn.slick.Color;
-
-import java.awt.*;
-import java.awt.Font;
 
 public final class Farrand extends PlayableSprite {
     //TODO Set default values for these
-    private int attack;
-    private int defense;
-    private int speed;
-    private int vigor;
-    private int stamina;
-    private int willpower;
-    private int focus;
+    private int attack = 6;
+    private int defense = 10;
+    private int speed = 8;
+    private int vigor = 10;
+    private int stamina = 6;
+    private int willpower = 14;
+    private int focus = 16;
     private int marksmanship;
-    private int magicResistance;
 
     @Override
     public void onLevelUp() {
@@ -66,11 +58,6 @@ public final class Farrand extends PlayableSprite {
     @Override
     public int getMarksmanship() {
         return marksmanship;
-    }
-
-    @Override
-    public int getMagicResistance() {
-        return magicResistance;
     }
 
     @Override
@@ -119,12 +106,9 @@ public final class Farrand extends PlayableSprite {
     }
 
     @Override
-    public void setMagicResistance(int magicResistance) {
-        this.magicResistance = magicResistance;
-    }
-
-    @Override
     public void onMovement(Direction direction) {
+        if (ignore_movement)
+            return;
         if (isAnimationPaused()) {
             super.setFrame(2);
             playAnimation();
@@ -152,7 +136,7 @@ public final class Farrand extends PlayableSprite {
 
     @Override
     public void onNoMovement() {
-        if (InputKeys.isButtonPressed(InputKeys.MOVEUP) || InputKeys.isButtonPressed(InputKeys.MOVEDOWN) || InputKeys.isButtonPressed(InputKeys.MOVELEFT) || InputKeys.isButtonPressed(InputKeys.MOVERIGHT)) {
+        if (isMoving() || ignore_movement) {
             return;
         }
         super.setFrame(1);

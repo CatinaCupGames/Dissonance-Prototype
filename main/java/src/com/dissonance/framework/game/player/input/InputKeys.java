@@ -1,4 +1,4 @@
-package com.dissonance.framework.game.input;
+package com.dissonance.framework.game.player.input;
 
 import com.dissonance.framework.system.utils.FileUtils;
 import com.dissonance.framework.system.utils.Validator;
@@ -16,6 +16,10 @@ public class InputKeys {
     public static final String MOVEY      = "my";
     public static final String EXTENDX    = "ex";
     public static final String EXTENDY    = "ey";
+    public static final String EXTENDUP   = "extendUp";
+    public static final String EXTENDDOWN = "extendDown";
+    public static final String EXTENDLEFT = "extendLeft";
+    public static final String EXTENDRIGHT = "extendRight";
     public static final String MOVEUP     = "moveUp";
     public static final String MOVEDOWN   = "moveDown";
     public static final String MOVELEFT   = "moveLeft";
@@ -27,60 +31,48 @@ public class InputKeys {
     public static final String SPECIAL    = "special";
     public static final String ATTACK     = "attack";
     public static final String STRAFE     = "strafe";
-    public static final String JUMP       = "jump";
+    public static final String SELECT     = "select";
     public static final String DODGE      = "dodge";
-    public static final String SWITCH = "extendLook";
+    public static final String SWITCH     = "switch";
+    public static final String GAMEMENU   = "menu";
+    public static final String QMENU      = "qmenu";
+
 
     private final static String DIR = "config" + File.separator;
     private static boolean loaded = false;
-    private final static String CONFIG_NAME = "keyconfig.txt";
+    private final static String CONFIG_NAME = "keyboard.dat";
     private final static String PATH = DIR + CONFIG_NAME; //move if ya want
     private final static HashMap<String, Integer> keys = new HashMap<>();
-    private final static HashMap<String, String> buttons = new HashMap<>();
-    private static Controller controller;
 
     public static void initializeConfig() throws IOException {
         loaded = true;
         FileUtils.createIfNotExist(DIR, CONFIG_NAME, createConfig());
         String[] lines = FileUtils.readAllLines(PATH);
 
-        Component[] components = null;
         for (String string : lines) {
             String[] split = string.split(":");
             Validator.validateNotBelow(split.length, 2, "key config property value");
-            if (split[0].equals("cname")) {
-                String cname = split[1];
-                for (Controller c : getAllControllers()) {
-                    if (c.getName().equals(cname) && c.getType() == Controller.Type.GAMEPAD) {
-                        controller = c;
-                        components = c.getComponents();
-                        break;
-                    }
-                }
-            } else {
-                try {
-                    keys.put(split[0], Integer.parseInt(split[1]));
-                } catch (Throwable t) {
-                    if (components == null)
-                        continue;
-
-                    for (Component c : components) {
-                        if (c.getName().equals(split[1])) {
-                            buttons.put(split[0], c.getName());
-                            break;
-                        }
-                    }
-                }
+            try {
+                keys.put(split[0], Integer.parseInt(split[1]));
+            } catch (Throwable t) {
+                t.printStackTrace();
             }
         }
     }
 
+    /**
+     * @deprecated This method is deprecated, please see the co-op wiki for more info.
+     */
+    @Deprecated
     public static Controller[] getAllControllers() {
         return ControllerEnvironment.getDefaultEnvironment().getControllers();
     }
 
     private static String createConfig() throws IOException {
-        return "moveUp:17\nmoveLeft:30\nmoveDown:31\nmoveRight:32\njump:57\ndodge:42\nextendLook:23\nstrafe:29\nattack:36\nspecial:37\nmagic1:24\nmagic2:38\nmenu:15\npause:1";
+        return "moveUp:17\nmoveLeft:30\nmoveDown:31\nmoveRight:32\n" +
+                "select:57\ndodge:42\nswitch:23\nstrafe:29\nattack:36\n" +
+                "special:37\nmagic1:24\nmagic2:38\nmenu:15\npause:1\n" +
+                "extendUp:200\nextendDown:208\nextendLeft:203\nextendRight:205\n";
     }
 
     public static void setKey(String button, int key) {
@@ -92,56 +84,46 @@ public class InputKeys {
         }
     }
 
+    /**
+     * @deprecated This method is deprecated, please see the co-op wiki for more info.
+     */
+    @Deprecated
     public static void setButton(String button, Component component) {
-        buttons.put(button, component.getName());
-        try {
-            save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
+    /**
+     * @deprecated This method is deprecated, please see the co-op wiki for more info.
+     */
+    @Deprecated
     public static void setController(String name) {
-        for (Controller c : getAllControllers()) {
-            if (c.getName().equals(name)) {
-                setController(c);
-                break;
-            }
-        }
     }
 
+    /**
+     * @deprecated This method is deprecated, please see the co-op wiki for more info.
+     */
+    @Deprecated
     public static void setController(Controller controller) {
-        InputKeys.controller = controller;
-        try {
-            save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static void save() throws IOException {
-        String[] config = new String[keys.size() + buttons.size() + (controller == null ? 0 : 1)];
+        String[] config = new String[keys.size()];
         int i = 0;
-        if (controller != null) {
-            config[i] = "cname:" + controller.getName();
-            i++;
-        }
         for (String s : keys.keySet()) {
             config[i] = s + ":" + keys.get(s);
-            i++;
-        }
-        for (String s : buttons.keySet()) {
-            config[i] = s + ":" + buttons.get(s);
             i++;
         }
 
         FileUtils.writeLines(PATH, config);
     }
 
+    /**
+     * @deprecated This method is deprecated, please see the co-op wiki for more info.
+     */
+    @Deprecated
     public static boolean isButtonPressed(String button) {
         if (!loaded)
             return false;
-        if (usingController()) {
+        /*if (usingController()) {
             if (button.equals(MOVEUP) || button.equals(MOVELEFT) || button.equals(MOVERIGHT) || button.equals(MOVELEFT)) {
                 throw new IllegalArgumentException("The player is using the controller! Use the axis!");
             }
@@ -156,13 +138,17 @@ public class InputKeys {
                     return cname.contains("Button") && c.getPollData() == 1.0f;
                 }
             }
-        }
+        }*/
         return checkKeyboard(button);
     }
 
-    public static float getJoypadValue(String button) {
-        if (!usingController())
-            return 0f;
+    /**
+     * @deprecated This method is deprecated, please see the co-op wiki for more info.
+     */
+    @Deprecated
+    public static float getJoypadValue(String button) { return 0f; }
+
+    public static float getJoypadValue(String button, Controller controller) {
         switch (button) {
             case MOVEX:
             case MOVELEFT:
@@ -189,22 +175,32 @@ public class InputKeys {
         return new Component.Identifier.Axis[] { Component.Identifier.Axis.RX, Component.Identifier.Axis.RY };
     }
 
-    private static boolean checkKeyboard(String button) {
+    public static boolean checkKeyboard(String button) {
         return Keyboard.isKeyDown(keys.get(button));
     }
 
-    public static boolean usingController() {
-        return controller != null && controllerConnected();
+    /**
+     * @deprecated This method is deprecated, please see the co-op wiki for more info.
+     */
+    @Deprecated
+    public static boolean checkController(String button, Controller controller) {
+        return false;
     }
 
+    /**
+     * @deprecated This method is deprecated, please see the co-op wiki for more info.
+     */
+    @Deprecated
+    public static boolean usingController() {
+        return false;
+    }
+
+    /**
+     * @deprecated This method is deprecated, please see the co-op wiki for more info.
+     */
+    @Deprecated
     private static boolean controllerConnected() {
-        if (controller == null)
-            return false;
-        try {
-            return controller.poll();
-        } catch (Exception e) {
-            return false;
-        }
+        return false;
     }
 
     public static int getMoveUpKey() {
@@ -224,7 +220,7 @@ public class InputKeys {
     }
 
     public static int getJumpKey() {
-        return keys.get(JUMP);
+        return keys.get(SELECT);
     }
 
     public static int getDodgeKey() {

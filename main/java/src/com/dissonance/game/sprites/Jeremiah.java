@@ -1,7 +1,7 @@
 package com.dissonance.game.sprites;
 
-import com.dissonance.framework.game.input.InputKeys;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.input.InputKeys;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
 
 public final class Jeremiah extends PlayableSprite {
@@ -62,11 +62,6 @@ public final class Jeremiah extends PlayableSprite {
     }
 
     @Override
-    public int getMagicResistance() {
-        return magicResistance;
-    }
-
-    @Override
     public void setAttack(int attack) {
         this.attack = attack;
     }
@@ -109,11 +104,6 @@ public final class Jeremiah extends PlayableSprite {
     @Override
     public void setMarksmanship(int marksmanship) {
         this.marksmanship = marksmanship;
-    }
-
-    @Override
-    public void setMagicResistance(int magicResistance) {
-        this.magicResistance = magicResistance;
     }
 
     @Override

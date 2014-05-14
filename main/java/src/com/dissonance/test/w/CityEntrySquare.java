@@ -38,7 +38,7 @@ public class CityEntrySquare extends GameWorldLoader {
         guard1 = new Wyatt();
         w.loadAndAdd(guard1);
         guard1.setX(764f);
-        guard1.setY(725f);
+        guard1.setY(325f);
 
         guard2 = new Wyatt();
         w.loadAndAdd(guard2);
