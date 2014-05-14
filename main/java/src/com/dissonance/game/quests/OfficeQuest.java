@@ -25,7 +25,7 @@ public class OfficeQuest extends AbstractQuest {
             @Override
             public void run() {
                 while(true){
-                    System.out.println(String.valueOf(WaldomarsMeetingRoom.farrand.getX()) + String.valueOf(WaldomarsMeetingRoom.farrand.getY()));
+                    //System.out.println(String.valueOf(WaldomarsMeetingRoom.farrand.getX()) + String.valueOf(WaldomarsMeetingRoom.farrand.getY()));
                     if(WaldomarsMeetingRoom.farrand.getX() <= 10*16 && WaldomarsMeetingRoom.farrand.getX() >= 3*16 && WaldomarsMeetingRoom.farrand.getY() <= 5*16){
                         WaldomarsMeetingRoom.farrand.deselect();
                         WaldomarsMeetingRoom.farrand.setMovementSpeed(30f);

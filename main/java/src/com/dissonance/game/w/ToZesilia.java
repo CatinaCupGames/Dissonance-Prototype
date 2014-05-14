@@ -5,14 +5,22 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.Jeremiah;
+import com.dissonance.game.sprites.StreetLamp;
 import com.dissonance.game.sprites.environment.Tree1;
 import com.dissonance.game.sprites.environment.Tree2;
+import com.dissonance.game.sprites.office.Gatehouse;
 
 import java.util.Random;
 
 public class ToZesilia implements WorldLoader {
     public static Farrand farrand;
     public static Jeremiah jeremiah;
+    public static StreetLamp lamp1;
+    public static StreetLamp lamp2;
+    public static StreetLamp lamp3;
+    public static StreetLamp lamp4;
+    public static Gatehouse gatehouse1;
+    public static Gatehouse gatehouse2;
     @Override
     public void onLoad(World w) {
         farrand = new Farrand();
@@ -145,11 +153,35 @@ public class ToZesilia implements WorldLoader {
             }
         }
 
+        lamp1 = new StreetLamp();
+        w.loadAndAdd(lamp1);
+        lamp1.setX(136f * 16);
+        lamp1.setY(20f*16);
+
+        lamp2 = new StreetLamp();
+        w.loadAndAdd(lamp2);
+        lamp2.setX(92f * 16);
+        lamp2.setY(20f*16);
+
+        gatehouse1 = new Gatehouse();
+        w.loadAndAdd(gatehouse1);
+        gatehouse1.setX(12.9f * 16);
+        gatehouse1.setY(16f * 16);
+
+        gatehouse2 = new Gatehouse();
+        w.loadAndAdd(gatehouse2);
+        gatehouse2.setX(12.9f * 16);
+        gatehouse2.setY(40f * 16);
+
+
+
         w.setWorldBrightness(0.8f);
-        w.createLight(165f*16, 18f*16, 1.4f, 0.9f);
-        w.createLight(136f*16, 18f*16, 1.4f, 0.9f);
+        w.createLight(165f * 16, 18f * 16, 1.4f, 0.9f);
+        w.createLight(136f*16, 16.5f*16, 1.8f, 0.03f);
+        w.createLight(136f*16, 14f*16, 1.4f, 0.9f);
         w.createLight(13f*16, 18f*16, 1.4f, 0.9f);
-        w.createLight(92f*16, 18f*16, 1.4f, 0.9f);
+        w.createLight(92f*16, 14f*16, 1.4f, 0.9f);
+        w.createLight(92f*16, 16.5f*16, 1.8f, 0.03f);
 
     }
 
