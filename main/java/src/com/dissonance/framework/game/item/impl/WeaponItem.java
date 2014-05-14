@@ -43,6 +43,8 @@ public class WeaponItem extends Item {
 
     @Override
     public void use(Object... parameters) {
+        if (getOwner() instanceof PlayableSprite && ((PlayableSprite)getOwner()).isFrozen())
+            return;
         if (weapon.isGun()) {
             //TODO animate shooter
 

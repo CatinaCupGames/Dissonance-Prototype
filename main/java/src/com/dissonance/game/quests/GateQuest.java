@@ -3,6 +3,8 @@ package com.dissonance.game.quests;
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.ai.behaviors.LeaderFollow;
+import com.dissonance.framework.game.player.Player;
+import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.world.World;
@@ -12,7 +14,7 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.game.scenes.GateScene;
 import com.dissonance.game.w.CityEntrySquare;
 
-public class GateQuest extends AbstractQuest {
+public class GateQuest extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         World world3 = WorldFactory.getWorld("CityEntrySquare");
@@ -21,9 +23,20 @@ public class GateQuest extends AbstractQuest {
         world3.invalidateDrawableList(); //Because fuck you
 
         CityEntrySquare.farrand.freeze();
-        CityEntrySquare.farrand.select();
+        CityEntrySquare.jeremiah.freeze();
+
+        Player player1 = Players.createPlayer1();
+
+        player1.joinAs(CityEntrySquare.farrand);
+
+        Player player2;
+        if ((player2 = Players.getPlayer(2)) != null) {
+            player2.joinAs(CityEntrySquare.jeremiah);
+        }
+
         playSceneAndWait(GateScene.class);
         CityEntrySquare.farrand.unfreeze();
+        CityEntrySquare.jeremiah.unfreeze();
         WorldFactory.clearCache();
         final boolean[] moved = {false};
         CityEntrySquare.farrand.setSpriteMovedListener(new Sprite.SpriteEvent.SpriteMovedEvent() {

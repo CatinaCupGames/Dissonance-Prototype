@@ -2,7 +2,7 @@ package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
 
-public class GameQuest extends AbstractQuest {
+public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
 

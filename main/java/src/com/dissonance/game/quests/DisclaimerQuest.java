@@ -5,12 +5,12 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.game.sprites.menu.DisclaimerSprite;
 
-public class DisclaimerQuest extends AbstractQuest {
+public class DisclaimerQuest extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         World world = WorldFactory.getWorld("some_world_idk");
         setWorld(world);
-        world.waitForWorldLoaded();
+        world.waitForWorldDisplayed();
 
         DisclaimerSprite sprite = new DisclaimerSprite();
         sprite.display(world);

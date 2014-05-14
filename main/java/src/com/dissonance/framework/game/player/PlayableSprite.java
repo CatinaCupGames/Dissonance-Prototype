@@ -447,6 +447,8 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     protected void dodge(Direction direction1) {
+        if (frozen)
+            return;
         frozen = true;
         String ani;
         float speed = movementSpeed() * 2.5f;
