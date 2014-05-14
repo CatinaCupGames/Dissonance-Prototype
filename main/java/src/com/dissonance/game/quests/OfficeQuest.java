@@ -13,6 +13,9 @@ public class OfficeQuest extends AbstractQuest {
     public void startQuest() throws Exception {
         World w = WorldFactory.getWorld("WaldomarsMeetingRoom");
         setWorld(w);
+        w.waitForWorldDisplayed();
+        WaldomarsMeetingRoom.var26.setWidth(12f);
+        WaldomarsMeetingRoom.var26.setHeight(12f);
         //Sound.playSound("waldobuilding");
         WaldomarsMeetingRoom.farrand.setAnimation("walk_left");
         WaldomarsMeetingRoom.farrand.pauseAnimation();

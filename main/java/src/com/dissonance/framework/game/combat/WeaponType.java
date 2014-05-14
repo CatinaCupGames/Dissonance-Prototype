@@ -3,7 +3,7 @@ package com.dissonance.framework.game.combat;
 public enum WeaponType {
     SPELL(""),
     LIGHT_MELEE("light_melee"),
-    HEAVY_MELEE("heavy_attack"),
+    HEAVY_MELEE("heavy_melee"),
     GUN("gun"),
     UNKNOWN("");
 
