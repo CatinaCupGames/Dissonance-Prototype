@@ -49,11 +49,6 @@ public class Waldomar extends CombatSprite {
     }
 
     @Override
-    public int getMagicResistance() {
-        return 0;
-    }
-
-    @Override
     public void setAttack(int attack) {
 
     }
@@ -100,11 +95,6 @@ public class Waldomar extends CombatSprite {
 
     @Override
     public void setMarksmanship(int marksmanship) {
-
-    }
-
-    @Override
-    public void setMagicResistance(int magicResistance) {
 
     }
 

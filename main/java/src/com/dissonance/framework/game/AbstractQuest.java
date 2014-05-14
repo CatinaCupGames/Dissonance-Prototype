@@ -34,6 +34,10 @@ public abstract class AbstractQuest {
         onResumeGame();
     }
 
+    public boolean isPaused() {
+        return paused;
+    }
+
 
     protected void onPauseGame() {
         //TODO Pause everything and show pause menu

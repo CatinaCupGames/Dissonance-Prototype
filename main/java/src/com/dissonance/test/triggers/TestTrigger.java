@@ -3,7 +3,7 @@ package com.dissonance.test.triggers;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.game.scene.dialog.DialogUI;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.render.RenderService;
 

@@ -1,6 +1,6 @@
 package com.dissonance.game.sprites;
 
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
 
 public final class Wyatt extends PlayableSprite {
@@ -51,11 +51,6 @@ public final class Wyatt extends PlayableSprite {
     }
 
     @Override
-    public int getMagicResistance() {
-        return 0;
-    }
-
-    @Override
     public void setAttack(int attack) {
 
     }
@@ -97,11 +92,6 @@ public final class Wyatt extends PlayableSprite {
 
     @Override
     public void setMarksmanship(int marksmanship) {
-
-    }
-
-    @Override
-    public void setMagicResistance(int magicResistance) {
 
     }
 

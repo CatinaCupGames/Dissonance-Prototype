@@ -6,7 +6,7 @@ import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.scene.ComplexScene;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.test.sprites.TestPlayer;
 

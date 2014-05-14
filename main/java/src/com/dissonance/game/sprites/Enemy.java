@@ -21,7 +21,6 @@ public class Enemy extends CombatSprite {
     private int willPower;
     private int focus;
     private int marksmanship;
-    private int magicResistance;
 
     @Override
     public int getAttack() {
@@ -61,11 +60,6 @@ public class Enemy extends CombatSprite {
     @Override
     public int getMarksmanship() {
         return marksmanship;
-    }
-
-    @Override
-    public int getMagicResistance() {
-        return magicResistance;
     }
 
     @Override
@@ -122,11 +116,6 @@ public class Enemy extends CombatSprite {
 
     @Override
     public void setMarksmanship(int marksmanship) {
-
-    }
-
-    @Override
-    public void setMagicResistance(int magicResistance) {
 
     }
 
@@ -205,7 +194,6 @@ public class Enemy extends CombatSprite {
         willPower = stats[5];
         focus = stats[6];
         marksmanship = stats[7];
-        magicResistance = stats[8];
     }
 
     @Override
@@ -214,7 +202,7 @@ public class Enemy extends CombatSprite {
         return "Enemy.java: [\n" + " name: " + spriteName + "\n level: " + level + "\n" + "[\n" + " attack: " + attack +
                 "\n defense: " + defense + "\n speed: " + speed + "\n vigor: " + vigor + "\n stamina: " + stamina +
                 "\n willPower: " + willPower + "\n focus: " + focus + "\n marksmanship: " + marksmanship +
-                "\n magicResistance: " + magicResistance + "\n]\n]";
+                "\n]\n]";
     }
 
 }

@@ -1,6 +1,6 @@
 package com.dissonance.framework.game.sprites;
 
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 import org.lwjgl.util.vector.Vector2f;
 
 public interface Selectable {

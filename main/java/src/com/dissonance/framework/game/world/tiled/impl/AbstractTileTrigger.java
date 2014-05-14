@@ -1,7 +1,6 @@
 package com.dissonance.framework.game.world.tiled.impl;
 
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
 import com.dissonance.framework.game.world.Tile;
 
 public abstract class AbstractTileTrigger {

@@ -150,7 +150,6 @@ public class WorldFactory {
                 cacheWorlds[index] = w;
             }
         }
-
         if (currentWorld != null) {
             w = getWorldHolder(currentWorld.getID());
             if (w != null) {
@@ -158,7 +157,6 @@ public class WorldFactory {
             }
             currentWorld.onUnload();
         }
-
         newworld.switchTo(fadetoblack);
         RenderService.INSTANCE.runOnServiceThread(new Runnable() {
             @Override

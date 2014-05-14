@@ -1,7 +1,7 @@
 package com.dissonance.test.sprites;
 
 import com.dissonance.framework.game.combat.Weapon;
-import com.dissonance.framework.game.sprites.impl.game.PlayableSprite;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
 
 public class TestPlayer extends PlayableSprite {
@@ -62,11 +62,6 @@ public class TestPlayer extends PlayableSprite {
     }
 
     @Override
-    public void setMagicResistance(int magicResistance) {
-
-    }
-
-    @Override
     public void onDeselect() {
         super.onDeselect();
         setFrame(0);
@@ -120,11 +115,6 @@ public class TestPlayer extends PlayableSprite {
     @Override
     public int getMarksmanship() {
         return 5;
-    }
-
-    @Override
-    public int getMagicResistance() {
-        return 1;
     }
 
     @Override
