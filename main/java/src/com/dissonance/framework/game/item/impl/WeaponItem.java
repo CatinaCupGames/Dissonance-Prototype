@@ -71,6 +71,7 @@ public class WeaponItem extends Item {
 
                     if (getOwner() instanceof PlayableSprite) {
                         ((PlayableSprite)getOwner()).freeze();
+                        //((PlayableSprite)getOwner()).setAttacking(true);
                     }
 
                     switch (getOwner().getDirection()) {
@@ -195,6 +196,7 @@ public class WeaponItem extends Item {
                             hits.clear();
                         }
                     });
+                    getOwner().setAnimationSpeed(150);
                     getOwner().playAnimation();
 
                     /**

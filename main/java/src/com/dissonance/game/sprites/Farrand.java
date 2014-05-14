@@ -6,15 +6,14 @@ import com.dissonance.framework.system.utils.Direction;
 
 public final class Farrand extends PlayableSprite {
     //TODO Set default values for these
-    private int attack;
-    private int defense;
-    private int speed = 16;
-    private int vigor;
-    private int stamina;
-    private int willpower;
-    private int focus;
+    private int attack = 6;
+    private int defense = 10;
+    private int speed = 8;
+    private int vigor = 10;
+    private int stamina = 6;
+    private int willpower = 14;
+    private int focus = 16;
     private int marksmanship;
-    private int magicResistance;
 
     @Override
     public void onLevelUp() {
@@ -59,11 +58,6 @@ public final class Farrand extends PlayableSprite {
     @Override
     public int getMarksmanship() {
         return marksmanship;
-    }
-
-    @Override
-    public int getMagicResistance() {
-        return magicResistance;
     }
 
     @Override
@@ -112,12 +106,9 @@ public final class Farrand extends PlayableSprite {
     }
 
     @Override
-    public void setMagicResistance(int magicResistance) {
-        this.magicResistance = magicResistance;
-    }
-
-    @Override
     public void onMovement(Direction direction) {
+        if (ignore_movement)
+            return;
         if (isAnimationPaused()) {
             super.setFrame(2);
             playAnimation();
@@ -145,7 +136,7 @@ public final class Farrand extends PlayableSprite {
 
     @Override
     public void onNoMovement() {
-        if (isMoving()) {
+        if (isMoving() || ignore_movement) {
             return;
         }
         super.setFrame(1);

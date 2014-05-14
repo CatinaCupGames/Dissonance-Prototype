@@ -33,6 +33,7 @@ public abstract class PlayableSprite extends CombatSprite {
     boolean keyboard_extend;
     boolean usepause;
     boolean use_select;
+    boolean isAttacking = false;
 
     float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
     long dodgeStartTime;
@@ -117,6 +118,14 @@ public abstract class PlayableSprite extends CombatSprite {
     @Override
     public boolean isMoving() {
         return input != null && input.isMoving(this);
+    }
+
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+
+    public void setAttacking(boolean value) {
+        this.isAttacking = value;
     }
 
     @Override

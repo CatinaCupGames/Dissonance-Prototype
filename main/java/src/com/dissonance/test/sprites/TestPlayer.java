@@ -62,11 +62,6 @@ public class TestPlayer extends PlayableSprite {
     }
 
     @Override
-    public void setMagicResistance(int magicResistance) {
-
-    }
-
-    @Override
     public void onDeselect() {
         super.onDeselect();
         setFrame(0);
@@ -120,11 +115,6 @@ public class TestPlayer extends PlayableSprite {
     @Override
     public int getMarksmanship() {
         return 5;
-    }
-
-    @Override
-    public int getMagicResistance() {
-        return 1;
     }
 
     @Override

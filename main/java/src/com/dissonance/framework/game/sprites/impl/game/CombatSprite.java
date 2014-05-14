@@ -176,15 +176,6 @@ public abstract class CombatSprite extends PhysicsSprite {
      */
     public abstract int getMarksmanship();
 
-    /**
-     * For non-magic users, determines value dealt by incoming magic attacks
-     *
-     * If this Sprite does not have this stat, then this method should return 0
-     * @return
-     *        The magic resistance stat, othwerwise 0
-     */
-    public abstract int getMagicResistance();
-
 
     public abstract void setAttack(int attack);
 
@@ -525,6 +516,8 @@ public abstract class CombatSprite extends PhysicsSprite {
         if (damage > 100)
             damage = 100;
 
+        toastText("-" + damage).setTint(255, 24, 38, 1);
+
         applyDamage(damage);
         if (HP <= 0) {
             //TODO Give attacker EXP
@@ -564,8 +557,6 @@ public abstract class CombatSprite extends PhysicsSprite {
     public abstract void setFocus(int focus);
 
     public abstract void setMarksmanship(int marksmanship);
-
-    public abstract void setMagicResistance(int magicResistance);
 
 
     public enum CombatType {

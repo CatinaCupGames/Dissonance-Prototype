@@ -62,11 +62,6 @@ public final class Jeremiah extends PlayableSprite {
     }
 
     @Override
-    public int getMagicResistance() {
-        return magicResistance;
-    }
-
-    @Override
     public void setAttack(int attack) {
         this.attack = attack;
     }
@@ -109,11 +104,6 @@ public final class Jeremiah extends PlayableSprite {
     @Override
     public void setMarksmanship(int marksmanship) {
         this.marksmanship = marksmanship;
-    }
-
-    @Override
-    public void setMagicResistance(int magicResistance) {
-        this.magicResistance = magicResistance;
     }
 
     @Override
