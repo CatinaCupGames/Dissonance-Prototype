@@ -2,11 +2,9 @@ package com.dissonance.framework.game.player.input.joypad;
 
 import com.dissonance.framework.game.player.ControllerInput;
 import com.dissonance.framework.game.player.Input;
-import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.system.utils.FileUtils;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
-import org.intellij.lang.annotations.MagicConstant;
 
 import java.io.File;
 import java.io.IOException;

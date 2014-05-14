@@ -50,4 +50,12 @@
     <sound name="zesilia"
            start="0:32:0"
            end="2:08:0"/>
+
+    <sound name="earthquake"/>
+
+    <sound name="bossfight"
+           start="0:17:143"
+           end="1:40:952"/>
+
+
 </sounds>

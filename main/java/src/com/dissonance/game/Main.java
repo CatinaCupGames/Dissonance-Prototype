@@ -13,8 +13,5 @@ public class Main {
         GameService.beginQuest(new DisclaimerQuest());
         //GameService.beginQuest(new OfficeQuest());
         //GameService.beginQuest(new HallwayQuest());
-
-        GameService.beginQuest(new DisclaimerQuest());
-
     }
 }
