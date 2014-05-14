@@ -7,7 +7,7 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.scenes.HallwayScene;
 
-public class HallwayQuest extends AbstractQuest {
+public class HallwayQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         World w = WorldFactory.getWorld("WaldoHallway");

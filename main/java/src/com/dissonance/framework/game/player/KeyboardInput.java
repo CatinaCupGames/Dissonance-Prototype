@@ -8,7 +8,7 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
 
 public class KeyboardInput implements Input {
-
+    private static boolean pause;
     KeyboardInput() { }
 
     @Override
@@ -86,13 +86,14 @@ public class KeyboardInput implements Input {
 
     @Override
     public void checkKeys(PlayableSprite playableSprite) {
-        checkExtend(playableSprite);
+        if (playableSprite != null) {
+            checkExtend(playableSprite);
 
-        if (!playableSprite.use_switch && playableSprite.party.size() > 0) {
-            if (InputKeys.checkKeyboard(InputKeys.SWITCH)) {
-                playableSprite.use_switch = true;
-                playableSprite.setVisible(false);
-                //TODO Find next open party member and switch to it.
+            if (!playableSprite.use_switch && playableSprite.party.size() > 0) {
+                if (InputKeys.checkKeyboard(InputKeys.SWITCH)) {
+                    playableSprite.use_switch = true;
+                    playableSprite.setVisible(false);
+                    //TODO Find next open party member and switch to it.
                 /*PlayableSprite next = playableSprite.party.get(PlayableSprite.s_index);
                 next.rawSetX(getX());
                 next.rawSetY(getY());
@@ -101,77 +102,78 @@ public class KeyboardInput implements Input {
                     s_index = 0;
                 next.select();
                 next.setVisible(true);*/
-            }
-        } else if (!InputKeys.checkKeyboard(InputKeys.SWITCH) && playableSprite.use_switch) playableSprite.use_switch = false;
+                }
+            } else if (!InputKeys.checkKeyboard(InputKeys.SWITCH) && playableSprite.use_switch) playableSprite.use_switch = false;
 
-        if (!playableSprite.use_lock) {
-            if (InputKeys.checkKeyboard(InputKeys.STRAFE)) {
-                playableSprite.use_lock = true;
-                playableSprite.findLock();
+            if (!playableSprite.use_lock) {
+                if (InputKeys.checkKeyboard(InputKeys.STRAFE)) {
+                    playableSprite.use_lock = true;
+                    playableSprite.findLock();
+                }
+            } else if (!InputKeys.checkKeyboard(InputKeys.STRAFE)) {
+                playableSprite.use_lock = false;
+                playableSprite.clearLock();
             }
-        } else if (!InputKeys.checkKeyboard(InputKeys.STRAFE)) {
-            playableSprite.use_lock = false;
-            playableSprite.clearLock();
+
+            if (!playableSprite.use_attack && !playableSprite.is_dodging) {
+                if (InputKeys.checkKeyboard(InputKeys.ATTACK)) {
+                    if (playableSprite.getCurrentWeapon() != null) {
+                        if (playableSprite.isMoving())
+                            playableSprite.getCurrentWeapon().use("stab");
+                        else
+                            playableSprite.getCurrentWeapon().use("swipe");
+                        playableSprite.ignore_movement = true;
+                    }
+                    playableSprite.use_attack = true;
+                }
+            } else if (!InputKeys.checkKeyboard(InputKeys.ATTACK)) playableSprite.use_attack = false;
+
+            if (!playableSprite.use_select) {
+                if (InputKeys.checkKeyboard(InputKeys.SELECT)) {
+                    playableSprite.checkSelect();
+                    playableSprite.use_select = false;
+                }
+            } else if (!InputKeys.checkKeyboard(InputKeys.SELECT)) playableSprite.use_select = false;
+
+            if (!playableSprite.use_dodge && !playableSprite.is_dodging && playableSprite.allow_dodge) {
+                if (InputKeys.checkKeyboard(InputKeys.DODGE)) {
+                    playableSprite.dodge(playableSprite.getDirection());
+                }
+            } else if (!InputKeys.checkKeyboard(InputKeys.DODGE)) playableSprite.use_dodge = false;
+
+            if (!playableSprite.usespell1) {
+                if (InputKeys.checkKeyboard(InputKeys.MAGIC1)) {
+                    if (playableSprite.hasSpell1())
+                        playableSprite.useSpell1();
+                    else {
+                        //TODO Play sound
+                    }
+                    playableSprite.usespell1 = true;
+                }
+            } else if (!InputKeys.checkKeyboard(InputKeys.MAGIC1)) playableSprite.usespell1 = false;
+
+            if (!playableSprite.usespell2) {
+                if (InputKeys.checkKeyboard(InputKeys.MAGIC2)) {
+                    if (playableSprite.hasSpell2())
+                        playableSprite.useSpell2();
+                    else {
+                        //TODO Play sound
+                    }
+                    playableSprite.usespell2 = true;
+                }
+            } else if (!InputKeys.checkKeyboard(InputKeys.MAGIC2)) playableSprite.usespell2 = false;
         }
 
-        if (!playableSprite.use_attack && !playableSprite.is_dodging) {
-            if (InputKeys.checkKeyboard(InputKeys.ATTACK)) {
-                if (playableSprite.getCurrentWeapon() != null) {
-                    if (playableSprite.isMoving())
-                        playableSprite.getCurrentWeapon().use("stab");
-                    else
-                        playableSprite.getCurrentWeapon().use("swipe");
-                    playableSprite.ignore_movement = true;
-                }
-                playableSprite.use_attack = true;
-            }
-        } else if (!InputKeys.checkKeyboard(InputKeys.ATTACK)) playableSprite.use_attack = false;
-
-        if (!playableSprite.use_select) {
-            if (InputKeys.checkKeyboard(InputKeys.SELECT)) {
-                playableSprite.checkSelect();
-                playableSprite.use_select = false;
-            }
-        } else if (!InputKeys.checkKeyboard(InputKeys.SELECT)) playableSprite.use_select = false;
-
-        if (!playableSprite.use_dodge && !playableSprite.is_dodging && playableSprite.allow_dodge) {
-            if (InputKeys.checkKeyboard(InputKeys.DODGE)) {
-                playableSprite.dodge(playableSprite.getDirection());
-            }
-        } else if (!InputKeys.checkKeyboard(InputKeys.DODGE)) playableSprite.use_dodge = false;
-
-        if (!playableSprite.usespell1) {
-            if (InputKeys.checkKeyboard(InputKeys.MAGIC1)) {
-                if (playableSprite.hasSpell1())
-                    playableSprite.useSpell1();
-                else {
-                    //TODO Play sound
-                }
-                playableSprite.usespell1 = true;
-            }
-        } else if (!InputKeys.checkKeyboard(InputKeys.MAGIC1)) playableSprite.usespell1 = false;
-
-        if (!playableSprite.usespell2) {
-            if (InputKeys.checkKeyboard(InputKeys.MAGIC2)) {
-                if (playableSprite.hasSpell2())
-                    playableSprite.useSpell2();
-                else {
-                    //TODO Play sound
-                }
-                playableSprite.usespell2 = true;
-            }
-        } else if (!InputKeys.checkKeyboard(InputKeys.MAGIC2)) playableSprite.usespell2 = false;
-
-        if (GameService.getCurrentQuest() != null && !playableSprite.usepause) {
+        if (GameService.getCurrentQuest() != null && !pause) {
             if (InputKeys.checkKeyboard(InputKeys.PAUSE)) {
                 AbstractQuest quest = GameService.getCurrentQuest();
-                playableSprite.usepause = true;
+                pause = true;
                 if (quest.isPaused())
                     quest.resumeGame();
                 else
                     quest.pauseGame();
             }
-        } else if (playableSprite.usepause && !InputKeys.checkKeyboard(InputKeys.PAUSE)) playableSprite.usepause = false;
+        } else if (pause && !InputKeys.checkKeyboard(InputKeys.PAUSE)) pause = false;
     }
 
     @Override

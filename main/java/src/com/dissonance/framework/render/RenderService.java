@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GLContext;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
 
@@ -29,6 +30,8 @@ public class RenderService extends Service {
     public static final int WORLD_DATA_TYPE = 0;
     public static final int ENABLE_CROSS_FADE = 1;
     public static final int CROSS_FADE_DURATION = 2;
+    public static final int DONT_UPDATE = 4;
+
     public static final float ZOOM_SCALE = 2f;
     public static float FPS = 0f;
     public static RenderService INSTANCE;
@@ -57,6 +60,7 @@ public class RenderService extends Service {
     private static float curAlpha;
     private float newAlpha;
     private float startAlpha;
+    private boolean dontUpdate = false;
 
     long next_tick;
     long cur = getTime();
@@ -215,7 +219,7 @@ public class RenderService extends Service {
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
 
-            //glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0.1f, -1f);
+            glOrtho(0.0f, GameSettings.Display.resolution.getWidth(), GameSettings.Display.resolution.getHeight(), 0.0f, 0.1f, -1f);
             glMatrixMode(GL_MODELVIEW);
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
@@ -309,6 +313,8 @@ public class RenderService extends Service {
             this.crossfade = (boolean)obj;
         } else if (type == CROSS_FADE_DURATION && crossfade) {
             this.fadeDuration = (float)obj;
+        } else if (type == DONT_UPDATE) {
+            this.dontUpdate = (boolean)obj;
         }
     }
 
@@ -335,15 +341,17 @@ public class RenderService extends Service {
         now = getTimeSinceStartMillis();
         TIME_DELTA = (now - cur) / 100.0f;
         if (current_world != null && !isPaused()) {
-            Iterator<UpdatableDrawable> updates = current_world.getUpdatables();
-            while (updates.hasNext()) {
-                UpdatableDrawable s = updates.next();
-                if (s == null)
-                    continue;
-                try {
-                    s.update();
-                } catch (Throwable t) {
-                    t.printStackTrace();
+            if (!dontUpdate) {
+                Iterator<UpdatableDrawable> updates = current_world.getUpdatables();
+                while (updates.hasNext()) {
+                    UpdatableDrawable s = updates.next();
+                    if (s == null)
+                        continue;
+                    try {
+                        s.update();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
                 }
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -9,7 +9,7 @@ import com.dissonance.game.scenes.Demo_OpeningScene;
 import com.dissonance.game.scenes.OutdoorScene;
 import com.dissonance.game.sprites.menu.IntroCredits;
 
-public class IntroSceneQuest extends AbstractQuest {
+public class IntroSceneQuest extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         IntroCredits intro = new IntroCredits();

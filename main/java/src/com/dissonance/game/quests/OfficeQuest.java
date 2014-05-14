@@ -6,9 +6,10 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.game.scenes.OfficeScene;
+import com.dissonance.game.sprites.menu.PauseMenu;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 
-public class OfficeQuest extends AbstractQuest {
+public class OfficeQuest extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         World w = WorldFactory.getWorld("WaldomarsMeetingRoom");

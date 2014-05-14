@@ -5,7 +5,7 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
 
-public class MenuQuest extends AbstractQuest {
+public class MenuQuest extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         World world = WorldFactory.getWorld("menu.MainMenu");
