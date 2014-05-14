@@ -443,6 +443,25 @@ public abstract class PlayableSprite extends CombatSprite {
         float speed = movementSpeed() * 2.5f;
         speed *= 1.5f;
         totalDodgeTime = 300;
+        /*
+
+        ALGEBRA TIME!
+
+        d = distance
+        s = speed
+        t = total dodge time
+        f = time per frame
+
+        t = 4f
+        s = 2.5 * movementSpeed()
+        d = s * (t / f)
+        f = (st) / d
+
+
+        ==============================
+
+        As long as t = 4f, then d = 4s
+         */
         int DISTANCE = (int) (speed * (totalDodgeTime / 150f));
         DISTANCE *= 0.8f;
         switch (direction1) {

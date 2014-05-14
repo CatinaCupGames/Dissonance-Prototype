@@ -17,7 +17,6 @@ public class Main {
         World.setDefaultLoaderPackage("com.dissonance.test.w");
 
         GameService.loadEssentials(args);
-<<<<<<< HEAD
         GameService.beginQuest(new CoopQuest());
 
         /*Controller[] controller = ControllerEnvironment.getDefaultEnvironment().getControllers();
@@ -48,8 +47,5 @@ public class Main {
             }
             Thread.sleep(1500);
         }*/
-=======
-        GameService.beginQuest(new OfficeQuest());
->>>>>>> master
     }
 }
