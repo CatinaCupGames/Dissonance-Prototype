@@ -37,12 +37,6 @@ public class Players {
      * @return The created player object, or null if there are to many players.
      */
     public static Player createPlayer(Input input) {
-        if (getPlayer1() != null) //If we have a player 1
-            checkSlots(); //Check to see if the max player count changed
-
-        if (getPlayer1() != null && getOpenSlots() == 0)
-            return null;
-
         checkIfInputUsed(input);
 
         int slot = 0;
@@ -213,7 +207,15 @@ public class Players {
         return getMaxPlayerCount() - getPlayingCount();
     }
 
-
+    public static boolean isInputUsed(Input input) {
+        for (Player player : players) {
+            if (player == null)
+                continue;
+            if (player.getInput().equals(input))
+                return true;
+        }
+        return false;
+    }
 
     private static void checkSlots() {
         if (getMaxPlayerCount() != players.length) {

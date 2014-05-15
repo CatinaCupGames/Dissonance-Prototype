@@ -1,5 +1,6 @@
 package com.dissonance.framework.render;
 
+import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.player.PlayableSprite;
@@ -182,8 +183,8 @@ public final class Camera {
         easeMovement(new Vector2f(newx, newy), duration);
     }
 
-    public static void followSprite(Sprite sprite) {
-        if (follower != null) {
+    public static void followSprite(Sprite... sprites) {
+        /*if (follower != null) {
             follower.setSpriteMovedListener(null);
         }
         follower = sprite;
@@ -195,7 +196,7 @@ public final class Camera {
             public void onSpriteMoved(Sprite sprite, float oldx, float oldy) {
                 setPos(translateToCameraCenter(sprite.getVector(), 32));
             }
-        });
+        });*/
     }
 
     public static void addFollow(Sprite sprite) {
@@ -413,7 +414,7 @@ public final class Camera {
     }
 
     public static void followPlayer() {
-        followSprite(PlayableSprite.getCurrentlyPlayingSprite());
+        followSprite(Players.getCurrentlyPlayingSprites());
     }
 
     public static float getExtendX() {

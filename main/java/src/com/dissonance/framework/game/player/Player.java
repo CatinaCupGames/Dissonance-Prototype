@@ -71,7 +71,7 @@ public class Player {
      * If there are no sprites available, then a {@link java.lang.IllegalAccessError} is thrown.
      * @throws java.lang.IllegalAccessError If no open sprite are available
      */
-    public void join() {
+    public boolean join() {
         Player player = Players.getPlayer1();
         if (player == null)
             throw new IllegalAccessError("There is no player 1!");
@@ -87,7 +87,11 @@ public class Player {
             }
         }
 
+        if (selected == null)
+            return false;
+
         joinAs(selected);
+        return true;
     }
 
     public Input getInput() {

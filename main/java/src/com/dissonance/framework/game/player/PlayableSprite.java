@@ -387,11 +387,6 @@ public abstract class PlayableSprite extends CombatSprite {
             selectedEvent.onSelectedEvent(this);
         }
 
-        if (currentlyPlaying != null) {
-            currentlyPlaying.deselect();
-        }
-
-        currentlyPlaying = this;
         isPlaying = true;
 
         Camera.followSprite(this);
@@ -431,13 +426,12 @@ public abstract class PlayableSprite extends CombatSprite {
         }
         Camera.followSprite(null);
         onDeselect();
-        if (currentlyPlaying != null)
+        if (isPlaying)
             throw new RuntimeException("super.onDeselect was not executed! Try putting super.onDeselect at the top of your method!");
     }
 
     protected void onDeselect() {
         isPlaying = false;
-        currentlyPlaying = null;
         Camera.setCameraEaseListener(null); //Safety net
 
         if (!isPlayer1()) {
@@ -548,8 +542,12 @@ public abstract class PlayableSprite extends CombatSprite {
         return isPlaying;
     }
 
+    /**
+     * @deprecated This method is deprecated, see the coop wiki for more info
+     */
+    @Deprecated
     public static PlayableSprite getCurrentlyPlayingSprite() {
-        return currentlyPlaying;
+        return null;
     }
 
     public static void haltMovement() {

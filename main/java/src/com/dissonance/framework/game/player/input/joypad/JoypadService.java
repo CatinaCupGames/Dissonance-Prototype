@@ -58,15 +58,19 @@ public class JoypadService extends Service {
     protected void onUpdate() {
         Joypad[] joypads = controllers.toArray(new Joypad[controllers.size()]);
         for (Joypad joypad : joypads) {
+
+            if (!joypad.isLoaded())
+                joypad.load();
+
             joypad.getController().poll();
-            if (joypad.isButtonPressed(InputKeys.MENU) && !this.joypads.contains(joypad)) {
+            if (joypad.isButtonPressed(InputKeys.PAUSE) && !this.joypads.contains(joypad)) {
                 this.joypads.add(joypad);
                 if (listener != null)
                     listener.onJoypadJoin(joypad);
             }
         }
 
-        if (!keyboardJoin && InputKeys.checkKeyboard(InputKeys.MENU)) {
+        if (!keyboardJoin && InputKeys.checkKeyboard(InputKeys.PAUSE)) {
             keyboardJoin = true;
             if (listener != null)
                 listener.onKeyboardJoin();

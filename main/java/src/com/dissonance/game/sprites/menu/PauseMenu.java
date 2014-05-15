@@ -1,9 +1,6 @@
 package com.dissonance.game.sprites.menu;
 
-import com.dissonance.framework.game.player.ControllerInput;
-import com.dissonance.framework.game.player.KeyboardInput;
-import com.dissonance.framework.game.player.Player;
-import com.dissonance.framework.game.player.Players;
+import com.dissonance.framework.game.player.*;
 import com.dissonance.framework.game.player.input.joypad.Joypad;
 import com.dissonance.framework.game.player.input.joypad.JoypadService;
 import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
@@ -76,7 +73,7 @@ public class PauseMenu extends AbstractUI  {
 
     private void coopMenu() {
         String str = "Press any button on the controllers/keyboard to join.";
-        RenderText.drawString(footer_font, str, GameSettings.Display.game_width / 4f - (font.getWidth(str) / 2f), GameSettings.Display.game_height / 2f - font.getHeight(), color);
+        RenderText.drawString(footer_font, str, 62f, GameSettings.Display.game_height / 2f - font.getHeight(), color);
 
         Player[] players = Players.getPlayersWithInput();
         float bx = controller.getTextureWidth() / 2f;
@@ -84,7 +81,7 @@ public class PauseMenu extends AbstractUI  {
         controller.bind();
         for (int i = 0; i < players.length; i++) {
             if (players[i].getInput() instanceof ControllerInput)
-                drawPlayer(Players.PLAYER_COLORS[i][0], Players.PLAYER_COLORS[i][1], Players.PLAYER_COLORS[i][2], ((GameSettings.Display.game_width / 2f) / 6f) * (i + 2), GameSettings.Display.game_height / 4f, bx, by);
+                drawPlayer(Players.PLAYER_COLORS[i][0], Players.PLAYER_COLORS[i][1], Players.PLAYER_COLORS[i][2], ((GameSettings.Display.game_width / 2f) / 5f) * (i + 1), GameSettings.Display.game_height / 4f, bx, by);
         }
         controller.unbind();
 
@@ -93,14 +90,13 @@ public class PauseMenu extends AbstractUI  {
         keyboard.bind();
         for (int i = 0; i < players.length; i++) {
             if (players[i].getInput() instanceof KeyboardInput)
-                drawPlayer(Players.PLAYER_COLORS[i][0], Players.PLAYER_COLORS[i][1], Players.PLAYER_COLORS[i][2], ((GameSettings.Display.game_width / 2f) / 6f) * (i + 2), GameSettings.Display.game_height / 4f, bx, by);
+                drawPlayer(Players.PLAYER_COLORS[i][0], Players.PLAYER_COLORS[i][1], Players.PLAYER_COLORS[i][2], ((GameSettings.Display.game_width / 2f) / 5f) * (i + 1), GameSettings.Display.game_height / 4f, bx, by);
         }
         keyboard.unbind();
     }
 
     private void drawPlayer(float r, float g, float b, float x, float y, float bx, float by) {
         float z = 0f;
-
 
         glColor4f(r, g, b, 1f);
         glBegin(GL_QUADS);
@@ -157,6 +153,7 @@ public class PauseMenu extends AbstractUI  {
                 break;
             case COOP_MENU:
                 joypadService.setServiceListener(null);
+                joypadService.pause();
                 break;
         }
 
@@ -170,17 +167,11 @@ public class PauseMenu extends AbstractUI  {
                 break;
             case COOP_MENU:
                 joypadService = ServiceManager.createService(JoypadService.class);
+                joypadService.resetJoin();
+                joypadService.resume();
                 joypadService.setServiceListener(JLISTEN);
 
-                /*
-                TINTS
-                1: #c60000
-                2: #0052c6
-                3: #00a000
-                4: #ffd900
-                5: 8c8c8c
-                 */
-                if (controller != null) {
+                if (controller == null) {
                     try {
                         controller = Texture.retrieveTexture("sprites/menu/coop/controller.png");
                     } catch (IOException e) {
@@ -188,7 +179,7 @@ public class PauseMenu extends AbstractUI  {
                     }
                 }
 
-                if (keyboard != null) {
+                if (keyboard == null) {
                     try {
                         keyboard = Texture.retrieveTexture("sprites/menu/coop/keyboard.png");
                     } catch (IOException e) {
@@ -226,14 +217,18 @@ public class PauseMenu extends AbstractUI  {
         @Override
         public void onJoypadJoin(Joypad joypad) {
             if (type == COOP_MENU) {
-
+                if (Players.isInputUsed(joypad.createInput()))
+                    return;
+                Players.createPlayer(joypad.createInput());
             }
         }
 
         @Override
         public void onKeyboardJoin() {
             if (type == COOP_MENU) {
-
+                if (Players.isInputUsed(Input.KEYBOARD))
+                    return;
+                Players.createPlayer(Input.KEYBOARD);
             }
         }
     };
