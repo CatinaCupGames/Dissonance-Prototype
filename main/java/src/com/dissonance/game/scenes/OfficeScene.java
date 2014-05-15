@@ -81,7 +81,7 @@ public class OfficeScene extends SimpleScene {
         Thread.sleep(500);
 
         Camera.shake(Direction.DOWN, 4000L, 5, 0.5);
-        Sound.playSound("firespell").setPitch(0.25f);
+        Sound.playSound("earthquake");
 
         WaldomarsMeetingRoom.guard1.setMovementSpeed(30f);
         WaldomarsMeetingRoom.guard1.setWaypoint(0, 11f * 16, WaypointType.SIMPLE);
@@ -91,7 +91,7 @@ public class OfficeScene extends SimpleScene {
 
         WaldomarsMeetingRoom.guard3.setMovementSpeed(30f);
         WaldomarsMeetingRoom.guard3.setWaypoint(13*16, 17*16, WaypointType.SIMPLE);
-        //21 17
+
 
         WaldomarsMeetingRoom.guard4.setMovementSpeed(30f);
         WaldomarsMeetingRoom.guard4.setWaypoint(21*16, 17*16, WaypointType.SIMPLE);
@@ -101,6 +101,8 @@ public class OfficeScene extends SimpleScene {
 
         WaldomarsMeetingRoom.farrand.setWaypoint(WaldomarsMeetingRoom.farrand.getX(), 0f, WaypointType.SIMPLE);
         WaldomarsMeetingRoom.farrand.setMovementSpeed(10f);
+
+        Sound.playSound("bossfight");
 
 
 
