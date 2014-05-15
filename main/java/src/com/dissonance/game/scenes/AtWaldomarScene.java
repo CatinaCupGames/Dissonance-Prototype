@@ -1,6 +1,5 @@
 package com.dissonance.game.scenes;
 
-import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.scene.SimpleScene;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
@@ -8,11 +7,6 @@ import com.dissonance.game.w.WaldoHallway;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 import org.lwjgl.util.vector.Vector2f;
 
-
-
-/**
- * Created by Henry on 5/15/2014.
- */
 public class AtWaldomarScene extends SimpleScene {
 
 

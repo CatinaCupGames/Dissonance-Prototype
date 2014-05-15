@@ -6,9 +6,6 @@ import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.Wyatt;
 
-/**
- * Created by Henry on 5/7/2014.
- */
 public class WaldoHallway implements WorldLoader {
 
     public static Farrand farrand;

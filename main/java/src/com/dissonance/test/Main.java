@@ -2,14 +2,7 @@ package com.dissonance.test;
 
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.world.World;
-import com.dissonance.game.quests.OfficeQuest;
-import com.dissonance.test.quests.AITestQuest;
-import com.dissonance.test.quests.CoopQuest;
-import net.java.games.input.Component;
-import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
-
-import javax.naming.ldap.Control;
+import com.dissonance.game.quests.DisclaimerQuest;
 
 public class Main {
 
@@ -17,7 +10,7 @@ public class Main {
         World.setDefaultLoaderPackage("com.dissonance.test.w");
 
         GameService.loadEssentials(args);
-        GameService.beginQuest(new CoopQuest());
+        GameService.beginQuest(new DisclaimerQuest());
 
         /*Controller[] controller = ControllerEnvironment.getDefaultEnvironment().getControllers();
 
