@@ -183,11 +183,17 @@ public class Players {
             throw new IllegalAccessError("There is no player 1!");
         if (getPlayer1().getSprite() == null)
             throw new IllegalAccessError("Player 1 does not have a sprite!");
-        return getPlayer1().getSprite().getParty().length;
+        return getPlayer1().getSprite().getParty().length + 1;
     }
 
-    public static void isAnyPlayerPressingButton(String key) {
-
+    public static boolean isAnyPlayerPressingButton(String key) {
+        Player[] players = getPlayersWithInput();
+        for (Player player : players) {
+            if (player.getInput().isKeyPressed(key)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

@@ -2,6 +2,8 @@ package com.dissonance.framework.game.scene.dialog;
 
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.game.player.Player;
+import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.RenderService;
 
@@ -30,13 +32,13 @@ public class Dialog {
             else
                 throw new RuntimeException("No world could be found to bound the UI to!");
         }
-        PlayableSprite player = PlayableSprite.getCurrentlyPlayingSprite();
+        Player player = Players.getPlayer1();
         boolean halt = true;
-        if (player != null) {
-            halt = !player.isFrozen();
+        if (player != null && player.getSprite() != null) {
+            halt = !player.getSprite().isFrozen();
         }
-        if (halt && PlayableSprite.getCurrentlyPlayingSprite() != null) {
-            PlayableSprite.getCurrentlyPlayingSprite().freeze(true, Dialog.class);
+        if (halt && player != null && player.getSprite() != null) {
+            player.getSprite().freeze(true, Dialog.class);
         }
 
         while (GameService.getCurrentQuest() != null && GameService.getCurrentQuest().isPaused()) {
@@ -54,8 +56,8 @@ public class Dialog {
             e.printStackTrace();
         }
 
-        if (halt && PlayableSprite.getCurrentlyPlayingSprite() != null) {
-            PlayableSprite.getCurrentlyPlayingSprite().unfreeze(Dialog.class);
+        if (halt && player != null && player.getSprite() != null) {
+            player.getSprite().unfreeze(Dialog.class);
         }
     }
 

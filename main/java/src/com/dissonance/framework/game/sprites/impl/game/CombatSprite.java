@@ -558,6 +558,10 @@ public abstract class CombatSprite extends PhysicsSprite {
 
     public abstract void setMarksmanship(int marksmanship);
 
+    public void onAttack() {
+
+    }
+
 
     public enum CombatType {
         /**

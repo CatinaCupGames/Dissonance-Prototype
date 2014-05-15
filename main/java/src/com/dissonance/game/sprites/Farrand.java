@@ -2,7 +2,10 @@ package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
 import com.dissonance.framework.system.utils.Direction;
+
+import java.awt.*;
 
 public final class Farrand extends PlayableSprite {
     //TODO Set default values for these
@@ -14,6 +17,11 @@ public final class Farrand extends PlayableSprite {
     private int willpower = 14;
     private int focus = 16;
     private int marksmanship;
+
+    @Override
+    public void onAttack() {
+        ParticleSprite.createParticlesAt(getX(), getY(), 3, 5f, new Color(0.856f, 0.94f, 0.968f, 1f), getWorld());
+    }
 
     @Override
     public void onLevelUp() {

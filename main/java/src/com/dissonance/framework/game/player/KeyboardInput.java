@@ -183,4 +183,9 @@ public class KeyboardInput implements Input {
 
     @Override
     public void update() { } //Do nothing
+
+    @Override
+    public boolean isKeyPressed(String key) {
+        return InputKeys.checkKeyboard(key);
+    }
 }
