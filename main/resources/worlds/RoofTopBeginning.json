@@ -143,31 +143,58 @@
             {
              "0":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                },
+             "1":
+                {
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 },
              "10":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                },
+             "12":
+                {
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                },
+             "13":
+                {
+                 "triggerclass":"tilefade"
+                },
+             "14":
+                {
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 },
              "2":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 },
              "4":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "trigerclass":"com.dissonance.gametriggers.TileFade"
+                },
+             "5":
+                {
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 },
              "6":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 },
              "8":
                 {
-                 "collideable":"true"
+                 "collideable":"true",
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 },
              "9":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 }
             },
          "tilewidth":16
