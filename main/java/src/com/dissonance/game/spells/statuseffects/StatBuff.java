@@ -30,6 +30,7 @@ public class StatBuff extends StatusEffect {
         ow = owner.getWillPower();
         of = owner.getFocus();
         om = owner.getMarksmanship();
+
         owner.setAttack(owner.getAttack() + a);
         owner.setDefense(owner.getDefense() + d);
         owner.setSpeed(owner.getSpeed() + s);
