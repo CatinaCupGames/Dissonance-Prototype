@@ -10,6 +10,10 @@ import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 import org.lwjgl.util.vector.Vector2f;
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 572df41aea82596c4b4e86e8bca20dab885e2245
 public class OfficeScene extends SimpleScene {
     @Override
     protected void playScene() throws Throwable {
@@ -98,5 +102,6 @@ public class OfficeScene extends SimpleScene {
 
         WaldomarsMeetingRoom.farrand.setWaypoint(WaldomarsMeetingRoom.farrand.getX(), 0f, WaypointType.SIMPLE);
         WaldomarsMeetingRoom.farrand.setMovementSpeed(10f);
+
     }
 }

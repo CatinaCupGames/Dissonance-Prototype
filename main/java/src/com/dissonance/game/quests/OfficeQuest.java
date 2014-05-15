@@ -1,12 +1,10 @@
 package com.dissonance.game.quests;
 
-import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.game.scenes.OfficeScene;
-import com.dissonance.game.sprites.menu.PauseMenu;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 
 public class OfficeQuest extends PauseQuest {
@@ -31,7 +29,7 @@ public class OfficeQuest extends PauseQuest {
                 while(true){
                     //System.out.println(String.valueOf(WaldomarsMeetingRoom.farrand.getX()) + String.valueOf(WaldomarsMeetingRoom.farrand.getY()));
                     if(WaldomarsMeetingRoom.farrand.getX() <= 10*16 && WaldomarsMeetingRoom.farrand.getX() >= 3*16 && WaldomarsMeetingRoom.farrand.getY() <= 5*16){
-                        WaldomarsMeetingRoom.farrand.deselect();
+                        WaldomarsMeetingRoom.farrand.freeze();
                         WaldomarsMeetingRoom.farrand.setMovementSpeed(30f);
                         try {
                             Thread.sleep(300);
@@ -44,7 +42,7 @@ public class OfficeQuest extends PauseQuest {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        WaldomarsMeetingRoom.farrand.setVisible(false);
+                        //WaldomarsMeetingRoom.farrand.setVisible(false);
                         WaldomarsMeetingRoom.jeremiah.setMovementSpeed(20f);
                         WaldomarsMeetingRoom.jeremiah.setWaypoint(8*16, 5*16, WaypointType.SIMPLE);
                         try {
