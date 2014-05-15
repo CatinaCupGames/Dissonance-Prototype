@@ -1,14 +1,16 @@
 package com.dissonance.framework.render;
 
+import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.player.Players;
-import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.game.sprites.Sprite;
-import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.system.utils.Direction;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class Camera {
     private static final float OFFSCREEN_THRESHOLD = 32;
@@ -183,30 +185,42 @@ public final class Camera {
         easeMovement(new Vector2f(newx, newy), duration);
     }
 
+    private static ArrayList<Sprite> toFollow = new ArrayList<Sprite>();
     public static void followSprite(Sprite... sprites) {
-        /*if (follower != null) {
-            follower.setSpriteMovedListener(null);
+        for (Sprite sprite : sprites) {
+            if (toFollow.contains(sprite))
+                continue;
+            toFollow.add(sprite);
         }
-        follower = sprite;
-        if (follower == null)
+    }
+
+    private static void centerFollowing() {
+        if (toFollow.size() == 0)
             return;
-        Camera.setPos(Camera.translateToCameraCenter(sprite.getVector(), sprite.getHeight()));
-        follower.setSpriteMovedListener(new Sprite.SpriteEvent.SpriteMovedEvent() {
-            @Override
-            public void onSpriteMoved(Sprite sprite, float oldx, float oldy) {
-                setPos(translateToCameraCenter(sprite.getVector(), 32));
-            }
-        });*/
+
+        Vector vector = Vector.centerOf(getFollowingVectors());
+        Camera.setPos(Camera.translateToCameraCenter(new Vector2f(vector.x, vector.y)));
+    }
+
+    private static List<Vector> getFollowingVectors() {
+        ArrayList<Vector> vectors = new ArrayList<>();
+        for (Sprite sprite : toFollow) {
+            vectors.add(new Vector(sprite.getX(), sprite.getY()));
+        }
+
+        return vectors;
     }
 
     public static void addFollow(Sprite sprite) {
-        //TODO Follow all following sprites collectively.
+        toFollow.add(sprite);
     }
 
     public static void stopFollowing() {
-        if (follower == null)
-            return;
-        followSprite(null);
+        toFollow.clear();
+    }
+
+    public static void stopFollowing(Sprite sprite) {
+        toFollow.remove(sprite);
     }
 
     public static void easeMovement(Vector2f newPos, float duration) {
@@ -327,6 +341,7 @@ public final class Camera {
     }
 
     static void executeAnimation() {
+        centerFollowing();
         if (isShaking) {
             float xadd = 0, yadd = 0;
             switch (shakeDir) {

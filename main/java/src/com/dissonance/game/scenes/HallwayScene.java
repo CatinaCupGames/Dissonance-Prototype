@@ -8,9 +8,6 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.game.w.WaldoHallway;
 import org.lwjgl.util.vector.Vector2f;
 
-/**
- * Created by Henry on 5/7/2014.
- */
 public class HallwayScene extends SimpleScene {
     @Override
     protected void playScene() throws Throwable {

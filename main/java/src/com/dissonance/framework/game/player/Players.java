@@ -186,8 +186,14 @@ public class Players {
         return getPlayer1().getSprite().getParty().length;
     }
 
-    public static void isAnyPlayerPressingButton(String key) {
-
+    public static boolean isAnyPlayerPressingButton(String key) {
+        Player[] players = getPlayersWithInput();
+        for (Player player : players) {
+            if (player.getInput().isKeyPressed(key)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

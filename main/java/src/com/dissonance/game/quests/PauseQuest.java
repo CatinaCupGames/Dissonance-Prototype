@@ -1,9 +1,11 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.sprites.menu.PauseMenu;
 
 public abstract class PauseQuest extends AbstractQuest {
@@ -29,5 +31,6 @@ public abstract class PauseQuest extends AbstractQuest {
                 player.join();
             }
         }
+        GameService.coop_mode = Players.getCurrentlyPlayingSprites().length > 1;
     }
 }
