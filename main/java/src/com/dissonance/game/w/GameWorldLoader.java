@@ -16,7 +16,6 @@ import com.dissonance.game.sprites.hud.BaseHUD;
  */
 public abstract class GameWorldLoader implements WorldLoader {
     public static BaseHUD hud;
-    public static Player player1;
     //public static HUD hud;
     //public static Wyatt wyatt;
     public static Farrand farrand;
@@ -25,10 +24,6 @@ public abstract class GameWorldLoader implements WorldLoader {
         if (hud == null) {
             hud = new BaseHUD();
             hud.display(w);
-        }
-
-        if (player1 == null && !GameService.coop_mode) {
-            player1 = Players.createPlayer1();
         }
 
         if (farrand == null) {

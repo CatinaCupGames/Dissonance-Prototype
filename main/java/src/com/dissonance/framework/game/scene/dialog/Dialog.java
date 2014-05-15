@@ -38,6 +38,15 @@ public class Dialog {
         if (halt && PlayableSprite.getCurrentlyPlayingSprite() != null) {
             PlayableSprite.getCurrentlyPlayingSprite().freeze(true, Dialog.class);
         }
+
+        while (GameService.getCurrentQuest() != null && GameService.getCurrentQuest().isPaused()) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         ui.display(world);
         try {
             ui.waitForEnd();

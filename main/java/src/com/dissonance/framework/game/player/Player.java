@@ -1,5 +1,7 @@
 package com.dissonance.framework.game.player;
 
+import org.omg.stub.java.rmi._Remote_Stub;
+
 public class Player {
     private PlayableSprite sprite;
     private int number;
@@ -91,4 +93,11 @@ public class Player {
     public Input getInput() {
         return input;
     }
+
+    public void leave() {
+        if (getSprite() != null)
+            getSprite().deselect();
+        Players.removePlayer(this);
+    }
+
 }

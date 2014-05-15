@@ -440,10 +440,18 @@ public abstract class PlayableSprite extends CombatSprite {
         currentlyPlaying = null;
         Camera.setCameraEaseListener(null); //Safety net
 
+        if (!isPlayer1()) {
+            //TODO Animate disapear maybe..?
+            setVisible(false);
+        }
+
+
         w = false;
         a = false;
         s = false;
         d = false;
+        player = null;
+        input = null;
     }
 
     protected void dodge(Direction direction1) {

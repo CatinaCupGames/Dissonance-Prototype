@@ -152,7 +152,7 @@ public abstract class Service {
 
     public ServiceRunnable runOnServiceThread(Runnable runnable, boolean force_next_frame, boolean every_tick) {
         Validator.validateNotNull(runnable, "runnable");
-        if (Thread.currentThread().getId() == serviceThreadID && !force_next_frame) //Run the runnable if were already on the service thread
+        if (Thread.currentThread().getId() == serviceThreadID && !force_next_frame && !every_tick) //Run the runnable if were already on the service thread
             runnable.run();
         else { //Otherwise queue it
             synchronized (listToRun) {

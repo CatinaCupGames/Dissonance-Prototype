@@ -13,6 +13,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class Players {
+    public static float[][] PLAYER_COLORS = {
+            {0.77647058823f, 0f, 0f},
+            {0f, 0.32156862745f, 0.77647058823f},
+            {0f, 0.62745098039f, 0f},
+            {1f, 0.85098039215f, 0f}
+    };
+
     private static Player[] players = new Player[4];
     private static JoypadService joypadService;
 
@@ -60,6 +67,13 @@ public class Players {
             return createPlayer(joypads.get(0).createInput());
         }
         return createPlayer(Input.KEYBOARD);
+    }
+
+    static void removePlayer(Player player) {
+        for (int i = 0; i < players.length; i++) {
+            if (player == players[i])
+                players[i] = null;
+        }
     }
 
     /**
@@ -143,6 +157,21 @@ public class Players {
         ArrayList<Player> sprites = new ArrayList<Player>();
         for (Player player : players) {
             if (player != null && player.getSprite() != null && player.getSprite().isPlaying()) {
+                sprites.add(player);
+            }
+        }
+
+        return sprites.toArray(new Player[sprites.size()]);
+    }
+
+    /**
+     * Get all player objects that have an input device. The players returned may or may not be playing.
+     * @return All player objects with input in an array of {@link com.dissonance.framework.game.player.Player} objects
+     */
+    public static Player[] getPlayersWithInput() {
+        ArrayList<Player> sprites = new ArrayList<Player>();
+        for (Player player : players) {
+            if (player != null && player.getInput() != null) {
                 sprites.add(player);
             }
         }
