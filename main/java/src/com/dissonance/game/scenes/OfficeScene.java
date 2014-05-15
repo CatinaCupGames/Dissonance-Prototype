@@ -101,12 +101,5 @@ public class OfficeScene extends SimpleScene {
 
         WaldomarsMeetingRoom.farrand.setWaypoint(WaldomarsMeetingRoom.farrand.getX(), 0f, WaypointType.SIMPLE);
         WaldomarsMeetingRoom.farrand.setMovementSpeed(10f);
-
-        Sound.playSound("bossfight");
-
-
-
-
-
     }
 }
