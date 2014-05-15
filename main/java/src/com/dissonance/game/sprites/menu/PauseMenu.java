@@ -37,6 +37,7 @@ public class PauseMenu extends AbstractUI  {
     private TrueTypeFont footer_font;
     private int type;
     private static final Color color = new Color(1f, 1f, 1f, 1f);
+    private static final Color warning = new Color(Players.PLAYER_COLORS[0][0], Players.PLAYER_COLORS[0][1], Players.PLAYER_COLORS[0][2]);
 
     @Override
     protected void onRender() {
@@ -93,6 +94,11 @@ public class PauseMenu extends AbstractUI  {
                 drawPlayer(Players.PLAYER_COLORS[i][0], Players.PLAYER_COLORS[i][1], Players.PLAYER_COLORS[i][2], ((GameSettings.Display.game_width / 2f) / 5f) * (i + 1), GameSettings.Display.game_height / 4f, bx, by);
         }
         keyboard.unbind();
+
+        if (Players.getPlayersWithInput().length > Players.getMaxPlayerCount()) {
+            String str1 = "Only " + Players.getMaxPlayerCount() + " of the " + Players.getPlayersWithInput().length + " can play at this time.";
+            RenderText.drawString(footer_font, str1, 140f, (GameSettings.Display.game_height / 2f - font.getHeight()) - font.getHeight() - 4f, warning);
+        }
     }
 
     private void drawPlayer(float r, float g, float b, float x, float y, float bx, float by) {

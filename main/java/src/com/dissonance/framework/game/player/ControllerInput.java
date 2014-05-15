@@ -146,9 +146,9 @@ public class ControllerInput implements Input {
             if (!playableSprite.use_attack && !playableSprite.is_dodging && !playableSprite.isFrozen()) {
                 if (controller.isButtonPressed(InputKeys.ATTACK)) {
                     if (playableSprite.getCurrentWeapon() != null) {
-                        if (playableSprite.isMoving())
+/*                        if (playableSprite.isMoving())
                             playableSprite.getCurrentWeapon().use("stab");
-                        else
+                        else*/
                             playableSprite.getCurrentWeapon().use("swipe");
                     }
                     playableSprite.ignore_movement = true;
