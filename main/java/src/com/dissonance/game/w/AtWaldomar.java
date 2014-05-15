@@ -21,6 +21,9 @@ public class AtWaldomar extends GameWorldLoader {
     public void onLoad(World w){
         super.onLoad(w);
 
+        farrand = new Farrand();
+        w.loadAndAdd(farrand);
+        //farrand.setX(41f*16, 32f*16);
 
     }
 }
