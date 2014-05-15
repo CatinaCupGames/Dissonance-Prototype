@@ -92,7 +92,7 @@ public class KeyboardInput implements Input {
             if (!playableSprite.use_switch && playableSprite.party.size() > 0) {
                 if (InputKeys.checkKeyboard(InputKeys.SWITCH)) {
                     playableSprite.use_switch = true;
-                    playableSprite.setVisible(false);
+                    //playableSprite.setVisible(false);
                     //TODO Find next open party member and switch to it.
                 /*PlayableSprite next = playableSprite.party.get(PlayableSprite.s_index);
                 next.rawSetX(getX());

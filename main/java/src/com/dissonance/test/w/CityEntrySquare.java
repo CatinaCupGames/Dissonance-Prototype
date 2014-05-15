@@ -25,7 +25,6 @@ public class CityEntrySquare extends GameWorldLoader {
     public void onLoad(World w) {
         super.onLoad(w);
 
-        farrand.deselect();
         farrand.setX(845.60016f);
         farrand.setY(785.5205f);
 
@@ -39,6 +38,7 @@ public class CityEntrySquare extends GameWorldLoader {
         w.loadAndAdd(guard1);
         guard1.setX(764f);
         guard1.setY(325f);
+        guard1.joinParty(farrand);
 
         guard2 = new Wyatt();
         w.loadAndAdd(guard2);

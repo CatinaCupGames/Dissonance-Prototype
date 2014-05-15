@@ -78,6 +78,7 @@ public class WeaponItem extends Item {
                         //((PlayableSprite)getOwner()).setAttacking(true);
                     }
 
+                    final String old_animation = getOwner().getCurrentAnimation().getName();
                     switch (getOwner().getDirection()) {
                         case UP:
                             getOwner().setAnimation("swipe_up");
@@ -171,7 +172,6 @@ public class WeaponItem extends Item {
                                 if (c instanceof CombatSprite) {
                                     CombatSprite combatSprite = (CombatSprite) c;
                                     if (!hits.contains(combatSprite)) {
-                                        System.out.println("HIT ON STEP: " + temp_step[0] + " @ (" + swordHitBox.getX() + "," + swordHitBox.getY() + ")");
                                         combatSprite.strike(getOwner(), WeaponItem.this);
                                         hits.add(combatSprite);
                                     }
@@ -193,10 +193,10 @@ public class WeaponItem extends Item {
                             sprite.setAnimationFinishedListener(null);
                             sprite.setAnimationFrameListener(null);
                             if (getOwner() instanceof PlayableSprite) {
-                                ((PlayableSprite)getOwner()).unfreeze();
+                                ((PlayableSprite) getOwner()).unfreeze();
                                 ((PlayableSprite) getOwner()).ignore_movement = false;
                             }
-                            sprite.setAnimation(0);
+                            sprite.setAnimation(old_animation);
                             hits.clear();
                         }
                     });
