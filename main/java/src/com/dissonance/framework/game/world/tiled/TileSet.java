@@ -21,7 +21,7 @@ public class TileSet {
     private HashMap<Object, HashMap<Object, Object>> tileproperties;
     private TileTexture texture;
 
-    public String getProperty(String key) {
+    public String getGlobalTileProperty(String key) {
         if (properties == null)
             return null;
         return (String) properties.get(key);
@@ -107,12 +107,14 @@ public class TileSet {
 
     public String getTileProperty(long ID, String property) {
         if (tileproperties == null)
-            return null;
+            return getGlobalTileProperty(property);
         ID -= firstgid;
         if (tileproperties.containsKey("" + ID)) {
-            return (String) tileproperties.get("" + ID).get(property);
+            String val =  (String) tileproperties.get("" + ID).get(property);
+            if (val != null)
+                return val;
         }
-        return null;
+        return getGlobalTileProperty(property);
     }
 
     public String getTileProperty(Tile t, String property)  {

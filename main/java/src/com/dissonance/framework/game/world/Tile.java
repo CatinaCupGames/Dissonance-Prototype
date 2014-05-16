@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.world;
 
+import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.TileSet;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTileTrigger;
@@ -11,7 +12,7 @@ import org.lwjgl.util.vector.Vector2f;
 import java.util.HashMap;
 
 public class Tile implements Collidable {
-    private static HashMap<String, AbstractTileTrigger> instances = new HashMap<String, AbstractTileTrigger>();
+    private static HashMap<Layer, HashMap<String, AbstractTileTrigger>> instances = new HashMap<Layer, HashMap<String, AbstractTileTrigger>>();
 
     private final long id;
     private final int cost;
@@ -26,6 +27,12 @@ public class Tile implements Collidable {
     public Tile(long id, float x, float y, Layer layer, World world, boolean flipH, boolean flipL, boolean flipD) {
         this.parent = world;
         this.id = id;
+        this.x = x;
+        this.y = y;
+        this.containingLayer = layer;
+        this.flipH = flipH;
+        this.flipL = flipL;
+        this.flipD = flipD;
 
         int cost1;
         if (hasProperty("cost", world)) {
@@ -46,12 +53,15 @@ public class Tile implements Collidable {
         if (hasProperty("triggerclass", world)) {
             trigger_tile = true;
             String tmp = getProperty("triggerclass", world);
-            if (instances.containsKey(tmp)) {
-                triggerClass = instances.get(tmp);
+            if (instances.containsKey(containingLayer) && instances.get(containingLayer).containsKey(tmp)) {
+                triggerClass = instances.get(containingLayer).get(tmp);
             } else {
                 try {
                     triggerClass = (AbstractTileTrigger) Class.forName(tmp).newInstance();
-                    instances.put(tmp, triggerClass);
+
+                    HashMap<String, AbstractTileTrigger> temp = new HashMap<String, AbstractTileTrigger>();
+                    temp.put(tmp, triggerClass);
+                    instances.put(layer, temp);
                 } catch (InstantiationException e) {
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {
@@ -61,13 +71,6 @@ public class Tile implements Collidable {
                 }
             }
         }
-
-        this.x = x;
-        this.y = y;
-        this.containingLayer = layer;
-        this.flipH = flipH;
-        this.flipL = flipL;
-        this.flipD = flipD;
     }
 
     public boolean isFlippedHorizontal() {
