@@ -10,7 +10,7 @@ public class Gate_2Quest extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         World w = WorldFactory.getWorld("AtWaldomar");
-        setWorld(w);
+        setWorld(w, RenderService.TransitionType.CROSSFADE);
         w.waitForWorldDisplayed();
 
         AtWaldomar.farrand.freeze();
