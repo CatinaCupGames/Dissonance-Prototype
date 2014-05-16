@@ -290,35 +290,74 @@
             {
              "0":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 },
              "1":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 },
              "10":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                },
+             "11":
+                {
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                },
+             "12":
+                {
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                },
+             "13":
+                {
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                },
+             "14":
+                {
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                },
+             "15":
+                {
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 },
              "2":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                },
+             "3":
+                {
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 },
              "4":
                 {
                  "collidable":"true"
                 },
+             "5":
+                {
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                },
              "6":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                },
+             "7":
+                {
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 },
              "8":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 },
              "9":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "triggerclass":"com.dissonance.gametriggers.TileFade"
                 }
             },
          "tilewidth":16

@@ -241,6 +241,53 @@
             },
          "spacing":0,
          "tileheight":16,
+         "tileproperties":
+            {
+             "0":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "1":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "12":
+                {
+                 "triggerclass":""
+                },
+             "13":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "14":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "2":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "3":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "4":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "5":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "6":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "8":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                }
+            },
          "tilewidth":16
         }, 
         {
