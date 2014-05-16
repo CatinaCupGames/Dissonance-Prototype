@@ -1,6 +1,7 @@
 package com.dissonance.game;
 
 import com.dissonance.framework.game.GameService;
+
 import com.dissonance.game.quests.Gate_2Quest;
 
 
@@ -12,10 +13,8 @@ public class Main {
         GameService.loadEssentials(args);
 
 
-
         GameService.beginQuest(new Gate_2Quest());
 
-        //GameService.beginQuest(new OfficeQuest());
-        //GameService.beginQuest(new HallwayQuest());
+
     }
 }

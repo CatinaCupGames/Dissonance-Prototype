@@ -32,7 +32,6 @@ public abstract class PlayableSprite extends CombatSprite {
     boolean use_dodge;
     boolean controller_extend;
     boolean keyboard_extend;
-    boolean usepause;
     boolean use_select;
     boolean isAttacking = false;
 
@@ -411,23 +410,7 @@ public abstract class PlayableSprite extends CombatSprite {
      * @deprecated This method is deprecated, please read the co-op wiki for more details. This method will be removed once all dependencies are resolved.
      */
     @Deprecated
-    public void select() {
-        if (!isPlayable())
-            throw new InvalidParameterException("This sprite has no input controller!");
-
-        if (selectedEvent != null) {
-            selectedEvent.onSelectedEvent(this);
-        }
-
-        if (currentlyPlaying != null) {
-            currentlyPlaying.deselect();
-        }
-
-        currentlyPlaying = this;
-        isPlaying = true;
-
-        Camera.addFollow(this);
-    }
+    public void select() { }
 
     public void deselect() {
         if (deselectedEvent != null) {

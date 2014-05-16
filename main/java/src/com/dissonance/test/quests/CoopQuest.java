@@ -14,12 +14,14 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.system.ServiceManager;
+import com.dissonance.game.quests.PauseQuest;
 import com.dissonance.game.sprites.Enemy;
 import com.dissonance.game.w.CityEntrySquare;
+import com.dissonance.test.w.AICity;
 
 import java.awt.*;
 
-public class CoopQuest extends AbstractQuest {
+public class CoopQuest extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         World world = WorldFactory.getWorld("AICity");
@@ -27,10 +29,11 @@ public class CoopQuest extends AbstractQuest {
         world.waitForWorldDisplayed();
 
         Player player1 = Players.createPlayer1();
-        player1.joinAs(CityEntrySquare.farrand);
+        player1.joinAs(AICity.farrand);
 
         for (Player player : Players.getPlayersWithInput()) {
-            player.join();
+            if (!player.isPlaying())
+                player.join();
         }
 
         Enemy enemy = new Enemy("aloysius", Enemy.StatType.NON_MAGIC, CombatSprite.CombatType.CREATURE);
@@ -39,7 +42,7 @@ public class CoopQuest extends AbstractQuest {
         enemy.setY(300f);
         ParticleSprite.createParticlesAt(100f, 300f, 5000f, 10f, Color.GREEN, world);
 
-        CityEntrySquare.farrand.setCurrentWeapon(Weapon.getWeapon("test").createItem(CityEntrySquare.farrand));
+        AICity.farrand.setCurrentWeapon(Weapon.getWeapon("test").createItem(CityEntrySquare.farrand));
 
     }
 

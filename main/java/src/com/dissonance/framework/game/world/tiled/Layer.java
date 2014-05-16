@@ -65,7 +65,7 @@ public class Layer {
                 if (high == null || low == null)
                     throw new InvalidParameterException("There is no ground layer in this map!");
                 if (high.getLayerNumber() < getLayerNumber())
-                    gLayer = getLayerNumber() - high.getLayerNumber();
+                    gLayer = (getLayerNumber() - high.getLayerNumber()) + 1;
                 else if (low.getLayerNumber() > getLayerNumber())
                     gLayer = getLayerNumber() - low.getLayerNumber();
                 else
