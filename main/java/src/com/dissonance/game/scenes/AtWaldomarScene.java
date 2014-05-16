@@ -18,5 +18,7 @@ public class AtWaldomarScene extends SimpleScene {
 
 
         AtWaldomar.farrand.setMovementSpeed(3f);
+
+        
     }
 }
