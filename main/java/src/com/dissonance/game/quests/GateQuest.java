@@ -62,7 +62,8 @@ public class GateQuest extends PauseQuest {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        setNextQuest(new HallwayQuest());
+
+                        setNextQuest(new Gate_2Quest());
                         try {
                             endQuest();
                         } catch (IllegalAccessException e) {

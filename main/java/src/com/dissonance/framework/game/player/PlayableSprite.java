@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.player;
 
+import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.Camera;
@@ -383,20 +384,23 @@ public abstract class PlayableSprite extends CombatSprite {
         if (!isPlayable())
             throw new InvalidParameterException("This sprite has no input controller!");
 
+        setBehavior(null);
+
         if (selectedEvent != null) {
             selectedEvent.onSelectedEvent(this);
         }
 
-        if (currentlyPlaying != null) {
-            currentlyPlaying.deselect();
-        }
-
-        currentlyPlaying = this;
         isPlaying = true;
 
         Camera.followSprite(this);
 
         this.player = player;
+    }
+
+    @Override
+    public void setBehavior(Behavior behavior) {
+        if (!isPlaying())
+            super.setBehavior(behavior);
     }
 
     public Player getPlayer() {
@@ -422,28 +426,35 @@ public abstract class PlayableSprite extends CombatSprite {
         currentlyPlaying = this;
         isPlaying = true;
 
-        Camera.followSprite(this);
+        Camera.addFollow(this);
     }
 
     public void deselect() {
         if (deselectedEvent != null) {
             deselectedEvent.onDeselectedEvent(this);
         }
-        Camera.followSprite(null);
+        Camera.stopFollowing(this);
         onDeselect();
-        if (currentlyPlaying != null)
+        if (isPlaying)
             throw new RuntimeException("super.onDeselect was not executed! Try putting super.onDeselect at the top of your method!");
     }
 
     protected void onDeselect() {
         isPlaying = false;
-        currentlyPlaying = null;
         Camera.setCameraEaseListener(null); //Safety net
+
+        if (!isPlayer1()) {
+            //TODO Animate disapear maybe..?
+            setVisible(false);
+        }
+
 
         w = false;
         a = false;
         s = false;
         d = false;
+        player = null;
+        input = null;
     }
 
     protected void dodge(Direction direction1) {
@@ -540,8 +551,12 @@ public abstract class PlayableSprite extends CombatSprite {
         return isPlaying;
     }
 
+    /**
+     * @deprecated This method is deprecated, see the coop wiki for more info
+     */
+    @Deprecated
     public static PlayableSprite getCurrentlyPlayingSprite() {
-        return currentlyPlaying;
+        return null;
     }
 
     public static void haltMovement() {

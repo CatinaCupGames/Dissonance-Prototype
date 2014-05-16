@@ -13,6 +13,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class Players {
+    public static float[][] PLAYER_COLORS = {
+            {0.77647058823f, 0f, 0f},
+            {0f, 0.32156862745f, 0.77647058823f},
+            {0f, 0.62745098039f, 0f},
+            {1f, 0.85098039215f, 0f}
+    };
+
     private static Player[] players = new Player[4];
     private static JoypadService joypadService;
 
@@ -30,12 +37,6 @@ public class Players {
      * @return The created player object, or null if there are to many players.
      */
     public static Player createPlayer(Input input) {
-        if (getPlayer1() != null) //If we have a player 1
-            checkSlots(); //Check to see if the max player count changed
-
-        if (getPlayer1() != null && getOpenSlots() == 0)
-            return null;
-
         checkIfInputUsed(input);
 
         int slot = 0;
@@ -60,6 +61,13 @@ public class Players {
             return createPlayer(joypads.get(0).createInput());
         }
         return createPlayer(Input.KEYBOARD);
+    }
+
+    static void removePlayer(Player player) {
+        for (int i = 0; i < players.length; i++) {
+            if (player == players[i])
+                players[i] = null;
+        }
     }
 
     /**
@@ -151,6 +159,21 @@ public class Players {
     }
 
     /**
+     * Get all player objects that have an input device. The players returned may or may not be playing.
+     * @return All player objects with input in an array of {@link com.dissonance.framework.game.player.Player} objects
+     */
+    public static Player[] getPlayersWithInput() {
+        ArrayList<Player> sprites = new ArrayList<Player>();
+        for (Player player : players) {
+            if (player != null && player.getInput() != null) {
+                sprites.add(player);
+            }
+        }
+
+        return sprites.toArray(new Player[sprites.size()]);
+    }
+
+    /**
      * Get the number of possible players that can play at this time. This method will <b>NOT</b> check to see if
      * new slots have opened
      * @return The total number of possible players that can play at this time.
@@ -160,11 +183,17 @@ public class Players {
             throw new IllegalAccessError("There is no player 1!");
         if (getPlayer1().getSprite() == null)
             throw new IllegalAccessError("Player 1 does not have a sprite!");
-        return getPlayer1().getSprite().getParty().length;
+        return getPlayer1().getSprite().getParty().length + 1;
     }
 
-    public static void isAnyPlayerPressingButton(String key) {
-
+    public static boolean isAnyPlayerPressingButton(String key) {
+        Player[] players = getPlayersWithInput();
+        for (Player player : players) {
+            if (player.getInput().isKeyPressed(key)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -184,7 +213,15 @@ public class Players {
         return getMaxPlayerCount() - getPlayingCount();
     }
 
-
+    public static boolean isInputUsed(Input input) {
+        for (Player player : players) {
+            if (player == null)
+                continue;
+            if (player.getInput().equals(input))
+                return true;
+        }
+        return false;
+    }
 
     private static void checkSlots() {
         if (getMaxPlayerCount() != players.length) {

@@ -259,7 +259,7 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public final void completeLoading() {
         if (loaded)
-            throw new IllegalAccessError("This sprite has already been loaded!");
+            throw new IllegalAccessError("The sprite \"" + toString() + "\" has already been loaded!");
         loaded = true;
         _wakeLoaders();
     }
@@ -278,6 +278,7 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public void onUnload() {
         texture = null;
+        loaded = false;
     }
 
     @Override

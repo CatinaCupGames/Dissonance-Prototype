@@ -14,9 +14,5 @@ public class collideTest extends GameWorldLoader {
         w.loadAndAdd(var1);
         var1.setX(314.59985f);
         var1.setY(196.89998f);
-
-        GameWorldLoader.farrand.setX(49 * 16);
-        GameWorldLoader.farrand.setY(196);
-        farrand.select();
     }
 }

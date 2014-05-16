@@ -12,7 +12,5 @@ public class test extends GameWorldLoader {
 
         var1 = new Jeremiah();
         w.loadAndAdd(var1);
-
-        farrand.select();
     }
 }

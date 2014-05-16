@@ -108,19 +108,36 @@ public final class Jeremiah extends PlayableSprite {
 
     @Override
     public void onMovement(Direction direction) {
+        if (ignore_movement)
+            return;
         if (isAnimationPaused()) {
             super.setFrame(2);
             playAnimation();
         }
-        if (direction == Direction.UP)
-            setAnimation("walk_back");
-        else if (direction == Direction.DOWN)
-            setAnimation("walk_front");
+
+        switch (direction) {
+            case UP:
+            case UP_LEFT:
+            case UP_RIGHT:
+                setAnimation("walk_back");
+                break;
+            case DOWN:
+            case DOWN_LEFT:
+            case DOWN_RIGHT:
+                setAnimation("walk_front");
+                break;
+            case LEFT:
+                setAnimation("walk_left");
+                break;
+            case RIGHT:
+                setAnimation("walk_right");
+                break;
+        }
     }
 
     @Override
     public void onNoMovement() {
-        if (InputKeys.isButtonPressed(InputKeys.MOVEUP) || InputKeys.isButtonPressed(InputKeys.MOVEDOWN) || InputKeys.isButtonPressed(InputKeys.MOVELEFT) || InputKeys.isButtonPressed(InputKeys.MOVERIGHT)) {
+        if (isMoving() || ignore_movement) {
             return;
         }
         super.setFrame(1);

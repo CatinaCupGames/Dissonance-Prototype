@@ -24,7 +24,7 @@ public class ControllerInput implements Input {
 
     @Override
     public boolean isMoving(PlayableSprite player) {
-        if (player.isPlayer1()) {
+        if (player.isPlayer1() && !GameService.coop_mode) {
             boolean value = Input.KEYBOARD.isMoving(player); //Check the keyboard as well as the gamepad.
             if (value)
                 return true;
@@ -146,9 +146,9 @@ public class ControllerInput implements Input {
             if (!playableSprite.use_attack && !playableSprite.is_dodging && !playableSprite.isFrozen()) {
                 if (controller.isButtonPressed(InputKeys.ATTACK)) {
                     if (playableSprite.getCurrentWeapon() != null) {
-                        if (playableSprite.isMoving())
+/*                        if (playableSprite.isMoving())
                             playableSprite.getCurrentWeapon().use("stab");
-                        else
+                        else*/
                             playableSprite.getCurrentWeapon().use("swipe");
                     }
                     playableSprite.ignore_movement = true;
@@ -213,6 +213,11 @@ public class ControllerInput implements Input {
     @Override
     public void update() {
         controller.getController().poll();
+    }
+
+    @Override
+    public boolean isKeyPressed(String key) {
+        return controller.isButtonPressed(key);
     }
 
     @Override

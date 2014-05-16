@@ -89,6 +89,16 @@ public final class Vector {
     public static Vector centerOf(List<Vector> points) {
         if (points.size() == 0)
             throw new InvalidParameterException("There must be at least 1 point to check against!");
+        if (points.size() == 1)
+            return points.get(0);
+        if (points.size() == 2) {
+            float x1 = points.get(0).x;
+            float y1 = points.get(0).y;
+            float x2 = points.get(1).x;
+            float y2 = points.get(1).y;
+
+            return new Vector((x1 + x2) / 2f, (y1 + y2) / 2f);
+        }
 
         Vector center = new Vector(0, 0);
         float area = 0f;

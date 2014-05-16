@@ -1,5 +1,7 @@
 package com.dissonance.framework.game.scene.dialog;
 
+import com.dissonance.framework.game.player.Player;
+import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
@@ -290,7 +292,7 @@ public class DialogUI extends AbstractUI {
     private long completedWhen;
     @Override
     public void update() {
-        boolean fast_moving = InputKeys.isButtonPressed(InputKeys.SELECT) && !autoScroll;
+        boolean fast_moving = Players.isAnyPlayerPressingButton(InputKeys.SELECT) && !autoScroll;
 
         long speed = this.speed / (fast_moving ? 2 : 1);
         if (RenderService.getTime() - lastUpdate > speed && !done) {
@@ -305,11 +307,11 @@ public class DialogUI extends AbstractUI {
         }
 
         if (!pressed) {
-            pressed = InputKeys.isButtonPressed(InputKeys.ATTACK) || InputKeys.isButtonPressed(InputKeys.SELECT);
+            pressed = Players.isAnyPlayerPressingButton(InputKeys.DODGE) || Players.isAnyPlayerPressingButton(InputKeys.SELECT);
             if (pressed && done) {
                 next();
             }
-        } else if (!InputKeys.isButtonPressed(InputKeys.ATTACK) && !InputKeys.isButtonPressed(InputKeys.SELECT)) {
+        } else if (!Players.isAnyPlayerPressingButton(InputKeys.DODGE) && !Players.isAnyPlayerPressingButton(InputKeys.SELECT)) {
             pressed = false;
         }
     }
@@ -370,12 +372,12 @@ public class DialogUI extends AbstractUI {
     }
 
     /*
-    Backwards compatiblity methods
+    Backwards compatibility methods
      */
     @Override
     protected void onClose() {
         if (halted) {
-            PlayableSprite.getCurrentlyPlayingSprite().unfreeze(DialogUI.class);
+            Players.getPlayer1().getSprite().unfreeze(DialogUI.class);
         }
     }
     private boolean halted = false;
@@ -418,8 +420,9 @@ public class DialogUI extends AbstractUI {
     @Deprecated
     public void displayUI(boolean halt, World world) {
         world.addDrawable(this);
-        if (halt && PlayableSprite.getCurrentlyPlayingSprite() != null) {
-            PlayableSprite.getCurrentlyPlayingSprite().freeze(true, DialogUI.class);
+        Player player = Players.getPlayer1();
+        if (halt && player != null && player.getSprite() != null) {
+            player.getSprite().freeze(true, DialogUI.class);
             halted = true;
         }
     }

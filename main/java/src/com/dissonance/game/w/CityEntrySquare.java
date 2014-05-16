@@ -10,6 +10,8 @@ Date: 2014/05/07 11:31:09
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.render.Camera;
+import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.Wyatt;
 
@@ -20,13 +22,16 @@ public class CityEntrySquare extends GameWorldLoader {
     public static Wyatt guard1;
     public static Wyatt guard2;
     public static Wyatt guard3;
+    public static Farrand farrand;
     @Override
     public void onLoad(World w) {
         super.onLoad(w);
 
-        farrand.deselect();
+        farrand = new Farrand();
         farrand.setX(985.60016f);
         farrand.setY(785.5205f);
+        w.loadAndAdd(farrand);
+        Camera.setPos(Camera.translateToCameraCenter(farrand.getVector(), farrand.getHeight()));
 
         jeremiah = new Jeremiah();
         w.loadAndAdd(jeremiah);

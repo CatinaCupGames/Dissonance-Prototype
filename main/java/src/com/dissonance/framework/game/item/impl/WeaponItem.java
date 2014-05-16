@@ -6,13 +6,16 @@ import com.dissonance.framework.game.item.Item;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Particle;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +49,6 @@ public class WeaponItem extends Item {
         if (getOwner() instanceof PlayableSprite && ((PlayableSprite)getOwner()).isFrozen())
             return;
         if (weapon.isGun()) {
-            //TODO animate shooter
 
             long time = System.currentTimeMillis();
 
@@ -198,9 +200,9 @@ public class WeaponItem extends Item {
                             hits.clear();
                         }
                     });
-                    getOwner().setAnimationSpeed(150);
+                    getOwner().setAnimationSpeed(50);
                     getOwner().playAnimation();
-
+                    getOwner().onAttack();
                     /**
                      * ===================
                      * END OF CODE CHUNK
