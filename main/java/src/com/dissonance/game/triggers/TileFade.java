@@ -1,6 +1,7 @@
 package com.dissonance.game.triggers;
 
 import com.dissonance.framework.game.ai.astar.FastMath;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.tiled.Layer;
@@ -15,6 +16,9 @@ public class TileFade extends AbstractTileTrigger {
 
     @Override
     public void onTrigger(final AnimatedSprite sprite, final Tile tile) {
+        if (!(sprite instanceof PlayableSprite))
+            return;
+
         int layer = tile.getContainingLayer().getGameLayer(sprite.getWorld());
 
         if (layer > sprite.getLayer()) {

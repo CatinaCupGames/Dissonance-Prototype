@@ -173,7 +173,7 @@ public class KeyboardInput implements Input {
                 else
                     quest.pauseGame();
             }
-        } else if (pause && !InputKeys.checkKeyboard(InputKeys.PAUSE)) pause = false;
+        } else if (pause && !Players.isAnyPlayerPressingButton(InputKeys.PAUSE)) pause = false;
     }
 
     @Override

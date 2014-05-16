@@ -17,15 +17,15 @@ public class OfficeQuest extends PauseQuest {
         w.waitForWorldDisplayed();
         WaldomarsMeetingRoom.var26.setWidth(12f);
         WaldomarsMeetingRoom.var26.setHeight(12f);
-        //Sound.playSound("waldobuilding");
         WaldomarsMeetingRoom.farrand.setAnimation("walk_left");
         WaldomarsMeetingRoom.farrand.pauseAnimation();
         WaldomarsMeetingRoom.farrand.setFrame(1);
 
         RenderService.INSTANCE.fadeToAlpha(1, 0f);
+        setNextQuest(new GameQuest());
         playSceneAndWait(OfficeScene.class);
 
-        new Thread(new Runnable() {
+/*        new Thread(new Runnable() {
             @Override
             public void run() {
                 while(true){
@@ -72,7 +72,9 @@ public class OfficeQuest extends PauseQuest {
                     }
                 }
             }
-        }).start();
+        }).start();*/
+
+        endQuest();
     }
 
     @Override

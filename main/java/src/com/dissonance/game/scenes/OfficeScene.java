@@ -7,13 +7,14 @@ import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.game.sprites.Waldomar;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 import org.lwjgl.util.vector.Vector2f;
 
 public class OfficeScene extends SimpleScene {
     @Override
     protected void playScene() throws Throwable {
-       RenderService.INSTANCE.fadeFromBlack(1500);
+        RenderService.INSTANCE.fadeFromBlack(1500);
         Vector2f center = Camera.translateToCameraCenter(WaldomarsMeetingRoom.farrand.getVector(), WaldomarsMeetingRoom.farrand.getHeight());
         Camera.setPos(center);
         Camera.followSprite(WaldomarsMeetingRoom.farrand);
@@ -96,7 +97,22 @@ public class OfficeScene extends SimpleScene {
 
         Dialog.displayDialog("waldomeeting3");
 
-        WaldomarsMeetingRoom.farrand.setWaypoint(WaldomarsMeetingRoom.farrand.getX(), 0f, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.farrand.setWaypoint(WaldomarsMeetingRoom.farrand.getX(), 5*16, WaypointType.SIMPLE);
         WaldomarsMeetingRoom.farrand.setMovementSpeed(10f);
+        WaldomarsMeetingRoom.farrand.waitForWaypointReached();
+
+        WaldomarsMeetingRoom.farrand.setMovementSpeed(30f);
+        Thread.sleep(300);
+        WaldomarsMeetingRoom.farrand.setWaypoint(WaldomarsMeetingRoom.farrand.getX(), 2f*16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.farrand.waitForWaypointReached();
+        WaldomarsMeetingRoom.farrand.setVisible(false);
+        WaldomarsMeetingRoom.jeremiah.setMovementSpeed(20f);
+        WaldomarsMeetingRoom.jeremiah.setWaypoint(8*16, 5*16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.jeremiah.waitForWaypointReached();
+        Thread.sleep(300);
+        WaldomarsMeetingRoom.jeremiah.setMovementSpeed(30f);
+        WaldomarsMeetingRoom.jeremiah.setWaypoint(8*16, 2*16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.jeremiah.waitForWaypointReached();
+        WaldomarsMeetingRoom.jeremiah.setVisible(false);
     }
 }
