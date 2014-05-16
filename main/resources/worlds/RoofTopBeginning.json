@@ -170,7 +170,7 @@
              "2":
                 {
                  "collidable":"true",
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "4":
                 {
@@ -242,6 +242,45 @@
             },
          "spacing":0,
          "tileheight":16,
+         "tileproperties":
+            {
+             "0":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "1":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "10":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "2":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "4":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "5":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "6":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "8":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "9":
+                {
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
+                }
+            },
          "tilewidth":16
         }],
  "tilewidth":16,
