@@ -53,6 +53,9 @@ public class AtWaldomar extends GameWorldLoader {
         guard5.setY(32*16f);
 
 
+        farrand = new Farrand();
+        w.loadAndAdd(farrand);
+        //farrand.setX(41f*16, 32f*16);
 
     }
 }

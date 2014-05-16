@@ -3,6 +3,7 @@ package com.dissonance.test;
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.game.quests.DisclaimerQuest;
+import com.dissonance.test.quests.CoopQuest;
 
 public class Main {
 
@@ -10,7 +11,7 @@ public class Main {
         World.setDefaultLoaderPackage("com.dissonance.test.w");
 
         GameService.loadEssentials(args);
-        GameService.beginQuest(new DisclaimerQuest());
+        GameService.beginQuest(new CoopQuest());
 
         /*Controller[] controller = ControllerEnvironment.getDefaultEnvironment().getControllers();
 

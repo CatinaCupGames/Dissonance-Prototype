@@ -104,4 +104,7 @@ public class Player {
         Players.removePlayer(this);
     }
 
+    public boolean isPlaying() {
+        return getSprite() != null && getSprite().isPlaying();
+    }
 }

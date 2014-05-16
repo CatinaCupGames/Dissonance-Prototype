@@ -24,7 +24,7 @@ public class ControllerInput implements Input {
 
     @Override
     public boolean isMoving(PlayableSprite player) {
-        if (player.isPlayer1() && !GameService.coop_mode) {
+        if (player.isPlayer1()) {
             boolean value = Input.KEYBOARD.isMoving(player); //Check the keyboard as well as the gamepad.
             if (value)
                 return true;
@@ -146,9 +146,6 @@ public class ControllerInput implements Input {
             if (!playableSprite.use_attack && !playableSprite.is_dodging && !playableSprite.isFrozen()) {
                 if (controller.isButtonPressed(InputKeys.ATTACK)) {
                     if (playableSprite.getCurrentWeapon() != null) {
-/*                        if (playableSprite.isMoving())
-                            playableSprite.getCurrentWeapon().use("stab");
-                        else*/
                             playableSprite.getCurrentWeapon().use("swipe");
                     }
                     playableSprite.ignore_movement = true;
@@ -202,7 +199,7 @@ public class ControllerInput implements Input {
                 else
                     quest.pauseGame();
             }
-        } else if (pause && !controller.isButtonPressed(InputKeys.PAUSE)) pause = false;
+        } else if (pause && !Players.isAnyPlayerPressingButton(InputKeys.PAUSE)) pause = false;
     }
 
     @Override

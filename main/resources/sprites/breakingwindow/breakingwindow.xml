@@ -1,0 +1,23 @@
+<animations
+        width="128"
+        height="32">
+
+    <animation
+            name="idle"
+            loop="false"
+            frames="1"
+            row="0"
+            default_speed="0ms"/>
+	<animation
+			name="breaking"
+			loop="false"
+			frames="5"
+			row="1"
+			default_speed="0ms" />
+	<animation
+			name="gone"
+			loop="false"
+			frames="1"
+			row="2"
+			default_speed="0ms" />
+</animations>
