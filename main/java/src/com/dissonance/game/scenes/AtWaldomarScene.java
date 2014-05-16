@@ -4,6 +4,7 @@ import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.scene.SimpleScene;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.game.w.AtWaldomar;
 import com.dissonance.game.w.WaldoHallway;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 import org.lwjgl.util.vector.Vector2f;
@@ -23,7 +24,7 @@ public class AtWaldomarScene extends SimpleScene {
         Camera.setPos(center);
         Camera.followSprite(WaldoHallway.farrand);
 
-       // WaldomarsMeetingRoom.farrand.setWaypoint(0f, AtWaldomar.farrand.getY(), WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.farrand.setWaypoint(0f, AtWaldomar.farrand.getY(), WaypointType.SIMPLE);
         WaldomarsMeetingRoom.farrand.setMovementSpeed(3f);
 
     }
