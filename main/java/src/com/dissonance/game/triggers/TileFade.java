@@ -47,6 +47,6 @@ public class TileFade extends AbstractTileTrigger {
 
     @Override
     public long triggerTimeout() {
-        return 0;
+        return -1;
     }
 }
