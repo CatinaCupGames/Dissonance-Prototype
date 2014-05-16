@@ -1,6 +1,5 @@
 package com.dissonance.game.quests;
 
-import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.World;
