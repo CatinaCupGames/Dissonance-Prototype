@@ -14,6 +14,5 @@ public class Main {
         GameService.beginQuest(new GateQuest());
         //GameService.beginQuest(new OfficeQuest());
         //GameService.beginQuest(new HallwayQuest());
-
     }
 }

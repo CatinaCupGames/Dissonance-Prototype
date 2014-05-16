@@ -12,4 +12,6 @@ public interface Input {
     public String getName();
 
     public void update();
+
+    public boolean isKeyPressed(String key);
 }

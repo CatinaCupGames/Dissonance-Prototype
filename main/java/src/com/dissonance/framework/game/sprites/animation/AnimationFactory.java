@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.sprites.animation;
 
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Validator;
 
@@ -53,6 +54,9 @@ public class AnimationFactory {
     public static void executeTick() throws IllegalAccessException {
         if (Thread.currentThread().getId() != RenderService.RENDER_THREAD_ID)
             throw new IllegalAccessException("executeTick() can only be called by the RenderService thread!");
+
+        if (GameService.getCurrentQuest() != null && GameService.getCurrentQuest().isPaused())
+            return;
 
         synchronized (animate) {
             for (AnimatorData ad : animate) {

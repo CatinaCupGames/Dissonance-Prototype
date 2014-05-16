@@ -454,6 +454,10 @@ public final class World {
     }
 
     public void onDispose() {
+        for (Drawable d : drawable) {
+            if (d instanceof Sprite)
+                ((Sprite)d).onUnload();
+        }
         drawable.clear();
         unsorted.clear();
         udrawables.clear();
@@ -781,6 +785,11 @@ public final class World {
 
     public Iterator<Drawable> getUnsortedDrawables() {
         return unsorted.iterator();
+    }
+
+    public void dispose() {
+        onUnload();
+        onDispose();
     }
 
     private class DisplayWaiters {

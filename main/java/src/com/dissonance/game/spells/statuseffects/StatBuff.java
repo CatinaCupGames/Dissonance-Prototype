@@ -31,7 +31,6 @@ public class StatBuff extends StatusEffect {
         of = owner.getFocus();
         om = owner.getMarksmanship();
 
-
         owner.setAttack(owner.getAttack() + a);
         owner.setDefense(owner.getDefense() + d);
         owner.setSpeed(owner.getSpeed() + s);
@@ -40,7 +39,6 @@ public class StatBuff extends StatusEffect {
         owner.setWillpower(owner.getWillPower() + w);
         owner.setFocus(owner.getFocus() + f);
         owner.setMarksmanship(owner.getMarksmanship() + m);
-
     }
 
     @Override
@@ -56,6 +54,5 @@ public class StatBuff extends StatusEffect {
         owner.setWillpower(ow);
         owner.setFocus(of);
         owner.setMarksmanship(om);
-
     }
 }

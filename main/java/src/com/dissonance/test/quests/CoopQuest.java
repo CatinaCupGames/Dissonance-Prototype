@@ -26,7 +26,12 @@ public class CoopQuest extends AbstractQuest {
         setWorld(world);
         world.waitForWorldDisplayed();
 
-        CityEntrySquare.player1.joinAs(CityEntrySquare.farrand);
+        Player player1 = Players.createPlayer1();
+        player1.joinAs(CityEntrySquare.farrand);
+
+        for (Player player : Players.getPlayersWithInput()) {
+            player.join();
+        }
 
         Enemy enemy = new Enemy("aloysius", Enemy.StatType.NON_MAGIC, CombatSprite.CombatType.CREATURE);
         world.loadAndAdd(enemy);
