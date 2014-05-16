@@ -27,5 +27,8 @@ public class AtWaldomarScene extends SimpleScene {
         WaldomarsMeetingRoom.farrand.setWaypoint(0f, AtWaldomar.farrand.getY(), WaypointType.SIMPLE);
         WaldomarsMeetingRoom.farrand.setMovementSpeed(3f);
 
+
+        AtWaldomar.farrand.setMovementSpeed(3f);
+
     }
 }
