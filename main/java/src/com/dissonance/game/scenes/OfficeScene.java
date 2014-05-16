@@ -80,6 +80,7 @@ public class OfficeScene extends SimpleScene {
 
         Camera.shake(Direction.DOWN, 4000L, 5, 0.5);
         Sound.playSound("earthquake");
+        //WaldomarsMeetingRoom.var18.
 
         WaldomarsMeetingRoom.guard1.setMovementSpeed(30f);
         WaldomarsMeetingRoom.guard1.setWaypoint(0, 11f * 16, WaypointType.SIMPLE);

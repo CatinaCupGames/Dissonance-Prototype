@@ -150,7 +150,6 @@ public class WaldomarsMeetingRoom implements WorldLoader {
 
         farrand = new Farrand();
         w.loadAndAdd(farrand);
-        farrand.deselect();
         farrand.setX(548.3502f);
         farrand.setY(128.44998f);
 

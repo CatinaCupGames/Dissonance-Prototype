@@ -1,9 +1,11 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
+import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.game.scenes.OfficeScene;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 
@@ -13,6 +15,21 @@ public class OfficeQuest extends PauseQuest {
         World w = WorldFactory.getWorld("WaldomarsMeetingRoom");
         setWorld(w);
         w.waitForWorldDisplayed();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //Load the maps into memory
+                    WorldFactory.getWorld("RoofTopBeginning");
+                    WorldFactory.getWorld("OutsideFighting");
+                } catch (WorldLoadFailedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        Players.createPlayer1();
+
         WaldomarsMeetingRoom.var26.setWidth(12f);
         WaldomarsMeetingRoom.var26.setHeight(12f);
         WaldomarsMeetingRoom.farrand.setAnimation("walk_left");

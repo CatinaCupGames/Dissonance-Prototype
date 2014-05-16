@@ -16,7 +16,6 @@ public class HallwayQuest  extends PauseQuest {
         setWorld(w);
         w.waitForWorldDisplayed();
         Sound.getSound("zesilia").fadeOut();
-        //Sound.getSound("waldobuilding").fadeIn();
         Sound.fadeInSound("waldobuilding");
 
         RenderService.INSTANCE.fadeToAlpha(1, 0f);
