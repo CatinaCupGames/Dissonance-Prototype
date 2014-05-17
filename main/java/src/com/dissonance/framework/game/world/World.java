@@ -171,7 +171,7 @@ public final class World {
             renderingService.resume();
     }
 
-    private boolean prepared = false;;
+    private boolean prepared = false;
     public void prepareTiles() {
         if (prepared)
             return;
@@ -194,12 +194,12 @@ public final class World {
             debug.display(World.this);
         }
         System.out.println("Done! Took " + (System.currentTimeMillis() - ms) + "ms. Added " + drawable.size() + " tiles!");
-        System.out.println("Attempting to generate frame buffer..");
+        System.out.println("Attempting to generate frame buffers..");
 
         //== OpenGL safe needed ==
         if (GameSettings.Graphics.useFBO && tiledData.getPixelWidth() > GameSettings.Display.window_width / 2f && tiledData.getPixelHeight() > GameSettings.Display.window_height / 2f) {
             try {
-                Framebuffer frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
+                frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
                 frame.generate();
                 frame.begin();
                 invalid = false;

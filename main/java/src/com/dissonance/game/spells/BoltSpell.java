@@ -19,7 +19,7 @@ public abstract class BoltSpell implements Spell {
     public void castSpell() {
         Sound.playSound("boltspell");
 
-        Direction direction = owner.getDirection();
+        Direction direction = owner.getFacingDirection();
         float x1, x2, y1, y2;
         switch (direction) {
             case DOWN:

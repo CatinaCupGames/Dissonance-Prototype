@@ -52,7 +52,7 @@ public final class NodeMap implements Serializable {
     }
 
     public void readMap() {
-        String fileName = "config" + File.separator + world.getName() + ".nodes";
+        String fileName = "cache" + File.separator + world.getName() + ".nodes";
         try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(fileName)))) {
             for (Node[] nodeArray : nodes) {
                 for (Node node : nodeArray) {
@@ -67,7 +67,7 @@ public final class NodeMap implements Serializable {
     }
 
     public void constructMap() {
-        String fileName = "config" + File.separator + world.getName() + ".nodes";
+        String fileName = "cache" + File.separator + world.getName() + ".nodes";
         new File(fileName).delete();
 
         Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
@@ -93,7 +93,7 @@ public final class NodeMap implements Serializable {
     }
 
     public void saveMap() {
-        String fileName = "config" + File.separator + world.getName() + ".nodes";
+        String fileName = "cache" + File.separator + world.getName() + ".nodes";
         try (DataOutputStream stream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(fileName)))) {
             for (Node[] nodeArray : nodes) {
                 for (Node node : nodeArray) {

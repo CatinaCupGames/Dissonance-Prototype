@@ -75,7 +75,6 @@ public class WaldomarsMeetingRoom implements WorldLoader {
     public static PottedPlant var20;
     
     public static Window var19;
-    public static Window var18;
     public static DeskRadio var17;
     public static Waldomar waldomar;
     public static Jeremiah jeremiah;
@@ -188,16 +187,11 @@ public class WaldomarsMeetingRoom implements WorldLoader {
         var17.setX(117.45002f);
         var17.setY(185.20001f);
         var17.setLayer(2);
-    
-        var18 = new Window();
-        w.loadAndAdd(var18);
-        var18.setX(72.0f);
-        var18.setY(55.6f);
-    
+
         var19 = new Window();
         w.loadAndAdd(var19);
-        var19.setX(135.95004f);
-        var19.setY(55.6f);
+        var19.setX(104f);
+        var19.setY(40f);
     
     
         var20 = new PottedPlant();

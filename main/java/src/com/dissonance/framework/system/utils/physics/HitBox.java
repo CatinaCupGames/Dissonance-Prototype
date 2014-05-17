@@ -153,6 +153,8 @@ public class HitBox {
     }
 
     public List<Collidable> checkAndRetrieve(World world, float startX, float startY, Sprite ignore) {
+        if (world == null) return new ArrayList<Collidable>();
+
         float halfx = (maxX - minX) / 2f;
         float halfy = (maxY - minY) / 2f;
         ArrayList<Collidable> collidables = new ArrayList<Collidable>();

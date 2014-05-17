@@ -6,23 +6,20 @@ import com.dissonance.framework.game.item.Item;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.player.PlayableSprite;
-import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Particle;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WeaponItem extends Item {
     private Weapon weapon;
 
-    private long lastShot;
+    private long lastUse;
 
     public WeaponItem(CombatSprite owner, Weapon w) {
         super(owner);
@@ -52,17 +49,17 @@ public class WeaponItem extends Item {
 
             long time = System.currentTimeMillis();
 
-            if (lastShot + weapon.getFiringSpeed() >= time) {
+            if (lastUse + weapon.getFiringSpeed() >= time) {
                 return;
             }
 
-            lastShot = time;
+            lastUse = time;
 
-            Direction direction = getOwner().getDirection();
+            Direction direction = getOwner().getFacingDirection();
 
             new Bullet(this).fire(direction);
         } else {
-            final Direction facingDirection = getOwner().getDirection();
+            final Direction facingDirection = getOwner().getFacingDirection();
             if (parameters.length > 0) {
                 String type = (String) parameters[0];
                 if (type.equals("swipe")) {
@@ -72,14 +69,22 @@ public class WeaponItem extends Item {
                      * This chunk of code is the sword swiping detection code
                      * =========================================================
                      */
+                    long time = System.currentTimeMillis();
+
+                    if (lastUse + 500 >= time) { //TODO Maybe make this timeout weapon specific..?
+                        return;
+                    }
+
+                    lastUse = time;
 
                     if (getOwner() instanceof PlayableSprite) {
                         ((PlayableSprite)getOwner()).freeze();
-                        //((PlayableSprite)getOwner()).setAttacking(true);
                     }
 
+                    getOwner().setAttacking(true);
+
                     final String old_animation = getOwner().getCurrentAnimation().getName();
-                    switch (getOwner().getDirection()) {
+                    switch (getOwner().getFacingDirection()) {
                         case UP:
                             getOwner().setAnimation("swipe_up");
                             break;
@@ -198,6 +203,7 @@ public class WeaponItem extends Item {
                             }
                             sprite.setAnimation(old_animation);
                             hits.clear();
+                            getOwner().setAttacking(false);
                         }
                     });
                     getOwner().setAnimationSpeed(50);
@@ -215,7 +221,7 @@ public class WeaponItem extends Item {
                      * This chunk of code is the sword stabbing detection code
                      * =========================================================
                      */
-                    switch (getOwner().getDirection()) {
+                    switch (getOwner().getFacingDirection()) {
                         case UP:
                             getOwner().setAnimation("stap_up");
                             break;

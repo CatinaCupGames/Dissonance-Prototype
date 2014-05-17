@@ -1,0 +1,16 @@
+<weapon>
+    <type>light_melee</type>
+    <attack>10</attack>
+    <defense>0</defense>
+    <speed>0</speed>
+    <vigor>0</vigor>
+    <stamina>0</stamina>
+    <willpower>0</willpower>
+    <focus>0</focus>
+    <marksmanship>0</marksmanship>
+    <range>24</range>
+    <swipe>16</swipe>
+    <spell>false</spell>
+    <gun>false</gun>
+    <name>farrand_staff</name>
+</weapon>

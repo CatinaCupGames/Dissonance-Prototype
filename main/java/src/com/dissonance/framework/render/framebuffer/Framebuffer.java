@@ -20,6 +20,24 @@ public class Framebuffer extends Sprite {
     private int fID, tID;
 
     protected int width, height;
+    protected int layer;
+    protected long mb_size;
+    protected static final long MB_LIMIT = 500;
+    protected static long MB_USED = 0;
+
+    public static long getMemoryLimit() {
+        return MB_LIMIT;
+    }
+
+    public static long getMemoryUsed() {
+        return MB_USED;
+    }
+
+    public static boolean enoughSpaceFor(int width, int height) {
+        double temp = width * height * 4.0;
+        temp /= 1048576;
+        return MB_USED + temp <= MB_LIMIT;
+    }
 
     public Framebuffer(int width, int height) {
         this.width = width;
@@ -36,7 +54,7 @@ public class Framebuffer extends Sprite {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (ByteBuffer) null);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (ByteBuffer) null);
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tID, 0);
 
@@ -49,6 +67,10 @@ public class Framebuffer extends Sprite {
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         clearErrors("Final Check");
+
+        this.mb_size = width * height * 4L;
+        mb_size /= 1048576;
+        MB_USED += mb_size;
     }
 
     public void begin() {
@@ -150,5 +172,6 @@ public class Framebuffer extends Sprite {
         //Bind 0, which means render to back buffer, as a result, fb is unbound
         glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
         glDeleteFramebuffers(fID);
+        MB_USED -= mb_size;
     }
 }

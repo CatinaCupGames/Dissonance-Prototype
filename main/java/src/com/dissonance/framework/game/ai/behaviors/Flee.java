@@ -1,7 +1,9 @@
 package com.dissonance.framework.game.ai.behaviors;
 
 import com.dissonance.framework.game.ai.astar.Vector;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
+import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.RenderService;
 
 /**
@@ -12,8 +14,9 @@ import com.dissonance.framework.render.RenderService;
  */
 public final class Flee implements Behavior {
     private final AbstractWaypointSprite sprite;
-    private final AbstractWaypointSprite target;
+    private AbstractWaypointSprite target;
     private float panicDistance = -1f;
+    private FleeListener listener;
 
     public Flee(AbstractWaypointSprite sprite, AbstractWaypointSprite target) {
         this.sprite = sprite;
@@ -25,11 +28,22 @@ public final class Flee implements Behavior {
         this.panicDistance = panicDistance * panicDistance;
     }
 
+    public void setFleeListener(FleeListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public void update() {
+        if (target == null) { //uwot
+            sprite.setBehavior(null);
+            return;
+        }
+
         Vector desired = sprite.getPositionVector().subtract(target.getPositionVector());
 
         if (desired.lengthSquared() > panicDistance && panicDistance != -1f) {
+            if (listener != null)
+                listener.onSpriteSafe(sprite);
             return;
         }
 
@@ -46,5 +60,17 @@ public final class Flee implements Behavior {
 
     public void setPanicDistance(float panicDistance) {
         this.panicDistance = panicDistance * panicDistance;
+    }
+
+    public void setTarget(AbstractWaypointSprite target) {
+        this.target = target;
+    }
+
+    public AbstractWaypointSprite getTarget() {
+        return target;
+    }
+
+    public static interface FleeListener {
+        public void onSpriteSafe(AbstractWaypointSprite sprite);
     }
 }
