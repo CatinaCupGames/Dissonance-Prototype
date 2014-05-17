@@ -13,7 +13,7 @@
 			loop="false"
 			frames="5"
 			row="1"
-			default_speed="0ms" />
+			default_speed="90ms" />
 	<animation
 			name="gone"
 			loop="false"

@@ -3,6 +3,7 @@ package com.dissonance.game.scenes;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.scene.SimpleScene;
 import com.dissonance.framework.game.scene.dialog.Dialog;
+import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
@@ -80,7 +81,17 @@ public class OfficeScene extends SimpleScene {
 
         Camera.shake(Direction.DOWN, 4000L, 5, 0.5);
         Sound.playSound("earthquake");
-        //WaldomarsMeetingRoom.var18.
+
+        //====WINDOW====
+        WaldomarsMeetingRoom.var19.setAnimation(1);
+        WaldomarsMeetingRoom.var19.setAnimationFinishedListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFinished() {
+            @Override
+            public void onAnimationFinished(AnimatedSprite sprite) {
+                WaldomarsMeetingRoom.var19.setAnimation(2);
+                WaldomarsMeetingRoom.var19.setAnimationFinishedListener(null);
+            }
+        });
+        //====WINDOW====
 
         WaldomarsMeetingRoom.guard1.setMovementSpeed(30f);
         WaldomarsMeetingRoom.guard1.setWaypoint(0, 11f * 16, WaypointType.SIMPLE);
