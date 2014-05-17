@@ -32,14 +32,14 @@ public abstract class ProjectileSpell extends AnimatedSprite implements Spell {
         owner.getWorld().addSprite(this);
         setX(owner.getX());
         setY(owner.getY());
-        setFacing(owner.getDirection());
-        if (owner.getDirection() == Direction.DOWN)
+        setFacingDirection(owner.getFacingDirection());
+        if (owner.getFacingDirection() == Direction.DOWN)
             setY(getY() + 32);
-        else if (owner.getDirection() == Direction.LEFT)
+        else if (owner.getFacingDirection() == Direction.LEFT)
             setX(getX() - 32);
-        else if (owner.getDirection() == Direction.RIGHT)
+        else if (owner.getFacingDirection() == Direction.RIGHT)
             setX(getX() + 32);
-        else if (owner.getDirection() == Direction.UP)
+        else if (owner.getFacingDirection() == Direction.UP)
             setY(getY() - 32);
         ox = getX();
         oy = getY();

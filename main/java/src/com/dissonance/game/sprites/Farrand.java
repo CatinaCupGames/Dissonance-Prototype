@@ -155,6 +155,14 @@ public final class Farrand extends PlayableSprite {
     public void onLoad() {
         super.onLoad();
         pauseAnimation();
+
+        setAttack(6);
+        setDefense(10);
+        setSpeed(8);
+        setVigor(10);
+        setStamina(6);
+        setWillpower(14);
+        setFocus(16);
     }
 
     @Override

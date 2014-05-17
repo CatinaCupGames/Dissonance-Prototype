@@ -178,7 +178,7 @@ public final class Approach implements FiniteBehavior {
     }
 
     private void calculateCOffset() {
-        switch (target.getDirection()) {
+        switch (target.getFacingDirection()) {
             case UP:
                 cOffset.x = offset.x;
                 cOffset.y = offset.y;

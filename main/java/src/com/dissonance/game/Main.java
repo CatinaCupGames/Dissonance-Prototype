@@ -2,7 +2,10 @@ package com.dissonance.game;
 
 import com.dissonance.framework.game.GameService;
 
+import com.dissonance.game.quests.DisclaimerQuest;
+import com.dissonance.game.quests.GameQuest;
 import com.dissonance.game.quests.Gate_2Quest;
+import com.dissonance.game.quests.OfficeQuest;
 
 
 public class Main {
@@ -13,7 +16,7 @@ public class Main {
         GameService.loadEssentials(args);
 
 
-        GameService.beginQuest(new Gate_2Quest());
+        GameService.beginQuest(new OfficeQuest());
 
 
     }

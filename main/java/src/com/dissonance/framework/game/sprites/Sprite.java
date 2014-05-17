@@ -1,6 +1,7 @@
 package com.dissonance.framework.game.sprites;
 
 import com.dissonance.framework.game.ai.astar.Position;
+import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.sprites.ui.UI;
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
@@ -68,7 +69,7 @@ public abstract class Sprite implements Drawable, Serializable {
         this.visible = visible;
     }
 
-    public Direction getDirection() {
+    public Direction getFacingDirection() {
         if (direction == null)
             direction = Direction.DOWN;
         return direction;
@@ -132,7 +133,7 @@ public abstract class Sprite implements Drawable, Serializable {
         hasTint = false;
     }
 
-    public void setFacing(Direction direction) {
+    public void setFacingDirection(Direction direction) {
         this.direction = direction;
     }
 
@@ -374,6 +375,87 @@ public abstract class Sprite implements Drawable, Serializable {
             }
         }
         return Drawable.AFTER;
+    }
+
+    /**
+     * Get the distance from another sprite.
+     * @param target The target sprite calculate distance to.
+     * @return The distance, in pixels, to the sprite <b>target</b>
+     */
+    public double distanceFrom(Sprite target) {
+        return Math.sqrt(((getX() - target.getX()) * (getX() - target.getX())) + ((getY() - target.getY()) * (getY() - target.getY())));
+    }
+
+    /**
+     * Get the direction towards the sprite in the parameter.
+     * @param sprite The sprite to get the direction towards
+     * @return The direction towards this sprite. This method will always return a {@link com.dissonance.framework.system.utils.Direction#simple()}  direction.
+     * @see com.dissonance.framework.system.utils.Direction#simple()
+     */
+    public Direction directionTowards(Sprite sprite) {
+        double angle = angleTowards(sprite);
+        if ((angle > 315 || angle < 45)) {
+            return Direction.RIGHT;
+        } else if (angle > 255 && angle <= 315) {
+            return Direction.DOWN;
+        } else if (angle > 135 && angle <= 225) {
+            return Direction.LEFT;
+        } else if (angle >= 45 && angle <= 135) {
+            return Direction.UP;
+        }
+        return Direction.NONE;
+    }
+
+    /**
+     * This method returns the angler direction of the sprite in the parameter. For example, if this sprite is above the parameter sprite, this method should return 270 degrees.
+     * @param sprite The sprite to check against
+     * @return The angler direction of the selected sprite.
+     */
+    public double angleTowards(Sprite sprite) {
+        float ydif = sprite.getY() - getY();
+        float xdif = sprite.getX() - getX();
+        double angle = Math.toDegrees(Math.atan2(-ydif, xdif));
+        while (angle < 0)
+            angle += 360;
+        while (angle > 360)
+            angle -= 360;
+        return angle;
+    }
+
+    /**
+     * Get the direction towards the vector in the parameter.
+     * @param target The vector to get the direction towards
+     * @return The direction towards the vector specified. This method will always return a {@link com.dissonance.framework.system.utils.Direction#simple()}  direction.
+     * @see com.dissonance.framework.system.utils.Direction#simple()
+     */
+    public Direction directionTowards(Vector target) {
+        double angle = angleTowards(target);
+        if ((angle > 315 || angle < 45)) {
+            return Direction.RIGHT;
+        } else if (angle > 255 && angle <= 315) {
+            return Direction.DOWN;
+        } else if (angle > 135 && angle <= 225) {
+            return Direction.LEFT;
+        } else if (angle >= 45 && angle <= 135) {
+            return Direction.UP;
+        }
+        return Direction.NONE;
+    }
+
+    /**
+     * This method returns the angler direction of the vector in the parameter. For example, if this sprite is above the vector, this method should return 270 degrees.
+     * @param target The sprite to check against
+     * @return The angler direction of the vector.
+     */
+    private double angleTowards(Vector target) {
+        float ydif = target.y - getY();
+        float xdif = target.x - getX();
+        double angle = Math.toDegrees(Math.atan2(-ydif, xdif));
+        while (angle < 0)
+            angle += 360;
+        while (angle > 360)
+            angle -= 360;
+        return angle;
     }
 
     public interface SpriteEvent {

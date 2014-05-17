@@ -2,7 +2,6 @@ package com.dissonance.framework.game.player;
 
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.GameService;
-import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.player.input.joypad.Joypad;
 import com.dissonance.framework.render.Camera;
@@ -56,9 +55,9 @@ public class ControllerInput implements Input {
             angle += 360;
 
         if (playableSprite.getLocker() != null) {
-            playableSprite.setFacing(playableSprite.getDirectionOf(playableSprite.getLocker()));
+            playableSprite.setFacingDirection(playableSprite.directionTowards(playableSprite.getLocker()));
 
-            double langle = playableSprite.getAngleOf(playableSprite.getLocker());
+            double langle = playableSprite.angleTowards(playableSprite.getLocker());
             float x = values.x;
             float y = values.y;
 
@@ -87,16 +86,16 @@ public class ControllerInput implements Input {
             playableSprite.rawSetY(playableSprite.getY() + values.y * (playableSprite.movementSpeed() * RenderService.TIME_DELTA));
             if (angle != 0 && angle != -0) {
                 if (angle > 315 || angle < 45) {
-                    playableSprite.setFacing(Direction.RIGHT);
+                    playableSprite.setFacingDirection(Direction.RIGHT);
                     playableSprite.d = true;
                 } else if (angle > 255 && angle <= 315) {
-                    playableSprite.setFacing(Direction.DOWN);
+                    playableSprite.setFacingDirection(Direction.DOWN);
                     playableSprite.s = true;
                 } else if (angle > 135 && angle <= 225) {
-                    playableSprite.setFacing(Direction.LEFT);
+                    playableSprite.setFacingDirection(Direction.LEFT);
                     playableSprite.a = true;
                 } else if (angle >= 45 && angle <= 135) {
-                    playableSprite.setFacing(Direction.UP);
+                    playableSprite.setFacingDirection(Direction.UP);
                     playableSprite.w = true;
                 }
             }
@@ -106,7 +105,7 @@ public class ControllerInput implements Input {
             if (values.x == 0 && values.y == 0)
                 playableSprite._onNoMovement();
             else
-                playableSprite._onMovement(playableSprite.getDirection());
+                playableSprite._onMovement(playableSprite.getFacingDirection());
         }
     }
 
@@ -146,9 +145,9 @@ public class ControllerInput implements Input {
             if (!playableSprite.use_attack && !playableSprite.is_dodging && !playableSprite.isFrozen()) {
                 if (controller.isButtonPressed(InputKeys.ATTACK)) {
                     if (playableSprite.getCurrentWeapon() != null) {
-                            playableSprite.getCurrentWeapon().use("swipe");
+                        playableSprite.getCurrentWeapon().use("swipe");
+                        playableSprite.ignore_movement = true;
                     }
-                    playableSprite.ignore_movement = true;
                     playableSprite.use_attack = true;
                 }
             } else if (!controller.isButtonPressed(InputKeys.ATTACK)) playableSprite.use_attack = false;
@@ -162,7 +161,7 @@ public class ControllerInput implements Input {
 
             if (!playableSprite.use_dodge && !playableSprite.is_dodging && playableSprite.allow_dodge) {
                 if (controller.isButtonPressed(InputKeys.DODGE)) {
-                    playableSprite.dodge(playableSprite.getDirection());
+                    playableSprite.dodge(playableSprite.getFacingDirection());
                 }
             } else if (!controller.isButtonPressed(InputKeys.DODGE)) playableSprite.use_dodge = false;
 

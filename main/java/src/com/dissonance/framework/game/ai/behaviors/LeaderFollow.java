@@ -86,7 +86,7 @@ public final class LeaderFollow implements Behavior {
         if (nodes.size() == 0) {
             if (Math.abs(sprite.getX() - target.x) <= 4.5f && Math.abs(sprite.getY() - target.y) <= 4.5f) {
                 sprite.setSteeringVelocity(new Vector(0, 0));
-                sprite.setFacing(leader.getDirection());
+                sprite.setFacingDirection(leader.getFacingDirection());
             }
         }
     }
@@ -105,7 +105,7 @@ public final class LeaderFollow implements Behavior {
     }
 
     private void calculateCOffset() {
-        switch (leader.getDirection()) {
+        switch (leader.getFacingDirection()) {
             case UP:
                 cOffset.x = offset.x;
                 cOffset.y = offset.y;

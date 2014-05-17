@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.sprites.impl.game;
 
+import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.combat.spells.Spell;
 import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.item.Item;
@@ -29,11 +30,13 @@ public abstract class CombatSprite extends PhysicsSprite {
 
     private boolean isCastingSpell = false;
     //==FIXED STATS==//
-    private double HP = 100; //This is a fixed stat
+    private double MAX_HP = 100;
+    private double HP = 100;
 
     //==VARIABLE STATS==//
     protected int level = 1;
     private float MP;
+    private boolean attacking;
 
     public int getLevel() {
         return level;
@@ -41,7 +44,7 @@ public abstract class CombatSprite extends PhysicsSprite {
 
     public void levelUp() {
         level++;
-        HP = 100;
+        refillHP();
         onLevelUp();
     }
 
@@ -363,6 +366,18 @@ public abstract class CombatSprite extends PhysicsSprite {
         return HP;
     }
 
+    public void refillHP() {
+        HP = MAX_HP;
+    }
+
+    public double getMaxHP() {
+        return MAX_HP;
+    }
+
+    public void setMaxHP(double HP) {
+        this.MAX_HP = HP;
+    }
+
     public List<Item> getInventory() {
         return Collections.unmodifiableList(inventory);
     }
@@ -509,12 +524,16 @@ public abstract class CombatSprite extends PhysicsSprite {
     }
 
     public void strike(CombatSprite attacker, WeaponItem with) {
+        if (isAlly(attacker))
+            return;
         double defense = getDefense() + (getCurrentWeapon() != null ? getCurrentWeapon().getWeaponInfo().getDefense() : 0);
         double attack = attacker.getAttack() + with.getWeaponInfo().getAttack();
         double damage;
         damage = ((attack * Math.log(attack)) / (defense / Math.log(defense))) * 2;
         if (damage > 100)
             damage = 100;
+
+        damage = FastMath.fastRound((float) damage);
 
         toastText("-" + damage).setTint(255, 24, 38, 1);
 
@@ -560,6 +579,14 @@ public abstract class CombatSprite extends PhysicsSprite {
 
     public void onAttack() {
 
+    }
+
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
+    }
+
+    public boolean isAttacking() {
+        return attacking;
     }
 
 

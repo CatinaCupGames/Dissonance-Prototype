@@ -171,7 +171,7 @@ public final class World {
             renderingService.resume();
     }
 
-    private boolean prepared = false;;
+    private boolean prepared = false;
     public void prepareTiles() {
         if (prepared)
             return;

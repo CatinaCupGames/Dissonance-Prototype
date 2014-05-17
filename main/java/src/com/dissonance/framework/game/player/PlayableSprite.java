@@ -5,18 +5,15 @@ import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.UpdatableDrawable;
-import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.framework.system.utils.Timer;
 import org.lwjgl.util.vector.Vector2f;
 
-import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
-
-import static org.lwjgl.opengl.GL11.*;
 
 public abstract class PlayableSprite extends CombatSprite {
     private PlayableSpriteEvent.OnSelectedEvent selectedEvent;
@@ -192,6 +189,8 @@ public abstract class PlayableSprite extends CombatSprite {
                         @Override
                         public void run() {
                             allow_dodge = true;
+                            if (isFrozen())
+                                unfreeze();
                         }
                     });
                     return;
@@ -216,6 +215,8 @@ public abstract class PlayableSprite extends CombatSprite {
                         @Override
                         public void run() {
                             allow_dodge = true;
+                            if (isFrozen())
+                                unfreeze();
                         }
                     });
                     return;
@@ -224,6 +225,9 @@ public abstract class PlayableSprite extends CombatSprite {
         }
         if (frozen)
             return;
+        if (ignore_movement && !isAttacking() && !is_dodging)
+            ignore_movement = false;
+
         input.checkMovement(this);
     }
 
@@ -306,7 +310,7 @@ public abstract class PlayableSprite extends CombatSprite {
             angle += 360;
         while (angle > 360)
             angle -= 360;
-        Direction direction1 = getDirection();
+        Direction direction1 = getFacingDirection();
         if ((angle > 315 || angle < 45) && direction1 == Direction.RIGHT) {
             return Math.abs(xdif) < distance;
         } else if (angle > 255 && angle <= 315 && direction1 == Direction.DOWN) {
@@ -443,11 +447,11 @@ public abstract class PlayableSprite extends CombatSprite {
     protected void dodge(Direction direction1) {
         if (frozen)
             return;
-        frozen = true;
         String ani;
         float speed = movementSpeed() * 2.5f;
         speed *= 1.5f;
         totalDodgeTime = 300;
+        freeze();
         /*
 
         ALGEBRA TIME!
@@ -471,6 +475,8 @@ public abstract class PlayableSprite extends CombatSprite {
         DISTANCE *= 0.8f;
         switch (direction1) {
             case UP:
+            case UP_LEFT:
+            case UP_RIGHT:
                 ani = "dodge_up";
                 int i = 0;
                 for (; i < DISTANCE; i++) {
@@ -481,6 +487,8 @@ public abstract class PlayableSprite extends CombatSprite {
                 dodgeX = 0;
                 break;
             case DOWN:
+            case DOWN_LEFT:
+            case DOWN_RIGHT:
                 ani = "dodge_down";
                 int ii = 0;
                 for (; ii < DISTANCE; ii++) {
@@ -511,6 +519,7 @@ public abstract class PlayableSprite extends CombatSprite {
                 dodgeY = 0;
                 break;
             default:
+                unfreeze();
                 return;
         }
         setAnimation(ani);
@@ -542,16 +551,18 @@ public abstract class PlayableSprite extends CombatSprite {
         return null;
     }
 
+    @Deprecated
     public static void haltMovement() {
         if (currentlyPlaying == null)
             return;
-        currentlyPlaying.frozen = true;
+        currentlyPlaying.freeze();
     }
 
+    @Deprecated
     public static void resumeMovement() {
         if (currentlyPlaying == null)
             return;
-        currentlyPlaying.frozen = false;
+        currentlyPlaying.freeze();
     }
 
     private final Camera.CameraMovementListener listener = new Camera.CameraMovementListener() {
@@ -570,36 +581,7 @@ public abstract class PlayableSprite extends CombatSprite {
         return locked;
     }
 
-    public Direction getDirectionOf(CombatSprite locker) {
-        float ydif = locker.getY() - getY();
-        float xdif = locker.getX() - getX();
-        double angle = Math.toDegrees(Math.atan2(-ydif, xdif));
-        while (angle < 0)
-            angle += 360;
-        while (angle > 360)
-            angle -= 360;
-        if ((angle > 315 || angle < 45)) {
-            return Direction.RIGHT;
-        } else if (angle > 255 && angle <= 315) {
-            return Direction.DOWN;
-        } else if (angle > 135 && angle <= 225) {
-            return Direction.LEFT;
-        } else if (angle >= 45 && angle <= 135) {
-            return Direction.UP;
-        }
-        return Direction.NONE;
-    }
 
-    public double getAngleOf(CombatSprite sprite) {
-        float ydif = sprite.getY() - getY();
-        float xdif = sprite.getX() - getX();
-        double angle = Math.toDegrees(Math.atan2(-ydif, xdif));
-        while (angle < 0)
-            angle += 360;
-        while (angle > 360)
-            angle -= 360;
-        return angle;
-    }
 
     public interface PlayableSpriteEvent {
         /**

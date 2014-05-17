@@ -29,26 +29,26 @@ public class KeyboardInput implements Input {
         playableSprite.a = InputKeys.checkKeyboard(InputKeys.MOVELEFT);
         if (playableSprite.w) {
             playableSprite.setY(playableSprite.getY() - (speed * RenderService.TIME_DELTA));
-            playableSprite.setFacing(playableSprite.a ? Direction.UP_LEFT : playableSprite.d ? Direction.UP_RIGHT : Direction.UP);
+            playableSprite.setFacingDirection(playableSprite.a ? Direction.UP_LEFT : playableSprite.d ? Direction.UP_RIGHT : Direction.UP);
         }
         if (playableSprite.s) {
             playableSprite.setY(playableSprite.getY() + (speed * RenderService.TIME_DELTA));
-            playableSprite.setFacing(playableSprite.a ? Direction.DOWN_LEFT : playableSprite.d ? Direction.DOWN_RIGHT : Direction.DOWN);
+            playableSprite.setFacingDirection(playableSprite.a ? Direction.DOWN_LEFT : playableSprite.d ? Direction.DOWN_RIGHT : Direction.DOWN);
         }
         if (playableSprite.a) {
             playableSprite.setX(playableSprite.getX() - (speed * RenderService.TIME_DELTA));
-            playableSprite.setFacing(playableSprite.w ? Direction.UP_LEFT : playableSprite.s ? Direction.DOWN_LEFT : Direction.LEFT);
+            playableSprite.setFacingDirection(playableSprite.w ? Direction.UP_LEFT : playableSprite.s ? Direction.DOWN_LEFT : Direction.LEFT);
         }
         if (playableSprite.d) {
             playableSprite.setX(playableSprite.getX() + (speed * RenderService.TIME_DELTA));
-            playableSprite.setFacing(playableSprite.w ? Direction.UP_RIGHT : playableSprite.s ? Direction.DOWN_RIGHT : Direction.RIGHT);
+            playableSprite.setFacingDirection(playableSprite.w ? Direction.UP_RIGHT : playableSprite.s ? Direction.DOWN_RIGHT : Direction.RIGHT);
         }
 
         if (!playableSprite.ignore_movement) {
             if (!playableSprite.w && !playableSprite.d && !playableSprite.s && !playableSprite.a)
                 playableSprite._onNoMovement();
             else
-                playableSprite._onMovement(playableSprite.getDirection());
+                playableSprite._onMovement(playableSprite.getFacingDirection());
         }
     }
 
@@ -115,13 +115,10 @@ public class KeyboardInput implements Input {
                 playableSprite.clearLock();
             }
 
-            if (!playableSprite.use_attack && !playableSprite.is_dodging) {
+            if (!playableSprite.use_attack && !playableSprite.is_dodging && !playableSprite.isFrozen()) {
                 if (InputKeys.checkKeyboard(InputKeys.ATTACK)) {
                     if (playableSprite.getCurrentWeapon() != null) {
-                        if (playableSprite.isMoving())
-                            playableSprite.getCurrentWeapon().use("stab");
-                        else
-                            playableSprite.getCurrentWeapon().use("swipe");
+                        playableSprite.getCurrentWeapon().use("swipe");
                         playableSprite.ignore_movement = true;
                     }
                     playableSprite.use_attack = true;
@@ -137,7 +134,7 @@ public class KeyboardInput implements Input {
 
             if (!playableSprite.use_dodge && !playableSprite.is_dodging && playableSprite.allow_dodge) {
                 if (InputKeys.checkKeyboard(InputKeys.DODGE)) {
-                    playableSprite.dodge(playableSprite.getDirection());
+                    playableSprite.dodge(playableSprite.getFacingDirection());
                 }
             } else if (!InputKeys.checkKeyboard(InputKeys.DODGE)) playableSprite.use_dodge = false;
 

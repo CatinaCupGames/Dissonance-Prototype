@@ -29,7 +29,7 @@ public class Enemy extends CombatSprite {
 
     @Override
     public int getDefense() {
-        return 19;
+        return defense;
     }
 
     @Override
@@ -64,24 +64,17 @@ public class Enemy extends CombatSprite {
 
     @Override
     public void setAttack(int attack) {
-
+        this.attack = attack;
     }
 
     @Override
     public void setDefense(int defense) {
-
+        this.defense = defense;
     }
 
     @Override
     public CombatType getCombatType() {
         return combatType;
-    }
-
-    @Override
-    public void update() {
-        super.update();
-        if (isUpdateCanceled())
-            return;
     }
 
     @Override
@@ -91,32 +84,32 @@ public class Enemy extends CombatSprite {
 
     @Override
     public void setSpeed(int speed) {
-
+        this.speed = speed;
     }
 
     @Override
     public void setVigor(int vigor) {
-
+        this.vigor = vigor;
     }
 
     @Override
     public void setStamina(int stamina) {
-
+        this.stamina = stamina;
     }
 
     @Override
     public void setWillpower(int willpower) {
-
+        this.willPower = willpower;
     }
 
     @Override
     public void setFocus(int focus) {
-
+        this.focus = focus;
     }
 
     @Override
     public void setMarksmanship(int marksmanship) {
-
+        this.marksmanship = marksmanship;
     }
 
     public enum StatType {
