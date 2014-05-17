@@ -82,6 +82,7 @@ public class TextureLoader {
 
         // convert that image into a byte buffer of texture data
         ByteBuffer textureBuffer = convertImageData(bufferedImage, texture, false);
+        texture.mb_size = textureBuffer.capacity() / 1048576.0;
 
         if (target == GL_TEXTURE_2D) {
             glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter);
@@ -173,6 +174,7 @@ public class TextureLoader {
 
         // convert that image into a byte buffer of texture data
         ByteBuffer textureBuffer = convertImageData(bufferedImage, texture, false);
+        texture.mb_size = textureBuffer.capacity() / 1048576.0;
 
         if (target == GL_TEXTURE_2D) {
             glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter);

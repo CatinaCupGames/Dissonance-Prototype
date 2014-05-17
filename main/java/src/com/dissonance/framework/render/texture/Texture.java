@@ -16,14 +16,20 @@ public class Texture {
     public static final int TOP_RIGHT = 2;
     public static final int TOP_LEFT = 3;
 
+    private static double MB_USED;
 
     int textureId;
     private int targetId;
     private int image_width, image_height;
     private int texture_width, texture_height;
     private float width, height;
+    double mb_size;
     private String resource;
     protected static final HashMap<String, Texture> cache = new HashMap<String, Texture>();
+
+    public static double getTextureMemoryUsed() {
+        return MB_USED;
+    }
 
     public static Texture retrieveTexture(String resource) throws IOException {
         if (cache.containsKey(resource)) {
@@ -31,8 +37,9 @@ public class Texture {
             return cache.get(resource);
         }
 
-        Texture t = TextureLoader.getTexture(resource, GL_TEXTURE_2D, GL_RGBA, GL_NEAREST, GL_NEAREST);
+        Texture t = TextureLoader.getTexture(resource, GL_TEXTURE_2D, GL_RGBA8, GL_NEAREST, GL_NEAREST);
         t.resource = resource;
+        MB_USED += t.mb_size;
         cache.put(resource, t);
         if (Debug.isDebugging()) System.err.println("Saving texture in cache.. (" + resource + ")");
         return t;
@@ -42,8 +49,9 @@ public class Texture {
         if (cache.containsKey(name))
             return cache.get(name);
 
-        Texture t = TextureLoader.convertToTexture(image, GL_TEXTURE_2D, GL_RGBA, GL_NEAREST, GL_NEAREST);
+        Texture t = TextureLoader.convertToTexture(image, GL_TEXTURE_2D, GL_RGBA8, GL_NEAREST, GL_NEAREST);
         t.resource = name;
+        MB_USED += t.mb_size;
         cache.put(name, t);
         return t;
     }
@@ -60,7 +68,7 @@ public class Texture {
     }
 
     public static void redrawTexture(Texture target, BufferedImage image) {
-        TextureLoader.drawToTexture(image, GL_TEXTURE_2D, GL_RGBA, GL_NEAREST, GL_NEAREST, target);
+        TextureLoader.drawToTexture(image, GL_TEXTURE_2D, GL_RGBA8, GL_NEAREST, GL_NEAREST, target);
     }
 
     private Texture() { }
@@ -156,6 +164,7 @@ public class Texture {
             @Override
             public void run() {
                 TextureLoader.disposeTexture(Texture.this);
+                MB_USED -= mb_size;
             }
         });
     }

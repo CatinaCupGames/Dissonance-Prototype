@@ -2,7 +2,9 @@ package com.dissonance.framework.system.debug;
 
 import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.render.framebuffer.Framebuffer;
 import com.dissonance.framework.render.text.RenderText;
+import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.GameSettings;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
@@ -38,7 +40,10 @@ public class DebugSprite extends AbstractUI {
         RenderText.drawString(font, "USprites: " + super.world.getUpdatableCount(), (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight() * 2f) + 10f, Color.white);
         DecimalFormat format = new DecimalFormat("#.0000");
         RenderText.drawString(font, "Memory%: " + format.format(Debug.getPercentUsed()) + "%", (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight() * 3f) + 10f, Color.white);
-        RenderText.drawString(font, "Memory Free: " + format.format(Debug.getFreeMemory() * 9.53674e-7) + "mb", (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight() * 4f) + 10f, Color.white);
+        RenderText.drawString(font, "Memory Free: " + format.format(Debug.getFreeMemory() / 1048576.0) + "mb", (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight() * 4f) + 10f, Color.white);
+        RenderText.drawString(font, "FB Used: " + format.format(Framebuffer.getMemoryUsed()) + "mb", (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight() * 5f) + 10f, Color.white);
+        RenderText.drawString(font, "TX Used: " + format.format(Texture.getTextureMemoryUsed()) + "mb", (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight() * 6f) + 10f, Color.white);
+        RenderText.drawString(font, "Video Memory Used: " + format.format(Texture.getTextureMemoryUsed() + Framebuffer.getMemoryUsed()) + "mb", (getX() - bx) + 10f, (((getY() - by) + bold_font.getHeight()) + font.getHeight() * 7f) + 10f, Color.white);
 
         glColor4f(1f, 1f, 1f, RenderService.getCurrentAlphaValue());
 
