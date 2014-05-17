@@ -31,12 +31,10 @@ public class TileFade extends AbstractTileTrigger {
                     float y = sprite.getY() + (sprite.getHeight() / 2f) - 6f;
 
                     Tile t = sprite.getWorld().getTileAt(x / 16f, FastMath.fastCeil((y - 8f) / 16f), tile.getContainingLayer());
-                    System.out.println("Testing layer " + (tile.getContainingLayer().getGameLayer(tile.getParentWorld())));
                     if (!t.isTriggerTile() || !(t.getTrigger() instanceof TileFade)) {
                         tile.getContainingLayer().setAlpha(1f);
                         uwot.remove(tile.getContainingLayer());
                         RenderService.INSTANCE.removeServiceTick(this);
-                        System.out.println("kill");
                     }
                 }
             }, true, true);

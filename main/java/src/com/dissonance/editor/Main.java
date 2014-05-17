@@ -25,7 +25,7 @@ public class Main {
 
         String interfaces = "Drawable|List|Behavior|WaypointSprite";
 
-        String methods = "getDirection|setFacing|getWorld|setBehavior|setWorld|getX|setX|getY|setY|getPosition|" +
+        String methods = "getFacingDirection|setFacingDirection|getWorld|setBehavior|setWorld|getX|setX|getY|setY|getPosition|" +
                 "setPos|getWidth|getHeight|addDrawable|addSprite|removeSprite|loadAndAdd|onLoad";
 
         try (DataOutputStream stream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(Highlighter.DATA, false)))) {

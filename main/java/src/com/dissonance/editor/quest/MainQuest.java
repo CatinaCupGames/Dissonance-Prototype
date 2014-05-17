@@ -542,22 +542,22 @@ public class MainQuest extends AbstractQuest {
 
             if (w) {
                 ss.setY(selectedSprite.getY() - (SPEED * RenderService.TIME_DELTA));
-                ss.setFacing(Direction.UP);
+                ss.setFacingDirection(Direction.UP);
                 EditorUI.INSTANCE.refreshCode();
             }
             if (s) {
                 ss.setY(selectedSprite.getY() + (SPEED * RenderService.TIME_DELTA));
-                ss.setFacing(Direction.DOWN);
+                ss.setFacingDirection(Direction.DOWN);
                 EditorUI.INSTANCE.refreshCode();
             }
             if (a) {
                 ss.setX(selectedSprite.getX() - (SPEED * RenderService.TIME_DELTA));
-                ss.setFacing(Direction.LEFT);
+                ss.setFacingDirection(Direction.LEFT);
                 EditorUI.INSTANCE.refreshCode();
             }
             if (d) {
                 ss.setX(selectedSprite.getX() + (SPEED * RenderService.TIME_DELTA));
-                ss.setFacing(Direction.RIGHT);
+                ss.setFacingDirection(Direction.RIGHT);
                 EditorUI.INSTANCE.refreshCode();
             }
         } else if ((w || a || s || d) && selectedSprite != null && selectedSprite instanceof UI) {
