@@ -39,7 +39,7 @@ public class ToastText extends UpdatableSprite {
         return duration;
     }
 
-    private float fSize = 12f;
+    private float fSize = 24f;
     @Override
     public void init() {
         font = RenderText.getFont(GameSettings.Display.GAME_FONT.deriveFont(fSize), Font.BOLD);
@@ -80,11 +80,13 @@ public class ToastText extends UpdatableSprite {
             return;
 
         if (!fadeOut) {
-            setX(parent.getX() - (getWidth() / 2f) + 3f);
+            setX(parent.getX() - (getWidth() / 4f));
+            setX(getX() * 2f);
 
             float targetAlpha = Camera.ease(0f, 1f, (duration - 200), (RenderService.getTime() - (start + 100L)));
             float target = Camera.ease(0f, this.target, duration, (RenderService.getTime() - (start + 100L)));
             setY(parent.getY() - target);
+            setY(getY() * 2f);
             alpha = targetAlpha;
             if (target == this.target) {
                 fadeOut = true;
@@ -98,7 +100,14 @@ public class ToastText extends UpdatableSprite {
 
     @Override
     public void render() {
+        RenderService.removeScale();
         float r = getTint().getRed() / 255f, g = getTint().getGreen() / 255f, b = getTint().getBlue() / 255f;
         RenderText.drawString(font, text, getX(), getY(), new org.newdawn.slick.Color(r, g, b, alpha));
+        RenderService.resetScale();
+    }
+
+    @Override
+    public boolean neverClip() {
+        return true;
     }
 }
