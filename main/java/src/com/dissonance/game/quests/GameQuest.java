@@ -6,19 +6,20 @@ import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.game.w.OutsideFighting;
+import com.dissonance.game.w.RoofTopBeginning;
 
 public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         WorldFactory.clearCache();
-        World w = WorldFactory.getWorld("OutsideFighting");
+        World w = WorldFactory.getWorld("RoofTopBeginning");
         World level2 = WorldFactory.getWorld("OutsideFighting");
-        setWorld(level2);
+        setWorld(w);
         w.waitForWorldDisplayed();
 
         Player player1 = Players.createPlayer1();
-        player1.joinAs(OutsideFighting.farrand);
-        OutsideFighting.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(OutsideFighting.farrand));
+        player1.joinAs(RoofTopBeginning.farrand);
+        RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
     }
 
     @Override

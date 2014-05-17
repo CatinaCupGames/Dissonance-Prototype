@@ -16,7 +16,7 @@ public class Main {
         GameService.loadEssentials(args);
 
 
-        GameService.beginQuest(new OfficeQuest());
+        GameService.beginQuest(new GameQuest());
 
 
     }
