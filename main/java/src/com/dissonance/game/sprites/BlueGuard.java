@@ -61,8 +61,8 @@ public class BlueGuard extends Enemy {
         pauseAnimation();
 
         setCurrentWeapon(Weapon.getWeapon("guardsword").createItem(this));
-        setAttack(12);
-        setDefense(6);
+        setAttack(10);
+        setDefense(8);
         setSpeed(6);
         setVigor(8);
         setStamina(4);
@@ -88,14 +88,16 @@ public class BlueGuard extends Enemy {
 
     @Override
     public boolean isAlly(CombatSprite sprite) {
-        //TODO Red guards are allys to.
-        return sprite instanceof BlueGuard;
+        return sprite instanceof BlueGuard || sprite instanceof RedGuard;
     }
 
 
     private boolean run;
     private long lastAttack;
+    private boolean looking = false;
+    private long foundTime = 0L;
     private static final long ATTACK_RATE_MS = 1800;
+    private static final long FOUND_YOU_MS = 100;
     private void runAI() {
         if (getCurrentWeapon() == null || run) {
             setMovementSpeed(14f);
@@ -122,13 +124,21 @@ public class BlueGuard extends Enemy {
                     setBehavior(idle);
                 }
             } else {
-                if (sprite.distanceFrom(this) < (sprite.getWidth() / 2f) + (getCurrentWeapon().getWeaponInfo().getRange())) {
+                if (distanceFrom(sprite) <= getCurrentWeapon().getWeaponInfo().getRange() + (sprite.getWidth() / 2f)) {
+                    if (looking) {
+                        foundTime = System.currentTimeMillis();
+                        looking = false;
+                    }
+
                     if (isAttacking()) return;
                     if (System.currentTimeMillis() - lastAttack < ATTACK_RATE_MS) return;
+                    if (System.currentTimeMillis() - foundTime < FOUND_YOU_MS) return;
+
                     lastAttack = System.currentTimeMillis();
                     getCurrentWeapon().use("swipe");
                     setBehavior(null);
                 } else {
+                    looking = true;
                     Behavior behavior = getBehavior();
                     if (behavior instanceof Seek) {
                         WaypointLikeSeek seek = (WaypointLikeSeek)getBehavior();
@@ -172,21 +182,23 @@ public class BlueGuard extends Enemy {
     private Position getSeekTarget(Sprite sprite) {
         float x = sprite.getX();
         float y = sprite.getY();
+/*
         Direction direction1 = directionTowards(sprite);
         switch (direction1) {
             case UP:
-                y += (sprite.getHeight() / 2f) + (getCurrentWeapon().getWeaponInfo().getRange() / 3f);
+                y += (sprite.getHeight() / 4f) + (getCurrentWeapon().getWeaponInfo().getRange() / 4f);
                 break;
             case DOWN:
-                y -= (sprite.getHeight() / 2f) + (getCurrentWeapon().getWeaponInfo().getRange() / 3f);
+                y -= (sprite.getHeight() / 4f) + (getCurrentWeapon().getWeaponInfo().getRange() / 4f);
                 break;
             case LEFT:
-                x += (sprite.getWidth() / 2f) + (getCurrentWeapon().getWeaponInfo().getRange() / 3f);
+                x += (sprite.getWidth() / 4f) + (getCurrentWeapon().getWeaponInfo().getRange() / 4f);
                 break;
             case RIGHT:
-                x -= (sprite.getHeight() / 2f) + (getCurrentWeapon().getWeaponInfo().getRange() / 3f);
+                x -= (sprite.getHeight() / 4f) + (getCurrentWeapon().getWeaponInfo().getRange() / 4f);
                 break;
         }
+*/
 
         return new Position(x, y);
     }

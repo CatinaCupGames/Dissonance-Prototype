@@ -17,16 +17,17 @@ public class RoofTopBeginning extends GameWorldLoader {
     public static BlueGuard var4;
     public static BlueGuard var3;
     public static BlueGuard var2;
-    public static Farrand farrand;
 
     @Override
     public void onLoad(World w) {
         super.onLoad(w);
 
-        farrand = new Farrand();
-        w.loadAndAdd(farrand);
         farrand.setX(97.9f);
         farrand.setY(204.34998f);
+
+        jeremiah.setX(100f);
+        jeremiah.setY(210f);
+        jeremiah.setVisible(false);
     
         var2 = new BlueGuard();
         w.loadAndAdd(var2);

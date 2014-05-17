@@ -16,7 +16,7 @@ public class TileFade extends AbstractTileTrigger {
 
     @Override
     public void onTrigger(final AnimatedSprite sprite, final Tile tile) {
-        if (!(sprite instanceof PlayableSprite))
+        if (!(sprite instanceof PlayableSprite) || !sprite.isVisible())
             return;
 
         int layer = tile.getContainingLayer().getGameLayer(sprite.getWorld());
@@ -30,6 +30,12 @@ public class TileFade extends AbstractTileTrigger {
                     float x = sprite.getX() + 8.5f;
                     float y = sprite.getY() + (sprite.getHeight() / 2f) - 6f;
 
+                    if (sprite.getWorld() == null) {
+                        tile.getContainingLayer().setAlpha(1f);
+                        uwot.remove(tile.getContainingLayer());
+                        RenderService.INSTANCE.removeServiceTick(this);
+                        return;
+                    }
                     Tile t = sprite.getWorld().getTileAt(x / 16f, FastMath.fastCeil((y - 8f) / 16f), tile.getContainingLayer());
                     if (!t.isTriggerTile() || !(t.getTrigger() instanceof TileFade)) {
                         tile.getContainingLayer().setAlpha(1f);

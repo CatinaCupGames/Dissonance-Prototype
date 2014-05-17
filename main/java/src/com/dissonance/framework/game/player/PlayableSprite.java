@@ -448,9 +448,7 @@ public abstract class PlayableSprite extends CombatSprite {
         if (frozen)
             return;
         String ani;
-        float speed = movementSpeed() * 2.5f;
-        speed *= 1.5f;
-        totalDodgeTime = 300;
+        float speed = movementSpeed() * 8.5f;
         freeze();
         /*
 
@@ -471,7 +469,7 @@ public abstract class PlayableSprite extends CombatSprite {
 
         As long as t = 4f, then d = 4s
          */
-        int DISTANCE = (int) (speed * (totalDodgeTime / 150f));
+        int DISTANCE = 150; //TODO Maybe change this
         DISTANCE *= 0.8f;
         switch (direction1) {
             case UP:
@@ -523,8 +521,10 @@ public abstract class PlayableSprite extends CombatSprite {
                 return;
         }
         setAnimation(ani);
-        float timePerFrame = totalDodgeTime / (getFrameCount());
-        setAnimationSpeed((int) timePerFrame);
+        setAnimationSpeed(150);
+        totalDodgeTime = 4 * getAnimationSpeed();
+        totalDodgeTime -= speed;
+        setAnimationSpeed((int) (((1f/4f) * speed) + ((1f/4f) * totalDodgeTime)));
         dodgeStartTime = System.currentTimeMillis();
         dodgeStartX = getX();
         dodgeStartY = getY();

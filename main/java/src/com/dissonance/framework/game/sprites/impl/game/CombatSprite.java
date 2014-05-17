@@ -35,7 +35,8 @@ public abstract class CombatSprite extends PhysicsSprite {
 
     //==VARIABLE STATS==//
     protected int level = 1;
-    private float MP;
+    private double MAX_MP = 100;
+    private double MP = 100;
     private boolean attacking;
 
     public int getLevel() {
@@ -370,13 +371,21 @@ public abstract class CombatSprite extends PhysicsSprite {
         HP = MAX_HP;
     }
 
+    public void refillMP() {
+        MP = MAX_MP;
+    }
+
     public double getMaxHP() {
         return MAX_HP;
     }
 
+    public double getMaxMP() { return MAX_MP; }
+
     public void setMaxHP(double HP) {
         this.MAX_HP = HP;
     }
+
+    public void setMaxMP(double MP) { this.MAX_MP = MP; }
 
     public List<Item> getInventory() {
         return Collections.unmodifiableList(inventory);
@@ -557,11 +566,11 @@ public abstract class CombatSprite extends PhysicsSprite {
         this.HP = HP;
     }
 
-    public float getMP() {
+    public double getMP() {
         return MP;
     }
 
-    public void setMP(float MP) {
+    public void setMP(double MP) {
         this.MP = MP;
     }
 

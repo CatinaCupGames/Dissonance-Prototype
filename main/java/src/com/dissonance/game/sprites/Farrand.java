@@ -4,6 +4,7 @@ import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.game.spells.impl.HeavyCure;
 
 import java.awt.*;
 
@@ -157,12 +158,15 @@ public final class Farrand extends PlayableSprite {
         pauseAnimation();
 
         setAttack(6);
-        setDefense(10);
-        setSpeed(8);
+        setDefense(12);
+        setSpeed(6);
         setVigor(10);
         setStamina(6);
         setWillpower(14);
         setFocus(16);
+
+        addSpell(new HeavyCure(this));
+        setSpell1(getSpell("Heavy Cure"));
     }
 
     @Override

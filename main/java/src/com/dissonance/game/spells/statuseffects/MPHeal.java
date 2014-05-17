@@ -4,7 +4,7 @@ import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 
 public class MPHeal extends StatusEffect {
-    public MPHeal(long duration, float value) {
+    public MPHeal(long duration, double value) {
         super(duration, value);
     }
 

@@ -458,6 +458,10 @@ public abstract class Sprite implements Drawable, Serializable {
         return angle;
     }
 
+    public double distanceFrom(Vector target) {
+        return Math.sqrt(((getX() - target.x) * (getX() - target.x)) + ((getY() - target.y) * (getY() - target.y)));
+    }
+
     public interface SpriteEvent {
 
         public interface SpriteMovedEvent {

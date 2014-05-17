@@ -6,8 +6,6 @@ import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.Wyatt;
 
 public class AtWaldomar extends GameWorldLoader {
-    public static Farrand farrand;
-    public static Jeremiah jeremiah;
     public static Wyatt guard1;
     public static Wyatt guard2;
     public static Wyatt guard3;
@@ -17,13 +15,10 @@ public class AtWaldomar extends GameWorldLoader {
     @Override
     public void onLoad(World w){
         super.onLoad(w);
-        farrand = new Farrand();
-        w.loadAndAdd(farrand);
+
         farrand.setX(42*16f);
         farrand.setY(30*16f);
 
-        jeremiah = new Jeremiah();
-        w.loadAndAdd(jeremiah);
         jeremiah.setX(45*16f);
         jeremiah.setY(36*16f);
 

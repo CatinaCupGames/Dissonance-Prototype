@@ -2,14 +2,25 @@ package com.dissonance.framework.game.combat.spells;
 
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 
+/**
+ * Status effects are effects that does something to a {@link com.dissonance.framework.game.sprites.impl.game.CombatSprite} over
+ * a period of time. This period of time is defined in the constructor as <b>duration.</b> <br></br>
+ */
 public abstract class StatusEffect {
     private static final long WAIT_PERIOD = 3000;
     private long lastInflict;
     protected long duration;
     protected long startTime;
-    protected float value;
+    protected double value;
     private boolean started = false;
-    public StatusEffect(long duration, float value) {
+
+    /**
+     * Create a new Status Effect.
+     * @param duration How long this status effect will last, in ms.
+     * @param value An arbitrary value that may or may not be used by the implementer.
+     */
+    public StatusEffect(long duration, double value) {
+
         this.duration = duration;
         this.value = value;
     }
@@ -40,7 +51,6 @@ public abstract class StatusEffect {
     public void startEffect(CombatSprite owner) {
         started = true;
         startTime = System.currentTimeMillis();
-        lastInflict = startTime;
         onStart(owner);
     }
 }

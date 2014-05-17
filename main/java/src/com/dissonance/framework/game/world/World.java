@@ -451,13 +451,13 @@ public final class World {
             lightShader.clear();
             lightShader.setOverallBrightness(1f);
         }
-    }
-
-    public void onDispose() {
         for (Drawable d : drawable) {
             if (d instanceof Sprite)
                 ((Sprite)d).onUnload();
         }
+    }
+
+    public void onDispose() {
         drawable.clear();
         unsorted.clear();
         udrawables.clear();

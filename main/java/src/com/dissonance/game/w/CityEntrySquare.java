@@ -27,17 +27,12 @@ public class CityEntrySquare extends GameWorldLoader {
     public void onLoad(World w) {
         super.onLoad(w);
 
-        farrand = new Farrand();
         farrand.setX(985.60016f);
         farrand.setY(785.5205f);
-        w.loadAndAdd(farrand);
         Camera.setPos(Camera.translateToCameraCenter(farrand.getVector(), farrand.getHeight()));
 
-        jeremiah = new Jeremiah();
-        w.loadAndAdd(jeremiah);
         jeremiah.setX(1019.05994f);
         jeremiah.setY(760.96906f);
-        jeremiah.joinParty(farrand);
 
         guard1 = new Wyatt();
         w.loadAndAdd(guard1);
