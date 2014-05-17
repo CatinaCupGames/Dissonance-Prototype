@@ -175,7 +175,7 @@ public class ToZesilia implements WorldLoader {
 
 
 
-        w.setWorldBrightness(0.8f);
+        w.setWorldBrightness(0.7f);
         w.createLight(165f * 16, 18f * 16, 1.4f, 0.9f);
         w.createLight(136f*16, 16.5f*16, 1.8f, 0.03f);
         w.createLight(136f*16, 14f*16, 1.4f, 0.9f);
