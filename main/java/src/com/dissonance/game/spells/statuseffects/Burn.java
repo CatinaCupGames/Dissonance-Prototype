@@ -2,6 +2,9 @@ package com.dissonance.game.spells.statuseffects;
 
 import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
+import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
+
+import java.awt.*;
 
 public class Burn extends StatusEffect {
     int oAttack, oDefense;
@@ -11,8 +14,8 @@ public class Burn extends StatusEffect {
 
     @Override
     protected void onStart(CombatSprite owner) {
-        if (owner.getCombatType() == CombatSprite.CombatType.HUMAN)
-            return;
+        /*if (owner.getCombatType() == CombatSprite.CombatType.HUMAN)
+            return;*/
         int constant = 8;
         if (owner.getCombatType() == CombatSprite.CombatType.CREATURE)
             constant = 4;
@@ -29,7 +32,6 @@ public class Burn extends StatusEffect {
         double damage = 3;
         if (owner.getCombatType() == CombatSprite.CombatType.CREATURE)
             damage = 7;
-
 
         double willpower = owner.getWillPower();
         double focus = super.value; //Use the parent's value variable as the orgin's focus stat
