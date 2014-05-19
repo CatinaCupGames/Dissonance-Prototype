@@ -15,7 +15,7 @@ public class Main {
 
 
 
-        GameService.beginQuest(new GateQuest());
+        GameService.beginQuest(new GameQuest());
 
 
 

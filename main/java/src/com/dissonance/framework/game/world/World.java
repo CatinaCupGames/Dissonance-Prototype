@@ -377,9 +377,11 @@ public final class World {
             @Override
             public void run() {
                 sprite.setWorld(World.this);
-                sprite.onLoad();
-                sprite.completeLoading();
-                if (sprite instanceof CombatSprite)
+                if (!sprite.isLoaded()) {
+                    sprite.onLoad();
+                    sprite.completeLoading();
+                }
+                if (sprite instanceof CombatSprite && combatCache.contains(sprite))
                     combatCache.add((CombatSprite) sprite);
             }
         });

@@ -11,8 +11,8 @@ public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         WorldFactory.clearCache();
-        World w = WorldFactory.getWorld("OutsideFighting");
-        //World level2 = WorldFactory.getWorld("OutsideFighting");
+        World w = WorldFactory.getWorld("RoofTopBeginning");
+        World level2 = WorldFactory.getWorld("OutsideFighting");
         setWorld(w);
         w.waitForWorldDisplayed();
 

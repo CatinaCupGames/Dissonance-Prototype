@@ -55,7 +55,7 @@ public class ControllerInput implements Input {
         }
 
         Vector2f values = new Vector2f(InputKeys.getJoypadValue(InputKeys.MOVEX, controller.getController()), InputKeys.getJoypadValue(InputKeys.MOVEY, controller.getController()));
-        if (values.lengthSquared() < 0.25f)
+        if (values.lengthSquared() < 0.3f)
             values = new Vector2f(0,0);
 
         double angle = Math.toDegrees(Math.atan2(-values.y, values.x));

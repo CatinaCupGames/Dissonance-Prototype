@@ -32,16 +32,12 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
     public void onLoad(World w) {
         super.onLoad(w);
 
-        farrand = new Farrand();
-        w.loadAndAdd(farrand);
         farrand.setX(97.9f);
         farrand.setY(204.34998f);
-        w.loadAndAdd(farrand);
 
         jeremiah.setX(100f);
         jeremiah.setY(210f);
         jeremiah.setVisible(false);
-        w.loadAndAdd(jeremiah);
     
         var2 = new BlueGuard();
         w.loadAndAdd(var2);
@@ -110,6 +106,8 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
 
     @Override
     public void onDisplay(World w){
+        super.onDisplay(w);
+
         dec2.setWidth(64);
         dec2.setHeight(32);
 

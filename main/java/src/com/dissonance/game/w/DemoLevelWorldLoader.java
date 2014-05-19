@@ -46,7 +46,7 @@ public abstract class DemoLevelWorldLoader implements WorldLoader {
 
     @Override
     public void onDisplay(World w) {
-        farrand.setWorld(w);
-        jeremiah.setWorld(w);
+        w.loadAndAdd(farrand);
+        w.loadAndAdd(jeremiah);
     }
 }

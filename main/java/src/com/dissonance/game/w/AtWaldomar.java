@@ -16,11 +16,9 @@ public class AtWaldomar extends DemoLevelWorldLoader {
 
         farrand.setX(42*16f);
         farrand.setY(30*16f);
-        w.loadAndAdd(farrand);
 
         jeremiah.setX(45*16f);
         jeremiah.setY(36*16f);
-        w.loadAndAdd(jeremiah);
 
         guard1 = new Wyatt();
         w.loadAndAdd(guard1);

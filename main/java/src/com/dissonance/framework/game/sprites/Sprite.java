@@ -13,6 +13,7 @@ import com.dissonance.framework.render.shader.impl.EdgeGlowShader;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.Validator;
+import com.dissonance.game.sprites.Jeremiah;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
@@ -283,6 +284,10 @@ public abstract class Sprite implements Drawable, Serializable {
             throw new IllegalAccessError("The sprite \"" + toString() + "\" has already been loaded!");
         loaded = true;
         _wakeLoaders();
+    }
+
+    public boolean isLoaded() {
+        return loaded;
     }
 
     public synchronized void waitForLoaded() throws InterruptedException {

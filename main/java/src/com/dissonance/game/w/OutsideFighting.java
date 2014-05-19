@@ -14,7 +14,6 @@ public class OutsideFighting extends DemoLevelWorldLoader {
 
         farrand.setX(97.9f);
         farrand.setY(204.34998f);
-        w.loadAndAdd(farrand);
 
         l1 = new StreetLamp();
         w.loadAndAdd(l1);
@@ -31,7 +30,5 @@ public class OutsideFighting extends DemoLevelWorldLoader {
         l3.setX(35*16);
 
         l3.setY(330*16);
-
-
     }
 }
