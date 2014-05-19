@@ -9,6 +9,7 @@ import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
@@ -69,6 +70,7 @@ public class WeaponItem extends Item {
                      * This chunk of code is the sword swiping detection code
                      * =========================================================
                      */
+                    Sound.playSound("sword.wav");
                     long time = System.currentTimeMillis();
 
                     if (lastUse + 500 >= time) { //TODO Maybe make this timeout weapon specific..?
