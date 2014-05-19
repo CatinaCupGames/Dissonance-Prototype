@@ -62,7 +62,7 @@ public class Spinner extends ImageSprite {
             animate = true;
             startTime = System.currentTimeMillis();
             start = angle;
-            end = angle + 180;
+            end = angle - 180;
         } else if (animate) {
             angle = Camera.ease(start, end, ANIMATE_TIME, (System.currentTimeMillis() - startTime));
             if (angle == end) {

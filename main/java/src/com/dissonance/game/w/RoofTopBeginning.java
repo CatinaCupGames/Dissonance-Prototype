@@ -11,6 +11,7 @@ Date: 2014/05/16 13:58:43
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.roof.*;
@@ -113,6 +114,13 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
     @Override
     public void onDisplay(World w){
         super.onDisplay(w);
+
+        farrand.setX(97.9f);
+        farrand.setY(204.34998f);
+
+        jeremiah.setX(100f);
+        jeremiah.setY(210f);
+        jeremiah.setVisible(false);
 
         dec2.setWidth(64);
         dec2.setHeight(32);
