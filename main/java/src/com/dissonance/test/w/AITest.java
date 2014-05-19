@@ -1,6 +1,6 @@
 package com.dissonance.test.w;
 
-import com.dissonance.game.w.GameWorldLoader;
+import com.dissonance.game.w.DemoLevelWorldLoader;
 
-public class AITest extends GameWorldLoader {
+public class AITest extends DemoLevelWorldLoader {
 }

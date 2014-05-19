@@ -151,6 +151,10 @@ public abstract class AbstractUI implements UI {
         marginTop((getParentHeight() / 4f) - (height / 2f));
     }
 
+    public void bringToBack() {
+        world.requestMoveDrawable(this, 0);
+    }
+
     public void setParent(AbstractUI parent) {
         if (this.parent != null)
             this.parent.children.remove(this);

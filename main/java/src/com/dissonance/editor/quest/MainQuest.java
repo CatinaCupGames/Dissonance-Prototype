@@ -98,7 +98,7 @@ public class MainQuest extends AbstractQuest {
                 builder.append("import com.dissonance.framework.game.ai.astar.Position;\n");
                 builder.append("import com.dissonance.framework.game.ai.behaviors.BehaviorOffsetFollow;\n");
             }
-            builder.append("\npublic class ").append(mapName).append(" extends GameWorldLoader {\n");
+            builder.append("\npublic class ").append(mapName).append(" extends DemoLevelWorldLoader {\n");
             for (int i = 0; i < sprites.size(); i++) {
                 String addName = sprites_name.get(i);
                 Drawable sprite = sprites.get(i);

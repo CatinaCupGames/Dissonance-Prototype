@@ -8,7 +8,6 @@ import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.utils.Direction;
-import com.dissonance.game.sprites.Waldomar;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -51,7 +50,7 @@ public class OfficeScene extends SimpleScene {
 
         WaldomarsMeetingRoom.guard1.waitForWaypointReached();
 
-        //Dialog.displayDialog("Waldos meeting");
+        Dialog.displayDialog("Waldos meeting");
 
         Thread.sleep(500);
 

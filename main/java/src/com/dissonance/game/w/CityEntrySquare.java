@@ -1,3 +1,4 @@
+
 /*
 =====================================
 
@@ -11,18 +12,14 @@ package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.Camera;
-import com.dissonance.game.sprites.Farrand;
-import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.Wyatt;
 
-public class CityEntrySquare extends GameWorldLoader {
+public class CityEntrySquare extends DemoLevelWorldLoader {
     public static Wyatt guard5;
     public static Wyatt guard4;
-    public static Jeremiah jeremiah;
     public static Wyatt guard1;
     public static Wyatt guard2;
     public static Wyatt guard3;
-    public static Farrand farrand;
     @Override
     public void onLoad(World w) {
         super.onLoad(w);
@@ -67,3 +64,4 @@ public class CityEntrySquare extends GameWorldLoader {
         w.createLight(0, 0, 0.1f, 0.1f);
     }
 }
+

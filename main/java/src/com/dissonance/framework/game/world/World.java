@@ -5,6 +5,7 @@ import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.ui.UI;
+import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
@@ -790,6 +791,34 @@ public final class World {
     public void dispose() {
         onUnload();
         onDispose();
+    }
+
+    public void requestMoveDrawable(final Drawable drawable, final int i) {
+        if (drawable.neverSort() || drawable instanceof UI) {
+            RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (drawable instanceof UI) {
+                        UI ui = (UI)drawable;
+                        uiElements.remove(ui);
+                        udrawables.remove(ui);
+
+                        uiElements.add(i, ui);
+                        udrawables.add(i, ui);
+                    } else {
+                        unsorted.remove(drawable);
+                        unsorted.add(i, drawable);
+                        if (drawable instanceof UpdatableDrawable) {
+                            UpdatableDrawable ud = (UpdatableDrawable)drawable;
+                            udrawables.remove(ud);
+                            udrawables.add(i, ud);
+                        }
+                    }
+                }
+            }, true); //Always invoke the request on the next frame, to avoid a concurrent exception
+        } else {
+            throw new InvalidParameterException("Only drawables that don't sort or UI drawables can be moved!");
+        }
     }
 
     private class DisplayWaiters {

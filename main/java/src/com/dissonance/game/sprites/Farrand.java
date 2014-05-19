@@ -174,7 +174,9 @@ public final class Farrand extends PlayableSprite {
         addSpell(new HeavyCure(this));
         setSpell1(getSpell("Heavy Cure"));
 
-        applyStatusCondition(new Burn(50000, 5f));
+        for (int i = 0; i < 4; i++) {
+            applyStatusCondition(new Burn(10000, 5f));
+        }
     }
 
     @Override

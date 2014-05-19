@@ -1,18 +1,12 @@
 package com.dissonance.framework.render.framebuffer;
 
 import com.dissonance.framework.game.sprites.Sprite;
-import com.dissonance.framework.render.Drawable;
 import com.dissonance.framework.render.RenderService;
-import org.lwjgl.opengl.GL14;
 
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.EXTFramebufferObject.GL_FRAMEBUFFER_EXT;
-import static org.lwjgl.opengl.EXTFramebufferObject.glBindFramebufferEXT;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.*;
-import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.GL14.*;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
 
@@ -168,6 +162,15 @@ public class Framebuffer extends Sprite {
     }
 
     public void dispose() {
+        if (!RenderService.isInRenderThread()) {
+            RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+                @Override
+                public void run() {
+                    dispose();
+                }
+            }, true, false);
+            return;
+        }
         glDeleteTextures(tID);
         //Bind 0, which means render to back buffer, as a result, fb is unbound
         glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);

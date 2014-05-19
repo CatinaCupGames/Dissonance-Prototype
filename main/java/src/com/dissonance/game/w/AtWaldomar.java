@@ -1,11 +1,9 @@
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
-import com.dissonance.game.sprites.Farrand;
-import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.Wyatt;
 
-public class AtWaldomar extends GameWorldLoader {
+public class AtWaldomar extends DemoLevelWorldLoader {
     public static Wyatt guard1;
     public static Wyatt guard2;
     public static Wyatt guard3;

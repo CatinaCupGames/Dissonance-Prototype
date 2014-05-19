@@ -2,9 +2,9 @@ package com.dissonance.test.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.game.sprites.Jeremiah;
-import com.dissonance.game.w.GameWorldLoader;
+import com.dissonance.game.w.DemoLevelWorldLoader;
 
-public class collideTest extends GameWorldLoader {
+public class collideTest extends DemoLevelWorldLoader {
     public static Jeremiah var1;
     @Override
     public void onLoad(World w) {

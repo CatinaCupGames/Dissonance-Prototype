@@ -13,12 +13,12 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.shader.impl.Light;
 import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.Jeremiah;
-import com.dissonance.game.w.GameWorldLoader;
+import com.dissonance.game.w.DemoLevelWorldLoader;
 
 import java.awt.*;
 
 
-public class WaldemarsMeetingRoom extends GameWorldLoader {
+public class WaldemarsMeetingRoom extends DemoLevelWorldLoader {
     @Override
     public void onLoad(World w) {
         super.onLoad(w);

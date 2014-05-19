@@ -4,6 +4,7 @@ import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
+import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 
@@ -92,7 +93,7 @@ public final class Approach implements FiniteBehavior {
                     onFinishedListener.onFinished(this);
                 }
 
-                //TODO: set direction opposite of target's
+                this.target.face(sprite.getFacingDirection().opposite());
             }
         }
     }
@@ -142,6 +143,10 @@ public final class Approach implements FiniteBehavior {
 
             AbstractWaypointSprite s = (AbstractWaypointSprite) next;
             if (s.getPositionVector().inRange(bounds[0], bounds[1], bounds[2], bounds[3]) && !s.equals(base)) {
+                if (base instanceof CombatSprite && next instanceof CombatSprite) {
+                    if (!((CombatSprite)next).isAlly((CombatSprite)base)) //Don't approach non-allies
+                        continue;
+                }
                 inRange.add((AbstractWaypointSprite) next);
             }
         }

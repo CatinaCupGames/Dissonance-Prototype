@@ -8,7 +8,7 @@ import java.util.Random;
 
 public final class Idle implements Behavior {
 
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     private AbstractWaypointSprite sprite;
     private final float radius;
@@ -22,7 +22,7 @@ public final class Idle implements Behavior {
                 public void run() {
                     sprite.setBehavior(null);
                     try {
-                        Thread.sleep(random.nextInt(3500) + 7500);
+                        Thread.sleep(random.nextInt(3500) + 5500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

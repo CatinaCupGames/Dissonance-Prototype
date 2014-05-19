@@ -134,8 +134,17 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         super.setY(y);
     }
 
+    /**
+     * This method is invoked when movement has been detected or requested. This method should change and play the current animation depending on the
+     * direction <b>passed in the parameter.</b>
+     * @param direction1 The direction this sprite should be facing.
+     */
     protected void onMovement(Direction direction1) { }
 
+    /**
+     * This method is invoked when no movement has been detected or requested. This method should pause the current animation and set it's frame to the idle frame of the
+     * current animation.
+     */
     protected void onNoMovement() { }
 
     public abstract String getSpriteName();
@@ -351,8 +360,23 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         this.speed = speed;
     }
 
+    /**
+     * Tell the sprite to animate its movement animation
+     */
     public void animateMovement() {
         onMovement(getFacingDirection());
+    }
+
+    /**
+     * Change which way the sprite is facing. This method depends on the child sprite to have the correct implementation
+     * of {@link com.dissonance.framework.game.sprites.impl.AnimatedSprite#onMovement(com.dissonance.framework.system.utils.Direction)} and of {@link AnimatedSprite#onNoMovement()} <br></br>
+     *
+     * @param direction The direction to face
+     */
+    public void face(Direction direction) {
+        setFacingDirection(direction);
+        animateMovement(); //Tell the sprite to change it's current animation
+        onNoMovement(); //Then tell it it's actually not moving
     }
 
     public interface AnimatedSpriteEvent {

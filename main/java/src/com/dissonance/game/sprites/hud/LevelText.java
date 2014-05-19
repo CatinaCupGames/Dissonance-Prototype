@@ -16,13 +16,13 @@ public class LevelText extends AbstractUI {
     int level = 1;
     @Override
     protected void onOpen() {
-        font = RenderText.getFont(GameSettings.Display.GAME_FONT.deriveFont(48f), Font.PLAIN);
+        font = RenderText.getFont(GameSettings.Display.GAME_FONT.deriveFont(38f), Font.PLAIN);
 
         setWidth(font.getWidth("99"));
         setHeight(font.getHeight("99"));
 
-        marginLeft(3f);
-        marginTop(-15f);
+        marginLeft(9f);
+        marginTop(-18f);
     }
 
     @Override
