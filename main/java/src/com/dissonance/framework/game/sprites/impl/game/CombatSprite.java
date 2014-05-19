@@ -597,6 +597,10 @@ public abstract class CombatSprite extends PhysicsSprite {
         return attacking;
     }
 
+    public StatusEffect[] getStatusEffects() {
+        return effects.toArray(new StatusEffect[effects.size()]);
+    }
+
 
     public enum CombatType {
         /**

@@ -13,7 +13,7 @@ package com.dissonance.game.w;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.game.sprites.*;
 
-public class RoofTopBeginning extends GameWorldLoader {
+public class RoofTopBeginning extends DemoLevelWorldLoader {
     public static BlueGuard var4;
     public static BlueGuard var3;
     public static BlueGuard var2;

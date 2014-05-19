@@ -5,6 +5,7 @@ import com.dissonance.framework.render.text.RenderText;
 import com.dissonance.framework.system.GameSettings;
 import org.lwjgl.opengl.NVDrawTexture;
 import org.newdawn.slick.*;
+import org.newdawn.slick.Color;
 import sun.java2d.pipe.TextRenderer;
 
 import java.awt.*;
@@ -12,6 +13,7 @@ import java.awt.Font;
 
 public class HealthText extends AbstractUI {
     private final BaseHUD baseHUD;
+    private Color color;
     public HealthText(BaseHUD parent) {
         super(parent);
         baseHUD = parent;
@@ -25,8 +27,10 @@ public class HealthText extends AbstractUI {
         setWidth(font.getWidth("HP:100/100"));
         setHeight(font.getHeight("HP:100/100"));
 
-        marginLeft(15f);
-        marginBottom(57f);
+        marginLeft(75f);
+        marginBottom(35f);
+
+        setAlpha(1f); //Set the color
     }
 
     @Override
@@ -36,8 +40,16 @@ public class HealthText extends AbstractUI {
     public void update() { }
 
     @Override
+    public void setAlpha(float alpha) {
+        super.setAlpha(alpha);
+        float color_alpha = alpha - 0.3f;
+        if (color_alpha < 0f)
+            color_alpha = 0f;
+        this.color = new Color(1f, 1f, 1f, color_alpha);
+    }
+
+    @Override
     public void onRender() {
-        RenderText.drawString(font, "HP:" + (int)baseHUD.getHealth() + "/" + 100, getX(), getY(), new org.newdawn.slick.Color(1f, 1f, 1f, getAlpha()));
-        //font.drawString(getX(), getY(), "HP:" + (int)baseHUD.getHealth() + "/" + 100, new org.newdawn.slick.Color(1f, 1f, 1f, getAlpha()));
+        RenderText.drawString(font, "HP:" + (int)baseHUD.getHealth() + "/" + 100, getX(), getY(), color);
     }
 }

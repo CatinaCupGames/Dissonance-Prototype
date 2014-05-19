@@ -1,9 +1,8 @@
 package com.dissonance.game.sprites.hud;
 
+import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
-import com.dissonance.framework.render.Camera;
-import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import org.lwjgl.input.Mouse;
 
@@ -13,7 +12,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class BaseHUD extends AbstractUI {
     private static Texture texture;
-    private static Texture glow;
+    private static final boolean SCALE = true;
 
 
     private Player owner;
@@ -24,6 +23,8 @@ public class BaseHUD extends AbstractUI {
     private LevelText levelText;
     private HealthText healthText;
     private MPText mpText;
+    private StatusEffectBar seBar;
+    private Glow glow;
 
     public BaseHUD(Player owner) {
         super();
@@ -33,24 +34,26 @@ public class BaseHUD extends AbstractUI {
         levelText = new LevelText(this);
         healthText = new HealthText(this);
         mpText = new MPText(this);
+        seBar = new StatusEffectBar(this);
+        glow = new Glow(this);
     }
 
     @Override
     protected void onOpen() {
-        scale(false);
+        scale(SCALE);
         try {
             if (texture == null)
                 texture = Texture.retrieveTexture("sprites/menu/player_hud/base.png");
-            if (glow == null)
-                glow = Texture.retrieveTexture("sprites/menu/player_hud/Glow.png");
 
             setWidth(texture.getTextureWidth());
             setHeight(texture.getTextureHeight());
 
             alignToTexture(texture);
 
-            marginBottom(8f);
-            marginLeft(8f);
+            float xadd = (getWidth() - 14f) * (owner.getNumber() - 1);
+
+            marginBottom(SCALE ? 16f : 8f); //TODO Make constant
+            marginLeft(SCALE ? 16f + xadd : 8f + xadd);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,17 +67,25 @@ public class BaseHUD extends AbstractUI {
             healthText.close();
         if (mpText.isOpened())
             mpText.close();
+        if (seBar.isOpened())
+            seBar.close();
+        if (glow.isOpened())
+            glow.close();
 
+        seBar.display(world);
         healthBar.display(world);
         mpBar.display(world);
         mpText.display(world);
         healthText.display(world);
         levelText.display(world);
-        levelText.scale(false);
-        healthText.scale(false);
-        mpText.scale(false);
-        mpBar.scale(false);
-        healthBar.scale(false);
+        glow.display(world);
+        levelText.scale(SCALE);
+        healthText.scale(SCALE);
+        mpText.scale(SCALE);
+        mpBar.scale(SCALE);
+        healthBar.scale(SCALE);
+        seBar.scale(SCALE);
+        glow.scale(SCALE);
     }
 
     @Override
@@ -103,6 +114,11 @@ public class BaseHUD extends AbstractUI {
                 setMaxMP(owner.getSprite().getMaxMP());
                 setMP(owner.getSprite().getMP());
                 oMP = owner.getSprite().getMP();
+            }
+
+            for (StatusEffect effect : owner.getSprite().getStatusEffects()) {
+                if (!seBar.hasEffect(effect))
+                    seBar.addEffect(effect);
             }
         }
 
@@ -191,5 +207,9 @@ public class BaseHUD extends AbstractUI {
 
     public void setMaxMP(double mp) {
         mpBar.setMaxMP(mp);
+    }
+
+    public Player getPlayer() {
+        return owner;
     }
 }

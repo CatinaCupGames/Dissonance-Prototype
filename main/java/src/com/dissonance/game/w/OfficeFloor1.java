@@ -41,7 +41,7 @@ package com.dissonance.game.w;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.game.sprites.office.*;
 
-public class OfficeFloor1 extends GameWorldLoader {
+public class OfficeFloor1 extends DemoLevelWorldLoader {
 
     public static PottedPlant var8;
     public static PottedPlant var9;
