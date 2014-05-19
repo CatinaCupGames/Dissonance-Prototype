@@ -1,7 +1,7 @@
 package com.dissonance.game;
 
 import com.dissonance.framework.game.GameService;
-import com.dissonance.game.quests.HallwayQuest;
+import com.dissonance.game.quests.GameQuest;
 
 
 public class Main {
@@ -13,7 +13,7 @@ public class Main {
 
 
 
-        GameService.beginQuest(new HallwayQuest());
+        GameService.beginQuest(new GameQuest());
 
 
 
