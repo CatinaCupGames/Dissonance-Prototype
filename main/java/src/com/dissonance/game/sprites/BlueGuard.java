@@ -172,6 +172,8 @@ public class BlueGuard extends Enemy {
         PlayableSprite closet = null;
         float dis = 0;
         for (PlayableSprite sprite : sprites) {
+            if (sprite.isDead() || sprite.isVisible())
+                continue;
             float temp = (float) Math.sqrt(((getX() - sprite.getX()) * (getX() - sprite.getX())) + ((getY() - sprite.getY()) * (getY() - sprite.getY())));
             if (temp <= distance) {
                 if (temp < dis || closet == null) {

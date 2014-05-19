@@ -18,6 +18,8 @@ public class Joypad {
     //z, +z
     private HashMap<String, String> analog = new HashMap<String, String>();
 
+    private HashMap<String, Component> componentCache = new HashMap<String, Component>();
+
     Joypad(Controller controller) {
         this.controller = controller;
     }
@@ -93,9 +95,18 @@ public class Joypad {
     public Component getComponentFor(String value) {
         if (ids.containsKey(value)) {
             String cid = ids.get(value);
-            for (Component c : controller.getComponents()) {
-                if (c.getIdentifier().getName().equals(cid))
-                    return c;
+            return getComponent(cid);
+        }
+        return null;
+    }
+
+    public Component getComponent(String id) {
+        if (componentCache.containsKey(id))
+            return componentCache.get(id);
+        for (Component c : controller.getComponents()) {
+            if (c.getIdentifier().getName().equals(id)) {
+                componentCache.put(id, c);
+                return c;
             }
         }
         return null;
