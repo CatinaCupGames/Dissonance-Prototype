@@ -15,20 +15,6 @@ public class OfficeQuest extends PauseQuest {
         World w = WorldFactory.getWorld("WaldomarsMeetingRoom");
         setWorld(w);
         w.waitForWorldDisplayed();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //Load the maps into memory
-                    WorldFactory.getWorld("RoofTopBeginning");
-                    WorldFactory.getWorld("OutsideFighting");
-                } catch (WorldLoadFailedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-        Players.createPlayer1();
 
         WaldomarsMeetingRoom.var26.setWidth(12f);
         WaldomarsMeetingRoom.var26.setHeight(12f);

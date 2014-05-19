@@ -35,6 +35,7 @@ public abstract class Sprite implements Drawable, Serializable {
     protected int layer = 1;
     protected boolean isTeleporting;
     protected boolean glowing;
+    protected float cutOffMargin;
 
     public static Sprite fromClass(Class<?> class_) {
         if (!Sprite.class.isAssignableFrom(class_))
@@ -150,6 +151,16 @@ public abstract class Sprite implements Drawable, Serializable {
         this.texture = texture;
         width = texture.getTextureWidth();
         height = texture.getTextureHeight();
+
+        cutOffMargin = getHeight() / 2f;
+    }
+
+    public float getCutOffMargin() {
+        return cutOffMargin;
+    }
+
+    public void setCutOffMargin(float value) {
+        this.cutOffMargin = value;
     }
 
     public void setLayer(int layer) {
@@ -308,6 +319,8 @@ public abstract class Sprite implements Drawable, Serializable {
         if (glowing) {
             renderGlow();
         }
+        if (getTexture() == null)
+            return;
         getTexture().bind();
         float bx = width / 2f;
         float by = height / 2f;
@@ -378,8 +391,8 @@ public abstract class Sprite implements Drawable, Serializable {
             else {
                 //float by = (getTexture() != null ? getTexture().getTextureHeight() / (this instanceof TileObject ? 2 : 4) : 0);
                 //float sy = (s.getTexture() != null ? s.getTexture().getTextureHeight() / (s instanceof TileObject ? 2 : 4) : 0);
-                float by = getHeight() / 2f;
-                float sy = s.getHeight() / 2f;
+                float by = cutOffMargin;
+                float sy = s.cutOffMargin;
                 return (int) ((getY() - by) - (s.getY() - sy));
             }
         }

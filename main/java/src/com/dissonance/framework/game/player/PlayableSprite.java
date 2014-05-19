@@ -219,15 +219,23 @@ public abstract class PlayableSprite extends CombatSprite {
 
     public void joinParty(PlayableSprite joiner) {
         for (PlayableSprite p : party) {
-            if (!p.party.contains(joiner))
+            if (!p.party.contains(joiner)) {
                 p.party.add(joiner); //Add the newcomer to everyone elses party
-            if (!joiner.party.contains(p))
+                p.ignoreCollisionWith(joiner);
+            }
+            if (!joiner.party.contains(p)) {
                 joiner.party.add(p); //Add everyone else to the newcomer's party
+                joiner.ignoreCollisionWith(p);
+            }
         }
-        if (!party.contains(joiner))
+        if (!party.contains(joiner)) {
             party.add(joiner); //Add the newcomer to this players party
-        if (!joiner.party.contains(this))
+            ignoreCollisionWith(joiner);
+        }
+        if (!joiner.party.contains(this)) {
             joiner.party.add(this); //Add this player to the newcomer's party
+            joiner.ignoreCollisionWith(this);
+        }
     }
 
     public PlayableSprite[] getParty() {
