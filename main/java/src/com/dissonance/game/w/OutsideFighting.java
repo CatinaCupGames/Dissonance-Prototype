@@ -3,32 +3,47 @@ package com.dissonance.game.w;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.game.sprites.StreetLamp;
 
+import java.awt.*;
+
 public class OutsideFighting extends DemoLevelWorldLoader {
-    public static StreetLamp l1;
-    public static StreetLamp l2;
-    public static StreetLamp l3;
 
     @Override
     public void onLoad(World w) {
         super.onLoad(w);
 
-        farrand.setX(97.9f);
-        farrand.setY(204.34998f);
+        farrand.setX(20*16);
+        farrand.setY(302*16);
 
-        l1 = new StreetLamp();
-        w.loadAndAdd(l1);
-        l1.setX(35*16);
-        l1.setY(350*16);
+        for(int y = 350; y>= 240; y -= 10){
+            if((y / 10) % 2 == 0){
+                StreetLamp lamp = new StreetLamp();
+                w.loadAndAdd(lamp);
+                lamp.setX(26*16);
+                lamp.setY(y * 16);
+                w.createLight(26* 16, (y - 3.5f)* 16, 1.2f, 0.03f, Color.YELLOW);
+            }else{
+                StreetLamp lamp = new StreetLamp();
+                w.loadAndAdd(lamp);
+                lamp.setX(35*16);
+                lamp.setY(y * 16);
+                w.createLight(35* 16, (y - 3.5f)* 16, 1.2f, 0.03f, Color.YELLOW);
+            }
+        }
 
-        l2 = new StreetLamp();
-        w.loadAndAdd(l2);
-        l2.setX(26*16);
-        l2.setY(340*16);
-
-        l3 = new StreetLamp();
-        w.loadAndAdd(l3);
-        l3.setX(35*16);
-
-        l3.setY(330*16);
+        for(int y = 350; y>= 240; y -= 10){
+            if((y / 10) % 2 == 0){
+                StreetLamp lamp = new StreetLamp();
+                w.loadAndAdd(lamp);
+                lamp.setX(121*16);
+                lamp.setY(y * 16);
+                w.createLight(121* 16, (y - 3.5f)* 16, 1.2f, 0.03f, Color.YELLOW);
+            }else{
+                StreetLamp lamp = new StreetLamp();
+                w.loadAndAdd(lamp);
+                lamp.setX(130*16);
+                lamp.setY(y * 16);
+                w.createLight(130* 16, (y - 3.5f)* 16, 1.2f, 0.03f, Color.YELLOW);
+            }
+        }
     }
 }
