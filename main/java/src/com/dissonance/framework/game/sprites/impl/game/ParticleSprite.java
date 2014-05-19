@@ -41,9 +41,10 @@ public class ParticleSprite extends UpdatableSprite {
         return source;
     }
 
-    public static ParticleSource createParticlesAt(float x, float y) {
+    public static ParticleSource createParticlesAt(float x, float y, World world) {
         ParticleSource source = new ParticleSource();
         source.setX(x).setY(y);
+        source.world = world;
         source.run();
         return source;
     }
@@ -126,10 +127,12 @@ public class ParticleSprite extends UpdatableSprite {
         private float count = 1f;
         private float speed = 5f;
         private long time = 800L;
+        private int rate = 200;
         private Direction direction = Direction.UP;
         private Color color = Color.white;
         private World world;
         private final Random random = new Random();
+        private boolean end = false;
 
         public ParticleSource setDirection(Direction direction) {
             this.direction = direction;
@@ -152,6 +155,15 @@ public class ParticleSprite extends UpdatableSprite {
 
         public float getX() {
             return x;
+        }
+
+        public ParticleSource setRate(int rate) {
+            this.rate = rate;
+            return this;
+        }
+
+        public int getRate() {
+            return rate;
         }
 
         public ParticleSource setX(float x) {
@@ -203,6 +215,8 @@ public class ParticleSprite extends UpdatableSprite {
                 @Override
                 public void run() {
                     for (int i = 0; i < count; i++) {
+                        if (end)
+                            break;
                         ParticleSprite sprite = new ParticleSprite();
                         sprite.x = x;
                         sprite.y = y;
@@ -217,13 +231,17 @@ public class ParticleSprite extends UpdatableSprite {
                         world.loadAndAdd(sprite);
 
                         try {
-                            Thread.sleep(random.nextInt(200) + 50);
+                            Thread.sleep(random.nextInt(rate) + rate / 4);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
                 }
             }).start();
+        }
+
+        public void end() {
+            end = true;
         }
     }
 }

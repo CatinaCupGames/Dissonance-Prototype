@@ -19,7 +19,7 @@ public class Main {
     /*
     private static void setDefaultHighlightInfo() {
         //run this if you mess up your highlight.dat cause i just messed up mine (badpokerface)
-        String classes = "Farrand|Wyatt|GameWorldLoader|World|BehaviorOffsetFollow|Position|System|String|Exception|" +
+        String classes = "Farrand|Wyatt|DemoLevelWorldLoader|World|BehaviorOffsetFollow|Position|System|String|Exception|" +
                 "ArrayList|HashMap|Object|Thread|Class|Date|Math|AbstractWaypointSprite|AnimatedSprite|Behavior|" +
                 "CombatSprite|Dialog|Enemy|NPCSprite|PhysicsSprite|PlayableSprite|Sound|Sprite|Weapon|WeaponItem";
 

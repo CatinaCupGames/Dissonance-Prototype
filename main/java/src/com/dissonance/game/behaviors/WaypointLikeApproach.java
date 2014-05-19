@@ -1,25 +1,21 @@
-package com.dissonance.framework.game.ai.behaviors;
+package com.dissonance.game.behaviors;
 
 import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.astar.Vector;
+import com.dissonance.framework.game.ai.behaviors.FiniteBehavior;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
+import com.dissonance.framework.system.utils.Direction;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Approach is a behavior that makes the sprite approach and face the specified target
- * making it look like they're talking to each other. <br />
- * You can use the {@link Approach#getRandomTarget(AbstractWaypointSprite, float)} to
- * get a random target to approach.
- */
-public final class Approach implements FiniteBehavior {
+public class WaypointLikeApproach implements FiniteBehavior {
 
     private static final Vector offset = new Vector(0, -32);
     private static final float SQRT2 = (float) Math.sqrt(2);
@@ -31,9 +27,9 @@ public final class Approach implements FiniteBehavior {
     private static Random random = new Random();
     private List<Position> nodes = new ArrayList<>();
 
-    private FiniteBehaviorEvent.OnFinished onFinishedListener;
+    private FiniteBehavior.FiniteBehaviorEvent.OnFinished onFinishedListener;
 
-    public Approach(AbstractWaypointSprite sprite, AbstractWaypointSprite target) {
+    public WaypointLikeApproach(AbstractWaypointSprite sprite, AbstractWaypointSprite target) {
         this.sprite = sprite;
         this.target = target;
         calculateNodes();
@@ -67,28 +63,32 @@ public final class Approach implements FiniteBehavior {
             return;
         }
 
-        Vector desired = target.subtract(sprite.getPositionVector());
-        desired = desired.normalize();
+        float xdiff = sprite.getX() - target.x;
+        float ydiff = sprite.getY() - target.y;
+        float speed = sprite.getMovementSpeed();
+        boolean moved = false;
 
-        float distance = this.target.getPositionVector().subtract(sprite.getPositionVector()).length();
-        if (distance <= 160f) {
-            desired = desired.multiply(MAX_VELOCITY * distance / 160f);
-        } else {
-            desired = desired.multiply(MAX_VELOCITY);
+        float difx = 4f;
+        float dify = 4f;
+
+        if (xdiff <= -difx || xdiff >= difx) {
+            moved = true;
+            sprite.setX(sprite.getX() + (xdiff > 0 ? -speed * RenderService.TIME_DELTA : speed * RenderService.TIME_DELTA));
+            sprite.setFacingDirection(xdiff > 0 ? Direction.LEFT : Direction.RIGHT);
         }
 
-        Vector steering = desired.subtract(sprite.getSteeringVelocity());
-        steering = steering.truncate(MAX_FORCE).multiply(0.21186f);
-
-        sprite.setSteeringVelocity(sprite.getSteeringVelocity().add(steering).truncate(MAX_VELOCITY));
-
-        sprite.setX(sprite.getX() + sprite.getSteeringVelocity().x * RenderService.TIME_DELTA * sprite.getMovementSpeed());
-        sprite.setY(sprite.getY() + sprite.getSteeringVelocity().y * RenderService.TIME_DELTA * sprite.getMovementSpeed());
+        if (ydiff <= -dify || ydiff >= dify) {
+            sprite.setY(sprite.getY() + (ydiff > 0 ? -speed * RenderService.TIME_DELTA : speed * RenderService.TIME_DELTA));
+            if (moved) {
+                sprite.setFacingDirection(ydiff > 0 ? sprite.getFacingDirection().add(Direction.UP) : sprite.getFacingDirection().add(Direction.DOWN));
+            } else {
+                sprite.setFacingDirection(ydiff > 0 ? Direction.UP : Direction.DOWN);
+            }
+            moved = true;
+        }
 
         if (nodes.size() == 0) {
             if (Math.abs(sprite.getX() - target.x) <= 4.5f && Math.abs(sprite.getY() - target.y) <= 4.5f) {
-                sprite.setSteeringVelocity(new Vector(0, 0));
-
                 if (onFinishedListener != null) {
                     onFinishedListener.onFinished(this);
                 }
@@ -158,11 +158,11 @@ public final class Approach implements FiniteBehavior {
         return inRange.get(random.nextInt(inRange.size()));
     }
 
-    public FiniteBehaviorEvent.OnFinished getOnFinishedListener() {
+    public FiniteBehavior.FiniteBehaviorEvent.OnFinished getOnFinishedListener() {
         return onFinishedListener;
     }
 
-    public void setOnFinishedListener(FiniteBehaviorEvent.OnFinished onFinishedListener) {
+    public void setOnFinishedListener(FiniteBehavior.FiniteBehaviorEvent.OnFinished onFinishedListener) {
         this.onFinishedListener = onFinishedListener;
     }
 

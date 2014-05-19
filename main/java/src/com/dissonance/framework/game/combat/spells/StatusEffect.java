@@ -13,6 +13,7 @@ public abstract class StatusEffect {
     protected long startTime;
     protected double value;
     private boolean started = false;
+    private boolean ended = false;
 
     /**
      * Create a new Status Effect.
@@ -32,6 +33,7 @@ public abstract class StatusEffect {
             lastInflict = cur;
         }
         if (cur - startTime > duration) {
+            ended = true;
             onEnd(owner);
             return true;
         }
@@ -52,5 +54,9 @@ public abstract class StatusEffect {
         started = true;
         startTime = System.currentTimeMillis();
         onStart(owner);
+    }
+
+    public boolean hasEnded() {
+        return ended;
     }
 }

@@ -1,12 +1,15 @@
-package com.dissonance.framework.game.ai.behaviors;
+package com.dissonance.game.behaviors;
 
 import com.dissonance.framework.game.ai.astar.Position;
-import com.dissonance.framework.game.ai.behaviors.FiniteBehavior.FiniteBehaviorEvent;
+import com.dissonance.framework.game.ai.behaviors.Approach;
+import com.dissonance.framework.game.ai.behaviors.Behavior;
+import com.dissonance.framework.game.ai.behaviors.FiniteBehavior;
+import com.dissonance.framework.game.ai.behaviors.PathFollow;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 
 import java.util.Random;
 
-public final class Idle implements Behavior {
+public class WaypointLikeIdle implements Behavior {
 
     private static final Random random = new Random();
 
@@ -15,28 +18,28 @@ public final class Idle implements Behavior {
     private final float[] limits;
 
 
-    private FiniteBehaviorEvent.OnFinished onFinished = new FiniteBehaviorEvent.OnFinished() {
+    private FiniteBehavior.FiniteBehaviorEvent.OnFinished onFinished = new FiniteBehavior.FiniteBehaviorEvent.OnFinished() {
         @Override
         public void onFinished(FiniteBehavior behavior) {
             new Thread(new Runnable() {
                 public void run() {
                     sprite.setBehavior(null);
                     try {
-                        Thread.sleep(random.nextInt(3500) + 5500);
+                        Thread.sleep(random.nextInt(3500) + 7500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    sprite.setBehavior(Idle.this);
+                    sprite.setBehavior(WaypointLikeIdle.this);
                 }
             }).start();
         }
     };
 
-    public Idle(AbstractWaypointSprite sprite) {
+    public WaypointLikeIdle(AbstractWaypointSprite sprite) {
         this(sprite, -1);
     }
 
-    public Idle(AbstractWaypointSprite sprite, float radius) {
+    public WaypointLikeIdle(AbstractWaypointSprite sprite, float radius) {
         this.sprite = sprite;
         this.radius = radius;
 
@@ -56,8 +59,8 @@ public final class Idle implements Behavior {
     public void update() {
         if (random.nextInt(100) > 49) {
             AbstractWaypointSprite target;
-            target = radius == -1 ? Approach.getRandomTarget(sprite) : Approach.getRandomTarget(sprite, limits);
-            Approach approach = new Approach(sprite, target);
+            target = radius == -1 ? WaypointLikeApproach.getRandomTarget(sprite) : WaypointLikeApproach.getRandomTarget(sprite, limits);
+            WaypointLikeApproach approach = new WaypointLikeApproach(sprite, target);
             approach.setOnFinishedListener(onFinished);
             sprite.setBehavior(approach);
         } else {
@@ -83,7 +86,7 @@ public final class Idle implements Behavior {
                 randY = random.nextFloat() * (limits[3] - limits[2] + 1) + limits[2];
             }
 
-            PathFollow follow = new PathFollow(sprite, new Position(randX, randY));
+            WaypointLikePathFollow follow = new WaypointLikePathFollow(sprite, new Position(randX, randY));
             follow.setOnFinishedListener(onFinished);
             sprite.setBehavior(follow);
         }

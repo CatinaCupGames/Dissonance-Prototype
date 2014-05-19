@@ -5,6 +5,7 @@ import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.spells.impl.HeavyCure;
+import com.dissonance.game.spells.statuseffects.Burn;
 
 import java.awt.*;
 
@@ -153,6 +154,11 @@ public final class Farrand extends PlayableSprite {
     }
 
     @Override
+    public void update() {
+        super.update();
+    }
+
+    @Override
     public void onLoad() {
         super.onLoad();
         pauseAnimation();
@@ -167,6 +173,10 @@ public final class Farrand extends PlayableSprite {
 
         addSpell(new HeavyCure(this));
         setSpell1(getSpell("Heavy Cure"));
+
+        for (int i = 0; i < 4; i++) {
+            applyStatusCondition(new Burn(10000, 5f));
+        }
     }
 
     @Override

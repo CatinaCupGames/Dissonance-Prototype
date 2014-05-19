@@ -1,11 +1,8 @@
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
-import com.dissonance.framework.game.world.WorldLoader;
-import com.dissonance.game.sprites.BlueGuard;
-import com.dissonance.game.sprites.Farrand;
 
-public class OutsideFighting extends GameWorldLoader {
+public class OutsideFighting extends DemoLevelWorldLoader {
 
     @Override
     public void onLoad(World w) {

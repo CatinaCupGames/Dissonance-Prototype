@@ -1,3 +1,4 @@
+
 /*
 =====================================
 
@@ -13,7 +14,7 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.game.sprites.Wyatt;
 
-public class CityEntrySquare extends GameWorldLoader {
+public class CityEntrySquare extends DemoLevelWorldLoader {
     public static Wyatt guard5;
     public static Wyatt guard4;
     public static Wyatt guard1;
@@ -59,3 +60,4 @@ public class CityEntrySquare extends GameWorldLoader {
         w.createLight(0, 0, 0.1f, 0.1f);
     }
 }
+

@@ -12,6 +12,7 @@ import java.awt.Font;
 
 public class MPText extends AbstractUI {
     private final BaseHUD baseHUD;
+    private Color color;
     public MPText(BaseHUD parent) {
         super(parent);
         baseHUD = parent;
@@ -25,8 +26,10 @@ public class MPText extends AbstractUI {
         setWidth(font.getWidth("MP:9999/9999"));
         setHeight(font.getHeight("MP:9999/9999"));
 
-        marginLeft(5f);
-        marginBottom(43f);
+        marginLeft(41f);
+        marginBottom(23f);
+
+        setAlpha(1f); //Set the color
     }
 
     @Override
@@ -36,8 +39,16 @@ public class MPText extends AbstractUI {
     public void update() { }
 
     @Override
+    public void setAlpha(float alpha) {
+        super.setAlpha(alpha);
+        float color_alpha = alpha - 0.3f;
+        if (color_alpha < 0f)
+            color_alpha = 0f;
+        this.color = new Color(1f, 1f, 1f, color_alpha);
+    }
+
+    @Override
     public void onRender() {
-        RenderText.drawString(font, "MP:" + (int)baseHUD.getMP() + "/" + (int)baseHUD.getMaxMP(), getX(), getY(), new Color(1f, 1f, 1f, getAlpha()));
-        //font.drawString(getX(), getY(), "MP:" + (int)baseHUD.getMP() + "/" + (int)baseHUD.getMaxMP(), new Color(1f, 1f, 1f, getAlpha()));
+        RenderText.drawString(font, "MP:" + (int)baseHUD.getMP() + "/" + (int)baseHUD.getMaxMP(), getX(), getY(), color);
     }
 }

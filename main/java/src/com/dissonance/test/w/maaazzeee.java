@@ -1,6 +1,6 @@
 package com.dissonance.test.w;
 
-import com.dissonance.game.w.GameWorldLoader;
+import com.dissonance.game.w.DemoLevelWorldLoader;
 
-public class maaazzeee extends GameWorldLoader {
+public class maaazzeee extends DemoLevelWorldLoader {
 }

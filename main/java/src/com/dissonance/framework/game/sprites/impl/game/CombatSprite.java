@@ -544,8 +544,6 @@ public abstract class CombatSprite extends PhysicsSprite {
 
         damage = FastMath.fastRound((float) damage);
 
-        toastText("-" + damage).setTint(255, 24, 38, 1);
-
         applyDamage(damage);
         if (HP <= 0) {
             //TODO Give attacker EXP
@@ -554,6 +552,7 @@ public abstract class CombatSprite extends PhysicsSprite {
 
     public void applyDamage(double damage) {
         HP -= damage;
+        toastText("-" + damage).setTint(255, 24, 38, 1);
         if (HP <= 0) {
             //TODO Play death animation for this sprite
             getWorld().removeSprite(this);
@@ -596,6 +595,10 @@ public abstract class CombatSprite extends PhysicsSprite {
 
     public boolean isAttacking() {
         return attacking;
+    }
+
+    public StatusEffect[] getStatusEffects() {
+        return effects.toArray(new StatusEffect[effects.size()]);
     }
 
 

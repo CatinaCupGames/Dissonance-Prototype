@@ -40,7 +40,12 @@ public enum Direction {
     /**
      * Represents no direction, or not moving.
      */
-    NONE;
+    NONE,
+
+    /**
+     * Represents any direction, or moving.
+     */
+    MOVING;
 
     /**
      * Converts a complex direction into a simple direction.
@@ -78,5 +83,37 @@ public enum Direction {
             return Direction.DOWN_RIGHT;
         else
             return this;
+    }
+
+    /**
+     * Get the opposite direction of this direction. For example, if this direction is {@link com.dissonance.framework.system.utils.Direction#RIGHT}, then this method will return {@link com.dissonance.framework.system.utils.Direction#LEFT}. <br></br>
+     * If a complex direction is given, then a complex direction is returned. The complex direction returned will always be the opposite of what was given.
+     * @return The opposite direction of this direction.
+     */
+    public Direction opposite() {
+        switch (this) {
+            case UP:
+                return DOWN;
+            case DOWN:
+                return UP;
+            case RIGHT:
+                return LEFT;
+            case LEFT:
+                return RIGHT;
+            case UP_LEFT:
+                return DOWN_RIGHT;
+            case UP_RIGHT:
+                return DOWN_LEFT;
+            case DOWN_LEFT:
+                return UP_RIGHT;
+            case DOWN_RIGHT:
+                return UP_LEFT;
+            case NONE:
+                return MOVING;
+            case MOVING:
+                return NONE;
+            default:
+                return this;
+        }
     }
 }
