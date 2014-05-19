@@ -11,6 +11,8 @@ package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.Camera;
+import com.dissonance.game.sprites.Farrand;
+import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.Wyatt;
 
 public class CityEntrySquare extends DemoLevelWorldLoader {

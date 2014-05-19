@@ -23,12 +23,15 @@ public class OutsideFighting extends DemoLevelWorldLoader {
 
         l2 = new StreetLamp();
         w.loadAndAdd(l2);
-        l2.setX(27*16);
-        l2.setY(345*16);
+        l2.setX(26*16);
+        l2.setY(340*16);
 
         l3 = new StreetLamp();
         w.loadAndAdd(l3);
         l3.setX(35*16);
-        l3.setY(340*16);
+
+        l3.setY(330*16);
+
+
     }
 }
