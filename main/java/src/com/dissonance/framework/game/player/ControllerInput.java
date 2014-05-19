@@ -215,6 +215,12 @@ public class ControllerInput implements Input {
 
     @Override
     public boolean isKeyPressed(String key) {
+        if (!GameService.coop_mode) {
+            boolean value = Input.KEYBOARD.isKeyPressed(key);
+            if (value)
+                return true;
+        }
+        controller.getController().poll();
         return controller.isButtonPressed(key);
     }
 
