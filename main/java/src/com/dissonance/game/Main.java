@@ -1,9 +1,7 @@
 package com.dissonance.game;
 
 import com.dissonance.framework.game.GameService;
-
-import com.dissonance.game.quests.DisclaimerQuest;
-import com.dissonance.game.quests.GameQuest;
+import com.dissonance.game.quests.HallwayQuest;
 
 
 public class Main {
@@ -15,7 +13,7 @@ public class Main {
 
 
 
-        GameService.beginQuest(new GameQuest());
+        GameService.beginQuest(new HallwayQuest());
 
 
 
