@@ -10,6 +10,8 @@ import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.game.behaviors.WaypointLikeIdle;
+import com.dissonance.game.behaviors.WaypointLikeSeek;
 
 public class BlueGuard extends Enemy {
     public BlueGuard() {
@@ -93,6 +95,7 @@ public class BlueGuard extends Enemy {
 
 
     private boolean run;
+    private boolean idle;
     private long lastAttack;
     private boolean looking = false;
     private long foundTime = 0L;
@@ -119,11 +122,13 @@ public class BlueGuard extends Enemy {
             setMovementSpeed(10f);
             PlayableSprite sprite = getClosestPlayer();
             if (sprite == null) {
-                if (!(getBehavior() instanceof Idle)) {
-                    Idle idle = new Idle(this, 256);
-                    setBehavior(idle);
+                if (!idle) {
+                    idle = true;
+                    WaypointLikeIdle idleBehavior = new WaypointLikeIdle(this, 720);
+                    setBehavior(idleBehavior);
                 }
             } else {
+                idle = false;
                 if (distanceFrom(sprite) <= getCurrentWeapon().getWeaponInfo().getRange() + (sprite.getWidth() / 2f)) {
                     if (looking) {
                         foundTime = System.currentTimeMillis();

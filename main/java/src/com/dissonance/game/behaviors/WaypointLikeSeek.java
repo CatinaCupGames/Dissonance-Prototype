@@ -1,7 +1,8 @@
-package com.dissonance.framework.game.ai.behaviors;
+package com.dissonance.game.behaviors;
 
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.astar.Vector;
+import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
