@@ -31,7 +31,7 @@ public class WorldFactory {
         return getWorld(name, true);
     }
 
-    static World getWorld(String name, boolean cache) throws WorldLoadFailedException {
+    public static World getWorld(String name, boolean cache) throws WorldLoadFailedException {
         if (isWorldStillLoaded(name)) {
             for (WorldHolder cacheWorld : cacheWorlds) {
                 if (cacheWorld.world.getName().equals(name)) {

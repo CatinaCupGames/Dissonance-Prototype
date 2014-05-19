@@ -1,0 +1,10 @@
+<animations
+        width="640"
+        height="360" >
+    <animation
+            name="static"
+            loop="true"
+            frames="4"
+            row="0"
+            default_speed="50ms"/>
+</animations>		
