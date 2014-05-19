@@ -27,6 +27,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
     public static RoofFan dec6;
     public static RoofVent dec7;
     public static RoofEntry dec8;
+    public static Skylight dec9;
 
     @Override
     public void onLoad(World w) {
@@ -89,7 +90,6 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         dec6.setX(72*16);
         dec6.setY(33*16);
 
-
         dec7 = new RoofVent();
         w.loadAndAdd(dec7);
         dec7.setX(68*16);
@@ -100,8 +100,14 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         w.loadAndAdd(dec8);
         dec8.setX(78*16);
         dec8.setY(22*16);
+
+
             */
 
+        dec9 = new Skylight();
+        w.loadAndAdd(dec9);
+        dec9.setX(80*16);
+        dec9.setY(26*16);
         w.setWorldBrightness(0.7f);
 
         //w.createLight(16.25f*16, 4.8f*16, 0.9f, 0.03f, Color.CYAN);
@@ -124,6 +130,9 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
 
         dec5.setWidth(160);
         dec5.setHeight(64);
+
+        dec9.setWidth(256);
+        dec9.setHeight(96);
 
 
     }
