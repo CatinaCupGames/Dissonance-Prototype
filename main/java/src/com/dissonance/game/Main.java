@@ -3,7 +3,7 @@ package com.dissonance.game;
 import com.dissonance.framework.game.GameService;
 
 import com.dissonance.game.quests.DisclaimerQuest;
-
+import com.dissonance.game.quests.GameQuest;
 
 
 public class Main {
@@ -15,7 +15,7 @@ public class Main {
 
 
 
-        GameService.beginQuest(new DisclaimerQuest());
+        GameService.beginQuest(new GameQuest());
 
 
 

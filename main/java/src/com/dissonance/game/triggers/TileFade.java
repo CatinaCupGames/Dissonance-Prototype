@@ -15,10 +15,14 @@ public class TileFade extends AbstractTileTrigger {
     private static HashMap<Layer, Service.ServiceRunnable> uwot = new HashMap<>();
 
     @Override
-    public void onTrigger(final AnimatedSprite sprite, final Tile tile) {
+    public void onCollide(final AnimatedSprite sprite, final Tile obj) {
         if (!(sprite instanceof PlayableSprite) || !sprite.isVisible())
             return;
+        super.onCollide(sprite, obj);
+    }
 
+    @Override
+    public void onTrigger(final AnimatedSprite sprite, final Tile tile) {
         int layer = tile.getContainingLayer().getGameLayer(sprite.getWorld());
         if (layer >= sprite.getLayer()) {
             tile.getContainingLayer().setAlpha(0.5f);
