@@ -18,11 +18,9 @@ import com.dissonance.game.sprites.Wyatt;
 public class CityEntrySquare extends GameWorldLoader {
     public static Wyatt guard5;
     public static Wyatt guard4;
-    public static Jeremiah jeremiah;
     public static Wyatt guard1;
     public static Wyatt guard2;
     public static Wyatt guard3;
-    public static Farrand farrand;
     @Override
     public void onLoad(World w) {
         super.onLoad(w);

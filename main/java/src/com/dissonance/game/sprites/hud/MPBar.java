@@ -16,15 +16,15 @@ public class MPBar extends AbstractUI {
     }
 
     private static Texture texture;
-    private float displayMP = 100f;
-    private float actualMP = 100f;
-    private float maxMP = 100f;
+    private double displayMP = 100f;
+    private double actualMP = 100f;
+    private double maxMP = 100f;
     private MPTip tip;
 
     //Ease stuff
     private boolean ease;
-    private float target;
-    private float startH;
+    private double target;
+    private double startH;
     private long start;
     @Override
     protected void onOpen() {
@@ -37,8 +37,8 @@ public class MPBar extends AbstractUI {
 
             alignToTexture(texture);
 
-            marginLeft(53f);
-            marginBottom(68f);
+            marginLeft(50f);
+            marginBottom(19f);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,14 +56,14 @@ public class MPBar extends AbstractUI {
     public void update() {
         if (ease) {
             long since = RenderService.getTime() - start;
-            float temp = Camera.ease(startH, target, 500f, since);
+            float temp = Camera.ease((float)startH, (float)target, 500f, since);
             _setDisplayMP(temp);
             if (temp == target)
                 ease = false;
         }
     }
 
-    public void setMP(float MP) {
+    public void setMP(double MP) {
         if (MP < 0)
             MP = 0;
         if (MP > maxMP)
@@ -89,13 +89,13 @@ public class MPBar extends AbstractUI {
         }
     }
 
-    public float getMP() {
+    public double getMP() {
         return actualMP;
     }
 
-    public float getMaxMP() { return maxMP; }
+    public double getMaxMP() { return maxMP; }
 
-    public void setMaxMP(float max) {
+    public void setMaxMP(double max) {
         this.maxMP = max;
     }
 
@@ -111,16 +111,16 @@ public class MPBar extends AbstractUI {
             return;
         float x = getX(), y = getY(), bx = getWidth() / 2f, by = getHeight() / 2f, z = 0;
 
-        float percent = bx * (-.02f * displayMP + 2);
+        double percent = bx * (-.02f * displayMP + 2);
 
         texture.bind();
         glBegin(GL_QUADS);
         glTexCoord2f(0f, 0f); //bottom left
         glVertex3f(x - bx, y - by, z);
         glTexCoord2f(1f, 0f); //bottom right
-        glVertex3f(x + (bx - percent), y - by, z);
+        glVertex3d(x + (bx - percent), y - by, z);
         glTexCoord2f(1f, 1f); //top right
-        glVertex3f(x + (bx - percent), y + by, z);
+        glVertex3d(x + (bx - percent), y + by, z);
         glTexCoord2f(0f, 1f); //top left
         glVertex3f(x - bx, y + by, z);
         glEnd();

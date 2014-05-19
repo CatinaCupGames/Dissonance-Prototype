@@ -1,5 +1,6 @@
 package com.dissonance.game.w;
 
+import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.game.sprites.Farrand;
@@ -20,7 +21,7 @@ public abstract class GameWorldLoader implements WorldLoader {
     @Override
     public void onLoad(World w) {
         if (hud == null) {
-            hud = new BaseHUD();
+            hud = new BaseHUD(Players.createPlayer1());
             hud.display(w);
         }
         if (farrand == null) {

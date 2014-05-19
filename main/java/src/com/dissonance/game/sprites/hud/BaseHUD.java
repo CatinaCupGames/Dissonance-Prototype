@@ -1,5 +1,6 @@
 package com.dissonance.game.sprites.hud;
 
+import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
@@ -12,34 +13,43 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class BaseHUD extends AbstractUI {
     private static Texture texture;
+    private static Texture glow;
 
+
+    private Player owner;
+    private double oHP = -1;
+    private double oMP = -1;
     private HealthBar healthBar;
     private MPBar mpBar;
     private LevelText levelText;
     private HealthText healthText;
     private MPText mpText;
 
-    public BaseHUD() {
+    public BaseHUD(Player owner) {
         super();
+        this.owner = owner;
         healthBar = new HealthBar(this);
         mpBar = new MPBar(this);
         levelText = new LevelText(this);
         healthText = new HealthText(this);
         mpText = new MPText(this);
     }
+
     @Override
     protected void onOpen() {
         scale(false);
         try {
             if (texture == null)
                 texture = Texture.retrieveTexture("sprites/menu/player_hud/base.png");
+            if (glow == null)
+                glow = Texture.retrieveTexture("sprites/menu/player_hud/Glow.png");
 
             setWidth(texture.getTextureWidth());
             setHeight(texture.getTextureHeight());
 
             alignToTexture(texture);
 
-            marginBottom(-8f);
+            marginBottom(8f);
             marginLeft(8f);
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,10 +88,29 @@ public class BaseHUD extends AbstractUI {
     private float start;
     @Override
     public void update() {
+        if (owner.getSprite() != null) {
+            if (oHP == -1 && oMP == -1) {
+                oHP = owner.getSprite().getHP();
+                oMP = owner.getSprite().getMP();
+            }
+
+            if (oHP != owner.getSprite().getHP()) {
+                setHealth(owner.getSprite().getHP(), owner.getSprite().getMaxHP());
+                oHP = owner.getSprite().getHP();
+            }
+
+            if (oMP != owner.getSprite().getMP()) {
+                setMaxMP(owner.getSprite().getMaxMP());
+                setMP(owner.getSprite().getMP());
+                oMP = owner.getSprite().getMP();
+            }
+        }
+
+
         float minX = 0f, maxX = 480f / 2f, minY = 0, maxY = 270f / 2f;
         float mx = Mouse.getX(), my = Mouse.getY();
 
-        if (mx > minX && mx < maxX && my > minY && my < maxY) {
+        /*if (mx > minX && mx < maxX && my > minY && my < maxY) {
             if (!overIt) {
                 overIt = true;
                 ease = true;
@@ -109,14 +138,14 @@ public class BaseHUD extends AbstractUI {
             mpText.setAlpha(temp);
             healthText.setAlpha(temp);
             levelText.setAlpha(temp);
-        }
+        }*/
     }
 
-    public void setHealth(float health) {
-        healthBar.setHealth(health);
+    public void setHealth(double health, double max) {
+        healthBar.setHealth(health, max);
     }
 
-    public void setMP(float MP) {
+    public void setMP(double MP) {
         mpBar.setMP(MP);
     }
 
@@ -124,11 +153,11 @@ public class BaseHUD extends AbstractUI {
         levelText.setLevel(level);
     }
 
-    public float getHealth() {
+    public double getHealth() {
         return healthBar.getHealth();
     }
 
-    public float getMP() {
+    public double getMP() {
         return mpBar.getMP();
     }
 
@@ -156,11 +185,11 @@ public class BaseHUD extends AbstractUI {
         texture.unbind();
     }
 
-    public float getMaxMP() {
+    public double getMaxMP() {
         return mpBar.getMaxMP();
     }
 
-    public void setMaxMP(float mp) {
+    public void setMaxMP(double mp) {
         mpBar.setMaxMP(mp);
     }
 }
