@@ -1,3 +1,4 @@
+
 /*
 =====================================
 
@@ -59,3 +60,4 @@ public class CityEntrySquare extends DemoLevelWorldLoader {
         w.createLight(0, 0, 0.1f, 0.1f);
     }
 }
+

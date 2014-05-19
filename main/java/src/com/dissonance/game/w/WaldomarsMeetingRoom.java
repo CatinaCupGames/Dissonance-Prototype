@@ -41,20 +41,16 @@ package com.dissonance.game.w;
 
 
 import com.dissonance.framework.game.world.World;
-
 import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.framework.render.shader.impl.Light;
 import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.Waldomar;
 import com.dissonance.game.sprites.Wyatt;
-import com.dissonance.framework.render.shader.impl.Light;
-import com.dissonance.framework.sound.Sound;
-import com.dissonance.game.sprites.*;
-
 import com.dissonance.game.sprites.office.*;
+import com.dissonance.game.sprites.office.Window;
 
-import java.awt.Color;
+import java.awt.*;
 
 
 public class WaldomarsMeetingRoom implements WorldLoader {
@@ -254,7 +250,7 @@ public class WaldomarsMeetingRoom implements WorldLoader {
         var32.setX(400.7f);
         var32.setY(274.15f);
 
-      w.setWorldBrightness(0.4f);
+      w.setWorldBrightness(0.5f);
         w.createLight(15f * 16, 2f * 16, 1.4f, 0.7f);
         //w.createLight(0f, 0f, 0.1f, 0.1f);
         l = w.createLight(-200f, -200f, 0.01f, 0.01f, Color.RED);
