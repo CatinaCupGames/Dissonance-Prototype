@@ -83,6 +83,15 @@ public abstract class Sprite implements Drawable, Serializable {
         glowing = false;
     }
 
+    public float getAlpha() {
+        return a;
+    }
+
+    public void setAlpha(float a) {
+        this.a = a;
+        hasTint = a != 1f;
+    }
+
     public void setTint(Color color) {
         r = color.getRed() / 255f;
         g = color.getGreen() / 255f;

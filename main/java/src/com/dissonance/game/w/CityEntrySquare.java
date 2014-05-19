@@ -26,9 +26,11 @@ public class CityEntrySquare extends DemoLevelWorldLoader {
         farrand.setX(985.60016f);
         farrand.setY(785.5205f);
         Camera.setPos(Camera.translateToCameraCenter(farrand.getVector(), farrand.getHeight()));
+        w.loadAndAdd(farrand);
 
         jeremiah.setX(1019.05994f);
         jeremiah.setY(760.96906f);
+        w.loadAndAdd(jeremiah);
 
         guard1 = new Wyatt();
         w.loadAndAdd(guard1);

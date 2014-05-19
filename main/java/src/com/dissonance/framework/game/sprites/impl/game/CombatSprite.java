@@ -601,6 +601,10 @@ public abstract class CombatSprite extends PhysicsSprite {
         return effects.toArray(new StatusEffect[effects.size()]);
     }
 
+    public boolean isDead() {
+        return HP == 0.0;
+    }
+
 
     public enum CombatType {
         /**
