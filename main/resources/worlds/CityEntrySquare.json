@@ -253,7 +253,7 @@
                 },
              "12":
                 {
-                 "triggerclass":""
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "13":
                 {
