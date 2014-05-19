@@ -3,6 +3,7 @@ package com.dissonance.framework.game.player;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
+import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.system.utils.Direction;
@@ -24,25 +25,27 @@ public abstract class PlayableSprite extends CombatSprite {
     private MovementType mType = MovementType.RUNNING;
     private boolean frozen;
 
-    boolean use_attack;
-    boolean use_switch;
-    boolean use_dodge;
+
     boolean controller_extend;
     boolean keyboard_extend;
-    boolean use_select;
+    boolean use_dodge;
     boolean isAttacking = false;
 
     float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
     long dodgeStartTime;
     boolean is_dodging, allow_dodge = true;
-    boolean usespell1, usespell2;
-    boolean use_lock;
-    boolean use_lock_controller;
     ArrayList<PlayableSprite> party = new ArrayList<PlayableSprite>();
 
     private static PlayableSprite currentlyPlaying;
     private CombatSprite locked;
     public boolean ignore_movement = false;
+
+    private boolean appear;
+    private long startTime;
+    private float start;
+    private float end;
+    private Runnable appearRunnable;
+    private ParticleSprite.ParticleSource source;
 
     public PlayableSprite(Input input) {
         super();
@@ -68,6 +71,52 @@ public abstract class PlayableSprite extends CombatSprite {
 
     public Input getInput() {
         return input;
+    }
+
+    public void appear() {
+        appear(null);
+    }
+
+    public void appear(Runnable runnable) {
+        appear = true;
+
+        startTime = System.currentTimeMillis();
+        start = getAlpha();
+        end = 1f;
+
+        if (source != null)
+            source.end();
+
+        source = ParticleSprite.createParticlesAt(getX(), (getY() + getHeight() / 2f), getWorld())
+                .setCount(50)
+                .setRate(300)
+                .setTime(800)
+                .setSpeed(4);
+
+        appearRunnable = runnable;
+    }
+
+    public void disappear() {
+        disappear(null);
+    }
+
+    public void disappear(Runnable runnable) {
+        appear = true;
+
+        startTime = System.currentTimeMillis();
+        start = getAlpha();
+        end = 0f;
+
+        if (source != null)
+            source.end();
+
+        source = ParticleSprite.createParticlesAt(getX(), (getY() + getHeight() / 2f), getWorld())
+                .setCount(50)
+                .setRate(150)
+                .setTime(800)
+                .setSpeed(4);
+
+        appearRunnable = runnable;
     }
 
     /**
@@ -135,6 +184,25 @@ public abstract class PlayableSprite extends CombatSprite {
 
             checkMovement();
             input.checkKeys(this);
+        }
+
+        if (appear) {
+            float value = Camera.ease(start, end, 800, (System.currentTimeMillis() - startTime));
+            setAlpha(value);
+            if (value == end) {
+                appear = false;
+                source.end();
+
+                source = null;
+
+                if (appearRunnable != null)
+                    appearRunnable.run();
+
+                if (end == 0f)
+                    setVisible(false);
+                else
+                    setVisible(true);
+            }
         }
     }
 
@@ -429,12 +497,6 @@ public abstract class PlayableSprite extends CombatSprite {
     protected void onDeselect() {
         isPlaying = false;
         Camera.setCameraEaseListener(null); //Safety net
-
-        if (!isPlayer1()) {
-            //TODO Animate disapear maybe..?
-            setVisible(false);
-        }
-
 
         w = false;
         a = false;

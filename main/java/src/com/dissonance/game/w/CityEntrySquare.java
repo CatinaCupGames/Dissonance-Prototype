@@ -1,4 +1,3 @@
-
 /*
 =====================================
 
@@ -26,13 +25,11 @@ public class CityEntrySquare extends DemoLevelWorldLoader {
     public void onLoad(World w) {
         super.onLoad(w);
 
-        farrand = new Farrand();
         w.loadAndAdd(farrand);
         farrand.setX(985.60016f);
         farrand.setY(785.5205f);
         Camera.setPos(Camera.translateToCameraCenter(farrand.getVector(), farrand.getHeight()));
 
-        jeremiah = new Jeremiah();
         w.loadAndAdd(jeremiah);
         jeremiah.setX(1019.05994f);
         jeremiah.setY(760.96906f);
@@ -66,4 +63,3 @@ public class CityEntrySquare extends DemoLevelWorldLoader {
         w.createLight(0, 0, 0.1f, 0.1f);
     }
 }
-

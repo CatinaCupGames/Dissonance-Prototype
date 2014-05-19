@@ -12,7 +12,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class BaseHUD extends AbstractUI {
     private static Texture texture;
-    private static final boolean SCALE = true;
+    private static final boolean SCALE = false;
 
 
     private Player owner;

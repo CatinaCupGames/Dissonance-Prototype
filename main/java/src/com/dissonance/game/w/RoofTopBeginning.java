@@ -36,10 +36,12 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         w.loadAndAdd(farrand);
         farrand.setX(97.9f);
         farrand.setY(204.34998f);
+        w.loadAndAdd(farrand);
 
         jeremiah.setX(100f);
         jeremiah.setY(210f);
         jeremiah.setVisible(false);
+        w.loadAndAdd(jeremiah);
     
         var2 = new BlueGuard();
         w.loadAndAdd(var2);
