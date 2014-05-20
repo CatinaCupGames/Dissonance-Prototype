@@ -28,7 +28,7 @@ public class LoadingQuest extends AbstractQuest {
             }
         }, true);
 
-        Thread.sleep(7000);
+        Thread.sleep(3000);
 
         RenderService.INSTANCE.runOnServiceThread(new Runnable() {
             @Override

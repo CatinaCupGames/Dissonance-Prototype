@@ -120,6 +120,20 @@ public class HitBox {
      * If no objects were found, then a null value is returned.
      */
     public boolean checkForCollision(World world, float startX, float startY, Sprite ignore) {
+        return checkForCollision(world, startX, startY, ignore, 1);
+    }
+
+    /**
+     * Check for collision with any {@link Collidable} objects and return the <b>FIRST</b> object found colliding.
+     *
+     * @param world  The world to check in
+     * @param startX The startX position.
+     * @param startY The startY position.
+     * @return The <b>FIRST</b> {@link Collidable} object found. Sprites are checked first, then TiledObjects and then lastly
+     * tiles. <br></br>
+     * If no objects were found, then a null value is returned.
+     */
+    public boolean checkForCollision(World world, float startX, float startY, Sprite ignore, float layer) {
         if (world == null)
             return false;
         float halfx = (maxX - minX) / 2f;
@@ -142,6 +156,23 @@ public class HitBox {
                     return true;
                 }
 
+                Layer pLayer = world.getLayer(layer, LayerType.TILE_LAYER);
+                if (pLayer != null) {
+                    if (pLayer.getProperty("collideLayer") != null) {
+                        int l = Integer.parseInt(pLayer.getProperty("collideLayer"));
+                        Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
+                        for (Layer faggot : layers) {
+                            if (faggot.getLayerNumber() == l) {
+                                Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), faggot);
+                                if (t != null && !t.isPassable()) {
+                                    lastCollide = t;
+                                    return true;
+                                }
+                                return false;
+                            }
+                        }
+                    }
+                }
                 Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
                 for (Layer l : layers) {
                     Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), l);

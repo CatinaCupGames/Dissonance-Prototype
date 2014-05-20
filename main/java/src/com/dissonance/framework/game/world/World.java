@@ -908,6 +908,16 @@ public final class World {
         return result;
     }
 
+    public Layer getLayer(float layer, LayerType type) {
+        Layer[] layers = getLayers(LayerType.TILE_LAYER);
+        for (Layer l : layers) {
+            if (l.getGameLayer(this) == layer)
+                return l;
+        }
+
+        return null;
+    }
+
     private class DisplayWaiters {
 
         public synchronized void _wait() throws InterruptedException {
