@@ -1,6 +1,5 @@
 package com.dissonance.game.quests;
 
-import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.Camera;
@@ -21,7 +20,7 @@ public class HallwayQuest  extends PauseQuest {
         RenderService.INSTANCE.fadeToAlpha(1, 0f);
         playSceneAndWait(HallwayScene.class);
 
-        setNextQuest(new OfficeQuest());
+        setNextQuest(new LoadingQuest());
         endQuest();
 
     }
