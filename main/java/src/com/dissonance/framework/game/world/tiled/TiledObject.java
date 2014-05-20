@@ -7,6 +7,7 @@ import com.dissonance.framework.system.utils.physics.HitBox;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class TiledObject implements Collidable {
@@ -168,5 +169,42 @@ public class TiledObject implements Collidable {
 
     public String getRawType() {
         return type;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TiledObject object = (TiledObject) o;
+
+        if (ellipse != object.ellipse) return false;
+        if (Float.compare(object.height, height) != 0) return false;
+        if (visible != object.visible) return false;
+        if (Float.compare(object.width, width) != 0) return false;
+        if (Float.compare(object.x, x) != 0) return false;
+        if (Float.compare(object.y, y) != 0) return false;
+        if (name != null ? !name.equals(object.name) : object.name != null) return false;
+        if (!Arrays.equals(polygon, object.polygon)) return false;
+        if (properties != null ? !properties.equals(object.properties) : object.properties != null) return false;
+        if (type != null ? !type.equals(object.type) : object.type != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (ellipse ? 1 : 0);
+        result = 31 * result + (height != +0.0f ? Float.floatToIntBits(height) : 0);
+        result = 31 * result + (width != +0.0f ? Float.floatToIntBits(width) : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (visible ? 1 : 0);
+        result = 31 * result + (x != +0.0f ? Float.floatToIntBits(x) : 0);
+        result = 31 * result + (y != +0.0f ? Float.floatToIntBits(y) : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (properties != null ? properties.hashCode() : 0);
+        result = 31 * result + (polygon != null ? Arrays.hashCode(polygon) : 0);
+        return result;
     }
 }

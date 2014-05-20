@@ -53,10 +53,11 @@ public final class World {
     private NodeMap nodeMap;
     private int ID;
     private transient RenderService renderingService;
-    private transient Framebuffer frame;
+    private transient ArrayList<Framebuffer> frames = new ArrayList<Framebuffer>();
     private boolean invalid = true;
     private boolean loaded = false;
     private boolean showing = false;
+    private boolean extreamSpeed = false;
     private WorldData tiledData;
     private WorldLoader loader;
     private List<UI> uiElements = new ArrayList<UI>();
@@ -95,6 +96,14 @@ public final class World {
 
     public List<UI> getElements() {
         return uiElements;
+    }
+
+    public boolean useExtreamSpeed() {
+        return extreamSpeed;
+    }
+
+    public void useExtreamSpeed(boolean value) {
+        this.extreamSpeed = value;
     }
 
     public void switchTo(boolean fadeToBlack) {
@@ -231,26 +240,39 @@ public final class World {
         //== OpenGL safe needed ==
         if (GameSettings.Graphics.useFBO && tiledData.getPixelWidth() > GameSettings.Display.window_width / 2f && tiledData.getPixelHeight() > GameSettings.Display.window_height / 2f) {
             try {
-                frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
-                frame.generate();
-                frame.begin();
-                invalid = false;
+                Layer[] layers = getLayers(LayerType.TILE_LAYER);
 
-                Iterator<Drawable> drawableIterator = getSortedDrawables();
-                while (drawableIterator.hasNext()) {
-                    Drawable d = drawableIterator.next();
-                    if (d instanceof TileObject) {
-                        TileObject t = (TileObject) d;
-                        if (t.isGroundLayer() && !t.isParallaxLayer() && !t.isAnimated()) {
-                            t.renderIgnoreFade();
-                            drawableIterator.remove();
+                for (Layer layer : layers) {
+                    if (!layer.isGroundLayer() && !extreamSpeed)
+                        continue;
+                    if (!Framebuffer.enoughSpaceFor(tiledData.getPixelWidth(), tiledData.getPixelHeight()))
+                        break; //We ran out of space.. :/
+                    Framebuffer frame = new Framebuffer(tiledData.getPixelWidth(), tiledData.getPixelHeight());
+                    frame.generate();
+                    frame.begin();
+                    invalid = false;
+
+
+                    Iterator<Drawable> drawableIterator = getSortedDrawables();
+                    while (drawableIterator.hasNext()) {
+                        Drawable d = drawableIterator.next();
+                        if (d instanceof TileObject) {
+                            TileObject t = (TileObject) d;
+                            if (t.getTiledLayer() == layer && !t.isParallaxLayer() && !t.isAnimated()) {
+                                t.renderIgnoreFade();
+                                drawableIterator.remove();
+                            }
                         }
                     }
-                }
 
-                frame.end();
-                System.out.println("Success!");
-                addDrawable(frame);
+                    frame.end();
+                    frame.setLayer(layer.getGameLayer(this));
+                    System.out.println("Success!");
+                    if (Debug.isDebugging())
+                        System.err.println("Framebuffer space used: " + Framebuffer.getMemoryUsed() + "\nFramebuffer space left: " + (Framebuffer.getMemoryLimit() - Framebuffer.getMemoryUsed()));
+                    addDrawable(frame);
+                    frames.add(frame);
+                }
             } catch (RuntimeException e) {
                 e.printStackTrace();
                 System.err.println("Framebuffers are not supported! Legacy rendering will be used!");
@@ -505,7 +527,9 @@ public final class World {
         prepared = false;
 
         if (tiledData != null) tiledData.dispose();
-        if (frame != null) frame.dispose();
+        for (Framebuffer frame : frames) {
+            frame.dispose();
+        }
 
         renderingService = null;
     }
@@ -854,6 +878,34 @@ public final class World {
         } else {
             throw new InvalidParameterException("Only drawables that don't sort or UI drawables can be moved!");
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        World world = (World) o;
+
+        if (ID != world.ID) return false;
+        if (!combatCache.equals(world.combatCache)) return false;
+        if (!drawable.equals(world.drawable)) return false;
+        if (!lights.equals(world.lights)) return false;
+        if (!name.equals(world.name)) return false;
+        if (tiledData != null ? !tiledData.equals(world.tiledData) : world.tiledData != null) return false;
+        if (!udrawables.equals(world.udrawables)) return false;
+        if (!uiElements.equals(world.uiElements)) return false;
+        if (!unsorted.equals(world.unsorted)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + ID;
+        result = 31 * result + (tiledData != null ? tiledData.hashCode() : 0);
+        return result;
     }
 
     private class DisplayWaiters {
