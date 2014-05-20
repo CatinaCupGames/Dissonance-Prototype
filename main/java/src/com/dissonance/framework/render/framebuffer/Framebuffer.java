@@ -103,6 +103,8 @@ public class Framebuffer extends Sprite {
         glPopMatrix();
 
         glPopAttrib();
+
+        setCutOffMargin(height / 2f);
     }
 
     public void render() {

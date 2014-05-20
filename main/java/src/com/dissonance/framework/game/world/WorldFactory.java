@@ -31,7 +31,7 @@ public class WorldFactory {
         return getWorld(name, true);
     }
 
-    static World getWorld(String name, boolean cache) throws WorldLoadFailedException {
+    public static World getWorld(String name, boolean cache) throws WorldLoadFailedException {
         if (isWorldStillLoaded(name)) {
             for (WorldHolder cacheWorld : cacheWorlds) {
                 if (cacheWorld.world.getName().equals(name)) {
@@ -206,7 +206,9 @@ public class WorldFactory {
         if (force && !removed) {
             System.out.println("[World Factory] Force cleanup requested.");
             for (int i = 0; i < WORLD_CACHE_LIMIT; i++) {
-                if (GameService.getCurrentWorld().getID() != cacheWorlds[i].world.getID()) {
+                if (cacheWorlds[i] == null)
+                    continue;
+                if (GameService.getCurrentWorld() == null || GameService.getCurrentWorld().getID() != cacheWorlds[i].world.getID()) {
                     System.out.println("[World Factory] Disposing " + cacheWorlds[i].world.getName() + ".");
                     cacheWorlds[i].world.onDispose();
                     cacheWorlds[i] = null;

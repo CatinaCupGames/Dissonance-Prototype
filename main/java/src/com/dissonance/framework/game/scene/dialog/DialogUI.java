@@ -292,7 +292,7 @@ public class DialogUI extends AbstractUI {
     private long completedWhen;
     @Override
     public void update() {
-        boolean fast_moving = Players.isAnyPlayerPressingButton(InputKeys.SELECT) && !autoScroll;
+        boolean fast_moving = (Players.isAnyPlayerPressingButton(InputKeys.SELECT)) && !autoScroll;
 
         long speed = this.speed / (fast_moving ? 2 : 1);
         if (RenderService.getTime() - lastUpdate > speed && !done) {

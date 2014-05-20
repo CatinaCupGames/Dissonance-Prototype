@@ -100,7 +100,7 @@ public class BlueGuard extends Enemy {
     private boolean looking = false;
     private long foundTime = 0L;
     private static final long ATTACK_RATE_MS = 1800;
-    private static final long FOUND_YOU_MS = 100;
+    private static final long FOUND_YOU_MS = 400;
     private void runAI() {
         if (getCurrentWeapon() == null || run) {
             setMovementSpeed(14f);
@@ -172,6 +172,8 @@ public class BlueGuard extends Enemy {
         PlayableSprite closet = null;
         float dis = 0;
         for (PlayableSprite sprite : sprites) {
+            if (sprite.isDead() || sprite.isVisible())
+                continue;
             float temp = (float) Math.sqrt(((getX() - sprite.getX()) * (getX() - sprite.getX())) + ((getY() - sprite.getY()) * (getY() - sprite.getY())));
             if (temp <= distance) {
                 if (temp < dis || closet == null) {

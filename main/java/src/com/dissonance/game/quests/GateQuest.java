@@ -63,7 +63,7 @@ public class GateQuest extends PauseQuest {
                             e.printStackTrace();
                         }
 
-                        setNextQuest(new Gate_2Quest());
+                        setNextQuest(new HallwayQuest());
                         try {
                             endQuest();
                         } catch (IllegalAccessException e) {
@@ -113,10 +113,10 @@ public class GateQuest extends PauseQuest {
         CityEntrySquare.guard5.setBehavior(new LeaderFollow(CityEntrySquare.guard5, CityEntrySquare.farrand, new Vector(0f, -32f)));
         CityEntrySquare.jeremiah.setBehavior(new LeaderFollow(CityEntrySquare.jeremiah, CityEntrySquare.farrand, new Vector(0f, 16f)));
 
-        CityEntrySquare.guard1.ignoreCollisionWith(CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard5, CityEntrySquare.farrand);
-        CityEntrySquare.guard2.ignoreCollisionWith(CityEntrySquare.guard1, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard5, CityEntrySquare.farrand);
-        CityEntrySquare.guard3.ignoreCollisionWith(CityEntrySquare.guard2, CityEntrySquare.guard1, CityEntrySquare.guard4, CityEntrySquare.guard5, CityEntrySquare.farrand);
-        CityEntrySquare.guard4.ignoreCollisionWith(CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard1, CityEntrySquare.guard5, CityEntrySquare.farrand);
+        CityEntrySquare.guard1.ignoreCollisionWith(CityEntrySquare.jeremiah, CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard5, CityEntrySquare.farrand);
+        CityEntrySquare.guard2.ignoreCollisionWith(CityEntrySquare.jeremiah, CityEntrySquare.guard1, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard5, CityEntrySquare.farrand);
+        CityEntrySquare.guard3.ignoreCollisionWith(CityEntrySquare.jeremiah, CityEntrySquare.guard2, CityEntrySquare.guard1, CityEntrySquare.guard4, CityEntrySquare.guard5, CityEntrySquare.farrand);
+        CityEntrySquare.guard4.ignoreCollisionWith(CityEntrySquare.jeremiah, CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard1, CityEntrySquare.guard5, CityEntrySquare.farrand);
         CityEntrySquare.guard5.ignoreCollisionWith(CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard1, CityEntrySquare.farrand, CityEntrySquare.jeremiah);
         CityEntrySquare.farrand.ignoreCollisionWith(CityEntrySquare.guard1, CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard5, CityEntrySquare.jeremiah);
         CityEntrySquare.jeremiah.ignoreCollisionWith(CityEntrySquare.guard1, CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard5, CityEntrySquare.farrand);

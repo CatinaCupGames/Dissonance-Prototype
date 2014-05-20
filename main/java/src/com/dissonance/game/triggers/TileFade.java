@@ -34,7 +34,7 @@ public class TileFade extends AbstractTileTrigger {
                     float x = sprite.getX() + 8.5f;
                     float y = sprite.getY() + (sprite.getHeight() / 2f) - 6f;
 
-                    if (sprite.getWorld() == null) {
+                    if (sprite.getWorld() == null || !sprite.isVisible()) {
                         tile.getContainingLayer().setAlpha(1f);
                         uwot.remove(tile.getContainingLayer());
                         RenderService.INSTANCE.removeServiceTick(this);

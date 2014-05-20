@@ -242,4 +242,12 @@ public class Players {
                 throw new InvalidParameterException("This input is currently being used by another player!");
         }
     }
+
+    public static boolean isSpriteUsed(PlayableSprite sprite) {
+        for (PlayableSprite s : getCurrentlyPlayingSprites()) {
+            if (sprite == s)
+                return true;
+        }
+        return false;
+    }
 }

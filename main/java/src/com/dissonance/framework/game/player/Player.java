@@ -62,6 +62,7 @@ public class Player {
                 sprite.joinParty(player.getSprite());
             }
 
+            sprite.appear();
             changeSprite(sprite);
         }
     }

@@ -21,34 +21,35 @@ public class AnimationFactory {
                 return indexOf;
             animate.add(ad);
             indexOf = animate.size() - 1;
+            ad.ID = indexOf;
         }
         return indexOf;
     }
 
     public static boolean removeAnimator(int index) {
         try {
-            animate.remove(index);
-            return true;
+            return animate.remove(getData(index));
         } catch (Throwable t) {
             t.printStackTrace();
             return false;
         }
     }
 
-    public static boolean removeAnimator(Animator animator) {
-        AnimatorData ad = new AnimatorData();
-        ad.animator = animator;
-        int index = animate.indexOf(ad);
-        return index != -1 && removeAnimator(index);
-    }
-
     public static void resetAnimator(int index) {
         if (index < 0 || index >= animate.size())
             return;
         synchronized (animate) {
-            AnimatorData ad = animate.get(index);
+            AnimatorData ad = getData(index);
             ad.last_tick = System.currentTimeMillis();
         }
+    }
+
+    private static AnimatorData getData(int index) {
+        for (AnimatorData a : animate) {
+            if (a.ID == index)
+                return a;
+        }
+        return null;
     }
 
     public static void executeTick() throws IllegalAccessException {
@@ -78,6 +79,7 @@ public class AnimationFactory {
         public Animator animator;
         public long last_tick;
         public int current_frame_number;
+        public int ID;
 
         public AnimatorData() {
             last_tick = System.currentTimeMillis();

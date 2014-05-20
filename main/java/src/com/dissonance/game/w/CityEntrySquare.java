@@ -1,4 +1,3 @@
-
 /*
 =====================================
 
@@ -12,6 +11,8 @@ package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.Camera;
+import com.dissonance.game.sprites.Farrand;
+import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.Wyatt;
 
 public class CityEntrySquare extends DemoLevelWorldLoader {
@@ -59,5 +60,17 @@ public class CityEntrySquare extends DemoLevelWorldLoader {
         w.setWorldBrightness(0.4f);
         w.createLight(0, 0, 0.1f, 0.1f);
     }
-}
 
+    @Override
+    public void onDisplay(World world) {
+        super.onDisplay(world);
+
+        farrand.setX(985.60016f);
+        farrand.setY(785.5205f);
+        Camera.setPos(Camera.translateToCameraCenter(farrand.getVector(), farrand.getHeight()));
+
+        jeremiah.setX(1019.05994f);
+        jeremiah.setY(760.96906f);
+        jeremiah.setVisible(true);
+    }
+}
