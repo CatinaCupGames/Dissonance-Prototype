@@ -67,7 +67,8 @@ public class Zesilia_pan implements WorldLoader {
         w.loadAndAdd(s1);
         s1.setX(50*16);
         s1.setY(20*16);
-        w.createLight(51*16, 20*16, 1.2f, 0.1f, Color.RED);
+        //w.createLight(50*16, 19*16, 1.0f, 0.03f, Color.RED);
+        //w.createLight(50*16, 20*16, 1.0f, 0.03f, Color.RED);
 
         s2 = new SideSign2();
         w.loadAndAdd(s2);
