@@ -17,11 +17,11 @@ public class AnimationFactory {
         AnimatorData ad = new AnimatorData();
         ad.animator = animator;
         synchronized (animate) {
-            if ((indexOf = animate.indexOf(ad)) != -1)
-                return indexOf;
-            animate.add(ad);
+            if (animate.contains(ad))
+                return animate.get(animate.indexOf(ad)).ID;
             indexOf = animate.size() - 1;
             ad.ID = indexOf;
+            animate.add(ad);
         }
         return indexOf;
     }
@@ -36,10 +36,10 @@ public class AnimationFactory {
     }
 
     public static void resetAnimator(int index) {
-        if (index < 0 || index >= animate.size())
-            return;
         synchronized (animate) {
             AnimatorData ad = getData(index);
+            if (ad == null)
+                return;
             ad.last_tick = System.currentTimeMillis();
         }
     }

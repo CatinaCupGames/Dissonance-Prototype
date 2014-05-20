@@ -1,9 +1,11 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.game.GameCache;
 
@@ -14,17 +16,15 @@ public class LoadingQuest extends AbstractQuest {
         setWorld(someWorld);
         someWorld.waitForWorldDisplayed();
 
-        Thread.sleep(4000);
+        GameCache.RoofTopBeginning = WorldFactory.getWorld("RoofTopBeginning", false);
+        GameCache.OutsideFighting = WorldFactory.getWorld("testbuilding", false);
+        //GameCache.OutsideFighting.useExtreamSpeed(true);
+        Thread.sleep(2000);
 
         RenderService.INSTANCE.runOnServiceThread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    GameCache.RoofTopBeginning = WorldFactory.getWorld("RoofTopBeginning", false);
-                    GameCache.RoofTopBeginning.prepareTiles();
-                } catch (WorldLoadFailedException e) {
-                    e.printStackTrace();
-                }
+                GameCache.RoofTopBeginning.prepareTiles();
             }
         }, true);
 
@@ -33,26 +33,21 @@ public class LoadingQuest extends AbstractQuest {
         RenderService.INSTANCE.runOnServiceThread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    GameCache.OutsideFighting = WorldFactory.getWorld("OutsideFighting", false);
-                    GameCache.OutsideFighting.prepareTiles();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(2000);
-                                setNextQuest(new DisclaimerQuest());
-                                endQuest();
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                GameCache.OutsideFighting.prepareTiles();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(2000);
+                            setNextQuest(new GameQuest());
+                            endQuest();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                    }).start();
-                } catch (WorldLoadFailedException e) {
-                    e.printStackTrace();
-                }
+                    }
+                }).start();
             }
         }, true);
     }

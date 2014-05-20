@@ -129,11 +129,6 @@ public class Framebuffer extends Sprite {
     }
 
     @Override
-    public void onLoad() {
-        setLayer(0);
-    }
-
-    @Override
     public float getX() {
         return 0;
     }

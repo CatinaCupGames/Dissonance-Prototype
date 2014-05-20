@@ -31,6 +31,7 @@ public abstract class Sprite implements Drawable, Serializable {
     protected transient World world;
     protected Direction direction;
     protected float x, y, width, height;
+    protected float startW = -1, startH = -1;
     protected float r = 1, g = 1, b = 1, a = 1;
     protected boolean hasTint;
     protected int layer = 1;
@@ -150,8 +151,18 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public void setTexture(Texture texture) {
         this.texture = texture;
-        width = texture.getTextureWidth();
-        height = texture.getTextureHeight();
+        if (startW == -1) {
+            width = texture.getTextureWidth();
+        } else {
+            width = startW;
+            startW = -1;
+        }
+        if (startH == -1) {
+            height = texture.getTextureHeight();
+        } else {
+            height = startH;
+            startH = -1;
+        }
 
         cutOffMargin = getHeight() / 2f;
     }
@@ -257,6 +268,14 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public float getHeight() {
         return height;
+    }
+
+    public void setStartWidth(float w) {
+        this.startW = w;
+    }
+
+    public void setStartHeight(float h) {
+        this.startH = h;
     }
 
     public void setWidth(float w) {

@@ -127,6 +127,11 @@ public class Tile implements Collidable {
         return false; //We don't need to check for tiles..
     }
 
+    @Override
+    public World getWorld() {
+        return parent;
+    }
+
     public Layer getContainingLayer() {
         return containingLayer;
     }

@@ -89,7 +89,34 @@
         {
          "height":70,
          "name":"hitboes",
-         "objects":[],
+         "objects":[
+                {
+                 "height":16,
+                 "name":"roof.RoofFan",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":16,
+                 "x":752,
+                 "y":320
+                }, 
+                {
+                 "height":16,
+                 "name":"roof.WaterTower",
+                 "properties":
+                    {
+                     "height":"32",
+                     "width":"32"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":16,
+                 "x":736,
+                 "y":432
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,

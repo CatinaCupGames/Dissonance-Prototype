@@ -2,6 +2,8 @@
 <objecttypes>
  <objecttype name="spawn" color="#aa0000"/>
  <objecttype name="door" color="#5500ff"/>
- <objecttype name="hitbox" color="#a0a0a4"/>
+ <objecttype name="hitbox" color="#000000"/>
  <objecttype name="trigger" color="#ffff00"/>
+ <objecttype name="espawn" color="#00ff00"/>
+ <objecttype name="sprite" color="#ffffff"/>
 </objecttypes>

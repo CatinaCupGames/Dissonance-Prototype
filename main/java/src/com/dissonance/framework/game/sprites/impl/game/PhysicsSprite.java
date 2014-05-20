@@ -141,7 +141,9 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             return;
         }
 
-        if (c instanceof PhysicsSprite && !ignore.contains(c)) {
+        if (c instanceof PhysicsSprite) {
+            if (ignore.contains(c))
+                return;
             super.setX(oldX);
             float add = getX() - c.getX();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
@@ -215,6 +217,12 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                 }).start();
 
             }
+        } else {
+            super.setX(oldX);
+            float add = getX() - c.getX();
+            for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
+                super.setX(super.getX() + (add < 0 ? -1 : 1));
+            }
         }
     }
 
@@ -226,7 +234,9 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             return;
         }
 
-        if (c instanceof PhysicsSprite && !ignore.contains(c)) {
+        if (c instanceof PhysicsSprite) {
+            if (ignore.contains(c))
+                return;
             super.setY(oldY);
             float add = getY() - hb.getLastCollide().getY();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
@@ -298,6 +308,12 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                         isTeleporting = false;
                     }
                 }).start();
+            }
+        } else {
+            super.setY(oldY);
+            float add = getY() - hb.getLastCollide().getY();
+            for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
+                super.setY(super.getY() + (add < 0 ? -1 : 1));
             }
         }
     }
