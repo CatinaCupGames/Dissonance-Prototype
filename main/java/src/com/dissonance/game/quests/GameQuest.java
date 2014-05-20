@@ -1,6 +1,5 @@
 package com.dissonance.game.quests;
 
-import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.player.PlayableSprite;
@@ -9,12 +8,10 @@ import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.World;
-import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.render.Camera;
-import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.Service;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
