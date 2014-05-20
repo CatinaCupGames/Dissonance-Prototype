@@ -159,4 +159,7 @@ public class TiledObject implements Collidable {
         return isBound;
     }
 
+    public String getRawType() {
+        return type;
+    }
 }

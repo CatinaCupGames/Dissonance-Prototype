@@ -128,6 +128,7 @@ public final class World {
             try {
                 tiledData = GSON.fromJson(new InputStreamReader(in), WorldData.class);
                 tiledData.loadTriggers();
+                loadTiledSprites();
 
                 nodeMap = new NodeMap(this, tiledData.getWidth(), tiledData.getHeight());
                 nodeMap.readMap();
@@ -170,6 +171,36 @@ public final class World {
 
         if (renderingService.isPaused())
             renderingService.resume();
+    }
+
+    private void loadTiledSprites() {
+        Layer[] objLayers = getLayers(LayerType.OBJECT_LAYER);
+        for (Layer layer : objLayers) {
+            for (TiledObject obj : layer.getObjectGroupData()) {
+                if (obj.getRawType().equals("sprite")) {
+                    String name = obj.getName();
+                    String w = obj.getProperty("width");
+                    String h = obj.getProperty("height");
+
+                    try {
+                        Sprite sprite = Sprite.fromClass(Class.forName("com.dissonance.game.sprites." + name));
+                        sprite.setX(obj.getX());
+                        sprite.setY(obj.getY());
+                        if (w != null) {
+                            float width = Float.parseFloat(w);
+                            sprite.setStartWidth(width);
+                        }
+                        if (h != null) {
+                            float height = Float.parseFloat(h);
+                            sprite.setStartHeight(height);
+                        }
+                        loadAndAdd(sprite);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     private boolean prepared = false;

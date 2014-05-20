@@ -61,8 +61,18 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         if (texture instanceof SpriteTexture) {
             super.setTexture(texture);
             this.texture = (SpriteTexture)texture;
-            width = texture.getWidth();
-            height = texture.getHeight();
+            if (startW == -1) {
+                width = texture.getWidth();
+            } else {
+                width = startW;
+                startW = -1;
+            }
+            if (startH == -1) {
+                height = texture.getHeight();
+            } else {
+                height = startH;
+                startH = -1;
+            }
 
             setCutOffMargin(getHeight() / 2f);
         } else
