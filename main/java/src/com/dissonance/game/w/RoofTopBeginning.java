@@ -90,14 +90,14 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         dec7.setX(68*16);
         dec7.setY(33*16);
 
-        /*
+
         dec8 = new RoofEntry();
         w.loadAndAdd(dec8);
         dec8.setX(78*16);
         dec8.setY(22*16);
 
 
-            */
+
 
         dec9 = new Skylight();
         w.loadAndAdd(dec9);

@@ -1,12 +1,9 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.system.GameSettings;
-import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.game.GameCache;
 
 public class LoadingQuest extends AbstractQuest {
@@ -17,7 +14,7 @@ public class LoadingQuest extends AbstractQuest {
         someWorld.waitForWorldDisplayed();
 
         GameCache.RoofTopBeginning = WorldFactory.getWorld("RoofTopBeginning", false);
-        GameCache.OutsideFighting = WorldFactory.getWorld("testbuilding", false);
+        GameCache.OutsideFighting = WorldFactory.getWorld("OutsideFighting", false);
         //GameCache.OutsideFighting.useExtreamSpeed(true);
         Thread.sleep(2000);
 
