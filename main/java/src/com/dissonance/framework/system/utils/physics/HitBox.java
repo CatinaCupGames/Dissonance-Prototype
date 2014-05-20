@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HitBox {
-    private static ArrayList<PhysicsSprite> cache = new ArrayList<PhysicsSprite>();
+    private static ArrayList<Collidable> cache = new ArrayList<Collidable>();
     private float minX, maxX, minY, maxY;
     private float x, y;
     private Collidable lastCollide;
@@ -120,11 +120,15 @@ public class HitBox {
      * If no objects were found, then a null value is returned.
      */
     public boolean checkForCollision(World world, float startX, float startY, Sprite ignore) {
+        if (world == null)
+            return false;
         float halfx = (maxX - minX) / 2f;
         float halfy = (maxY - minY) / 2f;
         for (float x = startX; x < startX + (maxX - minX); x++) {
             for (float y = startY; y < startY + (maxY - minY); y++) {
-                for (PhysicsSprite sprite : cache) {
+                for (Collidable sprite : cache) {
+                    if (sprite.getWorld() != world)
+                        continue;
                     if (sprite == ignore)
                         continue;
                     if (sprite.isPointInside(x, y)) {
@@ -160,7 +164,7 @@ public class HitBox {
         ArrayList<Collidable> collidables = new ArrayList<Collidable>();
         for (float x = minX + startX; x < startX + (maxX - minX); x++) {
             for (float y = minY + startY; y < startY + (maxY - minY); y++) {
-                for (PhysicsSprite sprite : cache) {
+                for (Collidable sprite : cache) {
                     if (sprite == ignore)
                         continue;
                     if (sprite.isPointInside(x, y) && !collidables.contains(sprite)) {
@@ -223,13 +227,17 @@ public class HitBox {
         this.maxY = y;
     }
 
-    public static void registerSprite(PhysicsSprite collidable) {
+    public static void registerSprite(Collidable collidable) {
         if (!cache.contains(collidable))
             cache.add(collidable);
     }
 
-    public static void unregisterSprite(PhysicsSprite collidable) {
+    public static void unregisterSprite(Collidable collidable) {
         if (cache.contains(collidable))
             cache.remove(collidable);
+    }
+
+    public static ArrayList<Collidable> getCollidables() {
+        return cache;
     }
 }

@@ -1,5 +1,9 @@
 package com.dissonance.framework.game.ai.astar;
 
+import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.system.utils.physics.Collidable;
+import com.dissonance.framework.system.utils.physics.HitBox;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

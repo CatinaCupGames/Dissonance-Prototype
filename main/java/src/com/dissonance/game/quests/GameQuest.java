@@ -7,10 +7,12 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.system.Service;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.w.RoofTopBeginning;
 
 public class GameQuest  extends PauseQuest {
+    private Service.ServiceRunnable runnable;
     @Override
     public void startQuest() throws Exception {
         setWorld(GameCache.RoofTopBeginning);
@@ -34,6 +36,24 @@ public class GameQuest  extends PauseQuest {
 
 
         RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
+
+        runnable = RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+            @Override
+            public void run() {
+                update();
+            }
+        }, true, true);
+    }
+
+    private void update() {
+
+    }
+
+    @Override
+    public void endQuest() throws IllegalAccessException {
+        super.endQuest();
+
+        runnable.kill();
     }
 
     @Override

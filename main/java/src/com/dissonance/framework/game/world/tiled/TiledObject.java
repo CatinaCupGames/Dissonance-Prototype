@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.world.tiled;
 
+import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
@@ -23,6 +24,7 @@ public class TiledObject implements Collidable {
     private boolean isBound;
     private Polygon javaPolygon;
     private HitBox hitBox;
+    World world;
 
     private AbstractTrigger trigger;
 
@@ -133,6 +135,11 @@ public class TiledObject implements Collidable {
     @Override
     public boolean isPointInside(float x, float y) {
         return isPointInside(new Vector2f(x, y));
+    }
+
+    @Override
+    public World getWorld() {
+        return null;
     }
 
     public boolean isPointInside(Vector2f test) {
