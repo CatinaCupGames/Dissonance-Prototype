@@ -4,6 +4,7 @@ import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.game.quests.DisclaimerQuest;
 import com.dissonance.test.quests.CoopQuest;
+import com.dissonance.test.quests.HenrysQUest;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
@@ -14,9 +15,9 @@ public class Main {
         World.setDefaultLoaderPackage("com.dissonance.test.w");
 
         GameService.loadEssentials(args);
-        //GameService.beginQuest(new CoopQuest());
+        GameService.beginQuest(new HenrysQUest());
 
-        Controller[] controller = ControllerEnvironment.getDefaultEnvironment().getControllers();
+        /*Controller[] controller = ControllerEnvironment.getDefaultEnvironment().getControllers();
 
         Controller temp = null;
         for (Controller c : controller) {
@@ -43,6 +44,6 @@ public class Main {
                 System.out.println(c.getIdentifier().getName() + " : " + c.getPollData());
             }
             Thread.sleep(1500);
-        }
+        }*/
     }
 }
