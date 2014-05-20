@@ -265,6 +265,56 @@
          "width":125,
          "x":0,
          "y":0
+        }, 
+        {
+         "height":130,
+         "name":"sprites",
+         "objects":[
+                {
+                 "height":19,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":15,
+                 "x":1434,
+                 "y":423
+                }, 
+                {
+                 "height":0,
+                 "name":"office.PottedPlant",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":0,
+                 "x":1440,
+                 "y":432
+                }, 
+                {
+                 "height":16,
+                 "name":"office.cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":16,
+                 "x":1408,
+                 "y":208
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":125,
+         "x":0,
+         "y":0
         }],
  "orientation":"orthogonal",
  "properties":

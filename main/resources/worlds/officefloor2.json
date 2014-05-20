@@ -5,6 +5,10 @@
          "height":90,
          "name":"ground",
          "opacity":1,
+         "properties":
+            {
+             "ground":"true"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":90,
@@ -17,6 +21,355 @@
          "name":"edges",
          "opacity":1,
          "type":"tilelayer",
+         "visible":true,
+         "width":90,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "height":90,
+         "name":"sprites",
+         "objects":[
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":304,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":304,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":368,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":368,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":432,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":496,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":560,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":624,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":688,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":752,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":816,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":880,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":944,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":1008,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":432,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":496,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":560,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":624,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":688,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":752,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":816,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":880,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":944,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":1008,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":240,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "name":"office.Cubicle",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":32,
+                 "x":240,
+                 "y":224
+                }],
+         "opacity":1,
+         "type":"objectgroup",
          "visible":true,
          "width":90,
          "x":0,
