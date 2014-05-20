@@ -11,9 +11,7 @@ Date: 2014/05/16 13:58:43
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
-import com.dissonance.framework.render.Camera;
 import com.dissonance.game.sprites.BlueGuard;
-import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.roof.*;
 
 public class RoofTopBeginning extends DemoLevelWorldLoader {
@@ -107,7 +105,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         dec9.setY(26*16);
         w.setWorldBrightness(0.7f);
 
-        //w.createLight(16.25f*16, 4.8f*16, 0.9f, 0.03f, Color.CYAN);
+
 
     }
 
@@ -125,7 +123,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         dec2.setWidth(64);
         dec2.setHeight(32);
 
-        dec1.setWidth(160);
+        dec1.setWidth(172);
         dec1.setHeight(64);
 
         dec4.setWidth(256);
@@ -134,7 +132,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         dec6.setWidth(64);
         dec6.setHeight(32);
 
-        dec5.setWidth(160);
+        dec5.setWidth(172);
         dec5.setHeight(64);
 
         dec9.setWidth(256);
