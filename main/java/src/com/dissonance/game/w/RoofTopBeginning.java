@@ -28,6 +28,8 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
     public static RoofEntry dec8;
     public static Skylight dec9;
 
+    public static Garbagechute exit;
+
     @Override
     public void onLoad(World w) {
         super.onLoad(w);
@@ -38,6 +40,12 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         jeremiah.setX(100f);
         jeremiah.setY(210f);
         jeremiah.setVisible(false);
+
+        exit = new Garbagechute();
+        exit.setX((88f * 16f) + 10);
+        exit.setY(60f * 16f);
+        exit.setLayer(100);
+        w.loadAndAdd(exit);
     
         var2 = new BlueGuard();
         w.loadAndAdd(var2);
