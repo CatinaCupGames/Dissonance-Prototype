@@ -284,6 +284,7 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public void setHeight(float h) {
         height = h;
+        setCutOffMargin(height / 2f);
     }
 
     public Vector2f getVector() {
