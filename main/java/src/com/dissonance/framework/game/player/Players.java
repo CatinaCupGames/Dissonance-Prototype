@@ -2,7 +2,6 @@ package com.dissonance.framework.game.player;
 
 import com.dissonance.framework.game.player.input.joypad.Joypad;
 import com.dissonance.framework.game.player.input.joypad.JoypadService;
-import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.ServiceManager;
 import com.dissonance.framework.system.debug.Debug;
 import com.dissonance.framework.system.utils.Validator;
@@ -92,6 +91,8 @@ public class Players {
         ArrayList<Joypad> open = new ArrayList<Joypad>();
 
         for (Joypad joypad : joypads) {
+            if (joypad == null)
+                continue;
             boolean found = false;
 
             for (Player p : players) {

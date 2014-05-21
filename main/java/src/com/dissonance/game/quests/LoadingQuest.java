@@ -1,12 +1,9 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
-import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.system.GameSettings;
-import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.game.GameCache;
 
 public class LoadingQuest extends AbstractQuest {

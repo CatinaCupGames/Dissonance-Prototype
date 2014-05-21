@@ -8,6 +8,7 @@ import net.java.games.input.Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 
 public class Joypad {
@@ -71,7 +72,7 @@ public class Joypad {
             //try to load it?
             load();
             if (!isLoaded)
-                return null;
+                throw new InvalidParameterException("Joypad can't be loaded! Device: \"" + controller.getName() + "\"");
             return new ControllerInput(this);
         }
     }
