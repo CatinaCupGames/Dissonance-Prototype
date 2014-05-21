@@ -83,17 +83,56 @@
          "name":"Object Layer 1",
          "objects":[
                 {
-                 "height":32,
-                 "name":"RoofFan",
+                 "height":82,
+                 "name":"factory.FactoryMachine1",
                  "properties":
                     {
 
                     },
-                 "type":"Sprite",
+                 "type":"sprite",
                  "visible":true,
-                 "width":48,
-                 "x":208,
-                 "y":3088
+                 "width":111,
+                 "x":32,
+                 "y":2720
+                }, 
+                {
+                 "height":82,
+                 "name":"factory.FactoryMachine1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":111,
+                 "x":176,
+                 "y":2832
+                }, 
+                {
+                 "height":82,
+                 "name":"factory.FactoryMachine1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":111,
+                 "x":176,
+                 "y":2720
+                }, 
+                {
+                 "height":82,
+                 "name":"factory.FactoryMachine1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":111,
+                 "x":32,
+                 "y":2832
                 }],
          "opacity":1,
          "type":"objectgroup",
