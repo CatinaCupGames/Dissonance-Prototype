@@ -407,6 +407,32 @@
                  "width":111,
                  "x":576,
                  "y":512
+                }, 
+                {
+                 "height":32,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "type":"door",
+                 "visible":true,
+                 "width":16,
+                 "x":944,
+                 "y":1264
+                }, 
+                {
+                 "height":32,
+                 "name":"BeltOut",
+                 "properties":
+                    {
+                     "spawn":"BeltOut"
+                    },
+                 "type":"spawn",
+                 "visible":true,
+                 "width":16,
+                 "x":944,
+                 "y":352
                 }],
          "opacity":1,
          "type":"objectgroup",
