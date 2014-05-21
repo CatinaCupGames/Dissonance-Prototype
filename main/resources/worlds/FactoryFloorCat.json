@@ -236,6 +236,95 @@
          "width":60,
          "x":0,
          "y":0
+        }, 
+        {
+         "height":210,
+         "name":"Object Layer 2",
+         "objects":[
+                {
+                 "height":82,
+                 "name":"factory.FactoryMachine1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":111,
+                 "x":592,
+                 "y":2992
+                }, 
+                {
+                 "height":82,
+                 "name":"factory.FactoryMachine1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":111,
+                 "x":784,
+                 "y":2992
+                }, 
+                {
+                 "height":82,
+                 "name":"factory.FactoryMachine1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":111,
+                 "x":592,
+                 "y":3120
+                }, 
+                {
+                 "height":82,
+                 "name":"factory.FactoryMachine1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":111,
+                 "x":784,
+                 "y":3120
+                }, 
+                {
+                 "height":82,
+                 "name":"factory.FactoryMachine1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":111,
+                 "x":784,
+                 "y":2864
+                }, 
+                {
+                 "height":82,
+                 "name":"factory.FactoryMachine1",
+                 "properties":
+                    {
+                     "layer":"12"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":111,
+                 "x":592,
+                 "y":2864
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":60,
+         "x":0,
+         "y":0
         }],
  "orientation":"orthogonal",
  "properties":
