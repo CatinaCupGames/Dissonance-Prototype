@@ -11,11 +11,10 @@ public class OutsideFighting extends DemoLevelWorldLoader {
     public void onLoad(World w) {
         super.onLoad(w);
 
-        farrand.setX(0);
-        farrand.setY(0);
+        farrand.setX(22*16);
+        farrand.setY(300*16);
 
         w.setWorldBrightness(0.96f);
-
         //DIS CUTOFF BULLSHIIIEEET
         //PLZ KILL ME
 
@@ -26,7 +25,7 @@ public class OutsideFighting extends DemoLevelWorldLoader {
                 lamp.setX(26*16);
                 lamp.setY(y * 16);
                 lamp.setLayer(11);
-                //lamp.setCutOffMargin(30f);
+                lamp.setCutOffMargin(30f);
                 w.createLight(26* 16, (y - 3.5f)* 16, 1.2f, 0.03f, Color.YELLOW);
                 w.createLight(26* 16, (y - 3.5f)* 16, 1.4f, 0.73f);
             }else{
@@ -35,7 +34,7 @@ public class OutsideFighting extends DemoLevelWorldLoader {
                 lamp.setX(35*16);
                 lamp.setY(y * 16);
                 lamp.setLayer(11);
-                //lamp.setCutOffMargin(30f);
+                lamp.setCutOffMargin(30f);
                 w.createLight(35* 16, (y - 3.5f)* 16, 1.2f, 0.03f, Color.YELLOW);
                 w.createLight(35* 16, (y - 3.5f)* 16, 1.4f, 0.73f);
             }

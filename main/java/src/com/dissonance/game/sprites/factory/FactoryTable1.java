@@ -12,6 +12,6 @@ public class FactoryTable1 extends ImagePhysicsSprite {
 
     @Override
     public String hitboxConfigPath() {
-        return null;
+        return "sprites/img/FactoryTable1.txt";
     }
 }
