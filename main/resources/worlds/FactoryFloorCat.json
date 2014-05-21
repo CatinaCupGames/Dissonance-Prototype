@@ -251,8 +251,8 @@
                  "type":"sprite",
                  "visible":true,
                  "width":111,
-                 "x":208,
-                 "y":2944
+                 "x":592,
+                 "y":2992
                 }, 
                 {
                  "height":82,
@@ -264,8 +264,8 @@
                  "type":"sprite",
                  "visible":true,
                  "width":111,
-                 "x":336,
-                 "y":2944
+                 "x":784,
+                 "y":2992
                 }, 
                 {
                  "height":82,
@@ -277,8 +277,8 @@
                  "type":"sprite",
                  "visible":true,
                  "width":111,
-                 "x":208,
-                 "y":3056
+                 "x":592,
+                 "y":3120
                 }, 
                 {
                  "height":82,
@@ -290,8 +290,8 @@
                  "type":"sprite",
                  "visible":true,
                  "width":111,
-                 "x":336,
-                 "y":3056
+                 "x":784,
+                 "y":3120
                 }, 
                 {
                  "height":82,
@@ -303,21 +303,21 @@
                  "type":"sprite",
                  "visible":true,
                  "width":111,
-                 "x":80,
-                 "y":2944
+                 "x":784,
+                 "y":2864
                 }, 
                 {
                  "height":82,
                  "name":"factory.FactoryMachine1",
                  "properties":
                     {
-
+                     "layer":"12"
                     },
                  "type":"sprite",
                  "visible":true,
                  "width":111,
-                 "x":80,
-                 "y":3104
+                 "x":592,
+                 "y":2864
                 }],
          "opacity":1,
          "type":"objectgroup",
