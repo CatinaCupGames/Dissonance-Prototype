@@ -512,15 +512,15 @@ public final class World {
             lightShader.clear();
             lightShader.setOverallBrightness(1f);
         }
+    }
 
+    public void onDispose() {
         Drawable[] drawables = drawable.toArray(new Drawable[drawable.size()]);
         for (Drawable d : drawables) {
             if (d instanceof Sprite)
                 ((Sprite)d).onUnload();
         }
-    }
 
-    public void onDispose() {
         drawable.clear();
         unsorted.clear();
         udrawables.clear();

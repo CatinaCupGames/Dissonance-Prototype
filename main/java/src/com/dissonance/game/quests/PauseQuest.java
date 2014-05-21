@@ -5,9 +5,8 @@ import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.sprites.hud.BaseHUD;
-import com.dissonance.game.sprites.menu.PauseMenu;
+import com.dissonance.game.sprites.menu.pause.PauseMenu;
 import com.dissonance.game.w.DemoLevelWorldLoader;
 
 public abstract class PauseQuest extends AbstractQuest {

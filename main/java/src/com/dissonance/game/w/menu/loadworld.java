@@ -5,7 +5,7 @@ import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.sprites.menu.loading.LoadingSprite;
 import com.dissonance.game.sprites.menu.loading.Spinner;
-import com.dissonance.game.sprites.menu.loading.Static;
+import com.dissonance.game.sprites.menu.Static;
 
 public class loadworld implements WorldLoader {
     @Override

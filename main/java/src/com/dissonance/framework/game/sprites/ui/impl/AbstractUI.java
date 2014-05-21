@@ -17,6 +17,7 @@ public abstract class AbstractUI implements UI {
     protected boolean opened;
     protected World world;
     protected float alpha = 1f;
+    private boolean visible = true;
     private AbstractUI parent;
     private float[] alignment = new float[] { 0, 0, 0, 0 }; //Alignment for textures
     private ArrayList<UI> children = new ArrayList<>();
@@ -34,6 +35,14 @@ public abstract class AbstractUI implements UI {
         this.scale = value;
     }
 
+    public void setVisible(boolean value) {
+        this.visible = value;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
     public boolean isScaling() {
         return scale;
     }
@@ -48,6 +57,8 @@ public abstract class AbstractUI implements UI {
 
     @Override
     public final void render() {
+        if (!visible)
+            return;
         if (!scale) {
             RenderService.removeScale();
         }

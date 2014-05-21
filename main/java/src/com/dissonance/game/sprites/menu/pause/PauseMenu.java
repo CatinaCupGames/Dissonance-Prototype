@@ -1,4 +1,4 @@
-package com.dissonance.game.sprites.menu;
+package com.dissonance.game.sprites.menu.pause;
 
 import com.dissonance.framework.game.player.*;
 import com.dissonance.framework.game.player.input.joypad.Joypad;
@@ -27,15 +27,15 @@ public class PauseMenu extends AbstractUI  {
             "CO-OP MODE"
     };
 
-    private Texture texture;
+    private static Texture texture;
 
-    private Texture controller;
-    private Texture keyboard;
+    private static Texture controller;
+    private static Texture keyboard;
 
     private Service.ServiceRunnable runnable;
-    private TrueTypeFont font;
-    private TrueTypeFont footer_font;
     private int type;
+    private static TrueTypeFont font;
+    private static TrueTypeFont footer_font;
     private static final Color color = new Color(1f, 1f, 1f, 1f);
     private static final Color warning = new Color(Players.PLAYER_COLORS[0][0], Players.PLAYER_COLORS[0][1], Players.PLAYER_COLORS[0][2]);
 

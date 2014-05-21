@@ -2,10 +2,7 @@ package com.dissonance.framework.game.player.input.joypad;
 
 import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.system.Service;
-import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.ControllerEvent;
-import net.java.games.input.ControllerListener;
+import net.java.games.input.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -62,18 +59,24 @@ public class JoypadService extends Service {
             if (!joypad.isLoaded())
                 joypad.load();
 
+            if (this.joypads.contains(joypad))
+                continue;
             joypad.getController().poll();
-            if (joypad.isButtonPressed(InputKeys.PAUSE) && !this.joypads.contains(joypad)) {
-                this.joypads.add(joypad);
-                if (listener != null)
-                    listener.onJoypadJoin(joypad);
+            for (Component c : joypad.getController().getComponents()) {
+                if (!c.isAnalog() && c.getPollData() == 1f) {
+                    this.joypads.add(joypad);
+                    if (listener != null)
+                        listener.onJoypadJoin(joypad);
+                }
             }
         }
 
-        if (!keyboardJoin && InputKeys.checkKeyboard(InputKeys.PAUSE)) {
-            keyboardJoin = true;
-            if (listener != null)
-                listener.onKeyboardJoin();
+        if (!keyboardJoin && org.lwjgl.input.Keyboard.next()) {
+            if (org.lwjgl.input.Keyboard.getEventKeyState()) {
+                keyboardJoin = true;
+                if (listener != null)
+                    listener.onKeyboardJoin();
+            }
         }
 
         try {
