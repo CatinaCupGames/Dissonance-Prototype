@@ -271,43 +271,695 @@
          "name":"sprites",
          "objects":[
                 {
-                 "height":19,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "type":"",
-                 "visible":true,
-                 "width":15,
-                 "x":1434,
-                 "y":423
-                }, 
-                {
-                 "height":0,
-                 "name":"office.PottedPlant",
+                 "height":37,
+                 "name":"roof.RoofAC",
                  "properties":
                     {
 
                     },
                  "type":"sprite",
                  "visible":true,
-                 "width":0,
-                 "x":1440,
-                 "y":432
+                 "width":96,
+                 "x":243,
+                 "y":314
                 }, 
                 {
-                 "height":16,
-                 "name":"office.cubicle",
+                 "height":37,
+                 "name":"roof.RoofAC",
                  "properties":
                     {
 
                     },
                  "type":"sprite",
                  "visible":true,
-                 "width":16,
-                 "x":1408,
-                 "y":208
+                 "width":96,
+                 "x":420,
+                 "y":1560
+                }, 
+                {
+                 "height":121,
+                 "name":"roof.RoofEntry",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":87,
+                 "x":56,
+                 "y":148
+                }, 
+                {
+                 "height":81,
+                 "name":"roof.Skylight",
+                 "properties":
+                    {
+                     "height":"100",
+                     "layer":"1",
+                     "width":"200"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":107,
+                 "x":599,
+                 "y":301
+                }, 
+                {
+                 "height":45,
+                 "name":"roof.RoofVent",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":56,
+                 "x":190,
+                 "y":695
+                }, 
+                {
+                 "height":45,
+                 "name":"roof.RoofVent",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":56,
+                 "x":190,
+                 "y":742
+                }, 
+                {
+                 "height":45,
+                 "name":"roof.RoofVent",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":56,
+                 "x":190,
+                 "y":789
+                }, 
+                {
+                 "height":45,
+                 "name":"roof.RoofVent",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":56,
+                 "x":190,
+                 "y":835
+                }, 
+                {
+                 "height":45,
+                 "name":"roof.RoofVent",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":56,
+                 "x":190,
+                 "y":882
+                }, 
+                {
+                 "height":45,
+                 "name":"roof.RoofVent",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":56,
+                 "x":190,
+                 "y":929
+                }, 
+                {
+                 "height":45,
+                 "name":"roof.RoofVent",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":56,
+                 "x":191,
+                 "y":976
+                }, 
+                {
+                 "height":45,
+                 "name":"roof.RoofVent",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":56,
+                 "x":191,
+                 "y":1025
+                }, 
+                {
+                 "height":45,
+                 "name":"roof.RoofVent",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":56,
+                 "x":192,
+                 "y":1071
+                }, 
+                {
+                 "height":79,
+                 "name":"roof.SatelliteDish",
+                 "properties":
+                    {
+                     "height":"180",
+                     "width":"200"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":75,
+                 "x":301,
+                 "y":1288
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+                     "height":"120",
+                     "width":"100"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":977,
+                 "y":1655
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":453,
+                 "y":495
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":453,
+                 "y":444
+                }, 
+                {
+                 "height":44,
+                 "name":"roof.RoofFan",
+                 "properties":
+                    {
+                     "height":"60",
+                     "width":"100"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":77,
+                 "x":511,
+                 "y":896
+                }, 
+                {
+                 "height":37,
+                 "name":"roof.RoofAC",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":96,
+                 "x":105,
+                 "y":312
+                }, 
+                {
+                 "height":81,
+                 "name":"roof.Skylight",
+                 "properties":
+                    {
+                     "height":"100",
+                     "width":"200"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":107,
+                 "x":769,
+                 "y":301
+                }, 
+                {
+                 "height":81,
+                 "name":"roof.Skylight",
+                 "properties":
+                    {
+                     "height":"100",
+                     "width":"200"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":107,
+                 "x":937,
+                 "y":301
+                }, 
+                {
+                 "height":81,
+                 "name":"roof.Skylight",
+                 "properties":
+                    {
+                     "height":"100",
+                     "width":"200"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":107,
+                 "x":938,
+                 "y":420
+                }, 
+                {
+                 "height":81,
+                 "name":"roof.Skylight",
+                 "properties":
+                    {
+                     "height":"100",
+                     "width":"200"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":107,
+                 "x":770,
+                 "y":420
+                }, 
+                {
+                 "height":81,
+                 "name":"roof.Skylight",
+                 "properties":
+                    {
+                     "height":"100",
+                     "layer":"1",
+                     "width":"200"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":107,
+                 "x":600,
+                 "y":420
+                }, 
+                {
+                 "height":44,
+                 "name":"roof.RoofFan",
+                 "properties":
+                    {
+                     "height":"60",
+                     "width":"100"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":77,
+                 "x":514,
+                 "y":779
+                }, 
+                {
+                 "height":44,
+                 "name":"roof.RoofFan",
+                 "properties":
+                    {
+                     "height":"60",
+                     "width":"100"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":77,
+                 "x":510,
+                 "y":1010
+                }, 
+                {
+                 "height":44,
+                 "name":"roof.RoofFan",
+                 "properties":
+                    {
+                     "height":"60",
+                     "width":"100"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":77,
+                 "x":1119,
+                 "y":332
+                }, 
+                {
+                 "height":44,
+                 "name":"roof.RoofFan",
+                 "properties":
+                    {
+                     "height":"60",
+                     "width":"100"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":77,
+                 "x":1122,
+                 "y":219
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":1383,
+                 "y":196
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":1302,
+                 "y":197
+                }, 
+                {
+                 "height":81,
+                 "name":"roof.Skylight",
+                 "properties":
+                    {
+                     "height":"100",
+                     "width":"200"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":107,
+                 "x":1187,
+                 "y":1177
+                }, 
+                {
+                 "height":81,
+                 "name":"roof.Skylight",
+                 "properties":
+                    {
+                     "height":"100",
+                     "width":"200"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":107,
+                 "x":854,
+                 "y":1177
+                }, 
+                {
+                 "height":81,
+                 "name":"roof.Skylight",
+                 "properties":
+                    {
+                     "height":"100",
+                     "width":"200"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":107,
+                 "x":853,
+                 "y":1321
+                }, 
+                {
+                 "height":81,
+                 "name":"roof.Skylight",
+                 "properties":
+                    {
+                     "height":"100",
+                     "width":"200"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":107,
+                 "x":1186,
+                 "y":1321
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":278,
+                 "y":43
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":228,
+                 "y":43
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+                     "height":"120",
+                     "width":"100"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":976,
+                 "y":1539
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+                     "height":"120",
+                     "width":"100"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":978,
+                 "y":1766
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":175,
+                 "y":44
+                }, 
+                {
+                 "height":44,
+                 "name":"roof.RoofFan",
+                 "properties":
+                    {
+                     "height":"60",
+                     "width":"100"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":77,
+                 "x":1666,
+                 "y":262
+                }, 
+                {
+                 "height":44,
+                 "name":"roof.RoofFan",
+                 "properties":
+                    {
+                     "height":"60",
+                     "width":"100"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":77,
+                 "x":1663,
+                 "y":395
+                }, 
+                {
+                 "height":44,
+                 "name":"roof.RoofFan",
+                 "properties":
+                    {
+                     "height":"60",
+                     "width":"100"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":77,
+                 "x":1836,
+                 "y":262
+                }, 
+                {
+                 "height":44,
+                 "name":"roof.RoofFan",
+                 "properties":
+                    {
+                     "height":"60",
+                     "width":"100"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":77,
+                 "x":1838,
+                 "y":393
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":1552,
+                 "y":653
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":1552,
+                 "y":767
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":1554,
+                 "y":530
+                }, 
+                {
+                 "height":37,
+                 "name":"roof.RoofAC",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":96,
+                 "x":418,
+                 "y":1739
+                }, 
+                {
+                 "height":37,
+                 "name":"roof.RoofAC",
+                 "properties":
+                    {
+                     "height":"60",
+                     "width":"150"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":96,
+                 "x":1759,
+                 "y":554
+                }, 
+                {
+                 "height":71,
+                 "name":"roof.RoofPipe",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":76,
+                 "x":1553,
+                 "y":412
+                }, 
+                {
+                 "height":37,
+                 "name":"roof.RoofAC",
+                 "properties":
+                    {
+                     "height":"60",
+                     "width":"150"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":96,
+                 "x":1755,
+                 "y":663
+                }, 
+                {
+                 "height":37,
+                 "name":"roof.RoofAC",
+                 "properties":
+                    {
+                     "height":"60",
+                     "width":"150"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":96,
+                 "x":1300,
+                 "y":399
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -341,73 +993,74 @@
              "0":
                 {
                  "collidable":"true",
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "1":
                 {
                  "collidable":"true",
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "10":
                 {
                  "collidable":"true",
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "11":
                 {
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "12":
                 {
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "13":
                 {
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "14":
                 {
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "15":
                 {
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "2":
                 {
                  "collidable":"true",
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "3":
                 {
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "4":
                 {
-                 "collidable":"true"
+                 "collidable":"true",
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "5":
                 {
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "6":
                 {
                  "collidable":"true",
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "7":
                 {
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "8":
                 {
                  "collidable":"true",
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 },
              "9":
                 {
                  "collidable":"true",
-                 "triggerclass":"com.dissonance.gametriggers.TileFade"
+                 "triggerclass":"com.dissonance.game.triggers.TileFade"
                 }
             },
          "tilewidth":16
