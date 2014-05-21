@@ -41,28 +41,28 @@ public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
-        setWorld(GameCache.OutsideFighting);
-        GameCache.OutsideFighting.waitForWorldDisplayed();
+        setWorld(GameCache.RoofTopBeginning);
+        GameCache.RoofTopBeginning.waitForWorldDisplayed();
         TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
 
         Camera.stopFollowing();
 
         Player player1 = Players.createPlayer1();
         if (player1.isPlaying())
-            player1.changeSprite(FactoryFloorCat.farrand);
+            player1.changeSprite(RoofTopBeginning.farrand);
         else
-            player1.joinAs(FactoryFloorCat.farrand);
+            player1.joinAs(RoofTopBeginning.farrand);
 
         Player player2 = Players.getPlayer(2);
         if (player2 != null) {
             if (player2.isPlaying())
-                player2.changeSprite(FactoryFloorCat.jeremiah);
+                player2.changeSprite(RoofTopBeginning.jeremiah);
             else
                 player2.join();
         }
 
 
-        FactoryFloorCat.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
+        RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
 
         /*runnable = RenderService.INSTANCE.runOnServiceThread(new Runnable() {
             @Override

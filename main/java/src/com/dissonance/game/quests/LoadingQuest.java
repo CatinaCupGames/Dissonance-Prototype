@@ -9,12 +9,12 @@ import com.dissonance.game.GameCache;
 public class LoadingQuest extends AbstractQuest {
     @Override
     public void startQuest() throws Exception {
-        World someWorld = WorldFactory.getWorld("loadworld");
+        World someWorld = WorldFactory.getWorld("menu.loadworld");
         setWorld(someWorld);
         someWorld.waitForWorldDisplayed();
 
         GameCache.RoofTopBeginning = WorldFactory.getWorld("RoofTopBeginning", false);
-        GameCache.OutsideFighting = WorldFactory.getWorld("FactoryFloorCat", false);
+        GameCache.OutsideFighting = WorldFactory.getWorld("OutsideFighting", false);
         //GameCache.OutsideFighting.useExtreamSpeed(true);
         Thread.sleep(2000);
 
