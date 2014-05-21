@@ -11,10 +11,12 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
+import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.Service;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
+import com.dissonance.game.w.FactoryFloorCat;
 import com.dissonance.game.w.OutsideFighting;
 import com.dissonance.game.w.RoofTopBeginning;
 
@@ -29,6 +31,7 @@ public class GameQuest  extends PauseQuest {
     private static final Class[] TO_SPAWN = new Class[] {
             BlueGuard.class
     };
+    public static GameQuest INSTANCE;
 
     private Service.ServiceRunnable runnable;
     private HashMap<World, TiledObject[]> spawns = new HashMap<World, TiledObject[]>();
@@ -37,27 +40,29 @@ public class GameQuest  extends PauseQuest {
 
     @Override
     public void startQuest() throws Exception {
+        INSTANCE = this;
         setWorld(GameCache.OutsideFighting);
         GameCache.OutsideFighting.waitForWorldDisplayed();
+        TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
 
         Camera.stopFollowing();
 
         Player player1 = Players.createPlayer1();
         if (player1.isPlaying())
-            player1.changeSprite(OutsideFighting.farrand);
+            player1.changeSprite(FactoryFloorCat.farrand);
         else
-            player1.joinAs(OutsideFighting.farrand);
+            player1.joinAs(FactoryFloorCat.farrand);
 
         Player player2 = Players.getPlayer(2);
         if (player2 != null) {
             if (player2.isPlaying())
-                player2.changeSprite(RoofTopBeginning.jeremiah);
+                player2.changeSprite(FactoryFloorCat.jeremiah);
             else
                 player2.join();
         }
 
 
-        RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
+        FactoryFloorCat.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
 
         /*runnable = RenderService.INSTANCE.runOnServiceThread(new Runnable() {
             @Override
@@ -156,6 +161,10 @@ public class GameQuest  extends PauseQuest {
                 }
             }
         }
+    }
+
+    public void turnOnBelts() {
+        TileObject.setTileAnimationSpeed(50L);
     }
 
     @Override

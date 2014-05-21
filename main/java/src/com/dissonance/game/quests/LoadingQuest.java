@@ -14,7 +14,7 @@ public class LoadingQuest extends AbstractQuest {
         someWorld.waitForWorldDisplayed();
 
         GameCache.RoofTopBeginning = WorldFactory.getWorld("RoofTopBeginning", false);
-        GameCache.OutsideFighting = WorldFactory.getWorld("OutsideFighting", false);
+        GameCache.OutsideFighting = WorldFactory.getWorld("FactoryFloorCat", false);
         //GameCache.OutsideFighting.useExtreamSpeed(true);
         Thread.sleep(2000);
 
@@ -25,7 +25,7 @@ public class LoadingQuest extends AbstractQuest {
             }
         }, true);
 
-        Thread.sleep(7000);
+        Thread.sleep(3000);
 
         RenderService.INSTANCE.runOnServiceThread(new Runnable() {
             @Override

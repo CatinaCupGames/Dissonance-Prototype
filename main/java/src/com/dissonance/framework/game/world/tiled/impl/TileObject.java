@@ -254,8 +254,16 @@ public class TileObject extends Sprite {
         return hash;
     }
 
+    public static void setTileAnimationSpeed(long l) {
+       tickLength = l;
+    }
+
+    public static long getTileAnimationSpeed() {
+        return tickLength;
+    }
+
     private static long lastTick = 0L;
-    private static final long tickLength = 50L;
+    private static long tickLength = 50L;
     private static final Runnable animtedRunnable = new Runnable() {
         @Override
         public void run() {
