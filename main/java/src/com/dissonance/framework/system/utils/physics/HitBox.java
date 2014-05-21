@@ -85,7 +85,7 @@ public class HitBox {
         sX += minX;
         sY += minY;
 
-        return checkForCollision(sprite.getWorld(), sX, sY, sprite);
+        return checkForCollision(sprite.getWorld(), sX, sY, sprite, sprite.getLayer());
     }
 
     public boolean checkForCollision(Sprite sprite, float x, float y) {
@@ -106,7 +106,7 @@ public class HitBox {
         sX += minX;
         sY += minY;
 
-        return checkForCollision(sprite.getWorld(), sX, sY, sprite);
+        return checkForCollision(sprite.getWorld(), sX, sY, sprite, sprite.getLayer());
     }
 
     /**
@@ -133,7 +133,7 @@ public class HitBox {
      * tiles. <br></br>
      * If no objects were found, then a null value is returned.
      */
-    public boolean checkForCollision(World world, float startX, float startY, Sprite ignore, float layer) {
+    public boolean checkForCollision(World world, float startX, float startY, Sprite ignore, int layer) {
         if (world == null)
             return false;
         float halfx = (maxX - minX) / 2f;
@@ -159,26 +159,41 @@ public class HitBox {
                 Layer pLayer = world.getLayer(layer, LayerType.TILE_LAYER);
                 if (pLayer != null) {
                     if (pLayer.getProperty("collideLayer") != null) {
-                        int l = Integer.parseInt(pLayer.getProperty("collideLayer"));
-                        Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
-                        for (Layer faggot : layers) {
-                            if (faggot.getLayerNumber() == l) {
-                                Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), faggot);
-                                if (t != null && !t.isPassable()) {
-                                    lastCollide = t;
-                                    return true;
+                        if (pLayer.getProperty("collideLayer").equals("ground") || pLayer.getProperty("collideLayer").equals("nonground")) {
+                            boolean nonground = pLayer.getProperty("collideLayer").equals("nonground");
+                            Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
+                            for (Layer faggot : layers) {
+                                if ((faggot.isGroundLayer() && !nonground) || (!faggot.isGroundLayer() && nonground)) {
+                                    Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), faggot);
+                                    if (t != null && !t.isPassable()) {
+                                        System.out.println(t.getX() + " : " + t.getY() + " : " + t.getContainingLayer().getName());
+                                        lastCollide = t;
+                                        return true;
+                                    }
                                 }
-                                return false;
+                            }
+                        } else {
+                            int l = Integer.parseInt(pLayer.getProperty("collideLayer"));
+                            Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
+                            for (Layer faggot : layers) {
+                                if (faggot.getLayerNumber() == l) {
+                                    Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), faggot);
+                                    if (t != null && !t.isPassable()) {
+                                        lastCollide = t;
+                                        return true;
+                                    }
+                                }
                             }
                         }
                     }
-                }
-                Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
-                for (Layer l : layers) {
-                    Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), l);
-                    if (t != null && !t.isPassable()) {
-                        lastCollide = t;
-                        return true;
+                } else {
+                    Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
+                    for (Layer l : layers) {
+                        Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), l);
+                        if (t != null && !t.isPassable()) {
+                            lastCollide = t;
+                            return true;
+                        }
                     }
                 }
             }
@@ -188,6 +203,10 @@ public class HitBox {
     }
 
     public List<Collidable> checkAndRetrieve(World world, float startX, float startY, Sprite ignore) {
+        return checkAndRetrieve(world, startX, startY, 1, ignore);
+    }
+
+    public List<Collidable> checkAndRetrieve(World world, float startX, float startY, int layer,  Sprite ignore) {
         if (world == null) return new ArrayList<Collidable>();
 
         float halfx = (maxX - minX) / 2f;
@@ -211,13 +230,47 @@ public class HitBox {
                     }
                 }
 
-                Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
-                for (Layer l : layers) {
-                    Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), l);
-                    if (t != null && !t.isPassable()) {
-                        if (collidables.contains(t))
-                            continue;
-                        collidables.add(t);
+                Layer pLayer = world.getLayer(layer, LayerType.TILE_LAYER);
+                if (pLayer != null) {
+                    String prop = pLayer.getProperty("collideLayer");
+                    if (prop != null) {
+                        if (prop.equals("ground") || prop.equals("nonground")) {
+                            boolean nonground = prop.equals("nonground");
+                            Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
+                            for (Layer faggot : layers) {
+                                if ((faggot.isGroundLayer() && !nonground) || (!faggot.isGroundLayer() && nonground)) {
+                                    Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), faggot);
+                                    if (t != null && !t.isPassable()) {
+                                        if (collidables.contains(t))
+                                            continue;
+                                        collidables.add(t);
+                                    }
+                                }
+                            }
+                        } else {
+                            int l = Integer.parseInt(prop);
+                            Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
+                            for (Layer faggot : layers) {
+                                if (faggot.getLayerNumber() == l) {
+                                    Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), faggot);
+                                    if (t != null && !t.isPassable()) {
+                                        if (collidables.contains(t))
+                                            continue;
+                                        collidables.add(t);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
+                    for (Layer l : layers) {
+                        Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), l);
+                        if (t != null && !t.isPassable()) {
+                            if (collidables.contains(t))
+                                continue;
+                            collidables.add(t);
+                        }
                     }
                 }
             }

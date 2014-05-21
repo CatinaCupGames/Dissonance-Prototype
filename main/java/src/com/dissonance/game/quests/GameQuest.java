@@ -15,6 +15,7 @@ import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.Service;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
+import com.dissonance.game.w.FactoryFloorCat;
 import com.dissonance.game.w.OutsideFighting;
 import com.dissonance.game.w.RoofTopBeginning;
 
@@ -44,20 +45,20 @@ public class GameQuest  extends PauseQuest {
 
         Player player1 = Players.createPlayer1();
         if (player1.isPlaying())
-            player1.changeSprite(OutsideFighting.farrand);
+            player1.changeSprite(FactoryFloorCat.farrand);
         else
-            player1.joinAs(OutsideFighting.farrand);
+            player1.joinAs(FactoryFloorCat.farrand);
 
         Player player2 = Players.getPlayer(2);
         if (player2 != null) {
             if (player2.isPlaying())
-                player2.changeSprite(RoofTopBeginning.jeremiah);
+                player2.changeSprite(FactoryFloorCat.jeremiah);
             else
                 player2.join();
         }
 
 
-        RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
+        FactoryFloorCat.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
 
         /*runnable = RenderService.INSTANCE.runOnServiceThread(new Runnable() {
             @Override
