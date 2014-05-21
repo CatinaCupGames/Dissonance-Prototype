@@ -246,7 +246,7 @@
                  "name":"factory.FactoryMachine1",
                  "properties":
                     {
-
+                     "layer":"12"
                     },
                  "type":"sprite",
                  "visible":true,
@@ -259,7 +259,7 @@
                  "name":"factory.FactoryMachine1",
                  "properties":
                     {
-
+                     "layer":"12"
                     },
                  "type":"sprite",
                  "visible":true,
@@ -272,7 +272,7 @@
                  "name":"factory.FactoryMachine1",
                  "properties":
                     {
-
+                     "layer ":"12"
                     },
                  "type":"sprite",
                  "visible":true,
@@ -285,7 +285,7 @@
                  "name":"factory.FactoryMachine1",
                  "properties":
                     {
-
+                     "layer":"12"
                     },
                  "type":"sprite",
                  "visible":true,
@@ -298,7 +298,7 @@
                  "name":"factory.FactoryMachine1",
                  "properties":
                     {
-
+                     "layer":"12"
                     },
                  "type":"sprite",
                  "visible":true,
@@ -318,6 +318,58 @@
                  "width":111,
                  "x":592,
                  "y":2864
+                }, 
+                {
+                 "height":80,
+                 "name":"factory.FactoryTable1",
+                 "properties":
+                    {
+                     "layer":"1"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":128,
+                 "x":272,
+                 "y":2928
+                }, 
+                {
+                 "height":80,
+                 "name":"factory.FactoryTable1",
+                 "properties":
+                    {
+                     "layer":"1"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":128,
+                 "x":80,
+                 "y":2928
+                }, 
+                {
+                 "height":80,
+                 "name":"factory.FactoryTable1",
+                 "properties":
+                    {
+                     "layer":"1"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":128,
+                 "x":80,
+                 "y":3056
+                }, 
+                {
+                 "height":80,
+                 "name":"factory.FactoryTable1",
+                 "properties":
+                    {
+                     "layer":"1"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":128,
+                 "x":272,
+                 "y":3056
                 }],
          "opacity":1,
          "type":"objectgroup",
