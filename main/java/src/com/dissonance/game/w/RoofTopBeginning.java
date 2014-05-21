@@ -74,6 +74,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         w.loadAndAdd(dec4);
         dec4.setX(60*16);
         dec4.setY(26*16);
+        dec4.setLayer(0);
 
         dec5 = new RoofAC();
         w.loadAndAdd(dec5);
@@ -104,6 +105,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         dec9.setX(80*16);
         dec9.setY(26*16);
         w.setWorldBrightness(0.7f);
+        dec9.setLayer(0);
 
 
 

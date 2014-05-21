@@ -190,6 +190,7 @@ public final class World {
                     String name = obj.getName();
                     String w = obj.getProperty("width");
                     String h = obj.getProperty("height");
+                    String l = obj.getProperty("layer");
 
                     try {
                         Sprite sprite = Sprite.fromClass(Class.forName("com.dissonance.game.sprites." + name));
@@ -202,6 +203,10 @@ public final class World {
                         if (h != null) {
                             float height = Float.parseFloat(h);
                             sprite.setStartHeight(height);
+                        }
+                        if (l != null) {
+                            int ll = Integer.parseInt(l);
+                            sprite.setLayer(ll);
                         }
                         loadAndAdd(sprite);
                     } catch (ClassNotFoundException e) {

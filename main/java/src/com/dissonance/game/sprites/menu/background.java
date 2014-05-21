@@ -2,9 +2,9 @@ package com.dissonance.game.sprites.menu;
 
 import com.dissonance.game.sprites.ImageSprite;
 
-public class Banner extends ImageSprite {
-    public Banner() {
-        super("sprites/menu/Menus/banner.png");
+public class Background extends ImageSprite {
+    public Background() {
+        super("sprites/menu/Menus/Generic_Screen.png");
     }
 
     @Override
