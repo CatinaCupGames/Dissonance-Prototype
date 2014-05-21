@@ -311,6 +311,13 @@
             },
          "spacing":0,
          "tileheight":16,
+         "tileproperties":
+            {
+             "0":
+                {
+                 "frames":"57,58,59"
+                }
+            },
          "tilewidth":16
         }, 
         {
