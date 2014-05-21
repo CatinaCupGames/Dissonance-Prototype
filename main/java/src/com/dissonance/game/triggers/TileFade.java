@@ -41,6 +41,8 @@ public class TileFade extends AbstractTileTrigger {
                         return;
                     }
                     Tile t = sprite.getWorld().getTileAt(x / 16f, FastMath.fastCeil((y - 8f) / 16f), tile.getContainingLayer());
+                    if (t == null)
+                        return;
                     if (!t.isTriggerTile() || !(t.getTrigger() instanceof TileFade)) {
                         tile.getContainingLayer().setAlpha(1f);
                         uwot.remove(tile.getContainingLayer());

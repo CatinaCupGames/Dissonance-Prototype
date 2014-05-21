@@ -116,7 +116,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         super.onDisplay(w);
 
         farrand.setX(97.9f);
-        farrand.setY(204.34998f);
+        farrand.setY(190f);
 
         jeremiah.setX(100f);
         jeremiah.setY(210f);

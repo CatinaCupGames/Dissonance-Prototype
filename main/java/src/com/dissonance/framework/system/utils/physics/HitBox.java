@@ -166,7 +166,6 @@ public class HitBox {
                                 if ((faggot.isGroundLayer() && !nonground) || (!faggot.isGroundLayer() && nonground)) {
                                     Tile t = world.getTileAt(FastMath.fastFloor((x + halfx + 2) / 16f), FastMath.fastFloor((y + (halfy * 2)) / 16f), faggot);
                                     if (t != null && !t.isPassable()) {
-                                        System.out.println(t.getX() + " : " + t.getY() + " : " + t.getContainingLayer().getName());
                                         lastCollide = t;
                                         return true;
                                     }
