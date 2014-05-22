@@ -57,5 +57,23 @@
         frames="4"
         row="8"
         default_speed="0ms" />
+    <animation
+        name="dodge_up"
+        loop="false"
+        frames="4"
+        row="9"
+        default_speed="0ms" />
+    <animation
+            name="dodge_left"
+            loop="false"
+            frames="4"
+            row="10"
+            default_speed="0ms" />
+    <animation
+            name="dodge_right"
+            loop="false"
+            frames="4"
+            row="11"
+            default_speed="0ms" />
 </animations>
 		

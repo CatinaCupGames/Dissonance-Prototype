@@ -132,6 +132,11 @@ public class Tile implements Collidable {
         return parent;
     }
 
+    @Override
+    public int getLayer() {
+        return getContainingLayer().getGameLayer(parent);
+    }
+
     public Layer getContainingLayer() {
         return containingLayer;
     }
