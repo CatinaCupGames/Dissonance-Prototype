@@ -13,7 +13,6 @@ import org.lwjgl.util.vector.Vector2f;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 public abstract class PlayableSprite extends CombatSprite {
@@ -539,7 +538,7 @@ public abstract class PlayableSprite extends CombatSprite {
 
         As long as t = 4f, then d = 4s
          */
-        int DISTANCE = 150; //TODO Maybe change this
+        int DISTANCE = 120; //TODO Maybe change this
         DISTANCE *= 0.8f;
         switch (direction1) {
             case UP:

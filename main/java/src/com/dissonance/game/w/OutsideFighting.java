@@ -21,8 +21,6 @@ public class OutsideFighting extends DemoLevelWorldLoader {
 
 
         w.setWorldBrightness(0.96f);
-        //DIS CUTOFF BULLSHIIIEEET
-        //PLZ KILL ME
 
         for(int y = 350; y>= 240; y -= 10){
             if((y / 10) % 2 == 0){
