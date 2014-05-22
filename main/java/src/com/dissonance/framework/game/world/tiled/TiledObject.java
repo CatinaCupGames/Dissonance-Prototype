@@ -143,6 +143,11 @@ public class TiledObject implements Collidable {
         return null;
     }
 
+    @Override
+    public int getLayer() {
+        return 0;
+    }
+
     public boolean isPointInside(Vector2f test) {
         int i;
         int j;

@@ -12,4 +12,6 @@ public interface Collidable {
     public boolean isPointInside(float x, float y);
 
     public World getWorld();
+
+    public int getLayer();
 }
