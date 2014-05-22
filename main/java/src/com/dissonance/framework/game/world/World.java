@@ -700,7 +700,7 @@ public final class World {
         Layer[] objLayers = getLayers(LayerType.OBJECT_LAYER);
         for (Layer layer : objLayers) {
             for (TiledObject obj : layer.getObjectGroupData()) {
-                if (obj.isPointInside(x, y)) {
+                if (obj.isHitbox() && obj.isPointInside(x, y)) {
                     objects.add(obj);
                 }
             }
