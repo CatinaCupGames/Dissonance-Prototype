@@ -1,0 +1,11 @@
+<animations
+        width="62"
+        height="130">
+
+    <animation
+            name="doors"
+            loop="false"
+            frames="27"
+            row="0"
+            default_speed="150ms"/>
+</animations>
