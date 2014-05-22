@@ -34,20 +34,23 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
     public void onLoad(World w) {
         super.onLoad(w);
 
+        exit = new Garbagechute();
+        exit.setX((88f * 16f) + 10);
+        exit.setY(60f * 16f);
+        exit.setLayer(100);
+        w.loadAndAdd(exit);
+    }
+
+    @Override
+    public void onDisplay(World w) {
+        super.onDisplay(w);
+
         farrand.setX(97.9f);
         farrand.setY(204.34998f);
 
         jeremiah.setX(100f);
         jeremiah.setY(210f);
         jeremiah.setVisible(false);
-
-        exit = new Garbagechute();
-        exit.setX((88f * 16f) + 10);
-        exit.setY(60f * 16f);
-        exit.setLayer(100);
-        w.loadAndAdd(exit);
-
-
-
     }
+
 }

@@ -1,5 +1,6 @@
 package com.dissonance.game.spells;
 
+import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.combat.spells.Spell;
 import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
@@ -65,8 +66,11 @@ public abstract class BoltSpell implements Spell {
                 damage = ((attack * Math.log(attack)) / (defense / Math.log(defense))) * 2;
                 if (damage > 100)
                     damage = 100;
+                damage = FastMath.fastRound((float) damage);
+
                 s.applyDamage(damage);
-                s.applyStatusCondition(getEffect());
+                if (getEffect() != null)
+                    s.applyStatusCondition(getEffect());
                 onContact(s);
             }
         }

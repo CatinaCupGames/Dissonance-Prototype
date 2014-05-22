@@ -190,7 +190,7 @@ public abstract class PlayableSprite extends CombatSprite {
             setAlpha(value);
             if (value == end) {
                 appear = false;
-                source.end();
+                if (source != null) source.end();
 
                 source = null;
 

@@ -29,20 +29,20 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
     private float heightC = -1;
     private float widthC = -1;
     private boolean moving;
-    private List<PhysicsSprite> ignore = new ArrayList<>();
+    private List<Collidable> ignore = new ArrayList<>();
 
     @Override
     public HitBox getHitBox() {
         return hb[0];
     }
 
-    public void ignoreCollisionWith(PhysicsSprite sprite) {
+    public void ignoreCollisionWith(Collidable sprite) {
         if (!ignore.contains(sprite))
             ignore.add(sprite);
     }
 
-    public void ignoreCollisionWith(PhysicsSprite... sprites) {
-        for (PhysicsSprite s : sprites) {
+    public void ignoreCollisionWith(Collidable... sprites) {
+        for (Collidable s : sprites) {
             if (!ignore.contains(s))
                 ignore.add(s);
         }
@@ -218,6 +218,8 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
 
             }
         } else {
+            if (ignore.contains(c))
+                return;
             super.setX(oldX);
         }
     }
@@ -306,6 +308,8 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                 }).start();
             }
         } else {
+            if (ignore.contains(c))
+                return;
             super.setY(oldY);
         }
     }

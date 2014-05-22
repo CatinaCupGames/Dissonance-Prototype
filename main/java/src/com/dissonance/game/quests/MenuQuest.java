@@ -1,6 +1,7 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.AbstractQuest;
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
@@ -47,6 +48,7 @@ public class MenuQuest extends PauseQuest {
             return;
         }
         Players.createPlayer1(); //Ensure we have a player 1
+        GameService.coop_mode = Players.getPlayersWithInput().length > 1;
         RenderService.INSTANCE.fadeToBlack(1000);
         try {
             RenderService.INSTANCE.waitForFade();
