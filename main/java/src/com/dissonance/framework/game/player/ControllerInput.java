@@ -32,7 +32,7 @@ public class ControllerInput implements Input {
 
     @Override
     public boolean isMoving(PlayableSprite player) {
-        if (player.isPlayer1()) {
+        if (player.isPlayer1() && !GameService.coop_mode) {
             boolean value = Input.KEYBOARD.isMoving(player); //Check the keyboard as well as the gamepad.
             if (value)
                 return true;

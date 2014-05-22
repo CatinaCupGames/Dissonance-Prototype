@@ -21,18 +21,6 @@ public abstract class DemoLevelWorldLoader implements WorldLoader {
 
     @Override
     public void onLoad(World w) {
-        if (huds[0] == null) {
-            huds[0] = new BaseHUD(Players.createPlayer1());
-            huds[0].display(w);
-        }
-        for (int i = 2; i <= 4; i++) {
-            Player player = Players.getPlayer(i);
-            if (player == null)
-                break;
-            huds[i - 1] = new BaseHUD(player);
-            huds[i - 1].display(w);
-        }
-
         if (farrand == null) {
             farrand = new Farrand();
         }
@@ -48,5 +36,16 @@ public abstract class DemoLevelWorldLoader implements WorldLoader {
     public void onDisplay(World w) {
         w.loadAndAdd(farrand);
         w.loadAndAdd(jeremiah);
+
+        huds[0] = new BaseHUD(Players.createPlayer1()); //Because fuck memory leaks
+        huds[0].display(w);
+
+        for (int i = 2; i <= 4; i++) {
+            Player player = Players.getPlayer(i);
+            if (player == null)
+                break;
+            huds[i - 1] = new BaseHUD(player);
+            huds[i - 1].display(w);
+        }
     }
 }

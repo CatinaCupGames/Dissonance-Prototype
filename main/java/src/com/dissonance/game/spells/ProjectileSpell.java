@@ -1,5 +1,6 @@
 package com.dissonance.game.spells;
 
+import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.combat.spells.Spell;
 import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
@@ -134,9 +135,12 @@ public abstract class ProjectileSpell extends AnimatedSprite implements Spell {
                         damage = ((attack * Math.log(attack)) / (defense / Math.log(defense))) * 2;
                         if (damage > 100)
                             damage = 100;
+
+                        damage = FastMath.fastRound((float) damage);
+
                         combat.applyDamage(damage);
 
-                        combat.applyStatusCondition(getEffect());
+                        if (getEffect() != null) combat.applyStatusCondition(getEffect());
                         onContact(combat);
                         destory();
                         setUpdateCanceled(true);
@@ -158,7 +162,6 @@ public abstract class ProjectileSpell extends AnimatedSprite implements Spell {
 
     protected void destory() {
         getWorld().removeSprite(this);
-        //TODO Do other things
     }
 
     protected void setSpeed(float speed) {

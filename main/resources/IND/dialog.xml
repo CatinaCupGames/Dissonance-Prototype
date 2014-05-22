@@ -1,5 +1,18 @@
 <game_dialog>
 
+    <dialog dialog_id="FakeExitFarrand">
+        <header>Farrand</header>
+        <message>This exit appears to be locked. We need to find another way to get down</message>
+        <message type="append">to the city streets.</message>
+    </dialog>
+
+    <dialog dialog_id="FakeExitJeremiah">
+        <header>Jeremiah</header>
+        <message>Dammit</message>
+        <message type="append" speed="150">...</message>
+        <message type="append">the door won't budge. We need to find another way down.</message>
+    </dialog>
+
     <dialog dialog_id="Outdoor Scene">
         <header>Jeremiah</header>
         <message>This is ridiculous.</message>

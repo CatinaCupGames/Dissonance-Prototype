@@ -74,6 +74,27 @@ public class GameQuest  extends PauseQuest {
         }, true, true);*/
     }
 
+    public void changeToOutside1() throws InterruptedException {
+        setWorld(GameCache.OutsideFighting);
+        GameCache.OutsideFighting.waitForWorldDisplayed();
+
+        Camera.stopFollowing();
+
+        Player player1 = Players.createPlayer1();
+        if (player1.isPlaying())
+            player1.changeSprite(RoofTopBeginning.farrand);
+        else
+            player1.joinAs(RoofTopBeginning.farrand);
+
+        Player player2 = Players.getPlayer(2);
+        if (player2 != null) {
+            if (player2.isPlaying())
+                player2.changeSprite(RoofTopBeginning.jeremiah);
+            else
+                player2.join();
+        }
+    }
+
     @Override
     public void setWorld(World world) {
         super.setWorld(world);

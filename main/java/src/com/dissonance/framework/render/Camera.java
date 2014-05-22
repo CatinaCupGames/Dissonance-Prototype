@@ -440,6 +440,13 @@ public final class Camera {
         return extendY;
     }
 
+    public static void clearMovementRequests() {
+        isEasing = false;
+        isLinear = false;
+        isMoving = false;
+        isShaking = false;
+    }
+
     public interface CameraMovementListener {
         public void onMovement(float x, float y, long time);
 
