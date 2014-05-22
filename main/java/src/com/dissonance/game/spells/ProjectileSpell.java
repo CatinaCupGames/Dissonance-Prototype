@@ -29,11 +29,44 @@ public abstract class ProjectileSpell extends AnimatedSprite implements Spell {
     }
 
     @Override
+    public void onMovement(Direction direction) {
+        if (isAnimationPaused()) {
+            super.setFrame(2);
+            playAnimation();
+        }
+
+        switch (direction) {
+            case UP:
+            case UP_LEFT:
+            case UP_RIGHT:
+                setAnimation("back");
+                break;
+            case DOWN:
+            case DOWN_LEFT:
+            case DOWN_RIGHT:
+                setAnimation("front");
+                break;
+            case LEFT:
+                setAnimation("left");
+                break;
+            case RIGHT:
+                setAnimation("right");
+                break;
+        }
+    }
+
+    @Override
+    public void onNoMovement() {
+        super.setFrame(1);
+        pauseAnimation();
+    }
+
+    @Override
     public void castSpell() {
         owner.getWorld().addSprite(this);
         setX(owner.getX());
         setY(owner.getY());
-        setFacingDirection(owner.getFacingDirection());
+        face(owner.getFacingDirection());
         if (owner.getFacingDirection() == Direction.DOWN)
             setY(getY() + 32);
         else if (owner.getFacingDirection() == Direction.LEFT)

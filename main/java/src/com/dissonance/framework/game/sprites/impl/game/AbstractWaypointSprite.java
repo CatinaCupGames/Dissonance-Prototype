@@ -9,6 +9,7 @@ import com.dissonance.framework.game.ai.waypoint.WaypointSprite;
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.system.utils.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -214,6 +215,33 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
                 break;
             }
             super.wait(0L);
+        }
+    }
+
+    public void moveTowards(Direction direction, float distance) {
+        float xadd, yadd;
+        switch (direction) {
+
+            case UP:
+                break;
+            case DOWN:
+                break;
+            case LEFT:
+                break;
+            case RIGHT:
+                break;
+            case UP_LEFT:
+                break;
+            case UP_RIGHT:
+                break;
+            case DOWN_LEFT:
+                break;
+            case DOWN_RIGHT:
+                break;
+            case NONE:
+                break;
+            case MOVING:
+                break;
         }
     }
 
