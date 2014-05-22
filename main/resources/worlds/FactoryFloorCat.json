@@ -175,7 +175,46 @@
         {
          "height":210,
          "name":"Machines",
-         "objects":[],
+         "objects":[
+                {
+                 "height":54,
+                 "name":"factory.FactoryTable1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":113,
+                 "x":288,
+                 "y":2912
+                }, 
+                {
+                 "height":54,
+                 "name":"factory.FactoryTable1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":113,
+                 "x":128,
+                 "y":3024
+                }, 
+                {
+                 "height":54,
+                 "name":"factory.FactoryTable1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":113,
+                 "x":288,
+                 "y":3024
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -394,8 +433,34 @@
                  "type":"sprite",
                  "visible":true,
                  "width":113,
-                 "x":80,
+                 "x":128,
                  "y":2912
+                }, 
+                {
+                 "height":21,
+                 "name":"WallLight",
+                 "properties":
+                    {
+                     "layer":"2"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":23,
+                 "x":864,
+                 "y":384
+                }, 
+                {
+                 "height":21,
+                 "name":"WallLight",
+                 "properties":
+                    {
+                     "layer":"2"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":23,
+                 "x":400,
+                 "y":3184
                 }],
          "opacity":1,
          "type":"objectgroup",
