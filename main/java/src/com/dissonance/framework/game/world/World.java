@@ -5,7 +5,6 @@ import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.ui.UI;
-import com.dissonance.framework.game.sprites.ui.impl.AbstractUI;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
@@ -700,7 +699,7 @@ public final class World {
         Layer[] objLayers = getLayers(LayerType.OBJECT_LAYER);
         for (Layer layer : objLayers) {
             for (TiledObject obj : layer.getObjectGroupData()) {
-                if (obj.isHitbox() && obj.isPointInside(x, y)) {
+                if ((obj.isDoor() || obj.isTrigger() || obj.isHitbox()) && obj.isPointInside(x, y)) {
                     objects.add(obj);
                 }
             }
