@@ -1020,16 +1020,16 @@
                 }, 
                 {
                  "height":0,
-                 "name":"",
+                 "name":"office.PottedPlant",
                  "properties":
                     {
 
                     },
-                 "type":"",
+                 "type":"sprite",
                  "visible":true,
                  "width":0,
-                 "x":1062,
-                 "y":1424
+                 "x":221,
+                 "y":108
                 }, 
                 {
                  "height":0,
@@ -1041,21 +1041,8 @@
                  "type":"sprite",
                  "visible":true,
                  "width":0,
-                 "x":1056,
-                 "y":1424
-                }, 
-                {
-                 "height":0,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":230,
-                 "y":1422
+                 "x":225,
+                 "y":1416
                 }, 
                 {
                  "height":0,
@@ -1067,8 +1054,34 @@
                  "type":"sprite",
                  "visible":true,
                  "width":0,
-                 "x":224,
-                 "y":1424
+                 "x":1057,
+                 "y":1419
+                }, 
+                {
+                 "height":35,
+                 "name":"office.tablecropped",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":38,
+                 "x":323,
+                 "y":144
+                }, 
+                {
+                 "height":30,
+                 "name":"office.DeskChair",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":34,
+                 "x":287,
+                 "y":149
                 }],
          "opacity":1,
          "type":"objectgroup",
