@@ -2,6 +2,7 @@ package com.dissonance.editor;
 
 import com.dissonance.editor.quest.MainQuest;
 import com.dissonance.framework.game.GameService;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.GameSettings;
 
 import javax.swing.*;
@@ -13,6 +14,8 @@ public class Main {
         GameService.loadEssentials(args);
         System.out.println("Starting MainQuest");
         GameSettings.Graphics.useFBO = false;
+        //AJ IS A POOP
+        RenderService.ZOOM_SCALE = 0.5f;
         GameService.beginQuest(new MainQuest());
     }
 

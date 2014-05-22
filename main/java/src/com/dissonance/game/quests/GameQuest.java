@@ -16,8 +16,6 @@ import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.Service;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
-import com.dissonance.game.w.FactoryFloorCat;
-import com.dissonance.game.w.OutsideFighting;
 import com.dissonance.game.w.RoofTopBeginning;
 
 import java.util.ArrayList;
@@ -41,8 +39,8 @@ public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
-        setWorld(GameCache.RoofTopBeginning);
-        GameCache.RoofTopBeginning.waitForWorldDisplayed();
+        setWorld(GameCache.OutsideFighting);
+        GameCache.OutsideFighting.waitForWorldDisplayed();
         TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
 
         Camera.stopFollowing();

@@ -7,9 +7,7 @@ import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.utils.Direction;
-import com.dissonance.game.GameCache;
 import com.dissonance.game.quests.GameQuest;
-import com.dissonance.game.w.OutsideFighting;
 import com.dissonance.game.w.RoofTopBeginning;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -63,8 +61,6 @@ public class Garbage extends AbstractTrigger {
         Thread.sleep(1500);
         Camera.clearMovementRequests();
         GameQuest.INSTANCE.changeToOutside1();
-        OutsideFighting.farrand.unfreeze();
-        OutsideFighting.jeremiah.unfreeze();
     }
 
     @Override
