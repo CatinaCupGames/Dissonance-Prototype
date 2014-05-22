@@ -9,6 +9,6 @@ public class Building3 extends ImagePhysicsSprite {
 
     @Override
     public String hitboxConfigPath() {
-        return "sprites/buildings/building3.txt";
+        return "";
     }
 }
