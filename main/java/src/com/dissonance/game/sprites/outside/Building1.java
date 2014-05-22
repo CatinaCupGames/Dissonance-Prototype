@@ -11,4 +11,9 @@ public class Building1 extends ImagePhysicsSprite {
     public String hitboxConfigPath() {
         return "";
     }
+
+    @Override
+    public boolean neverClip() {
+        return true;
+    }
 }

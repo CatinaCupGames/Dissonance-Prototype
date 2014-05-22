@@ -371,8 +371,14 @@ public class MainQuest extends AbstractQuest {
             if (!EditorUI.INSTANCE.highlighter.classes.contains(sprite.getClass().getSimpleName())) {
                 EditorUI.INSTANCE.highlighter.addClass(sprite.getClass().getSimpleName());
             }
-            sprite.setX(0);
-            sprite.setY(0);
+            float x = 0f;
+            float y = 0f;
+            if (selectedSprite != null) {
+                x = selectedSprite.getX() + selectedSprite.getWidth();
+                y = selectedSprite.getY();
+            }
+            sprite.setX(x);
+            sprite.setY(y);
             getWorld().loadAndAdd(sprite);
             if (PlayableSprite.getCurrentlyPlayingSprite() != null)
                 PlayableSprite.getCurrentlyPlayingSprite().freeze();
@@ -380,6 +386,7 @@ public class MainQuest extends AbstractQuest {
             adding = true;
             EditorUI.INSTANCE.refreshCode();
             adding = false;
+            Camera.stopFollowing();
             if (selectedSprite instanceof Sprite)
                 Camera.followSprite((Sprite)selectedSprite);
             EditorUI.INSTANCE.clearComboBox();
@@ -395,8 +402,14 @@ public class MainQuest extends AbstractQuest {
         if (!EditorUI.INSTANCE.highlighter.classes.contains(sprite.getClass().getSimpleName())) {
             EditorUI.INSTANCE.highlighter.addClass(sprite.getClass().getSimpleName());
         }
-        sprite.setX(0);
-        sprite.setY(0);
+        float x = 0f;
+        float y = 0f;
+        if (selectedSprite != null) {
+            x = selectedSprite.getX() + selectedSprite.getWidth();
+            y = selectedSprite.getY();
+        }
+        sprite.setX(x);
+        sprite.setY(y);
         getWorld().loadAndAdd(sprite);
         if (PlayableSprite.getCurrentlyPlayingSprite() != null)
             PlayableSprite.getCurrentlyPlayingSprite().freeze();
@@ -404,6 +417,7 @@ public class MainQuest extends AbstractQuest {
         adding = true;
         EditorUI.INSTANCE.refreshCode();
         adding = false;
+        Camera.stopFollowing();
         if (selectedSprite instanceof Sprite)
             Camera.followSprite((Sprite)selectedSprite);
         EditorUI.INSTANCE.clearComboBox();

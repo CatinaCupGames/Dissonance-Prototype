@@ -32,7 +32,7 @@ public class RenderService extends Service {
     public static final int CROSS_FADE_DURATION = 2;
     public static final int DONT_UPDATE = 4;
 
-    public static final float ZOOM_SCALE = 2f;
+    public static float ZOOM_SCALE = 2f;
     public static float FPS = 0f;
     public static RenderService INSTANCE;
 
