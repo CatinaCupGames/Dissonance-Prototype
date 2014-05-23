@@ -20,4 +20,9 @@ public class Switch extends ImagePhysicsSprite implements Selectable {
         GameQuest.INSTANCE.turnOnBelts();
         return true;
     }
+
+    @Override
+    public double getDistanceRequired() {
+        return 50;
+    }
 }

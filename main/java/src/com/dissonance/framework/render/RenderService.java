@@ -494,7 +494,7 @@ public class RenderService extends Service {
             }
 
             Camera.executeAnimation(); //Execute any interlop
-            exitOnGLError("RenderService.renderSprites");
+            //exitOnGLError("RenderService.renderSprites");
 
             Display.update();
 

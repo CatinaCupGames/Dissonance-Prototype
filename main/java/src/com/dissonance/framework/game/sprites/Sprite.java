@@ -445,11 +445,12 @@ public abstract class Sprite implements Drawable, Serializable {
             return Direction.RIGHT;
         } else if (angle > 255 && angle <= 315) {
             return Direction.DOWN;
-        } else if (angle > 135 && angle <= 225) {
+        } else if (angle > 135 && angle <= 255) {
             return Direction.LEFT;
         } else if (angle >= 45 && angle <= 135) {
             return Direction.UP;
         }
+        System.out.println(angle);
         return Direction.NONE;
     }
 

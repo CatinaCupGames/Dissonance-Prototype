@@ -13,6 +13,7 @@ import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Camera;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.system.Service;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
@@ -36,10 +37,12 @@ public class GameQuest  extends PauseQuest {
     private HashMap<World, TiledObject[]> spawns = new HashMap<World, TiledObject[]>();
     private HashMap<TiledObject, CombatSprite[]> children = new HashMap<TiledObject, CombatSprite[]>();
     private HashMap<TiledObject, Long> timeout = new HashMap<TiledObject, Long>();
+    public boolean factory_beltsactive;
 
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
+
         setWorld(GameCache.OutsideFighting);
         GameCache.OutsideFighting.waitForWorldDisplayed();
         TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
@@ -191,7 +194,8 @@ public class GameQuest  extends PauseQuest {
     public void endQuest() throws IllegalAccessException {
         super.endQuest();
 
-        runnable.kill();
+
+        if (runnable != null) runnable.kill();
     }
 
     @Override

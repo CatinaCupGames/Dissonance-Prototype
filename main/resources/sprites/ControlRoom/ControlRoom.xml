@@ -7,5 +7,5 @@
             loop="false"
             frames="27"
             row="0"
-            default_speed="150ms"/>
+            default_speed="60ms"/>
 </animations>

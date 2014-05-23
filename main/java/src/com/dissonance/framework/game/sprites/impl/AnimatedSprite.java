@@ -314,6 +314,11 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         paused = false;
     }
 
+    private boolean reverse;
+    public void reverseAnimation(boolean value) {
+        this.reverse = value;
+    }
+
     public boolean isAnimationPaused() {
         return paused;
     }
@@ -336,7 +341,10 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
             return;
         if (texture != null) {
             int lastFrame = getCurrentFrame();
-            texture.step();
+            if (!reverse)
+                texture.step();
+            else
+                texture.backstep();
             if (animationFrame != null) {
                 animationFrame.onAnimationFrame(this);
             }

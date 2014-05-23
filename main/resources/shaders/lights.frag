@@ -31,7 +31,7 @@
      scalex *= window.x / iResolution.x;
      scaley *= ysomething;
 
-     for (float i = 0; i < count; i++) {
+     for (float i = 0.0; i < count; i++) {
          //extract data from texture
          float t = (i / count) - 0.1;
          vec3 light = texture1D(lightData, t).rgb;

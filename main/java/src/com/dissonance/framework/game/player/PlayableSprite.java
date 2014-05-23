@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.player;
 
+import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
@@ -260,6 +261,7 @@ public abstract class PlayableSprite extends CombatSprite {
                     setAnimation(0);
                     ignore_movement = false;
                     is_dodging = false;
+                    face(getFacingDirection());
                     Timer.delayedInvokeRunnable(100, new Runnable() {
                         @Override
                         public void run() {
@@ -281,6 +283,7 @@ public abstract class PlayableSprite extends CombatSprite {
                 moveY = dodgeStartY + ((dodgeY - dodgeStartY) * percent);
                 //moveY = Camera.ease(dodgeStartY, dodgeY, totalDodgeTime, ((System.currentTimeMillis() - dodgeStartTime)));
                 rawSetY(moveY);
+                face(getFacingDirection());
                 if (moveY == dodgeY) {
                     unfreeze();
                     setAnimation(0);
@@ -368,7 +371,7 @@ public abstract class PlayableSprite extends CombatSprite {
 
                 if (!isFacing(sprite, distance))
                     continue;
-                if (distance <= 50) {
+                if (distance <= sprite.getDistanceRequired()) {
                     sprite.onSelected(this);
                     return true;
                 }
@@ -378,24 +381,7 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     protected boolean isFacing(Selectable s, double distance) {
-        float ydif = s.getY() - getY();
-        float xdif = s.getX() - getX();
-        double angle = Math.toDegrees(Math.atan2(-ydif, xdif));
-        while (angle < 0)
-            angle += 360;
-        while (angle > 360)
-            angle -= 360;
-        Direction direction1 = getFacingDirection();
-        if ((angle > 315 || angle < 45) && direction1 == Direction.RIGHT) {
-            return Math.abs(xdif) < distance;
-        } else if (angle > 255 && angle <= 315 && direction1 == Direction.DOWN) {
-            return Math.abs(ydif) < distance;
-        } else if (angle > 135 && angle <= 225 && direction1 == Direction.LEFT) {
-            return Math.abs(xdif) < distance;
-        } else if (angle >= 45 && angle <= 135 && direction1 == Direction.UP) {
-            return Math.abs(ydif) < distance;
-        }
-        return false;
+        return getFacingDirection() == directionTowards(new Vector(s.getX(), s.getY()));
     }
 
 
@@ -540,6 +526,7 @@ public abstract class PlayableSprite extends CombatSprite {
          */
         int DISTANCE = 120; //TODO Maybe change this
         DISTANCE *= 0.8f;
+        DISTANCE /= 2f;
         switch (direction1) {
             case UP:
             case UP_LEFT:
@@ -590,7 +577,7 @@ public abstract class PlayableSprite extends CombatSprite {
                 return;
         }
         setAnimation(ani);
-        setAnimationSpeed(150);
+        setAnimationSpeed(75);
         totalDodgeTime = 4 * getAnimationSpeed();
         totalDodgeTime -= speed;
         setAnimationSpeed((int) (((1f/4f) * speed) + ((1f/4f) * totalDodgeTime)));

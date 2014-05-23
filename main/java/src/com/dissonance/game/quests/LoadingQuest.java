@@ -4,6 +4,7 @@ import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.GameCache;
 
 public class LoadingQuest extends AbstractQuest {
@@ -24,7 +25,13 @@ public class LoadingQuest extends AbstractQuest {
         RenderService.INSTANCE.runOnServiceThread(new Runnable() {
             @Override
             public void run() {
+
+                boolean value = GameSettings.Graphics.useFBO;
+                GameSettings.Graphics.useFBO = false;
+
                 GameCache.RoofTopBeginning.prepareTiles();
+
+                GameSettings.Graphics.useFBO = value;
             }
         }, true);
 

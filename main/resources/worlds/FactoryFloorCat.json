@@ -820,7 +820,8 @@
             {
              "0":
                 {
-                 "frames":"57,58,59"
+                 "frames":"57,58,59",
+                 "triggerclass":"com.dissonance.game.triggers.ConveyorBeltFactory"
                 }
             },
          "tilewidth":16
