@@ -9,7 +9,7 @@ public class Building5 extends ImagePhysicsSprite {
 
     @Override
     public String hitboxConfigPath() {
-        return "";
+        return "sprites/buildings/building5.txt";
     }
 
     @Override
