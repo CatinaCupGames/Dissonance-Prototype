@@ -972,6 +972,21 @@
                  "width":96,
                  "x":1300,
                  "y":399
+                }, 
+                {
+                 "height":81,
+                 "name":"roof.Skylight",
+                 "properties":
+                    {
+                     "height":"100",
+                     "layer":"1",
+                     "width":"200"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":107,
+                 "x":1113,
+                 "y":115
                 }],
          "opacity":1,
          "type":"objectgroup",

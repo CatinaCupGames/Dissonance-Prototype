@@ -2,7 +2,6 @@ package com.dissonance.framework.system.utils.physics;
 
 import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.sprites.Sprite;
-import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;
@@ -141,7 +140,7 @@ public class HitBox {
         for (float x = startX; x < startX + (maxX - minX); x++) {
             for (float y = startY; y < startY + (maxY - minY); y++) {
                 for (Collidable sprite : cache) {
-                    if (sprite.getWorld() != world || sprite == ignore || sprite.getLayer() == layer) continue;
+                    if (sprite.getWorld() != world || sprite == ignore || sprite.getLayer() != layer) continue;
 
                     if (sprite.isPointInside(x, y)) {
                         lastCollide = sprite;
@@ -212,7 +211,7 @@ public class HitBox {
         for (float x = minX + startX; x < startX + (maxX - minX); x++) {
             for (float y = minY + startY; y < startY + (maxY - minY); y++) {
                 for (Collidable sprite : cache) {
-                    if (sprite.getWorld() != world || sprite == ignore || sprite.getLayer() == layer) continue;
+                    if (sprite.getWorld() != world || sprite == ignore || sprite.getLayer() != layer) continue;
                     if (sprite.isPointInside(x, y) && !collidables.contains(sprite)) {
                         collidables.add(sprite);
                     }
