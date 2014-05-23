@@ -15,7 +15,7 @@ public class ImageSprite extends Sprite {
     public void onLoad() {
         try {
             setTexture(Texture.retrieveTexture(image));
-            setCutOffMargin(getTexture().getImageHeight());
+            setCutOffMargin(getTexture().getImageHeight() / 2f);
         } catch (IOException e) {
             e.printStackTrace();
         }
