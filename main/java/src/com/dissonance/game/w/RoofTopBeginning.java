@@ -27,6 +27,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
     public static RoofVent dec7;
     public static RoofEntry dec8;
     public static Skylight dec9;
+    public static BlueGuard[] meleeGuard = new BlueGuard[3];
 
     public static Garbagechute exit;
 
@@ -39,6 +40,24 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         exit.setY(60f * 16f);
         exit.setLayer(100);
         w.loadAndAdd(exit);
+
+        for(int i = 0; i < meleeGuard.length; i++){
+            meleeGuard[i] = new BlueGuard();
+            w.loadAndAdd(meleeGuard[i]);
+
+        }
+
+        w.loadAndAdd(meleeGuard[0]);
+        meleeGuard[0].setX(72*16);
+        meleeGuard[0].setY(21*16);
+
+        w.loadAndAdd(meleeGuard[1]);
+        meleeGuard[1].setX(71*16);
+        meleeGuard[1].setY(28*16);
+
+        w.loadAndAdd(meleeGuard[2]);
+        meleeGuard[1].setX(64*16);
+        meleeGuard[1].setY(20*16);
     }
 
     @Override
@@ -53,6 +72,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         jeremiah.setX(100f);
         jeremiah.setY(210f);
         jeremiah.setVisible(false);
+
 
 
     }

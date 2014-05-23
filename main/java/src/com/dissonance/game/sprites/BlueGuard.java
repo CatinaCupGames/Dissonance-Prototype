@@ -69,6 +69,8 @@ public class BlueGuard extends Enemy {
         setVigor(8);
         setStamina(4);
         setMarksmanship(8);
+        setMovementSpeed(3f);
+
     }
 
     @Override
@@ -106,16 +108,24 @@ public class BlueGuard extends Enemy {
             setMovementSpeed(14f);
             if (getBehavior() == null || !(getBehavior() instanceof Flee)) {
                 PlayableSprite sprite = getClosestPlayer();
-                if (sprite == null) return;
+                if (sprite == null) {
+                    WaypointLikeIdle idleBehavior = new WaypointLikeIdle(this, 720);
+                    setBehavior(idleBehavior);
+                    return;
+                }
 
                 Flee flee = new Flee(this, sprite, (getMarksmanship() * 2f) * 16f);
                 setBehavior(flee);
                 flee.setFleeListener(FLEE_LISTENER);
-            } else if (getBehavior() != null) {
+            } else {
                 Flee flee = (Flee)getBehavior();
 
                 PlayableSprite sprite = getClosestPlayer();
-                if (sprite == null) return;
+                if (sprite == null) {
+                    WaypointLikeIdle idleBehavior = new WaypointLikeIdle(this, 720);
+                    setBehavior(idleBehavior);
+                    return;
+                }
                 flee.setTarget(sprite);
             }
         } else {
