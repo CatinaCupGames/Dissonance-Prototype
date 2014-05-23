@@ -8,9 +8,7 @@ import org.lwjgl.util.vector.Vector2f;
 
 
 
-/**
- * Created by Henry on 5/15/2014.
- */
+
 public class AtWaldomarScene extends SimpleScene {
 
 
