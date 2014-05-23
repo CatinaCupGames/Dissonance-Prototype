@@ -577,7 +577,7 @@ public abstract class PlayableSprite extends CombatSprite {
                 return;
         }
         setAnimation(ani);
-        setAnimationSpeed(75);
+        setAnimationSpeed(100);
         totalDodgeTime = 4 * getAnimationSpeed();
         totalDodgeTime -= speed;
         setAnimationSpeed((int) (((1f/4f) * speed) + ((1f/4f) * totalDodgeTime)));

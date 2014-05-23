@@ -7,7 +7,7 @@ public class OutsideFighting extends DemoLevelWorldLoader {
     public void onLoad(World w) {
         super.onLoad(w);
 
-        farrand.setX(166f*16f);
-        farrand.setY(376f*16f);
+        farrand.setX(200f*16f);
+        farrand.setY(200f*16f);
     }
 }
