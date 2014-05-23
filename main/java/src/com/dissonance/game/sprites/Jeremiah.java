@@ -3,6 +3,7 @@ package com.dissonance.game.sprites;
 import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.game.spells.impl.Earthquake;
 
 public final class Jeremiah extends PlayableSprite {
     //TODO Set default values for these.
@@ -148,6 +149,16 @@ public final class Jeremiah extends PlayableSprite {
     public void onLoad() {
         super.onLoad();
         pauseAnimation();
+
+        setAttack(16);
+        setDefense(8);
+        setSpeed(12);
+        setVigor(8);
+        setStamina(12);
+        setWillpower(10);
+        setFocus(4);
+
+        addSpell(new Earthquake(this));
     }
 
     @Override

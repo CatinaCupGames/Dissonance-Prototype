@@ -21,6 +21,7 @@ public class LightShader extends AbstractShader {
     private int resolutionLocation = -1, overallBrightnessLocation = -1, countLocation = -1, windowLocation = -1, cameraLocation = -1, aspectLocation = -1, texture2 = -1, texture3 = -1;
     private float oX, oY;
     private int lightDataTexture = -1, colorDataTexture = -1;
+    private int scaleLocation;
 
     @Override
     public String getVertexFile() {
@@ -161,7 +162,6 @@ public class LightShader extends AbstractShader {
             if (aspectLocation == -1) {
                 aspectLocation = GL20.glGetUniformLocation(program, "aspect");
             }
-
 
             glUniform2f(resolutionLocation, (float) GameSettings.Display.resolution.getWidth(), (float) GameSettings.Display.resolution.getHeight());
             glUniform1f(overallBrightnessLocation, overallBrightness);

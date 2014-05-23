@@ -13,9 +13,11 @@ import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Camera;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.system.Service;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
+import com.dissonance.game.w.OutsideFighting;
 import com.dissonance.game.w.RoofTopBeginning;
 
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class GameQuest  extends PauseQuest {
     private HashMap<World, TiledObject[]> spawns = new HashMap<World, TiledObject[]>();
     private HashMap<TiledObject, CombatSprite[]> children = new HashMap<TiledObject, CombatSprite[]>();
     private HashMap<TiledObject, Long> timeout = new HashMap<TiledObject, Long>();
+    public boolean factory_beltsactive;
 
     @Override
     public void startQuest() throws Exception {
@@ -47,14 +50,14 @@ public class GameQuest  extends PauseQuest {
 
         Player player1 = Players.createPlayer1();
         if (player1.isPlaying())
-            player1.changeSprite(RoofTopBeginning.farrand);
+            player1.changeSprite(OutsideFighting.farrand);
         else
-            player1.joinAs(RoofTopBeginning.farrand);
+            player1.joinAs(OutsideFighting.farrand);
 
         Player player2 = Players.getPlayer(2);
         if (player2 != null) {
             if (player2.isPlaying())
-                player2.changeSprite(RoofTopBeginning.jeremiah);
+                player2.changeSprite(OutsideFighting.jeremiah);
             else
                 player2.join();
         }
@@ -190,7 +193,8 @@ public class GameQuest  extends PauseQuest {
     public void endQuest() throws IllegalAccessException {
         super.endQuest();
 
-        runnable.kill();
+
+        if (runnable != null) runnable.kill();
     }
 
     @Override

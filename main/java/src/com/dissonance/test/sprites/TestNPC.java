@@ -38,4 +38,9 @@ public final class TestNPC extends NPCSprite {
     }
 
     TrueTypeFont font;
+
+    @Override
+    public double getDistanceRequired() {
+        return 50;
+    }
 }

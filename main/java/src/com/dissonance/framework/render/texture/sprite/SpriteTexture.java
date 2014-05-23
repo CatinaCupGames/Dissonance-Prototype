@@ -248,4 +248,17 @@ public class SpriteTexture extends Texture {
     public int getCurrentStep() {
         return step;
     }
+
+    public void backstep() {
+        if (step - 1 >= 0 || row < animations[row].getLastRow() || animations[row].doesLoop()) {
+            step--;
+            if (step < 0) {
+                step = animations[row].size() - 1;
+                if (row < animations[row].getLastRow()) {
+                    row++;
+                    step = animations[row].size() - 1;
+                }
+            }
+        }
+    }
 }

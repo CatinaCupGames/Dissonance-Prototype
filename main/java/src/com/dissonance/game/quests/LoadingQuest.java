@@ -4,6 +4,7 @@ import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.GameCache;
 
 public class LoadingQuest extends AbstractQuest {
@@ -17,14 +18,20 @@ public class LoadingQuest extends AbstractQuest {
 
 
         GameCache.RoofTopBeginning = WorldFactory.getWorld("FactoryFloorCat", false);
-        GameCache.OutsideFighting = WorldFactory.getWorld("OutsideFightingshit", false);
+        GameCache.OutsideFighting = WorldFactory.getWorld("OutsideFighting", false);
         //GameCache.OutsideFightingshit.useExtreamSpeed(true);
         Thread.sleep(2000);
 
         RenderService.INSTANCE.runOnServiceThread(new Runnable() {
             @Override
             public void run() {
+
+                boolean value = GameSettings.Graphics.useFBO;
+                GameSettings.Graphics.useFBO = false;
+
                 GameCache.RoofTopBeginning.prepareTiles();
+
+                GameSettings.Graphics.useFBO = value;
             }
         }, true);
 

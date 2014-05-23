@@ -1,9 +1,38 @@
 <game_dialog>
 
+    <dialog dialog_id="LevelStart">
+        <header>Farrand</header>
+        <message style="bold">Are you out of your mind?!</message>
+        <header>Jeremiah</header>
+        <message>What do you mean, am I out of my mind? I saved both our lives!</message>
+        <header>Farrand</header>
+        <message>We don't know that yet. Do you really think they're going to </message>
+        <message type="append">let us out of here alive?</message>
+        <header>Jeremiah</header>
+        <message>They will if they can't kill us. We gotta book it.</message>
+    </dialog>
+
+    <dialog dialog_id="EnterFactory">
+        <header>Jeremiah</header>
+        <message>These guys don't know when to give up...</message>
+        <header>Farrand</header>
+        <message>We need to get off the streets. This door looks unlocked.</message>
+    </dialog>
+
+    <dialog dialog_id="GarbageChuteFarrand">
+        <header>Farrand</header>
+        <message style="italic">*sigh* </message>
+        <message type="append">No other way...</message>
+    </dialog>
+
+    <dialog dialog_id="GarbageChuteJeremiah">
+        <header>Jeremiah</header>
+        <message>The things I do for this job...</message>
+    </dialog>
+
     <dialog dialog_id="FakeExitFarrand">
         <header>Farrand</header>
-        <message>This exit appears to be locked. We need to find another way to get down</message>
-        <message type="append">to the city streets.</message>
+        <message>No good, it's locked.</message>
     </dialog>
 
     <dialog dialog_id="FakeExitJeremiah">

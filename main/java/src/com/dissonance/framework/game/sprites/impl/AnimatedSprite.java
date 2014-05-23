@@ -101,11 +101,11 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         movementDetect = true;
         if (this.x > x) { //Left
             long dur = System.currentTimeMillis() - lastY;
-            onMovement(dur < 50 ? Direction.LEFT.add(lastDirY) : Direction.LEFT);
+            __onMovement(dur < 50 ? Direction.LEFT.add(lastDirY) : Direction.LEFT);
             lastDirX = Direction.LEFT;
         } else if (this.x < x) {
             long dur = System.currentTimeMillis() - lastY;
-            onMovement(dur < 50 ? Direction.RIGHT.add(lastDirY) : Direction.RIGHT);
+            __onMovement(dur < 50 ? Direction.RIGHT.add(lastDirY) : Direction.RIGHT);
             lastDirX = Direction.RIGHT;
         }
         lastX = System.currentTimeMillis();
@@ -135,15 +135,22 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         movementDetect = true;
         if (this.y > y) {
             long dur = System.currentTimeMillis() - lastX;
-            onMovement(dur < 50 ? Direction.UP.add(lastDirX) : Direction.UP);
+            __onMovement(dur < 50 ? Direction.UP.add(lastDirX) : Direction.UP);
             lastDirY = Direction.UP;
         } else if (this.y < y) {
             long dur = System.currentTimeMillis() - lastX;
-            onMovement(dur < 50 ? Direction.DOWN.add(lastDirX) : Direction.DOWN);
+            __onMovement(dur < 50 ? Direction.DOWN.add(lastDirX) : Direction.DOWN);
             lastDirY = Direction.DOWN;
         }
         lastY = System.currentTimeMillis();
         super.setY(y);
+    }
+
+    private void __onMovement(Direction direction) {
+        if (fDirection != Direction.NONE)
+            onMovement(fDirection);
+        else
+            onMovement(direction);
     }
 
     /**
@@ -307,6 +314,11 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         paused = false;
     }
 
+    private boolean reverse;
+    public void reverseAnimation(boolean value) {
+        this.reverse = value;
+    }
+
     public boolean isAnimationPaused() {
         return paused;
     }
@@ -329,7 +341,10 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
             return;
         if (texture != null) {
             int lastFrame = getCurrentFrame();
-            texture.step();
+            if (!reverse)
+                texture.step();
+            else
+                texture.backstep();
             if (animationFrame != null) {
                 animationFrame.onAnimationFrame(this);
             }
@@ -389,6 +404,16 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         setFacingDirection(direction);
         animateMovement(); //Tell the sprite to change it's current animation
         onNoMovement(); //Then tell it it's actually not moving
+    }
+
+    private Direction fDirection = Direction.NONE;
+    /**
+     * Tell the animation implementation to always use a certain direction when animating movement. Providing {@link Direction#NONE} will tell the
+     * implementation to use the normal direction given.
+     * @param direction The direction to force or {@link com.dissonance.framework.system.utils.Direction#NONE} for no forced direction
+     */
+    public void forceAnimationDirection(Direction direction) {
+        fDirection = direction;
     }
 
     public interface AnimatedSpriteEvent {

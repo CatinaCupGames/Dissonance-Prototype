@@ -11,4 +11,6 @@ public interface Selectable {
     public float getX();
 
     public float getY();
+
+    public double getDistanceRequired();
 }
