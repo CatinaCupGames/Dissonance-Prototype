@@ -780,6 +780,279 @@
                  "width":240,
                  "x":3264,
                  "y":6192
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":6352
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":6112
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":6192
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":6272
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":6032
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":5952
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":5872
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":5792
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":5712
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":5632
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":5552
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":5472
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":5392
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":5312
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":5232
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":5152
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":5072
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":4992
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":4912
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":4832
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2832,
+                 "y":4752
                 }],
          "opacity":1,
          "type":"objectgroup",
