@@ -79,7 +79,7 @@ public class Players {
             joypadService = ServiceManager.createService(JoypadService.class);
             while (!joypadService.hasStarted()) {
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

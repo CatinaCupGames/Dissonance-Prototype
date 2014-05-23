@@ -70,7 +70,7 @@ public class WeaponItem extends Item {
                      * This chunk of code is the sword swiping detection code
                      * =========================================================
                      */
-                    Sound.playSound("sword.wav");
+                    Sound.playSound("sword");
                     long time = System.currentTimeMillis();
 
                     if (lastUse + 500 >= time) { //TODO Maybe make this timeout weapon specific..?

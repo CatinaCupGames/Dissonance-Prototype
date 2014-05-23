@@ -254,105 +254,75 @@
                  "name":"roof.Skylight",
                  "properties":
                     {
-                     "":"",
                      "height":"100",
+                     "layer":"0",
                      "width":"200"
                     },
                  "type":"sprite",
                  "visible":true,
                  "width":107,
-                 "x":721,
-                 "y":249
+                 "x":720,
+                 "y":256
                 }, 
                 {
                  "height":81,
                  "name":"roof.Skylight",
                  "properties":
                     {
-                     "":"",
                      "height":"100",
+                     "layer":"0",
                      "width":"200"
                     },
                  "type":"sprite",
                  "visible":true,
                  "width":107,
-                 "x":945,
-                 "y":245
+                 "x":976,
+                 "y":256
                 }, 
                 {
                  "height":81,
                  "name":"roof.Skylight",
                  "properties":
                     {
-                     "":"",
                      "height":"100",
+                     "layer":"0",
                      "width":"200"
                     },
                  "type":"sprite",
                  "visible":true,
                  "width":107,
-                 "x":1171,
-                 "y":247
+                 "x":1232,
+                 "y":256
                 }, 
                 {
                  "height":81,
                  "name":"roof.Skylight",
                  "properties":
                     {
-                     "":"",
                      "height":"100",
+                     "layer":"0",
                      "width":"200"
                     },
                  "type":"sprite",
                  "visible":true,
                  "width":107,
-                 "x":1171,
-                 "y":394
+                 "x":1232,
+                 "y":400
                 }, 
                 {
                  "height":81,
                  "name":"roof.Skylight",
                  "properties":
                     {
-                     "":"",
                      "height":"100",
+                     "layer":"0",
                      "width":"200"
                     },
                  "type":"sprite",
                  "visible":true,
                  "width":107,
-                 "x":945,
-                 "y":392
-                }, 
-                {
-                 "height":81,
-                 "name":"roof.Skylight",
-                 "properties":
-                    {
-                     "":"",
-                     "height":"100",
-                     "width":"200"
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":107,
-                 "x":945,
-                 "y":536
-                }, 
-                {
-                 "height":81,
-                 "name":"roof.Skylight",
-                 "properties":
-                    {
-                     "":"",
-                     "height":"100",
-                     "width":"200"
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":107,
-                 "x":1171,
-                 "y":538
+                 "x":976,
+                 "y":400
                 }],
          "opacity":1,
          "type":"objectgroup",
