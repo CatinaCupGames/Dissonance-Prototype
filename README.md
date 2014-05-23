@@ -33,6 +33,11 @@ Meet the Team
 |------------------------|------------------------|
 |John|viceroyvonsalsa|
 
+###Game Designer
+|![img1](http://a03.t26.net/avatares/5/9/2/5/120_5925664.jpg)|
+|------------------------|
+|AJ Goguen|
+
 
 ###Inactive Members
 * laurenclayberg
