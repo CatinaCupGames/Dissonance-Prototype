@@ -132,7 +132,7 @@ public class KeyboardInput implements Input {
                 playableSprite.clearLock();
             }
 
-            if (!use_attack && !playableSprite.is_dodging && !playableSprite.isFrozen()) {
+            if (!use_attack && !playableSprite.isDodging() && !playableSprite.isFrozen()) {
                 if (InputKeys.checkKeyboard(InputKeys.ATTACK)) {
                     if (playableSprite.getCurrentWeapon() != null) {
                         playableSprite.getCurrentWeapon().use("swipe");
@@ -149,7 +149,7 @@ public class KeyboardInput implements Input {
                 }
             } else if (!InputKeys.checkKeyboard(InputKeys.SELECT)) use_select = false;
 
-            if (!playableSprite.use_dodge && !playableSprite.is_dodging && playableSprite.allow_dodge) {
+            if (!playableSprite.use_dodge && !playableSprite.isDodging() && playableSprite.canDodge()) {
                 if (InputKeys.checkKeyboard(InputKeys.DODGE)) {
                     playableSprite.dodge(playableSprite.getFacingDirection());
                 }

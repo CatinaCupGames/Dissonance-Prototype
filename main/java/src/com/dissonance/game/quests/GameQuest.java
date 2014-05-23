@@ -13,6 +13,7 @@ import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Camera;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.system.Service;
 import com.dissonance.game.GameCache;
@@ -65,14 +66,14 @@ public class GameQuest  extends PauseQuest {
 
         RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
 
-        /*runnable = RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+        runnable = RenderService.INSTANCE.runOnServiceThread(new Runnable() {
             @Override
             public void run() {
                 long time = System.currentTimeMillis();
                 update();
                 System.out.println(System.currentTimeMillis() - time);
             }
-        }, true, true);*/
+        }, true, true);
     }
 
     public void changeToOutside1() throws InterruptedException {

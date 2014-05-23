@@ -102,29 +102,13 @@ public class BlueGuard extends Enemy {
     private static final long ATTACK_RATE_MS = 1800;
     private static final long FOUND_YOU_MS = 400;
     private void runAI() {
-        if (getCurrentWeapon() == null || run) {
-            setMovementSpeed(14f);
-            if (getBehavior() == null || !(getBehavior() instanceof Flee)) {
-                PlayableSprite sprite = getClosestPlayer();
-                if (sprite == null) return;
-
-                Flee flee = new Flee(this, sprite, (getMarksmanship() * 2f) * 16f);
-                setBehavior(flee);
-                flee.setFleeListener(FLEE_LISTENER);
-            } else if (getBehavior() != null) {
-                Flee flee = (Flee)getBehavior();
-
-                PlayableSprite sprite = getClosestPlayer();
-                if (sprite == null) return;
-                flee.setTarget(sprite);
-            }
-        } else {
-            setMovementSpeed(10f);
+        if (getCurrentWeapon() != null) {
+            setMovementSpeed(getSpeed());
             PlayableSprite sprite = getClosestPlayer();
             if (sprite == null) {
                 if (!idle) {
                     idle = true;
-                    WaypointLikeIdle idleBehavior = new WaypointLikeIdle(this, 720);
+                    WaypointLikeIdle idleBehavior = new WaypointLikeIdle(this, 80);
                     setBehavior(idleBehavior);
                 }
             } else {
@@ -142,6 +126,9 @@ public class BlueGuard extends Enemy {
                     lastAttack = System.currentTimeMillis();
                     getCurrentWeapon().use("swipe");
                     setBehavior(null);
+                    if (run) {
+                        dodge(directionTowards(sprite).opposite());
+                    }
                 } else {
                     looking = true;
                     Behavior behavior = getBehavior();
@@ -166,7 +153,7 @@ public class BlueGuard extends Enemy {
     };
 
     private PlayableSprite getClosestPlayer() {
-        float distance = getMarksmanship() * 16f;
+        float distance = getMarksmanship() * 32f;
 
         PlayableSprite[] sprites = Players.getCurrentlyPlayingSprites();
         PlayableSprite closet = null;

@@ -25,15 +25,11 @@ public abstract class PlayableSprite extends CombatSprite {
     private MovementType mType = MovementType.RUNNING;
     private boolean frozen;
 
-
-    boolean controller_extend;
+     boolean controller_extend;
     boolean keyboard_extend;
     boolean use_dodge;
     boolean isAttacking = false;
 
-    float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
-    long dodgeStartTime;
-    boolean is_dodging, allow_dodge = true;
     ArrayList<PlayableSprite> party = new ArrayList<PlayableSprite>();
 
     private static PlayableSprite currentlyPlaying;
@@ -175,6 +171,20 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     @Override
+    protected void dodge(Direction direction1) {
+        if (frozen)
+            return;
+        freeze();
+        super.dodge(direction1, movementSpeed() * 8.5f);
+        if (!is_dodging) {
+            unfreeze();
+            return;
+        }
+        ignore_movement = true;
+        use_dodge = true;
+    }
+
+    @Override
     public void update() {
         super.update();
         if (isUpdateCanceled())
@@ -244,69 +254,21 @@ public abstract class PlayableSprite extends CombatSprite {
 
     boolean w, a, s, d;
     protected void checkMovement() {
-        if (is_dodging) {
-            float moveX, moveY;
-            if (dodgeX != 0) {
-                float dif = (float)(System.currentTimeMillis() - dodgeStartTime);
-                float percent;
-                if (dif > totalDodgeTime) {
-                    percent = 1;
-                } else {
-                    percent = dif / totalDodgeTime;
-                }
-                moveX = dodgeStartX + ((dodgeX - dodgeStartX) * percent);
-                rawSetX(moveX);
-                if (moveX == dodgeX) {
-                    unfreeze();
-                    setAnimation(0);
-                    ignore_movement = false;
-                    is_dodging = false;
-                    face(getFacingDirection());
-                    Timer.delayedInvokeRunnable(100, new Runnable() {
-                        @Override
-                        public void run() {
-                            allow_dodge = true;
-                            if (isFrozen())
-                                unfreeze();
-                        }
-                    });
-                    return;
-                }
-            } else if (dodgeY != 0) {
-                float dif = (float)(System.currentTimeMillis() - dodgeStartTime);
-                float percent;
-                if (dif > totalDodgeTime) {
-                    percent = 1;
-                } else {
-                    percent = dif / totalDodgeTime;
-                }
-                moveY = dodgeStartY + ((dodgeY - dodgeStartY) * percent);
-                //moveY = Camera.ease(dodgeStartY, dodgeY, totalDodgeTime, ((System.currentTimeMillis() - dodgeStartTime)));
-                rawSetY(moveY);
-                face(getFacingDirection());
-                if (moveY == dodgeY) {
-                    unfreeze();
-                    setAnimation(0);
-                    ignore_movement = false;
-                    is_dodging = false;
-                    Timer.delayedInvokeRunnable(100, new Runnable() {
-                        @Override
-                        public void run() {
-                            allow_dodge = true;
-                            if (isFrozen())
-                                unfreeze();
-                        }
-                    });
-                    return;
-                }
-            }
-        }
         if (frozen)
             return;
         if (ignore_movement && !isAttacking() && !is_dodging)
             ignore_movement = false;
 
         input.checkMovement(this);
+    }
+
+    @Override
+    protected void checkDodge() {
+        super.checkDodge();
+        if (!is_dodging) {
+            unfreeze();
+            ignore_movement = false;
+        }
     }
 
     void _onNoMovement() { onNoMovement(); }
@@ -499,97 +461,7 @@ public abstract class PlayableSprite extends CombatSprite {
         input = null;
     }
 
-    protected void dodge(Direction direction1) {
-        if (frozen)
-            return;
-        String ani;
-        float speed = movementSpeed() * 8.5f;
-        freeze();
-        /*
 
-        ALGEBRA TIME!
-
-        d = distance
-        s = speed
-        t = total dodge time
-        f = time per frame
-
-        t = 4f
-        s = 2.5 * movementSpeed()
-        d = s * (t / f)
-        f = (st) / d
-
-
-        ==============================
-
-        As long as t = 4f, then d = 4s
-         */
-        int DISTANCE = 120; //TODO Maybe change this
-        DISTANCE *= 0.8f;
-        DISTANCE /= 2f;
-        switch (direction1) {
-            case UP:
-            case UP_LEFT:
-            case UP_RIGHT:
-                ani = "dodge_up";
-                int i = 0;
-                for (; i < DISTANCE; i++) {
-                    if (getHitBox().checkForCollision(this, getX(), getY() - i))
-                        break;
-                }
-                dodgeY = getY() - i;
-                dodgeX = 0;
-                break;
-            case DOWN:
-            case DOWN_LEFT:
-            case DOWN_RIGHT:
-                ani = "dodge_down";
-                int ii = 0;
-                for (; ii < DISTANCE; ii++) {
-                    if (getHitBox().checkForCollision(this, getX(), getY() + ii))
-                        break;
-                }
-                dodgeY = getY() + ii;
-                dodgeX = 0;
-                break;
-            case LEFT:
-                ani = "dodge_left";
-                int iii = 0;
-                for (; iii < DISTANCE; iii++) {
-                    if (getHitBox().checkForCollision(this, getX() - iii, getY()))
-                        break;
-                }
-                dodgeX = getX() - iii;
-                dodgeY = 0;
-                break;
-            case RIGHT:
-                ani = "dodge_right";
-                int iiii = 0;
-                for (; iiii < DISTANCE; iiii++) {
-                    if (getHitBox().checkForCollision(this, getX() + iiii, getY()))
-                        break;
-                }
-                dodgeX = getX() + iiii;
-                dodgeY = 0;
-                break;
-            default:
-                unfreeze();
-                return;
-        }
-        setAnimation(ani);
-        setAnimationSpeed(100);
-        totalDodgeTime = 4 * getAnimationSpeed();
-        totalDodgeTime -= speed;
-        setAnimationSpeed((int) (((1f/4f) * speed) + ((1f/4f) * totalDodgeTime)));
-        dodgeStartTime = System.currentTimeMillis();
-        dodgeStartX = getX();
-        dodgeStartY = getY();
-        is_dodging = true;
-        allow_dodge = false;
-        ignore_movement = true;
-        playAnimation();
-        use_dodge = true;
-    }
 
     public boolean isPlaying() {
         return isPlaying;
