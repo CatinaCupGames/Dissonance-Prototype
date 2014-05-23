@@ -41,6 +41,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         exit.setLayer(100);
         w.loadAndAdd(exit);
 
+
         for(int i = 0; i < meleeGuard.length; i++){
             meleeGuard[i] = new BlueGuard();
             w.loadAndAdd(meleeGuard[i]);
@@ -58,6 +59,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         w.loadAndAdd(meleeGuard[2]);
         meleeGuard[1].setX(64*16);
         meleeGuard[1].setY(20*16);
+
     }
 
     @Override

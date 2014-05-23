@@ -15,7 +15,7 @@ import com.dissonance.game.behaviors.WaypointLikeSeek;
 
 public class BlueGuard extends Enemy {
     public BlueGuard() {
-        super("farrand", StatType.NON_MAGIC, CombatType.HUMAN);
+        super("meleeguard", StatType.NON_MAGIC, CombatType.HUMAN);
     }
 
 
@@ -69,7 +69,7 @@ public class BlueGuard extends Enemy {
         setVigor(8);
         setStamina(4);
         setMarksmanship(8);
-        setMovementSpeed(3f);
+        setMovementSpeed(1f);
 
     }
 
