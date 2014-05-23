@@ -13,6 +13,13 @@ public class Building2 extends ImagePhysicsSprite {
     }
 
     @Override
+    public void onLoad() {
+        super.onLoad();
+
+        setCutOffMargin(-60);
+    }
+
+    @Override
     public boolean neverClip() {
         return true;
     }

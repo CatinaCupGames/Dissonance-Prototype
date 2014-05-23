@@ -11,6 +11,12 @@ public class Building5 extends ImagePhysicsSprite {
     public String hitboxConfigPath() {
         return "sprites/buildings/building5.txt";
     }
+    @Override
+    public void onLoad() {
+        super.onLoad();
+
+        setCutOffMargin(-60f);
+    }
 
     @Override
     public boolean neverClip() {
