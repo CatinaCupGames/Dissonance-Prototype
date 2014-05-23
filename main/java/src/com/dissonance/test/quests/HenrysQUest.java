@@ -17,12 +17,12 @@ public class HenrysQUest extends AbstractQuest {
     public void startQuest() throws Exception {
         World.setDefaultLoaderPackage("com.dissonance.game.w");
 
-        World w = WorldFactory.getWorld("RooftopMid");
+        World w = WorldFactory.getWorld("RoofTopBeginning");
         setWorld(w);
         w.waitForWorldDisplayed();
 
         Player player1 = Players.createPlayer1();
-        player1.joinAs(RooftopMid.farrand);
+        player1.joinAs(RoofTopBeginning.farrand);
     }
 
     @Override
