@@ -3,9 +3,9 @@ package com.dissonance.framework.game.item.impl;
 import com.dissonance.framework.game.combat.Bullet;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.item.Item;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
-import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
@@ -21,6 +21,8 @@ public class WeaponItem extends Item {
     private Weapon weapon;
 
     private long lastUse;
+
+    private static boolean isPlaying;
 
     public WeaponItem(CombatSprite owner, Weapon w) {
         super(owner);
@@ -70,7 +72,13 @@ public class WeaponItem extends Item {
                      * This chunk of code is the sword swiping detection code
                      * =========================================================
                      */
-                    Sound.playSound("sword.wav");
+
+                    if(!isPlaying){
+                        Sound.playSound("sword");
+                        isPlaying = true;
+                    }
+
+
                     long time = System.currentTimeMillis();
 
                     if (lastUse + 500 >= time) { //TODO Maybe make this timeout weapon specific..?
@@ -206,6 +214,7 @@ public class WeaponItem extends Item {
                             sprite.setAnimation(old_animation);
                             hits.clear();
                             getOwner().setAttacking(false);
+                            isPlaying = false;
                         }
                     });
                     getOwner().setAnimationSpeed(50);

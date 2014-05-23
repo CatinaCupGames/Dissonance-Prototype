@@ -15,7 +15,7 @@ import com.dissonance.game.behaviors.WaypointLikeSeek;
 
 public class BlueGuard extends Enemy {
     public BlueGuard() {
-        super("farrand", StatType.NON_MAGIC, CombatType.HUMAN);
+        super("meleeguard", StatType.NON_MAGIC, CombatType.HUMAN);
     }
 
 
@@ -69,6 +69,8 @@ public class BlueGuard extends Enemy {
         setVigor(8);
         setStamina(4);
         setMarksmanship(8);
+        setMovementSpeed(1f);
+
     }
 
     @Override
@@ -102,8 +104,37 @@ public class BlueGuard extends Enemy {
     private static final long ATTACK_RATE_MS = 1800;
     private static final long FOUND_YOU_MS = 400;
     private void runAI() {
+<<<<<<< HEAD
         if (getCurrentWeapon() != null) {
             setMovementSpeed(getSpeed());
+=======
+        if (getCurrentWeapon() == null || run) {
+            setMovementSpeed(14f);
+            if (getBehavior() == null || !(getBehavior() instanceof Flee)) {
+                PlayableSprite sprite = getClosestPlayer();
+                if (sprite == null) {
+                    WaypointLikeIdle idleBehavior = new WaypointLikeIdle(this, 720);
+                    setBehavior(idleBehavior);
+                    return;
+                }
+
+                Flee flee = new Flee(this, sprite, (getMarksmanship() * 2f) * 16f);
+                setBehavior(flee);
+                flee.setFleeListener(FLEE_LISTENER);
+            } else {
+                Flee flee = (Flee)getBehavior();
+
+                PlayableSprite sprite = getClosestPlayer();
+                if (sprite == null) {
+                    WaypointLikeIdle idleBehavior = new WaypointLikeIdle(this, 720);
+                    setBehavior(idleBehavior);
+                    return;
+                }
+                flee.setTarget(sprite);
+            }
+        } else {
+            setMovementSpeed(10f);
+>>>>>>> cea0461ec6b7aa5a4057ec4c7ba03428a1cc7151
             PlayableSprite sprite = getClosestPlayer();
             if (sprite == null) {
                 if (!idle) {
