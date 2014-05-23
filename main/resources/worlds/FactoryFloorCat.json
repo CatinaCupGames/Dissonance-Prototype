@@ -274,7 +274,7 @@
                     },
                  "type":"trigger",
                  "visible":true,
-                 "width":16,
+                 "width":32,
                  "x":96,
                  "y":1184
                 }, 

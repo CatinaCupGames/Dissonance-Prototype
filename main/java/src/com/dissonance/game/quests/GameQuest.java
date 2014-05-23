@@ -42,7 +42,6 @@ public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
-
         setWorld(GameCache.OutsideFighting);
         GameCache.OutsideFighting.waitForWorldDisplayed();
         TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
