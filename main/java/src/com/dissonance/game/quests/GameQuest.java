@@ -16,6 +16,7 @@ import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.Service;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
+import com.dissonance.game.w.OutsideFighting;
 import com.dissonance.game.w.RoofTopBeginning;
 
 import java.util.ArrayList;
@@ -47,14 +48,14 @@ public class GameQuest  extends PauseQuest {
 
         Player player1 = Players.createPlayer1();
         if (player1.isPlaying())
-            player1.changeSprite(RoofTopBeginning.farrand);
+            player1.changeSprite(OutsideFighting.farrand);
         else
-            player1.joinAs(RoofTopBeginning.farrand);
+            player1.joinAs(OutsideFighting.farrand);
 
         Player player2 = Players.getPlayer(2);
         if (player2 != null) {
             if (player2.isPlaying())
-                player2.changeSprite(RoofTopBeginning.jeremiah);
+                player2.changeSprite(OutsideFighting.jeremiah);
             else
                 player2.join();
         }

@@ -17,7 +17,7 @@ public class LoadingQuest extends AbstractQuest {
 
 
         GameCache.RoofTopBeginning = WorldFactory.getWorld("FactoryFloorCat", false);
-        GameCache.OutsideFighting = WorldFactory.getWorld("OutsideFightingshit", false);
+        GameCache.OutsideFighting = WorldFactory.getWorld("OutsideFighting", false);
         //GameCache.OutsideFightingshit.useExtreamSpeed(true);
         Thread.sleep(2000);
 

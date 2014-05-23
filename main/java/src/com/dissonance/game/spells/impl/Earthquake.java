@@ -36,7 +36,6 @@ public class Earthquake implements Spell {
                 Direction pushDirection = owner.directionTowards(c).opposite();
                 c.forceAnimationDirection(pushDirection);
                 c.setMovementSpeed(30);
-                c.moveTowards(pushDirection, 5f * 16f)
             }
         }
     }
