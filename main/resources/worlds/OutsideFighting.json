@@ -792,19 +792,6 @@
                  "visible":true,
                  "width":48,
                  "x":2832,
-                 "y":6352
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":2832,
                  "y":6112
                 }, 
                 {
@@ -909,32 +896,6 @@
                  "visible":true,
                  "width":48,
                  "x":2832,
-                 "y":5632
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":2832,
-                 "y":5552
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":2832,
                  "y":5472
                 }, 
                 {
@@ -942,39 +903,13 @@
                  "name":"outside.PoliceBarrierV",
                  "properties":
                     {
-
+                     "layer":"0"
                     },
                  "type":"sprite",
                  "visible":true,
                  "width":48,
                  "x":2832,
                  "y":5392
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":2832,
-                 "y":5312
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":2832,
-                 "y":5232
                 }, 
                 {
                  "height":96,
@@ -1091,33 +1026,7 @@
                  "visible":true,
                  "width":48,
                  "x":2832,
-                 "y":4512
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":2832,
                  "y":4352
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":2832,
-                 "y":4432
                 }, 
                 {
                  "height":96,
@@ -1337,97 +1246,6 @@
                  "type":"sprite",
                  "visible":true,
                  "width":96,
-                 "x":4752,
-                 "y":4176
-                }, 
-                {
-                 "height":48,
-                 "name":"outside.PoliceBarrierH",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":96,
-                 "x":4640,
-                 "y":4176
-                }, 
-                {
-                 "height":48,
-                 "name":"outside.PoliceBarrierH",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":96,
-                 "x":4528,
-                 "y":4176
-                }, 
-                {
-                 "height":48,
-                 "name":"outside.PoliceBarrierH",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":96,
-                 "x":4416,
-                 "y":4176
-                }, 
-                {
-                 "height":48,
-                 "name":"outside.PoliceBarrierH",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":96,
-                 "x":4304,
-                 "y":4176
-                }, 
-                {
-                 "height":48,
-                 "name":"outside.PoliceBarrierH",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":96,
-                 "x":4192,
-                 "y":4176
-                }, 
-                {
-                 "height":48,
-                 "name":"outside.PoliceBarrierH",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":96,
-                 "x":4080,
-                 "y":4176
-                }, 
-                {
-                 "height":48,
-                 "name":"outside.PoliceBarrierH",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":96,
                  "x":3968,
                  "y":4176
                 }, 
@@ -1558,45 +1376,6 @@
                  "type":"sprite",
                  "visible":true,
                  "width":96,
-                 "x":1600,
-                 "y":3104
-                }, 
-                {
-                 "height":48,
-                 "name":"outside.PoliceBarrierH",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":96,
-                 "x":144,
-                 "y":3104
-                }, 
-                {
-                 "height":48,
-                 "name":"outside.PoliceBarrierH",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":96,
-                 "x":1488,
-                 "y":3104
-                }, 
-                {
-                 "height":48,
-                 "name":"outside.PoliceBarrierH",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":96,
                  "x":1824,
                  "y":3104
                 }, 
@@ -1624,19 +1403,6 @@
                  "visible":true,
                  "width":96,
                  "x":816,
-                 "y":3104
-                }, 
-                {
-                 "height":48,
-                 "name":"outside.PoliceBarrierH",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":96,
-                 "x":1712,
                  "y":3104
                 }, 
                 {
@@ -1727,19 +1493,6 @@
                  "type":"sprite",
                  "visible":true,
                  "width":96,
-                 "x":1376,
-                 "y":3104
-                }, 
-                {
-                 "height":48,
-                 "name":"outside.PoliceBarrierH",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":96,
                  "x":2272,
                  "y":3104
                 }, 
@@ -1748,7 +1501,7 @@
                  "name":"outside.PoliceBarrierH",
                  "properties":
                     {
-
+                     "layer":"0"
                     },
                  "type":"sprite",
                  "visible":true,
@@ -1767,19 +1520,6 @@
                  "visible":true,
                  "width":96,
                  "x":592,
-                 "y":3104
-                }, 
-                {
-                 "height":48,
-                 "name":"outside.PoliceBarrierH",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":96,
-                 "x":32,
                  "y":3104
                 }, 
                 {
@@ -1910,19 +1650,6 @@
                  "visible":true,
                  "width":48,
                  "x":3079,
-                 "y":1186
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":3079,
                  "y":2066
                 }, 
                 {
@@ -1962,19 +1689,6 @@
                  "visible":true,
                  "width":48,
                  "x":3079,
-                 "y":2386
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":3079,
                  "y":2866
                 }, 
                 {
@@ -2002,19 +1716,6 @@
                  "width":48,
                  "x":3079,
                  "y":2546
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":3079,
-                 "y":2306
                 }, 
                 {
                  "height":96,
@@ -2079,19 +1780,6 @@
                  "visible":true,
                  "width":48,
                  "x":3079,
-                 "y":1106
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":3079,
                  "y":866
                 }, 
                 {
@@ -2131,19 +1819,6 @@
                  "visible":true,
                  "width":48,
                  "x":3079,
-                 "y":1266
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":3079,
                  "y":3026
                 }, 
                 {
@@ -2164,7 +1839,7 @@
                  "name":"outside.PoliceBarrierV",
                  "properties":
                     {
-
+                     "layer":"0"
                     },
                  "type":"sprite",
                  "visible":true,
@@ -2229,26 +1904,13 @@
                  "name":"outside.PoliceBarrierV",
                  "properties":
                     {
-
+                     "layer":"0"
                     },
                  "type":"sprite",
                  "visible":true,
                  "width":48,
                  "x":3079,
                  "y":2226
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":3079,
-                 "y":2466
                 }, 
                 {
                  "height":96,

@@ -174,8 +174,8 @@ public abstract class PlayableSprite extends CombatSprite {
     protected void dodge(Direction direction1) {
         if (frozen)
             return;
-        freeze();
         super.dodge(direction1, movementSpeed() * 8.5f);
+        freeze();
         if (!is_dodging) {
             unfreeze();
             return;
@@ -264,10 +264,12 @@ public abstract class PlayableSprite extends CombatSprite {
 
     @Override
     protected void checkDodge() {
+        boolean value = is_dodging;
         super.checkDodge();
-        if (!is_dodging) {
+        if (value && !is_dodging) {
             unfreeze();
             ignore_movement = false;
+            face(dodgeDirection);
         }
     }
 

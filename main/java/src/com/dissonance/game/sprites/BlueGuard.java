@@ -13,6 +13,9 @@ import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.behaviors.WaypointLikeIdle;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class BlueGuard extends Enemy {
     public BlueGuard() {
         super("meleeguard", StatType.NON_MAGIC, CombatType.HUMAN);
@@ -65,7 +68,7 @@ public class BlueGuard extends Enemy {
         setCurrentWeapon(Weapon.getWeapon("guardsword").createItem(this));
         setAttack(10);
         setDefense(8);
-        setSpeed(6);
+        setSpeed(4);
         setVigor(8);
         setStamina(4);
         setMarksmanship(8);
@@ -78,7 +81,8 @@ public class BlueGuard extends Enemy {
         super.strike(attacker, with);
 
         if (getClosestPlayer() == attacker && getHP() < getMaxHP() / 3.0) {
-            run = !run;
+            run = true;
+            dodge(directionTowards(attacker).opposite(), movementSpeed() * 8.5f);
         }
     }
 
@@ -95,56 +99,45 @@ public class BlueGuard extends Enemy {
         return sprite instanceof BlueGuard || sprite instanceof RedGuard;
     }
 
+    @Override
+    protected void onAnimationFinished() {
+        if (getCurrentAnimation().getName().startsWith("swipe")) {
+            if (run && !isDodging() && target != null) {
+                dodge(directionTowards(target).opposite());
+            }
+        }
+        super.onAnimationFinished();
+    }
+
+    private int movementSpeed() {
+        return 15 + (getSpeed());
+    }
+
 
     private boolean run;
     private boolean idle;
     private long lastAttack;
     private boolean looking = false;
     private long foundTime = 0L;
+    private PlayableSprite target;
     private static final long ATTACK_RATE_MS = 1800;
     private static final long FOUND_YOU_MS = 400;
     private void runAI() {
-<<<<<<< HEAD
+        if (isDodging())
+            return;
         if (getCurrentWeapon() != null) {
-            setMovementSpeed(getSpeed());
-=======
-        if (getCurrentWeapon() == null || run) {
-            setMovementSpeed(14f);
-            if (getBehavior() == null || !(getBehavior() instanceof Flee)) {
-                PlayableSprite sprite = getClosestPlayer();
-                if (sprite == null) {
-                    WaypointLikeIdle idleBehavior = new WaypointLikeIdle(this, 720);
-                    setBehavior(idleBehavior);
-                    return;
-                }
-
-                Flee flee = new Flee(this, sprite, (getMarksmanship() * 2f) * 16f);
-                setBehavior(flee);
-                flee.setFleeListener(FLEE_LISTENER);
-            } else {
-                Flee flee = (Flee)getBehavior();
-
-                PlayableSprite sprite = getClosestPlayer();
-                if (sprite == null) {
-                    WaypointLikeIdle idleBehavior = new WaypointLikeIdle(this, 720);
-                    setBehavior(idleBehavior);
-                    return;
-                }
-                flee.setTarget(sprite);
-            }
-        } else {
-            setMovementSpeed(10f);
->>>>>>> cea0461ec6b7aa5a4057ec4c7ba03428a1cc7151
-            PlayableSprite sprite = getClosestPlayer();
-            if (sprite == null) {
+            setMovementSpeed(movementSpeed());
+            target = getClosestPlayer();
+            if (target == null) {
                 if (!idle) {
                     idle = true;
                     WaypointLikeIdle idleBehavior = new WaypointLikeIdle(this, 80);
                     setBehavior(idleBehavior);
                 }
             } else {
-                idle = false;
-                if (distanceFrom(sprite) <= getCurrentWeapon().getWeaponInfo().getRange() + (sprite.getWidth() / 2f)) {
+                idle = false;/*
+                System.out.println(distanceFrom(target) + " <= " + (getCurrentWeapon().getWeaponInfo().getRange() + (target.getWidth() / 2f)));*/
+                if (distanceFrom(target) <= 3 + getCurrentWeapon().getWeaponInfo().getRange() + (target.getWidth() / 4f)) {
                     if (looking) {
                         foundTime = System.currentTimeMillis();
                         looking = false;
@@ -157,17 +150,14 @@ public class BlueGuard extends Enemy {
                     lastAttack = System.currentTimeMillis();
                     getCurrentWeapon().use("swipe");
                     setBehavior(null);
-                    if (run) {
-                        dodge(directionTowards(sprite).opposite());
-                    }
                 } else {
                     looking = true;
                     Behavior behavior = getBehavior();
                     if (behavior instanceof Seek) {
                         WaypointLikeSeek seek = (WaypointLikeSeek)getBehavior();
-                        seek.setTarget(getSeekTarget(sprite));
+                        seek.setTarget(getSeekTarget(target));
                     } else {
-                        WaypointLikeSeek seek = new WaypointLikeSeek(this, getSeekTarget(sprite));
+                        WaypointLikeSeek seek = new WaypointLikeSeek(this, getSeekTarget(target));
                         setBehavior(seek);
                     }
                 }
@@ -204,6 +194,7 @@ public class BlueGuard extends Enemy {
         return closet;
     }
 
+    static HashMap<PlayableSprite, ArrayList<CombatSprite>> attackers = new HashMap<>();
     private Position getSeekTarget(Sprite sprite) {
         float x = sprite.getX();
         float y = sprite.getY();

@@ -29,6 +29,7 @@ public abstract class CombatSprite extends PhysicsSprite {
     protected float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
     protected long dodgeStartTime;
     protected boolean is_dodging, allow_dodge = true;
+    protected Direction dodgeDirection;
 
 
     private transient ArrayList<PlayableSprite> lockers = new ArrayList<PlayableSprite>();
@@ -324,11 +325,13 @@ public abstract class CombatSprite extends PhysicsSprite {
             default:
                 return;
         }
+        this.dodgeDirection = direction1;
         setAnimation(ani);
-        setAnimationSpeed(100);
+        setAnimationSpeed(70);
         totalDodgeTime = 4 * getAnimationSpeed();
         totalDodgeTime -= speed;
         setAnimationSpeed((int) (((1f/4f) * speed) + ((1f/4f) * totalDodgeTime)));
+        playAnimation();
         dodgeStartTime = System.currentTimeMillis();
         dodgeStartX = getX();
         dodgeStartY = getY();
@@ -386,7 +389,7 @@ public abstract class CombatSprite extends PhysicsSprite {
                 if (moveX == dodgeX) {
                     setAnimation(0);
                     is_dodging = false;
-                    face(getFacingDirection());
+                    face(dodgeDirection);
                     com.dissonance.framework.system.utils.Timer.delayedInvokeRunnable(100, new Runnable() {
                         @Override
                         public void run() {
@@ -409,6 +412,7 @@ public abstract class CombatSprite extends PhysicsSprite {
                 if (moveY == dodgeY) {
                     setAnimation(0);
                     is_dodging = false;
+                    face(dodgeDirection);
                     com.dissonance.framework.system.utils.Timer.delayedInvokeRunnable(100, new Runnable() {
                         @Override
                         public void run() {

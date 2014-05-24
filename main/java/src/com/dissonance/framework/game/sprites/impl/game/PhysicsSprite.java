@@ -144,28 +144,28 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         if (c instanceof PhysicsSprite) {
             if (ignore.contains(c))
                 return;
-            super.setX(oldX);
+            super.rawSetX(oldX);
             float add = getX() - c.getX();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
-                super.setX(super.getX() + (add < 0 ? -1 : 1));
+                super.rawSetX(super.getX() + (add < 0 ? -1 : 1));
             }
         } else if (c instanceof Tile) {
-            super.setX(oldX);
+            super.rawSetX(oldX);
             float add = getX() - c.getX();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
-                super.setX(super.getX() + (add < 0 ? -1 : 1));
+                super.rawSetX(super.getX() + (add < 0 ? -1 : 1));
             }
         } else if (c instanceof TiledObject) {
             TiledObject to = (TiledObject) c;
             if (to.isHitbox())
-                super.setX(oldX);
+                super.rawSetX(oldX);
             else if (to.isTrigger() && this instanceof PlayableSprite && ((PlayableSprite) this).isSelected()) { //2meta4me
                 AbstractTrigger abstractTrigger = to.getTrigger();
                 abstractTrigger.onCollide((PlayableSprite) this);
             } else if (to.isDoor() && this instanceof PlayableSprite && ((PlayableSprite) this).isSelected()) { //3meta5me
                 String target = to.getDoorTarget();
                 if (target.equalsIgnoreCase("")) {
-                    super.setX(oldX);
+                    super.rawSetX(oldX);
                     return;
                 }
                 String world = to.getDoorWorldTarget();
@@ -177,14 +177,14 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                         worldObj = WorldFactory.getWorld(world);
                     } catch (WorldLoadFailedException e) {
                         e.printStackTrace();
-                        super.setX(oldX);
+                        super.rawSetX(oldX);
                         return;
                     }
                 }
 
                 final TiledObject spawn = worldObj.getSpawn(target);
                 if (spawn == null) {
-                    super.setX(oldX);
+                    super.rawSetX(oldX);
                     return;
                 }
 
@@ -200,8 +200,8 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                             setWorld(worldObj);
                         }
 
-                        PhysicsSprite.super.setX(spawn.getX());
-                        PhysicsSprite.super.setY(spawn.getY());
+                        PhysicsSprite.super.rawSetX(spawn.getX());
+                        PhysicsSprite.super.rawSetY(spawn.getY());
                         Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
                         while (RenderService.getCurrentAlphaValue() != 1) {
                             try {
@@ -220,7 +220,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         } else {
             if (ignore.contains(c))
                 return;
-            super.setX(oldX);
+            super.rawSetX(oldX);
         }
     }
 
@@ -235,28 +235,28 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         if (c instanceof PhysicsSprite) {
             if (ignore.contains(c))
                 return;
-            super.setY(oldY);
+            super.rawSetY(oldY);
             float add = getY() - hb.getLastCollide().getY();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
-                super.setY(super.getY() + (add < 0 ? -1 : 1));
+                super.rawSetY(super.getY() + (add < 0 ? -1 : 1));
             }
         } else if (c instanceof Tile) {
-            super.setY(oldY);
+            super.rawSetY(oldY);
             float add = getY() - c.getY();
             for (int i = 0; i < 1000 && hb.checkForCollision(this); i++) {
-                super.setY(super.getY() + (add < 0 ? -1 : 1));
+                super.rawSetY(super.getY() + (add < 0 ? -1 : 1));
             }
         } else if (c instanceof TiledObject) {
             TiledObject to = (TiledObject) c;
             if (to.isHitbox())
-                super.setY(oldY);
+                super.rawSetY(oldY);
             else if (to.isTrigger() && this instanceof PlayableSprite && ((PlayableSprite) this).isSelected()) { //2meta4me
                 AbstractTrigger abstractTrigger = to.getTrigger();
                 abstractTrigger.onCollide((PlayableSprite) this);
             } else if (to.isDoor() && this instanceof PlayableSprite && ((PlayableSprite) this).isSelected()) { //3meta5me
                 String target = to.getDoorTarget();
                 if (target.equalsIgnoreCase("")) {
-                    super.setY(oldY);
+                    super.rawSetY(oldY);
                     return;
                 }
                 String world = to.getDoorWorldTarget();
@@ -268,14 +268,14 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                         worldObj = WorldFactory.getWorld(world);
                     } catch (WorldLoadFailedException e) {
                         e.printStackTrace();
-                        super.setY(oldY);
+                        super.rawSetY(oldY);
                         return;
                     }
                 }
 
                 final TiledObject spawn = worldObj.getSpawn(target);
                 if (spawn == null) {
-                    super.setY(oldY);
+                    super.rawSetY(oldY);
                     return;
                 }
 
@@ -291,8 +291,8 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
                             setWorld(worldObj);
                         }
 
-                        PhysicsSprite.super.setX(spawn.getX());
-                        PhysicsSprite.super.setY(spawn.getY());
+                        PhysicsSprite.super.rawSetX(spawn.getX());
+                        PhysicsSprite.super.rawSetY(spawn.getY());
                         Camera.setPos(Camera.translateToCameraCenter(getVector(), getHeight()));
                         while (RenderService.getCurrentAlphaValue() != 1) {
                             try {
@@ -310,7 +310,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         } else {
             if (ignore.contains(c))
                 return;
-            super.setY(oldY);
+            super.rawSetY(oldY);
         }
     }
 

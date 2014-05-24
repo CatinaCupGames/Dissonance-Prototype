@@ -94,20 +94,22 @@ public class WeaponItem extends Item {
                     getOwner().setAttacking(true);
 
                     final String old_animation = getOwner().getCurrentAnimation().getName();
+                    String newName = old_animation;
                     switch (getOwner().getFacingDirection()) {
                         case UP:
-                            getOwner().setAnimation("swipe_up");
+                            newName = "swipe_up";
                             break;
                         case LEFT:
-                            getOwner().setAnimation("swipe_left");
+                            newName = "swipe_left";
                             break;
                         case RIGHT:
-                            getOwner().setAnimation("swipe_right");
+                            newName = "swipe_right";
                             break;
                         case DOWN:
-                            getOwner().setAnimation("swipe_down");
+                            newName = "swipe_down";
                             break;
                     }
+                    getOwner().setAnimation(newName);
                     float height;
                     float width;
                     Texture texture = getOwner().getTexture();
@@ -202,6 +204,7 @@ public class WeaponItem extends Item {
                                 swordHitBox.setY(swordHitBox.getY() + yadd);
                         }
                     });
+                    final String finalNewName = newName;
                     getOwner().setAnimationFinishedListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFinished() {
                         @Override
                         public void onAnimationFinished(AnimatedSprite sprite) {
@@ -211,7 +214,7 @@ public class WeaponItem extends Item {
                                 ((PlayableSprite) getOwner()).unfreeze();
                                 ((PlayableSprite) getOwner()).ignore_movement = false;
                             }
-                            sprite.setAnimation(old_animation);
+                            if (sprite.getCurrentAnimation().getName().equals(finalNewName)) sprite.setAnimation(old_animation);
                             hits.clear();
                             getOwner().setAttacking(false);
                             isPlaying = false;

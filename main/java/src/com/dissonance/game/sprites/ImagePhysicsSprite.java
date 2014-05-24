@@ -21,6 +21,7 @@ public abstract class ImagePhysicsSprite extends ImageSprite implements Collidab
     @Override
     public void onLoad() {
         super.onLoad();
+
         float width = getWidth(), height = getHeight();
         if (getTexture() != null) {
             width = getTexture().getImageWidth();

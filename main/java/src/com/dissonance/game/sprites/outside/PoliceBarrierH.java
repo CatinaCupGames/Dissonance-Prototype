@@ -12,4 +12,12 @@ public class PoliceBarrierH extends ImagePhysicsSprite {
     public String hitboxConfigPath() {
         return "sprites/img/PoliceBarrierH.txt";
     }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+
+        if (getLayer() == 0)
+            setCutOffMargin(-80f);
+    }
 }

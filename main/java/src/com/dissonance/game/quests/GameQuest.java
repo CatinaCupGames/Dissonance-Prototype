@@ -44,8 +44,8 @@ public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
-        setWorld(GameCache.RoofTopBeginning);
-        GameCache.RoofTopBeginning.waitForWorldDisplayed();
+        setWorld(GameCache.OutsideFighting);
+        GameCache.OutsideFighting.waitForWorldDisplayed();
         TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
 
         Camera.stopFollowing();
@@ -69,14 +69,14 @@ public class GameQuest  extends PauseQuest {
 
         RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
 
-        runnable = RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+        /*runnable = RenderService.INSTANCE.runOnServiceThread(new Runnable() {
             @Override
             public void run() {
                 long time = System.currentTimeMillis();
                 update();
                 System.out.println(System.currentTimeMillis() - time);
             }
-        }, true, true);
+        }, true, true);*/
     }
 
     public void changeToOutside1() throws InterruptedException {
@@ -98,6 +98,9 @@ public class GameQuest  extends PauseQuest {
             else
                 player2.join();
         }
+
+        RoofTopBeginning.farrand.unfreeze();
+        RoofTopBeginning.jeremiah.unfreeze();
     }
 
     @Override

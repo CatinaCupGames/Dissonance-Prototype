@@ -70,7 +70,7 @@ public class InputKeys {
 
     private static String createConfig() throws IOException {
         return "moveUp:17\nmoveLeft:30\nmoveDown:31\nmoveRight:32\n" +
-                "select:57\ndodge:29\nswitch:23\nstrafe:29\nattack:36\n" +
+                "select:57\ndodge:16\nswitch:23\nstrafe:29\nattack:36\n" +
                 "special:37\nmagic1:24\nmagic2:38\nmenu:15\npause:1\n" +
                 "extendUp:200\nextendDown:208\nextendLeft:203\nextendRight:205\n";
     }
