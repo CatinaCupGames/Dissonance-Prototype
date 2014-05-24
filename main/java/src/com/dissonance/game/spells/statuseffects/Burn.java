@@ -2,12 +2,14 @@ package com.dissonance.game.spells.statuseffects;
 
 import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.combat.spells.StatusEffect;
+import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
 
 import java.awt.*;
 
 public class Burn extends StatusEffect {
+    private ParticleSprite.ParticleSource source;
     int oAttack, oDefense;
     public Burn(long duration, float value) {
         super(duration, value);
@@ -24,6 +26,22 @@ public class Burn extends StatusEffect {
         oDefense = owner.getDefense();
         owner.setAttack(owner.getAttack() - (owner.getAttack() / constant));
         owner.setDefense(owner.getDefense() - (owner.getDefense() / constant));
+        owner.setSpriteMovedListener(new Sprite.SpriteEvent.SpriteMovedEvent() {
+            @Override
+            public void onSpriteMoved(Sprite sprite, float oldx, float oldy) {
+                if (source.hasEnded()) {
+                    sprite.setSpriteMovedListener(null);
+                    return;
+                }
+                source.setX(sprite.getX())
+                        .setY(sprite.getY());
+            }
+        });
+
+        source = ParticleSprite.createParticlesAt(owner.getX(), owner.getY(), owner.getWorld())
+                .setColor(Color.RED)
+                .setCount(300f)
+                .setRate(400);
     }
 
     @Override
@@ -51,5 +69,7 @@ public class Burn extends StatusEffect {
             return;
         owner.setAttack(oAttack);
         owner.setDefense(oDefense);
+
+        source.end();
     }
 }

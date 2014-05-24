@@ -486,7 +486,7 @@ public abstract class CombatSprite extends PhysicsSprite {
     }
 
     public void useSpell2() {
-        if (!hasSpell1())
+        if (!hasSpell2())
             return;
         if (MP < spell2.mpCost()) {
             //TODO Play sound
@@ -494,7 +494,7 @@ public abstract class CombatSprite extends PhysicsSprite {
         }
         this.isCastingSpell = true;
         MP -= spell2.mpCost();
-        spell1.castSpell();
+        spell2.castSpell();
         this.isCastingSpell = false;
     }
 
