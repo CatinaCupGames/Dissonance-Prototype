@@ -9,6 +9,7 @@ import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.behaviors.WaypointLikeIdle;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
@@ -76,15 +77,15 @@ public class BlueGuard extends Enemy {
 
     }
 
-    @Override
+    /*@Override
     public void strike(CombatSprite attacker, WeaponItem with) {
         super.strike(attacker, with);
 
-        if (getClosestPlayer() == attacker && getHP() < getMaxHP() / 3.0) {
+        if (target == attacker && getHP() < getMaxHP() / 3.0) {
             run = true;
             dodge(directionTowards(attacker).opposite(), movementSpeed() * 8.5f);
         }
-    }
+    }*/
 
     @Override
     public void update() {
@@ -135,8 +136,7 @@ public class BlueGuard extends Enemy {
                     setBehavior(idleBehavior);
                 }
             } else {
-                idle = false;/*
-                System.out.println(distanceFrom(target) + " <= " + (getCurrentWeapon().getWeaponInfo().getRange() + (target.getWidth() / 2f)));*/
+                idle = false;
                 if (distanceFrom(target) <= 3 + getCurrentWeapon().getWeaponInfo().getRange() + (target.getWidth() / 4f)) {
                     if (looking) {
                         foundTime = System.currentTimeMillis();
@@ -174,7 +174,7 @@ public class BlueGuard extends Enemy {
     };
 
     private PlayableSprite getClosestPlayer() {
-        float distance = getMarksmanship() * 32f;
+        float distance = 15f * 16f;
 
         PlayableSprite[] sprites = Players.getCurrentlyPlayingSprites();
         PlayableSprite closet = null;

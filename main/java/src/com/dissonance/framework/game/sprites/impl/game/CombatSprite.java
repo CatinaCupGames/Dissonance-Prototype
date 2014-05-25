@@ -283,11 +283,11 @@ public abstract class CombatSprite extends PhysicsSprite {
             case UP_RIGHT:
                 ani = "dodge_up";
                 int i = 0;
-                for (; i < DISTANCE; i++) {
+                /*for (; i < DISTANCE; i++) {
                     if (getHitBox().checkForCollision(this, getX(), getY() - i))
                         break;
-                }
-                dodgeY = getY() - i;
+                }*/
+                dodgeY = getY() - DISTANCE;
                 dodgeX = 0;
                 break;
             case DOWN:
@@ -295,31 +295,31 @@ public abstract class CombatSprite extends PhysicsSprite {
             case DOWN_RIGHT:
                 ani = "dodge_down";
                 int ii = 0;
-                for (; ii < DISTANCE; ii++) {
+               /* for (; ii < DISTANCE; ii++) {
                     if (getHitBox().checkForCollision(this, getX(), getY() + ii))
                         break;
-                }
-                dodgeY = getY() + ii;
+                }*/
+                dodgeY = getY() + DISTANCE;
                 dodgeX = 0;
                 break;
             case LEFT:
                 ani = "dodge_left";
                 int iii = 0;
-                for (; iii < DISTANCE; iii++) {
+                /*for (; iii < DISTANCE; iii++) {
                     if (getHitBox().checkForCollision(this, getX() - iii, getY()))
                         break;
-                }
-                dodgeX = getX() - iii;
+                }*/
+                dodgeX = getX() - DISTANCE;
                 dodgeY = 0;
                 break;
             case RIGHT:
                 ani = "dodge_right";
                 int iiii = 0;
-                for (; iiii < DISTANCE; iiii++) {
+                /*for (; iiii < DISTANCE; iiii++) {
                     if (getHitBox().checkForCollision(this, getX() + iiii, getY()))
                         break;
-                }
-                dodgeX = getX() + iiii;
+                }*/
+                dodgeX = getX() + DISTANCE;
                 dodgeY = 0;
                 break;
             default:
@@ -384,9 +384,10 @@ public abstract class CombatSprite extends PhysicsSprite {
                 } else {
                     percent = dif / totalDodgeTime;
                 }
+                float oX = super.getX();
                 moveX = dodgeStartX + ((dodgeX - dodgeStartX) * percent);
                 rawSetX(moveX);
-                if (moveX == dodgeX) {
+                if (moveX == dodgeX || oX == moveX) {
                     setAnimation(0);
                     is_dodging = false;
                     face(dodgeDirection);
@@ -405,11 +406,11 @@ public abstract class CombatSprite extends PhysicsSprite {
                 } else {
                     percent = dif / totalDodgeTime;
                 }
+                float oY = super.getY();
                 moveY = dodgeStartY + ((dodgeY - dodgeStartY) * percent);
-                //moveY = Camera.ease(dodgeStartY, dodgeY, totalDodgeTime, ((System.currentTimeMillis() - dodgeStartTime)));
                 rawSetY(moveY);
                 face(getFacingDirection());
-                if (moveY == dodgeY) {
+                if (moveY == dodgeY || oY == moveY) {
                     setAnimation(0);
                     is_dodging = false;
                     face(dodgeDirection);
