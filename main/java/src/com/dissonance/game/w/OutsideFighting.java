@@ -1,6 +1,7 @@
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
+<<<<<<< HEAD
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.sprites.StreetLamp;
@@ -8,6 +9,8 @@ import com.dissonance.game.sprites.environment.BasicLight;
 
 import java.awt.*;
 import java.util.ArrayList;
+=======
+>>>>>>> cda4cb53d61761fd606bb5123ec1f4be20a41638
 
 public class OutsideFighting extends DemoLevelWorldLoader {
     int pleaseKillMe = 0;
