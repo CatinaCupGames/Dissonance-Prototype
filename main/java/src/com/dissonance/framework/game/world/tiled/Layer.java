@@ -62,6 +62,11 @@ public class Layer {
             if (!isGroundLayer()) {
                 Layer high = world.getHighestGroundLayer();
                 Layer low = world.getLowestGroundLayer();
+                if (high.getLayerNumber() == getLayerNumber() || low.getLayerNumber() == getLayerNumber()) {
+                    gLayer = 0;
+                    return 0; //Well fuck you to
+                }
+
                 if (high == null || low == null)
                     throw new InvalidParameterException("There is no ground layer in this map!");
                 if (high.getLayerNumber() < getLayerNumber())
@@ -69,7 +74,7 @@ public class Layer {
                 else if (low.getLayerNumber() > getLayerNumber())
                     gLayer = getLayerNumber() - low.getLayerNumber();
                 else
-                    throw new InvalidParameterException("There is a non-ground layer in between 2 ground layers! (INVALID LAYER: " + getLayerNumber() + ")");
+                    throw new InvalidParameterException("There is a non-ground layer in between 2 ground layers! (INVALID LAYER: " + getLayerNumber() + " WORLD: " + world.getName() + ")");
             } else
                 gLayer = 0;
         }

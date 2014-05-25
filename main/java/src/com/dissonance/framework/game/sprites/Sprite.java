@@ -25,6 +25,7 @@ import static org.lwjgl.opengl.GL11.*;
 public abstract class Sprite implements Drawable, Serializable {
     private static EdgeGlowShader EDGE_SHADER;
     private SpriteEvent.SpriteMovedEvent spriteMoved;
+    private int ID;
 
     protected transient Texture texture;
     protected boolean visible = true;
@@ -66,6 +67,10 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public boolean isVisible() {
         return visible;
+    }
+
+    public int getID() {
+        return ID;
     }
 
     public void setVisible(boolean visible) {
@@ -217,6 +222,19 @@ public abstract class Sprite implements Drawable, Serializable {
         int y = (int) (getY() / 16f);
 
         return lowest.getTileAt(x, y, world);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Sprite) {
+            return ((Sprite)o).ID == ID;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return ID;
     }
 
     private boolean isGroundLayer(Layer l) {

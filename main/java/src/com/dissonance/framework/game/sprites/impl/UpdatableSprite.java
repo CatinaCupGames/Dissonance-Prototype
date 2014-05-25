@@ -16,6 +16,9 @@ public abstract class UpdatableSprite extends Sprite implements UpdatableDrawabl
 
     @Override
     public void update() {
-        this.dontUpdate = false;
+        if (getWorld() == null)
+            dontUpdate = true;
+        else
+            this.dontUpdate = false;
     }
 }

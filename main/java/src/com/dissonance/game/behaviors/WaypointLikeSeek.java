@@ -3,6 +3,7 @@ package com.dissonance.game.behaviors;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
+import com.dissonance.framework.game.ai.behaviors.FiniteBehavior;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
@@ -15,9 +16,10 @@ import com.dissonance.framework.system.utils.Direction;
  * @see com.dissonance.framework.game.ai.waypoint.WaypointType#SIMPLE
  * @see com.dissonance.framework.game.ai.behaviors.Seek
  */
-public class WaypointLikeSeek implements Behavior {
+public class WaypointLikeSeek implements FiniteBehavior {
     private final AbstractWaypointSprite sprite;
     private Vector target;
+    private FiniteBehaviorEvent.OnFinished onFinishedListener;
 
     public WaypointLikeSeek(AbstractWaypointSprite sprite, Position target) {
         this.sprite = sprite;
@@ -52,6 +54,9 @@ public class WaypointLikeSeek implements Behavior {
 
         if (!moved) {
             sprite.setBehavior(null);
+            if (onFinishedListener != null) {
+                onFinishedListener.onFinished(this);
+            }
         }
     }
 
@@ -61,5 +66,13 @@ public class WaypointLikeSeek implements Behavior {
 
     public void setTarget(Position position) {
         this.target = position.vector();
+    }
+
+    public FiniteBehaviorEvent.OnFinished getOnFinishedListener() {
+        return onFinishedListener;
+    }
+
+    public void setOnFinishedListener(FiniteBehaviorEvent.OnFinished onFinishedListener) {
+        this.onFinishedListener = onFinishedListener;
     }
 }

@@ -35,6 +35,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.List;
@@ -438,8 +439,42 @@ public final class World {
                 }
                 if (sprite instanceof CombatSprite && combatCache.contains(sprite))
                     combatCache.add((CombatSprite) sprite);
+                generateID(sprite);
+                System.out.println("ID SET TO: " + sprite.getID());
             }
         });
+    }
+
+    private static final Random random = new Random();
+    private void generateID(Sprite sprite) {
+        int ID;
+        do {
+            ID = random.nextInt();
+        } while(!isIDFree(ID));
+        setID(sprite, ID);
+    }
+
+    private boolean isIDFree(int ID) {
+        for (Drawable d : drawable) {
+            if (d instanceof Sprite) {
+                Sprite s = (Sprite) d;
+                if (s.getID() == ID)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private void setID(Sprite sprite, int ID) {
+        try {
+            Field field = Sprite.class.getDeclaredField("ID");
+            field.setAccessible(true);
+            field.set(sprite, ID);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void removeSprite(final Sprite sprite) {
@@ -555,18 +590,25 @@ public final class World {
             @Override
             public void run() {
                 if (drawable instanceof UI) {
-                    //searchAndRemove(uiElements, (UI)drawable);
-                    //searchAndRemove(udrawables, (UpdatableDrawable)drawable);
-                    uiElements.remove(drawable);
-                    udrawables.remove(drawable);
+                    while (World.this.udrawables.contains(drawable))
+                        World.this.udrawables.remove(drawable);
+                    while (World.this.uiElements.contains(drawable))
+                        World.this.uiElements.remove(drawable);
                     if (runnable != null)
                         runnable.run();
                     return;
                 }
-                //searchAndRemove(World.this.drawable, drawable);
-                World.this.drawable.remove(drawable);
-                if (drawable instanceof UpdatableDrawable)
-                    World.this.udrawables.remove(drawable);
+                if (drawable.neverSort()) {
+                    while (World.this.unsorted.contains(drawable))
+                        World.this.unsorted.remove(drawable);
+                } else {
+                    while (World.this.drawable.contains(drawable))
+                        World.this.drawable.remove(drawable);
+                }
+                if (drawable instanceof UpdatableDrawable) {
+                    while (World.this.udrawables.contains(drawable))
+                        World.this.udrawables.remove(drawable);
+                }
                 if (runnable != null)
                     runnable.run();
             }

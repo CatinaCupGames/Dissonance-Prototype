@@ -3,16 +3,16 @@ package com.dissonance.game.sprites;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.behaviors.*;
 import com.dissonance.framework.game.combat.Weapon;
-import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
-import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
-import com.dissonance.game.behaviors.WaypointLikeIdle;
+import com.dissonance.game.behaviors.Patrol;
+import com.dissonance.game.behaviors.Search;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
+import org.lwjgl.Sys;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,23 +119,39 @@ public class BlueGuard extends Enemy {
     private boolean idle;
     private long lastAttack;
     private boolean looking = false;
+    private boolean saw = false;
     private long foundTime = 0L;
     private PlayableSprite target;
     private static final long ATTACK_RATE_MS = 1800;
     private static final long FOUND_YOU_MS = 400;
+    private static final long SPOT_TIME = 2000;
     private void runAI() {
         if (isDodging())
             return;
         if (getCurrentWeapon() != null) {
-            setMovementSpeed(movementSpeed());
             target = getClosestPlayer();
             if (target == null) {
+                if (getBehavior() != null && getBehavior() instanceof Search) {
+                    face(((Search)getBehavior()).getOrginalDirection());
+                }
+                saw = false;
                 if (!idle) {
+                    setMovementSpeed(movementSpeed() / 4f);
                     idle = true;
-                    WaypointLikeIdle idleBehavior = new WaypointLikeIdle(this, 80);
-                    setBehavior(idleBehavior);
+                    Patrol patrol = new Patrol(this);
+                    setBehavior(patrol);
                 }
             } else {
+                if (!saw && !isPlayerSeen(target)) {
+                    if (getBehavior() == null || !(getBehavior() instanceof Search)) {
+                        Search search = new Search(this);
+                        setBehavior(search);
+                    }
+                    return;
+                }
+                saw = true;
+                spot.clear();
+                setMovementSpeed(movementSpeed() / 1.5f);
                 idle = false;
                 if (distanceFrom(target) <= 3 + getCurrentWeapon().getWeaponInfo().getRange() + (target.getWidth() / 4f)) {
                     if (looking) {
@@ -153,7 +169,7 @@ public class BlueGuard extends Enemy {
                 } else {
                     looking = true;
                     Behavior behavior = getBehavior();
-                    if (behavior instanceof Seek) {
+                    if (behavior instanceof WaypointLikeSeek) {
                         WaypointLikeSeek seek = (WaypointLikeSeek)getBehavior();
                         seek.setTarget(getSeekTarget(target));
                     } else {
@@ -165,6 +181,25 @@ public class BlueGuard extends Enemy {
         }
     }
 
+    private boolean isPlayerSeen(PlayableSprite target) {
+        if (directionTowards(target) != getFacingDirection()) {
+            if (directionTowards(target) != getFacingDirection().opposite()) {
+                if (!spot.containsKey(target)) {
+                    spot.put(target, System.currentTimeMillis());
+                    return false;
+                }
+                long l = spot.get(target);
+                if (System.currentTimeMillis() - l > SPOT_TIME) {
+                    spot.remove(target);
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+        return true;
+    }
+
     private final Flee.FleeListener FLEE_LISTENER = new Flee.FleeListener() {
         @Override
         public void onSpriteSafe(AbstractWaypointSprite sprite) {
@@ -173,6 +208,8 @@ public class BlueGuard extends Enemy {
         }
     };
 
+    private HashMap<PlayableSprite, Long> spot = new HashMap<>();
+    private Direction oDirection;
     private PlayableSprite getClosestPlayer() {
         float distance = 15f * 16f;
 
@@ -193,6 +230,8 @@ public class BlueGuard extends Enemy {
 
         return closet;
     }
+
+
 
     static HashMap<PlayableSprite, ArrayList<CombatSprite>> attackers = new HashMap<>();
     private Position getSeekTarget(Sprite sprite) {

@@ -51,8 +51,8 @@ public class WaypointLikePathFollow implements FiniteBehavior {
         float speed = sprite.getMovementSpeed();
         boolean moved = false;
 
-        float difx = sprite.getWidth() / 2f;
-        float dify = sprite.getHeight() / 2f;
+        float difx = sprite.getWidth() / 4f;
+        float dify = sprite.getHeight() / 4f;
 
         if (xdiff <= -difx || xdiff >= difx) {
             moved = true;
