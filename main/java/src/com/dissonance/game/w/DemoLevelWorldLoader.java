@@ -4,8 +4,10 @@ import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.Jeremiah;
+import com.dissonance.game.sprites.environment.BasicLight;
 import com.dissonance.game.sprites.hud.BaseHUD;
 
 /**
@@ -46,6 +48,20 @@ public abstract class DemoLevelWorldLoader implements WorldLoader {
                 break;
             huds[i - 1] = new BaseHUD(player);
             huds[i - 1].display(w);
+        }
+    }
+
+    protected void createLight(World w, float x, float y, float brightness, float radius, float basicLightAlpha) {
+        if (!GameSettings.Graphics.qualityLights) {
+            BasicLight light = new BasicLight();
+            light.setX(x);
+            light.setY(y);
+            light.setStartHeight((1024f / 2f) * radius);
+            light.setStartWidth((1024f / 2f) * radius);
+            light.setAlpha(basicLightAlpha);
+            w.loadAndAdd(light);
+        } else {
+            w.createLight(x, y, brightness, radius);
         }
     }
 }

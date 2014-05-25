@@ -1,7 +1,6 @@
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
-import com.dissonance.game.sprites.BlueGuard;
 
 public class OutsideFighting extends DemoLevelWorldLoader {
     @Override
@@ -13,6 +12,8 @@ public class OutsideFighting extends DemoLevelWorldLoader {
 
         w.setWorldBrightness(0.4f);
         w.createLight(0, 0, 0.1f, 0.1f);
+
+
     }
 
     @Override
