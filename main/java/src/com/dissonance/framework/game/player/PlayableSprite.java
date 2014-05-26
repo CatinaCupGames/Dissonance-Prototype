@@ -6,11 +6,20 @@ import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
+import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.WorldFactory;
+import com.dissonance.framework.game.world.tiled.TiledObject;
+import com.dissonance.framework.game.world.tiled.impl.AbstractTileTrigger;
+import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.render.Camera;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
+import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.framework.system.utils.Timer;
+import com.dissonance.framework.system.utils.physics.Collidable;
+import com.dissonance.framework.system.utils.physics.HitBox;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.security.InvalidParameterException;
@@ -26,7 +35,7 @@ public abstract class PlayableSprite extends CombatSprite {
     private MovementType mType = MovementType.RUNNING;
     private boolean frozen;
 
-     boolean controller_extend;
+    boolean controller_extend;
     boolean keyboard_extend;
     boolean use_dodge;
     boolean isAttacking = false;
@@ -118,30 +127,132 @@ public abstract class PlayableSprite extends CombatSprite {
 
     @Override
     public void setX(float x) {
-        if (GameService.coop_mode && Camera.isFollowing(this) && Camera.isOffScreen(x, y, getWidth(), getHeight()))
+        if (GameService.coop_mode && Camera.isFollowing(this) && (Camera.isOffScreen(x + getWidth(), y, getWidth(), getHeight()) || Camera.isOffScreen(x - getWidth(), y, getWidth(), getHeight())))
             return;
         super.setX(x);
     }
 
     @Override
     public void setY(float y) {
-        if (GameService.coop_mode && Camera.isFollowing(this) && Camera.isOffScreen(x, y, getWidth(), getHeight()))
+        if (GameService.coop_mode && Camera.isFollowing(this) && (Camera.isOffScreen(x, y + getHeight(), getWidth(), getHeight()) || Camera.isOffScreen(x, y - getHeight(), getWidth(), getHeight())))
             return;
         super.setY(y);
     }
 
     @Override
     public void rawSetX(float x) {
-        if (GameService.coop_mode && Camera.isFollowing(this) && Camera.isOffScreen(x, y, getWidth(), getHeight()))
+        if (GameService.coop_mode && Camera.isFollowing(this) && (Camera.isOffScreen(x + getWidth(), y, getWidth(), getHeight()) || Camera.isOffScreen(x - getWidth(), y, getWidth(), getHeight())))
             return;
         super.rawSetX(x);
     }
 
     @Override
     public void rawSetY(float y) {
-        if (GameService.coop_mode && Camera.isFollowing(this) && Camera.isOffScreen(x, y, getWidth(), getHeight()))
+        if (GameService.coop_mode && Camera.isFollowing(this) && (Camera.isOffScreen(x, y + getHeight(), getWidth(), getHeight()) || Camera.isOffScreen(x, y - getHeight(), getWidth(), getHeight())))
             return;
         super.rawSetY(y);
+    }
+
+    @Override
+    protected void onCollideX(float oldX, float newX, Collidable hit, HitBox hb) {
+        if (hit instanceof TiledObject) {
+            TiledObject obj = (TiledObject)hit;
+            if (obj.isTrigger()) {
+                AbstractTrigger abstractTrigger = obj.getTrigger();
+                abstractTrigger.onCollide(this);
+                return;
+            } else if (obj.isDoor()) {
+                _teleport(obj, oldX, -1f);
+                return;
+            }
+        }
+        super.onCollideX(oldX, newX, hit, hb);
+    }
+
+    @Override
+    protected void onCollideY(float oldY, float newY, Collidable hit, HitBox hb) {
+        if (hit instanceof TiledObject) {
+            TiledObject obj = (TiledObject)hit;
+            if (obj.isTrigger()) {
+                AbstractTrigger abstractTrigger = obj.getTrigger();
+                abstractTrigger.onCollide(this);
+                return;
+            } else if (obj.isDoor()) {
+                _teleport(obj, -1f, oldY);
+                return;
+            }
+        }
+        super.onCollideY(oldY, newY, hit, hb);
+    }
+
+    private void _teleport(TiledObject obj, float oldX, float oldY) {
+        String target = obj.getDoorTarget();
+        if (target.equalsIgnoreCase("")) {
+            if (oldX != -1f)
+                super.rawSetX(oldX);
+            if (oldY != -1f)
+                super.rawSetY(oldY);
+            return;
+        }
+        String world = obj.getDoorWorldTarget();
+        final World worldObj;
+        if (world.equalsIgnoreCase("")) {
+            worldObj = getWorld();
+        } else {
+            try {
+                worldObj = WorldFactory.getWorld(world);
+            } catch (WorldLoadFailedException e) {
+                e.printStackTrace();
+                if (oldX != -1f)
+                    super.rawSetX(oldX);
+                if (oldY != -1f)
+                    super.rawSetY(oldY);
+                return;
+            }
+        }
+
+        final TiledObject spawn = worldObj.getSpawn(target);
+        if (spawn == null) {
+            if (oldX != -1f)
+                super.rawSetX(oldX);
+            if (oldY != -1f)
+                super.rawSetY(oldY);
+            return;
+        }
+
+        freeze();
+        final PlayableSprite[] sprites = Players.getCurrentlyPlayingSprites();
+        for (PlayableSprite sprite : sprites) {
+            if (sprite == this)
+                continue;
+            sprite.freeze();
+        }
+        isTeleporting = true;
+        if (worldObj != getWorld()) {
+            RenderService.INSTANCE.fadeToBlack(1000);
+            WorldFactory.swapView(worldObj, true);
+            for (PlayableSprite sprite : sprites) {
+                sprite.setWorld(worldObj);
+            }
+        }
+
+        for (PlayableSprite sprite : sprites) {
+            sprite.x = spawn.getX();
+            sprite.y = spawn.getY();
+        }
+        Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
+        while (RenderService.getCurrentAlphaValue() != 1) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                break;
+            }
+        }
+        for (PlayableSprite sprite : sprites) {
+            sprite.unfreeze();
+        }
+        isTeleporting = false;
     }
 
     /**

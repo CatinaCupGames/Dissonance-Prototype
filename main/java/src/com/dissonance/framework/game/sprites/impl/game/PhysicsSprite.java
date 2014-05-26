@@ -159,64 +159,6 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             TiledObject to = (TiledObject) c;
             if (to.isHitbox())
                 super.rawSetX(oldX);
-            else if (to.isTrigger() && this instanceof PlayableSprite && ((PlayableSprite) this).isSelected()) { //2meta4me
-                AbstractTrigger abstractTrigger = to.getTrigger();
-                abstractTrigger.onCollide((PlayableSprite) this);
-            } else if (to.isDoor() && this instanceof PlayableSprite && ((PlayableSprite) this).isSelected()) { //3meta5me
-                String target = to.getDoorTarget();
-                if (target.equalsIgnoreCase("")) {
-                    super.rawSetX(oldX);
-                    return;
-                }
-                String world = to.getDoorWorldTarget();
-                final World worldObj;
-                if (world.equalsIgnoreCase("")) {
-                    worldObj = getWorld();
-                } else {
-                    try {
-                        worldObj = WorldFactory.getWorld(world);
-                    } catch (WorldLoadFailedException e) {
-                        e.printStackTrace();
-                        super.rawSetX(oldX);
-                        return;
-                    }
-                }
-
-                final TiledObject spawn = worldObj.getSpawn(target);
-                if (spawn == null) {
-                    super.rawSetX(oldX);
-                    return;
-                }
-
-                ((PlayableSprite) this).freeze();
-                new Thread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        isTeleporting = true;
-                        if (worldObj != getWorld()) {
-                            RenderService.INSTANCE.fadeToBlack(1000);
-                            WorldFactory.swapView(worldObj, true);
-                            setWorld(worldObj);
-                        }
-
-                        PhysicsSprite.super.rawSetX(spawn.getX());
-                        PhysicsSprite.super.rawSetY(spawn.getY());
-                        Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
-                        while (RenderService.getCurrentAlphaValue() != 1) {
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                                break;
-                            }
-                        }
-                        ((PlayableSprite) PhysicsSprite.this).unfreeze();
-                        isTeleporting = false;
-                    }
-                }).start();
-
-            }
         } else {
             if (ignore.contains(c))
                 return;
@@ -250,63 +192,6 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             TiledObject to = (TiledObject) c;
             if (to.isHitbox())
                 super.rawSetY(oldY);
-            else if (to.isTrigger() && this instanceof PlayableSprite && ((PlayableSprite) this).isSelected()) { //2meta4me
-                AbstractTrigger abstractTrigger = to.getTrigger();
-                abstractTrigger.onCollide((PlayableSprite) this);
-            } else if (to.isDoor() && this instanceof PlayableSprite && ((PlayableSprite) this).isSelected()) { //3meta5me
-                String target = to.getDoorTarget();
-                if (target.equalsIgnoreCase("")) {
-                    super.rawSetY(oldY);
-                    return;
-                }
-                String world = to.getDoorWorldTarget();
-                final World worldObj;
-                if (world.equalsIgnoreCase("")) {
-                    worldObj = getWorld();
-                } else {
-                    try {
-                        worldObj = WorldFactory.getWorld(world);
-                    } catch (WorldLoadFailedException e) {
-                        e.printStackTrace();
-                        super.rawSetY(oldY);
-                        return;
-                    }
-                }
-
-                final TiledObject spawn = worldObj.getSpawn(target);
-                if (spawn == null) {
-                    super.rawSetY(oldY);
-                    return;
-                }
-
-                ((PlayableSprite) this).freeze();
-                new Thread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        isTeleporting = true;
-                        if (worldObj != getWorld()) {
-                            RenderService.INSTANCE.fadeToBlack(1000);
-                            WorldFactory.swapView(worldObj, true);
-                            setWorld(worldObj);
-                        }
-
-                        PhysicsSprite.super.rawSetX(spawn.getX());
-                        PhysicsSprite.super.rawSetY(spawn.getY());
-                        Camera.setPos(Camera.translateToCameraCenter(getVector(), getHeight()));
-                        while (RenderService.getCurrentAlphaValue() != 1) {
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                                break;
-                            }
-                        }
-                        ((PlayableSprite) PhysicsSprite.this).unfreeze();
-                        isTeleporting = false;
-                    }
-                }).start();
-            }
         } else {
             if (ignore.contains(c))
                 return;
