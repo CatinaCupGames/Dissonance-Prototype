@@ -2,9 +2,7 @@ package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.system.GameSettings;
-import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.sprites.StreetLamp;
-import com.dissonance.game.sprites.environment.BasicLight;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -72,6 +70,8 @@ public class OutsideFighting extends DemoLevelWorldLoader {
                 pleaseKillMeAgain ++;
             }
         }
+        w.createLight(70*16, 301*16, 1.6f, 0.34f);
+        w.createLight(64*16, 301*16, 1.6f, 0.34f);
     }
 
     @Override

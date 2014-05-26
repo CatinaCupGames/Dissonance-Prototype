@@ -12,6 +12,7 @@ package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.game.sprites.BlueGuard;
+import com.dissonance.game.sprites.RoofLight;
 import com.dissonance.game.sprites.roof.*;
 
 public class RoofTopBeginning extends DemoLevelWorldLoader {
@@ -27,6 +28,9 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
     public static RoofVent dec7;
     public static RoofEntry dec8;
     public static Skylight dec9;
+    public static RoofLight r1;
+    public static RoofLight r2;
+
     public static BlueGuard[] meleeGuard = new BlueGuard[3];
 
     public static Garbagechute exit;
@@ -34,6 +38,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
     @Override
     public void onLoad(World w) {
         super.onLoad(w);
+        w.setWorldBrightness(0.5f);
 
         exit = new Garbagechute();
         exit.setX((88f * 16f) + 10);
@@ -56,6 +61,18 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
 
         meleeGuard[1].setX(64*16);
         meleeGuard[1].setY(20*16);
+
+        r1 = new RoofLight();
+        w.loadAndAdd(r1);
+        r1.setX(32*16);
+        r1.setY(20*16);
+        w.createLight(32*16, 20*16, 1.4f, 0.5f);
+
+        r2 = new RoofLight();
+        w.loadAndAdd(r2);
+        r2.setX(38*16);
+        r2.setY(13*16);
+        w.createLight(38*16, 13*16, 1.4f, 0.5f);
     }
 
     @Override

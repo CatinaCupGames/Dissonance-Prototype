@@ -4,6 +4,7 @@ import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.GameCache;
 
@@ -72,7 +73,7 @@ public class LoadingQuest extends AbstractQuest {
                 }).start();
             }
         }, true);
-
+        Sound.stopSound("introtheme");
     }
 
     @Override
