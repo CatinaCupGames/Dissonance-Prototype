@@ -88,4 +88,8 @@ public class WaypointLikePathFollow implements FiniteBehavior {
     public void setOnFinishedListener(FiniteBehaviorEvent.OnFinished onFinishedListener) {
         this.onFinishedListener = onFinishedListener;
     }
+
+    public void append(Position seekTarget) {
+        nodes.add(seekTarget);
+    }
 }

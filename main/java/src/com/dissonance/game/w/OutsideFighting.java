@@ -23,6 +23,8 @@ public class OutsideFighting extends DemoLevelWorldLoader {
 
         if (GameSettings.Graphics.qualityLights) {
             w.setWorldBrightness(0.96f);
+            w.createLight(70*16, 301*16, 1.6f, 0.34f);
+            w.createLight(64*16, 301*16, 1.6f, 0.34f);
         } else {
             w.setWorldBrightness(0.4f);
             w.createLight(-200, -200, 0.4f, 0.1f); //Lights for brightness
@@ -76,12 +78,7 @@ public class OutsideFighting extends DemoLevelWorldLoader {
         w.createLight(70*16, 301*16, 1.6f, 0.34f);
         w.createLight(64*16, 301*16, 1.6f, 0.34f);
 
-        //82, 307
-        billboard1 = new Billboard();
-        w.loadAndAdd(billboard1);
-        billboard1.setX(82*16);
-        billboard1.setY(307*16);
-        billboard1.setAnimation("billboard1");
+
 
 
     }
@@ -90,8 +87,11 @@ public class OutsideFighting extends DemoLevelWorldLoader {
     public void onDisplay(World w){
         super.onDisplay(w);
 
-        farrand.setX(27*16);
-        farrand.setY(317*16);
+        farrand.setX(23f * 16f);
+        farrand.setY(330f*16f);
+
+        jeremiah.setX(24f*16f);
+        jeremiah.setY(330f*16f);
 
         for(StreetLamp lamp : lamps1){
             lamp.setCutOffMargin(22f);

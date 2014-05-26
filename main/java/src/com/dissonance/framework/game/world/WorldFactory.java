@@ -11,7 +11,7 @@ public class WorldFactory {
     private static final int WORLD_CACHE_LIMIT = 5;
     private static final Random random = new Random();
     private static int worldCount;
-    public static final int WORLD_ACCESS_LIMIT_SECONDS = 120;
+    public static final long WORLD_ACCESS_LIMIT_SECONDS = 120L * 1000L;
     private static WorldHolder[] cacheWorlds = new WorldHolder[WORLD_CACHE_LIMIT];
     private static World lastWorld;
     private static World currentWorld;
@@ -194,7 +194,7 @@ public class WorldFactory {
         for (int i = 0; i < WORLD_CACHE_LIMIT; i++) {
             if (cacheWorlds[i] == null) continue;
             long since = curr - cacheWorlds[i].lastAccess;
-            if ((since / 1000) > WORLD_ACCESS_LIMIT_SECONDS && GameService.getCurrentWorld().getID() != cacheWorlds[i].world.getID()) {
+            if (since > WORLD_ACCESS_LIMIT_SECONDS && GameService.getCurrentWorld().getID() != cacheWorlds[i].world.getID()) {
                 System.out.println("[World Factory] Disposing " + cacheWorlds[i].world.getName() + ".");
                 cacheWorlds[i].world.onDispose();
                 cacheWorlds[i] = null;
@@ -216,6 +216,19 @@ public class WorldFactory {
                     break;
                 }
             }
+
+            System.out.println("[World Factory] Shifting cache");
+            WorldHolder[] temp = new WorldHolder[worldCount + 1];
+            int ii = 0;
+            for (int i = 0; i < WORLD_CACHE_LIMIT; i++) {
+                if (cacheWorlds[i] == null)
+                    continue;
+                temp[ii] = cacheWorlds[i];
+                cacheWorlds[i] = null;
+                ii++;
+            }
+
+            System.arraycopy(temp, 0, cacheWorlds, 0, temp.length);
         }
     }
 

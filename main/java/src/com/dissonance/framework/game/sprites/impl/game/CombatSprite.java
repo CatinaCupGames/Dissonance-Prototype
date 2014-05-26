@@ -387,7 +387,7 @@ public abstract class CombatSprite extends PhysicsSprite {
                 float oX = super.getX();
                 moveX = dodgeStartX + ((dodgeX - dodgeStartX) * percent);
                 rawSetX(moveX);
-                if (moveX == dodgeX || oX == moveX) {
+                if (moveX == dodgeX || oX == super.getX()) {
                     setAnimation(0);
                     is_dodging = false;
                     face(dodgeDirection);
@@ -410,7 +410,7 @@ public abstract class CombatSprite extends PhysicsSprite {
                 moveY = dodgeStartY + ((dodgeY - dodgeStartY) * percent);
                 rawSetY(moveY);
                 face(getFacingDirection());
-                if (moveY == dodgeY || oY == moveY) {
+                if (moveY == dodgeY || oY == super.getY()) {
                     setAnimation(0);
                     is_dodging = false;
                     face(dodgeDirection);
