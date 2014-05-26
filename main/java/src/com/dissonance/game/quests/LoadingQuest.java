@@ -19,6 +19,9 @@ public class LoadingQuest extends AbstractQuest {
 
         GameCache.RoofTopBeginning = WorldFactory.getWorld("RoofTopBeginning", false);
         GameCache.OutsideFighting = WorldFactory.getWorld("OutsideFighting", false);
+        GameCache.FactoryFloor = WorldFactory.getWorld("FactoryFloorCat", false);
+        GameCache.OfficeFloor1 = WorldFactory.getWorld("OfficeFloor1", false);
+        GameCache.OfficeFloor2 = WorldFactory.getWorld("officefloor2", false);
         //GameCache.OutsideFightingshit.useExtreamSpeed(true);
         Thread.sleep(2000);
 
@@ -41,6 +44,18 @@ public class LoadingQuest extends AbstractQuest {
             @Override
             public void run() {
                 GameCache.OutsideFighting.prepareTiles();
+            }
+        }, true);
+
+        Thread.sleep(4000);
+
+        RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+            @Override
+            public void run() {
+                GameCache.FactoryFloor.prepareTiles();
+                GameCache.OfficeFloor1.prepareTiles();
+                GameCache.OfficeFloor2.prepareTiles();
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -57,6 +72,7 @@ public class LoadingQuest extends AbstractQuest {
                 }).start();
             }
         }, true);
+
     }
 
     @Override

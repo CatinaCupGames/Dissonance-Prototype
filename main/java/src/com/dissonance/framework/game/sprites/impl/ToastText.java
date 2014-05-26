@@ -66,9 +66,10 @@ public class ToastText extends UpdatableSprite {
         return fSize;
     }
 
-    public void setToastFontSize(float size) {
+    public ToastText setToastFontSize(float size) {
         this.fSize = size;
         init(); //Recreate font object
+        return this;
     }
 
     boolean fadeOut = false;

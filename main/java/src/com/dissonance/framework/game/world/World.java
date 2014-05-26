@@ -134,6 +134,7 @@ public final class World {
         if (in != null) {
             try {
                 tiledData = GSON.fromJson(new InputStreamReader(in), WorldData.class);
+                tiledData.assignAllLayers();
                 tiledData.loadTriggers();
                 loadTiledSprites();
 
@@ -229,7 +230,6 @@ public final class World {
         }
 
         tiledData.loadAllTileSets(); //OpenGL safe needed
-        tiledData.assignAllLayers();
         System.out.println("Creating tiles..");
         long ms = System.currentTimeMillis();
         drawable.addAll(tiledData.createDrawables(World.this)); //OpenGL safe needed
@@ -440,7 +440,6 @@ public final class World {
                 if (sprite instanceof CombatSprite && combatCache.contains(sprite))
                     combatCache.add((CombatSprite) sprite);
                 generateID(sprite);
-                System.out.println("ID SET TO: " + sprite.getID());
             }
         });
     }
@@ -779,16 +778,23 @@ public final class World {
         return getTileAt(x, y, l);
     }
 
+
+    private EnumMap<LayerType, Layer[]> layerCache = new EnumMap<LayerType, Layer[]>(LayerType.class);
     public Layer[] getLayers(LayerType type) {
         if (tiledData == null)
             return new Layer[0];
-        List<Layer> layers = new ArrayList<Layer>();
-        for (Layer l : tiledData.getLayers()) {
-            if (l.getLayerType() == type)
-                layers.add(l);
+        if (!layerCache.containsKey(type)) {
+            List<Layer> layers = new ArrayList<Layer>();
+            for (Layer l : tiledData.getLayers()) {
+                if (l.getLayerType() == type)
+                    layers.add(l);
+            }
+
+            Layer[] temp = layers.toArray(new Layer[layers.size()]);
+            layerCache.put(type, temp);
         }
 
-        return layers.toArray(new Layer[layers.size()]);
+        return layerCache.get(type);
     }
 
     public Layer[] getLayers() {

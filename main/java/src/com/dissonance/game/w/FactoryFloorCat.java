@@ -18,12 +18,12 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
 
         w.setWorldBrightness(0.9f);
 
-        farrand.setX(52f * 16f);
-        farrand.setY(175f * 16f);
+        farrand.setX(45f * 16f);
+        farrand.setY(72f * 16f);
         farrand.setLayer(2);
 
-        jeremiah.setX(53f * 16f);
-        jeremiah.setY(176f * 16f);
+        jeremiah.setX(43f * 16f);
+        jeremiah.setY(72f * 16f);
         jeremiah.setLayer(2);
         jeremiah.setVisible(false);
 

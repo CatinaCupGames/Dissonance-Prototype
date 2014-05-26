@@ -1,0 +1,17 @@
+<animations
+        width="41"
+        height="41"	 >
+    <animation
+            name="closed"
+            loop="false"
+            frames="1"
+            row="0"
+            default_speed="0ms"/>
+    <animation
+            name="opening"
+            loop="false"
+            frames="7"
+            row="1"
+            default_speed="150ms"/>
+</animations>
+		

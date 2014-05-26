@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.player;
 
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.sprites.Selectable;
@@ -113,6 +114,34 @@ public abstract class PlayableSprite extends CombatSprite {
                 .setSpeed(4);
 
         appearRunnable = runnable;
+    }
+
+    @Override
+    public void setX(float x) {
+        if (GameService.coop_mode && Camera.isFollowing(this) && Camera.isOffScreen(x, y, getWidth(), getHeight()))
+            return;
+        super.setX(x);
+    }
+
+    @Override
+    public void setY(float y) {
+        if (GameService.coop_mode && Camera.isFollowing(this) && Camera.isOffScreen(x, y, getWidth(), getHeight()))
+            return;
+        super.setY(y);
+    }
+
+    @Override
+    public void rawSetX(float x) {
+        if (GameService.coop_mode && Camera.isFollowing(this) && Camera.isOffScreen(x, y, getWidth(), getHeight()))
+            return;
+        super.rawSetX(x);
+    }
+
+    @Override
+    public void rawSetY(float y) {
+        if (GameService.coop_mode && Camera.isFollowing(this) && Camera.isOffScreen(x, y, getWidth(), getHeight()))
+            return;
+        super.rawSetY(y);
     }
 
     /**

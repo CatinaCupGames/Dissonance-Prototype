@@ -1,6 +1,7 @@
 package com.dissonance.game;
 
 import com.dissonance.framework.game.GameService;
+import com.dissonance.game.quests.CatQuest;
 import com.dissonance.game.quests.LoadingQuest;
 import com.dissonance.game.quests.MenuQuest;
 
@@ -14,7 +15,7 @@ public class Main {
 
 
 
-        GameService.beginQuest(new MenuQuest());
+        GameService.beginQuest(new CatQuest());
 
 
 

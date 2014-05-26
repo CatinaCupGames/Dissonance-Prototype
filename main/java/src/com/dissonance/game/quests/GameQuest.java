@@ -44,8 +44,8 @@ public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
-        setWorld(GameCache.RoofTopBeginning);
-        GameCache.RoofTopBeginning.waitForWorldDisplayed();
+        setWorld(GameCache.FactoryFloor);
+        GameCache.FactoryFloor.waitForWorldDisplayed();
         TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
 
         Camera.stopFollowing();
@@ -65,6 +65,8 @@ public class GameQuest  extends PauseQuest {
             else
                 player2.join();
         }
+
+        turnOnBelts();
 
 
         RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
@@ -193,6 +195,7 @@ public class GameQuest  extends PauseQuest {
 
     public void turnOnBelts() {
         TileObject.setTileAnimationSpeed(50L);
+        GameQuest.INSTANCE.factory_beltsactive = true;
     }
 
     @Override

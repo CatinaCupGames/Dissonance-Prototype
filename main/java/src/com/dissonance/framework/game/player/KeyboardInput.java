@@ -69,12 +69,21 @@ public class KeyboardInput implements Input {
             else
                 Camera.setExtendY(Camera.getExtendY() + (RenderService.TIME_DELTA * 32f));
         } else if (Camera.getExtendY() != 0f && !sprite.controller_extend) {
-            if (Math.abs(Camera.getExtendY() - 0f) < 4f)
+            float value = RenderService.TIME_DELTA * 64f;
+            if (Math.abs(Camera.getExtendY() - 0f) < 6f)
                 Camera.setExtendY(0f);
-            else if (Camera.getExtendY() > 0f)
-                Camera.setExtendY(Camera.getExtendY() - (RenderService.TIME_DELTA * 64f));
-            else
-                Camera.setExtendY(Camera.getExtendY() + (RenderService.TIME_DELTA * 64f));
+            else if (Camera.getExtendY() > 0f) {
+                if (Camera.getExtendY() - value < 0f)
+                    Camera.setExtendY(0f);
+                else
+                    Camera.setExtendY(Camera.getExtendY() - (RenderService.TIME_DELTA * 64f));
+            }
+            else {
+                if (Camera.getExtendY() + value > 0f)
+                    Camera.setExtendY(0f);
+                else
+                    Camera.setExtendY(Camera.getExtendY() + (RenderService.TIME_DELTA * 64f));
+            }
         }
 
         if (InputKeys.checkKeyboard(InputKeys.EXTENDLEFT) || InputKeys.checkKeyboard(InputKeys.EXTENDRIGHT)) {
@@ -84,12 +93,21 @@ public class KeyboardInput implements Input {
             else
                 Camera.setExtendX(Camera.getExtendX() + (RenderService.TIME_DELTA * 32f));
         } else if (Camera.getExtendX() != 0f && !sprite.controller_extend) {
-            if (Math.abs(Camera.getExtendX() - 0f) < 4f)
+            float value = RenderService.TIME_DELTA * 64f;
+            if (Math.abs(Camera.getExtendX() - 0f) < 6f)
                 Camera.setExtendX(0f);
-            else if (Camera.getExtendX() > 0f)
-                Camera.setExtendX(Camera.getExtendX() - (RenderService.TIME_DELTA * 64f));
-            else
-                Camera.setExtendX(Camera.getExtendX() + (RenderService.TIME_DELTA * 64f));
+            else if (Camera.getExtendX() > 0f) {
+                if (Camera.getExtendX() - value < 0f)
+                    Camera.setExtendX(0f);
+                else
+                    Camera.setExtendX(Camera.getExtendX() - (RenderService.TIME_DELTA * 64f));
+            }
+            else {
+                if (Camera.getExtendX() + value > 0f)
+                    Camera.setExtendX(0f);
+                else
+                    Camera.setExtendX(Camera.getExtendX() + (RenderService.TIME_DELTA * 64f));
+            }
         }
     }
 
@@ -102,13 +120,20 @@ public class KeyboardInput implements Input {
                 if (InputKeys.checkKeyboard(InputKeys.SWITCH)) {
                     use_switch = true;
                     if (playableSprite.isPlayer1()) {
-                        PlayableSprite next = playableSprite.party.get(p_index);
+                        final PlayableSprite next = playableSprite.party.get(p_index);
+                        playableSprite.freeze();
                         p_index++;
                         if (p_index >= playableSprite.party.size())
                             p_index = 0;
+                        next.freeze();
                         next.rawSetX(playableSprite.getX());
                         next.rawSetY(playableSprite.getY());
-                        next.appear();
+                        next.appear(new Runnable() {
+                            @Override
+                            public void run() {
+                                next.unfreeze();
+                            }
+                        });
                         playableSprite.disappear();
                         playableSprite.getPlayer().changeSprite(next);
                         if (next.getInput() instanceof ControllerInput) {

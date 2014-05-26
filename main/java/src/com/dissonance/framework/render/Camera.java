@@ -1,6 +1,7 @@
 package com.dissonance.framework.render;
 
 import com.dissonance.framework.game.ai.astar.Vector;
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.system.GameSettings;
@@ -445,6 +446,10 @@ public final class Camera {
         isLinear = false;
         isMoving = false;
         isShaking = false;
+    }
+
+    public static boolean isFollowing(Sprite sprite) {
+        return toFollow.contains(sprite);
     }
 
     public interface CameraMovementListener {

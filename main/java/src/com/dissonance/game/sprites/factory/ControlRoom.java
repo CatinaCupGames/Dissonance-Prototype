@@ -68,8 +68,8 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
 
         Thread.sleep(3700);
 
-        //TODO Play sound maybe..?
-        TileObject.setTileAnimationSpeed(50L);
+        //TODO Play sound maybe..?\
+        GameQuest.INSTANCE.turnOnBelts();
 
         reverseAnimation(false);
         playAnimation();
@@ -80,7 +80,6 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
         sprite.waitForWaypointReached();
         sprite.setLayer(2);
         sprite.unfreeze();
-        GameQuest.INSTANCE.factory_beltsactive = true;
 
         reverseAnimation(true);
         playAnimation();

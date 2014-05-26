@@ -16,7 +16,7 @@ public class Framebuffer extends Sprite {
     protected int width, height;
     protected int layer;
     protected long mb_size;
-    protected static final long MB_LIMIT = 500;
+    protected static final long MB_LIMIT = 800;
     protected static long MB_USED = 0;
 
     public static long getMemoryLimit() {

@@ -14,6 +14,7 @@ import com.dissonance.game.behaviors.Search;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
 import org.lwjgl.Sys;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -149,6 +150,11 @@ public class BlueGuard extends Enemy {
                     }
                     return;
                 }
+                if (!saw) {
+                    toastText("!")
+                            .setToastFontSize(32f)
+                            .setTint(Color.RED);
+                }
                 saw = true;
                 spot.clear();
                 setMovementSpeed(movementSpeed() / 1.5f);
@@ -186,6 +192,9 @@ public class BlueGuard extends Enemy {
             if (directionTowards(target) != getFacingDirection().opposite()) {
                 if (!spot.containsKey(target)) {
                     spot.put(target, System.currentTimeMillis());
+                     toastText("?")
+                             .setToastFontSize(32f)
+                             .setTint(Color.RED);
                     return false;
                 }
                 long l = spot.get(target);
