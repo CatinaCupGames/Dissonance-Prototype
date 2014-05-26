@@ -89,7 +89,7 @@ public class OutsideFighting extends DemoLevelWorldLoader {
         jeremiah.setX(24f*16f);
         jeremiah.setY(330f*16f);
 
-        for(StreetLamp lamp : lamps1){
+        for(StreetLamp lamp : lamps1) {
             lamp.setCutOffMargin(22f);
         }
 

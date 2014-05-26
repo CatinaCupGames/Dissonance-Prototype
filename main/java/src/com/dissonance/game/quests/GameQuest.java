@@ -36,6 +36,7 @@ public class GameQuest  extends PauseQuest {
             BlueGuard.class
     };
     public static GameQuest INSTANCE;
+    public boolean unlockedControl = false;
 
     private Service.ServiceRunnable runnable;
     private HashMap<World, TiledObject[]> spawns = new HashMap<World, TiledObject[]>();

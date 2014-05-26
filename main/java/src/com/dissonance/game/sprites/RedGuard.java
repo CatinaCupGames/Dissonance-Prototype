@@ -5,8 +5,7 @@ import com.dissonance.framework.system.utils.Direction;
 
 public class RedGuard extends Enemy {
     public RedGuard() {
-        //TODO Change to proper sprite
-        super("farrand", StatType.NON_MAGIC, CombatType.HUMAN);
+        super("gunguard", StatType.NON_MAGIC, CombatType.HUMAN);
     }
 
 
