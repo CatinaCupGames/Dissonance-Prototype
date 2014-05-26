@@ -20,6 +20,8 @@ public class OutsideFighting extends DemoLevelWorldLoader {
 
         if (GameSettings.Graphics.qualityLights) {
             w.setWorldBrightness(0.96f);
+            w.createLight(70*16, 301*16, 1.6f, 0.34f);
+            w.createLight(64*16, 301*16, 1.6f, 0.34f);
         } else {
             w.setWorldBrightness(0.4f);
             w.createLight(-200, -200, 0.4f, 0.1f); //Lights for brightness
@@ -70,13 +72,17 @@ public class OutsideFighting extends DemoLevelWorldLoader {
                 pleaseKillMeAgain ++;
             }
         }
-        w.createLight(70*16, 301*16, 1.6f, 0.34f);
-        w.createLight(64*16, 301*16, 1.6f, 0.34f);
     }
 
     @Override
     public void onDisplay(World w){
         super.onDisplay(w);
+
+        farrand.setX(23f * 16f);
+        farrand.setY(330f*16f);
+
+        jeremiah.setX(24f*16f);
+        jeremiah.setY(330f*16f);
 
         for(StreetLamp lamp : lamps1){
             lamp.setCutOffMargin(22f);

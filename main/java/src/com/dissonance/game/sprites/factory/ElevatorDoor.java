@@ -12,6 +12,7 @@ import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
+import com.dissonance.game.quests.GameQuest;
 import com.dissonance.game.scenes.ElevatorScene;
 
 import java.io.BufferedReader;
@@ -94,6 +95,7 @@ public class ElevatorDoor extends AnimatedSprite implements Selectable, Collidab
             setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
                 @Override
                 public void onAnimationFinished(AnimatedSprite sprite) {
+                    setAnimationFinishedListener(null);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -129,7 +131,7 @@ public class ElevatorDoor extends AnimatedSprite implements Selectable, Collidab
 
                                 player.setUsePhysics(true);
 
-                                //TODO Switch maps
+                                GameQuest.INSTANCE.changeToRooftopMid();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }

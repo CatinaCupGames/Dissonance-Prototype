@@ -1,6 +1,7 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.ai.astar.Vector;
+import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Player;
@@ -17,10 +18,12 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.Service;
+import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.w.OutsideFighting;
 import com.dissonance.game.w.RoofTopBeginning;
+import com.dissonance.game.w.RooftopMid;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,9 +70,49 @@ public class GameQuest  extends PauseQuest {
         }
 
         turnOnBelts();
+        changeToRooftopMid();
 
 
         RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
+    }
+
+    public void changeToRooftopMid() throws InterruptedException {
+        setWorld(GameCache.RooftopMid);
+        GameCache.RooftopMid.waitForWorldDisplayed();
+
+        RenderService.INSTANCE.fadeFromBlack(1300);
+        RooftopMid.farrand.setLayer(0);
+        RooftopMid.jeremiah.setLayer(0);
+        RooftopMid.farrand.setUsePhysics(false);
+        RooftopMid.jeremiah.setUsePhysics(false);
+
+        RooftopMid.farrand.setMovementSpeed(8);
+        RooftopMid.jeremiah.setMovementSpeed(8);
+        RooftopMid.farrand.face(Direction.RIGHT);
+        RooftopMid.jeremiah.face(Direction.RIGHT);
+        RooftopMid.farrand.setX(3f * 16f);
+        RooftopMid.farrand.setY(7f * 16f);
+        RooftopMid.jeremiah.setX(2f * 16f);
+        RooftopMid.jeremiah.setY(2f * 16f);
+        PlayableSprite p1 = Players.getPlayer1().getSprite();
+        PlayableSprite p2 = null;
+        if (Players.getPlayer(2) != null) p2 = Players.getPlayer(2).getSprite();
+
+        p1.setWaypoint(p1.getX() + (5f * 16f), p1.getY(), WaypointType.SIMPLE);
+        if (p2 != null)
+            p2.setWaypoint(p2.getX() + (5f * 16f), p2.getY(), WaypointType.SIMPLE);
+
+       /* p1.waitForWaypointReached();
+        if (p2 != null)
+            p2.waitForWaypointReached();*/
+
+
+        RooftopMid.farrand.setLayer(1);
+        RooftopMid.jeremiah.setLayer(1);
+        RooftopMid.farrand.setUsePhysics(true);
+        RooftopMid.jeremiah.setUsePhysics(true);
+        RooftopMid.farrand.unfreeze();
+        RooftopMid.jeremiah.unfreeze();
     }
 
     public void changeToOutside1() throws InterruptedException {

@@ -374,7 +374,7 @@
                  "name":"factory.FactoryMachine1",
                  "properties":
                     {
-                     "layer":"3"
+                     "layer":"2"
                     },
                  "type":"sprite",
                  "visible":true,
@@ -477,7 +477,7 @@
                  "name":"factory.FactoryMachine1",
                  "properties":
                     {
-                     "layer":"3"
+                     "layer":"2"
                     },
                  "type":"sprite",
                  "visible":true,

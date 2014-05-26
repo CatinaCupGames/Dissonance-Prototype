@@ -37,7 +37,7 @@ public class Building2 extends ImagePhysicsSprite {
             float miny = getY() - (getHeight() / 2f);
             float maxx = getX() + 192f;
             float maxy = getY() + 93f;
-
+            maxy -= 30;
             if (x <= maxx && x >= minx
                     && y <= maxy && y >= miny) {
                 setAlpha(0.4f);
