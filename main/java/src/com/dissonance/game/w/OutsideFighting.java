@@ -2,6 +2,7 @@ package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.system.GameSettings;
+import com.dissonance.game.sprites.Billboard;
 import com.dissonance.game.sprites.StreetLamp;
 
 import java.awt.*;
@@ -13,6 +14,8 @@ public class OutsideFighting extends DemoLevelWorldLoader {
 
     public static ArrayList<StreetLamp> lamps1 = new ArrayList<StreetLamp>();
     public static ArrayList<StreetLamp> lamps2 = new ArrayList<StreetLamp>();
+
+    public static Billboard billboard1;
 
     @Override
     public void onLoad(World w) {
@@ -72,11 +75,19 @@ public class OutsideFighting extends DemoLevelWorldLoader {
         }
         w.createLight(70*16, 301*16, 1.6f, 0.34f);
         w.createLight(64*16, 301*16, 1.6f, 0.34f);
+
+        //82, 307
+        billboard1 =
+
+
     }
 
     @Override
     public void onDisplay(World w){
         super.onDisplay(w);
+
+        farrand.setX(27*16);
+        farrand.setY(317*16);
 
         for(StreetLamp lamp : lamps1){
             lamp.setCutOffMargin(22f);

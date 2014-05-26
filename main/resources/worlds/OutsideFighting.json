@@ -135,9 +135,9 @@
                     },
                  "type":"espawn",
                  "visible":true,
-                 "width":192,
-                 "x":832,
-                 "y":5328
+                 "width":64,
+                 "x":1296,
+                 "y":4784
                 }, 
                 {
                  "height":80,
@@ -328,7 +328,7 @@
                  "visible":true,
                  "width":16,
                  "x":1536,
-                 "y":4944
+                 "y":4912
                 }, 
                 {
                  "height":16,
@@ -341,7 +341,7 @@
                  "visible":true,
                  "width":16,
                  "x":1200,
-                 "y":4944
+                 "y":4912
                 }, 
                 {
                  "height":16,
@@ -354,7 +354,7 @@
                  "visible":true,
                  "width":16,
                  "x":832,
-                 "y":4944
+                 "y":4912
                 }, 
                 {
                  "height":16,
@@ -367,7 +367,7 @@
                  "visible":true,
                  "width":16,
                  "x":832,
-                 "y":5104
+                 "y":5072
                 }, 
                 {
                  "height":16,
@@ -380,7 +380,7 @@
                  "visible":true,
                  "width":16,
                  "x":1200,
-                 "y":5104
+                 "y":5072
                 }, 
                 {
                  "height":16,
@@ -393,7 +393,7 @@
                  "visible":true,
                  "width":16,
                  "x":1536,
-                 "y":5104
+                 "y":5072
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -706,7 +706,7 @@
                  "y":1168
                 }, 
                 {
-                 "height":96,
+                 "height":349,
                  "name":"outside.Building4",
                  "properties":
                     {
@@ -714,9 +714,9 @@
                     },
                  "type":"sprite",
                  "visible":true,
-                 "width":240,
-                 "x":2624,
-                 "y":5472
+                 "width":752,
+                 "x":2208,
+                 "y":5392
                 }, 
                 {
                  "height":96,
@@ -2249,7 +2249,20 @@
                  "type":"sprite",
                  "visible":true,
                  "width":256,
-                 "x":1040,
+                 "x":944,
+                 "y":4800
+                }, 
+                {
+                 "height":160,
+                 "name":"outside.SmallBuilding3",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":192,
+                 "x":1456,
                  "y":4800
                 }, 
                 {
@@ -2262,20 +2275,7 @@
                  "type":"sprite",
                  "visible":true,
                  "width":192,
-                 "x":1344,
-                 "y":4800
-                }, 
-                {
-                 "height":160,
-                 "name":"outside.SmallBuilding1",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":192,
-                 "x":704,
+                 "x":752,
                  "y":5216
                 }, 
                 {
@@ -2301,7 +2301,7 @@
                  "type":"sprite",
                  "visible":true,
                  "width":192,
-                 "x":1696,
+                 "x":1648,
                  "y":5216
                 }, 
                 {
@@ -2319,14 +2319,14 @@
                 }, 
                 {
                  "height":160,
-                 "name":"outside.SmallBuilding1",
+                 "name":"outside.SmallBuilding4",
                  "properties":
                     {
 
                     },
                  "type":"sprite",
                  "visible":true,
-                 "width":192,
+                 "width":256,
                  "x":1648,
                  "y":4800
                 }],

@@ -62,7 +62,7 @@ public class LoadingQuest extends AbstractQuest {
                     public void run() {
                         try {
                             Thread.sleep(2000);
-                            setNextQuest(new GameQuest());
+                            setNextQuest(new DisclaimerQuest());
                             endQuest();
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();

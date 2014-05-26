@@ -14,7 +14,6 @@ import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.system.GameSettings;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.Service;
 import com.dissonance.game.GameCache;
@@ -44,8 +43,8 @@ public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
-        setWorld(GameCache.FactoryFloor);
-        GameCache.FactoryFloor.waitForWorldDisplayed();
+        setWorld(GameCache.RoofTopBeginning);
+        GameCache.RoofTopBeginning.waitForWorldDisplayed();
         TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
 
         Camera.stopFollowing();
