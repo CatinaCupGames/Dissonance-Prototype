@@ -1,13 +1,11 @@
 package com.dissonance.game.quests;
 
-import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
-import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
-import org.lwjgl.util.vector.Vector2f;
+import com.dissonance.framework.sound.Sound;
 
 public class MenuQuest extends PauseQuest {
     private World main, coop;
@@ -15,6 +13,7 @@ public class MenuQuest extends PauseQuest {
 
     @Override
     public void startQuest() throws Exception {
+
         INSTANCE = this;
         main = WorldFactory.getWorld("menu.MainMenu");
         coop = WorldFactory.getWorld("menu.CoopMenuWorld");
@@ -22,6 +21,7 @@ public class MenuQuest extends PauseQuest {
         main.waitForWorldDisplayed();
         RenderService.INSTANCE.fadeToBlack(1f);
         RenderService.INSTANCE.fadeFromBlack(2500);
+        Sound.playSound("introtheme");
         //TODO Display menu and wait for option to be chosen
 
         //TODO Remove, temp code
