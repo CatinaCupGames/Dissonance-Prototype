@@ -32,11 +32,11 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
                 nonground.add(layer);
         }
 
-        groundNodeMap = new NodeMap(w, w.getPixelWidth(), w.getPixelHeight());
+        groundNodeMap = new NodeMap(w, w.getWidth(), w.getHeight());
         groundNodeMap.setCachePath("cache" + File.separator + "factory_GROUND.nodes");
         groundNodeMap.create(ground.toArray(new Layer[ground.size()]));
 
-        nongroundNodeMap = new NodeMap(w, w.getPixelWidth(), w.getPixelHeight());
+        nongroundNodeMap = new NodeMap(w, w.getWidth(), w.getHeight());
         nongroundNodeMap.setCachePath("cache" + File.separator + "factory_NONGROUND.nodes");
         nongroundNodeMap.create(nonground.toArray(new Layer[nonground.size()]));
     }

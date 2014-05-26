@@ -973,7 +973,6 @@ public final class World {
     public int hashCode() {
         int result = name.hashCode();
         result = 31 * result + ID;
-        result = 31 * result + (tiledData != null ? tiledData.hashCode() : 0);
         return result;
     }
 

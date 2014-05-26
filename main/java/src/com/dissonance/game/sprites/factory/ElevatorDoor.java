@@ -1,10 +1,15 @@
 package com.dissonance.game.sprites.factory;
 
+import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.game.player.Player;
+import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
+import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
 import com.dissonance.game.scenes.ElevatorScene;
@@ -76,7 +81,7 @@ public class ElevatorDoor extends AnimatedSprite implements Selectable, Collidab
     }
 
     @Override
-    public boolean onSelected(PlayableSprite player) {
+    public boolean onSelected(final PlayableSprite player) {
         double angle = angleTowards(player);
         if (angle > 227.0 && angle < 314.0) {
             player.freeze();
@@ -89,8 +94,48 @@ public class ElevatorDoor extends AnimatedSprite implements Selectable, Collidab
             setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
                 @Override
                 public void onAnimationFinished(AnimatedSprite sprite) {
-                    ElevatorScene scene = new ElevatorScene(ElevatorDoor.this);
-                    scene.beginScene();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            player.setUsePhysics(false);
+
+                            Player player1 = Players.getPlayer1();
+                            Player player2 = Players.getPlayer(2);
+                            if (player1.getSprite() == player) {
+                                if (player2 != null && player2.getSprite() != null) {
+                                    player2.getSprite().freeze();
+                                    player2.getSprite().disappear();
+                                }
+                            } else if (player2 != null && player2.getSprite() != null && player2.getSprite().equals(player)) {
+                                player1.getSprite().freeze();
+                                player1.getSprite().disappear();
+                            }
+
+                            player.setLayer(1);
+                            player.setMovementSpeed(8f);
+                            player.setWaypoint(29f * 16f, 7f * 16f, WaypointType.SIMPLE);
+                            try {
+                                player.waitForWaypointReached();
+                                Thread.sleep(1200);
+
+                                player.face(Direction.DOWN);
+
+                                reverseAnimation(true);
+                                playAnimation();
+                                waitForAnimationEnd();
+
+                                RenderService.INSTANCE.fadeToBlack(1300);
+                                RenderService.INSTANCE.waitForFade();
+
+                                player.setUsePhysics(true);
+
+                                //TODO Switch maps
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }).start();
                 }
             });
             return true;

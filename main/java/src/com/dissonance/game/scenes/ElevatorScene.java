@@ -19,45 +19,30 @@ public class ElevatorScene extends SimpleScene {
     @Override
     protected void playScene() throws Throwable {
         PlayableSprite sprite = Players.getPlayer1().getSprite();
+        sprite.setUsePhysics(false);
 
         Player player2 = Players.getPlayer(2);
-        PlayableSprite p2 = null;
+        PlayableSprite p2;
         if (player2 != null && player2.getSprite() != null) {
             p2 = player2.getSprite();
-            p2.ignoreCollisionWith(door);
-            p2.setWaypoint(new Position(sprite.getX(), sprite.getY() + 32f), WaypointType.SMART);
-            p2.waitForEndOfWaypointQueue();
+            p2.freeze();
+            p2.disappear();
         }
 
         sprite.setLayer(1);
         sprite.setMovementSpeed(8f);
         sprite.setWaypoint(29f * 16f, 7f * 16f, WaypointType.SIMPLE);
-        if (p2 != null) {
-            p2.setLayer(2);
-            p2.setMovementSpeed(8f);
-            p2.setWaypoint(28f * 16f, 7 * 16f, WaypointType.SIMPLE);
-        }
         sprite.waitForWaypointReached();
-        if (p2 != null)
-            p2.waitForWaypointReached();
-
-        sprite.setX(29f * 16f);
-        sprite.setY(7f * 16f);
-
-        if (p2 != null) {
-            p2.setX(28f * 16f);
-            p2.setY(7f * 16f);
-        }
 
         Thread.sleep(1200);
 
         sprite.face(Direction.DOWN);
-        if (p2 != null)
-            p2.face(Direction.DOWN);
         door.reverseAnimation(true);
         door.playAnimation();
         door.waitForAnimationEnd();
         RenderService.INSTANCE.fadeToBlack(1300);
         RenderService.INSTANCE.waitForFade();
+
+        sprite.setUsePhysics(true);
     }
 }

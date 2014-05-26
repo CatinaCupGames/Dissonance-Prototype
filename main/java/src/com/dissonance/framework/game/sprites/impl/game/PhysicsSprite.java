@@ -30,6 +30,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
     private float widthC = -1;
     private boolean moving;
     private List<Collidable> ignore = new ArrayList<>();
+    private boolean physics = true;
 
     @Override
     public HitBox getHitBox() {
@@ -82,6 +83,8 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         float oX = super.getX();
         super.setX(x);
 
+        if (!physics)
+            return;
         if (hb == null)
             return;
         for (HitBox hitBox : hb) {
@@ -96,6 +99,8 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         float oY = super.getY();
         super.setY(y);
 
+        if (!physics)
+            return;
         if (hb == null)
             return;
         for (HitBox hitBox : hb) {
@@ -110,6 +115,8 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         float oX = super.getX();
         super.rawSetX(x);
 
+        if (!physics)
+            return;
         if (hb == null)
             return;
         for (HitBox hitBox : hb) {
@@ -124,6 +131,8 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
         float oY = super.getY();
         super.rawSetY(y);
 
+        if (!physics)
+            return;
         if (hb == null)
             return;
         for (HitBox hitBox : hb) {
@@ -308,5 +317,13 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             hitboxes.add(new HitBox(sX, sY, width, height));
 
         return hitboxes.toArray(new HitBox[hitboxes.size()]);
+    }
+
+    public void setUsePhysics(boolean value) {
+        this.physics = value;
+    }
+
+    public boolean isUsingPhysics() {
+        return physics;
     }
 }

@@ -9,8 +9,10 @@ import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.game.GameCache;
 import com.dissonance.game.behaviors.Patrol;
 import com.dissonance.game.behaviors.Search;
+import com.dissonance.game.behaviors.WaypointLikePathFollow;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
 import com.dissonance.game.w.FactoryFloorCat;
 import org.lwjgl.Sys;
@@ -91,11 +93,13 @@ public class BlueGuard extends Enemy {
 
     @Override
     public void update() {
-        //Ensure we always use the correct node map
-        if (getLayer() == 2)
-            getWorld().setActiveNodeMap(FactoryFloorCat.groundNodeMap);
-        else if (getLayer() == 6)
-            getWorld().setActiveNodeMap(FactoryFloorCat.nongroundNodeMap);
+        if (getWorld().equals(GameCache.FactoryFloor)) {
+            //Ensure we always use the correct node map
+            if (getLayer() == 2)
+                getWorld().setActiveNodeMap(FactoryFloorCat.groundNodeMap);
+            else if (getLayer() == 6)
+                getWorld().setActiveNodeMap(FactoryFloorCat.nongroundNodeMap);
+        }
 
         super.update();
         if (isUpdateCanceled())
@@ -198,13 +202,22 @@ public class BlueGuard extends Enemy {
     }
 
     private boolean isPlayerSeen(PlayableSprite target) {
-        if (directionTowards(target) != getFacingDirection()) {
+        if (getLayer() != target.getLayer()) {
+            if (!spot.containsKey(target)) {
+                spot.put(target, System.currentTimeMillis());
+                toastText("?")
+                        .setToastFontSize(32f)
+                        .setTint(Color.RED);
+            }
+            return false;
+        }
+        else if (directionTowards(target) != getFacingDirection()) {
             if (directionTowards(target) != getFacingDirection().opposite()) {
                 if (!spot.containsKey(target)) {
                     spot.put(target, System.currentTimeMillis());
-                     toastText("?")
-                             .setToastFontSize(32f)
-                             .setTint(Color.RED);
+                    toastText("?")
+                            .setToastFontSize(32f)
+                            .setTint(Color.RED);
                     return false;
                 }
                 long l = spot.get(target);
