@@ -24,7 +24,7 @@ public class LoadingQuest extends AbstractQuest {
         GameCache.RooftopMid = WorldFactory.getWorld("RooftopMid", false);
         GameCache.OfficeFloor1 = WorldFactory.getWorld("OfficeFloor1", false);
         GameCache.OfficeFloor2 = WorldFactory.getWorld("officefloor2", false);
-        //GameCache.OutsideFightingshit.useExtreamSpeed(true);
+
         Thread.sleep(2000);
 
         RenderService.INSTANCE.runOnServiceThread(new Runnable() {
@@ -64,7 +64,7 @@ public class LoadingQuest extends AbstractQuest {
                     public void run() {
                         try {
                             Thread.sleep(2000);
-                            setNextQuest(new DisclaimerQuest());
+                            setNextQuest(new GameQuest());
                             endQuest();
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();

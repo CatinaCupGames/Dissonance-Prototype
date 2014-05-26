@@ -19,6 +19,7 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
     public static NodeMap groundNodeMap;
     public static NodeMap nongroundNodeMap;
     private static final float WALL_LIGHT_BRIGHTNESS = 1.4f;
+    public static BlueGuard[] melees = new BlueGuard[5];
 
     @Override
     public void onLoad(World w) {
@@ -95,11 +96,30 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
             createLight(54*16, 24*16,  w);
         }
 
-        BlueGuard guard = new BlueGuard();
-        guard.setX(30f * 16f);
-        guard.setY(68f * 16f);
-        guard.setLayer(6);
-        w.loadAndAdd(guard);
+        melees[0] = new BlueGuard();
+        w.loadAndAdd(melees[0]);
+        melees[0].setX(54*16);
+        melees[0].setY(184*16);
+
+        melees[1] = new BlueGuard();
+        w.loadAndAdd(melees[1]);
+        melees[1].setX(31*16);
+        melees[1].setY(171*16);
+
+        melees[2] = new BlueGuard();
+        w.loadAndAdd(melees[2]);
+        melees[2].setX(14*16);
+        melees[2].setY(153*16);
+
+        melees[3] = new BlueGuard();
+        w.loadAndAdd(melees[3]);
+        melees[3].setX(40*16);
+        melees[3].setY(116*16);
+
+        melees[4] = new BlueGuard();
+        w.loadAndAdd(melees[4]);
+        melees[4].setX(13*16);
+        melees[4].setY(50*16);
     }
 
     private void createLight(float x, float y, World w) {
