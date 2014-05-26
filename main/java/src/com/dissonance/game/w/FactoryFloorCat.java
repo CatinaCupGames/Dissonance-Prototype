@@ -1,16 +1,45 @@
 package com.dissonance.game.w;
 
+import com.dissonance.framework.game.ai.astar.NodeMap;
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.tiled.Layer;
+import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.system.GameSettings;
+import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.sprites.environment.BasicLight;
+
+import java.io.File;
+import java.util.ArrayList;
 
 public class FactoryFloorCat extends DemoLevelWorldLoader {
     /*
     LAYER 2 = PLAYER
     LAYER 6 = CATWALK LAYER
      */
-
+    public static NodeMap groundNodeMap;
+    public static NodeMap nongroundNodeMap;
     private static final float WALL_LIGHT_BRIGHTNESS = 1.4f;
+
+    @Override
+    public void onLoad(World w) {
+        ArrayList<Layer> ground = new ArrayList<>();
+        ArrayList<Layer> nonground = new ArrayList<>();
+        Layer[] layers = w.getLayers(LayerType.TILE_LAYER);
+        for (Layer layer : layers) {
+            if (layer.isGroundLayer())
+                ground.add(layer);
+            else
+                nonground.add(layer);
+        }
+
+        groundNodeMap = new NodeMap(w, w.getPixelWidth(), w.getPixelHeight());
+        groundNodeMap.setCachePath("cache" + File.separator + "factory_GROUND.nodes");
+        groundNodeMap.create(ground.toArray(new Layer[ground.size()]));
+
+        nongroundNodeMap = new NodeMap(w, w.getPixelWidth(), w.getPixelHeight());
+        nongroundNodeMap.setCachePath("cache" + File.separator + "factory_NONGROUND.nodes");
+        nongroundNodeMap.create(nonground.toArray(new Layer[nonground.size()]));
+    }
 
     @Override
     public void onDisplay(World w) {
@@ -65,6 +94,12 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
             createLight(43*16, 32*16,  w);
             createLight(54*16, 24*16,  w);
         }
+
+        BlueGuard guard = new BlueGuard();
+        guard.setX(30f * 16f);
+        guard.setY(68f * 16f);
+        guard.setLayer(6);
+        w.loadAndAdd(guard);
     }
 
     private void createLight(float x, float y, World w) {

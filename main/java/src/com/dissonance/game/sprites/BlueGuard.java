@@ -12,6 +12,7 @@ import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.behaviors.Patrol;
 import com.dissonance.game.behaviors.Search;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
+import com.dissonance.game.w.FactoryFloorCat;
 import org.lwjgl.Sys;
 
 import java.awt.*;
@@ -90,10 +91,19 @@ public class BlueGuard extends Enemy {
 
     @Override
     public void update() {
+        //Ensure we always use the correct node map
+        if (getLayer() == 2)
+            getWorld().setActiveNodeMap(FactoryFloorCat.groundNodeMap);
+        else if (getLayer() == 6)
+            getWorld().setActiveNodeMap(FactoryFloorCat.nongroundNodeMap);
+
         super.update();
         if (isUpdateCanceled())
             return;
         runAI();
+
+        //And be sure to reset it
+        getWorld().setActiveNodeMap(getWorld().getDefaultNodeMap());
     }
 
     @Override

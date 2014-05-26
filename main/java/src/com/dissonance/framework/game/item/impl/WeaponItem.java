@@ -184,7 +184,7 @@ public class WeaponItem extends Item {
                     getOwner().setAnimationFrameListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFrame() {
                         @Override
                         public void onAnimationFrame(AnimatedSprite sprite) {
-                            List<Collidable> list = swordHitBox.checkAndRetrieve(sprite.getWorld(), swordHitBox.getX(), swordHitBox.getY(), sprite);
+                            List<Collidable> list = swordHitBox.checkAndRetrieve(sprite.getWorld(), swordHitBox.getX(), swordHitBox.getY(), sprite.getLayer(), sprite);
                             for (Collidable c : list) {
                                 if (c instanceof CombatSprite) {
                                     CombatSprite combatSprite = (CombatSprite) c;

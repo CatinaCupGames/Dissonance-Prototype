@@ -48,6 +48,7 @@ public final class World {
     private transient final ArrayList<Drawable> drawable = new ArrayList<>();
     private transient final ArrayList<Drawable> unsorted = new ArrayList<>();
     private String name;
+    private NodeMap activeNodeMap;
     private NodeMap nodeMap;
     private int ID;
     private transient RenderService renderingService;
@@ -139,7 +140,9 @@ public final class World {
                 loadTiledSprites();
 
                 nodeMap = new NodeMap(this, tiledData.getWidth(), tiledData.getHeight());
+                System.out.println("Reading default node map for world \"" + world + "\"");
                 nodeMap.readMap();
+                setActiveNodeMap(nodeMap);
             } catch (Exception e) {
                 throw new WorldLoadFailedException("Error loading Tiled file! (" + name + ")", e);
             } finally {
@@ -841,6 +844,8 @@ public final class World {
      * Returns the width of the world in tiles.
      */
     public int getWidth() {
+        if (tiledData == null)
+            return getPixelWidth();
         return tiledData.getWidth();
     }
 
@@ -848,6 +853,8 @@ public final class World {
      * Returns the width of the world in pixels.
      */
     public int getPixelWidth() {
+        if (tiledData == null)
+            return 640;
         return tiledData.getWidth() * tiledData.getTileWidth();
     }
 
@@ -855,6 +862,8 @@ public final class World {
      * Returns the height of the world in tiles.
      */
     public int getHeight() {
+        if (tiledData == null)
+            return getPixelHeight();
         return tiledData.getHeight();
     }
 
@@ -862,6 +871,8 @@ public final class World {
      * Returns the height of the world in pixels.
      */
     public int getPixelHeight() {
+        if (tiledData == null)
+            return 360;
         return tiledData.getHeight() * tiledData.getTileHeight();
     }
 
@@ -874,6 +885,14 @@ public final class World {
     }
 
     public NodeMap getNodeMap() {
+        return activeNodeMap;
+    }
+
+    public void setActiveNodeMap(NodeMap map) {
+        this.activeNodeMap = map;
+    }
+
+    public NodeMap getDefaultNodeMap() {
         return nodeMap;
     }
 
