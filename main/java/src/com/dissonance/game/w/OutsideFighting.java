@@ -78,7 +78,12 @@ public class OutsideFighting extends DemoLevelWorldLoader {
         w.createLight(70*16, 301*16, 1.6f, 0.34f);
         w.createLight(64*16, 301*16, 1.6f, 0.34f);
 
-
+        //82, 307
+        billboard1 = new Billboard();
+        w.loadAndAdd(billboard1);
+        billboard1.setX(82*16);
+        billboard1.setY(307*16);
+        billboard1.setAnimation("billboard1");
 
 
     }

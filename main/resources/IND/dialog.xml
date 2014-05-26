@@ -1,5 +1,16 @@
 <game_dialog>
 
+    <dialog dialog_id="ControlLockFarrand">
+        <header>Farrand</header>
+        <message style="italic">Damn, it's locked.</message>
+        <message type="append"> One of these guys has to have a key...</message>
+    </dialog>
+
+    <dialog dialog_id="ControlLockJeremiah">
+        <header>Jeremiah</header>
+        <message style="italic">I probably shouldn't try to break this door...</message>
+    </dialog>
+
     <dialog dialog_id="LevelStart">
         <header>Farrand</header>
         <message style="bold">Are you out of your mind?!</message>
