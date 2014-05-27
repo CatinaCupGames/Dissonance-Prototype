@@ -4,12 +4,15 @@ import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.scene.dialog.DialogFactory;
 import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.render.RenderService;
 
 public class TestTrigger extends AbstractTrigger {
     @Override
-    protected void onTrigger(final PlayableSprite player) throws Throwable { //This method is executed outside the render thread, so we can safely wait for things without locking up
+    protected void onTrigger(final PhysicsSprite s) throws Throwable { //This method is executed outside the render thread, so we can safely wait for things without locking up
+        PlayableSprite player = (PlayableSprite)s;
+
         player.freeze(); //Freeze the player, he can't use any buttons but can still be moved manually.
 
         Dialog dialog = DialogFactory.getDialog("testingTrigger"); //Load up some dialog
