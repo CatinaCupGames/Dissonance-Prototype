@@ -5,7 +5,7 @@
         <message>You picked up a key card</message>
     </dialog>
 
-    <dialog dialog_id="found_key_jeremaih">
+    <dialog dialog_id="found_key_jeremiah">
         <header>Jeremiah</header>
         <message>You picked up a key card</message>
     </dialog>
