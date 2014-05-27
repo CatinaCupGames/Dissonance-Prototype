@@ -11,16 +11,14 @@ package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.Camera;
-import com.dissonance.game.sprites.Farrand;
-import com.dissonance.game.sprites.Jeremiah;
-import com.dissonance.game.sprites.Wyatt;
+import com.dissonance.game.sprites.BlueGuard;
 
 public class CityEntrySquare extends DemoLevelWorldLoader {
-    public static Wyatt guard5;
-    public static Wyatt guard4;
-    public static Wyatt guard1;
-    public static Wyatt guard2;
-    public static Wyatt guard3;
+    public static BlueGuard guard5;
+    public static BlueGuard guard4;
+    public static BlueGuard guard1;
+    public static BlueGuard guard2;
+    public static BlueGuard guard3;
     @Override
     public void onLoad(World w) {
         super.onLoad(w);
@@ -32,27 +30,27 @@ public class CityEntrySquare extends DemoLevelWorldLoader {
         jeremiah.setX(1019.05994f);
         jeremiah.setY(760.96906f);
 
-        guard1 = new Wyatt();
+        guard1 = new BlueGuard();
         w.loadAndAdd(guard1);
         guard1.setX(924f);
         guard1.setY(725f);
 
-        guard2 = new Wyatt();
+        guard2 = new BlueGuard();
         w.loadAndAdd(guard2);
         guard2.setX(924f);
         guard2.setY(760f);
 
-        guard3 = new Wyatt();
+        guard3 = new BlueGuard();
         w.loadAndAdd(guard3);
         guard3.setX(924f);
         guard3.setY(795f);
     
-        guard4 = new Wyatt();
+        guard4 = new BlueGuard();
         w.loadAndAdd(guard4);
         guard4.setX(924f);
         guard4.setY(830f);
     
-        guard5 = new Wyatt();
+        guard5 = new BlueGuard();
         w.loadAndAdd(guard5);
         guard5.setX(924f);
         guard5.setY(865f);

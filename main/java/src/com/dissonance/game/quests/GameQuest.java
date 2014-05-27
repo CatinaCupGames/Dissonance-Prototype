@@ -47,8 +47,8 @@ public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
-        setWorld(GameCache.RoofTopBeginning);
-        GameCache.RoofTopBeginning.waitForWorldDisplayed();
+        setWorld(GameCache.FactoryFloor);
+        GameCache.FactoryFloor.waitForWorldDisplayed();
         TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
 
         Camera.stopFollowing();
@@ -80,37 +80,18 @@ public class GameQuest  extends PauseQuest {
         setWorld(GameCache.RooftopMid);
         GameCache.RooftopMid.waitForWorldDisplayed();
 
-        RenderService.INSTANCE.fadeFromBlack(1300);
-        RooftopMid.farrand.setLayer(0);
-        RooftopMid.jeremiah.setLayer(0);
-        RooftopMid.farrand.setUsePhysics(false);
-        RooftopMid.jeremiah.setUsePhysics(false);
+        RooftopMid.farrand.freeze();
+        RooftopMid.jeremiah.freeze();
 
-        RooftopMid.farrand.setMovementSpeed(8);
-        RooftopMid.jeremiah.setMovementSpeed(8);
+        RooftopMid.farrand.setX(8f * 16f);
+        RooftopMid.farrand.setY(7f * 16f);
+        RooftopMid.jeremiah.setX(7f * 16f);
+        RooftopMid.jeremiah.setY(2f * 16f);
         RooftopMid.farrand.face(Direction.RIGHT);
         RooftopMid.jeremiah.face(Direction.RIGHT);
-        RooftopMid.farrand.setX(3f * 16f);
-        RooftopMid.farrand.setY(7f * 16f);
-        RooftopMid.jeremiah.setX(2f * 16f);
-        RooftopMid.jeremiah.setY(2f * 16f);
-        PlayableSprite p1 = Players.getPlayer1().getSprite();
-        PlayableSprite p2 = null;
-        if (Players.getPlayer(2) != null) p2 = Players.getPlayer(2).getSprite();
+        RenderService.INSTANCE.fadeFromBlack(1300);
+        RenderService.INSTANCE.waitForFade();
 
-        p1.setWaypoint(p1.getX() + (5f * 16f), p1.getY(), WaypointType.SIMPLE);
-        if (p2 != null)
-            p2.setWaypoint(p2.getX() + (5f * 16f), p2.getY(), WaypointType.SIMPLE);
-
-       /* p1.waitForWaypointReached();
-        if (p2 != null)
-            p2.waitForWaypointReached();*/
-
-
-        RooftopMid.farrand.setLayer(1);
-        RooftopMid.jeremiah.setLayer(1);
-        RooftopMid.farrand.setUsePhysics(true);
-        RooftopMid.jeremiah.setUsePhysics(true);
         RooftopMid.farrand.unfreeze();
         RooftopMid.jeremiah.unfreeze();
     }

@@ -1,11 +1,14 @@
 package com.dissonance.framework.game.world.tiled.impl;
 
 import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.tiled.TiledObject;
+
+import java.util.ArrayList;
 
 public abstract class AbstractTrigger {
     private boolean init = false;
-    private boolean active = false;
+    private ArrayList<PhysicsSprite> activators = new ArrayList<>();
     private long lastTrigger = System.currentTimeMillis();
     private TiledObject parent;
 
@@ -13,14 +16,13 @@ public abstract class AbstractTrigger {
         if (init)
             return;
         init = true;
-        active = true;
         this.parent = parent;
     }
 
-    public void onCollide(final PlayableSprite sprite) {
-        if (System.currentTimeMillis() - lastTrigger < triggerTimeout() || !active) return;
+    public void onCollide(final PhysicsSprite sprite) {
+        if (isPlayerOnly() && !(sprite instanceof PlayableSprite) || System.currentTimeMillis() - lastTrigger < triggerTimeout() || activators.contains(sprite)) return;
         lastTrigger = System.currentTimeMillis();
-        setActive(false);
+        activators.add(sprite);
         new Thread(new Runnable() {
 
             @Override
@@ -30,24 +32,20 @@ public abstract class AbstractTrigger {
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
-                setActive(true);
+                activators.remove(sprite);
             }
         }).start();
-    }
-
-    protected void setActive(boolean value) {
-        this.active = value;
-    }
-
-    public boolean isActive() {
-        return active;
     }
 
     protected TiledObject getParent() {
         return parent;
     }
 
-    protected abstract void onTrigger(PlayableSprite sprite) throws Throwable;
+    protected abstract void onTrigger(PhysicsSprite sprite) throws Throwable;
 
     protected abstract long triggerTimeout();
+
+    protected boolean isPlayerOnly() {
+        return true;
+    }
 }

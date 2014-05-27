@@ -3,9 +3,11 @@ package com.dissonance.framework.game.player;
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
+import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
+import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.tiled.TiledObject;
@@ -157,11 +159,7 @@ public abstract class PlayableSprite extends CombatSprite {
     protected void onCollideX(float oldX, float newX, Collidable hit, HitBox hb) {
         if (hit instanceof TiledObject) {
             TiledObject obj = (TiledObject)hit;
-            if (obj.isTrigger()) {
-                AbstractTrigger abstractTrigger = obj.getTrigger();
-                abstractTrigger.onCollide(this);
-                return;
-            } else if (obj.isDoor()) {
+            if (obj.isDoor()) {
                 _teleport(obj, oldX, -1f);
                 return;
             }
@@ -173,11 +171,7 @@ public abstract class PlayableSprite extends CombatSprite {
     protected void onCollideY(float oldY, float newY, Collidable hit, HitBox hb) {
         if (hit instanceof TiledObject) {
             TiledObject obj = (TiledObject)hit;
-            if (obj.isTrigger()) {
-                AbstractTrigger abstractTrigger = obj.getTrigger();
-                abstractTrigger.onCollide(this);
-                return;
-            } else if (obj.isDoor()) {
+            if (obj.isDoor()) {
                 _teleport(obj, -1f, oldY);
                 return;
             }
@@ -460,6 +454,8 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     protected boolean checkSelect() {
+        if (DialogUI.currentDialogBox() != null)
+            return false;
         Iterator<UpdatableDrawable> sprites = getWorld().getUpdatables(); //Sprites will always be Updatable
         while (sprites.hasNext()) {
             UpdatableDrawable d = sprites.next();

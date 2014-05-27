@@ -12,6 +12,7 @@ import com.dissonance.framework.render.text.RenderText;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.GameSettings;
+import com.dissonance.framework.system.utils.Timer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 
@@ -351,7 +352,14 @@ public class DialogUI extends AbstractUI {
         dialog.reset();
         close();
         doWakeUp();
-        currentdialog = null;
+
+        Timer.delayedInvokeRunnable(3000L, new Runnable() {
+            @Override
+            public void run() {
+                currentdialog = null;
+            }
+        });
+
         if (events != null) {
             events.onDialogEnded();
         }

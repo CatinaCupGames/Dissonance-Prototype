@@ -85,6 +85,8 @@ public class Dialog {
     }
 
     public String getCurrentHeader() {
+        if (header.length == 0)
+            return null;
         int i = index;
         while (i >= header.length || header[i] == null) {
             i--;

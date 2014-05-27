@@ -43,10 +43,7 @@ package com.dissonance.game.w;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.framework.render.shader.impl.Light;
-import com.dissonance.game.sprites.Farrand;
-import com.dissonance.game.sprites.Jeremiah;
-import com.dissonance.game.sprites.Waldomar;
-import com.dissonance.game.sprites.Wyatt;
+import com.dissonance.game.sprites.*;
 import com.dissonance.game.sprites.office.*;
 import com.dissonance.game.sprites.office.Window;
 
@@ -85,11 +82,11 @@ public class WaldomarsMeetingRoom implements WorldLoader {
     public static Bookshelf2 var4;
     public static BlackCover var9;
 
-    public static Wyatt guard1;
-    public static Wyatt guard2;
-    public static Wyatt guard3;
-    public static Wyatt guard4;
-    public static Wyatt guard5;
+    public static BlueGuard guard1;
+    public static BlueGuard guard2;
+    public static BlueGuard guard3;
+    public static BlueGuard guard4;
+    public static BlueGuard guard5;
 
     public static Light l;
 
@@ -153,27 +150,27 @@ public class WaldomarsMeetingRoom implements WorldLoader {
         jeremiah.setX(603.4502f);
         jeremiah.setY(129.25f);
 
-        guard1 = new Wyatt();
+        guard1 = new BlueGuard();
         w.loadAndAdd(guard1);
         guard1.setX(509.69965f);
         guard1.setY(128.24994f);
 
-        guard2 = new Wyatt();
+        guard2 = new BlueGuard();
         w.loadAndAdd(guard2);
         guard2.setX(529.60004f);
         guard2.setY(128.45f);
 
-        guard3 = new Wyatt();
+        guard3 = new BlueGuard();
         w.loadAndAdd(guard3);
         guard3.setX(566.4501f);
         guard3.setY(128.75002f);
 
-        guard4 = new Wyatt();
+        guard4 = new BlueGuard();
         w.loadAndAdd(guard4);
         guard4.setX(584.8502f);
         guard4.setY(128.95f);
 
-        guard5 = new Wyatt();
+        guard5 = new BlueGuard();
         w.loadAndAdd(guard5);
         guard5.setX(622.5496f);
         guard5.setY(129.9f);

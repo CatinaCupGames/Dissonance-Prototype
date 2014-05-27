@@ -4,6 +4,7 @@ import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
+import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.utils.Direction;
@@ -13,7 +14,9 @@ import org.lwjgl.util.vector.Vector2f;
 
 public class Garbage extends AbstractTrigger {
     @Override
-    protected void onTrigger(PlayableSprite sprite) throws Throwable {
+    protected void onTrigger(PhysicsSprite s) throws Throwable {
+        PlayableSprite sprite = (PlayableSprite)s;
+
         Player player1 = Players.getPlayer1();
         Player player2 = Players.getPlayer(2);
         if (player2 == null) {

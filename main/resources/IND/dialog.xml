@@ -1,5 +1,17 @@
 <game_dialog>
 
+
+    <dialog dialog_id="found_key_farrand">
+        <header>Farrand</header>
+        <message>This must be the Admin's keycard. It looks like it</message>
+        <message type="append">goes to one of the doors nearby.</message>
+    </dialog>
+
+    <dialog dialog_id="found_key_jeremiah">
+        <header>Jeremiah</header>
+        <message>it's a Keycard, must go to one of the doors around here.</message>
+    </dialog>
+
     <dialog dialog_id="ControlLockFarrand">
         <header>Farrand</header>
         <message style="italic">Damn, it's locked.</message>
@@ -21,13 +33,6 @@
         <message type="append">let us out of here alive?</message>
         <header>Jeremiah</header>
         <message>They will if they can't kill us. We gotta book it.</message>
-    </dialog>
-
-    <dialog dialog_id="EnterFactory">
-        <header>Jeremiah</header>
-        <message>These guys don't know when to give up...</message>
-        <header>Farrand</header>
-        <message>We need to get off the streets. This door looks unlocked.</message>
     </dialog>
 
     <dialog dialog_id="GarbageChuteFarrand">
