@@ -2,12 +2,14 @@ package com.dissonance.game.sprites.factory;
 
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.game.quests.GameQuest;
+import com.dissonance.game.sprites.Farrand;
 
 public class ControlRoom extends PhysicsSprite implements Selectable {
     @Override
@@ -27,6 +29,20 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
     public boolean onSelected(final PlayableSprite player) {
         double angle = angleTowards(player);
         if (angle > 248.0 && angle < 268.0) {
+            if (!GameQuest.INSTANCE.unlockedControl) {
+                final String ind;
+                if (player instanceof Farrand)
+                    ind = "ControlLockFarrand";
+                else
+                    ind = "ControlLockJeremiah";
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Dialog.displayDialog(ind);
+                    }
+                }).start();
+                return true;
+            }
             player.freeze();
 
             reverseAnimation(false);
@@ -68,8 +84,8 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
 
         Thread.sleep(3700);
 
-        //TODO Play sound maybe..?
-        TileObject.setTileAnimationSpeed(50L);
+        //TODO Play sound maybe..?\
+        GameQuest.INSTANCE.turnOnBelts();
 
         reverseAnimation(false);
         playAnimation();
@@ -80,7 +96,6 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
         sprite.waitForWaypointReached();
         sprite.setLayer(2);
         sprite.unfreeze();
-        GameQuest.INSTANCE.factory_beltsactive = true;
 
         reverseAnimation(true);
         playAnimation();

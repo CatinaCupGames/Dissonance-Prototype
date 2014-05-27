@@ -335,6 +335,12 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         return texture.getCurrentStep();
     }
 
+    protected void onAnimationFinished() {
+        if (animationFinished != null) {
+            animationFinished.onAnimationFinished(this);
+        }
+    }
+
     @Override
     public void onAnimate() {
         if (paused)
@@ -348,10 +354,8 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
             if (animationFrame != null) {
                 animationFrame.onAnimationFrame(this);
             }
-            if (animationFinished != null) {
-                if (getCurrentFrame() == 0 || getCurrentFrame() == lastFrame) //If it looped back or if it didn't advance
-                    animationFinished.onAnimationFinished(this);
-            }
+            if (getCurrentFrame() == 0 || getCurrentFrame() == lastFrame)
+                onAnimationFinished();
         }
     }
 

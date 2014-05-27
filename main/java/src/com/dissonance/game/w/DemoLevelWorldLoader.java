@@ -4,9 +4,13 @@ import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.Jeremiah;
+import com.dissonance.game.sprites.environment.BasicLight;
 import com.dissonance.game.sprites.hud.BaseHUD;
+
+import java.awt.*;
 
 /**
  * This "World Loader" is an abstract World Loader that adds the Player and any HUD to the world.
@@ -46,6 +50,35 @@ public abstract class DemoLevelWorldLoader implements WorldLoader {
                 break;
             huds[i - 1] = new BaseHUD(player);
             huds[i - 1].display(w);
+        }
+    }
+
+    protected void createLight(World w, float x, float y, float brightness, float radius, float basicLightRadius, float basicLightAlpha, Color color) {
+        if (!GameSettings.Graphics.qualityLights) {
+            BasicLight light = new BasicLight();
+            light.setX(x);
+            light.setY(y);
+            light.setStartHeight(basicLightRadius);
+            light.setStartWidth(basicLightRadius);
+            light.setAlpha(basicLightAlpha);
+            light.setTint(color);
+            w.loadAndAdd(light);
+        } else {
+            w.createLight(x, y, brightness, radius, color);
+        }
+    }
+
+    protected void createLight(World w, float x, float y, float brightness, float radius, float basicLightRadius, float basicLightAlpha) {
+        if (!GameSettings.Graphics.qualityLights) {
+            BasicLight light = new BasicLight();
+            light.setX(x);
+            light.setY(y);
+            light.setStartHeight(basicLightRadius);
+            light.setStartWidth(basicLightRadius);
+            light.setAlpha(basicLightAlpha);
+            w.loadAndAdd(light);
+        } else {
+            w.createLight(x, y, brightness, radius);
         }
     }
 }

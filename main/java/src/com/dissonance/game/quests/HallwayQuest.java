@@ -20,7 +20,7 @@ public class HallwayQuest  extends PauseQuest {
         RenderService.INSTANCE.fadeToAlpha(1, 0f);
         playSceneAndWait(HallwayScene.class);
 
-        setNextQuest(new LoadingQuest());
+        setNextQuest(new OfficeQuest());
         endQuest();
 
     }

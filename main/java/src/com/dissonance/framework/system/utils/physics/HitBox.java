@@ -67,6 +67,18 @@ public class HitBox {
      * If no objects were found, then a null value is returned.
      */
     public boolean checkForCollision(Sprite sprite) {
+        return checkForCollision(sprite, null);
+    }
+
+    /**
+     * Check for collision with any {@link Collidable} objects, ignoring any {@link Collidable} object in the <b>ignoreList</b> parameter, and return the <b>FIRST</b> object found colliding.
+     *
+     * @param sprite The sprite to check collision for.
+     * @return The <b>FIRST</b> {@link Collidable} object found. Sprites are checked first, then TiledObjects and then lastly
+     * tiles. <br></br>
+     * If no objects were found, then a null value is returned.
+     */
+    public boolean checkForCollision(Sprite sprite, List<Collidable> ignoreList) {
         float height;
         float width;
         if (sprite.getTexture() instanceof SpriteTexture) {
@@ -84,10 +96,14 @@ public class HitBox {
         sX += minX;
         sY += minY;
 
-        return checkForCollision(sprite.getWorld(), sX, sY, sprite, sprite.getLayer());
+        return checkForCollision(sprite.getWorld(), sX, sY, sprite, sprite.getLayer(), ignoreList);
     }
 
     public boolean checkForCollision(Sprite sprite, float x, float y) {
+        return checkForCollision(sprite, x, y, null);
+    }
+
+    public boolean checkForCollision(Sprite sprite, float x, float y, List<Collidable> ignoreList) {
         float height;
         float width;
         if (sprite.getTexture() instanceof SpriteTexture) {
@@ -105,7 +121,7 @@ public class HitBox {
         sX += minX;
         sY += minY;
 
-        return checkForCollision(sprite.getWorld(), sX, sY, sprite, sprite.getLayer());
+        return checkForCollision(sprite.getWorld(), sX, sY, sprite, sprite.getLayer(), ignoreList);
     }
 
     /**
@@ -119,7 +135,11 @@ public class HitBox {
      * If no objects were found, then a null value is returned.
      */
     public boolean checkForCollision(World world, float startX, float startY, Sprite ignore) {
-        return checkForCollision(world, startX, startY, ignore, 1);
+        return checkForCollision(world, startX, startY, ignore, 1, null);
+    }
+
+    public boolean checkForCollision(World world, float startX, float startY, Sprite ignore, int layer) {
+        return checkForCollision(world, startX, startY, ignore, layer, null);
     }
 
     /**
@@ -132,7 +152,7 @@ public class HitBox {
      * tiles. <br></br>
      * If no objects were found, then a null value is returned.
      */
-    public boolean checkForCollision(World world, float startX, float startY, Sprite ignore, int layer) {
+    public boolean checkForCollision(World world, float startX, float startY, Sprite ignore, int layer, List<Collidable> ignoreList) {
         if (world == null)
             return false;
         float halfx = (maxX - minX) / 2f;
@@ -140,7 +160,7 @@ public class HitBox {
         for (float x = startX; x < startX + (maxX - minX); x++) {
             for (float y = startY; y < startY + (maxY - minY); y++) {
                 for (Collidable sprite : cache) {
-                    if (sprite.getWorld() != world || sprite == ignore || sprite.getLayer() != layer) continue;
+                    if (sprite.getWorld() != world || sprite == ignore || sprite.getLayer() != layer || (ignoreList != null && ignoreList.contains(sprite))) continue;
 
                     if (sprite.isPointInside(x, y)) {
                         lastCollide = sprite;
@@ -199,10 +219,14 @@ public class HitBox {
     }
 
     public List<Collidable> checkAndRetrieve(World world, float startX, float startY, Sprite ignore) {
-        return checkAndRetrieve(world, startX, startY, 1, ignore);
+        return checkAndRetrieve(world, startX, startY, 1, ignore, null);
     }
 
-    public List<Collidable> checkAndRetrieve(World world, float startX, float startY, int layer,  Sprite ignore) {
+    public List<Collidable> checkAndRetrieve(World world, float startX, float startY, int layer, Sprite ignore) {
+        return checkAndRetrieve(world, startX, startY, layer, ignore, null);
+    }
+
+    public List<Collidable> checkAndRetrieve(World world, float startX, float startY, int layer, Sprite ignore, List<Collidable> ignoreList) {
         if (world == null) return new ArrayList<Collidable>();
 
         float halfx = (maxX - minX) / 2f;
@@ -211,7 +235,7 @@ public class HitBox {
         for (float x = minX + startX; x < startX + (maxX - minX); x++) {
             for (float y = minY + startY; y < startY + (maxY - minY); y++) {
                 for (Collidable sprite : cache) {
-                    if (sprite.getWorld() != world || sprite == ignore || sprite.getLayer() != layer) continue;
+                    if (sprite.getWorld() != world || sprite == ignore || sprite.getLayer() != layer || (ignoreList != null && ignoreList.contains(sprite))) continue;
                     if (sprite.isPointInside(x, y) && !collidables.contains(sprite)) {
                         collidables.add(sprite);
                     }

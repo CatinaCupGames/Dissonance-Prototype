@@ -1,6 +1,7 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.ai.astar.Vector;
+import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Player;
@@ -13,12 +14,15 @@ import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Camera;
-import com.dissonance.framework.system.GameSettings;
+import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.Service;
+import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.w.OutsideFighting;
 import com.dissonance.game.w.RoofTopBeginning;
+import com.dissonance.game.w.RooftopMid;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,12 +30,13 @@ import java.util.Random;
 
 public class GameQuest  extends PauseQuest {
     private static final long DEFAULT_TIMEOUT = 6000L;
-    private static final int DEFAULT_MAX = 3;
+    private static final int DEFAULT_MAX = 4;
     private static final Random random = new Random();
     private static final Class[] TO_SPAWN = new Class[] {
             BlueGuard.class
     };
     public static GameQuest INSTANCE;
+    public boolean unlockedControl = false;
 
     private Service.ServiceRunnable runnable;
     private HashMap<World, TiledObject[]> spawns = new HashMap<World, TiledObject[]>();
@@ -42,11 +47,13 @@ public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
-        setWorld(GameCache.OutsideFighting);
-        GameCache.OutsideFighting.waitForWorldDisplayed();
+        setWorld(GameCache.FactoryFloor);
+        GameCache.FactoryFloor.waitForWorldDisplayed();
         TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
 
         Camera.stopFollowing();
+
+        Sound.playSound("bossfight");
 
         Player player1 = Players.createPlayer1();
         if (player1.isPlaying())
@@ -62,38 +69,81 @@ public class GameQuest  extends PauseQuest {
                 player2.join();
         }
 
+        turnOnBelts();
+
 
         RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
+    }
 
-        /*runnable = RenderService.INSTANCE.runOnServiceThread(new Runnable() {
-            @Override
-            public void run() {
-                long time = System.currentTimeMillis();
-                update();
-                System.out.println(System.currentTimeMillis() - time);
-            }
-        }, true, true);*/
+    public void changeToRooftopMid() throws InterruptedException {
+        setWorld(GameCache.RooftopMid);
+        GameCache.RooftopMid.waitForWorldDisplayed();
+
+        RenderService.INSTANCE.fadeFromBlack(1300);
+        RooftopMid.farrand.setLayer(0);
+        RooftopMid.jeremiah.setLayer(0);
+        RooftopMid.farrand.setUsePhysics(false);
+        RooftopMid.jeremiah.setUsePhysics(false);
+
+        RooftopMid.farrand.setMovementSpeed(8);
+        RooftopMid.jeremiah.setMovementSpeed(8);
+        RooftopMid.farrand.face(Direction.RIGHT);
+        RooftopMid.jeremiah.face(Direction.RIGHT);
+        RooftopMid.farrand.setX(3f * 16f);
+        RooftopMid.farrand.setY(7f * 16f);
+        RooftopMid.jeremiah.setX(2f * 16f);
+        RooftopMid.jeremiah.setY(2f * 16f);
+        PlayableSprite p1 = Players.getPlayer1().getSprite();
+        PlayableSprite p2 = null;
+        if (Players.getPlayer(2) != null) p2 = Players.getPlayer(2).getSprite();
+
+        p1.setWaypoint(p1.getX() + (5f * 16f), p1.getY(), WaypointType.SIMPLE);
+        if (p2 != null)
+            p2.setWaypoint(p2.getX() + (5f * 16f), p2.getY(), WaypointType.SIMPLE);
+
+       /* p1.waitForWaypointReached();
+        if (p2 != null)
+            p2.waitForWaypointReached();*/
+
+
+        RooftopMid.farrand.setLayer(1);
+        RooftopMid.jeremiah.setLayer(1);
+        RooftopMid.farrand.setUsePhysics(true);
+        RooftopMid.jeremiah.setUsePhysics(true);
+        RooftopMid.farrand.unfreeze();
+        RooftopMid.jeremiah.unfreeze();
     }
 
     public void changeToOutside1() throws InterruptedException {
         setWorld(GameCache.OutsideFighting);
         GameCache.OutsideFighting.waitForWorldDisplayed();
 
-        Camera.stopFollowing();
+        OutsideFighting.farrand.setX(23f * 16f);
+        OutsideFighting.farrand.setY(330f*16f);
 
-        Player player1 = Players.createPlayer1();
-        if (player1.isPlaying())
-            player1.changeSprite(RoofTopBeginning.farrand);
-        else
-            player1.joinAs(RoofTopBeginning.farrand);
+        OutsideFighting.jeremiah.setX(24f*16f);
+        OutsideFighting.jeremiah.setY(330f*16f);
+
+        Player player1 = Players.getPlayer1();
+        player1.getSprite().setVisible(true);
+        Camera.followSprite(player1.getSprite());
 
         Player player2 = Players.getPlayer(2);
-        if (player2 != null) {
-            if (player2.isPlaying())
-                player2.changeSprite(RoofTopBeginning.jeremiah);
-            else
-                player2.join();
+        if (player2 != null && player2.getSprite() != null) {
+            player2.getSprite().setVisible(true);
+            Camera.followSprite(player2.getSprite());
         }
+          
+        RoofTopBeginning.farrand.unfreeze();
+        RoofTopBeginning.jeremiah.unfreeze();
+
+
+        runnable = RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+            @Override
+            public void run() {
+                update();
+            }
+        }, true, true);
     }
 
     @Override
@@ -145,7 +195,7 @@ public class GameQuest  extends PauseQuest {
 
                     if (System.currentTimeMillis() - l >= time) {
                         PlayableSprite player1 = Players.getPlayer1().getSprite();
-                        if (player1.distanceFrom(new Vector(t.getX(), t.getY())) > 25f * 16f) {
+                        if (player1.distanceFrom(new Vector(t.getX(), t.getY())) > 50f * 16f) {
                             continue;
                         }
 
@@ -187,6 +237,7 @@ public class GameQuest  extends PauseQuest {
 
     public void turnOnBelts() {
         TileObject.setTileAnimationSpeed(50L);
+        GameQuest.INSTANCE.factory_beltsactive = true;
     }
 
     @Override
