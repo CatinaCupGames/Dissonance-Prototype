@@ -58,6 +58,8 @@ public abstract class AbstractQuest {
     }
 
     public void setWorld(World world) {
+        if (getWorld() != null && getWorld().equals(world))
+            return;
         if (RenderService.INSTANCE == null) {
             try {
                 world.waitForWorldLoaded();

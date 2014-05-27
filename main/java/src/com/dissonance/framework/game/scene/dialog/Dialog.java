@@ -32,13 +32,15 @@ public class Dialog {
             else
                 throw new RuntimeException("No world could be found to bound the UI to!");
         }
-        Player player = Players.getPlayer1();
+        PlayableSprite[] players = Players.getCurrentlyPlayingSprites();
         boolean halt = true;
-        if (player != null && player.getSprite() != null) {
-            halt = !player.getSprite().isFrozen();
+        if (players.length > 0) {
+            halt = !players[0].isFrozen();
         }
-        if (halt && player != null && player.getSprite() != null) {
-            player.getSprite().freeze(true, Dialog.class);
+        if (halt && players.length > 0) {
+            for (PlayableSprite player : players) {
+                player.freeze(true, Dialog.class);
+            }
         }
 
         while (GameService.getCurrentQuest() != null && GameService.getCurrentQuest().isPaused()) {
@@ -56,8 +58,10 @@ public class Dialog {
             e.printStackTrace();
         }
 
-        if (halt && player != null && player.getSprite() != null) {
-            player.getSprite().unfreeze(Dialog.class);
+        if (halt && players.length > 0) {
+            for (PlayableSprite player : players) {
+                player.unfreeze(Dialog.class);
+            }
         }
     }
 
