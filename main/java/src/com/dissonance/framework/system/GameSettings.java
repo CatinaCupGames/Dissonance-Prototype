@@ -26,6 +26,8 @@ public class GameSettings extends ReflectionConfig {
     protected boolean useFBO = true;
     @ConfigItem
     protected boolean qualityLights = true;
+    @ConfigItem
+    protected boolean vsync = false;
 
     public static void loadGameSettings() throws IOException {
         if (!new File("config/settings.dat").exists()) {
@@ -40,6 +42,7 @@ public class GameSettings extends ReflectionConfig {
         Display.window_height = settings.resolution_height;
         Display.fullscreen = settings.fullscreen;
 
+        Graphics.vsync = settings.vsync;
         Graphics.FPSLimit = settings.fps_limit;
         Graphics.color = settings.color;
         Graphics.useFBO = settings.useFBO;
@@ -52,6 +55,8 @@ public class GameSettings extends ReflectionConfig {
         settings.resolution_width = Display.window_width;
         settings.resolution_height = Display.window_height;
         settings.fullscreen = Display.fullscreen;
+
+        settings.vsync = Graphics.vsync;
 
         settings.fps_limit = Graphics.FPSLimit;
         settings.color = Graphics.color;
@@ -141,6 +146,7 @@ public class GameSettings extends ReflectionConfig {
          * Whether or not to use the light shader to make a "light" effect
          */
         public static boolean qualityLights;
+        public static boolean vsync;
 
         private Graphics() {
         }

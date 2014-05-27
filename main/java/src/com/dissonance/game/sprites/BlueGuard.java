@@ -12,6 +12,7 @@ import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.game.GameCache;
 import com.dissonance.game.behaviors.Patrol;
 import com.dissonance.game.behaviors.Search;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
@@ -26,7 +27,7 @@ public class BlueGuard extends Enemy {
     public BlueGuard() {
         super("meleeguard", StatType.NON_MAGIC, CombatType.HUMAN);
     }
-    private boolean isHostile;
+    private boolean isHostile = true;
 
     @Override
     public void onMovement(Direction direction) {
@@ -93,18 +94,15 @@ public class BlueGuard extends Enemy {
 
     @Override
     public void update() {
-<<<<<<< HEAD
-=======
         if (Camera.isOffScreen(getX(), getY(), getWidth(), getHeight()))
             return;
         if (getWorld().equals(GameCache.FactoryFloor)) {
->>>>>>> 21e9a54d4910a28e64b5d6d62671196d85a380ba
             //Ensure we always use the correct node map
             if (getLayer() == 2)
                 getWorld().setActiveNodeMap(FactoryFloorCat.groundNodeMap);
             else if (getLayer() == 6)
                 getWorld().setActiveNodeMap(FactoryFloorCat.nongroundNodeMap);
-
+        }
 
         super.update();
         if (isUpdateCanceled())

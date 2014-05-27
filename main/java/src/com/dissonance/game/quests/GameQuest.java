@@ -71,6 +71,7 @@ public class GameQuest  extends PauseQuest {
         changeToOutside1();
 
         RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
+        RoofTopBeginning.jeremiah.setCurrentWeapon(Weapon.getWeapon("jeremiahsword").createItem(RoofTopBeginning.jeremiah));
     }
 
     public void changeToRooftopMid() throws InterruptedException {
