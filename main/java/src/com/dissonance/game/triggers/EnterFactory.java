@@ -1,6 +1,7 @@
 package com.dissonance.game.triggers;
 
 import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 
 /**
@@ -8,7 +9,7 @@ import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
  */
 public class EnterFactory extends AbstractTrigger {
     @Override
-    protected void onTrigger(PlayableSprite sprite) throws Throwable {
+    protected void onTrigger(PhysicsSprite sprite) throws Throwable {
 
     }
 
