@@ -1,5 +1,12 @@
 <game_dialog>
 
+    <dialog dialog_id="jump_into_office">
+        <header>Farrand</header>
+        <message>Looks like another drop. Ready?</message>
+        <header>Jeremiah</header>
+        <message>Let's do this.</message>
+    </dialog>
+
 
     <dialog dialog_id="found_key_farrand">
         <header>Farrand</header>

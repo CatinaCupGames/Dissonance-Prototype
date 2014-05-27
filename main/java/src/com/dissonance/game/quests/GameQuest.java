@@ -1,7 +1,6 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.ai.astar.Vector;
-import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Player;
@@ -80,6 +79,9 @@ public class GameQuest  extends PauseQuest {
 
         RooftopMid.farrand.freeze();
         RooftopMid.jeremiah.freeze();
+
+        RooftopMid.farrand.setLayer(1);
+        RooftopMid.jeremiah.setLayer(1);
 
         RooftopMid.farrand.setX(8f * 16f);
         RooftopMid.farrand.setY(7f * 16f);
