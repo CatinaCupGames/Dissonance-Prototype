@@ -2,7 +2,6 @@ package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.game.sprites.office.Window;
-import sun.awt.windows.WInputMethod;
 
 public class RooftopMid extends DemoLevelWorldLoader {
 

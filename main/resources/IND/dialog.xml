@@ -7,7 +7,7 @@
         <message type="append">goes to one of the doors nearby.</message>
     </dialog>
 
-    <dialog dialog_id="found_key_jeremaih">
+    <dialog dialog_id="found_key_jeremiah">
         <header>Jeremiah</header>
         <message>it's a Keycard, must go to one of the doors around here.</message>
     </dialog>
