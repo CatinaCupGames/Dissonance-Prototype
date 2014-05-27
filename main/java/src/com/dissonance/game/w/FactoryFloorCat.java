@@ -102,6 +102,11 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
             createLight(43*16, 32*16,  w);
             createLight(54*16, 24*16,  w);
         }
+        BlueGuard guard = new BlueGuard();
+        guard.setX(28f * 16f);
+        guard.setY(38f * 16f);
+        guard.setLayer(6);
+        w.loadAndAdd(guard);
 
         melees[0] = new BlueGuard();
         w.loadAndAdd(melees[0]);
