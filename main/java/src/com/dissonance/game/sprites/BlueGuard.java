@@ -4,11 +4,13 @@ import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.ai.behaviors.Flee;
 import com.dissonance.framework.game.combat.Weapon;
+import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.behaviors.Patrol;
 import com.dissonance.game.behaviors.Search;
@@ -18,6 +20,7 @@ import com.dissonance.game.w.FactoryFloorCat;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class BlueGuard extends Enemy {
     public BlueGuard() {
@@ -79,18 +82,23 @@ public class BlueGuard extends Enemy {
 
     }
 
-    /*@Override
+    @Override
     public void strike(CombatSprite attacker, WeaponItem with) {
         super.strike(attacker, with);
 
         if (target == attacker && getHP() < getMaxHP() / 3.0) {
             run = true;
-            dodge(directionTowards(attacker).opposite(), movementSpeed() * 8.5f);
         }
-    }*/
+    }
 
     @Override
     public void update() {
+<<<<<<< HEAD
+=======
+        if (Camera.isOffScreen(getX(), getY(), getWidth(), getHeight()))
+            return;
+        if (getWorld().equals(GameCache.FactoryFloor)) {
+>>>>>>> 21e9a54d4910a28e64b5d6d62671196d85a380ba
             //Ensure we always use the correct node map
             if (getLayer() == 2)
                 getWorld().setActiveNodeMap(FactoryFloorCat.groundNodeMap);
@@ -141,12 +149,14 @@ public class BlueGuard extends Enemy {
     private boolean idle;
     private long lastAttack;
     private boolean looking = false;
+    private boolean dodgeAway = false;
     private boolean saw = false;
     private long foundTime = 0L;
     private PlayableSprite target;
     private static final long ATTACK_RATE_MS = 1800;
     private static final long FOUND_YOU_MS = 400;
     private static final long SPOT_TIME = 2000;
+    private static final Random random = new Random();
     private void runAI() {
         if (isDodging())
             return;
@@ -187,13 +197,45 @@ public class BlueGuard extends Enemy {
                     }
 
                     if (isAttacking()) return;
-                    if (System.currentTimeMillis() - lastAttack < ATTACK_RATE_MS) return;
+                    if (System.currentTimeMillis() - lastAttack < ATTACK_RATE_MS) {
+                        dodgeAway = true;
+                        Direction direction = directionTowards(target).rotate90();
+                        int rnd = random.nextInt(3);
+                        switch (rnd) {
+                            case 0:
+                                dodge(direction);
+                                break;
+                            case 1:
+                                dodge(direction.rotate90());
+                                break;
+                            case 2:
+                                dodge(direction.rotateNegitive90());
+                        }
+                        return;
+                    }
                     if (System.currentTimeMillis() - foundTime < FOUND_YOU_MS) return;
 
                     lastAttack = System.currentTimeMillis();
                     getCurrentWeapon().use("swipe");
                     setBehavior(null);
+
                 } else {
+                    if (dodgeAway && !isDodging()) {
+                        Direction direction = directionTowards(target).rotate90();
+                        int rnd = random.nextInt(3);
+                        switch (rnd) {
+                            case 0:
+                                dodge(direction);
+                                break;
+                            case 1:
+                                dodge(direction.rotate90());
+                                break;
+                            case 2:
+                                dodge(direction.rotateNegitive90());
+                        }
+                        dodgeAway = false;
+                        return;
+                    }
                     looking = true;
                     Behavior behavior = getBehavior();
                     if (behavior instanceof WaypointLikeSeek) {

@@ -116,4 +116,33 @@ public enum Direction {
                 return this;
         }
     }
+
+    public Direction rotateNegitive90() {
+        return opposite().rotate90();
+    }
+
+    public Direction rotate90() {
+        switch (this) {
+            case UP:
+                return LEFT;
+            case DOWN:
+                return RIGHT;
+            case LEFT:
+                return DOWN;
+            case RIGHT:
+                return UP;
+            case UP_LEFT:
+                return DOWN_LEFT;
+            case UP_RIGHT:
+                return UP_LEFT;
+            case DOWN_LEFT:
+                return DOWN_RIGHT;
+            case DOWN_RIGHT:
+                return UP_LEFT;
+            case NONE:
+            case MOVING:
+            default:
+                return this;
+        }
+    }
 }
