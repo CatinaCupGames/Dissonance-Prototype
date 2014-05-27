@@ -10,4 +10,10 @@ public class RoofVent extends ImagePhysicsSprite {
     public String hitboxConfigPath() {
         return "";
     }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        setCutOffMargin(22);
+    }
 }
