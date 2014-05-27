@@ -47,8 +47,8 @@ public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
-        setWorld(GameCache.FactoryFloor);
-        GameCache.FactoryFloor.waitForWorldDisplayed();
+        setWorld(GameCache.OutsideFighting);
+        GameCache.OutsideFighting.waitForWorldDisplayed();
         TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
 
         Camera.stopFollowing();
@@ -69,9 +69,7 @@ public class GameQuest  extends PauseQuest {
                 player2.join();
         }
 
-        turnOnBelts();
-        changeToRooftopMid();
-
+        changeToOutside1();
 
         RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
     }
@@ -100,11 +98,11 @@ public class GameQuest  extends PauseQuest {
         setWorld(GameCache.OutsideFighting);
         GameCache.OutsideFighting.waitForWorldDisplayed();
 
-        OutsideFighting.farrand.setX(23f * 16f);
-        OutsideFighting.farrand.setY(330f*16f);
+        OutsideFighting.farrand.setX(27f * 16f);
+        OutsideFighting.farrand.setY(240f*16f);
 
         OutsideFighting.jeremiah.setX(24f*16f);
-        OutsideFighting.jeremiah.setY(330f*16f);
+        OutsideFighting.jeremiah.setY(240f*16f);
 
         Player player1 = Players.getPlayer1();
         player1.getSprite().setVisible(true);

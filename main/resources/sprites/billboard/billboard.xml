@@ -8,4 +8,28 @@
             frames="13"
             row="0"
             default_speed="200ms"/>
+    <animation
+            name="billboard1"
+            loop="true"
+            frames="13"
+            row="1"
+            default_speed="200ms"/>
+    <animation
+            name="billboard1"
+            loop="true"
+            frames="13"
+            row="2"
+            default_speed="200ms"/>
+    <animation
+            name="billboard1"
+            loop="true"
+            frames="13"
+            row="3"
+            default_speed="200ms"/>
+    <animation
+            name="billboard1"
+            loop="true"
+            frames="13"
+            row="4"
+            default_speed="200ms"/>
 </animations>

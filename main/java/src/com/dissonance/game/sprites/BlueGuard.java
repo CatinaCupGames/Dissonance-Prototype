@@ -9,6 +9,7 @@ import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.behaviors.Patrol;
@@ -94,6 +95,8 @@ public class BlueGuard extends Enemy {
 
     @Override
     public void update() {
+        if (Camera.isOffScreen(getX(), getY(), getWidth(), getHeight()))
+            return;
         if (getWorld().equals(GameCache.FactoryFloor)) {
             //Ensure we always use the correct node map
             if (getLayer() == 2)
