@@ -6,13 +6,16 @@ import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.w.RoofTopBeginning;
 
 public class FakeExitRoof extends AbstractTrigger {
     @Override
-    protected void onTrigger(PlayableSprite sprite) throws Throwable {
+    protected void onTrigger(PhysicsSprite s) throws Throwable {
+        PlayableSprite sprite = (PlayableSprite)s;
+
         Player player1 = Players.getPlayer1();
         Player player2 = Players.getPlayer(2);
         sprite.freeze();
