@@ -1,7 +1,8 @@
 package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.ai.astar.Position;
-import com.dissonance.framework.game.ai.behaviors.*;
+import com.dissonance.framework.game.ai.behaviors.Behavior;
+import com.dissonance.framework.game.ai.behaviors.Flee;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Players;
@@ -9,13 +10,10 @@ import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.system.utils.Direction;
-import com.dissonance.game.GameCache;
 import com.dissonance.game.behaviors.Patrol;
 import com.dissonance.game.behaviors.Search;
-import com.dissonance.game.behaviors.WaypointLikePathFollow;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
 import com.dissonance.game.w.FactoryFloorCat;
-import org.lwjgl.Sys;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -25,7 +23,7 @@ public class BlueGuard extends Enemy {
     public BlueGuard() {
         super("meleeguard", StatType.NON_MAGIC, CombatType.HUMAN);
     }
-
+    private boolean isHostile;
 
     @Override
     public void onMovement(Direction direction) {
@@ -93,18 +91,19 @@ public class BlueGuard extends Enemy {
 
     @Override
     public void update() {
-        if (getWorld().equals(GameCache.FactoryFloor)) {
             //Ensure we always use the correct node map
             if (getLayer() == 2)
                 getWorld().setActiveNodeMap(FactoryFloorCat.groundNodeMap);
             else if (getLayer() == 6)
                 getWorld().setActiveNodeMap(FactoryFloorCat.nongroundNodeMap);
-        }
+
 
         super.update();
         if (isUpdateCanceled())
             return;
-        runAI();
+        if(isHostile) {
+            runAI();
+        }
 
         //And be sure to reset it
         getWorld().setActiveNodeMap(getWorld().getDefaultNodeMap());
@@ -113,6 +112,14 @@ public class BlueGuard extends Enemy {
     @Override
     public boolean isAlly(CombatSprite sprite) {
         return sprite instanceof BlueGuard || sprite instanceof RedGuard;
+    }
+
+    public boolean isHostile() {
+        return isHostile;
+    }
+
+    public void setHostile(boolean isHostile) {
+        this.isHostile = isHostile;
     }
 
     @Override

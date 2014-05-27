@@ -14,6 +14,13 @@ public class GateScene extends SimpleScene{
         RenderService.INSTANCE.fadeFromBlack(800);
         RenderService.INSTANCE.waitForFade();
 
+        CityEntrySquare.guard1.setHostile(false);
+        CityEntrySquare.guard2.setHostile(false);
+        CityEntrySquare.guard3.setHostile(false);
+        CityEntrySquare.guard4.setHostile(false);
+        CityEntrySquare.guard5.setHostile(false);
+
+
         Vector2f center = Camera.translateToCameraCenter(CityEntrySquare.farrand.getVector(), CityEntrySquare.farrand.getHeight());
         Camera.setPos(center);
         Camera.followSprite(CityEntrySquare.farrand);
