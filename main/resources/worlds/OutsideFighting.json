@@ -1339,19 +1339,6 @@
                  "type":"sprite",
                  "visible":true,
                  "width":240,
-                 "x":5584,
-                 "y":1248
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.Building3",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":240,
                  "x":4272,
                  "y":-32
                 }, 
@@ -3096,6 +3083,19 @@
                  "width":192,
                  "x":4608,
                  "y":176
+                }, 
+                {
+                 "height":160,
+                 "name":"outside.Factory",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":256,
+                 "x":5328,
+                 "y":1168
                 }],
          "opacity":1,
          "type":"objectgroup",
