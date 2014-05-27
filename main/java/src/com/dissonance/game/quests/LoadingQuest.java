@@ -4,6 +4,7 @@ import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.GameCache;
 
@@ -17,9 +18,13 @@ public class LoadingQuest extends AbstractQuest {
         RenderService.INSTANCE.waitForFade();
 
 
-        GameCache.RoofTopBeginning = WorldFactory.getWorld("FactoryFloorCat", false);
+        GameCache.RoofTopBeginning = WorldFactory.getWorld("RoofTopBeginning", false);
         GameCache.OutsideFighting = WorldFactory.getWorld("OutsideFighting", false);
-        //GameCache.OutsideFightingshit.useExtreamSpeed(true);
+        GameCache.FactoryFloor = WorldFactory.getWorld("FactoryFloorCat", false);
+        GameCache.RooftopMid = WorldFactory.getWorld("RooftopMid", false);
+        GameCache.OfficeFloor1 = WorldFactory.getWorld("OfficeFloor1", false);
+        GameCache.OfficeFloor2 = WorldFactory.getWorld("officefloor2", false);
+
         Thread.sleep(2000);
 
         RenderService.INSTANCE.runOnServiceThread(new Runnable() {
@@ -30,6 +35,7 @@ public class LoadingQuest extends AbstractQuest {
                 GameSettings.Graphics.useFBO = false;
 
                 GameCache.RoofTopBeginning.prepareTiles();
+                GameCache.RooftopMid.prepareTiles();
 
                 GameSettings.Graphics.useFBO = value;
             }
@@ -41,6 +47,18 @@ public class LoadingQuest extends AbstractQuest {
             @Override
             public void run() {
                 GameCache.OutsideFighting.prepareTiles();
+            }
+        }, true);
+
+        Thread.sleep(4000);
+
+        RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+            @Override
+            public void run() {
+                GameCache.FactoryFloor.prepareTiles();
+                GameCache.OfficeFloor1.prepareTiles();
+                GameCache.OfficeFloor2.prepareTiles();
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -57,6 +75,7 @@ public class LoadingQuest extends AbstractQuest {
                 }).start();
             }
         }, true);
+        Sound.stopSound("introtheme");
     }
 
     @Override

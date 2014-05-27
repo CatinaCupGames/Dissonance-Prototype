@@ -2,14 +2,17 @@ package com.dissonance.game.spells.impl;
 
 import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
+import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
 import com.dissonance.game.spells.BoltSpell;
 import com.dissonance.game.spells.ProjectileSpell;
 import com.dissonance.game.spells.statuseffects.Burn;
 import com.sun.org.apache.xml.internal.security.utils.resolver.implementations.ResolverAnonymous;
 
+import java.awt.*;
 import java.util.Random;
 
 public class Fire extends ProjectileSpell {
+    private ParticleSprite.ParticleSource source;
     public Fire(CombatSprite owner) {
         super(owner);
     }
@@ -21,7 +24,31 @@ public class Fire extends ProjectileSpell {
 
     @Override
     public int getRange() {
-        return 80;
+        return 384;
+    }
+
+    @Override
+    protected float getSpeed() {
+        return 25f;
+    }
+
+    @Override
+    protected void moveOneFrame() {
+        super.moveOneFrame();
+        if (!destoried) {
+            if (source == null) {
+                source = ParticleSprite.createParticlesAt(getX(), getY(), getWorld())
+                        .setSpeed(getSpeed() / 2f)
+                        .setTime(300L)
+                        .setRate(100)
+                        .setCount(300)
+                        .setColor(Color.RED);
+            }
+            source.setX(getX());
+            source.setY(getY());
+        } else {
+            if (source != null) source.end();
+        }
     }
 
     final Random random = new Random();
@@ -38,11 +65,11 @@ public class Fire extends ProjectileSpell {
 
     @Override
     public String getName() {
-        return "fire";
+        return "FireBall";
     }
 
     @Override
     public String getSpriteName() {
-        return "FireBall";
+        return "fireball_spell";
     }
 }

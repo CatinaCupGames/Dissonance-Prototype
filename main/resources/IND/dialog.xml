@@ -1,5 +1,26 @@
 <game_dialog>
 
+    <dialog dialog_id="found_key_farrand">
+        <header>Farrand</header>
+        <message>You picked up a key card</message>
+    </dialog>
+
+    <dialog dialog_id="found_key_jeremaih">
+        <header>Jeremiah</header>
+        <message>You picked up a key card</message>
+    </dialog>
+
+    <dialog dialog_id="ControlLockFarrand">
+        <header>Farrand</header>
+        <message style="italic">Damn, it's locked.</message>
+        <message type="append"> One of these guys has to have a key...</message>
+    </dialog>
+
+    <dialog dialog_id="ControlLockJeremiah">
+        <header>Jeremiah</header>
+        <message style="italic">I probably shouldn't try to break this door...</message>
+    </dialog>
+
     <dialog dialog_id="LevelStart">
         <header>Farrand</header>
         <message style="bold">Are you out of your mind?!</message>
@@ -48,14 +69,14 @@
 
         <header>Farrand</header>
         <message speed="100">What?</message>
-        
+
         <header>Jeremiah</header>
         <message>The whole "no mounts" thing. This trip took us, like, three days.</message>
         <message style="italic" type="append">I don't think my feet even exist anymore.</message>
 
         <header>Farrand</header>
         <message>Well, what do you want me to do about it? The rules are there for a reason.</message>
-        
+
         <header>Jeremiah</header>
         <message>What reason can you think of for us walking across the entire damn province? </message>
         <message style="italic" type="append">Tell me, Farrand.</message>
@@ -64,7 +85,7 @@
         <message style="italic">Well, </message>
         <message type="append">for one, horses eat things they're not supposed to. </message>
         <message type="append">They're invasive.</message>
-        
+
         <header>Jeremiah</header>
         <message>Then we can bring some feed or something. You're a higher-up now, </message>
         <message type="append">why don't you bring the issue to a meeting?</message>
@@ -72,7 +93,7 @@
         <header>Farrand</header>
         <message>Oh, so then I can be "Farrand: Patron of Sloth" for the rest of my life. </message>
         <message type="append">Proposing amendments isn't taken lightly, you know.</message>
-        
+
         <header>Jeremiah</header>
         <message>Well, I guess so. Still... </message>
         <message style="italic" type="append">three days</message>
@@ -265,8 +286,8 @@
 
 
 
-	<dialog dialog_id="fds">
+    <dialog dialog_id="fds">
         <header>poop</header>
-		<message>poop</message>
+        <message>poop</message>
     </dialog>
 </game_dialog>

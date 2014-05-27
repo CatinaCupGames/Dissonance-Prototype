@@ -2,6 +2,7 @@ package com.dissonance.game.triggers;
 
 import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.tiled.Layer;
@@ -56,7 +57,5 @@ public class TileFade extends AbstractTileTrigger {
     }
 
     @Override
-    public long triggerTimeout() {
-        return -1;
-    }
+    public void onSpriteTrigger(Sprite sprite, Tile tile) { }
 }

@@ -25,6 +25,7 @@ public final class NodeMap implements Serializable {
     private Queue<Node> openList;
     private Queue<Node> closedList;
     private World world;
+    private String cachePath;
 
     /**
      * Creates a new NodeMap with the specified width and height.
@@ -39,6 +40,8 @@ public final class NodeMap implements Serializable {
 
         nodes = new Node[width][height];
 
+        cachePath = "cache" + File.separator + world.getName() + ".nodes";
+
         this.width = width - 1;
         this.height = height - 1;
 
@@ -51,9 +54,29 @@ public final class NodeMap implements Serializable {
         this.world = world;
     }
 
+    public void setCachePath(String path) {
+        this.cachePath = path;
+    }
+
+    public String getCachePath() {
+        return cachePath;
+    }
+
+
+    public void create(Layer[] layers) {
+        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(cachePath)))) {
+            for (Node[] nodeArray : nodes) {
+                for (Node node : nodeArray) {
+                    node.readNode(stream);
+                }
+            }
+        } catch (IOException e) {
+            constructMap(layers);
+        }
+    }
+
     public void readMap() {
-        String fileName = "cache" + File.separator + world.getName() + ".nodes";
-        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(fileName)))) {
+        try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(cachePath)))) {
             for (Node[] nodeArray : nodes) {
                 for (Node node : nodeArray) {
                     node.readNode(stream);
@@ -67,10 +90,12 @@ public final class NodeMap implements Serializable {
     }
 
     public void constructMap() {
-        String fileName = "cache" + File.separator + world.getName() + ".nodes";
-        new File(fileName).delete();
+        constructMap(world.getLayers(LayerType.TILE_LAYER));
+    }
 
-        Layer[] layers = world.getLayers(LayerType.TILE_LAYER);
+    public void constructMap(Layer[] layers) {
+        new File(cachePath).delete();
+
         for (int x = 0; x < world.getTiledData().getWidth(); x++) {
             for (int y = 0; y < world.getTiledData().getHeight(); y++) {
                 for (Layer layer : layers) {
@@ -93,8 +118,7 @@ public final class NodeMap implements Serializable {
     }
 
     public void saveMap() {
-        String fileName = "cache" + File.separator + world.getName() + ".nodes";
-        try (DataOutputStream stream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(fileName)))) {
+        try (DataOutputStream stream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(cachePath)))) {
             for (Node[] nodeArray : nodes) {
                 for (Node node : nodeArray) {
                     node.saveNode(stream);
@@ -335,4 +359,5 @@ public final class NodeMap implements Serializable {
 
         return adj;
     }
+
 }

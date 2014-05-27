@@ -24,6 +24,8 @@ public class GameSettings extends ReflectionConfig {
     protected Color color = new Color(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
     @ConfigItem
     protected boolean useFBO = true;
+    @ConfigItem
+    protected boolean qualityLights = true;
 
     public static void loadGameSettings() throws IOException {
         if (!new File("config/settings.dat").exists()) {
@@ -41,6 +43,7 @@ public class GameSettings extends ReflectionConfig {
         Graphics.FPSLimit = settings.fps_limit;
         Graphics.color = settings.color;
         Graphics.useFBO = settings.useFBO;
+        Graphics.qualityLights = settings.qualityLights;
     }
 
     public static void saveGameSettings() throws IOException {
@@ -53,6 +56,7 @@ public class GameSettings extends ReflectionConfig {
         settings.fps_limit = Graphics.FPSLimit;
         settings.color = Graphics.color;
         settings.useFBO = Graphics.useFBO;
+        settings.qualityLights = Graphics.qualityLights;
 
         settings.saveToFile("settings.dat");
         System.out.println("Done!");
@@ -132,6 +136,11 @@ public class GameSettings extends ReflectionConfig {
          * Whether or not to render ground tiles to a framebuffer.
          */
         public static boolean useFBO;
+
+        /**
+         * Whether or not to use the light shader to make a "light" effect
+         */
+        public static boolean qualityLights;
 
         private Graphics() {
         }

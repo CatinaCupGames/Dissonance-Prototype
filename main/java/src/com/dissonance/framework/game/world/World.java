@@ -35,6 +35,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.List;
@@ -47,6 +48,7 @@ public final class World {
     private transient final ArrayList<Drawable> drawable = new ArrayList<>();
     private transient final ArrayList<Drawable> unsorted = new ArrayList<>();
     private String name;
+    private NodeMap activeNodeMap;
     private NodeMap nodeMap;
     private int ID;
     private transient RenderService renderingService;
@@ -133,11 +135,14 @@ public final class World {
         if (in != null) {
             try {
                 tiledData = GSON.fromJson(new InputStreamReader(in), WorldData.class);
+                tiledData.assignAllLayers();
                 tiledData.loadTriggers();
                 loadTiledSprites();
 
                 nodeMap = new NodeMap(this, tiledData.getWidth(), tiledData.getHeight());
+                System.out.println("Reading default node map for world \"" + world + "\"");
                 nodeMap.readMap();
+                setActiveNodeMap(nodeMap);
             } catch (Exception e) {
                 throw new WorldLoadFailedException("Error loading Tiled file! (" + name + ")", e);
             } finally {
@@ -228,7 +233,6 @@ public final class World {
         }
 
         tiledData.loadAllTileSets(); //OpenGL safe needed
-        tiledData.assignAllLayers();
         System.out.println("Creating tiles..");
         long ms = System.currentTimeMillis();
         drawable.addAll(tiledData.createDrawables(World.this)); //OpenGL safe needed
@@ -438,8 +442,41 @@ public final class World {
                 }
                 if (sprite instanceof CombatSprite && combatCache.contains(sprite))
                     combatCache.add((CombatSprite) sprite);
+                generateID(sprite);
             }
         });
+    }
+
+    private static final Random random = new Random();
+    private void generateID(Sprite sprite) {
+        int ID;
+        do {
+            ID = random.nextInt();
+        } while(!isIDFree(ID));
+        setID(sprite, ID);
+    }
+
+    private boolean isIDFree(int ID) {
+        for (Drawable d : drawable) {
+            if (d instanceof Sprite) {
+                Sprite s = (Sprite) d;
+                if (s.getID() == ID)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private void setID(Sprite sprite, int ID) {
+        try {
+            Field field = Sprite.class.getDeclaredField("ID");
+            field.setAccessible(true);
+            field.set(sprite, ID);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void removeSprite(final Sprite sprite) {
@@ -555,18 +592,25 @@ public final class World {
             @Override
             public void run() {
                 if (drawable instanceof UI) {
-                    //searchAndRemove(uiElements, (UI)drawable);
-                    //searchAndRemove(udrawables, (UpdatableDrawable)drawable);
-                    uiElements.remove(drawable);
-                    udrawables.remove(drawable);
+                    while (World.this.udrawables.contains(drawable))
+                        World.this.udrawables.remove(drawable);
+                    while (World.this.uiElements.contains(drawable))
+                        World.this.uiElements.remove(drawable);
                     if (runnable != null)
                         runnable.run();
                     return;
                 }
-                //searchAndRemove(World.this.drawable, drawable);
-                World.this.drawable.remove(drawable);
-                if (drawable instanceof UpdatableDrawable)
-                    World.this.udrawables.remove(drawable);
+                if (drawable.neverSort()) {
+                    while (World.this.unsorted.contains(drawable))
+                        World.this.unsorted.remove(drawable);
+                } else {
+                    while (World.this.drawable.contains(drawable))
+                        World.this.drawable.remove(drawable);
+                }
+                if (drawable instanceof UpdatableDrawable) {
+                    while (World.this.udrawables.contains(drawable))
+                        World.this.udrawables.remove(drawable);
+                }
                 if (runnable != null)
                     runnable.run();
             }
@@ -737,16 +781,23 @@ public final class World {
         return getTileAt(x, y, l);
     }
 
+
+    private EnumMap<LayerType, Layer[]> layerCache = new EnumMap<LayerType, Layer[]>(LayerType.class);
     public Layer[] getLayers(LayerType type) {
         if (tiledData == null)
             return new Layer[0];
-        List<Layer> layers = new ArrayList<Layer>();
-        for (Layer l : tiledData.getLayers()) {
-            if (l.getLayerType() == type)
-                layers.add(l);
+        if (!layerCache.containsKey(type)) {
+            List<Layer> layers = new ArrayList<Layer>();
+            for (Layer l : tiledData.getLayers()) {
+                if (l.getLayerType() == type)
+                    layers.add(l);
+            }
+
+            Layer[] temp = layers.toArray(new Layer[layers.size()]);
+            layerCache.put(type, temp);
         }
 
-        return layers.toArray(new Layer[layers.size()]);
+        return layerCache.get(type);
     }
 
     public Layer[] getLayers() {
@@ -793,6 +844,8 @@ public final class World {
      * Returns the width of the world in tiles.
      */
     public int getWidth() {
+        if (tiledData == null)
+            return getPixelWidth();
         return tiledData.getWidth();
     }
 
@@ -800,6 +853,8 @@ public final class World {
      * Returns the width of the world in pixels.
      */
     public int getPixelWidth() {
+        if (tiledData == null)
+            return 640;
         return tiledData.getWidth() * tiledData.getTileWidth();
     }
 
@@ -807,6 +862,8 @@ public final class World {
      * Returns the height of the world in tiles.
      */
     public int getHeight() {
+        if (tiledData == null)
+            return getPixelHeight();
         return tiledData.getHeight();
     }
 
@@ -814,6 +871,8 @@ public final class World {
      * Returns the height of the world in pixels.
      */
     public int getPixelHeight() {
+        if (tiledData == null)
+            return 360;
         return tiledData.getHeight() * tiledData.getTileHeight();
     }
 
@@ -826,6 +885,14 @@ public final class World {
     }
 
     public NodeMap getNodeMap() {
+        return activeNodeMap;
+    }
+
+    public void setActiveNodeMap(NodeMap map) {
+        this.activeNodeMap = map;
+    }
+
+    public NodeMap getDefaultNodeMap() {
         return nodeMap;
     }
 
@@ -906,7 +973,6 @@ public final class World {
     public int hashCode() {
         int result = name.hashCode();
         result = 31 * result + ID;
-        result = 31 * result + (tiledData != null ? tiledData.hashCode() : 0);
         return result;
     }
 

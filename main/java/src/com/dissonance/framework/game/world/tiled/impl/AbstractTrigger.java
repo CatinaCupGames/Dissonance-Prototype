@@ -1,6 +1,7 @@
 package com.dissonance.framework.game.world.tiled.impl;
 
 import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 
 public abstract class AbstractTrigger {
@@ -17,8 +18,8 @@ public abstract class AbstractTrigger {
         this.parent = parent;
     }
 
-    public void onCollide(final PlayableSprite sprite) {
-        if (System.currentTimeMillis() - lastTrigger < triggerTimeout() || !active) return;
+    public void onCollide(final PhysicsSprite sprite) {
+        if (isPlayerOnly() && !(sprite instanceof PlayableSprite) || System.currentTimeMillis() - lastTrigger < triggerTimeout() || !active) return;
         lastTrigger = System.currentTimeMillis();
         setActive(false);
         new Thread(new Runnable() {
@@ -47,7 +48,11 @@ public abstract class AbstractTrigger {
         return parent;
     }
 
-    protected abstract void onTrigger(PlayableSprite sprite) throws Throwable;
+    protected abstract void onTrigger(PhysicsSprite sprite) throws Throwable;
 
     protected abstract long triggerTimeout();
+
+    protected boolean isPlayerOnly() {
+        return true;
+    }
 }

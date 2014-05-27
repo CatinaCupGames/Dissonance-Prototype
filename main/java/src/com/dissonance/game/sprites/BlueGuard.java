@@ -3,19 +3,27 @@ package com.dissonance.game.sprites;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.behaviors.*;
 import com.dissonance.framework.game.combat.Weapon;
-import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.system.utils.Direction;
-import com.dissonance.game.behaviors.WaypointLikeIdle;
+import com.dissonance.game.GameCache;
+import com.dissonance.game.behaviors.Patrol;
+import com.dissonance.game.behaviors.Search;
+import com.dissonance.game.behaviors.WaypointLikePathFollow;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
+import com.dissonance.game.w.FactoryFloorCat;
+import org.lwjgl.Sys;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BlueGuard extends Enemy {
     public BlueGuard() {
-        super("farrand", StatType.NON_MAGIC, CombatType.HUMAN);
+        super("meleeguard", StatType.NON_MAGIC, CombatType.HUMAN);
     }
 
 
@@ -65,27 +73,41 @@ public class BlueGuard extends Enemy {
         setCurrentWeapon(Weapon.getWeapon("guardsword").createItem(this));
         setAttack(10);
         setDefense(8);
-        setSpeed(6);
+        setSpeed(4);
         setVigor(8);
         setStamina(4);
         setMarksmanship(8);
+        setMovementSpeed(1f);
+
     }
 
-    @Override
+    /*@Override
     public void strike(CombatSprite attacker, WeaponItem with) {
         super.strike(attacker, with);
 
-        if (getClosestPlayer() == attacker && getHP() < getMaxHP() / 3.0) {
-            run = !run;
+        if (target == attacker && getHP() < getMaxHP() / 3.0) {
+            run = true;
+            dodge(directionTowards(attacker).opposite(), movementSpeed() * 8.5f);
         }
-    }
+    }*/
 
     @Override
     public void update() {
+        if (getWorld().equals(GameCache.FactoryFloor)) {
+            //Ensure we always use the correct node map
+            if (getLayer() == 2)
+                getWorld().setActiveNodeMap(FactoryFloorCat.groundNodeMap);
+            else if (getLayer() == 6)
+                getWorld().setActiveNodeMap(FactoryFloorCat.nongroundNodeMap);
+        }
+
         super.update();
         if (isUpdateCanceled())
             return;
         runAI();
+
+        //And be sure to reset it
+        getWorld().setActiveNodeMap(getWorld().getDefaultNodeMap());
     }
 
     @Override
@@ -93,43 +115,65 @@ public class BlueGuard extends Enemy {
         return sprite instanceof BlueGuard || sprite instanceof RedGuard;
     }
 
+    @Override
+    protected void onAnimationFinished() {
+        if (getCurrentAnimation().getName().startsWith("swipe")) {
+            if (run && !isDodging() && target != null) {
+                dodge(directionTowards(target).opposite());
+            }
+        }
+        super.onAnimationFinished();
+    }
+
+    private int movementSpeed() {
+        return 15 + (getSpeed());
+    }
+
 
     private boolean run;
     private boolean idle;
     private long lastAttack;
     private boolean looking = false;
+    private boolean saw = false;
     private long foundTime = 0L;
+    private PlayableSprite target;
     private static final long ATTACK_RATE_MS = 1800;
     private static final long FOUND_YOU_MS = 400;
+    private static final long SPOT_TIME = 2000;
     private void runAI() {
-        if (getCurrentWeapon() == null || run) {
-            setMovementSpeed(14f);
-            if (getBehavior() == null || !(getBehavior() instanceof Flee)) {
-                PlayableSprite sprite = getClosestPlayer();
-                if (sprite == null) return;
-
-                Flee flee = new Flee(this, sprite, (getMarksmanship() * 2f) * 16f);
-                setBehavior(flee);
-                flee.setFleeListener(FLEE_LISTENER);
-            } else if (getBehavior() != null) {
-                Flee flee = (Flee)getBehavior();
-
-                PlayableSprite sprite = getClosestPlayer();
-                if (sprite == null) return;
-                flee.setTarget(sprite);
-            }
-        } else {
-            setMovementSpeed(10f);
-            PlayableSprite sprite = getClosestPlayer();
-            if (sprite == null) {
+        if (isDodging())
+            return;
+        if (getCurrentWeapon() != null) {
+            target = getClosestPlayer();
+            if (target == null) {
+                if (getBehavior() != null && getBehavior() instanceof Search) {
+                    face(((Search)getBehavior()).getOrginalDirection());
+                }
+                saw = false;
                 if (!idle) {
+                    setMovementSpeed(movementSpeed() / 4f);
                     idle = true;
-                    WaypointLikeIdle idleBehavior = new WaypointLikeIdle(this, 720);
-                    setBehavior(idleBehavior);
+                    Patrol patrol = new Patrol(this);
+                    setBehavior(patrol);
                 }
             } else {
+                if (!saw && !isPlayerSeen(target)) {
+                    if (getBehavior() == null || !(getBehavior() instanceof Search)) {
+                        Search search = new Search(this);
+                        setBehavior(search);
+                    }
+                    return;
+                }
+                if (!saw) {
+                    toastText("!")
+                            .setToastFontSize(32f)
+                            .setTint(Color.RED);
+                }
+                saw = true;
+                spot.clear();
+                setMovementSpeed(movementSpeed() / 1.5f);
                 idle = false;
-                if (distanceFrom(sprite) <= getCurrentWeapon().getWeaponInfo().getRange() + (sprite.getWidth() / 2f)) {
+                if (distanceFrom(target) <= 3 + getCurrentWeapon().getWeaponInfo().getRange() + (target.getWidth() / 4f)) {
                     if (looking) {
                         foundTime = System.currentTimeMillis();
                         looking = false;
@@ -145,16 +189,47 @@ public class BlueGuard extends Enemy {
                 } else {
                     looking = true;
                     Behavior behavior = getBehavior();
-                    if (behavior instanceof Seek) {
+                    if (behavior instanceof WaypointLikeSeek) {
                         WaypointLikeSeek seek = (WaypointLikeSeek)getBehavior();
-                        seek.setTarget(getSeekTarget(sprite));
+                        seek.setTarget(getSeekTarget(target));
                     } else {
-                        WaypointLikeSeek seek = new WaypointLikeSeek(this, getSeekTarget(sprite));
+                        WaypointLikeSeek seek = new WaypointLikeSeek(this, getSeekTarget(target));
                         setBehavior(seek);
                     }
                 }
             }
         }
+    }
+
+    private boolean isPlayerSeen(PlayableSprite target) {
+        if (getLayer() != target.getLayer()) {
+            if (!spot.containsKey(target)) {
+                spot.put(target, System.currentTimeMillis());
+                toastText("?")
+                        .setToastFontSize(32f)
+                        .setTint(Color.RED);
+            }
+            return false;
+        }
+        else if (directionTowards(target) != getFacingDirection()) {
+            if (directionTowards(target) != getFacingDirection().opposite()) {
+                if (!spot.containsKey(target)) {
+                    spot.put(target, System.currentTimeMillis());
+                    toastText("?")
+                            .setToastFontSize(32f)
+                            .setTint(Color.RED);
+                    return false;
+                }
+                long l = spot.get(target);
+                if (System.currentTimeMillis() - l > SPOT_TIME) {
+                    spot.remove(target);
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+        return true;
     }
 
     private final Flee.FleeListener FLEE_LISTENER = new Flee.FleeListener() {
@@ -165,8 +240,10 @@ public class BlueGuard extends Enemy {
         }
     };
 
+    private HashMap<PlayableSprite, Long> spot = new HashMap<>();
+    private Direction oDirection;
     private PlayableSprite getClosestPlayer() {
-        float distance = getMarksmanship() * 16f;
+        float distance = 15f * 16f;
 
         PlayableSprite[] sprites = Players.getCurrentlyPlayingSprites();
         PlayableSprite closet = null;
@@ -186,6 +263,9 @@ public class BlueGuard extends Enemy {
         return closet;
     }
 
+
+
+    static HashMap<PlayableSprite, ArrayList<CombatSprite>> attackers = new HashMap<>();
     private Position getSeekTarget(Sprite sprite) {
         float x = sprite.getX();
         float y = sprite.getY();

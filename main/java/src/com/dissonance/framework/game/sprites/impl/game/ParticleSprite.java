@@ -243,5 +243,9 @@ public class ParticleSprite extends UpdatableSprite {
         public void end() {
             end = true;
         }
+
+        public boolean hasEnded() {
+            return end;
+        }
     }
 }

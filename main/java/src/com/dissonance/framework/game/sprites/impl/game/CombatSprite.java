@@ -8,11 +8,12 @@ import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
-import com.dissonance.framework.system.utils.Validator;
+import com.dissonance.framework.system.utils.*;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.*;
+import java.util.Timer;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -23,6 +24,13 @@ public abstract class CombatSprite extends PhysicsSprite {
     private Spell spell2;
     private final ArrayList<StatusEffect> effects = new ArrayList<StatusEffect>();
     private int weaponIndex;
+
+
+    protected float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
+    protected long dodgeStartTime;
+    protected boolean is_dodging, allow_dodge = true;
+    protected Direction dodgeDirection;
+
 
     private transient ArrayList<PlayableSprite> lockers = new ArrayList<PlayableSprite>();
     private transient ArrayList<Float[]> lockedOnColor = new ArrayList<Float[]>();
@@ -238,11 +246,106 @@ public abstract class CombatSprite extends PhysicsSprite {
         }
     }
 
+    protected void dodge(Direction direction1) {
+        dodge(direction1, movementSpeed * 8.5f);
+    }
+
+
+    protected void dodge(Direction direction1, float speed) {
+        if (!canDodge())
+            return;
+        String ani;
+        /*
+
+        ALGEBRA TIME!
+
+        d = distance
+        s = speed
+        t = total dodge time
+        f = time per frame
+
+        t = 4f
+        s = 2.5 * movementSpeed()
+        d = s * (t / f)
+        f = (st) / d
+
+
+        ==============================
+
+        As long as t = 4f, then d = 4s
+         */
+        int DISTANCE = 120; //TODO Maybe change this
+        DISTANCE *= 0.8f;
+        DISTANCE /= 2f;
+        switch (direction1) {
+            case UP:
+            case UP_LEFT:
+            case UP_RIGHT:
+                ani = "dodge_up";
+                int i = 0;
+                /*for (; i < DISTANCE; i++) {
+                    if (getHitBox().checkForCollision(this, getX(), getY() - i))
+                        break;
+                }*/
+                dodgeY = getY() - DISTANCE;
+                dodgeX = 0;
+                break;
+            case DOWN:
+            case DOWN_LEFT:
+            case DOWN_RIGHT:
+                ani = "dodge_down";
+                int ii = 0;
+               /* for (; ii < DISTANCE; ii++) {
+                    if (getHitBox().checkForCollision(this, getX(), getY() + ii))
+                        break;
+                }*/
+                dodgeY = getY() + DISTANCE;
+                dodgeX = 0;
+                break;
+            case LEFT:
+                ani = "dodge_left";
+                int iii = 0;
+                /*for (; iii < DISTANCE; iii++) {
+                    if (getHitBox().checkForCollision(this, getX() - iii, getY()))
+                        break;
+                }*/
+                dodgeX = getX() - DISTANCE;
+                dodgeY = 0;
+                break;
+            case RIGHT:
+                ani = "dodge_right";
+                int iiii = 0;
+                /*for (; iiii < DISTANCE; iiii++) {
+                    if (getHitBox().checkForCollision(this, getX() + iiii, getY()))
+                        break;
+                }*/
+                dodgeX = getX() + DISTANCE;
+                dodgeY = 0;
+                break;
+            default:
+                return;
+        }
+        this.dodgeDirection = direction1;
+        setAnimation(ani);
+        setAnimationSpeed(70);
+        totalDodgeTime = 4 * getAnimationSpeed();
+        totalDodgeTime -= speed;
+        setAnimationSpeed((int) (((1f/4f) * speed) + ((1f/4f) * totalDodgeTime)));
+        playAnimation();
+        dodgeStartTime = System.currentTimeMillis();
+        dodgeStartX = getX();
+        dodgeStartY = getY();
+        is_dodging = true;
+        allow_dodge = false;
+    }
+
     @Override
     public void update() {
         super.update();
         if (isUpdateCanceled())
             return;
+
+        checkDodge();
 
         if (effects.size() > 0) {
             synchronized (effects) {
@@ -268,6 +371,58 @@ public abstract class CombatSprite extends PhysicsSprite {
             setUpdateCanceled(true);
         if (HP <= 0)
             setUpdateCanceled(true);
+    }
+
+    protected void checkDodge() {
+        if (is_dodging) {
+            float moveX, moveY;
+            if (dodgeX != 0) {
+                float dif = (float)(System.currentTimeMillis() - dodgeStartTime);
+                float percent;
+                if (dif > totalDodgeTime) {
+                    percent = 1;
+                } else {
+                    percent = dif / totalDodgeTime;
+                }
+                float oX = super.getX();
+                moveX = dodgeStartX + ((dodgeX - dodgeStartX) * percent);
+                rawSetX(moveX);
+                if (moveX == dodgeX || oX == super.getX()) {
+                    setAnimation(0);
+                    is_dodging = false;
+                    face(dodgeDirection);
+                    com.dissonance.framework.system.utils.Timer.delayedInvokeRunnable(100, new Runnable() {
+                        @Override
+                        public void run() {
+                            allow_dodge = true;
+                        }
+                    });
+                }
+            } else if (dodgeY != 0) {
+                float dif = (float)(System.currentTimeMillis() - dodgeStartTime);
+                float percent;
+                if (dif > totalDodgeTime) {
+                    percent = 1;
+                } else {
+                    percent = dif / totalDodgeTime;
+                }
+                float oY = super.getY();
+                moveY = dodgeStartY + ((dodgeY - dodgeStartY) * percent);
+                rawSetY(moveY);
+                face(getFacingDirection());
+                if (moveY == dodgeY || oY == super.getY()) {
+                    setAnimation(0);
+                    is_dodging = false;
+                    face(dodgeDirection);
+                    com.dissonance.framework.system.utils.Timer.delayedInvokeRunnable(100, new Runnable() {
+                        @Override
+                        public void run() {
+                            allow_dodge = true;
+                        }
+                    });
+                }
+            }
+        }
     }
 
     public boolean isMoving() {
@@ -332,7 +487,7 @@ public abstract class CombatSprite extends PhysicsSprite {
     }
 
     public void useSpell2() {
-        if (!hasSpell1())
+        if (!hasSpell2())
             return;
         if (MP < spell2.mpCost()) {
             //TODO Play sound
@@ -340,7 +495,7 @@ public abstract class CombatSprite extends PhysicsSprite {
         }
         this.isCastingSpell = true;
         MP -= spell2.mpCost();
-        spell1.castSpell();
+        spell2.castSpell();
         this.isCastingSpell = false;
     }
 
@@ -603,6 +758,22 @@ public abstract class CombatSprite extends PhysicsSprite {
 
     public boolean isDead() {
         return HP == 0.0;
+    }
+
+    public boolean isDodging() {
+        return is_dodging;
+    }
+
+    public boolean isIs_dodging() {
+        return is_dodging;
+    }
+
+    public void setIs_dodging(boolean is_dodging) {
+        this.is_dodging = is_dodging;
+    }
+
+    public boolean canDodge() {
+        return allow_dodge;
     }
 
 

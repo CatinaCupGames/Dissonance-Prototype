@@ -9,9 +9,11 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.utils.Validator;
+import com.dissonance.framework.system.utils.WinRegistry;
 import com.sun.istack.internal.NotNull;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Locale;
 
 public class GameService {
@@ -83,6 +85,17 @@ public class GameService {
         DialogFactory.loadDialog();
         System.out.println("Loading sound");
         Sound.loadAllSounds();
+        System.out.println("Setting sticky keys to 0");
+        /*
+        HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys
+         */
+        /*try {
+            WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "Control Panel\\Accessibility\\StickyKeys", "Flags", "506");
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }*/
     }
 
     public static void handleKillRequest() {

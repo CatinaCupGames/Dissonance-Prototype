@@ -1,15 +1,27 @@
 package com.dissonance.framework.game.player;
 
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.ai.astar.Vector;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
+import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
+import com.dissonance.framework.game.world.Tile;
+import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.WorldFactory;
+import com.dissonance.framework.game.world.tiled.TiledObject;
+import com.dissonance.framework.game.world.tiled.impl.AbstractTileTrigger;
+import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.render.Camera;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
+import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.framework.system.utils.Timer;
+import com.dissonance.framework.system.utils.physics.Collidable;
+import com.dissonance.framework.system.utils.physics.HitBox;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.security.InvalidParameterException;
@@ -25,15 +37,11 @@ public abstract class PlayableSprite extends CombatSprite {
     private MovementType mType = MovementType.RUNNING;
     private boolean frozen;
 
-
     boolean controller_extend;
     boolean keyboard_extend;
     boolean use_dodge;
     boolean isAttacking = false;
 
-    float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
-    long dodgeStartTime;
-    boolean is_dodging, allow_dodge = true;
     ArrayList<PlayableSprite> party = new ArrayList<PlayableSprite>();
 
     private static PlayableSprite currentlyPlaying;
@@ -119,6 +127,128 @@ public abstract class PlayableSprite extends CombatSprite {
         appearRunnable = runnable;
     }
 
+    @Override
+    public void setX(float x) {
+        if (GameService.coop_mode && Camera.isFollowing(this) && (Camera.isOffScreen(x + getWidth(), y, getWidth(), getHeight()) || Camera.isOffScreen(x - getWidth(), y, getWidth(), getHeight())))
+            return;
+        super.setX(x);
+    }
+
+    @Override
+    public void setY(float y) {
+        if (GameService.coop_mode && Camera.isFollowing(this) && (Camera.isOffScreen(x, y + getHeight(), getWidth(), getHeight()) || Camera.isOffScreen(x, y - getHeight(), getWidth(), getHeight())))
+            return;
+        super.setY(y);
+    }
+
+    @Override
+    public void rawSetX(float x) {
+        if (GameService.coop_mode && Camera.isFollowing(this) && (Camera.isOffScreen(x + getWidth(), y, getWidth(), getHeight()) || Camera.isOffScreen(x - getWidth(), y, getWidth(), getHeight())))
+            return;
+        super.rawSetX(x);
+    }
+
+    @Override
+    public void rawSetY(float y) {
+        if (GameService.coop_mode && Camera.isFollowing(this) && (Camera.isOffScreen(x, y + getHeight(), getWidth(), getHeight()) || Camera.isOffScreen(x, y - getHeight(), getWidth(), getHeight())))
+            return;
+        super.rawSetY(y);
+    }
+
+    @Override
+    protected void onCollideX(float oldX, float newX, Collidable hit, HitBox hb) {
+        if (hit instanceof TiledObject) {
+            TiledObject obj = (TiledObject)hit;
+            if (obj.isDoor()) {
+                _teleport(obj, oldX, -1f);
+                return;
+            }
+        }
+        super.onCollideX(oldX, newX, hit, hb);
+    }
+
+    @Override
+    protected void onCollideY(float oldY, float newY, Collidable hit, HitBox hb) {
+        if (hit instanceof TiledObject) {
+            TiledObject obj = (TiledObject)hit;
+            if (obj.isDoor()) {
+                _teleport(obj, -1f, oldY);
+                return;
+            }
+        }
+        super.onCollideY(oldY, newY, hit, hb);
+    }
+
+    private void _teleport(TiledObject obj, float oldX, float oldY) {
+        String target = obj.getDoorTarget();
+        if (target.equalsIgnoreCase("")) {
+            if (oldX != -1f)
+                super.rawSetX(oldX);
+            if (oldY != -1f)
+                super.rawSetY(oldY);
+            return;
+        }
+        String world = obj.getDoorWorldTarget();
+        final World worldObj;
+        if (world.equalsIgnoreCase("")) {
+            worldObj = getWorld();
+        } else {
+            try {
+                worldObj = WorldFactory.getWorld(world);
+            } catch (WorldLoadFailedException e) {
+                e.printStackTrace();
+                if (oldX != -1f)
+                    super.rawSetX(oldX);
+                if (oldY != -1f)
+                    super.rawSetY(oldY);
+                return;
+            }
+        }
+
+        final TiledObject spawn = worldObj.getSpawn(target);
+        if (spawn == null) {
+            if (oldX != -1f)
+                super.rawSetX(oldX);
+            if (oldY != -1f)
+                super.rawSetY(oldY);
+            return;
+        }
+
+        freeze();
+        final PlayableSprite[] sprites = Players.getCurrentlyPlayingSprites();
+        for (PlayableSprite sprite : sprites) {
+            if (sprite == this)
+                continue;
+            sprite.freeze();
+        }
+        isTeleporting = true;
+        if (worldObj != getWorld()) {
+            RenderService.INSTANCE.fadeToBlack(1000);
+            WorldFactory.swapView(worldObj, true);
+            for (PlayableSprite sprite : sprites) {
+                sprite.setWorld(worldObj);
+            }
+        }
+
+        for (PlayableSprite sprite : sprites) {
+            sprite.x = spawn.getX();
+            sprite.y = spawn.getY();
+        }
+        Camera.setPos(Camera.translateToCameraCenter(getVector(), 32));
+        while (RenderService.getCurrentAlphaValue() != 1) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                break;
+            }
+        }
+        for (PlayableSprite sprite : sprites) {
+            sprite.unfreeze();
+        }
+        isTeleporting = false;
+    }
+
     /**
      * Sets this {@link PlayableSprite PlayableSprite's}
      * {@link PlayableSpriteEvent.OnSelectedEvent OnSelectedEvent listener} to the specified listener.
@@ -172,6 +302,20 @@ public abstract class PlayableSprite extends CombatSprite {
 
     public void setAttacking(boolean value) {
         this.isAttacking = value;
+    }
+
+    @Override
+    protected void dodge(Direction direction1) {
+        if (frozen)
+            return;
+        super.dodge(direction1, movementSpeed() * 8.5f);
+        freeze();
+        if (!is_dodging) {
+            unfreeze();
+            return;
+        }
+        ignore_movement = true;
+        use_dodge = true;
     }
 
     @Override
@@ -244,69 +388,23 @@ public abstract class PlayableSprite extends CombatSprite {
 
     boolean w, a, s, d;
     protected void checkMovement() {
-        if (is_dodging) {
-            float moveX, moveY;
-            if (dodgeX != 0) {
-                float dif = (float)(System.currentTimeMillis() - dodgeStartTime);
-                float percent;
-                if (dif > totalDodgeTime) {
-                    percent = 1;
-                } else {
-                    percent = dif / totalDodgeTime;
-                }
-                moveX = dodgeStartX + ((dodgeX - dodgeStartX) * percent);
-                rawSetX(moveX);
-                if (moveX == dodgeX) {
-                    unfreeze();
-                    setAnimation(0);
-                    ignore_movement = false;
-                    is_dodging = false;
-                    face(getFacingDirection());
-                    Timer.delayedInvokeRunnable(100, new Runnable() {
-                        @Override
-                        public void run() {
-                            allow_dodge = true;
-                            if (isFrozen())
-                                unfreeze();
-                        }
-                    });
-                    return;
-                }
-            } else if (dodgeY != 0) {
-                float dif = (float)(System.currentTimeMillis() - dodgeStartTime);
-                float percent;
-                if (dif > totalDodgeTime) {
-                    percent = 1;
-                } else {
-                    percent = dif / totalDodgeTime;
-                }
-                moveY = dodgeStartY + ((dodgeY - dodgeStartY) * percent);
-                //moveY = Camera.ease(dodgeStartY, dodgeY, totalDodgeTime, ((System.currentTimeMillis() - dodgeStartTime)));
-                rawSetY(moveY);
-                face(getFacingDirection());
-                if (moveY == dodgeY) {
-                    unfreeze();
-                    setAnimation(0);
-                    ignore_movement = false;
-                    is_dodging = false;
-                    Timer.delayedInvokeRunnable(100, new Runnable() {
-                        @Override
-                        public void run() {
-                            allow_dodge = true;
-                            if (isFrozen())
-                                unfreeze();
-                        }
-                    });
-                    return;
-                }
-            }
-        }
         if (frozen)
             return;
         if (ignore_movement && !isAttacking() && !is_dodging)
             ignore_movement = false;
 
         input.checkMovement(this);
+    }
+
+    @Override
+    protected void checkDodge() {
+        boolean value = is_dodging;
+        super.checkDodge();
+        if (value && !is_dodging) {
+            unfreeze();
+            ignore_movement = false;
+            face(dodgeDirection);
+        }
     }
 
     void _onNoMovement() { onNoMovement(); }
@@ -356,6 +454,8 @@ public abstract class PlayableSprite extends CombatSprite {
     }
 
     protected boolean checkSelect() {
+        if (DialogUI.currentDialogBox() != null)
+            return false;
         Iterator<UpdatableDrawable> sprites = getWorld().getUpdatables(); //Sprites will always be Updatable
         while (sprites.hasNext()) {
             UpdatableDrawable d = sprites.next();
@@ -499,97 +599,7 @@ public abstract class PlayableSprite extends CombatSprite {
         input = null;
     }
 
-    protected void dodge(Direction direction1) {
-        if (frozen)
-            return;
-        String ani;
-        float speed = movementSpeed() * 8.5f;
-        freeze();
-        /*
 
-        ALGEBRA TIME!
-
-        d = distance
-        s = speed
-        t = total dodge time
-        f = time per frame
-
-        t = 4f
-        s = 2.5 * movementSpeed()
-        d = s * (t / f)
-        f = (st) / d
-
-
-        ==============================
-
-        As long as t = 4f, then d = 4s
-         */
-        int DISTANCE = 120; //TODO Maybe change this
-        DISTANCE *= 0.8f;
-        DISTANCE /= 2f;
-        switch (direction1) {
-            case UP:
-            case UP_LEFT:
-            case UP_RIGHT:
-                ani = "dodge_up";
-                int i = 0;
-                for (; i < DISTANCE; i++) {
-                    if (getHitBox().checkForCollision(this, getX(), getY() - i))
-                        break;
-                }
-                dodgeY = getY() - i;
-                dodgeX = 0;
-                break;
-            case DOWN:
-            case DOWN_LEFT:
-            case DOWN_RIGHT:
-                ani = "dodge_down";
-                int ii = 0;
-                for (; ii < DISTANCE; ii++) {
-                    if (getHitBox().checkForCollision(this, getX(), getY() + ii))
-                        break;
-                }
-                dodgeY = getY() + ii;
-                dodgeX = 0;
-                break;
-            case LEFT:
-                ani = "dodge_left";
-                int iii = 0;
-                for (; iii < DISTANCE; iii++) {
-                    if (getHitBox().checkForCollision(this, getX() - iii, getY()))
-                        break;
-                }
-                dodgeX = getX() - iii;
-                dodgeY = 0;
-                break;
-            case RIGHT:
-                ani = "dodge_right";
-                int iiii = 0;
-                for (; iiii < DISTANCE; iiii++) {
-                    if (getHitBox().checkForCollision(this, getX() + iiii, getY()))
-                        break;
-                }
-                dodgeX = getX() + iiii;
-                dodgeY = 0;
-                break;
-            default:
-                unfreeze();
-                return;
-        }
-        setAnimation(ani);
-        setAnimationSpeed(75);
-        totalDodgeTime = 4 * getAnimationSpeed();
-        totalDodgeTime -= speed;
-        setAnimationSpeed((int) (((1f/4f) * speed) + ((1f/4f) * totalDodgeTime)));
-        dodgeStartTime = System.currentTimeMillis();
-        dodgeStartX = getX();
-        dodgeStartY = getY();
-        is_dodging = true;
-        allow_dodge = false;
-        ignore_movement = true;
-        playAnimation();
-        use_dodge = true;
-    }
 
     public boolean isPlaying() {
         return isPlaying;
