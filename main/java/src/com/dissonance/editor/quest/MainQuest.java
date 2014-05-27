@@ -72,7 +72,7 @@ public class MainQuest extends AbstractQuest {
                 for (String s : lines) {
                     EditorUI.INSTANCE.codeTextPane.setText(EditorUI.INSTANCE.codeTextPane.getText() + "\n" + s);
                 }
-                compileAndShow(EditorUI.INSTANCE.codeTextPane.getText());
+                //compileAndShow(EditorUI.INSTANCE.codeTextPane.getText()); because fuck you
             }
             if (world.getName() != null) {
                 EditorUI.INSTANCE.highlighter.addClass(mapName);

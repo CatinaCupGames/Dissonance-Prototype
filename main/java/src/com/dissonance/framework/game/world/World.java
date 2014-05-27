@@ -558,6 +558,7 @@ public final class World {
         drawable.clear();
         unsorted.clear();
         udrawables.clear();
+        layerCache.clear();
         for (CombatSprite c : combatCache) {
             HitBox.unregisterSprite(c);
         }
