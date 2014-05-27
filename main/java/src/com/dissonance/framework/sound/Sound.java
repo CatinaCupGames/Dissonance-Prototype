@@ -338,35 +338,40 @@ public final class Sound {
      * @return The sound if found, otherwise null.
      */
     public static Sound playSound(String name) {
-        Sound sound = getSound(name);
+        try {
+            Sound sound = getSound(name);
 
-        if (sound != null) {
-            if (sound.bufferIndex == -1) {
-                sound.bufferIndex = loadALBuffer(sound.path);
-                checkError();
-            }
-            if (sound.sourceIndex == -1) {
-                sound.sourceIndex = getFreeSource();
-                alSourcei(sound.sourceIndex, AL10.AL_BUFFER, sound.bufferIndex);
-            }
-
-            if (sound.lastKnownState == AL_PLAYING && sound.isSoundEffect()) {
-                Sound tempSound = cloneSound(sound);
-                alSourcePlay(tempSound.getSourceIndex());
-                if (tempSound.startTime == -1 && tempSound.endTime == -1) {
-                    tempSound.lastKnownState = AL_PLAYING;
+            if (sound != null) {
+                if (sound.bufferIndex == -1) {
+                    sound.bufferIndex = loadALBuffer(sound.path);
+                    checkError();
                 }
-                return tempSound;
-            } else {
-                alSourcePlay(sound.getSourceIndex());
+                if (sound.sourceIndex == -1) {
+                    sound.sourceIndex = getFreeSource();
+                    alSourcei(sound.sourceIndex, AL10.AL_BUFFER, sound.bufferIndex);
+                }
 
-                if (sound.startTime == -1 && sound.endTime == -1) {
-                    sound.lastKnownState = AL_PLAYING;
+                if (sound.lastKnownState == AL_PLAYING && sound.isSoundEffect()) {
+                    Sound tempSound = cloneSound(sound);
+                    alSourcePlay(tempSound.getSourceIndex());
+                    if (tempSound.startTime == -1 && tempSound.endTime == -1) {
+                        tempSound.lastKnownState = AL_PLAYING;
+                    }
+                    return tempSound;
+                } else {
+                    alSourcePlay(sound.getSourceIndex());
+
+                    if (sound.startTime == -1 && sound.endTime == -1) {
+                        sound.lastKnownState = AL_PLAYING;
+                    }
                 }
             }
+
+            return sound;
+        } catch (Throwable t) {
+            t.printStackTrace();
+            return null;
         }
-
-        return sound;
     }
 
     public static Sound fadeInSound(String name, float duration) {
