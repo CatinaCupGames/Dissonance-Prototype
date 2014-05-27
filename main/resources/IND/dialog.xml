@@ -12,13 +12,6 @@
         <message>They will if they can't kill us. We gotta book it.</message>
     </dialog>
 
-    <dialog dialog_id="EnterFactory">
-        <header>Jeremiah</header>
-        <message>These guys don't know when to give up...</message>
-        <header>Farrand</header>
-        <message>We need to get off the streets. This door looks unlocked.</message>
-    </dialog>
-
     <dialog dialog_id="GarbageChuteFarrand">
         <header>Farrand</header>
         <message style="italic">*sigh* </message>
