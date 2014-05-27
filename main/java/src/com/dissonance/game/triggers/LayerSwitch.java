@@ -10,6 +10,8 @@ public class LayerSwitch extends AbstractTrigger {
     protected void onTrigger(PhysicsSprite sprite) throws Throwable {
         if (sprite.getLayer() == 2) {
             sprite.setUsePhysics(false);
+            sprite.rawSetX(getParent().getX() + (getParent().getWidth() / 2f));
+            sprite.rawSetY(getParent().getY() + (getParent().getHeight() / 2f));
             sprite.setLayer(6);
             if (sprite instanceof PlayableSprite)
                 ((PlayableSprite)sprite).freeze();
@@ -20,8 +22,8 @@ public class LayerSwitch extends AbstractTrigger {
             sprite.setUsePhysics(true);
         } else if (sprite.getLayer() == 6) {
             sprite.setUsePhysics(false);
-            sprite.rawSetX(getParent().getX());
-            sprite.rawSetY(getParent().getY());
+            sprite.rawSetX(getParent().getX() + (getParent().getWidth() / 2f));
+            sprite.rawSetY(getParent().getY() + (getParent().getHeight() / 2f));
             if (sprite instanceof PlayableSprite)
                 ((PlayableSprite)sprite).freeze();
             sprite.setWaypoint(sprite.getX(), sprite.getY() + (2 * 16f), WaypointType.SIMPLE);

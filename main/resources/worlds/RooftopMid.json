@@ -137,8 +137,8 @@
                  "name":"roof.Skylight",
                  "properties":
                     {
-                     "":"",
                      "height":"100",
+                     "layer":"0",
                      "width":"200"
                     },
                  "type":"sprite",
@@ -566,7 +566,7 @@
                  "y":880
                 }, 
                 {
-                 "height":36,
+                 "height":32,
                  "name":"",
                  "properties":
                     {
@@ -574,7 +574,7 @@
                     },
                  "type":"hitbox",
                  "visible":true,
-                 "width":75,
+                 "width":80,
                  "x":469,
                  "y":987
                 }, 
@@ -670,6 +670,19 @@
                  "width":16,
                  "x":1040,
                  "y":208
+                }, 
+                {
+                 "height":32,
+                 "name":"",
+                 "properties":
+                    {
+                     "triggerclass":"com.dissonance.game.triggers.EnterOffice"
+                    },
+                 "type":"trigger",
+                 "visible":true,
+                 "width":96,
+                 "x":928,
+                 "y":1056
                 }],
          "opacity":1,
          "type":"objectgroup",
