@@ -1,13 +1,15 @@
 <game_dialog>
 
+
     <dialog dialog_id="found_key_farrand">
         <header>Farrand</header>
-        <message>You picked up a key card</message>
+        <message>This must be the Admin's keycard. It looks like it</message>
+        <message type="append">goes to one of the doors nearby.</message>
     </dialog>
 
     <dialog dialog_id="found_key_jeremaih">
         <header>Jeremiah</header>
-        <message>You picked up a key card</message>
+        <message>it's a Keycard, must go to one of the doors around here.</message>
     </dialog>
 
     <dialog dialog_id="ControlLockFarrand">
