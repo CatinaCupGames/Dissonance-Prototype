@@ -149,8 +149,8 @@
                  "type":"espawn",
                  "visible":true,
                  "width":192,
-                 "x":5568,
-                 "y":1936
+                 "x":4464,
+                 "y":2448
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -689,8 +689,8 @@
                  "type":"sprite",
                  "visible":true,
                  "width":240,
-                 "x":5584,
-                 "y":2448
+                 "x":5856,
+                 "y":2736
                 }, 
                 {
                  "height":96,
@@ -2329,6 +2329,19 @@
                  "width":256,
                  "x":1648,
                  "y":4800
+                }, 
+                {
+                 "height":648,
+                 "name":"outside.Factory",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":1024,
+                 "x":5632,
+                 "y":2032
                 }],
          "opacity":1,
          "type":"objectgroup",
