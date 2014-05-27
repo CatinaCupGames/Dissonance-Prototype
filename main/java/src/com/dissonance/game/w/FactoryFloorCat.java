@@ -7,6 +7,7 @@ import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.sprites.environment.BasicLight;
+import com.dissonance.game.sprites.factory.Key;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,6 +48,12 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         super.onDisplay(w);
 
         w.setWorldBrightness(0.9f);
+
+        Key key = new Key();
+        key.setX(38f * 16f);
+        key.setY(72f * 16f);
+        key.setLayer(2);
+        w.loadAndAdd(key);
 
         farrand.setX(45f * 16f);
         farrand.setY(72f * 16f);
@@ -96,7 +103,7 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
             createLight(54*16, 24*16,  w);
         }
 
-        melees[0] = new BlueGuard();
+        /*melees[0] = new BlueGuard();
         w.loadAndAdd(melees[0]);
         melees[0].setX(54*16);
         melees[0].setY(184*16);
@@ -119,7 +126,7 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         melees[4] = new BlueGuard();
         w.loadAndAdd(melees[4]);
         melees[4].setX(13*16);
-        melees[4].setY(50*16);
+        melees[4].setY(50*16);*/
     }
 
     private void createLight(float x, float y, World w) {

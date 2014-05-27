@@ -166,7 +166,10 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             }
         } else if (c instanceof TiledObject) {
             TiledObject to = (TiledObject) c;
-            if (to.isHitbox())
+            if (to.isTrigger()) {
+                AbstractTrigger abstractTrigger = to.getTrigger();
+                abstractTrigger.onCollide(this);
+            } else if (to.isHitbox())
                 super.rawSetX(oldX);
         } else {
             if (ignore.contains(c))
@@ -199,7 +202,10 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             }
         } else if (c instanceof TiledObject) {
             TiledObject to = (TiledObject) c;
-            if (to.isHitbox())
+            if (to.isTrigger()) {
+                AbstractTrigger abstractTrigger = to.getTrigger();
+                abstractTrigger.onCollide(this);
+            } else if (to.isHitbox())
                 super.rawSetY(oldY);
         } else {
             if (ignore.contains(c))

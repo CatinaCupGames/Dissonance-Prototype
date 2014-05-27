@@ -1,5 +1,15 @@
 <game_dialog>
 
+    <dialog dialog_id="found_key_farrand">
+        <header>Farrand</header>
+        <message>You picked up a key card</message>
+    </dialog>
+
+    <dialog dialog_id="found_key_jeremaih">
+        <header>Jeremiah</header>
+        <message>You picked up a key card</message>
+    </dialog>
+
     <dialog dialog_id="ControlLockFarrand">
         <header>Farrand</header>
         <message style="italic">Damn, it's locked.</message>

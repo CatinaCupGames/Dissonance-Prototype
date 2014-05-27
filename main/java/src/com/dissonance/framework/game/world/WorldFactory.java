@@ -218,7 +218,13 @@ public class WorldFactory {
             }
 
             System.out.println("[World Factory] Shifting cache");
-            WorldHolder[] temp = new WorldHolder[worldCount + 1];
+            int count = 0;
+            for (int i = 0; i < WORLD_CACHE_LIMIT; i++) {
+                if (cacheWorlds[i] == null)
+                    continue;
+                count++;
+            }
+            WorldHolder[] temp = new WorldHolder[count];
             int ii = 0;
             for (int i = 0; i < WORLD_CACHE_LIMIT; i++) {
                 if (cacheWorlds[i] == null)
