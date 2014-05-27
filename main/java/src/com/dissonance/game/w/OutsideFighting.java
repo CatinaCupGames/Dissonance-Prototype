@@ -26,7 +26,7 @@ public class OutsideFighting extends DemoLevelWorldLoader {
             w.createLight(70*16, 301*16, 1.6f, 0.34f);
             w.createLight(64*16, 301*16, 1.6f, 0.34f);
         } else {
-            w.setWorldBrightness(0.4f);
+            w.setWorldBrightness(0.7f);
             w.createLight(-200, -200, 0.4f, 0.1f); //Lights for brightness
             w.createLight(-200, -200, 0.4f, 0.1f); //Lights for brightness
         }

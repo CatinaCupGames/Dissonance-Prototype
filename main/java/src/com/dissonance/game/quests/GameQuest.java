@@ -70,6 +70,7 @@ public class GameQuest  extends PauseQuest {
         }
 
         turnOnBelts();
+        changeToRooftopMid();
 
 
         RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
