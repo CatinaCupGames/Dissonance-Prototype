@@ -122,7 +122,7 @@
                     },
                  "type":"hitbox",
                  "visible":true,
-                 "width":1920,
+                 "width":1824,
                  "x":-48,
                  "y":3200
                 }, 
@@ -398,6 +398,110 @@
                  "width":1488,
                  "x":3536,
                  "y":2480
+                }, 
+                {
+                 "height":16,
+                 "name":"environment.Tree1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":16,
+                 "x":3760,
+                 "y":1328
+                }, 
+                {
+                 "height":16,
+                 "name":"environment.Tree1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":16,
+                 "x":4000,
+                 "y":1328
+                }, 
+                {
+                 "height":16,
+                 "name":"environment.Tree1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":16,
+                 "x":4240,
+                 "y":1328
+                }, 
+                {
+                 "height":16,
+                 "name":"environment.Tree1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":16,
+                 "x":4240,
+                 "y":1040
+                }, 
+                {
+                 "height":16,
+                 "name":"environment.Tree1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":16,
+                 "x":4480,
+                 "y":1040
+                }, 
+                {
+                 "height":16,
+                 "name":"environment.Tree1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":16,
+                 "x":4480,
+                 "y":1328
+                }, 
+                {
+                 "height":16,
+                 "name":"environment.Tree1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":16,
+                 "x":4720,
+                 "y":1328
+                }, 
+                {
+                 "height":16,
+                 "name":"environment.Tree1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":16,
+                 "x":4720,
+                 "y":1040
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2786,7 +2890,7 @@
                  "y":1040
                 }, 
                 {
-                 "height":320,
+                 "height":416,
                  "name":"",
                  "properties":
                     {
@@ -2796,7 +2900,7 @@
                  "visible":true,
                  "width":96,
                  "x":1776,
-                 "y":2384
+                 "y":2320
                 }],
          "opacity":1,
          "type":"objectgroup",
