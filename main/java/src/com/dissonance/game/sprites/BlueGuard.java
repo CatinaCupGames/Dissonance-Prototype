@@ -151,7 +151,7 @@ public class BlueGuard extends Enemy {
     private boolean saw = false;
     private long foundTime = 0L;
     private PlayableSprite target;
-    private static final long ATTACK_RATE_MS = 1800;
+    private static final long ATTACK_RATE_MS = 1000;
     private static final long FOUND_YOU_MS = 400;
     private static final long SPOT_TIME = 2000;
     private static final Random random = new Random();

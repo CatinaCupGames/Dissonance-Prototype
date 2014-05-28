@@ -17,6 +17,7 @@ public class WaldoHallway implements WorldLoader {
     public static BlueGuard guard5;
 
    public void onLoad(World w){
+
        guard1 = new BlueGuard();
        w.loadAndAdd(guard1);
        guard1.setX(39*16);
@@ -51,6 +52,13 @@ public class WaldoHallway implements WorldLoader {
        w.loadAndAdd(guard5);
        guard5.setX(46*16);
        guard5.setY(7*16);
+
+       guard1.setHostile(false);
+       guard2.setHostile(false);
+       guard3.setHostile(false);
+       guard4.setHostile(false);
+       guard5.setHostile(false);
+
        w.setWorldBrightness(0.4f);
        w.createLight(33*16, 6*16, 1.4f, 1.0f);
        w.createLight(0, 0, 0.1f, 0.1f);

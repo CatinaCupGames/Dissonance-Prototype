@@ -52,7 +52,11 @@ public class GameQuest  extends PauseQuest {
         setWorld(GameCache.RoofTopBeginning);
         GameCache.RoofTopBeginning.waitForWorldDisplayed();
 
+        TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
+
         Camera.stopFollowing();
+
+        Sound.stopSound("waldobuilding");
 
         Sound.playSound("bossfight");
 
@@ -93,8 +97,6 @@ public class GameQuest  extends PauseQuest {
             RoofTopBeginning.farrand.unfreeze();
             RoofTopBeginning.jeremiah.unfreeze();
         }
-        changeToFactory();
-        turnOnBelts();
     }
 
     public void changeToRooftopMid() throws InterruptedException {
