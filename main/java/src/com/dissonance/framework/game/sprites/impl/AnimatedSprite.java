@@ -401,6 +401,8 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     /**
      * Change which way the sprite is facing. This method depends on the child sprite to have the correct implementation
      * of {@link com.dissonance.framework.game.sprites.impl.AnimatedSprite#onMovement(com.dissonance.framework.system.utils.Direction)} and of {@link AnimatedSprite#onNoMovement()} <br></br>
+     * This method sets the facing direction of the sprite, then tells the child sprite to animate as if it was moved, then tells it to pause the animation, as if it was stopped. <br></br>
+     * This method does not and should move the sprite in any way, it simply tricks the child class into thinking it was moved, and thus invoking an animation update.
      *
      * @param direction The direction to face
      */
