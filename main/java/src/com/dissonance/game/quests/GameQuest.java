@@ -1,10 +1,12 @@
 package com.dissonance.game.quests;
 
 import com.dissonance.framework.game.ai.astar.Vector;
+import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.combat.Weapon;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
+import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.World;
@@ -19,6 +21,7 @@ import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
+import com.dissonance.game.w.FactoryFloorCat;
 import com.dissonance.game.w.OutsideFighting;
 import com.dissonance.game.w.RoofTopBeginning;
 import com.dissonance.game.w.RooftopMid;
@@ -46,32 +49,50 @@ public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
-        setWorld(GameCache.OutsideFighting);
-        GameCache.OutsideFighting.waitForWorldDisplayed();
-        TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
+        setWorld(GameCache.RoofTopBeginning);
+        GameCache.RoofTopBeginning.waitForWorldDisplayed();
 
         Camera.stopFollowing();
 
         Sound.playSound("bossfight");
 
+        RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
+        RoofTopBeginning.jeremiah.setCurrentWeapon(Weapon.getWeapon("jeremiahsword").createItem(RoofTopBeginning.jeremiah));
+        RoofTopBeginning.farrand.giveSpells();
+        RoofTopBeginning.jeremiah.giveSpells();
+
         Player player1 = Players.createPlayer1();
         if (player1.isPlaying())
-            player1.changeSprite(OutsideFighting.farrand);
+            player1.changeSprite(RoofTopBeginning.farrand);
         else
-            player1.joinAs(OutsideFighting.farrand);
+            player1.joinAs(RoofTopBeginning.farrand);
 
         Player player2 = Players.getPlayer(2);
         if (player2 != null) {
             if (player2.isPlaying())
-                player2.changeSprite(OutsideFighting.jeremiah);
+                player2.changeSprite(RoofTopBeginning.jeremiah);
             else
                 player2.join();
         }
 
-        changeToOutside1();
+        Thread.sleep(700);
 
-        RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
-        RoofTopBeginning.jeremiah.setCurrentWeapon(Weapon.getWeapon("jeremiahsword").createItem(RoofTopBeginning.jeremiah));
+        RoofTopBeginning.farrand.face(Direction.RIGHT);
+        RoofTopBeginning.jeremiah.face(Direction.LEFT);
+
+        Dialog.displayDialog("LevelStart");
+
+        if (player2 == null) {
+            RoofTopBeginning.jeremiah.setMovementSpeed(25);
+            RoofTopBeginning.jeremiah.setWaypoint(RoofTopBeginning.farrand.getX(), RoofTopBeginning.farrand.getY(), WaypointType.SIMPLE);
+            RoofTopBeginning.jeremiah.disappear();
+            RoofTopBeginning.jeremiah.waitForWaypointReached();
+            RoofTopBeginning.farrand.unfreeze();
+            RoofTopBeginning.jeremiah.unfreeze();
+        } else {
+            RoofTopBeginning.farrand.unfreeze();
+            RoofTopBeginning.jeremiah.unfreeze();
+        }
     }
 
     public void changeToRooftopMid() throws InterruptedException {
@@ -109,16 +130,20 @@ public class GameQuest  extends PauseQuest {
 
         Player player1 = Players.getPlayer1();
         player1.getSprite().setVisible(true);
+        player1.getSprite().setUsePhysics(true);
         Camera.followSprite(player1.getSprite());
 
         Player player2 = Players.getPlayer(2);
         if (player2 != null && player2.getSprite() != null) {
             player2.getSprite().setVisible(true);
+            player2.getSprite().setUsePhysics(true);
             Camera.followSprite(player2.getSprite());
         }
-          
+
         RoofTopBeginning.farrand.unfreeze();
         RoofTopBeginning.jeremiah.unfreeze();
+        RoofTopBeginning.farrand.setUsePhysics(true);
+        RoofTopBeginning.jeremiah.setUsePhysics(true);
 
 
         runnable = RenderService.INSTANCE.runOnServiceThread(new Runnable() {
@@ -133,25 +158,29 @@ public class GameQuest  extends PauseQuest {
     public void setWorld(World world) {
         super.setWorld(world);
 
-        if (!spawns.containsKey(world)) {
-            ArrayList<TiledObject> temp = new ArrayList<>();
-            Layer[] layers = world.getLayers(LayerType.OBJECT_LAYER);
-            for (Layer l : layers) {
-                for (TiledObject obj : l.getObjectGroupData()) {
-                    if (obj.getRawType().equals("espawn"))
-                        temp.add(obj);
+        if (world.equals(GameCache.OutsideFighting)) {
+            if (!spawns.containsKey(world)) {
+                ArrayList<TiledObject> temp = new ArrayList<>();
+                Layer[] layers = world.getLayers(LayerType.OBJECT_LAYER);
+                for (Layer l : layers) {
+                    for (TiledObject obj : l.getObjectGroupData()) {
+                        if (obj.getRawType().equals("espawn"))
+                            temp.add(obj);
+                    }
                 }
-            }
 
-            spawns.put(world, temp.toArray(new TiledObject[temp.size()]));
+                spawns.put(world, temp.toArray(new TiledObject[temp.size()]));
+            }
         }
     }
 
     private void update() {
         TiledObject[] objs = spawns.get(getWorld());
-
+        if (objs == null) return;
         for (TiledObject t : objs) {
-            boolean valid = false;
+            boolean valid;
+            if (!Camera.isOffScreen(t.getX(), t.getY(), t.getWidth(), t.getHeight()))
+                continue;
             CombatSprite[] sprites = children.get(t);
             if (sprites == null) {
                 valid = true;
@@ -234,5 +263,38 @@ public class GameQuest  extends PauseQuest {
     @Override
     public String getName() {
         return "the actual game";
+    }
+
+    public void changeToFactory() throws InterruptedException {
+        Camera.stopFollowing();
+        if (runnable != null) { runnable.kill(); runnable = null; }
+
+        setWorld(GameCache.FactoryFloor);
+        GameCache.FactoryFloor.waitForWorldDisplayed();
+        TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
+
+        FactoryFloorCat.farrand.setX(5f * 16f);
+        FactoryFloorCat.farrand.setY(208f * 16f);
+        FactoryFloorCat.farrand.setLayer(2);
+
+        FactoryFloorCat.jeremiah.setX(7f * 16f);
+        FactoryFloorCat.jeremiah.setY(208f * 16f);
+        FactoryFloorCat.jeremiah.setLayer(2);
+
+        Player player1 = Players.getPlayer1();
+        player1.getSprite().setVisible(true);
+        Camera.followSprite(player1.getSprite());
+
+        Player player2 = Players.getPlayer(2);
+        if (player2 != null && player2.getSprite() != null) {
+            player2.getSprite().setVisible(true);
+            Camera.followSprite(player2.getSprite());
+        }
+
+        RenderService.INSTANCE.fadeFromBlack(800);
+        RenderService.INSTANCE.waitForFade();
+
+        FactoryFloorCat.farrand.unfreeze();
+        FactoryFloorCat.jeremiah.unfreeze();
     }
 }

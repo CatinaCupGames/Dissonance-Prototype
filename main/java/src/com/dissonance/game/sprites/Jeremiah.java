@@ -157,8 +157,11 @@ public final class Jeremiah extends PlayableSprite {
         setStamina(12);
         setWillpower(10);
         setFocus(4);
+    }
 
+    public void giveSpells() {
         addSpell(new Earthquake(this));
+        setSpell1(getSpell("Earthquake"));
     }
 
     @Override

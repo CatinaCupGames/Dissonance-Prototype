@@ -1223,7 +1223,7 @@
                  "visible":true,
                  "width":240,
                  "x":6320,
-                 "y":1888
+                 "y":2000
                 }, 
                 {
                  "height":96,
@@ -1289,19 +1289,6 @@
                  "width":240,
                  "x":4208,
                  "y":800
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.Building2",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":240,
-                 "x":5360,
-                 "y":1904
                 }, 
                 {
                  "height":96,
@@ -3085,7 +3072,7 @@
                  "y":176
                 }, 
                 {
-                 "height":160,
+                 "height":512,
                  "name":"outside.Factory",
                  "properties":
                     {
@@ -3093,9 +3080,22 @@
                     },
                  "type":"sprite",
                  "visible":true,
-                 "width":256,
-                 "x":5328,
-                 "y":1168
+                 "width":512,
+                 "x":5280,
+                 "y":1360
+                }, 
+                {
+                 "height":80,
+                 "name":"",
+                 "properties":
+                    {
+                     "triggerclass":"com.dissonance.game.triggers.FactoryEntry"
+                    },
+                 "type":"trigger",
+                 "visible":true,
+                 "width":96,
+                 "x":5072,
+                 "y":1488
                 }],
          "opacity":1,
          "type":"objectgroup",

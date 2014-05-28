@@ -20,22 +20,28 @@ public class Earthquake implements Spell {
         Camera.shake(Direction.DOWN, 4000L, 5, 0.5);
         Sound.playSound("earthquake");
 
-        float radius = 20f * 16f; //20 tiles
-        Polygon javaPolygon = new Polygon();
-        int ox = (int) (owner.getX() + radius);
-        int oy = (int) (owner.getY() + radius);
-        for (int i = 0; i < 20; i++) {
-            int x = (int) (ox * Math.cos(Math.toRadians(i * 18)));
-            int y = (int) (oy * Math.sin(Math.toRadians(i * 18)));
-            javaPolygon.addPoint(x, y);
-        }
+        float radius = 5f * 16f; //20 tiles
 
         java.util.List<CombatSprite> combatSprites = owner.getWorld().getAllCombatSprites();
         for (CombatSprite c : combatSprites) {
-            if (!c.isAlly(owner)) {
+            if (!c.isAlly(owner) && owner.distanceFrom(c) < radius) {
                 Direction pushDirection = owner.directionTowards(c).opposite();
-                c.forceAnimationDirection(pushDirection);
-                c.setMovementSpeed(30);
+                switch (pushDirection) {
+                    case UP:
+                        c.rawSetY((float) (c.getY() - (((radius) - c.distanceFrom(owner)))));
+                        break;
+                    case DOWN:
+                        c.rawSetY((float) (c.getY() + (((radius) - c.distanceFrom(owner)))));
+                        break;
+                    case LEFT:
+                        c.rawSetX((float) (c.getX() - (((radius) - c.distanceFrom(owner)))));
+                        break;
+                    case RIGHT:
+                        c.rawSetX((float) (c.getX() + (((radius) - c.distanceFrom(owner)))));
+                        break;
+                }
+
+                System.out.println(c.getX() + " : " + c.getY());
             }
         }
     }

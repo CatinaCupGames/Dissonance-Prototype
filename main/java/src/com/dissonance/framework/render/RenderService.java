@@ -281,6 +281,8 @@ public class RenderService extends Service {
                 t.interrupt();
             }
         }
+
+        System.exit(0); //Exit
     }
 
     private static boolean scaled = true;
