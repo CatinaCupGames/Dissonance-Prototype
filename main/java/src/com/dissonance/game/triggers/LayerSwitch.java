@@ -10,24 +10,26 @@ public class LayerSwitch extends AbstractTrigger {
     protected void onTrigger(PhysicsSprite sprite) throws Throwable {
         if (sprite.getLayer() == 2) {
             sprite.setUsePhysics(false);
+            sprite.rawSetX(getParent().getX() + (getParent().getWidth() / 2f));
+            sprite.rawSetY(getParent().getY() + (getParent().getHeight() / 2f));
             sprite.setLayer(6);
             if (sprite instanceof PlayableSprite)
-                ((PlayableSprite)sprite).freeze();
+                ((PlayableSprite)sprite).freeze(true, LayerSwitch.class);
             sprite.setWaypoint(sprite.getX(), sprite.getY() - (4 * 16f), WaypointType.SIMPLE);
             sprite.waitForWaypointReached();
             if (sprite instanceof PlayableSprite)
-                ((PlayableSprite)sprite).unfreeze();
+                ((PlayableSprite)sprite).unfreeze(LayerSwitch.class);
             sprite.setUsePhysics(true);
         } else if (sprite.getLayer() == 6) {
             sprite.setUsePhysics(false);
-            sprite.rawSetX(getParent().getX());
-            sprite.rawSetY(getParent().getY());
+            sprite.rawSetX(getParent().getX() + (getParent().getWidth() / 2f));
+            sprite.rawSetY(getParent().getY() + (getParent().getHeight() / 2f));
             if (sprite instanceof PlayableSprite)
-                ((PlayableSprite)sprite).freeze();
+                ((PlayableSprite)sprite).freeze(true, LayerSwitch.class);
             sprite.setWaypoint(sprite.getX(), sprite.getY() + (2 * 16f), WaypointType.SIMPLE);
             sprite.waitForWaypointReached();
             if (sprite instanceof PlayableSprite)
-                ((PlayableSprite)sprite).unfreeze();
+                ((PlayableSprite)sprite).unfreeze(LayerSwitch.class);
             sprite.setLayer(2);
             sprite.setUsePhysics(true);
         }

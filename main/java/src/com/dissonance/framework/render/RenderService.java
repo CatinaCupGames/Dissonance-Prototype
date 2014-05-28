@@ -205,6 +205,7 @@ public class RenderService extends Service {
         try {
             loadIcons();
             Display.setIcon(icons);
+            Display.setVSyncEnabled(GameSettings.Graphics.vsync);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -280,6 +281,8 @@ public class RenderService extends Service {
                 t.interrupt();
             }
         }
+
+        System.exit(0); //Exit
     }
 
     private static boolean scaled = true;

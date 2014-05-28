@@ -5,6 +5,7 @@ import com.dissonance.framework.game.world.World;
 
 import java.security.InvalidParameterException;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Layer {
     private static final int FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
@@ -24,7 +25,7 @@ public class Layer {
     private TiledObject[] objects; //for type objectgroup
     private long[] data; //for type tilelayer
     private HashMap<Integer, Tile> cache = new HashMap<Integer, Tile>();
-    private HashMap<Integer, Boolean[]> fuckItInTheAsshole = new HashMap<Integer, Boolean[]>();
+    private ConcurrentHashMap<Integer, Boolean[]> fuckItInTheAsshole = new ConcurrentHashMap<Integer, Boolean[]>();
 
     private int layer_number;
 
@@ -50,7 +51,8 @@ public class Layer {
             cache.put(index, t);
             return t;
         } else {
-            Tile t = new Tile(data[index], x, y, this, world, false, false, false);
+            boolean[] values = stripTileRotationFlag(index); //Lets try to start a strip dance it then
+            Tile t = new Tile(data[index], x, y, this, world, values[0], values[1], values[2]);
             cache.put(index, t);
             return t;
         }
@@ -145,7 +147,10 @@ public class Layer {
         return data;
     }
 
-    public boolean[] stripTileRotationFlag(int index) {
+    public Boolean[] stripTileRotationFlag(int index) {
+        if (fuckItInTheAsshole.containsKey(index))
+            return fuckItInTheAsshole.get(index);
+
         long id = data[index];
         //Check the rotation flags
         boolean flipH = (id & FLIPPED_HORIZONTALLY_FLAG) > 0;
@@ -158,7 +163,7 @@ public class Layer {
         if (flipH || flipL || flipD)
             fuckItInTheAsshole.put(index, new Boolean[] { flipH, flipL, flipD });
 
-        return new boolean[] { flipH, flipL, flipD };
+        return new Boolean[] { flipH, flipL, flipD };
     }
 
     public String getImageLayerData() {

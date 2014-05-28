@@ -220,7 +220,7 @@ public class WeaponItem extends Item {
                             isPlaying = false;
                         }
                     });
-                    getOwner().setAnimationSpeed(50);
+                    getOwner().setAnimationSpeed(25);
                     getOwner().playAnimation();
                     getOwner().onAttack();
                     /**

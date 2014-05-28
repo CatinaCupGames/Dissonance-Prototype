@@ -8,8 +8,8 @@
     <willpower>0</willpower>
     <focus>0</focus>
     <marksmanship>0</marksmanship>
-    <range>10</range>
-    <swipe>10</swipe>
+    <range>16</range>
+    <swipe>16</swipe>
     <spell>false</spell>
     <gun>false</gun>
     <name>farrand_staff</name>

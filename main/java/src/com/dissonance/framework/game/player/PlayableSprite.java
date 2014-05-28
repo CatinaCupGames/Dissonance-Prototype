@@ -288,7 +288,7 @@ public abstract class PlayableSprite extends CombatSprite {
 
     @Override
     public boolean isAlly(CombatSprite sprite) {
-        return sprite instanceof PlayableSprite && party.contains(sprite);
+        return sprite == this || (sprite instanceof PlayableSprite && party.contains(sprite));
     }
 
     @Override

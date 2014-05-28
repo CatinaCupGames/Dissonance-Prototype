@@ -1,4 +1,8 @@
 <sounds>
+    <sound name="bossfight"
+           start="0:17:143"
+	   end="1:40:952"/>	
+
     <sound name="breakbeat"
            start="0:0:723"
            end="1:10:12"/>

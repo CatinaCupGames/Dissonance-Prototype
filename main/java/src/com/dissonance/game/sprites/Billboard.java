@@ -13,5 +13,9 @@ public class Billboard extends AnimatedSprite {
         super.onLoad();
         setAnimation("billboard1");
         playAnimation();
+
+        BillboardBase base = new BillboardBase();
+        base.setX(getX());
+        base.setY(getY() + getHeight() + 10f);
     }
 }

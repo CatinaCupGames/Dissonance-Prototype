@@ -1,5 +1,21 @@
 <game_dialog>
 
+    <dialog dialog_id="jump_into_office">
+        <header>Farrand</header>
+        <message>Looks like another drop. Ready?</message>
+        <header>Jeremiah</header>
+        <message>Let's do this.</message>
+    </dialog>
+
+    <dialog dialog_id="factory_enter">
+        <header>Jeremiah</header>
+        <message>These guys just don't give up...</message>
+        <header>Farrand</header>
+        <message>We gotta get off the streets</message>
+        <message speed="300" type="append">...</message>
+        <message type="append">lets go in here.</message>
+    </dialog>
+
 
     <dialog dialog_id="found_key_farrand">
         <header>Farrand</header>
@@ -98,7 +114,7 @@
         <message>You shouldn't be calling me </message>
         <message style="italic" type="append">man</message>
         <message type="append">, either. </message>
-        <message type="append"> We need to get into the habit of being professional</message>
+        <message type="append">We need to get into the habit of being professional</message>
         <message>if I want to make good first impressions as a sage.</message>
 
         <header>Jeremiah</header>
@@ -141,16 +157,6 @@
         <header>Farrand</header>
         <message>Good.</message>
     </dialog>
-    <dialog dialog_id="entering_zesilia2">
-        <header>Guard</header>
-        <message>AHAHAHFUAHFUA</message>
-
-        <header>Farrand</header>
-        <message>HOPAHAPAHAPAHPAHA</message>
-
-        <header>Guard</header>
-        <message>You are permitted to enter.</message>
-    </dialog>
 
     <dialog dialog_id="road to waldos house">
         <header>Jeremiah</header>
@@ -169,74 +175,93 @@
     <dialog dialog_id="Waldos meeting">
         <header>Waldomar</header>
         <message>Ah, Farrand, the man of the hour! I was worried you would keep us waiting!</message>
-        <message type="append">So, did my little crew here give you a warm welcome?</message>
 
         <header>Farrand</header>
-        <message>Sure...</message>
+        <message speed="500">...</message>
+
+        <header>Waldomar</header>
+        <message>So, did my little crew here give you a warm welcome?</message>
+
+        <header>Farrand</header>
+        <message>I would say so...</message>
 
         <header>Waldomar</header>
         <message>...Please, make yourself comfortable! </message>
         <message type="append">Would you like a cigar?</message>
 
         <header>Farrand</header>
-        <message>No, thank you. I would rather get straight to the point.</message>
+        <message>No, thank you. If we could please discuss why I-</message>
 
         <header>Waldomar</header>
-        <message>Well then, by all means! Tell me, why have we gathered here today?</message>
+        <message>Yes, by all means! Tell me, why have we gathered here today?</message>
 
         <header>Farrand</header>
-        <message>I have come to order the halt of the Adlers' urban expansion project.</message>
-        <message type="append">As I am sure you are aware, industrialization poses a threat to </message>
+        <message>On behalf of the Sages' Union of Isthmo Candidus, I hereby demand the Adler</message>
+        <message type="append">Commune to agree to surrender 2000 square kilometers of land as reparations</message>
 
         <header>Farrand</header>
-        <message>both our environment and to our state of social well-being.</message>
+        <message>for violating its terms in the Ecological Preservation Contract.</message>
 
         <header>Waldomar</header>
-        <message>You have come to "halt me and my expansion"?</message>
+        <message>5000 hectares... That is truly a grand fine for breaking a law</message>
+        <message type="append">I never knew existed.</message>
+
+        <header>Farrand</header>
+        <message>Chancellor, I was confident that all Adler officials were aware of </message>
+        <message type="append">basic regional laws.</message>
+
+        <header>Farrand</header>
+        <message>The level of industrialization in this city is not only detrimental</message>
+        <message type="append">to the local ecosystems, but it is strictly prohibited.</message>
 
         <header>Waldomar</header>
-        <message>Why, whatever do you mean by that?</message>
+        <message>Well then...I definitely cannot say I'm surprised. After all, you sages are</message>
+        <message type="append">some greedy sons of-</message>
 
         <header>Farrand</header>
-        <message>You know as well as I do what it means... Your further expansion</message>
-        <message type="append">is a clear violation of the Candidus Treaty.</message>
+        <message>May I remind you that this is a formal matter?</message>
 
         <header>Waldomar</header>
-        <message>Ah, but Farrand, it would be selfish to keep all that land to yourself.</message>
+        <message style="italic">Excuse me?</message>
 
         <header>Farrand</header>
-        <message>What’s selfish is the lavish lifestyle you live while your followers starve!</message>
+        <message>Please, this is not an appropriate time for expletives.</message>
 
         <header>Waldomar</header>
-        <message>The state of my own followers is their doing. They are free </message>
-        <message type="append">to work and live as they please.</message>
+        <message>I'm sorry...</message>
+
+        <header>Farrand</header>
+        <message>Forgiven. Now-</message>
+
+        </dialog>
+
+        <dialog dialog_id="waldomeeting4">
 
         <header>Waldomar</header>
-        <message>They don't have imposed reproduction rights or live in blasted huts eating </message>
-        <message type="append">leaves and berries like animals!</message>
+        <message style="bold">I wasn't done talking!</message>
+        <message type="append">Farrand, tell me, where are you standing right now?</message>
 
         <header>Farrand</header>
-        <message>The citizens of Isthmo do not live like animals! They are simply respecting </message>
-        <message type="append">the laws that uphold our survival. </message>
+        <message>...I beg your pardon?</message>
 
-        <header>Farrand</header>
-        <message>I know your type Waldomar, your thirst for power is unquenchable, </message>
-        <message type="append">you will not be satisfied until you have completely stripped  </message>
-
-        <header>Farrand</header>
-        <message>this land of all of it’s resources in exchange for material wealth!</message>
-
-        <header>Farrand</header>
-        <message>It was because of people like you in the old world that Isthmo Candidus was </message>
-        <message type="append">created as a safe haven from ecological destruction in the first place, and </message>
-
-        <header>Farrand</header>
-        <message>I'll be damned if I let you have an inch more of it! </message>
 
         <header>Waldomar</header>
-        <message>...Farrand, you do realize that this is sounding like more and more of</message>
-        <message type="append">a threat on your part. I do not take kindly to threats...</message>
+        <message type="bold">Where is it that your filthy feet are touching?</message>
 
+
+        <header>Farrand</header>
+        <message>Well, evidently, I'm standing in front of you, but I don't-</message>
+
+        <header>Waldomar</header>
+        <message style="bold">You are standing in the middle of MY city!</message>
+        <message type="append" style="italic">How dare you speak to a man of my stature with such disrespect!</message>
+
+        <header>Farrand</header>
+        <message>...You are absolutely insane...</message>
+
+        <header>Waldomar</header>
+        <message style="bold">ENOUGH! </message>
+        <message type="append">Welcome to Zesilia, you fuckin' wetback!</message>
 
     </dialog>
 
@@ -278,11 +303,4 @@
         <message speed="500">...</message>
     </dialog>
 
-
-
-
-    <dialog dialog_id="fds">
-        <header>poop</header>
-        <message>poop</message>
-    </dialog>
 </game_dialog>

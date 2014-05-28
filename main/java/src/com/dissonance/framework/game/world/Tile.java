@@ -1,10 +1,8 @@
 package com.dissonance.framework.game.world;
 
-import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.TileSet;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTileTrigger;
-import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
 import org.lwjgl.util.vector.Vector2f;
@@ -51,6 +49,8 @@ public class Tile implements Collidable {
         }
 
         if (hasProperty("triggerclass", world)) {
+            if (world.getName().equals("FactoryFloorCat"))
+                System.out.println("hi");
             trigger_tile = true;
             String tmp = getProperty("triggerclass", world);
             if (instances.containsKey(containingLayer) && instances.get(containingLayer).containsKey(tmp)) {

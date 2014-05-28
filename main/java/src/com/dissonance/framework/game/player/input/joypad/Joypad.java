@@ -84,9 +84,9 @@ public class Joypad {
         if (analog.containsKey(ids.get(value))) {
             String temp = analog.get(ids.get(value));  //dubs
 
-            if (temp.startsWith("+") && component.isAnalog()) {
+            if (temp.startsWith("+")) {
                 return component.getPollData() > 0.5f;
-            } else if (temp.startsWith("-") && component.isAnalog()) {
+            } else if (temp.startsWith("-")) {
                 return component.getPollData() < -0.5f;
             }
         }

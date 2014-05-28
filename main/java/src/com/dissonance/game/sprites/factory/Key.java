@@ -37,7 +37,7 @@ public class Key extends ImageSprite {
                         if (sprite instanceof Farrand) {
                             Dialog.displayDialog("found_key_farrand");
                         } else {
-                            Dialog.displayDialog("found_key_jeremaih");
+                            Dialog.displayDialog("found_key_jeremiah");
                         }
                     }
                 }).start();

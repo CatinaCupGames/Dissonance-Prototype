@@ -100,7 +100,7 @@ public class WorldData {
                     if (id == 0)
                         continue;
 
-                    boolean[] flippedFlags = layer.stripTileRotationFlag(i);
+                    Boolean[] flippedFlags = layer.stripTileRotationFlag(i);
                     id = layer.getTileLayerData()[i]; //Get id again
 
                     TileSet set = findTileSetFromID(id);
