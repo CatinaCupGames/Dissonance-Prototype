@@ -205,6 +205,7 @@ public class RenderService extends Service {
         try {
             loadIcons();
             Display.setIcon(icons);
+            Display.setVSyncEnabled(GameSettings.Graphics.vsync);
         } catch (IOException e) {
             e.printStackTrace();
         }
