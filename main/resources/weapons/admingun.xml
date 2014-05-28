@@ -1,0 +1,26 @@
+<weapon>
+    <!--Wyatt the cowboy-->
+    <name>admingun</name>
+
+    <!--The name of the bullet sprite-->
+    <bulletName>Bullet</bulletName>
+
+    <!--Just add these two-->
+    <type>gun</type>
+    <gun>true</gun>
+
+    <!--Delay between shots-->
+    <firingSpeed>750</firingSpeed>
+
+    <!--Speed of bullets-->
+    <bulletSpeed>55</bulletSpeed>
+
+    <!--Self explanatory-->
+    <bulletDamage>10</bulletDamage>
+
+    <!--Distance before the bullet suicides-->
+    <range>150</range>
+
+    <!--Accuracy constant-->
+    <accuracy>5</accuracy>
+</weapon>

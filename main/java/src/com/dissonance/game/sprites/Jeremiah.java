@@ -1,6 +1,5 @@
 package com.dissonance.game.sprites;
 
-import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.spells.impl.Earthquake;
@@ -152,7 +151,7 @@ public final class Jeremiah extends PlayableSprite {
 
         setAttack(16);
         setDefense(8);
-        setSpeed(12);
+        setSpeed(6);
         setVigor(8);
         setStamina(12);
         setWillpower(10);
