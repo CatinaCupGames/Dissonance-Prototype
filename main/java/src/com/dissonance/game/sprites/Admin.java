@@ -39,8 +39,7 @@ public class Admin extends Enemy {
         setVigor(6);
         setStamina(8);
         setMarksmanship(10);
-        for (int i = 0; i < 4; i++)
-            levelUp();
+        levelUp();
 
         setCurrentWeapon(Weapon.getWeapon("Revolver").createItem(this));
     }

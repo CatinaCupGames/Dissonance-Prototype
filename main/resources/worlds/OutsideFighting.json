@@ -408,8 +408,8 @@
                     },
                  "type":"trigger",
                  "visible":true,
-                 "width":80,
-                 "x":5072,
+                 "width":96,
+                 "x":5104,
                  "y":1360
                 }],
          "opacity":1,
