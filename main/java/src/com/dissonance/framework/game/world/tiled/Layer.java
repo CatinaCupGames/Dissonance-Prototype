@@ -50,7 +50,8 @@ public class Layer {
             cache.put(index, t);
             return t;
         } else {
-            Tile t = new Tile(data[index], x, y, this, world, false, false, false);
+            boolean[] values = stripTileRotationFlag(index); //Lets try to start a strip dance it then
+            Tile t = new Tile(data[index], x, y, this, world, values[0], values[1], values[2]);
             cache.put(index, t);
             return t;
         }

@@ -114,7 +114,7 @@
         <message>You shouldn't be calling me </message>
         <message style="italic" type="append">man</message>
         <message type="append">, either. </message>
-        <message type="append"> We need to get into the habit of being professional</message>
+        <message type="append">We need to get into the habit of being professional</message>
         <message>if I want to make good first impressions as a sage.</message>
 
         <header>Jeremiah</header>
@@ -157,16 +157,6 @@
         <header>Farrand</header>
         <message>Good.</message>
     </dialog>
-    <dialog dialog_id="entering_zesilia2">
-        <header>Guard</header>
-        <message>AHAHAHFUAHFUA</message>
-
-        <header>Farrand</header>
-        <message>HOPAHAPAHAPAHPAHA</message>
-
-        <header>Guard</header>
-        <message>You are permitted to enter.</message>
-    </dialog>
 
     <dialog dialog_id="road to waldos house">
         <header>Jeremiah</header>
@@ -190,7 +180,7 @@
         <message speed="500">...</message>
 
         <header>Waldomar</header>
-        <message type="append">So, did my little crew here give you a warm welcome?</message>
+        <message>So, did my little crew here give you a warm welcome?</message>
 
         <header>Farrand</header>
         <message>I would say so...</message>
@@ -207,20 +197,22 @@
 
         <header>Farrand</header>
         <message>On behalf of the Sages' Union of Isthmo Candidus, I hereby demand the Adler</message>
-        <message type="append">Commune to agree to surrender 5000 hectares of land as reparations</message>
+        <message type="append">Commune to agree to surrender 2000 square kilometers of land as reparations</message>
 
         <header>Farrand</header>
         <message>for violating its terms in the Ecological Preservation Contract.</message>
 
         <header>Waldomar</header>
-        <message>5000 hectares... That is truly a grand fine for breaking a law I never knew existed.</message>
+        <message>5000 hectares... That is truly a grand fine for breaking a law</message>
+        <message type="append">I never knew existed.</message>
 
         <header>Farrand</header>
-        <message>Chancellor, I was confident that all Adler officials were aware of basic regional laws.</message>
-        <message type="append">The level of industrialization in this city is not only detrimental</message>
+        <message>Chancellor, I was confident that all Adler officials were aware of </message>
+        <message type="append">basic regional laws.</message>
 
         <header>Farrand</header>
-        <message>to the local ecosystems, but it is strictly prohibited.</message>
+        <message>The level of industrialization in this city is not only detrimental</message>
+        <message type="append">to the local ecosystems, but it is strictly prohibited.</message>
 
         <header>Waldomar</header>
         <message>Well then...I definitely cannot say I'm surprised. After all, you sages are</message>
@@ -268,8 +260,8 @@
         <message>...You are absolutely insane...</message>
 
         <header>Waldomar</header>
-        <message style="bold">ENOUGH!</message>
-        <message type="append">Welcome to Zesilia!</message>
+        <message style="bold">ENOUGH! </message>
+        <message type="append">Welcome to Zesilia, you fuckin' wetback!</message>
 
     </dialog>
 

@@ -56,6 +56,8 @@ public class GameQuest  extends PauseQuest {
 
         Camera.stopFollowing();
 
+        Sound.stopSound("waldobuilding");
+
         Sound.playSound("bossfight");
 
         RoofTopBeginning.farrand.setCurrentWeapon(Weapon.getWeapon("farrandstaff").createItem(RoofTopBeginning.farrand));
@@ -95,6 +97,10 @@ public class GameQuest  extends PauseQuest {
             RoofTopBeginning.farrand.unfreeze();
             RoofTopBeginning.jeremiah.unfreeze();
         }
+
+        Thread.sleep(1000);
+        changeToFactory();
+        turnOnBelts();
     }
 
     public void changeToRooftopMid() throws InterruptedException {

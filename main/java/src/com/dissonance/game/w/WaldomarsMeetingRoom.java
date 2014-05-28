@@ -95,7 +95,6 @@ public class WaldomarsMeetingRoom implements WorldLoader {
     @Override
     public void onLoad(World w) {
 
-
         var1 = new Bookshelf1();
         w.loadAndAdd(var1);
         var1.setX(220.44997f);
@@ -254,6 +253,12 @@ public class WaldomarsMeetingRoom implements WorldLoader {
         fireball.setX(waldomar.getX());
         fireball.setY(waldomar.getY());
         fireball.setVisible(false);
+
+        guard1.setHostile(false);
+        guard2.setHostile(false);
+        guard3.setHostile(false);
+        guard4.setHostile(false);
+        guard5.setHostile(false);
 
       w.setWorldBrightness(0.5f);
         w.createLight(15f * 16, 2f * 16, 1.4f, 0.7f);

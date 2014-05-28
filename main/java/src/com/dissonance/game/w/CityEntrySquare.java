@@ -55,6 +55,12 @@ public class CityEntrySquare extends DemoLevelWorldLoader {
         guard5.setX(924f);
         guard5.setY(865f);
 
+        guard1.setHostile(false);
+        guard2.setHostile(false);
+        guard3.setHostile(false);
+        guard4.setHostile(false);
+        guard5.setHostile(false);
+
         w.setWorldBrightness(0.4f);
         w.createLight(0, 0, 0.1f, 0.1f);
     }
