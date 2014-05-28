@@ -171,7 +171,9 @@ public final class Farrand extends PlayableSprite {
         setStamina(6);
         setWillpower(14);
         setFocus(16);
+    }
 
+    public void giveSpells() {
         addSpell(new HeavyCure(this));
         addSpell(new Fire(this));
         setSpell1(getSpell("Heavy Cure"));

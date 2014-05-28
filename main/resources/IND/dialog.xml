@@ -7,6 +7,15 @@
         <message>Let's do this.</message>
     </dialog>
 
+    <dialog dialog_id="factory_enter">
+        <header>Jeremiah</header>
+        <message>These guys just don't give up...</message>
+        <header>Farrand</header>
+        <message>We gotta get off the streets</message>
+        <message speed="300" type="append">...</message>
+        <message type="append">lets go in here.</message>
+    </dialog>
+
 
     <dialog dialog_id="found_key_farrand">
         <header>Farrand</header>
@@ -302,11 +311,4 @@
         <message speed="500">...</message>
     </dialog>
 
-
-
-
-    <dialog dialog_id="fds">
-        <header>poop</header>
-        <message>poop</message>
-    </dialog>
 </game_dialog>

@@ -440,7 +440,7 @@ public final class World {
                     sprite.onLoad();
                     sprite.completeLoading();
                 }
-                if (sprite instanceof CombatSprite && combatCache.contains(sprite))
+                if (sprite instanceof CombatSprite && !combatCache.contains(sprite))
                     combatCache.add((CombatSprite) sprite);
                 generateID(sprite);
             }

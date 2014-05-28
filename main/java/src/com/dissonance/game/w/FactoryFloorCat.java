@@ -41,6 +41,41 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         nongroundNodeMap = new NodeMap(w, w.getWidth(), w.getHeight());
         nongroundNodeMap.setCachePath("cache" + File.separator + "factory_NONGROUND.nodes");
         nongroundNodeMap.create(nonground.toArray(new Layer[nonground.size()]));
+
+        BlueGuard guard = new BlueGuard();
+        guard.setX(28f * 16f);
+        guard.setY(38f * 16f);
+        guard.setLayer(6);
+        w.loadAndAdd(guard);
+
+        melees[0] = new BlueGuard();
+        w.loadAndAdd(melees[0]);
+        melees[0].setX(54*16);
+        melees[0].setY(184*16);
+
+        melees[1] = new BlueGuard();
+        w.loadAndAdd(melees[1]);
+        melees[1].setX(31*16);
+        melees[1].setY(171*16);
+
+        melees[2] = new BlueGuard();
+        w.loadAndAdd(melees[2]);
+        melees[2].setX(14*16);
+        melees[2].setY(153*16);
+
+        melees[3] = new BlueGuard();
+        w.loadAndAdd(melees[3]);
+        melees[3].setX(40*16);
+        melees[3].setY(116*16);
+
+        melees[4] = new BlueGuard();
+        w.loadAndAdd(melees[4]);
+        melees[4].setX(13*16);
+        melees[4].setY(50*16);
+
+        for (BlueGuard melee : melees) {
+            melee.setLayer(2);
+        }
     }
 
     @Override
@@ -55,14 +90,13 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         key.setLayer(2);
         w.loadAndAdd(key);
 
-        farrand.setX(45f * 16f);
-        farrand.setY(72f * 16f);
+        farrand.setX(5f * 16f);
+        farrand.setY(208f * 16f);
         farrand.setLayer(2);
 
-        jeremiah.setX(43f * 16f);
-        jeremiah.setY(72f * 16f);
+        jeremiah.setX(7f * 16f);
+        jeremiah.setY(208f * 16f);
         jeremiah.setLayer(2);
-        jeremiah.setVisible(false);
 
         if (GameSettings.Graphics.qualityLights) {
             w.createLight(25*16, 199*16, WALL_LIGHT_BRIGHTNESS, 0.5f);
@@ -101,40 +135,6 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
             createLight(30*16, 32*16,  w);
             createLight(43*16, 32*16,  w);
             createLight(54*16, 24*16,  w);
-        }
-        BlueGuard guard = new BlueGuard();
-        guard.setX(28f * 16f);
-        guard.setY(38f * 16f);
-        guard.setLayer(6);
-        w.loadAndAdd(guard);
-
-        melees[0] = new BlueGuard();
-        w.loadAndAdd(melees[0]);
-        melees[0].setX(54*16);
-        melees[0].setY(184*16);
-
-        melees[1] = new BlueGuard();
-        w.loadAndAdd(melees[1]);
-        melees[1].setX(31*16);
-        melees[1].setY(171*16);
-
-        melees[2] = new BlueGuard();
-        w.loadAndAdd(melees[2]);
-        melees[2].setX(14*16);
-        melees[2].setY(153*16);
-
-        melees[3] = new BlueGuard();
-        w.loadAndAdd(melees[3]);
-        melees[3].setX(40*16);
-        melees[3].setY(116*16);
-
-        melees[4] = new BlueGuard();
-        w.loadAndAdd(melees[4]);
-        melees[4].setX(13*16);
-        melees[4].setY(50*16);
-
-        for (BlueGuard melee : melees) {
-            melee.setLayer(2);
         }
     }
 

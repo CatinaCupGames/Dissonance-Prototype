@@ -11,6 +11,7 @@ Date: 2014/05/16 13:58:43
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.sprites.RoofLight;
 import com.dissonance.game.sprites.roof.*;
@@ -59,8 +60,8 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         meleeGuard[1].setX(71*16);
         meleeGuard[1].setY(28*16);
 
-        meleeGuard[1].setX(64*16);
-        meleeGuard[1].setY(20*16);
+        meleeGuard[2].setX(64 * 16);
+        meleeGuard[2].setY(20 * 16);
 
         r1 = new RoofLight();
         w.loadAndAdd(r1);
@@ -79,17 +80,15 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
     public void onDisplay(World w) {
         super.onDisplay(w);
 
-        farrand.setX(97.9f);
-        farrand.setY(204.34998f);
+        farrand.setX(4f * 16f);
+        farrand.setY(14f * 16f);
+        farrand.face(Direction.UP);
+        farrand.freeze();
 
-
-
-        jeremiah.setX(100f);
-        jeremiah.setY(210f);
-        jeremiah.setVisible(false);
-
-
-
+        jeremiah.setX(6f * 16f);
+        jeremiah.setY(14f * 16f);
+        jeremiah.face(Direction.UP);
+        jeremiah.freeze();
     }
 
 }

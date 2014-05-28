@@ -45,6 +45,7 @@ public class Garbage extends AbstractTrigger {
     }
 
     private void animateSprite(PlayableSprite sprite) throws InterruptedException {
+        sprite.setUsePhysics(false);
         sprite.freeze();
         sprite.ignoreCollisionWith(RoofTopBeginning.exit);
         sprite.setMovementSpeed(3);
