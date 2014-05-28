@@ -51,10 +51,8 @@ public class GameQuest  extends PauseQuest {
         INSTANCE = this;
         setWorld(GameCache.RoofTopBeginning);
         GameCache.RoofTopBeginning.waitForWorldDisplayed();
-<<<<<<< HEAD
+
         TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
-=======
->>>>>>> 9c17f9c7569f7003c946b4f1813bacf06e04d3da
 
         Camera.stopFollowing();
 
