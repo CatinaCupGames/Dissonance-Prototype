@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public abstract class AbstractTrigger {
     private boolean init = false;
-    private ArrayList<PhysicsSprite> activators = new ArrayList<>();
+    protected ArrayList<PhysicsSprite> activators = new ArrayList<>();
     private long lastTrigger = System.currentTimeMillis();
     private TiledObject parent;
 

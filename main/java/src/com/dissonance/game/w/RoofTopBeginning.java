@@ -31,6 +31,9 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
     public static Skylight dec9;
     public static RoofLight r1;
     public static RoofLight r2;
+    public static RoofLight r3;
+    public static RoofLight r4;
+    public static RoofLight r5;
 
     public static BlueGuard[] meleeGuard = new BlueGuard[3];
 
@@ -39,7 +42,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
     @Override
     public void onLoad(World w) {
         super.onLoad(w);
-        w.setWorldBrightness(0.5f);
+        w.setWorldBrightness(0.8f);
 
         exit = new Garbagechute();
         exit.setX((88f * 16f) + 10);
@@ -74,6 +77,24 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         r2.setX(38*16);
         r2.setY(13*16);
         w.createLight(38*16, 13*16, 1.4f, 0.5f);
+
+        r3 = new RoofLight();
+        w.loadAndAdd(r3);
+        r3.setX(38*16);
+        r3.setY(40*16);
+        w.createLight(38*16, 40*16, 1.4f, 0.5f);
+
+        r4 = new RoofLight();
+        w.loadAndAdd(r4);
+        r4.setX(86*16);
+        r4.setY(13*16);
+        w.createLight(86*16, 13*16, 1.4f, 0.5f);
+
+        r5 = new RoofLight();
+        w.loadAndAdd(r5);
+        r5.setX(86*16);
+        r5.setY(40*16);
+        w.createLight(86*16, 40*16, 1.4f, 0.5f);
     }
 
     @Override
