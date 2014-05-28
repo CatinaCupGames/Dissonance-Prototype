@@ -60,7 +60,11 @@ public class WeaponItem extends Item {
 
             Direction direction = getOwner().getFacingDirection();
 
-            new Bullet(this).fire(direction);
+            Bullet bullet = new Bullet(this);
+            bullet.fire(direction);
+            if (parameters.length > 0 && parameters[0] instanceof Integer) {
+                bullet.setLayer((Integer)parameters[0]);
+            }
         } else {
             final Direction facingDirection = getOwner().getFacingDirection();
             if (parameters.length > 0) {

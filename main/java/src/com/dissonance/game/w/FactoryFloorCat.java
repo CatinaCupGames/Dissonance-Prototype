@@ -5,6 +5,7 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.system.GameSettings;
+import com.dissonance.game.sprites.Admin;
 import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.sprites.environment.BasicLight;
 import com.dissonance.game.sprites.factory.Key;
@@ -21,6 +22,7 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
     public static NodeMap nongroundNodeMap;
     private static final float WALL_LIGHT_BRIGHTNESS = 1.4f;
     public static BlueGuard[] melees = new BlueGuard[5];
+    public static Admin miniboss;
 
     @Override
     public void onLoad(World w) {
@@ -41,6 +43,12 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         nongroundNodeMap = new NodeMap(w, w.getWidth(), w.getHeight());
         nongroundNodeMap.setCachePath("cache" + File.separator + "factory_NONGROUND.nodes");
         nongroundNodeMap.create(nonground.toArray(new Layer[nonground.size()]));
+
+        miniboss = new Admin();
+        miniboss.setLayer(6);
+        miniboss.setX(33f * 16f);
+        miniboss.setY(27f * 16f);
+        w.loadAndAdd(miniboss);
 
         BlueGuard guard = new BlueGuard();
         guard.setX(28f * 16f);
@@ -93,10 +101,12 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         farrand.setX(5f * 16f);
         farrand.setY(208f * 16f);
         farrand.setLayer(2);
+        farrand.setVisible(false);
 
         jeremiah.setX(7f * 16f);
         jeremiah.setY(208f * 16f);
         jeremiah.setLayer(2);
+        jeremiah.setVisible(false);
 
         if (GameSettings.Graphics.qualityLights) {
             w.createLight(25*16, 199*16, WALL_LIGHT_BRIGHTNESS, 0.5f);

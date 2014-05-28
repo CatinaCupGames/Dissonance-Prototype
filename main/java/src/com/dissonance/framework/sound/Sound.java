@@ -423,21 +423,26 @@ public final class Sound {
      * @return The sound if found, otherwise null.
      */
     public static Sound stopSound(String name) {
-        Sound sound = getSound(name);
+        try {
+            Sound sound = getSound(name);
 
-        if (sound != null) {
-            alSourceStop(sound.getSourceIndex());
+            if (sound != null) {
+                alSourceStop(sound.getSourceIndex());
 
-            if (sound.startTime == -1 && sound.endTime == -1) {
-                sound.lastKnownState = AL_STOPPED;
+                if (sound.startTime == -1 && sound.endTime == -1) {
+                    sound.lastKnownState = AL_STOPPED;
+                }
+
+                if (sound.listener != null) {
+                    sound.listener.onFinished(SoundFinishedType.STOPPED);
+                }
             }
 
-            if (sound.listener != null) {
-                sound.listener.onFinished(SoundFinishedType.STOPPED);
-            }
+            return sound;
+        } catch (Throwable t) {
+            t.printStackTrace();
+            return null;
         }
-
-        return sound;
     }
 
     /**

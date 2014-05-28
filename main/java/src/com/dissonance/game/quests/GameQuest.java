@@ -21,6 +21,7 @@ import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
+import com.dissonance.game.sprites.outside.Factory;
 import com.dissonance.game.w.FactoryFloorCat;
 import com.dissonance.game.w.OutsideFighting;
 import com.dissonance.game.w.RoofTopBeginning;
@@ -127,10 +128,10 @@ public class GameQuest  extends PauseQuest {
         GameCache.OutsideFighting.waitForWorldDisplayed();
 
         OutsideFighting.farrand.setX(27f * 16f);
-        OutsideFighting.farrand.setY(240f*16f);
+        OutsideFighting.farrand.setY(240f * 16f);
 
-        OutsideFighting.jeremiah.setX(24f*16f);
-        OutsideFighting.jeremiah.setY(240f*16f);
+        OutsideFighting.jeremiah.setX(24f * 16f);
+        OutsideFighting.jeremiah.setY(240f * 16f);
 
         Player player1 = Players.getPlayer1();
         player1.getSprite().setVisible(true);
@@ -297,6 +298,12 @@ public class GameQuest  extends PauseQuest {
 
         RenderService.INSTANCE.fadeFromBlack(800);
         RenderService.INSTANCE.waitForFade();
+
+        FactoryFloorCat.farrand.setWaypoint(FactoryFloorCat.farrand.getX(), FactoryFloorCat.farrand.getY() - 48, WaypointType.SIMPLE);
+        FactoryFloorCat.farrand.setWaypoint(FactoryFloorCat.jeremiah.getX(), FactoryFloorCat.jeremiah.getY() - 48, WaypointType.SIMPLE);
+        player1.getSprite().waitForWaypointReached();
+        if (player2 != null && player2.getSprite() != null)
+            player2.getSprite().waitForWaypointReached();
 
         FactoryFloorCat.farrand.unfreeze();
         FactoryFloorCat.jeremiah.unfreeze();

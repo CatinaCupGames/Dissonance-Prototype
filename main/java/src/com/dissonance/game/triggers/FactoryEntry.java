@@ -26,10 +26,12 @@ public class FactoryEntry extends AbstractTrigger {
                 if (player2 != null && player2.getSprite() != null) {
                     player2.getSprite().freeze();
                     player2.getSprite().setWaypoint(player.getX(), player.getY() + (player.getHeight()) + 16, WaypointType.SMART);
+                    player2.getSprite().waitForEndOfWaypointQueue();
                 }
-            } else if (player2 != null && player2.getSprite() != null && player2.getSprite().equals(player)) {
+            } else {
                 player1.getSprite().freeze();
                 player1.getSprite().setWaypoint(player.getX(), player.getY() + (player.getHeight()) + 16, WaypointType.SMART);
+                player1.getSprite().waitForEndOfWaypointQueue();
             }
         } else {
             if (player.equals(OutsideFighting.farrand)) {

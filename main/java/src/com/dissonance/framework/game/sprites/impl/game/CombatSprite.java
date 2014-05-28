@@ -54,6 +54,7 @@ public abstract class CombatSprite extends PhysicsSprite {
     public void levelUp() {
         level++;
         refillHP();
+        setMaxHP(getMaxHP() + 100);
         onLevelUp();
     }
 

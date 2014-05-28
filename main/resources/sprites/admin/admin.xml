@@ -27,53 +27,81 @@
             row="3"
             default_speed="150ms" />
     <animation
-            name="swipe_down"
+            name="bringup_down"
             loop="true"
-            frames="5"
+            frames="2"
             row="4"
-            default_speed="0ms" />
+            default_speed="200ms" />
     <animation
-            name="swipe_up"
+            name="shoot_down"
             loop="false"
-            frames="5"
+            frames="2"
             row="5"
-            default_speed="0ms" />
+            default_speed="150ms" />
     <animation
-            name="swipe_left"
+            name="bringup_up"
             loop="false"
-            frames="5"
+            frames="2"
             row="6"
-            default_speed="0ms" />
+            default_speed="200ms" />
 
     <animation
-            name="swipe_right"
+            name="shoot_up"
             loop="false"
-            frames="5"
+            frames="2"
             row="7"
-            default_speed="0ms" />
+            default_speed="150ms" />
+    <animation
+            name="bringup_left"
+            loop="false"
+            frames="2"
+            row="8"
+            default_speed="200ms" />
+    <animation
+            name="shoot_left"
+            loop="false"
+            frames="2"
+            row="9"
+            default_speed="150ms" />
+    <animation
+            name="bringup_right"
+            loop="false"
+            frames="2"
+            row="10"
+            default_speed="200ms" />
+    <animation
+            name="shoot_right"
+            loop="false"
+            frames="2"
+            row="11"
+            default_speed="150ms" />
+
     <animation
             name="dodge_down"
             loop="false"
             frames="4"
-            row="8"
+            row="12"
             default_speed="0ms" />
+
     <animation
             name="dodge_up"
             loop="false"
             frames="4"
-            row="9"
+            row="13"
             default_speed="0ms" />
+
     <animation
             name="dodge_left"
             loop="false"
             frames="4"
-            row="10"
+            row="14"
             default_speed="0ms" />
+
     <animation
             name="dodge_right"
             loop="false"
             frames="4"
-            row="11"
+            row="15"
             default_speed="0ms" />
 
-</animations>		
+</animations>
