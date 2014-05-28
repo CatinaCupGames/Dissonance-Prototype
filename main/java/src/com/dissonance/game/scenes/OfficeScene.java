@@ -4,12 +4,15 @@ import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.scene.SimpleScene;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
+import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 import org.lwjgl.util.vector.Vector2f;
+
+import java.awt.*;
 
 public class OfficeScene extends SimpleScene {
     @Override
@@ -21,24 +24,30 @@ public class OfficeScene extends SimpleScene {
 
         WaldomarsMeetingRoom.guard1.setMovementSpeed(4f);
         WaldomarsMeetingRoom.guard1.setWaypoint(4f * 16, 11f * 16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.guard1.face(Direction.UP);
         WaldomarsMeetingRoom.guard2.setMovementSpeed(4f);
         WaldomarsMeetingRoom.guard2.setWaypoint(9f * 16, 11f * 16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.guard2.face(Direction.UP);
 
         WaldomarsMeetingRoom.farrand.setMovementSpeed(4f);
         WaldomarsMeetingRoom.farrand.setWaypoint(102.95f, 8f*16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.farrand.face(Direction.DOWN);
 
         WaldomarsMeetingRoom.waldomar.waitForLoaded();
-        WaldomarsMeetingRoom.waldomar.setAnimation("walk_back");
+        WaldomarsMeetingRoom.waldomar.face(Direction.UP);
         WaldomarsMeetingRoom.waldomar.pauseAnimation();
         WaldomarsMeetingRoom.waldomar.setFrame(1);
 
         WaldomarsMeetingRoom.guard3.setMovementSpeed(4f);
         WaldomarsMeetingRoom.guard3.setWaypoint(14f * 16, 13f * 16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.guard3.face(Direction.UP);
         WaldomarsMeetingRoom.guard4.setMovementSpeed(4f);
         WaldomarsMeetingRoom.guard4.setWaypoint(19f * 16, 13f * 16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.guard4.face(Direction.UP);
 
         WaldomarsMeetingRoom.jeremiah.setMovementSpeed(4f);
         WaldomarsMeetingRoom.jeremiah.setWaypoint(16f*16, 12f*16, WaypointType.SIMPLE);
+
 
         WaldomarsMeetingRoom.guard5.setMovementSpeed(4f);
         WaldomarsMeetingRoom.guard5.setWaypoint(26f * 16, 9f * 16, WaypointType.SIMPLE);
@@ -54,10 +63,18 @@ public class OfficeScene extends SimpleScene {
 
         Thread.sleep(500);
 
-        WaldomarsMeetingRoom.l.setX(WaldomarsMeetingRoom.waldomar.getX());
-        WaldomarsMeetingRoom.l.setY(WaldomarsMeetingRoom.waldomar.getY());
+        ParticleSprite.ParticleSource source = ParticleSprite.createParticlesAt(WaldomarsMeetingRoom.waldomar.getX(), WaldomarsMeetingRoom.waldomar.getY(), 50f, 100f, Color.RED, getWorld());
+        source.setTime(100000);
 
-        final long START_TIME = System.currentTimeMillis();
+        //WaldomarsMeetingRoom.fireball.setVisible(true);
+
+        Dialog.displayDialog("waldomeeting4");
+
+
+        //WaldomarsMeetingRoom.l.setX(WaldomarsMeetingRoom.waldomar.getX());
+        //WaldomarsMeetingRoom.l.setY(WaldomarsMeetingRoom.waldomar.getY());
+
+        /*final long START_TIME = System.currentTimeMillis();
         RenderService.INSTANCE.runOnServiceThread(new Runnable() {
             @Override
             public void run() {
@@ -70,7 +87,9 @@ public class OfficeScene extends SimpleScene {
                     RenderService.INSTANCE.removeServiceTick(this);
                 }
             }
-        }, false, true);
+        }, false, true);*/
+
+        source.setSpeed(300f);
 
         Thread.sleep(1500);
 
@@ -78,6 +97,7 @@ public class OfficeScene extends SimpleScene {
 
         Thread.sleep(500);
 
+        ParticleSprite.createParticlesAt(WaldomarsMeetingRoom.jeremiah.getX(), WaldomarsMeetingRoom.jeremiah.getY(), 50f, 200f, Color.WHITE, getWorld());
         Camera.shake(Direction.DOWN, 4000L, 5, 0.5);
         Sound.playSound("earthquake");
 

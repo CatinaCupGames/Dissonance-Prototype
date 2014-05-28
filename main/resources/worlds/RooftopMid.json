@@ -33,7 +33,7 @@
              "ground":"true"
             },
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":125,
          "x":0,
          "y":0
@@ -198,7 +198,7 @@
              "ground":"true"
             },
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "width":125,
          "x":0,
          "y":0
@@ -213,7 +213,7 @@
              "ground":"true"
             },
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":125,
          "x":0,
          "y":0
@@ -228,7 +228,7 @@
              "ground":"true"
             },
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":125,
          "x":0,
          "y":0
@@ -254,7 +254,7 @@
          "name":"Placeholders",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":125,
          "x":0,
          "y":0
@@ -265,7 +265,7 @@
          "name":"windows2",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":125,
          "x":0,
          "y":0
@@ -276,7 +276,7 @@
          "name":"Shadows",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":125,
          "x":0,
          "y":0
@@ -287,7 +287,7 @@
          "name":"Separate Building",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":125,
          "x":0,
          "y":0
@@ -298,7 +298,7 @@
          "name":"Separate Shadow",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":125,
          "x":0,
          "y":0
@@ -309,7 +309,7 @@
          "name":"Windows",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":125,
          "x":0,
          "y":0
@@ -686,7 +686,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "width":125,
          "x":0,
          "y":0
@@ -1254,7 +1254,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "width":125,
          "x":0,
          "y":0
