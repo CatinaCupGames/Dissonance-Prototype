@@ -22,28 +22,23 @@ public class OfficeScene extends SimpleScene {
         Camera.setPos(center);
         Camera.followSprite(WaldomarsMeetingRoom.farrand);
 
+
+
         WaldomarsMeetingRoom.guard1.setMovementSpeed(4f);
         WaldomarsMeetingRoom.guard1.setWaypoint(4f * 16, 11f * 16, WaypointType.SIMPLE);
-        //WaldomarsMeetingRoom.guard1.face(Direction.UP);
         WaldomarsMeetingRoom.guard2.setMovementSpeed(4f);
         WaldomarsMeetingRoom.guard2.setWaypoint(9f * 16, 11f * 16, WaypointType.SIMPLE);
-        //WaldomarsMeetingRoom.guard2.face(Direction.UP);
 
         WaldomarsMeetingRoom.farrand.setMovementSpeed(4f);
         WaldomarsMeetingRoom.farrand.setWaypoint(102.95f, 8f*16, WaypointType.SIMPLE);
-        //WaldomarsMeetingRoom.farrand.face(Direction.DOWN);
 
         WaldomarsMeetingRoom.waldomar.waitForLoaded();
-        //WaldomarsMeetingRoom.waldomar.face(Direction.UP);
-        WaldomarsMeetingRoom.waldomar.pauseAnimation();
-        WaldomarsMeetingRoom.waldomar.setFrame(1);
+        WaldomarsMeetingRoom.waldomar.face(Direction.UP);
 
         WaldomarsMeetingRoom.guard3.setMovementSpeed(4f);
         WaldomarsMeetingRoom.guard3.setWaypoint(14f * 16, 13f * 16, WaypointType.SIMPLE);
-        //WaldomarsMeetingRoom.guard3.face(Direction.UP);
         WaldomarsMeetingRoom.guard4.setMovementSpeed(4f);
         WaldomarsMeetingRoom.guard4.setWaypoint(19f * 16, 13f * 16, WaypointType.SIMPLE);
-        //WaldomarsMeetingRoom.guard4.face(Direction.UP);
 
         WaldomarsMeetingRoom.jeremiah.setMovementSpeed(4f);
         WaldomarsMeetingRoom.jeremiah.setWaypoint(16f*16, 12f*16, WaypointType.SIMPLE);
@@ -58,6 +53,15 @@ public class OfficeScene extends SimpleScene {
         WaldomarsMeetingRoom.farrand.setFrame(1);
 
         WaldomarsMeetingRoom.guard1.waitForWaypointReached();
+
+        WaldomarsMeetingRoom.guard1.face(Direction.UP);
+        WaldomarsMeetingRoom.guard2.face(Direction.UP);
+        WaldomarsMeetingRoom.farrand.face(Direction.DOWN);
+        WaldomarsMeetingRoom.guard3.face(Direction.DOWN);
+        WaldomarsMeetingRoom.guard4.face(Direction.DOWN);
+        WaldomarsMeetingRoom.jeremiah.face(Direction.LEFT);
+        WaldomarsMeetingRoom.guard5.face(Direction.LEFT);
+
 
         Dialog.displayDialog("Waldos meeting");
 
