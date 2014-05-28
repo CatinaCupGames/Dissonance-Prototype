@@ -1,12 +1,10 @@
 package com.dissonance.game.sprites;
 
-import com.dissonance.framework.game.player.input.InputKeys;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.spells.impl.Fire;
 import com.dissonance.game.spells.impl.HeavyCure;
-import com.dissonance.game.spells.statuseffects.Burn;
 
 import java.awt.*;
 
@@ -166,7 +164,7 @@ public final class Farrand extends PlayableSprite {
 
         setAttack(6);
         setDefense(12);
-        setSpeed(6);
+        setSpeed(3);
         setVigor(10);
         setStamina(6);
         setWillpower(14);

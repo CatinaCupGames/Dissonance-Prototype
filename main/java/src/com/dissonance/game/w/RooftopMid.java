@@ -7,7 +7,7 @@ import com.dissonance.game.sprites.office.Window;
 
 public class RooftopMid extends DemoLevelWorldLoader {
     public static RoofLight[] lights = new RoofLight[16];
-    private static final float BRIGHTNESS = 1.3f;
+    private static final float BRIGHTNESS = 1.1f;
     private static final float RADIUS = 0.6f;
     @Override
     public void onLoad(World w) {
