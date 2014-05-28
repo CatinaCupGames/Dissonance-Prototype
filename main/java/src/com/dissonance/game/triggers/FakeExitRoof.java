@@ -15,11 +15,12 @@ public class FakeExitRoof extends AbstractTrigger {
     @Override
     protected void onTrigger(PhysicsSprite s) throws Throwable {
         PlayableSprite sprite = (PlayableSprite)s;
-
+        sprite.setUsePhysics(false);
+        sprite.setIsInvincible(true);
         Player player1 = Players.getPlayer1();
         Player player2 = Players.getPlayer(2);
         sprite.freeze();
-        if (player2 == null) {
+        if (player2 == null || player2.getSprite() == null) {
             PlayableSprite toTalk;
             String did;
             if (sprite == RoofTopBeginning.farrand) {
@@ -38,8 +39,12 @@ public class FakeExitRoof extends AbstractTrigger {
             toTalk.disappear();
             sprite.setWaypoint(sprite.getX() + (16f * 3f), sprite.getY(), WaypointType.SIMPLE);
             sprite.waitForWaypointReached();
+            sprite.setInvincible(false);
+            sprite.setUsePhysics(true);
             sprite.unfreeze();
         } else {
+            player1.getSprite().setIsInvincible(true);
+            player2.getSprite().setIsInvincible(true);
             if (sprite == player1.getSprite()) { //Farrand
                 Direction direction = sprite.directionTowards(player2.getSprite());
                 sprite.face(direction);
@@ -52,6 +57,8 @@ public class FakeExitRoof extends AbstractTrigger {
                 Dialog.displayDialog("FakeExitJeremiah");
             }
 
+            player1.getSprite().setIsInvincible(false);
+            player2.getSprite().setIsInvincible(false);
             player1.getSprite().unfreeze();
             player2.getSprite().unfreeze();
         }

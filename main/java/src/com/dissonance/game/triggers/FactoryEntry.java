@@ -24,16 +24,19 @@ public class FactoryEntry extends AbstractTrigger {
             Player player2 = Players.getPlayer(2);
             if (player1.getSprite().equals(player)) {
                 if (player2 != null && player2.getSprite() != null) {
+                    player2.getSprite().setIsInvincible(true);
                     player2.getSprite().freeze();
                     player2.getSprite().setWaypoint(player.getX(), player.getY() + (player.getHeight()) + 16, WaypointType.SMART);
                     player2.getSprite().waitForEndOfWaypointQueue();
                 }
             } else {
+                player1.getSprite().setIsInvincible(true);
                 player1.getSprite().freeze();
                 player1.getSprite().setWaypoint(player.getX(), player.getY() + (player.getHeight()) + 16, WaypointType.SMART);
                 player1.getSprite().waitForEndOfWaypointQueue();
             }
         } else {
+            player.setIsInvincible(true);
             if (player.equals(OutsideFighting.farrand)) {
                 OutsideFighting.jeremiah.setX(player.getX() + player.getWidth() + 8);
                 OutsideFighting.jeremiah.setY(player.getY());
@@ -53,7 +56,7 @@ public class FactoryEntry extends AbstractTrigger {
 
         RenderService.INSTANCE.fadeToBlack(800);
         RenderService.INSTANCE.waitForFade();
-
+        player.setIsInvincible(false);
         GameQuest.INSTANCE.changeToFactory();
     }
 

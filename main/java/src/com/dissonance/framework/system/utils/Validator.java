@@ -55,7 +55,7 @@ public class Validator {
      */
     public static void validateInRange(int parameter, int low, int high, String parameter_name) {
         if (parameter < low || parameter > high)
-            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" must be between " + low + "-" + high);
+            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" must be between " + low + "-" + high + " (value given: " + parameter + ")");
     }
 
     /**
@@ -69,7 +69,7 @@ public class Validator {
      */
     public static void validateNotOver(int parameter, int high, String parameter_name) {
         if (parameter > high)
-            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" can't be above " + high);
+            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" can't be above " + high + " (value given: " + parameter + ")");
     }
 
     /**
@@ -83,7 +83,7 @@ public class Validator {
      */
     public static void validateNotBelow(int parameter, int low, String parameter_name) {
         if (parameter < low)
-            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" can't be below " + low);
+            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" can't be below " + low + " (value given: " + parameter + ")");
     }
 
     /**
@@ -98,7 +98,7 @@ public class Validator {
      */
     public static void validateInRange(float parameter, float low, float high, String parameter_name) {
         if (parameter < low || parameter > high)
-            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" must be between " + low + "-" + high);
+            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" must be between " + low + "-" + high + " (value given: " + parameter + ")");
     }
 
     /**
@@ -112,7 +112,7 @@ public class Validator {
      */
     public static void validateNotOver(float parameter, float high, String parameter_name) {
         if (parameter > high)
-            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" can't be above " + high);
+            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" can't be above " + high + " (value given: " + parameter + ")");
     }
 
     /**
@@ -126,7 +126,7 @@ public class Validator {
      */
     public static void validateNotBelow(float parameter, float low, String parameter_name) {
         if (parameter < low)
-            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" can't be below " + low);
+            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" can't be below " + low + " (value given: " + parameter + ")");
     }
 
     /**
@@ -141,7 +141,7 @@ public class Validator {
      */
     public static void validateInRange(double parameter, double low, double high, String parameter_name) {
         if (parameter < low || parameter > high)
-            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" must be between " + low + "-" + high);
+            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" must be between " + low + "-" + high + " (value given: " + parameter + ")");
     }
 
     /**
@@ -155,7 +155,7 @@ public class Validator {
      */
     public static void validateNotOver(double parameter, double high, String parameter_name) {
         if (parameter > high)
-            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" can't be above " + high);
+            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" can't be above " + high + " (value given: " + parameter + ")");
     }
 
     /**
@@ -169,7 +169,7 @@ public class Validator {
      */
     public static void validateNotBelow(double parameter, double low, String parameter_name) {
         if (parameter < low)
-            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" can't be below " + low);
+            throw new InvalidParameterException("The parameter \"" + parameter_name + "\" can't be below " + low + " (value given: " + parameter + ")");
     }
 
 

@@ -315,7 +315,6 @@ public abstract class PlayableSprite extends CombatSprite {
             return;
         }
         ignore_movement = true;
-        use_dodge = true;
     }
 
     @Override

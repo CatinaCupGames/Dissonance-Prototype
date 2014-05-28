@@ -281,10 +281,12 @@ public class GameQuest  extends PauseQuest {
         FactoryFloorCat.farrand.setX(5f * 16f);
         FactoryFloorCat.farrand.setY(208f * 16f);
         FactoryFloorCat.farrand.setLayer(2);
+        FactoryFloorCat.farrand.setIsInvincible(false);
 
         FactoryFloorCat.jeremiah.setX(7f * 16f);
         FactoryFloorCat.jeremiah.setY(208f * 16f);
         FactoryFloorCat.jeremiah.setLayer(2);
+        FactoryFloorCat.jeremiah.setIsInvincible(false);
 
         Player player1 = Players.getPlayer1();
         player1.getSprite().setVisible(true);

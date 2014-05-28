@@ -44,11 +44,11 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         nongroundNodeMap.setCachePath("cache" + File.separator + "factory_NONGROUND.nodes");
         nongroundNodeMap.create(nonground.toArray(new Layer[nonground.size()]));
 
-        miniboss = new Admin();
+        /*miniboss = new Admin();
         miniboss.setLayer(6);
         miniboss.setX(33f * 16f);
         miniboss.setY(27f * 16f);
-        w.loadAndAdd(miniboss);
+        w.loadAndAdd(miniboss);*/
 
         BlueGuard guard = new BlueGuard();
         guard.setX(28f * 16f);

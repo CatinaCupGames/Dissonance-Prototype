@@ -4,6 +4,7 @@ import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.render.texture.sprite.SpriteTexture;
 import com.dissonance.framework.system.utils.physics.Collidable;
 import com.dissonance.framework.system.utils.physics.HitBox;
+import com.sun.java.swing.plaf.windows.resources.windows;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,16 +22,42 @@ public abstract class ImagePhysicsSprite extends ImageSprite implements Collidab
 
     @Override
     public void onLoad() {
+        float width = -1, height = -1;
+        if (startW != -1)
+            width = startW;
+        if (startH != -1)
+            height = startH;
+
         super.onLoad();
 
-        float width = getWidth(), height = getHeight();
-        if (getTexture() != null) {
-            width = getTexture().getImageWidth();
-            height = getTexture().getImageHeight();
+        if (width == -1) {
+            width = getWidth();
+            if (getTexture() != null)
+                width = getTexture().getImageWidth();
         }
+        if (height == -1) {
+            height = getHeight();
+            if (getTexture() != null)
+                height = getTexture().getImageHeight();
+        }
+
         hb = PhysicsSprite.readHitboxConfig(hitboxConfigPath(), width, height);
 
         HitBox.registerSprite(this);
+    }
+
+    @Override
+    public void setWidth(float width) {
+        super.setWidth(width);
+        if (hitboxConfigPath().equals(""))
+            hb[0].setMaxX(width);
+    }
+
+    @Override
+    public void setHeight(float height) {
+        super.setHeight(height);
+        if (hitboxConfigPath().equals(""))
+            hb[0].setMaxY(height);
     }
 
     @Override

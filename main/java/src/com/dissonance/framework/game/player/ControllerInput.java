@@ -21,6 +21,7 @@ public class ControllerInput implements Input {
     private boolean use_attack;
     boolean use_switch;
     private boolean use_select;
+    private boolean use_dodge;
 
     public ControllerInput(Joypad controller) {
         this.controller = controller;
@@ -161,11 +162,12 @@ public class ControllerInput implements Input {
                 }
             } else if (!controller.isButtonPressed(InputKeys.SELECT)) use_select = false;
 
-            if (!playableSprite.use_dodge && !playableSprite.isDodging() && playableSprite.canDodge()) {
+            if (!use_dodge && !playableSprite.isDodging() && playableSprite.canDodge()) {
                 if (controller.isButtonPressed(InputKeys.DODGE)) {
                     playableSprite.dodge(playableSprite.getFacingDirection());
+                    use_dodge = true;
                 }
-            } else if (!controller.isButtonPressed(InputKeys.DODGE)) playableSprite.use_dodge = false;
+            } else if (!controller.isButtonPressed(InputKeys.DODGE)) use_dodge = false;
 
             if (!usespell1 && !playableSprite.isFrozen()) {
                 if (controller.isButtonPressed(InputKeys.MAGIC1)) {

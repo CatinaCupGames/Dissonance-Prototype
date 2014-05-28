@@ -2,13 +2,20 @@ package com.dissonance.game.triggers;
 
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
 
+import java.util.ArrayList;
+
 public class LayerSwitch extends AbstractTrigger {
+    static ArrayList<Sprite> climbers = new ArrayList<Sprite>();
+
     @Override
     protected void onTrigger(PhysicsSprite sprite) throws Throwable {
         if (sprite.getLayer() == 2) {
+            climbers.add(sprite);
+
             sprite.setUsePhysics(false);
             sprite.rawSetX(getParent().getX() + (getParent().getWidth() / 2f));
             sprite.rawSetY(getParent().getY() + (getParent().getHeight() / 2f));
@@ -20,7 +27,11 @@ public class LayerSwitch extends AbstractTrigger {
             if (sprite instanceof PlayableSprite)
                 ((PlayableSprite)sprite).unfreeze(LayerSwitch.class);
             sprite.setUsePhysics(true);
+
+            climbers.remove(sprite);
         } else if (sprite.getLayer() == 6) {
+            climbers.add(sprite);
+
             sprite.setUsePhysics(false);
             sprite.rawSetX(getParent().getX() + (getParent().getWidth() / 2f));
             sprite.rawSetY(getParent().getY() + (getParent().getHeight() / 2f));
@@ -32,6 +43,8 @@ public class LayerSwitch extends AbstractTrigger {
                 ((PlayableSprite)sprite).unfreeze(LayerSwitch.class);
             sprite.setLayer(2);
             sprite.setUsePhysics(true);
+
+            climbers.remove(sprite);
         }
     }
 

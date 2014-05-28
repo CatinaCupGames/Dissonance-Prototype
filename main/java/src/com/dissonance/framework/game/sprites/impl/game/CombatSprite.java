@@ -46,6 +46,7 @@ public abstract class CombatSprite extends PhysicsSprite {
     private double MAX_MP = 100;
     private double MP = 100;
     private boolean attacking;
+    private boolean isInvincible;
 
     public int getLevel() {
         return level;
@@ -689,6 +690,8 @@ public abstract class CombatSprite extends PhysicsSprite {
     }
 
     public void strike(CombatSprite attacker, WeaponItem with) {
+        if (isInvincible)
+            return;
         if (isAlly(attacker))
             return;
         double defense = getDefense() + (getCurrentWeapon() != null ? getCurrentWeapon().getWeaponInfo().getDefense() : 0);
@@ -707,6 +710,8 @@ public abstract class CombatSprite extends PhysicsSprite {
     }
 
     public void applyDamage(double damage) {
+        if (isInvincible)
+            return;
         HP -= damage;
         toastText("-" + damage).setTint(255, 24, 38, 1);
         if (HP <= 0) {
@@ -775,6 +780,18 @@ public abstract class CombatSprite extends PhysicsSprite {
 
     public boolean canDodge() {
         return allow_dodge;
+    }
+
+    public void setIsInvincible(boolean isInvincible) {
+        this.isInvincible = isInvincible;
+    }
+
+    public boolean isInvincible() {
+        return isInvincible;
+    }
+
+    public void setInvincible(boolean isInvincible) {
+        this.isInvincible = isInvincible;
     }
 
 

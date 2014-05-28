@@ -17,6 +17,7 @@ public class KeyboardInput implements Input {
     private boolean use_attack;
     private boolean use_switch;
     private boolean use_select;
+    private boolean use_dodge;
 
     KeyboardInput() { }
 
@@ -126,12 +127,13 @@ public class KeyboardInput implements Input {
                         if (p_index >= playableSprite.party.size())
                             p_index = 0;
                         next.freeze();
+                        next.setUsePhysics(false);
                         next.rawSetX(playableSprite.getX());
                         next.rawSetY(playableSprite.getY());
                         next.appear(new Runnable() {
                             @Override
                             public void run() {
-                                next.unfreeze();
+                                next.setUsePhysics(true); next.unfreeze();
                             }
                         });
                         playableSprite.disappear();
@@ -174,11 +176,12 @@ public class KeyboardInput implements Input {
                 }
             } else if (!InputKeys.checkKeyboard(InputKeys.SELECT)) use_select = false;
 
-            if (!playableSprite.use_dodge && !playableSprite.isDodging() && playableSprite.canDodge()) {
+            if (!use_dodge && !playableSprite.isDodging() && playableSprite.canDodge()) {
                 if (InputKeys.checkKeyboard(InputKeys.DODGE)) {
                     playableSprite.dodge(playableSprite.getFacingDirection());
+                    use_dodge = true;
                 }
-            } else if (!InputKeys.checkKeyboard(InputKeys.DODGE)) playableSprite.use_dodge = false;
+            } else if (!InputKeys.checkKeyboard(InputKeys.DODGE)) use_dodge = false;
 
             if (!usespell1) {
                 if (InputKeys.checkKeyboard(InputKeys.MAGIC1)) {

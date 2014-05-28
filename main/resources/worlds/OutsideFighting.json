@@ -398,6 +398,19 @@
                  "width":1488,
                  "x":3536,
                  "y":2480
+                }, 
+                {
+                 "height":128,
+                 "name":"",
+                 "properties":
+                    {
+                     "triggerclass":"com.dissonance.game.triggers.FactoryEntry"
+                    },
+                 "type":"trigger",
+                 "visible":true,
+                 "width":80,
+                 "x":5072,
+                 "y":1360
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1041,7 +1054,7 @@
                  "visible":true,
                  "width":240,
                  "x":5360,
-                 "y":1904
+                 "y":2096
                 }, 
                 {
                  "height":96,
@@ -2692,7 +2705,7 @@
                  "visible":true,
                  "width":256,
                  "x":5328,
-                 "y":1168
+                 "y":1296
                 }, 
                 {
                  "height":2128,

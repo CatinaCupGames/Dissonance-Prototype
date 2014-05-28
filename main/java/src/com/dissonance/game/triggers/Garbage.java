@@ -19,7 +19,7 @@ public class Garbage extends AbstractTrigger {
 
         Player player1 = Players.getPlayer1();
         Player player2 = Players.getPlayer(2);
-        if (player2 == null) {
+        if (player2 == null || player2.getSprite() == null) {
             animateSprite(sprite);
         } else {
             sprite.freeze();
@@ -45,6 +45,7 @@ public class Garbage extends AbstractTrigger {
     }
 
     private void animateSprite(PlayableSprite sprite) throws InterruptedException {
+        sprite.setIsInvincible(true);
         sprite.setUsePhysics(false);
         sprite.freeze();
         sprite.ignoreCollisionWith(RoofTopBeginning.exit);
@@ -58,6 +59,7 @@ public class Garbage extends AbstractTrigger {
         sprite.setVisible(false);
         sprite.clearWaypoints();
         Camera.stopFollowing(sprite);
+        sprite.setIsInvincible(false);
     }
 
     private void finish() throws InterruptedException {
