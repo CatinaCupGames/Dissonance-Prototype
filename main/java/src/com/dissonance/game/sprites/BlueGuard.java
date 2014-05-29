@@ -75,7 +75,7 @@ public class BlueGuard extends Enemy {
         setCurrentWeapon(Weapon.getWeapon("guardsword").createItem(this));
         setAttack(10);
         setDefense(8);
-        setSpeed(2);
+        setSpeed(4);
         setVigor(8);
         setStamina(4);
         setMarksmanship(8);
