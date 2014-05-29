@@ -81,6 +81,13 @@ public abstract class PlayableSprite extends CombatSprite {
         return input;
     }
 
+
+    @Override
+    public void onDeath() {
+        if (GameService.getCurrentQuest() != null)
+            GameService.getCurrentQuest().playerDied();
+    }
+
     public void appear() {
         appear(null);
     }

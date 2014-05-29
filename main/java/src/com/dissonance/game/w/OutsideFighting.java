@@ -92,6 +92,17 @@ public class OutsideFighting extends DemoLevelWorldLoader {
     }
 
     @Override
+    public void onRespawn(World w) {
+        super.onRespawn(w);
+
+        farrand.setX(27f * 16f);
+        farrand.setY(240f*16f);
+
+        jeremiah.setX(24f*16f);
+        jeremiah.setY(240f*16f);
+    }
+
+    @Override
     public void onDisplay(World w){
         super.onDisplay(w);
 

@@ -1,14 +1,18 @@
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.ai.astar.NodeMap;
+import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.sprites.Admin;
 import com.dissonance.game.sprites.BlueGuard;
+import com.dissonance.game.sprites.Farrand;
+import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.environment.BasicLight;
 import com.dissonance.game.sprites.factory.Key;
+import sun.text.resources.FormatData_ar_AE;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -145,6 +149,62 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
             createLight(30*16, 32*16,  w);
             createLight(43*16, 32*16,  w);
             createLight(54*16, 24*16,  w);
+        }
+    }
+
+    @Override
+    public void onRespawn(World w) {
+        super.onRespawn(w);
+
+        farrand.setX(5f * 16f);
+        farrand.setY(208f * 16f);
+        farrand.setLayer(2);
+        farrand.setVisible(false);
+
+        jeremiah.setX(7f * 16f);
+        jeremiah.setY(208f * 16f);
+        jeremiah.setLayer(2);
+        jeremiah.setVisible(false);
+
+        miniboss = new Admin();
+        miniboss.setLayer(6);
+        miniboss.setX(33f * 16f);
+        miniboss.setY(27f * 16f);
+        w.loadAndAdd(miniboss);
+
+        BlueGuard guard = new BlueGuard();
+        guard.setX(28f * 16f);
+        guard.setY(38f * 16f);
+        guard.setLayer(6);
+        w.loadAndAdd(guard);
+
+        melees[0] = new BlueGuard();
+        w.loadAndAdd(melees[0]);
+        melees[0].setX(54*16);
+        melees[0].setY(184*16);
+
+        melees[1] = new BlueGuard();
+        w.loadAndAdd(melees[1]);
+        melees[1].setX(31*16);
+        melees[1].setY(171*16);
+
+        melees[2] = new BlueGuard();
+        w.loadAndAdd(melees[2]);
+        melees[2].setX(14*16);
+        melees[2].setY(153*16);
+
+        melees[3] = new BlueGuard();
+        w.loadAndAdd(melees[3]);
+        melees[3].setX(40*16);
+        melees[3].setY(116*16);
+
+        melees[4] = new BlueGuard();
+        w.loadAndAdd(melees[4]);
+        melees[4].setX(13*16);
+        melees[4].setY(50*16);
+
+        for (BlueGuard melee : melees) {
+            melee.setLayer(2);
         }
     }
 

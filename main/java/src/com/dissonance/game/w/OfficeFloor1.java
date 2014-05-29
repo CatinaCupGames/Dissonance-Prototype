@@ -106,6 +106,27 @@ public class OfficeFloor1 extends DemoLevelWorldLoader {
         w.loadAndAdd(var11);
         var11.setX(15.3498f);
         var11.setY(90.44995f);
+    }
 
+    @Override
+    public void onRespawn(World w) {
+        super.onRespawn(w);
+
+        farrand.setX(26f * 16f);
+        farrand.setY(85f * 16f);
+
+        jeremiah.setX(28f * 16f);
+        jeremiah.setY(85f * 16f);
+
+        farrand.setVisible(false);
+        jeremiah.setVisible(false);
+    }
+
+    @Override
+    public void onDisplay(World w) {
+        super.onDisplay(w);
+
+        farrand.setVisible(false);
+        jeremiah.setVisible(false);
     }
 }

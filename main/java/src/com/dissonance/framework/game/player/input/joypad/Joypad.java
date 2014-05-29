@@ -12,6 +12,7 @@ import java.security.InvalidParameterException;
 import java.util.HashMap;
 
 public class Joypad {
+    private static final File DEFAULT_CONFIG = new File("config/defaultController.dat");
     private Controller controller;
     private boolean isLoaded;
     //jump, 1
@@ -27,8 +28,11 @@ public class Joypad {
 
     private boolean loadSetup() {
         File file = new File("config/" + controller.getName() + ".dat");
-        if (!file.exists())
-            return false;
+        if (!file.exists()) {
+            System.err.println("No controller config found for controller \"" + controller.getName() + "\"");
+            System.err.println("Attempting to use default configuration..");
+            file = DEFAULT_CONFIG;
+        }
 
         try {
             String[] lines = FileUtils.readAllLines(file.getAbsolutePath());
@@ -39,7 +43,7 @@ public class Joypad {
                     if (cid.startsWith("+") || cid.startsWith("-")) {
                         String temp = cid;
                         cid = cid.substring(1);
-                        analog.put(cid, temp);
+                        analog.put(gid, temp);
                     }
                     ids.put(gid, cid);
                 }
@@ -81,8 +85,8 @@ public class Joypad {
         Component component = getComponentFor(value);
         if (component == null)
             return false;
-        if (analog.containsKey(ids.get(value))) {
-            String temp = analog.get(ids.get(value));  //dubs
+        if (analog.containsKey(value)) {
+            String temp = analog.get(value);
 
             if (temp.startsWith("+")) {
                 return component.getPollData() > 0.5f;

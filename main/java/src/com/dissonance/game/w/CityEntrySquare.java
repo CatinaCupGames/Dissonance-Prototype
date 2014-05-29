@@ -77,4 +77,9 @@ public class CityEntrySquare extends DemoLevelWorldLoader {
         jeremiah.setY(760.96906f);
         jeremiah.setVisible(true);
     }
+
+    @Override
+    public void onRespawn(World oldworld) {
+
+    }
 }

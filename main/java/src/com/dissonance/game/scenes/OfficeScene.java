@@ -108,11 +108,11 @@ public class OfficeScene extends SimpleScene {
 
         //====WINDOW====
         WaldomarsMeetingRoom.var19.setAnimation(1);
-        WaldomarsMeetingRoom.var19.setAnimationFinishedListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFinished() {
+        WaldomarsMeetingRoom.var19.addAnimationFinishedListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFinished() {
             @Override
             public void onAnimationFinished(AnimatedSprite sprite) {
                 WaldomarsMeetingRoom.var19.setAnimation(2);
-                WaldomarsMeetingRoom.var19.setAnimationFinishedListener(null);
+                WaldomarsMeetingRoom.var19.removeAnimationFinishedListener(this);
             }
         });
         //====WINDOW====

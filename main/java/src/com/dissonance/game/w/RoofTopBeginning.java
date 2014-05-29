@@ -112,4 +112,29 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
         jeremiah.freeze();
     }
 
+    @Override
+    public void onRespawn(World w) {
+        super.onRespawn(w);
+
+        farrand.setX(4f * 16f);
+        farrand.setY(14f * 16f);
+
+        jeremiah.setX(6f * 16f);
+        jeremiah.setY(14f * 16f);
+
+        for(int i = 0; i < meleeGuard.length; i++){
+            meleeGuard[i] = new BlueGuard();
+            w.loadAndAdd(meleeGuard[i]);
+
+        }
+
+        meleeGuard[0].setX(72*16);
+        meleeGuard[0].setY(21*16);
+
+        meleeGuard[1].setX(71*16);
+        meleeGuard[1].setY(28*16);
+
+        meleeGuard[2].setX(64 * 16);
+        meleeGuard[2].setY(20 * 16);
+    }
 }

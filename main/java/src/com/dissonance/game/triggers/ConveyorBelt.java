@@ -8,7 +8,7 @@ import com.dissonance.framework.game.world.tiled.impl.AbstractTileTrigger;
 import com.dissonance.framework.render.RenderService;
 
 public class ConveyorBelt extends AbstractTileTrigger {
-    private static final float SPEED = 5f;
+    private static final float SPEED = 8f;
 
     @Override
     public void onCollide(AnimatedSprite sprite, Tile tile) {

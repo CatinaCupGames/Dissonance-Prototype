@@ -716,11 +716,14 @@ public abstract class CombatSprite extends PhysicsSprite {
         if (isInvincible)
             return;
         HP -= damage;
-        toastText("-" + damage).setTint(255, 24, 38, 1);
+        toastText("-" + (int)damage).setToastFontSize(32f).setTint(255, 24, 38, 1);
         if (HP <= 0) {
-            //TODO Play death animation for this sprite
-            getWorld().removeSprite(this);
+            onDeath();
         }
+    }
+
+    protected void onDeath() {
+        getWorld().removeSprite(this);
     }
 
     public abstract boolean isAlly(CombatSprite sprite);

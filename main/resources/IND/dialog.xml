@@ -1,6 +1,6 @@
 <game_dialog>
 
-    <dialog dialog_id="jump_into_office">
+    <dialog dialog_id="jump_into_office_coop">
         <header>Farrand</header>
         <message>Looks like another drop. Ready?</message>
         <header>Jeremiah</header>

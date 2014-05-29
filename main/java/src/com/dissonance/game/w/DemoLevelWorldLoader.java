@@ -2,6 +2,7 @@ package com.dissonance.game.w;
 
 import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
+import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.framework.system.GameSettings;
@@ -80,5 +81,21 @@ public abstract class DemoLevelWorldLoader implements WorldLoader {
         } else {
             w.createLight(x, y, brightness, radius);
         }
+    }
+
+    public void onRespawn(World world) {
+        CombatSprite[] sprites = world.getAllCombatSprites().toArray(new CombatSprite[world.getAllCombatSprites().size()]);
+
+        for (CombatSprite sprite : sprites) {
+            if (sprite instanceof Jeremiah || sprite instanceof Farrand)
+                continue;
+            world.removeSprite(sprite);
+        }
+
+        farrand.refillHP();
+        farrand.refillMP();
+
+        jeremiah.refillHP();
+        jeremiah.refillMP();
     }
 }

@@ -3015,6 +3015,14 @@
             },
          "spacing":0,
          "tileheight":16,
+         "tileproperties":
+            {
+             "0":
+                {
+                 "frames":"64,65,66",
+                 "triggerclass":"com.dissonance.game.triggers.ConveyorBelt"
+                }
+            },
          "tilewidth":16
         }, 
         {

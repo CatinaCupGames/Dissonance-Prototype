@@ -105,12 +105,12 @@ public class BaseHUD extends AbstractUI {
                 oMP = owner.getSprite().getMP();
             }
 
-            if (oHP != owner.getSprite().getHP()) {
+            if (oHP != owner.getSprite().getHP() || owner.getSprite().getHP() != getHealth()) {
                 setHealth(owner.getSprite().getHP(), owner.getSprite().getMaxHP());
                 oHP = owner.getSprite().getHP();
             }
 
-            if (oMP != owner.getSprite().getMP()) {
+            if (oMP != owner.getSprite().getMP() || owner.getSprite().getMP() != getMP()) {
                 setMaxMP(owner.getSprite().getMaxMP());
                 setMP(owner.getSprite().getMP());
                 oMP = owner.getSprite().getMP();

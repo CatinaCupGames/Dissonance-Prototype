@@ -4,19 +4,24 @@ import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.ai.behaviors.Flee;
 import com.dissonance.framework.game.combat.Weapon;
+import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
+import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.Timer;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.behaviors.Patrol;
 import com.dissonance.game.behaviors.Search;
+import com.dissonance.game.behaviors.WaypointLikePathFollow;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
+import com.dissonance.game.sprites.factory.Key;
 import com.dissonance.game.w.FactoryFloorCat;
 
 import java.awt.*;
@@ -34,22 +39,24 @@ public class Admin extends Enemy {
     public void onLoad() {
         super.onLoad();
 
-        setDefense(4);
+        setAttack(10);
+        setDefense(12);
         setSpeed(10);
-        setVigor(6);
-        setStamina(8);
+        setVigor(10);
+        setStamina(10);
         setMarksmanship(10);
-        levelUp();
+        setMaxMP(270);
+        setHP(270);
 
-        setCurrentWeapon(Weapon.getWeapon("Revolver").createItem(this));
+        setCurrentWeapon(Weapon.getWeapon("admingun").createItem(this));
     }
 
     @Override
     public void onMovement(Direction direction) {
-        if (isAttacking())
+        if (isAttacking() || urunning || drunning)
             return;
         if (isAnimationPaused()) {
-            super.setFrame(2);
+            super.setFrame(1);
             playAnimation();
         }
 
@@ -75,7 +82,7 @@ public class Admin extends Enemy {
 
     @Override
     public void onNoMovement() {
-        if (isMoving() || isAttacking()) {
+        if (isMoving() || isAttacking() || drunning || urunning) {
             return;
         }
         super.setFrame(1);
@@ -108,6 +115,19 @@ public class Admin extends Enemy {
         return sprite instanceof BlueGuard || sprite instanceof RedGuard;
     }
 
+    @Override
+    public void onDeath() {
+        Key key = new Key();
+        key.setLayer(getLayer());
+        key.setX(getX());
+        key.setY(getY());
+        getWorld().loadAndAdd(key);
+        key.setVisible(false);
+        Timer.delayedInvokeMethod(400, "blink", key);
+
+        super.onDeath();
+    }
+
     public boolean isHostile() {
         return isHostile;
     }
@@ -117,24 +137,42 @@ public class Admin extends Enemy {
     }
 
     private int movementSpeed() {
-        return 5 + getSpeed();
+        return 8 + getSpeed();
     }
 
 
-    private boolean run;
+    @Override
+    public void strike(CombatSprite attacker, WeaponItem with) {
+        super.strike(attacker, with);
+
+        if (target == attacker && getHP() < getMaxHP() / 3.0) {
+            run = true;
+        }
+    }
+
+    @Override
+    protected void onAnimationFinished() {
+        if (getCurrentAnimation().getName().startsWith("swipe")) {
+            if (run && !isDodging() && target != null) {
+                dodge(directionTowards(target).opposite());
+            }
+        }
+        super.onAnimationFinished();
+    }
+
     private boolean idle;
+    private boolean run;
     private long lastAttack;
     private boolean looking = false;
-    private boolean dodgeAway = false;
-    private boolean saw = false;
     private long foundTime = 0L;
+    private boolean dodgeAway;
     private PlayableSprite target;
     private static final long ATTACK_RATE_MS = 700;
-    private static final long FOUND_YOU_MS = 200;
+    private static final long FOUND_YOU_MS = 500;
     private static final long SPOT_TIME = 2000;
     private static final Random random = new Random();
     private void runAI() {
-        if (isDodging())
+        if (isDodging() || isAttacking())
             return;
         if (getCurrentWeapon() != null) {
             target = getClosestPlayer();
@@ -142,7 +180,6 @@ public class Admin extends Enemy {
                 if (getBehavior() != null && getBehavior() instanceof Search) {
                     face(((Search)getBehavior()).getOrginalDirection());
                 }
-                saw = false;
                 if (!idle) {
                     setMovementSpeed(movementSpeed() / 4f);
                     idle = true;
@@ -150,12 +187,21 @@ public class Admin extends Enemy {
                     setBehavior(patrol);
                 }
             } else {
+                Direction towards = directionTowards(target);
                 setMovementSpeed(movementSpeed() / 1.5f);
                 idle = false;
                 if (isAlignedWith(target)) {
+                    if (towards != getFacingDirection())
+                        face(towards);
                     if (looking) {
                         foundTime = System.currentTimeMillis();
                         looking = false;
+                    }
+
+                    if (distanceFrom(target) < 32 && run) {
+                        dodgeAway();
+                        dodgeAway = true;
+                        return;
                     }
 
                     if (!bup) {
@@ -174,6 +220,11 @@ public class Admin extends Enemy {
                         looking = true;
                         bringDownGun();
                     } else {
+                        if (dodgeAway && !isDodging()) {
+                            dodgeAway();
+                            dodgeAway = false;
+                            return;
+                        }
                         Behavior behavior = getBehavior();
                         if (behavior instanceof WaypointLikeSeek) {
                             WaypointLikeSeek seek = (WaypointLikeSeek)getBehavior();
@@ -188,7 +239,24 @@ public class Admin extends Enemy {
         }
     }
 
+    private void dodgeAway() {
+        Direction direction = directionTowards(target).rotate90();
+        int rnd = random.nextInt(3);
+        switch (rnd) {
+            case 0:
+                dodge(direction);
+                break;
+            case 1:
+                dodge(direction.rotate90());
+                break;
+            case 2:
+                dodge(direction.rotateNegitive90());
+        }
+    }
+
     private Position getSeekTarget(PlayableSprite target) {
+        if (distanceFrom(target) >= 170f)
+            return target.getPosition();
         Direction direction1 = directionTowards(target);
         switch (direction1) {
             case UP:
@@ -198,7 +266,7 @@ public class Admin extends Enemy {
             case RIGHT:
                 return new Position(getX(), target.getY());
         }
-        return new Position(target.getX(), target.getY());
+        return target.getPosition();
     }
 
     private boolean bup;
@@ -227,12 +295,12 @@ public class Admin extends Enemy {
                 playAnimation();
                 break;
         }
-        setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+        addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
             @Override
             public void onAnimationFinished(AnimatedSprite sprite) {
                 bup = false;
                 drunning = false;
-                setAnimationFinishedListener(null);
+                removeAnimationFinishedListener(this);
             }
         });
     }
@@ -261,17 +329,19 @@ public class Admin extends Enemy {
                 break;
         }
 
-        setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+        addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
             @Override
             public void onAnimationFinished(AnimatedSprite sprite) {
                 bup = true;
                 urunning = false;
-                setAnimationFinishedListener(null);
+                removeAnimationFinishedListener(this);
             }
         });
     }
 
     private boolean isAlignedWith(PlayableSprite target) {
+        if (distanceFrom(target) < 64f)
+            return true;
         Direction direction = directionTowards(target);
         switch (direction) {
             case UP:
@@ -292,13 +362,6 @@ public class Admin extends Enemy {
         return false;
     }
 
-    private final Flee.FleeListener FLEE_LISTENER = new Flee.FleeListener() {
-        @Override
-        public void onSpriteSafe(AbstractWaypointSprite sprite) {
-            run = false;
-            setBehavior(null);
-        }
-    };
     private PlayableSprite getClosestPlayer() {
         float distance = 45f * 16f;
 

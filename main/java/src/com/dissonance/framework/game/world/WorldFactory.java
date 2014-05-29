@@ -2,9 +2,12 @@ package com.dissonance.framework.game.world;
 
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.system.debug.Debug;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Validator;
+import org.lwjgl.Sys;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class WorldFactory {
@@ -150,7 +153,7 @@ public class WorldFactory {
                 cacheWorlds[index] = w;
             }
         }
-        if (currentWorld != null) {
+        if (currentWorld != null && !RenderService.INSTANCE.isCrossFading()) {
             w = getWorldHolder(currentWorld.getID());
             if (w != null) {
                 w.lastAccess = System.currentTimeMillis();
@@ -158,15 +161,20 @@ public class WorldFactory {
             currentWorld.onUnload();
         }
         newworld.switchTo(fadetoblack);
-        RenderService.INSTANCE.runOnServiceThread(new Runnable() {
-            @Override
-            public void run() {
-                newworld.onDisplay();
-            }
-        });
+        if (!RenderService.INSTANCE.isCrossFading())  {
+            RenderService.INSTANCE.runOnServiceThread(new Runnable() {
+                @Override
+                public void run() {
+                    newworld.onDisplay();
+                }
+            });
+        }
         lastWorld = currentWorld;
         currentWorld = newworld;
         System.out.println("[World Factory] New World: " + currentWorld.getName() + ", Old World: " + (lastWorld == null ? "null" : lastWorld.getName()));
+        if (Debug.isDebugging()) {
+            System.err.println("[World Factory] REQUESTER: " + Arrays.toString(Thread.currentThread().getStackTrace()));
+        }
     }
 
     public static World getCurrentWorld() {

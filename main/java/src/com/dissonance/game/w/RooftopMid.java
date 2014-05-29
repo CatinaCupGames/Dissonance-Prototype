@@ -2,6 +2,7 @@ package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.game.sprites.RoofLight;
+import com.dissonance.game.sprites.office.OpenWindow;
 import com.dissonance.game.sprites.office.Window;
 
 
@@ -13,12 +14,9 @@ public class RooftopMid extends DemoLevelWorldLoader {
     public void onLoad(World w) {
         super.onLoad(w);
 
-        Window window = new Window();
+        OpenWindow window = new OpenWindow();
         window.setX(60.5f * 16f);
         window.setY(62.5f * 16f);
-        window.setAnimation("breaking");
-        window.setFrame(2);
-        window.pauseAnimation();
         w.loadAndAdd(window);
 
         for(int i = 0; i < lights.length; i++){
@@ -89,10 +87,15 @@ public class RooftopMid extends DemoLevelWorldLoader {
         lights[15].setX(45*16);
         lights[15].setY(67*16);
         w.createLight(44*16, 66*16, BRIGHTNESS, RADIUS);
+    }
 
+    @Override
+    public void onRespawn(World w) {
+        super.onRespawn(w);
 
-
-
-
+        farrand.setX(8f * 16f);
+        farrand.setY(7f * 16f);
+        jeremiah.setX(7f * 16f);
+        jeremiah.setY(2f * 16f);
     }
 }

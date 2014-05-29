@@ -20,18 +20,22 @@ public abstract class AbstractQuest {
 
     public abstract String getName();
 
-    public void pauseGame() {
+    public final void pauseGame() {
         if (paused)
             return;
         paused = true;
         onPauseGame();
     }
 
-    public void resumeGame() {
+    public final void resumeGame() {
         if (!paused)
             return;
         paused = false;
         onResumeGame();
+    }
+
+    public final void playerDied() {
+        onPlayerDeath();
     }
 
     public boolean isPaused() {
@@ -40,11 +44,15 @@ public abstract class AbstractQuest {
 
 
     protected void onPauseGame() {
-        //TODO Pause everything and show pause menu
+
     }
 
     protected void onResumeGame() {
-        //TODO Resume everything and get rid of pause menu
+
+    }
+
+    protected void onPlayerDeath() {
+
     }
 
     public World getWorld() {/*

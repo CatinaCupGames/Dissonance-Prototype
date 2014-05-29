@@ -6,6 +6,7 @@ import com.dissonance.framework.render.RenderService;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Static extends AnimatedSprite {
+    private long lastFrame;
     @Override
     public String getSpriteName() {
         return "static";
@@ -21,7 +22,6 @@ public class Static extends AnimatedSprite {
         super.onLoad();
         setAnimation("static");
         playAnimation();
-        setLayer(2);
     }
 
     @Override
@@ -32,4 +32,13 @@ public class Static extends AnimatedSprite {
         super.render();
         glPopMatrix();
     }
+
+    /*private void _update() {
+        if (!RenderService.INSTANCE.isUpdating()) {
+            if (System.currentTimeMillis() - lastFrame >= getAnimationSpeed()) {
+                lastFrame = System.currentTimeMillis();
+                onAnimate();
+            }
+        }
+    }*/
 }

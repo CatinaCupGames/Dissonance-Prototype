@@ -47,4 +47,9 @@ public class AtWaldomar extends DemoLevelWorldLoader {
 
 
     }
+
+    @Override
+    public void onRespawn(World oldworld) {
+
+    }
 }
