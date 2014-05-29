@@ -14,7 +14,6 @@ public final class Farrand extends PlayableSprite {
     private int defense = 10;
     private int speed = 8;
     private int vigor = 10;
-    private int stamina = 6;
     private int willpower = 14;
     private int focus = 16;
     private int marksmanship;
@@ -47,11 +46,6 @@ public final class Farrand extends PlayableSprite {
     @Override
     public int getVigor() {
         return vigor;
-    }
-
-    @Override
-    public int getStamina() {
-        return stamina;
     }
 
     @Override
@@ -92,11 +86,6 @@ public final class Farrand extends PlayableSprite {
     @Override
     public void setVigor(int vigor) {
         this.vigor = vigor;
-    }
-
-    @Override
-    public void setStamina(int stamina) {
-        this.stamina = stamina;
     }
 
     @Override
@@ -166,7 +155,8 @@ public final class Farrand extends PlayableSprite {
         setDefense(12);
         setSpeed(3);
         setVigor(10);
-        setStamina(6);
+        setStamina(60);
+        setMaxStamina(60);
         setWillpower(14);
         setFocus(16);
     }

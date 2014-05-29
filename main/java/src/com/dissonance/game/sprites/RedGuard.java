@@ -33,7 +33,8 @@ public class RedGuard extends Enemy {
         setDefense(4);
         setSpeed(10);
         setVigor(6);
-        setStamina(8);
+        setStamina(80);
+        setMaxStamina(80);
         setMarksmanship(10);
 
         setCurrentWeapon(Weapon.getWeapon("admingun").createItem(this));

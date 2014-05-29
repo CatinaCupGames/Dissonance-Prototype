@@ -43,7 +43,8 @@ public class Admin extends Enemy {
         setDefense(12);
         setSpeed(10);
         setVigor(10);
-        setStamina(10);
+        setStamina(100);
+        setMaxStamina(100);
         setMarksmanship(10);
         setMaxMP(270);
         setHP(270);

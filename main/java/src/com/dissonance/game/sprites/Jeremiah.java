@@ -10,7 +10,6 @@ public final class Jeremiah extends PlayableSprite {
     private int defense;
     private int speed;
     private int vigor;
-    private int stamina;
     private int willpower;
     private int focus;
     private int marksmanship;
@@ -39,11 +38,6 @@ public final class Jeremiah extends PlayableSprite {
     @Override
     public int getVigor() {
         return vigor;
-    }
-
-    @Override
-    public int getStamina() {
-        return stamina;
     }
 
     @Override
@@ -84,11 +78,6 @@ public final class Jeremiah extends PlayableSprite {
     @Override
     public void setVigor(int vigor) {
         this.vigor = vigor;
-    }
-
-    @Override
-    public void setStamina(int stamina) {
-        this.stamina = stamina;
     }
 
     @Override
@@ -153,7 +142,8 @@ public final class Jeremiah extends PlayableSprite {
         setDefense(8);
         setSpeed(6);
         setVigor(8);
-        setStamina(12);
+        setStamina(120);
+        setMaxStamina(120);
         setWillpower(10);
         setFocus(4);
     }

@@ -325,7 +325,11 @@ public final class World {
     public Iterator<Drawable> getSortedDrawables() {
         if (invalid) {
             if (Debug.isDebugging()) System.err.println("Sorting Drawables!");
-            Collections.sort(drawable);
+            try {
+                Collections.sort(drawable);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
             invalid = false;
         }
         return drawable.iterator();

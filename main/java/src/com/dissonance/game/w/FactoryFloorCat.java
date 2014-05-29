@@ -96,12 +96,6 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
 
         w.setWorldBrightness(0.9f);
 
-        Key key = new Key();
-        key.setX(38f * 16f);
-        key.setY(72f * 16f);
-        key.setLayer(2);
-        w.loadAndAdd(key);
-
         farrand.setX(5f * 16f);
         farrand.setY(208f * 16f);
         farrand.setLayer(2);
