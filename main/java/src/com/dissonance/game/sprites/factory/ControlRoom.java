@@ -23,6 +23,7 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
         pauseAnimation();
 
         setLayer(2);
+        setWidth(-getWidth());
     }
 
     @Override
