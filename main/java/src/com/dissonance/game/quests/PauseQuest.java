@@ -16,14 +16,14 @@ public abstract class PauseQuest extends AbstractQuest {
     public void onPauseGame() {
         oplayer = Players.getPlayingCount();
         menu.display(getWorld());
-        RenderService.INSTANCE.provideData(true, RenderService.DONT_UPDATE);
+        RenderService.INSTANCE.provideData(true, RenderService.DONT_UPDATE_TYPE);
     }
 
     @Override
     public void onResumeGame() {
         menu.reset();
         menu.close();
-        RenderService.INSTANCE.provideData(false, RenderService.DONT_UPDATE);
+        RenderService.INSTANCE.provideData(false, RenderService.DONT_UPDATE_TYPE);
         if (oplayer != Players.getPlayersWithInput().length) {
             for (BaseHUD hud : DemoLevelWorldLoader.huds) {
                 if (hud != null)

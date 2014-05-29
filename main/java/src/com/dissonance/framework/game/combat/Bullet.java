@@ -1,5 +1,6 @@
 package com.dissonance.framework.game.combat;
 
+import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
@@ -54,7 +55,7 @@ public class Bullet extends PhysicsSprite {
         this.direction = direction;
 
         angle = 3 * random.nextFloat() / weapon.getWeaponInfo().getAccuracy() / owner.getMarksmanship();
-        damage = damageModifier * owner.getMarksmanship() * weapon.getWeaponInfo().getBulletDamage();
+        damage = FastMath.fastRound((float) (damageModifier * owner.getMarksmanship() * weapon.getWeaponInfo().getBulletDamage()) / 10f);
         range = weapon.getWeaponInfo().getRange() * rangeModifier;
 
         if (random.nextBoolean()) {
@@ -132,6 +133,8 @@ public class Bullet extends PhysicsSprite {
         } else if (direction == Direction.LEFT) {
             setAnimation("shoot_left");
         }
+        reverseAnimation(false);
+        playAnimation();
     }
 
     @Override
@@ -159,11 +162,11 @@ public class Bullet extends PhysicsSprite {
         exploded = true;
 
         setAnimation("explode");
-        setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+        addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
             @Override
             public void onAnimationFinished(AnimatedSprite sprite) {
-                owner.getWorld().removeSprite(sprite);
-                setAnimationFinishedListener(null);
+                getWorld().removeSprite(sprite);
+                removeAnimationFinishedListener(this);
             }
         });
     }

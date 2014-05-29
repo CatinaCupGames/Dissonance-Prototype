@@ -10,6 +10,7 @@ import com.dissonance.game.sprites.menu.buttons.BackButton;
 import com.dissonance.game.sprites.menu.buttons.CoopPlayButton;
 
 public class CoopMenuWorld implements WorldLoader{
+    public static CoopMenu menu;
     @Override
     public void onLoad(World world) {
 
@@ -25,8 +26,8 @@ public class CoopMenuWorld implements WorldLoader{
         s.setLayer(2);
         world.loadAndAdd(s);
 
-        CoopMenu meu = new CoopMenu();
-        meu.display(world);
+        menu = new CoopMenu();
+        menu.display(world);
 
         BackButton back = new BackButton();
         back.display(world);

@@ -8,12 +8,13 @@ import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
-import com.dissonance.framework.system.utils.*;
+import com.dissonance.framework.sound.Sound;
+import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.Validator;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.*;
-import java.util.Timer;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -690,6 +691,7 @@ public abstract class CombatSprite extends PhysicsSprite {
     }
 
     public void strike(CombatSprite attacker, WeaponItem with) {
+        Sound.playSound("hit2");
         if (isInvincible)
             return;
         if (isAlly(attacker))
@@ -697,7 +699,7 @@ public abstract class CombatSprite extends PhysicsSprite {
         double defense = getDefense() + (getCurrentWeapon() != null ? getCurrentWeapon().getWeaponInfo().getDefense() : 0);
         double attack = attacker.getAttack() + with.getWeaponInfo().getAttack();
         double damage;
-        damage = ((attack * Math.log(attack)) / (defense / Math.log(defense))) * 2;
+        damage = (attack / defense) * 12;
         if (damage > 100)
             damage = 100;
 
@@ -707,17 +709,21 @@ public abstract class CombatSprite extends PhysicsSprite {
         if (HP <= 0) {
             //TODO Give attacker EXP
         }
+
     }
 
     public void applyDamage(double damage) {
         if (isInvincible)
             return;
         HP -= damage;
-        toastText("-" + damage).setTint(255, 24, 38, 1);
+        toastText("-" + (int)damage).setToastFontSize(32f).setTint(255, 24, 38, 1);
         if (HP <= 0) {
-            //TODO Play death animation for this sprite
-            getWorld().removeSprite(this);
+            onDeath();
         }
+    }
+
+    protected void onDeath() {
+        getWorld().removeSprite(this);
     }
 
     public abstract boolean isAlly(CombatSprite sprite);

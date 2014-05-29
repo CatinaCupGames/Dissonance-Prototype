@@ -23,6 +23,7 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
         pauseAnimation();
 
         setLayer(2);
+        setWidth(-getWidth());
     }
 
     @Override
@@ -48,7 +49,7 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
             reverseAnimation(false);
             playAnimation();
 
-            setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+            addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
                 @Override
                 public void onAnimationFinished(AnimatedSprite sprite) {
                     new Thread(new Runnable() {
@@ -61,7 +62,7 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
                             }
                         }
                     }).start();
-                    setAnimationFinishedListener(null);
+                    removeAnimationFinishedListener(this);
                 }
             });
             return true;
@@ -77,6 +78,7 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
     private void _play(PlayableSprite sprite) throws InterruptedException {
         sprite.setMovementSpeed(7);
         sprite.setLayer(1);
+        sprite.setUsePhysics(false);
         sprite.setWaypoint(getX(), sprite.getY() - 48f, WaypointType.SIMPLE);
         sprite.waitForWaypointReached();
         reverseAnimation(true);
@@ -84,7 +86,6 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
 
         Thread.sleep(3700);
 
-        //TODO Play sound maybe..?\
         GameQuest.INSTANCE.turnOnBelts();
 
         reverseAnimation(false);
@@ -96,6 +97,7 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
         sprite.waitForWaypointReached();
         sprite.setLayer(2);
         sprite.unfreeze();
+        sprite.setUsePhysics(true);
 
         reverseAnimation(true);
         playAnimation();

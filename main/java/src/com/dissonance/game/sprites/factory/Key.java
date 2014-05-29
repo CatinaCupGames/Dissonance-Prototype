@@ -9,6 +9,7 @@ import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.ImageSprite;
 
 public class Key extends ImageSprite {
+    private boolean pickable = false;
     public Key() {
         super("sprites/img/Keycard.png");
     }
@@ -25,11 +26,39 @@ public class Key extends ImageSprite {
         super.render();
     }
 
+    public void blink() {
+        try {
+            setVisible(true);
+            Thread.sleep(800);
+            setVisible(false);
+            Thread.sleep(800);
+            setVisible(true);
+            Thread.sleep(800);
+            setVisible(false);
+            setVisible(true);
+            Thread.sleep(800);
+            setVisible(false);
+            Thread.sleep(800);
+            Thread.sleep(700);
+            setVisible(true);
+            Thread.sleep(600);
+            setVisible(false);
+            Thread.sleep(300);
+            setVisible(true);
+            pickable = true;
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
+
     private void update() {
+        if (!pickable)
+            return;
         PlayableSprite[] sprites = Players.getCurrentlyPlayingSprites();
         for (final PlayableSprite sprite : sprites) {
             if (sprite.isPointInside(getX(), getY())) {
                 GameQuest.INSTANCE.unlockedControl = true;
+                pickable = false;
                 getWorld().removeSprite(this);
                 new Thread(new Runnable() {
                     @Override

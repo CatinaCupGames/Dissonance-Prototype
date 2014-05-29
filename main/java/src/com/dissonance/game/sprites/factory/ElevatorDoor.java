@@ -92,10 +92,10 @@ public class ElevatorDoor extends AnimatedSprite implements Selectable, Collidab
             reverseAnimation(false);
             playAnimation();
 
-            setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+            addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
                 @Override
                 public void onAnimationFinished(AnimatedSprite sprite) {
-                    setAnimationFinishedListener(null);
+                    removeAnimationFinishedListener(this);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {

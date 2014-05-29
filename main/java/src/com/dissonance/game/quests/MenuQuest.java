@@ -6,6 +6,8 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
+import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
+import com.dissonance.game.w.menu.CoopMenuWorld;
 
 public class MenuQuest extends PauseQuest {
     private World main, coop;
@@ -16,17 +18,12 @@ public class MenuQuest extends PauseQuest {
 
         INSTANCE = this;
         main = WorldFactory.getWorld("menu.MainMenu");
-        coop = WorldFactory.getWorld("menu.CoopMenuWorld");
         setWorld(main);
+        Players.createPlayer1();
         main.waitForWorldDisplayed();
         RenderService.INSTANCE.fadeToBlack(1f);
         RenderService.INSTANCE.fadeFromBlack(2500);
         Sound.playSound("introtheme");
-        //TODO Display menu and wait for option to be chosen
-
-        //TODO Remove, temp code
-        //setNextQuest(new DisclaimerQuest()); //Set the next quest
-        //endQuest(); //End this quest
     }
 
     public void mainMenu() {
@@ -34,7 +31,13 @@ public class MenuQuest extends PauseQuest {
     }
 
     public void coopMenu() {
-        setWorld(coop);
+        try {
+            if (coop == null)
+                coop = WorldFactory.getWorld("menu.CoopMenuWorld");
+            setWorld(coop);
+        } catch (WorldLoadFailedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void startGame() {
@@ -47,6 +50,7 @@ public class MenuQuest extends PauseQuest {
             }).start();
             return;
         }
+        if (coop != null) CoopMenuWorld.menu.close();
         Players.createPlayer1(); //Ensure we have a player 1
         GameService.coop_mode = Players.getPlayersWithInput().length > 1;
         RenderService.INSTANCE.fadeToBlack(1000);

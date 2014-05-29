@@ -65,6 +65,33 @@ public class WeaponItem extends Item {
             if (parameters.length > 0 && parameters[0] instanceof Integer) {
                 bullet.setLayer((Integer)parameters[0]);
             }
+
+            final String old_a = owner.getCurrentAnimation().getName();
+            owner.setAttacking(true);
+            switch (owner.getFacingDirection()) {
+                case UP:
+                    owner.setAnimation("shoot_top");
+                    break;
+                case DOWN:
+                    owner.setAnimation("shoot_bottom");
+                    break;
+                case LEFT:
+                    owner.setAnimation("shoot_left");
+                    break;
+                case RIGHT:
+                    owner.setAnimation("shoot_right");
+                    break;
+            }
+            owner.reverseAnimation(false);
+            owner.playAnimation();
+            owner.addAnimationFinishedListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFinished() {
+                @Override
+                public void onAnimationFinished(AnimatedSprite sprite) {
+                    owner.setAttacking(false);
+                    owner.setAnimation(old_a);
+                    owner.removeAnimationFinishedListener(this);
+                }
+            });
         } else {
             final Direction facingDirection = getOwner().getFacingDirection();
             if (parameters.length > 0) {
@@ -209,10 +236,10 @@ public class WeaponItem extends Item {
                         }
                     });
                     final String finalNewName = newName;
-                    getOwner().setAnimationFinishedListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFinished() {
+                    getOwner().addAnimationFinishedListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFinished() {
                         @Override
                         public void onAnimationFinished(AnimatedSprite sprite) {
-                            sprite.setAnimationFinishedListener(null);
+                            sprite.removeAnimationFinishedListener(this);
                             sprite.setAnimationFrameListener(null);
                             if (getOwner() instanceof PlayableSprite) {
                                 ((PlayableSprite) getOwner()).unfreeze();
@@ -293,10 +320,10 @@ public class WeaponItem extends Item {
                             }
                         }
                     });
-                    getOwner().setAnimationFinishedListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFinished() {
+                    getOwner().addAnimationFinishedListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFinished() {
                         @Override
                         public void onAnimationFinished(AnimatedSprite sprite) {
-                            sprite.setAnimationFinishedListener(null);
+                            sprite.removeAnimationFinishedListener(this);
                             sprite.setAnimationFrameListener(null);
                             if (getOwner() instanceof PlayableSprite) {
                                 ((PlayableSprite) getOwner()).ignore_movement = false;

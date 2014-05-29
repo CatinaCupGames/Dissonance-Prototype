@@ -18,6 +18,7 @@ public class loadworld implements WorldLoader {
         Static s = new Static();
         s.setX(640f / 2f);
         s.setY(360f / 2f);
+        s.setLayer(2);
         world.loadAndAdd(s);
 
         Spinner spinner = new Spinner();

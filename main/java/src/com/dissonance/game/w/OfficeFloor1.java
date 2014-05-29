@@ -39,6 +39,7 @@ Date: 2014/05/09 14:59:35
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
+import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.sprites.office.*;
 
 public class OfficeFloor1 extends DemoLevelWorldLoader {
@@ -47,6 +48,7 @@ public class OfficeFloor1 extends DemoLevelWorldLoader {
     public static PottedPlant var9;
     public static PottedPlant var10;
     public static PottedPlant var11;
+    public static BlueGuard[] blueGuards = new BlueGuard[8];
 
     @Override
     public void onLoad(World w){
@@ -107,5 +109,57 @@ public class OfficeFloor1 extends DemoLevelWorldLoader {
         var11.setX(15.3498f);
         var11.setY(90.44995f);
 
+        for (int i = 0; i < blueGuards.length; i++) {
+            blueGuards[i] = new BlueGuard();
+            w.loadAndAdd(blueGuards[i]);
+        }
+
+        blueGuards[0].setX(15*16);
+        blueGuards[0].setY(74*16);
+
+        blueGuards[1].setX(31*16);
+        blueGuards[1].setY(68*16);
+
+        blueGuards[2].setX(22*16);
+        blueGuards[2].setY(64*16);
+
+        blueGuards[3].setX(29*16);
+        blueGuards[3].setY(62*16);
+
+        blueGuards[4].setX(18*16);
+        blueGuards[4].setY(54*16);
+
+        blueGuards[5].setX(28*16);
+        blueGuards[5].setY(57*16);
+
+        blueGuards[6].setX(15*16);
+        blueGuards[6].setY(32*16);
+
+        blueGuards[7].setX(34*16);
+        blueGuards[7].setY(14*16);
+
+
+    }
+
+    @Override
+    public void onRespawn(World w) {
+        super.onRespawn(w);
+
+        farrand.setX(26f * 16f);
+        farrand.setY(85f * 16f);
+
+        jeremiah.setX(28f * 16f);
+        jeremiah.setY(85f * 16f);
+
+        farrand.setVisible(false);
+        jeremiah.setVisible(false);
+    }
+
+    @Override
+    public void onDisplay(World w) {
+        super.onDisplay(w);
+
+        farrand.setVisible(false);
+        jeremiah.setVisible(false);
     }
 }

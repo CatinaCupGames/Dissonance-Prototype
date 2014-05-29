@@ -84,10 +84,11 @@ public abstract class ExplodableSprite extends PhysicsSprite {
             setX(x);
             setY(y);
 
-            setAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+            addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
                 @Override
                 public void onAnimationFinished(AnimatedSprite sprite) {
                     world.removeSprite(ExplosionSprite.this);
+                    removeAnimationFinishedListener(this);
                 }
             });
         }

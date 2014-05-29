@@ -251,8 +251,12 @@ public abstract class Sprite implements Drawable, Serializable {
         if (x < 0) {
             x = 0;
         }
+        if (world != null && x > world.getPixelWidth()) {
+            x = world.getPixelWidth();
+        }
 
         this.x = x;
+
         if (spriteMoved != null)
             spriteMoved.onSpriteMoved(this, ox, y);
     }
@@ -267,9 +271,15 @@ public abstract class Sprite implements Drawable, Serializable {
         if (y < 0) {
             y = 0;
         }
-        if (y != this.y && getWorld() != null)
+        if (world != null && y > world.getPixelHeight()) {
+            y = world.getPixelHeight();
+        }
+
+        if (y != this.y && world != null)
             getWorld().invalidateDrawableList();
+
         this.y = y;
+
         if (spriteMoved != null)
             spriteMoved.onSpriteMoved(this, x, oy);
     }

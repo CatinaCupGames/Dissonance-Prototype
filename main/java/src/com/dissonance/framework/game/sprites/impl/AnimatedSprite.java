@@ -11,13 +11,14 @@ import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class AnimatedSprite extends UpdatableSprite implements Animator {
     private AnimatedSpriteEvent.OnAnimationPlayEvent animationPlayEvent;
     private AnimatedSpriteEvent.OnAnimationPauseEvent animationPauseEvent;
-    private AnimatedSpriteEvent.OnAnimationFinished animationFinished;
+    private ArrayList<AnimatedSpriteEvent.OnAnimationFinished> animationFinished = new ArrayList<AnimatedSpriteEvent.OnAnimationFinished>();
     private AnimatedSpriteEvent.OnAnimationFrame animationFrame;
     private SpriteTexture texture;
 
@@ -38,8 +39,12 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
         this.animationPlayEvent = animationPlayListener;
     }
 
-    public void setAnimationFinishedListener(AnimatedSpriteEvent.OnAnimationFinished animationFinished) {
-        this.animationFinished = animationFinished;
+    public void addAnimationFinishedListener(AnimatedSpriteEvent.OnAnimationFinished animationFinished) {
+        this.animationFinished.add(animationFinished);
+    }
+
+    public void removeAnimationFinishedListener(AnimatedSpriteEvent.OnAnimationFinished listener) {
+        animationFinished.remove(listener);
     }
 
     public void setAnimationFrameListener(AnimatedSpriteEvent.OnAnimationFrame animationFrame) {
@@ -336,8 +341,11 @@ public abstract class AnimatedSprite extends UpdatableSprite implements Animator
     }
 
     protected void onAnimationFinished() {
-        if (animationFinished != null) {
-            animationFinished.onAnimationFinished(this);
+        if (animationFinished.size() > 0) {
+            AnimatedSpriteEvent.OnAnimationFinished[] events = animationFinished.toArray(new AnimatedSpriteEvent.OnAnimationFinished[animationFinished.size()]);
+            for (AnimatedSpriteEvent.OnAnimationFinished event : events) {
+                event.onAnimationFinished(this);
+            }
         }
     }
 

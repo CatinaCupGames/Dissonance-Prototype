@@ -159,8 +159,8 @@ public final class World {
                 try {
                     Class<?> class_ = Class.forName(tiledData.getProperty("loader"));
                     if (WorldLoader.class.isAssignableFrom(class_)) {
-                        WorldLoader trueLoader = (WorldLoader) class_.newInstance();
-                        loader = ProxyFactory.createSafeObject(trueLoader, WorldLoader.class);
+                        loader = (WorldLoader) class_.newInstance();
+                        //loader = ProxyFactory.createSafeObject(trueLoader, WorldLoader.class);
                     }
                 } catch (Exception e) {
                     loader = attemptSearchForWorldLoader();
@@ -314,8 +314,8 @@ public final class World {
         try {
             Class<?> class_ = Class.forName(wlpackage + "." + name);
             if (WorldLoader.class.isAssignableFrom(class_)) {
-                WorldLoader trueLoader = (WorldLoader) class_.newInstance();
-                return ProxyFactory.createSafeObject(trueLoader, WorldLoader.class);
+                return (WorldLoader) class_.newInstance();
+                //return ProxyFactory.createSafeObject(trueLoader, WorldLoader.class);
             }
         } catch (Exception ignored) {
         }

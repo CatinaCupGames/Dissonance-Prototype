@@ -33,7 +33,7 @@
             row="4"
             default_speed="200ms" />
     <animation
-            name="shoot_down"
+            name="shoot_bottom"
             loop="false"
             frames="2"
             row="5"
@@ -46,7 +46,7 @@
             default_speed="200ms" />
 
     <animation
-            name="shoot_up"
+            name="shoot_top"
             loop="false"
             frames="2"
             row="7"

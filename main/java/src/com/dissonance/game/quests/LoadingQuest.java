@@ -64,7 +64,8 @@ public class LoadingQuest extends AbstractQuest {
                     public void run() {
                         try {
                             Thread.sleep(2000);
-                            
+
+
                             setNextQuest(new GameQuest());
 
                             endQuest();

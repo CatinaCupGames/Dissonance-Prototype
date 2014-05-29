@@ -8,6 +8,8 @@ import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
+import com.dissonance.framework.game.sprites.impl.ToastText;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;
@@ -16,19 +18,22 @@ import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.Service;
+import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
-import com.dissonance.game.sprites.outside.Factory;
-import com.dissonance.game.w.FactoryFloorCat;
-import com.dissonance.game.w.OutsideFighting;
-import com.dissonance.game.w.RoofTopBeginning;
-import com.dissonance.game.w.RooftopMid;
+import com.dissonance.game.sprites.Farrand;
+import com.dissonance.game.sprites.Jeremiah;
+import com.dissonance.game.sprites.menu.Background;
+import com.dissonance.game.sprites.menu.Static;
+import com.dissonance.game.w.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Random;
 
 public class GameQuest  extends PauseQuest {
@@ -52,8 +57,6 @@ public class GameQuest  extends PauseQuest {
         INSTANCE = this;
         setWorld(GameCache.RoofTopBeginning);
         GameCache.RoofTopBeginning.waitForWorldDisplayed();
-
-        TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
 
         Camera.stopFollowing();
 
@@ -270,6 +273,103 @@ public class GameQuest  extends PauseQuest {
         return "the actual game";
     }
 
+    @Override
+    public void onPlayerDeath() {
+        Camera.stopFollowing();
+        RenderService.INSTANCE.provideData(4400f, RenderService.CROSS_FADE_DURATION);
+        RenderService.INSTANCE.provideData(true, RenderService.DONT_UPDATE_TYPE);
+
+        Iterator<UpdatableDrawable> updatableDrawableIterator = getWorld().getUpdatables();
+        while (updatableDrawableIterator.hasNext()) {
+            UpdatableDrawable ud = updatableDrawableIterator.next();
+            if (ud instanceof AnimatedSprite)
+                ((AnimatedSprite)ud).pauseAnimation();
+            if (ud instanceof ToastText)
+                getWorld().removeSprite((ToastText)ud);
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Background b = new Background();
+                b.setX(1024f / 2f);
+                b.setY(512f / 2f);
+                b.setLayer(100);
+                b.setAlpha(0f);
+                getWorld().loadAndAdd(b);
+
+                Static s = new Static();
+                s.setX(640f / 2f);
+                s.setY(360f / 2f);
+                s.setLayer(200);
+                getWorld().loadAndAdd(s);
+                long start = RenderService.getTime();
+
+                try {
+                    s.waitForLoaded();
+                    getWorld().invalidateDrawableList();
+                    float alpha = 0f;
+                    while (alpha < 1f) {
+                        alpha = (RenderService.getTime() - start) / 4400f;
+                        if (alpha > 1f)
+                            alpha = 1f;
+                        b.setAlpha(alpha);
+                        Thread.sleep(10);
+                    }
+
+                    Thread.sleep(3500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if (getWorld().getWorldLoader() instanceof DemoLevelWorldLoader) {
+                    DemoLevelWorldLoader.farrand.setUsePhysics(false);
+                    DemoLevelWorldLoader.jeremiah.setUsePhysics(false);
+                    ((DemoLevelWorldLoader)getWorld().getWorldLoader()).onRespawn(getWorld());
+                    DemoLevelWorldLoader.farrand.setUsePhysics(true);
+                    DemoLevelWorldLoader.jeremiah.setUsePhysics(true);
+                }
+
+                Player player1 = Players.getPlayer1();
+                player1.getSprite().setVisible(true);
+                player1.getSprite().setAttacking(false);
+                player1.getSprite().playAnimation();
+                Camera.followSprite(player1.getSprite());
+
+                Player player2 = Players.getPlayer(2);
+                if (player2 != null && player2.getSprite() != null) {
+                    player2.getSprite().setVisible(true);
+                    player2.getSprite().setAttacking(false);
+                    player2.getSprite().playAnimation();
+                    Camera.followSprite(player2.getSprite());
+                }
+
+                try {
+                    start = RenderService.getTime();
+                    float alpha = 1f;
+                    while (alpha > 0f) {
+                        alpha = 1f - ((RenderService.getTime() - start) / 4400f);
+                        if (alpha < 0f)
+                            alpha = 0f;
+                        b.setAlpha(alpha);
+                        s.setAlpha(alpha);
+                        Thread.sleep(10);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                getWorld().removeSprite(s);
+                getWorld().removeSprite(b);
+
+                RenderService.INSTANCE.provideData(false, RenderService.DONT_UPDATE_TYPE);
+                player1.getSprite().unfreeze();
+                if (player2 != null && player2.getSprite() != null)
+                    player2.getSprite().unfreeze();
+            }
+        }).start();
+    }
+
     public void changeToFactory() throws InterruptedException {
         Camera.stopFollowing();
         if (runnable != null) { runnable.kill(); runnable = null; }
@@ -309,5 +409,62 @@ public class GameQuest  extends PauseQuest {
 
         FactoryFloorCat.farrand.unfreeze();
         FactoryFloorCat.jeremiah.unfreeze();
+    }
+
+    public void changeToOffice1() throws InterruptedException {
+        Camera.stopFollowing();
+        setWorld(GameCache.OfficeFloor1);
+        GameCache.OfficeFloor1.waitForWorldDisplayed();
+
+        OfficeFloor1.farrand.setX(26f * 16f);
+        OfficeFloor1.farrand.setY(85f * 16f);
+
+        OfficeFloor1.jeremiah.setX(28f * 16f);
+        OfficeFloor1.jeremiah.setY(85f * 16f);
+
+
+        Player player1 = Players.getPlayer1();
+        player1.getSprite().setVisible(true);
+        Camera.followSprite(player1.getSprite());
+
+        Player player2 = Players.getPlayer(2);
+        if (player2 != null && player2.getSprite() != null) {
+            player2.getSprite().setVisible(true);
+            Camera.followSprite(player2.getSprite());
+        }
+
+        OfficeFloor1.farrand.unfreeze();
+        OfficeFloor1.jeremiah.unfreeze();
+    }
+
+    public void changeToOffice2() throws InterruptedException {
+        Camera.stopFollowing();
+        setWorld(GameCache.OfficeFloor2);
+        GameCache.OfficeFloor2.waitForWorldDisplayed();
+
+        officefloor2.farrand.setUsePhysics(false);
+        officefloor2.jeremiah.setUsePhysics(false);
+        officefloor2.farrand.setX(18f * 16f);
+        officefloor2.farrand.setY(8f * 16f);
+
+        officefloor2.jeremiah.setX(21f * 16f);
+        officefloor2.jeremiah.setY(8f * 16f);
+
+
+        Player player1 = Players.getPlayer1();
+        player1.getSprite().setVisible(true);
+        Camera.followSprite(player1.getSprite());
+
+        Player player2 = Players.getPlayer(2);
+        if (player2 != null && player2.getSprite() != null) {
+            player2.getSprite().setVisible(true);
+            Camera.followSprite(player2.getSprite());
+        }
+
+        officefloor2.jeremiah.setUsePhysics(true);
+        officefloor2.farrand.setUsePhysics(true);
+
+        officefloor2.farrand.unfreeze();
+        officefloor2.jeremiah.unfreeze();
     }
 }

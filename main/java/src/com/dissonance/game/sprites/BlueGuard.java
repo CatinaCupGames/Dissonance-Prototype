@@ -12,6 +12,7 @@ import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.Timer;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.behaviors.Patrol;
 import com.dissonance.game.behaviors.Search;
@@ -75,7 +76,7 @@ public class BlueGuard extends Enemy {
         setCurrentWeapon(Weapon.getWeapon("guardsword").createItem(this));
         setAttack(10);
         setDefense(8);
-        setSpeed(2);
+        setSpeed(4);
         setVigor(8);
         setStamina(4);
         setMarksmanship(8);
@@ -129,10 +130,15 @@ public class BlueGuard extends Enemy {
     }
 
     @Override
-    protected void onAnimationFinished() {
+     protected void onAnimationFinished() {
         if (getCurrentAnimation().getName().startsWith("swipe")) {
             if (run && !isDodging() && target != null) {
-                dodge(directionTowards(target).opposite());
+                Timer.delayedInvokeRunnable(100, new Runnable() {
+                    @Override
+                    public void run() {
+                        dodge(directionTowards(target).opposite());
+                    }
+                });
             }
         }
         super.onAnimationFinished();
@@ -151,7 +157,7 @@ public class BlueGuard extends Enemy {
     private boolean saw = false;
     private long foundTime = 0L;
     private PlayableSprite target;
-    private static final long ATTACK_RATE_MS = 1000;
+    private static final long ATTACK_RATE_MS = 900;
     private static final long FOUND_YOU_MS = 400;
     private static final long SPOT_TIME = 2000;
     private static final Random random = new Random();
@@ -197,18 +203,7 @@ public class BlueGuard extends Enemy {
                     if (isAttacking()) return;
                     if (System.currentTimeMillis() - lastAttack < ATTACK_RATE_MS) {
                         dodgeAway = true;
-                        Direction direction = directionTowards(target).rotate90();
-                        int rnd = random.nextInt(3);
-                        switch (rnd) {
-                            case 0:
-                                dodge(direction);
-                                break;
-                            case 1:
-                                dodge(direction.rotate90());
-                                break;
-                            case 2:
-                                dodge(direction.rotateNegitive90());
-                        }
+                        dodgeAway();
                         return;
                     }
                     if (System.currentTimeMillis() - foundTime < FOUND_YOU_MS) return;
@@ -219,18 +214,7 @@ public class BlueGuard extends Enemy {
 
                 } else {
                     if (dodgeAway && !isDodging()) {
-                        Direction direction = directionTowards(target).rotate90();
-                        int rnd = random.nextInt(3);
-                        switch (rnd) {
-                            case 0:
-                                dodge(direction);
-                                break;
-                            case 1:
-                                dodge(direction.rotate90());
-                                break;
-                            case 2:
-                                dodge(direction.rotateNegitive90());
-                        }
+                        dodgeAway();
                         dodgeAway = false;
                         return;
                     }
@@ -245,6 +229,21 @@ public class BlueGuard extends Enemy {
                     }
                 }
             }
+        }
+    }
+
+    private void dodgeAway() {
+        Direction direction = directionTowards(target).rotate90();
+        int rnd = random.nextInt(3);
+        switch (rnd) {
+            case 0:
+                dodge(direction);
+                break;
+            case 1:
+                dodge(direction.rotate90());
+                break;
+            case 2:
+                dodge(direction.rotateNegitive90());
         }
     }
 

@@ -87,6 +87,9 @@ public class OfficeScene extends SimpleScene {
                 long time = (long) Camera.ease(350, 200, 1500, System.currentTimeMillis() - START_TIME);
                 source.setTime(time);
 
+                float count = Camera.ease(1000f, 3000f, 1500, System.currentTimeMillis() - START_TIME);
+                source.setCount(count);
+
                 if (speed == 50f) {
                     RenderService.INSTANCE.removeServiceTick(this);
                 }
@@ -105,11 +108,11 @@ public class OfficeScene extends SimpleScene {
 
         //====WINDOW====
         WaldomarsMeetingRoom.var19.setAnimation(1);
-        WaldomarsMeetingRoom.var19.setAnimationFinishedListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFinished() {
+        WaldomarsMeetingRoom.var19.addAnimationFinishedListener(new AnimatedSprite.AnimatedSpriteEvent.OnAnimationFinished() {
             @Override
             public void onAnimationFinished(AnimatedSprite sprite) {
                 WaldomarsMeetingRoom.var19.setAnimation(2);
-                WaldomarsMeetingRoom.var19.setAnimationFinishedListener(null);
+                WaldomarsMeetingRoom.var19.removeAnimationFinishedListener(this);
             }
         });
         //====WINDOW====

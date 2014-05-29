@@ -25,6 +25,30 @@
          "width":55,
          "x":0,
          "y":0
+        }, 
+        {
+         "height":90,
+         "name":"Hitbox",
+         "objects":[
+                {
+                 "height":96,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "type":"hitbox",
+                 "visible":true,
+                 "width":880,
+                 "x":0,
+                 "y":0
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":55,
+         "x":0,
+         "y":0
         }],
  "orientation":"orthogonal",
  "properties":
@@ -46,6 +70,21 @@
             },
          "spacing":0,
          "tileheight":16,
+         "tileproperties":
+            {
+             "16":
+                {
+                 "passable":"false"
+                },
+             "17":
+                {
+                 "passable":"false"
+                },
+             "23":
+                {
+                 "passable":"false"
+                }
+            },
          "tilewidth":16
         }],
  "tilewidth":16,

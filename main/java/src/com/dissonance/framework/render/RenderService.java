@@ -19,7 +19,6 @@ import org.lwjgl.opengl.GLContext;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
 
@@ -30,7 +29,7 @@ public class RenderService extends Service {
     public static final int WORLD_DATA_TYPE = 0;
     public static final int ENABLE_CROSS_FADE = 1;
     public static final int CROSS_FADE_DURATION = 2;
-    public static final int DONT_UPDATE = 4;
+    public static final int DONT_UPDATE_TYPE = 4;
 
     public static float ZOOM_SCALE = 2f;
     public static float FPS = 0f;
@@ -252,6 +251,7 @@ public class RenderService extends Service {
 
         started = getTime();
         next_tick = getTime();
+        getDelta();
     }
 
     private long getTimeSinceStartMillis() {
@@ -314,9 +314,9 @@ public class RenderService extends Service {
             }
         } else if (type == ENABLE_CROSS_FADE) {
             this.crossfade = (boolean)obj;
-        } else if (type == CROSS_FADE_DURATION && crossfade) {
+        } else if (type == CROSS_FADE_DURATION) {
             this.fadeDuration = (float)obj;
-        } else if (type == DONT_UPDATE) {
+        } else if (type == DONT_UPDATE_TYPE) {
             this.dontUpdate = (boolean)obj;
         }
     }
@@ -334,6 +334,18 @@ public class RenderService extends Service {
 
     public static long getTime() {
         return System.nanoTime() / 1000000;
+    }
+
+    private long lastFrame;
+    private int getDelta() {
+        long time = getTime();
+        int delta = (int)(time - lastFrame);
+        lastFrame = time;
+        return delta;
+    }
+
+    public boolean isUpdating() {
+        return !dontUpdate;
     }
 
     private long fadeStartTime;
@@ -452,18 +464,13 @@ public class RenderService extends Service {
 
                 Iterator<Drawable> next_sprites = next_world.getSortedDrawables();
                 while (next_sprites.hasNext()) {
-                    Drawable d = next_sprites.next();
-                    if (d == null)
+                    Drawable s = next_sprites.next();
+                    if (s == null)
                         continue;
                     try {
-                        /*if (d instanceof Sprite) {
-                            if (Camera.isOffScreen((Sprite)d, 2))
-                                continue;
-                        } else if (Camera.isOffScreen(d.getX(), d.getY(), d.getWidth() / 2, d.getHeight() / 2, 2)) //Assume everything is 32x32
-                            continue;*/
-                        if (Camera.isOffScreen(d.getX(), d.getY(), d.getWidth() / 2, d.getHeight() / 2))
+                        if (!s.neverClip() && (!(s instanceof TileObject) || !((TileObject)s).isParallaxLayer()) && Camera.isOffScreen(s.getX(), s.getY(), s.getWidth() / 2, s.getHeight() / 2))
                             continue;
-                        d.render();
+                        s.render();
                     } catch (Throwable t) {
                         t.printStackTrace();
                     }
@@ -485,7 +492,9 @@ public class RenderService extends Service {
                 curAlpha = emu;
 
                 if (percent == 1) {
+                    current_world.onUnload();
                     current_world = next_world;
+                    current_world.onDisplay();
                     next_world = null;
                 }
             }
