@@ -61,5 +61,7 @@
            start="0:17:143"
            end="1:40:952"/>
 
+        <sound name="hit2"/>
+
 
 </sounds>
