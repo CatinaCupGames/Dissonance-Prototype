@@ -1,18 +1,15 @@
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.ai.astar.NodeMap;
-import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.sprites.Admin;
 import com.dissonance.game.sprites.BlueGuard;
-import com.dissonance.game.sprites.Farrand;
-import com.dissonance.game.sprites.Jeremiah;
+import com.dissonance.game.sprites.RedGuard;
 import com.dissonance.game.sprites.environment.BasicLight;
 import com.dissonance.game.sprites.factory.Key;
-import sun.text.resources.FormatData_ar_AE;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,6 +23,7 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
     public static NodeMap nongroundNodeMap;
     private static final float WALL_LIGHT_BRIGHTNESS = 1.4f;
     public static BlueGuard[] melees = new BlueGuard[5];
+    public static RedGuard[] gunGuards = new RedGuard[7];
     public static Admin miniboss;
 
     @Override
