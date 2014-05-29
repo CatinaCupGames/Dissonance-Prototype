@@ -150,8 +150,6 @@ public class Admin extends Enemy {
                     setBehavior(patrol);
                 }
             } else {
-                face(directionTowards(target));
-
                 setMovementSpeed(movementSpeed() / 1.5f);
                 idle = false;
                 if (isAlignedWith(target)) {
@@ -176,29 +174,31 @@ public class Admin extends Enemy {
                         looking = true;
                         bringDownGun();
                     } else {
-                        Direction direction1 = directionTowards(target);
-                        switch (direction1) {
-                            case UP:
-                            case DOWN:
-                                float dif = getX() - target.getX();
-                                if (dif > 6.5)
-                                    setX(getX() - (movementSpeed() * RenderService.TIME_DELTA));
-                                else if (dif < 6.5)
-                                    setX(getX() + (movementSpeed() * RenderService.TIME_DELTA));
-                                break;
-                            case LEFT:
-                            case RIGHT:
-                                dif = getY() - target.getY();
-                                if (dif > 6.5)
-                                    setY(getY() - (movementSpeed() * RenderService.TIME_DELTA));
-                                else if (dif < 6.5)
-                                    setY(getY() + (movementSpeed() * RenderService.TIME_DELTA));
-                                break;
+                        Behavior behavior = getBehavior();
+                        if (behavior instanceof WaypointLikeSeek) {
+                            WaypointLikeSeek seek = (WaypointLikeSeek)getBehavior();
+                            seek.setTarget(getSeekTarget(target));
+                        } else {
+                            WaypointLikeSeek seek = new WaypointLikeSeek(this, getSeekTarget(target));
+                            setBehavior(seek);
                         }
                     }
                 }
             }
         }
+    }
+
+    private Position getSeekTarget(PlayableSprite target) {
+        Direction direction1 = directionTowards(target);
+        switch (direction1) {
+            case UP:
+            case DOWN:
+                return new Position(target.getX(), getY());
+            case LEFT:
+            case RIGHT:
+                return new Position(getX(), target.getY());
+        }
+        return new Position(target.getX(), target.getY());
     }
 
     private boolean bup;
@@ -292,37 +292,6 @@ public class Admin extends Enemy {
         return false;
     }
 
-    private boolean isPlayerSeen(PlayableSprite target) {
-        if (getLayer() != target.getLayer()) {
-            if (!spot.containsKey(target)) {
-                spot.put(target, System.currentTimeMillis());
-                toastText("?")
-                        .setToastFontSize(32f)
-                        .setTint(Color.RED);
-            }
-            return false;
-        }
-        else if (directionTowards(target) != getFacingDirection()) {
-            if (directionTowards(target) != getFacingDirection().opposite()) {
-                if (!spot.containsKey(target)) {
-                    spot.put(target, System.currentTimeMillis());
-                    toastText("?")
-                            .setToastFontSize(32f)
-                            .setTint(Color.RED);
-                    return false;
-                }
-                long l = spot.get(target);
-                if (System.currentTimeMillis() - l > SPOT_TIME) {
-                    spot.remove(target);
-                    return true;
-                }
-                return false;
-            }
-            return false;
-        }
-        return true;
-    }
-
     private final Flee.FleeListener FLEE_LISTENER = new Flee.FleeListener() {
         @Override
         public void onSpriteSafe(AbstractWaypointSprite sprite) {
@@ -330,9 +299,6 @@ public class Admin extends Enemy {
             setBehavior(null);
         }
     };
-
-    private HashMap<PlayableSprite, Long> spot = new HashMap<>();
-    private Direction oDirection;
     private PlayableSprite getClosestPlayer() {
         float distance = 45f * 16f;
 

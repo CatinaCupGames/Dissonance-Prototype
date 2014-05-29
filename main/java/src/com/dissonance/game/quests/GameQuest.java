@@ -98,6 +98,9 @@ public class GameQuest  extends PauseQuest {
             RoofTopBeginning.farrand.unfreeze();
             RoofTopBeginning.jeremiah.unfreeze();
         }
+
+        Thread.sleep(800);
+        changeToFactory();
     }
 
     public void changeToRooftopMid() throws InterruptedException {

@@ -135,6 +135,40 @@ public class ControllerInput implements Input {
             }
             playableSprite.controller_extend = values.x > 0f || values.y > 0f || values.x < 0f || values.y < 0f;
 
+
+            if (!use_switch && playableSprite.party.size() > 0) {
+                if (controller.isButtonPressed(InputKeys.SWITCH)) {
+                    use_switch = true;
+                    if (playableSprite.isPlayer1()) {
+                        final PlayableSprite next = playableSprite.party.get(KeyboardInput.p_index);
+                        playableSprite.freeze();
+                        KeyboardInput.p_index++;
+                        if (KeyboardInput.p_index >= playableSprite.party.size())
+                            KeyboardInput.p_index = 0;
+                        next.freeze();
+                        next.setUsePhysics(false);
+                        next.rawSetX(playableSprite.getX());
+                        next.rawSetY(playableSprite.getY());
+                        next.appear(new Runnable() {
+                            @Override
+                            public void run() {
+                                next.setUsePhysics(true); next.unfreeze();
+                            }
+                        });
+                        playableSprite.disappear();
+                        playableSprite.getPlayer().changeSprite(next);
+                        if (next.getInput() instanceof ControllerInput) {
+                            ((ControllerInput)next.getInput()).use_switch = true;
+                            if (!GameService.coop_mode)
+                                Input.KEYBOARD.use_switch = true;
+                        }
+                        else
+                            ((KeyboardInput)next.getInput()).use_switch = true;
+                    }
+                }
+            } else if (!controller.isButtonPressed(InputKeys.SWITCH) && use_switch) use_switch = false;
+
+
             if (!use_lock_controller) {
                 if (controller.isButtonPressed(InputKeys.STRAFE)) {
                     use_lock_controller = true;

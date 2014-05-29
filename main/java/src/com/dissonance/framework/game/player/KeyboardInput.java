@@ -9,13 +9,13 @@ import com.dissonance.framework.system.utils.Direction;
 
 public class KeyboardInput implements Input {
     private static boolean pause;
-    private static int p_index;
+    static int p_index;
     private boolean party_switch = false;
     private boolean usespell1, usespell2;
     private boolean use_lock;
     private boolean use_lock_controller;
     private boolean use_attack;
-    private boolean use_switch;
+    boolean use_switch;
     private boolean use_select;
     private boolean use_dodge;
 
