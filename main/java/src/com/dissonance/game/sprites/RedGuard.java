@@ -3,18 +3,15 @@ package com.dissonance.game.sprites;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.combat.Weapon;
-import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.system.utils.Direction;
-import com.dissonance.framework.system.utils.Timer;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.behaviors.Patrol;
 import com.dissonance.game.behaviors.Search;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
-import com.dissonance.game.sprites.factory.Key;
 import com.dissonance.game.w.FactoryFloorCat;
 
 import java.util.Random;
@@ -36,7 +33,7 @@ public class RedGuard extends Enemy {
         setStamina(8);
         setMarksmanship(10);
 
-        setCurrentWeapon(Weapon.getWeapon("admingun").createItem(this));
+        setCurrentWeapon(Weapon.getWeapon("guardgun").createItem(this));
     }
 
     @Override

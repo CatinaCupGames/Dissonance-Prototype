@@ -385,6 +385,19 @@
                  "width":192,
                  "x":1728,
                  "y":560
+                }, 
+                {
+                 "height":64,
+                 "name":"FactoryEntry",
+                 "properties":
+                    {
+                     "triggerclass":"com.dissonance.game.triggers.FactoryEntry"
+                    },
+                 "type":"trigger",
+                 "visible":true,
+                 "width":144,
+                 "x":3680,
+                 "y":672
                 }],
          "opacity":1,
          "type":"objectgroup",

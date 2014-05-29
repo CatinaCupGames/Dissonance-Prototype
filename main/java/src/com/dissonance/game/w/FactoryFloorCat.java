@@ -86,6 +86,34 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         for (BlueGuard melee : melees) {
             melee.setLayer(2);
         }
+
+        for (int i = 0; i < gunGuards.length; i++) {
+            gunGuards[i] = new RedGuard();
+            w.loadAndAdd(gunGuards[i]);
+        }
+
+        gunGuards[0].setX(45*16);
+        gunGuards[0].setY(155*16);
+
+        gunGuards[1].setX(8*16);
+        gunGuards[1].setY(144 * 16);
+
+        gunGuards[2].setX(34*16);
+        gunGuards[2].setY(107 * 16);
+
+        gunGuards[3].setX(33*16);
+        gunGuards[3].setY(94*16);
+
+        gunGuards[4].setX(28*16);
+        gunGuards[4].setY(49*16);
+
+        gunGuards[5].setX(7*16);
+        gunGuards[5].setY(38*16);
+
+        gunGuards[6].setX(40 * 16);
+        gunGuards[6].setY(38*16);
+
+
     }
 
     @Override
@@ -109,6 +137,10 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         jeremiah.setY(208f * 16f);
         jeremiah.setLayer(2);
         jeremiah.setVisible(false);
+
+        for(RedGuard gunGuard : gunGuards){
+            gunGuard.setLayer(6);
+        }
 
         if (GameSettings.Graphics.qualityLights) {
             w.createLight(25*16, 199*16, WALL_LIGHT_BRIGHTNESS, 0.5f);
@@ -148,6 +180,8 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
             createLight(43*16, 32*16,  w);
             createLight(54*16, 24*16,  w);
         }
+
+
     }
 
     @Override

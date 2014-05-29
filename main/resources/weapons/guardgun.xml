@@ -16,7 +16,7 @@
     <bulletSpeed>55</bulletSpeed>
 
     <!--Self explanatory-->
-    <bulletDamage>8</bulletDamage>
+    <bulletDamage>4</bulletDamage>
 
     <!--Distance before the bullet suicides-->
     <range>150</range>

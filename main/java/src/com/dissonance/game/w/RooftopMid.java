@@ -3,7 +3,6 @@ package com.dissonance.game.w;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.game.sprites.RoofLight;
 import com.dissonance.game.sprites.office.OpenWindow;
-import com.dissonance.game.sprites.office.Window;
 
 
 public class RooftopMid extends DemoLevelWorldLoader {
@@ -26,67 +25,67 @@ public class RooftopMid extends DemoLevelWorldLoader {
 
         lights[0].setX(21*16);
         lights[0].setY(21*16);
-        w.createLight(21*16, 21*16, BRIGHTNESS, RADIUS);
+        createLight(w, 21*16, 21*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[1].setX(27*16);
         lights[1].setY(14*16);
-        w.createLight(27*16, 14*16, BRIGHTNESS, RADIUS);
+        createLight(w, 27*16, 14*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[2].setX(63*16);
         lights[2].setY(14*16);
-        w.createLight(64*16, 13*16, BRIGHTNESS, RADIUS);
+        createLight(w, 64*16, 13*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[3].setX(27*16);
         lights[3].setY(34*16);
-        w.createLight(26*16, 35*16, BRIGHTNESS, RADIUS);
+        createLight(w, 26*16, 35*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[4].setX(11*16);
         lights[4].setY(43*16);
-        w.createLight(10*16, 42*16, BRIGHTNESS, RADIUS);
+        createLight(w, 10*16, 42*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[5].setX(36*16);
         lights[5].setY(43*16);
-        w.createLight(37*16, 42*16, BRIGHTNESS, RADIUS);
+        createLight(w, 37*16, 42*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[6].setX(11*16);
         lights[6].setY(85*16);
-        w.createLight(10*16, 86*16, BRIGHTNESS, RADIUS);
+        createLight(w, 10*16, 86*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[7].setX(36*16);
         lights[7].setY(85*16);
-        w.createLight(37*16, 86*16, BRIGHTNESS, RADIUS);
+        createLight(w, 37*16, 86*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[8].setX(22*16);
         lights[8].setY(94*16);
-        w.createLight(21*16, 93*16, BRIGHTNESS, RADIUS);
+        createLight(w, 21*16, 93*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[9].setX(63*16);
         lights[9].setY(94*16);
-        w.createLight(64*16, 93*16, BRIGHTNESS, RADIUS);
+        createLight(w, 64*16, 93*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[10].setX(22*16);
         lights[10].setY(114*16);
-        w.createLight(21*16, 115*16, BRIGHTNESS, RADIUS);
+        createLight(w, 21*16, 115*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[11].setX(63*16);
         lights[11].setY(114*16);
-        w.createLight(64*16, 115*16, BRIGHTNESS, RADIUS);
+        createLight(w, 64*16, 115*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[12].setX(45*16);
         lights[12].setY(85*16);
-        w.createLight(44*16, 86*16, BRIGHTNESS, RADIUS);
+        createLight(w, 44*16, 86*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[13].setX(82*16);
         lights[13].setY(85*16);
-        w.createLight(83*16, 86*16, BRIGHTNESS, RADIUS);
+        createLight(w, 83*16, 86*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[14].setX(82*16);
         lights[14].setY(67*16);
-        w.createLight(83*16, 66*16, BRIGHTNESS, RADIUS);
+        createLight(w, 83*16, 66*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
 
         lights[15].setX(45*16);
         lights[15].setY(67*16);
-        w.createLight(44*16, 66*16, BRIGHTNESS, RADIUS);
+        createLight(w, 44*16, 66*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
     }
 
     @Override
