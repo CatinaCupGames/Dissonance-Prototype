@@ -214,7 +214,7 @@ public class Admin extends Enemy {
                     if (System.currentTimeMillis() - foundTime < FOUND_YOU_MS) return;
 
                     lastAttack = System.currentTimeMillis();
-                    getCurrentWeapon().use();
+                    getCurrentWeapon().use(new Integer(getLayer()));
                     setBehavior(null);
                 } else {
                     if (bup) {

@@ -7,6 +7,7 @@ import com.dissonance.game.spells.impl.Fire;
 import com.dissonance.game.spells.impl.HeavyCure;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public final class Farrand extends PlayableSprite {
     //TODO Set default values for these
@@ -134,7 +135,7 @@ public final class Farrand extends PlayableSprite {
 
     @Override
     public void onNoMovement() {
-        if (isMoving() || ignore_movement) {
+         if (isMoving() || ignore_movement) {
             return;
         }
         super.setFrame(1);
