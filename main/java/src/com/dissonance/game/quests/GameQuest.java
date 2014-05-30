@@ -281,6 +281,21 @@ public class GameQuest  extends PauseQuest {
         GameQuest.INSTANCE.factory_beltsactive = true;
     }
 
+    public void toTheBoss() {
+        setNextQuest(new BossQuest());
+        RenderService.INSTANCE.fadeToBlack(2000);
+        try {
+            RenderService.INSTANCE.waitForFade();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
+            endQuest();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void endQuest() throws IllegalAccessException {
         super.endQuest();

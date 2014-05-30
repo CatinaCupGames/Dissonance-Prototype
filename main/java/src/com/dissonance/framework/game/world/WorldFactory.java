@@ -31,10 +31,12 @@ public class WorldFactory {
      *                              If the world fails to load into memory
      */
     public static World getWorld(String name) throws WorldLoadFailedException {
-        return getWorld(name, true);
+        return getWorld(name, true, null);
     }
 
-    public static World getWorld(String name, boolean cache) throws WorldLoadFailedException {
+    public static World getWorld(String name, WorldLoader toUse) throws WorldLoadFailedException { return getWorld(name, false, toUse); }
+
+    public static World getWorld(String name, boolean cache, WorldLoader toUse) throws WorldLoadFailedException {
         if (isWorldStillLoaded(name)) {
             for (WorldHolder cacheWorld : cacheWorlds) {
                 if (cacheWorld.world.getName().equals(name)) {
@@ -60,7 +62,7 @@ public class WorldFactory {
 
         World w = new World(index == -1 ? random.nextInt() : index);
         w.init();
-        w.load(name);
+        w.load(name, toUse);
         System.out.println("[World Factory] " + w.getName() + " loaded into memory.");
         if (cache) {
             WorldHolder worldHolder = new WorldHolder();
