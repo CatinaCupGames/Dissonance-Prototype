@@ -9,6 +9,7 @@ import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.game.spells.impl.Fire;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -45,7 +46,7 @@ public class OfficeScene extends SimpleScene {
 
 
         WaldomarsMeetingRoom.guard5.setMovementSpeed(4f);
-        WaldomarsMeetingRoom.guard5.setWaypoint(26f * 16, 9f * 16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.guard5.setWaypoint(26f * 16, 7f * 16, WaypointType.SIMPLE);
 
         WaldomarsMeetingRoom.farrand.waitForWaypointReached();
         WaldomarsMeetingRoom.farrand.setAnimation("walk_front");
@@ -66,6 +67,8 @@ public class OfficeScene extends SimpleScene {
         Dialog.displayDialog("Waldos meeting");
 
         Thread.sleep(500);
+
+        WaldomarsMeetingRoom.waldomar.useSpell(new Fire(WaldomarsMeetingRoom.waldomar));
 
         final ParticleSprite.ParticleSource source = ParticleSprite.createParticlesAt(WaldomarsMeetingRoom.waldomar.getX(), WaldomarsMeetingRoom.waldomar.getY(), 1000f, 20f, Color.WHITE, getWorld()).setTime(350);
         source.setRate(100);
