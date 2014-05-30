@@ -28,7 +28,7 @@ public class officefloor2 extends DemoLevelWorldLoader {
         w.loadAndAdd(meleeGuard[0]);
 
         meleeGuard[1].setX(36 * 16);
-        meleeGuard[1].setY(26 * 16);
+        meleeGuard[1].setY(28 * 16);
         w.loadAndAdd(meleeGuard[1]);
 
         meleeGuard[2].setX(31 * 16);
@@ -36,7 +36,7 @@ public class officefloor2 extends DemoLevelWorldLoader {
         w.loadAndAdd(meleeGuard[2]);
 
         meleeGuard[3].setX(57 * 16);
-        meleeGuard[3].setY(27 * 16);
+        meleeGuard[3].setY(28 * 16);
         w.loadAndAdd(meleeGuard[3]);
 
         meleeGuard[4].setX(44 * 16);
@@ -44,7 +44,7 @@ public class officefloor2 extends DemoLevelWorldLoader {
         w.loadAndAdd(meleeGuard[4]);
 
         meleeGuard[5].setX(52 * 16);
-        meleeGuard[5].setY(27 * 16);
+        meleeGuard[5].setY(28 * 16);
         w.loadAndAdd(meleeGuard[5]);
 
         meleeGuard[6].setX(56 * 16);
