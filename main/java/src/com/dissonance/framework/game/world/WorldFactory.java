@@ -36,6 +36,8 @@ public class WorldFactory {
 
     public static World getWorld(String name, WorldLoader toUse) throws WorldLoadFailedException { return getWorld(name, false, toUse); }
 
+    public static World getWorld(String name, boolean cache) throws WorldLoadFailedException { return getWorld(name, cache, null); }
+
     public static World getWorld(String name, boolean cache, WorldLoader toUse) throws WorldLoadFailedException {
         if (isWorldStillLoaded(name)) {
             for (WorldHolder cacheWorld : cacheWorlds) {
