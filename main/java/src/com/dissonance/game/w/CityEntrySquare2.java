@@ -11,6 +11,12 @@ public class CityEntrySquare2 extends DemoLevelWorldLoader {
     public void onLoad(World w){
         super.onLoad(w);
 
+        farrand.setX(21*16);
+        farrand.setY(28*16);
+
+        jeremiah.setX(23*16);
+        jeremiah.setY(29*16);
+
         admin1 = new Admin();
         w.loadAndAdd(admin1);
         admin1.setX(43*16);
