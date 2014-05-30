@@ -23,7 +23,7 @@ public class OfficeScene extends SimpleScene {
         Camera.setPos(center);
         Camera.followSprite(WaldomarsMeetingRoom.farrand);
 
-
+        //these guards are in the shit
 
         WaldomarsMeetingRoom.guard1.setMovementSpeed(4f);
         WaldomarsMeetingRoom.guard1.setWaypoint(4f * 16, 11f * 16, WaypointType.SIMPLE);
@@ -31,7 +31,7 @@ public class OfficeScene extends SimpleScene {
         WaldomarsMeetingRoom.guard2.setWaypoint(9f * 16, 11f * 16, WaypointType.SIMPLE);
 
         WaldomarsMeetingRoom.farrand.setMovementSpeed(4f);
-        WaldomarsMeetingRoom.farrand.setWaypoint(102.95f, 8f*16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.farrand.setWaypoint(6.5f*16, 8f*16, WaypointType.SIMPLE);
 
         WaldomarsMeetingRoom.waldomar.waitForLoaded();
         WaldomarsMeetingRoom.waldomar.face(Direction.UP);
@@ -42,11 +42,11 @@ public class OfficeScene extends SimpleScene {
         WaldomarsMeetingRoom.guard4.setWaypoint(19f * 16, 13f * 16, WaypointType.SIMPLE);
 
         WaldomarsMeetingRoom.jeremiah.setMovementSpeed(4f);
-        WaldomarsMeetingRoom.jeremiah.setWaypoint(16f*16, 12f*16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.jeremiah.setWaypoint(16f*16, 15f*16, WaypointType.SIMPLE);
 
 
         WaldomarsMeetingRoom.guard5.setMovementSpeed(4f);
-        WaldomarsMeetingRoom.guard5.setWaypoint(26f * 16, 7f * 16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.guard5.setWaypoint(26f * 16, 9f * 16, WaypointType.SIMPLE);
 
         WaldomarsMeetingRoom.farrand.waitForWaypointReached();
         WaldomarsMeetingRoom.farrand.setAnimation("walk_front");

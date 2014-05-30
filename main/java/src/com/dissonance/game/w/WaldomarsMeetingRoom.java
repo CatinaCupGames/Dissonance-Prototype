@@ -95,6 +95,9 @@ public class WaldomarsMeetingRoom implements WorldLoader {
     @Override
     public void onLoad(World w) {
 
+        //es fucked up, senor
+        //feex it
+
         var1 = new Bookshelf1();
         w.loadAndAdd(var1);
         var1.setX(220.44997f);
@@ -153,8 +156,8 @@ public class WaldomarsMeetingRoom implements WorldLoader {
 
         guard1 = new BlueGuard();
         w.loadAndAdd(guard1);
-        guard1.setX(509.69965f);
-        guard1.setY(128.24994f);
+        guard1.setX(31*16);
+        guard1.setY(9*16);
 
         guard2 = new BlueGuard();
         w.loadAndAdd(guard2);
@@ -164,17 +167,17 @@ public class WaldomarsMeetingRoom implements WorldLoader {
         guard3 = new BlueGuard();
         w.loadAndAdd(guard3);
         guard3.setX(566.4501f);
-        guard3.setY(128.75002f);
+        guard3.setY(9*16);
 
         guard4 = new BlueGuard();
         w.loadAndAdd(guard4);
         guard4.setX(584.8502f);
-        guard4.setY(128.95f);
+        guard4.setY(9*16);
 
         guard5 = new BlueGuard();
         w.loadAndAdd(guard5);
         guard5.setX(622.5496f);
-        guard5.setY(129.9f);
+        guard5.setY(9*16);
 
         var17 = new DeskRadio();
         w.loadAndAdd(var17);
