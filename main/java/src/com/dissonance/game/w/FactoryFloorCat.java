@@ -5,6 +5,7 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.system.GameSettings;
+import com.dissonance.game.quests.GameQuest;
 import com.dissonance.game.sprites.Admin;
 import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.sprites.RedGuard;
@@ -122,12 +123,6 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
 
         w.setWorldBrightness(0.9f);
 
-        Key key = new Key();
-        key.setX(38f * 16f);
-        key.setY(72f * 16f);
-        key.setLayer(2);
-        w.loadAndAdd(key);
-
         farrand.setX(5f * 16f);
         farrand.setY(208f * 16f);
         farrand.setLayer(2);
@@ -203,6 +198,8 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         miniboss.setX(33f * 16f);
         miniboss.setY(27f * 16f);
         w.loadAndAdd(miniboss);
+
+        GameQuest.INSTANCE.unlockedControl = false;
 
         BlueGuard guard = new BlueGuard();
         guard.setX(28f * 16f);

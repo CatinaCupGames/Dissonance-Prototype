@@ -17,7 +17,6 @@ public class Enemy extends CombatSprite {
     private int defense;
     private int speed;
     private int vigor;
-    private int stamina;
     private int willPower;
     private int focus;
     private int marksmanship;
@@ -40,11 +39,6 @@ public class Enemy extends CombatSprite {
     @Override
     public int getVigor() {
         return vigor;
-    }
-
-    @Override
-    public int getStamina() {
-        return stamina;
     }
 
     @Override
@@ -90,11 +84,6 @@ public class Enemy extends CombatSprite {
     @Override
     public void setVigor(int vigor) {
         this.vigor = vigor;
-    }
-
-    @Override
-    public void setStamina(int stamina) {
-        this.stamina = stamina;
     }
 
     @Override
@@ -183,7 +172,8 @@ public class Enemy extends CombatSprite {
         defense = stats[1];
         speed = stats[2];
         vigor = stats[3];
-        stamina = stats[4];
+        setStamina(stats[4]);
+        setMaxStamina(stats[4]);
         willPower = stats[5];
         focus = stats[6];
         marksmanship = stats[7];
@@ -193,7 +183,7 @@ public class Enemy extends CombatSprite {
     public String toString() {
 
         return "Enemy.java: [\n" + " name: " + spriteName + "\n level: " + level + "\n" + "[\n" + " attack: " + attack +
-                "\n defense: " + defense + "\n speed: " + speed + "\n vigor: " + vigor + "\n stamina: " + stamina +
+                "\n defense: " + defense + "\n speed: " + speed + "\n vigor: " + vigor + "\n stamina: " + getStamina() +
                 "\n willPower: " + willPower + "\n focus: " + focus + "\n marksmanship: " + marksmanship +
                 "\n]\n]";
     }

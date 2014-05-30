@@ -81,13 +81,13 @@ public class ToastText extends UpdatableSprite {
             return;
 
         if (!fadeOut) {
-            setX(parent.getX() - (getWidth() / 4f));
-            setX(getX() * 2f);
+            x = parent.getX() - (getWidth() / 4f);
+            x *= 2f;
 
             float targetAlpha = Camera.ease(0f, 1f, (duration - 200), (RenderService.getTime() - (start + 100L)));
             float target = Camera.ease(0f, this.target, duration, (RenderService.getTime() - (start + 100L)));
-            setY(parent.getY() - target);
-            setY(getY() * 2f);
+            y = parent.getY() - target;
+            y *= 2f;
             alpha = targetAlpha;
             if (target == this.target) {
                 fadeOut = true;

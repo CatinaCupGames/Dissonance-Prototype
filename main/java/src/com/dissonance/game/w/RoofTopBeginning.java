@@ -101,15 +101,19 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
     public void onDisplay(World w) {
         super.onDisplay(w);
 
+        farrand.setUsePhysics(false);
         farrand.setX(4f * 16f);
         farrand.setY(14f * 16f);
         farrand.face(Direction.UP);
         farrand.freeze();
+        farrand.setUsePhysics(true);
 
+        jeremiah.setUsePhysics(false);
         jeremiah.setX(6f * 16f);
         jeremiah.setY(14f * 16f);
         jeremiah.face(Direction.UP);
         jeremiah.freeze();
+        jeremiah.setUsePhysics(true);
     }
 
     @Override
@@ -121,6 +125,7 @@ public class RoofTopBeginning extends DemoLevelWorldLoader {
 
         jeremiah.setX(6f * 16f);
         jeremiah.setY(14f * 16f);
+        jeremiah.setBehavior(null);
 
         for(int i = 0; i < meleeGuard.length; i++){
             meleeGuard[i] = new BlueGuard();

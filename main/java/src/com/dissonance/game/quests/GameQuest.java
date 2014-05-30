@@ -101,6 +101,9 @@ public class GameQuest  extends PauseQuest {
             RoofTopBeginning.farrand.unfreeze();
             RoofTopBeginning.jeremiah.unfreeze();
         }
+
+        Thread.sleep(300);
+        changeToFactory();
     }
 
     public void changeToRooftopMid() throws InterruptedException {
@@ -112,7 +115,8 @@ public class GameQuest  extends PauseQuest {
 
         RooftopMid.farrand.setLayer(1);
         RooftopMid.jeremiah.setLayer(1);
-
+        RooftopMid.farrand.setUsePhysics(false);
+        RooftopMid.jeremiah.setUsePhysics(false);
         RooftopMid.farrand.setX(8f * 16f);
         RooftopMid.farrand.setY(7f * 16f);
         RooftopMid.jeremiah.setX(7f * 16f);
@@ -121,6 +125,8 @@ public class GameQuest  extends PauseQuest {
         RooftopMid.jeremiah.face(Direction.RIGHT);
         RenderService.INSTANCE.fadeFromBlack(1300);
         RenderService.INSTANCE.waitForFade();
+        RooftopMid.jeremiah.setUsePhysics(true);
+        RooftopMid.farrand.setUsePhysics(true);
 
         RooftopMid.farrand.unfreeze();
         RooftopMid.jeremiah.unfreeze();
@@ -131,10 +137,12 @@ public class GameQuest  extends PauseQuest {
         GameCache.OutsideFighting.waitForWorldDisplayed();
 
         OutsideFighting.farrand.setX(27f * 16f);
-        OutsideFighting.farrand.setY(240f * 16f);
+        OutsideFighting.farrand.setY(135f * 16f);
+        OutsideFighting.farrand.setIsInvincible(false);
 
         OutsideFighting.jeremiah.setX(24f * 16f);
-        OutsideFighting.jeremiah.setY(240f * 16f);
+        OutsideFighting.jeremiah.setY(135f * 16f);
+        OutsideFighting.jeremiah.setIsInvincible(false);
 
         Player player1 = Players.getPlayer1();
         player1.getSprite().setVisible(true);
@@ -274,8 +282,11 @@ public class GameQuest  extends PauseQuest {
     }
 
     @Override
-    public void onPlayerDeath() {
+    public void onPlayerDeath(PlayableSprite sprite) {
         Camera.stopFollowing();
+
+
+
         RenderService.INSTANCE.provideData(4400f, RenderService.CROSS_FADE_DURATION);
         RenderService.INSTANCE.provideData(true, RenderService.DONT_UPDATE_TYPE);
 
@@ -310,14 +321,14 @@ public class GameQuest  extends PauseQuest {
                     getWorld().invalidateDrawableList();
                     float alpha = 0f;
                     while (alpha < 1f) {
-                        alpha = (RenderService.getTime() - start) / 4400f;
+                        alpha = (RenderService.getTime() - start) / 1700f;
                         if (alpha > 1f)
                             alpha = 1f;
                         b.setAlpha(alpha);
                         Thread.sleep(10);
                     }
 
-                    Thread.sleep(3500);
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -348,7 +359,7 @@ public class GameQuest  extends PauseQuest {
                     start = RenderService.getTime();
                     float alpha = 1f;
                     while (alpha > 0f) {
-                        alpha = 1f - ((RenderService.getTime() - start) / 4400f);
+                        alpha = 1f - ((RenderService.getTime() - start) / 1700f);
                         if (alpha < 0f)
                             alpha = 0f;
                         b.setAlpha(alpha);
