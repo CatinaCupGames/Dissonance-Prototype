@@ -17,7 +17,7 @@ public class FinalFightScene extends SimpleScene {
 
         Dialog.displayDialog("end scene");
 
-        Vector2f pan = new Vector2f(50*16, 50*16);
+        Vector2f pan = new Vector2f(76*16, 50*16);
         Camera.easeMovement(pan, 3000);
 
         Camera.easeMovement(center, 1000);

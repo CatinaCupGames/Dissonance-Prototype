@@ -315,4 +315,12 @@
         <message>Wait a second. There's going to be more of them.</message>
     </dialog>
 
+    <dialog dialog_id="itsogre">
+        <header>Farrand</header>
+        <message>Good riddance.</message>
+
+        <header>Jeremiah</header>
+        <message speed="450">Farrand...</message>
+    </dialog>
+
 </game_dialog>
