@@ -148,36 +148,43 @@ public class WaldomarsMeetingRoom implements WorldLoader {
         w.loadAndAdd(farrand);
         farrand.setX(548.3502f);
         farrand.setY(128.44998f);
+        farrand.setUsePhysics(false);
 
         jeremiah = new Jeremiah();
         w.loadAndAdd(jeremiah);
         jeremiah.setX(603.4502f);
         jeremiah.setY(129.25f);
+        jeremiah.setUsePhysics(false);
 
         guard1 = new BlueGuard();
         w.loadAndAdd(guard1);
         guard1.setX(31*16);
         guard1.setY(9*16);
+        guard1.setUsePhysics(false);
 
         guard2 = new BlueGuard();
         w.loadAndAdd(guard2);
         guard2.setX(529.60004f);
         guard2.setY(128.45f);
+        guard2.setUsePhysics(false);
 
         guard3 = new BlueGuard();
         w.loadAndAdd(guard3);
         guard3.setX(566.4501f);
         guard3.setY(9*16);
+        guard3.setUsePhysics(false);
 
         guard4 = new BlueGuard();
         w.loadAndAdd(guard4);
         guard4.setX(584.8502f);
         guard4.setY(9*16);
+        guard4.setUsePhysics(false);
 
         guard5 = new BlueGuard();
         w.loadAndAdd(guard5);
         guard5.setX(622.5496f);
         guard5.setY(9*16);
+        guard5.setUsePhysics(false);
 
         var17 = new DeskRadio();
         w.loadAndAdd(var17);
