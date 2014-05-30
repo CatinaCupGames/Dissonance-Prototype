@@ -60,29 +60,26 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         w.loadAndAdd(guard);
 
         melees[0] = new BlueGuard();
-        w.loadAndAdd(melees[0]);
         melees[0].setX(54*16);
         melees[0].setY(184*16);
 
         melees[1] = new BlueGuard();
-        w.loadAndAdd(melees[1]);
         melees[1].setX(31*16);
         melees[1].setY(171*16);
 
         melees[2] = new BlueGuard();
-        w.loadAndAdd(melees[2]);
         melees[2].setX(14*16);
         melees[2].setY(153*16);
 
         melees[3] = new BlueGuard();
-        w.loadAndAdd(melees[3]);
         melees[3].setX(40*16);
         melees[3].setY(116*16);
 
         melees[4] = new BlueGuard();
-        w.loadAndAdd(melees[4]);
         melees[4].setX(13*16);
         melees[4].setY(50*16);
+
+        w.loadAndAdd(melees);
 
         for (BlueGuard melee : melees) {
             melee.setLayer(2);
@@ -94,31 +91,26 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
 
         gunGuards[0].setX(45*16);
         gunGuards[0].setY(155*16);
-        w.loadAndAdd(gunGuards[0]);
 
         gunGuards[1].setX(8*16);
         gunGuards[1].setY(144 * 16);
-        w.loadAndAdd(gunGuards[1]);
 
         gunGuards[2].setX(34*16);
         gunGuards[2].setY(107 * 16);
-        w.loadAndAdd(gunGuards[2]);
 
         gunGuards[3].setX(33*16);
         gunGuards[3].setY(94*16);
-        w.loadAndAdd(gunGuards[3]);
 
         gunGuards[4].setX(28*16);
         gunGuards[4].setY(49*16);
-        w.loadAndAdd(gunGuards[4]);
 
         gunGuards[5].setX(7*16);
         gunGuards[5].setY(38*16);
-        w.loadAndAdd(gunGuards[5]);
 
         gunGuards[6].setX(40 * 16);
         gunGuards[6].setY(38*16);
-        w.loadAndAdd(gunGuards[6]);
+
+        w.loadAndAdd(gunGuards);
 
         for(RedGuard gunGuard : gunGuards){
             gunGuard.setLayer(6);

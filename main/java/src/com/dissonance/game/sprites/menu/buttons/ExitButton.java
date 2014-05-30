@@ -1,8 +1,7 @@
 package com.dissonance.game.sprites.menu.buttons;
 
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.game.quests.MenuQuest;
-import com.dissonance.game.sprites.menu.Button;
+import com.dissonance.game.sprites.menu.TextButton;
 
 public class ExitButton extends TextButton {
     @Override

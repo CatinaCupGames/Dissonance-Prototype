@@ -26,7 +26,7 @@ public class OutsideFighting extends DemoLevelWorldLoader {
             w.createLight(70*16, 301*16, 1.6f, 0.34f);
             w.createLight(64*16, 301*16, 1.6f, 0.34f);
         } else {
-            w.setWorldBrightness(0.7f);
+            w.setWorldBrightness(0.8f);
             w.createLight(-200, -200, 0.4f, 0.1f); //Lights for brightness
             w.createLight(-200, -200, 0.4f, 0.1f); //Lights for brightness
         }
@@ -95,11 +95,11 @@ public class OutsideFighting extends DemoLevelWorldLoader {
     public void onRespawn(World w) {
         super.onRespawn(w);
 
-        farrand.setX(27f * 16f);
-        farrand.setY(240f*16f);
+        farrand.setX(38f * 16f);
+        farrand.setY(131f*16f);
 
         jeremiah.setX(24f*16f);
-        jeremiah.setY(240f*16f);
+        jeremiah.setY(131f*16f);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class OutsideFighting extends DemoLevelWorldLoader {
         farrand.setY(131f*16f);
 
         jeremiah.setX(24f*16f);
-        jeremiah.setY(240f*16f);
+        jeremiah.setY(131f*16f);
 
         for(StreetLamp lamp : lamps1) {
             lamp.setCutOffMargin(22f);

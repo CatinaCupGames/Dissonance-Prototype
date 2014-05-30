@@ -43,8 +43,8 @@ public abstract class DemoLevelWorldLoader implements WorldLoader {
             w.removeSprite(farrand);
         if (w.getAllCombatSprites().contains(jeremiah))
             w.removeSprite(jeremiah);
-        w.loadAndAdd(farrand);
-        w.loadAndAdd(jeremiah);
+
+        w.loadAndAdd(farrand, jeremiah);
 
         huds[0] = new BaseHUD(Players.createPlayer1()); //Because fuck memory leaks
         huds[0].display(w);

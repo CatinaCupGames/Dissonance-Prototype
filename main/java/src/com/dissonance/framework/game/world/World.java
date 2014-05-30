@@ -685,15 +685,16 @@ public final class World {
             }
         });
     }
-
-    public void loadAndAdd(Drawable d) {
-        if (d instanceof Sprite) {
-            if (d instanceof AnimatedSprite) {
-                loadAnimatedTextureForSprite((AnimatedSprite) d);
+    public void loadAndAdd(Drawable... drawables) {
+        for (Drawable d : drawables) {
+            if (d instanceof Sprite) {
+                if (d instanceof AnimatedSprite) {
+                    loadAnimatedTextureForSprite((AnimatedSprite) d);
+                }
+                addSprite((Sprite) d);
+            } else {
+                addDrawable(d);
             }
-            addSprite((Sprite) d);
-        } else {
-            addDrawable(d);
         }
     }
 
@@ -942,18 +943,11 @@ public final class World {
                     if (drawable instanceof UI) {
                         UI ui = (UI)drawable;
                         uiElements.remove(ui);
-                        udrawables.remove(ui);
 
                         uiElements.add(i, ui);
-                        udrawables.add(i, ui);
                     } else {
                         unsorted.remove(drawable);
                         unsorted.add(i, drawable);
-                        if (drawable instanceof UpdatableDrawable) {
-                            UpdatableDrawable ud = (UpdatableDrawable)drawable;
-                            udrawables.remove(ud);
-                            udrawables.add(i, ud);
-                        }
                     }
                 }
             }, true); //Always invoke the request on the next frame, to avoid a concurrent exception
@@ -997,6 +991,10 @@ public final class World {
         }
 
         return null;
+    }
+
+    public List<UI> getUIList() {
+        return this.uiElements;
     }
 
     private class DisplayWaiters {

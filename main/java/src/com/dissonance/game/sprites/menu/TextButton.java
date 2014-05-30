@@ -1,4 +1,4 @@
-package com.dissonance.game.sprites.menu.buttons;
+package com.dissonance.game.sprites.menu;
 
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.text.RenderText;
@@ -48,9 +48,6 @@ public abstract class TextButton extends Button {
 
         setWidth(text.getWidth(getText()));
         setHeight(text.getHeight());
-
-        setX(640 - (getWidth() / 2f));
-        setY(360);
     }
 
     @Override

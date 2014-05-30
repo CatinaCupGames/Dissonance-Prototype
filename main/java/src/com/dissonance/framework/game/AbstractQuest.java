@@ -159,7 +159,7 @@ public abstract class AbstractQuest {
         return world;
     }
 
-    protected void setWorld(World world, RenderService.TransitionType transitionType) {
+    public void setWorld(World world, RenderService.TransitionType transitionType) {
         setWorld(world, transitionType, true);
     }
 

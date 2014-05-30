@@ -1,5 +1,6 @@
 package com.dissonance.game.sprites.menu;
 
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.render.RenderService;
 
@@ -26,6 +27,7 @@ public class Static extends AnimatedSprite {
 
     @Override
     public void render() {
+        _update();
         glPushMatrix();
         glLoadIdentity();
         glScalef(RenderService.ZOOM_SCALE, RenderService.ZOOM_SCALE, 1f);
@@ -33,12 +35,12 @@ public class Static extends AnimatedSprite {
         glPopMatrix();
     }
 
-    /*private void _update() {
-        if (!RenderService.INSTANCE.isUpdating()) {
+    private void _update() {
+        if (GameService.getCurrentQuest().isPaused()) {
             if (System.currentTimeMillis() - lastFrame >= getAnimationSpeed()) {
                 lastFrame = System.currentTimeMillis();
                 onAnimate();
             }
         }
-    }*/
+    }
 }

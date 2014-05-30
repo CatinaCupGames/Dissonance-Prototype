@@ -29,6 +29,7 @@ import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.menu.Background;
 import com.dissonance.game.sprites.menu.Static;
+import com.dissonance.game.sprites.menu.tutorial.Tutorial;
 import com.dissonance.game.sprites.outside.Factory;
 import com.dissonance.game.w.*;
 
@@ -96,15 +97,27 @@ public class GameQuest  extends PauseQuest {
             RoofTopBeginning.jeremiah.setWaypoint(RoofTopBeginning.farrand.getX(), RoofTopBeginning.farrand.getY(), WaypointType.SIMPLE);
             RoofTopBeginning.jeremiah.disappear();
             RoofTopBeginning.jeremiah.waitForWaypointReached();
-            RoofTopBeginning.farrand.unfreeze();
-            RoofTopBeginning.jeremiah.unfreeze();
-        } else {
-            RoofTopBeginning.farrand.unfreeze();
-            RoofTopBeginning.jeremiah.unfreeze();
         }
 
-        Thread.sleep(300);
-        changeToOffice2();
+        tutoral = Tutorial.display();
+        getWorld().loadAndAdd(tutoral);
+    }
+
+    private Sprite[] tutoral;
+
+    public void closeTutorial() {
+        for (Sprite s : tutoral) {
+            getWorld().removeSprite(s);
+        }
+
+        RoofTopBeginning.farrand.unfreeze();
+        RoofTopBeginning.jeremiah.unfreeze();
+
+        try {
+            bossBattle();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void changeToRooftopMid() throws InterruptedException {
@@ -417,10 +430,8 @@ public class GameQuest  extends PauseQuest {
         GameCache.FactoryFloor.waitForWorldDisplayed();
         TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
 
-        //FactoryFloorCat.farrand.setX(5f * 16f);
-        //FactoryFloorCat.farrand.setY(208f * 16f);
-        FactoryFloorCat.farrand.setX(55f * 16f);
-        FactoryFloorCat.farrand.setY(76f * 16f);
+        FactoryFloorCat.farrand.setX(5f * 16f);
+        FactoryFloorCat.farrand.setY(208f * 16f);
         FactoryFloorCat.farrand.setLayer(2);
         FactoryFloorCat.farrand.setIsInvincible(false);
 
@@ -586,5 +597,17 @@ public class GameQuest  extends PauseQuest {
 
         RooftopMid.farrand.unfreeze();
         RooftopMid.jeremiah.unfreeze();
+    }
+
+    public void bossBattle() throws InterruptedException {
+        RenderService.INSTANCE.fadeToBlack(1800);
+        RenderService.INSTANCE.waitForFade();
+
+        setNextQuest(new BossQuest());
+        try {
+            endQuest();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

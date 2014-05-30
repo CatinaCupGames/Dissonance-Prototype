@@ -1256,26 +1256,13 @@
                  "name":"outside.PoliceBarrierV",
                  "properties":
                     {
-
+                     "layer":"0"
                     },
                  "type":"sprite",
                  "visible":true,
                  "width":48,
                  "x":2272,
                  "y":1552
-                }, 
-                {
-                 "height":96,
-                 "name":"outside.PoliceBarrierV",
-                 "properties":
-                    {
-
-                    },
-                 "type":"sprite",
-                 "visible":true,
-                 "width":48,
-                 "x":2272,
-                 "y":1472
                 }, 
                 {
                  "height":96,
@@ -1928,7 +1915,7 @@
                  "y":2112
                 }, 
                 {
-                 "height":1280,
+                 "height":1360,
                  "name":"",
                  "properties":
                     {
@@ -1936,7 +1923,7 @@
                     },
                  "type":"hitbox",
                  "visible":true,
-                 "width":89,
+                 "width":96,
                  "x":1781,
                  "y":320
                 }, 

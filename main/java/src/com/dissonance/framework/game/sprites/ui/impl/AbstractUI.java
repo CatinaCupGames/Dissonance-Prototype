@@ -166,6 +166,10 @@ public abstract class AbstractUI implements UI {
         world.requestMoveDrawable(this, 0);
     }
 
+    public void bringToFront() {
+        world.requestMoveDrawable(this, world.getUIList().size() - 1);
+    }
+
     public void setParent(AbstractUI parent) {
         if (this.parent != null)
             this.parent.children.remove(this);
@@ -296,5 +300,4 @@ public abstract class AbstractUI implements UI {
     protected abstract void onOpen();
 
     protected abstract void onClose();
-
 }

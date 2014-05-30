@@ -95,7 +95,7 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
 
         Thread.sleep(1920);
 
-        sprite.setWaypoint(getX() - 16f, sprite.getY() + 64f, WaypointType.SIMPLE);
+        sprite.setWaypoint(getX(), sprite.getY() + 64f, WaypointType.SIMPLE);
         sprite.waitForWaypointReached();
         sprite.setLayer(2);
         sprite.unfreeze();

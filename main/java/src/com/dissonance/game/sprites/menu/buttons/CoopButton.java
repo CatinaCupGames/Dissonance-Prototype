@@ -1,13 +1,7 @@
 package com.dissonance.game.sprites.menu.buttons;
 
-import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.render.text.RenderText;
-import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.quests.MenuQuest;
-import com.dissonance.game.sprites.menu.Button;
-import org.newdawn.slick.TrueTypeFont;
-
-import java.awt.*;
+import com.dissonance.game.sprites.menu.TextButton;
 
 public class CoopButton extends TextButton {
     @Override

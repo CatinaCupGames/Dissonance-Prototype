@@ -30,6 +30,7 @@ public class RenderService extends Service {
     public static final int ENABLE_CROSS_FADE = 1;
     public static final int CROSS_FADE_DURATION = 2;
     public static final int DONT_UPDATE_TYPE = 4;
+    public static final int SET_UI_VISIBILITY = 8;
 
     public static float ZOOM_SCALE = 2f;
     public static float FPS = 0f;
@@ -59,6 +60,7 @@ public class RenderService extends Service {
     private static float curAlpha;
     private float newAlpha;
     private float startAlpha;
+    private boolean show_ui = true;
     private boolean dontUpdate = false;
 
     long next_tick;
@@ -318,6 +320,8 @@ public class RenderService extends Service {
             this.fadeDuration = (float)obj;
         } else if (type == DONT_UPDATE_TYPE) {
             this.dontUpdate = (boolean)obj;
+        } else if (type == SET_UI_VISIBILITY) {
+            this.show_ui = (boolean)obj;
         }
     }
 
@@ -439,16 +443,17 @@ public class RenderService extends Service {
             glLoadIdentity();
             glScalef(ZOOM_SCALE, ZOOM_SCALE, 1f);
 
-            for (UI e : current_world.getElements()) {
-                if (e == null)
-                    return;
-                try {
-                    e.render();
-                } catch (Throwable t) {
-                    t.printStackTrace();
+            if (show_ui) {
+                for (UI e : current_world.getElements()) {
+                    if (e == null)
+                        return;
+                    try {
+                        e.render();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
                 }
             }
-
 
             if (next_world != null) {
                 long time = getTime() - fadeStartTime;

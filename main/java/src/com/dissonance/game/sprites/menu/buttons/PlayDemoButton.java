@@ -1,14 +1,7 @@
 package com.dissonance.game.sprites.menu.buttons;
 
-import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.render.text.RenderText;
-import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.quests.MenuQuest;
 import com.dissonance.game.sprites.menu.*;
-import org.newdawn.slick.*;
-
-import java.awt.*;
-import java.awt.Color;
 
 public class PlayDemoButton extends TextButton {
     @Override

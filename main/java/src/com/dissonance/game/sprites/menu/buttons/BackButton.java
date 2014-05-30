@@ -1,6 +1,7 @@
 package com.dissonance.game.sprites.menu.buttons;
 
 import com.dissonance.game.quests.MenuQuest;
+import com.dissonance.game.sprites.menu.TextButton;
 
 public class BackButton extends TextButton {
     @Override

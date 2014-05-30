@@ -18,22 +18,21 @@ public class CityEntrySquare2 extends DemoLevelWorldLoader {
         jeremiah.setY(29*16);
 
         admin1 = new Admin();
-        w.loadAndAdd(admin1);
         admin1.setX(43*16);
         admin1.setY(56*16);
         admin1.setHostile(false);
 
         admin2 = new Admin();
-        w.loadAndAdd(admin2);
         admin2.setX(57*16);
         admin2.setY(56*16);
         admin2.setHostile(false);
 
         admin3 = new Admin();
-        w.loadAndAdd(admin3);
         admin3.setX(43*16);
         admin3.setY(56*16);
         admin3.setHostile(false);
+
+        w.loadAndAdd(admin1, admin2, admin3);
     }
 
     @Override

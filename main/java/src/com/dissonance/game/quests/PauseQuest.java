@@ -4,6 +4,7 @@ import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
+import com.dissonance.framework.game.scene.dialog.DialogUI;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.game.sprites.hud.BaseHUD;
 import com.dissonance.game.sprites.menu.pause.PauseMenu;
@@ -39,6 +40,9 @@ public abstract class PauseQuest extends AbstractQuest {
                 if (player.getSprite() != null)
                     continue;
                 player.join();
+
+                if (DialogUI.currentDialogBox() != null)
+                    DialogUI.currentDialogBox().bringToFront();
             }
         }
         GameService.coop_mode = Players.getCurrentlyPlayingSprites().length > 1;

@@ -4,9 +4,11 @@ import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
+import com.dissonance.game.GameCache;
 import com.dissonance.game.w.menu.CoopMenuWorld;
 
 public class MenuQuest extends PauseQuest {
@@ -15,14 +17,23 @@ public class MenuQuest extends PauseQuest {
 
     @Override
     public void startQuest() throws Exception {
+        Camera.removeBounds();
+        Camera.setX(0f);
+        Camera.setY(0f);
 
         INSTANCE = this;
-        main = WorldFactory.getWorld("menu.MainMenu");
+        GameCache.MainMenu = WorldFactory.getWorld("menu.MainMenu");
+        main = GameCache.MainMenu;
         setWorld(main);
+        main.waitForWorldDisplayed();
+
+        WorldFactory.clearCache();
+        GameCache.clear();
+
         Players.createPlayer1();
         main.waitForWorldDisplayed();
-        RenderService.INSTANCE.fadeToBlack(1f);
-        RenderService.INSTANCE.fadeFromBlack(2500);
+        if (RenderService.getCurrentAlphaValue() == 0f)
+            RenderService.INSTANCE.fadeFromBlack(2500);
         Sound.playSound("introtheme");
     }
 

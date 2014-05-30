@@ -2,7 +2,6 @@ package com.dissonance.game;
 
 import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.game.quests.BossQuest;
 import com.dissonance.game.quests.CatQuest;
 
 
@@ -13,7 +12,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         GameService.loadEssentials(args);
         RenderService.ZOOM_SCALE = 2;
-        GameService.beginQuest(new BossQuest());
+        GameService.beginQuest(new CatQuest());
 
 
     }

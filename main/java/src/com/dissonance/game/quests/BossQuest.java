@@ -22,6 +22,9 @@ public class BossQuest extends PauseQuest {
         CityEntrySquare2.farrand.freeze(true, BossQuest.class);
         CityEntrySquare2.jeremiah.freeze(true, BossQuest.class);
 
+        RenderService.INSTANCE.fadeFromBlack(1800);
+        RenderService.INSTANCE.waitForFade();
+
         playSceneAndWait(BossStart.class);
 
         Player player1 = Players.getPlayer1();
