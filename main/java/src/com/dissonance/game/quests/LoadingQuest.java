@@ -67,7 +67,7 @@ public class LoadingQuest extends AbstractQuest {
 
 
 
-                            setNextQuest(new OfficeQuest());
+                            setNextQuest(new DisclaimerQuest());
 
 
                             endQuest();
