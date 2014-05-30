@@ -67,8 +67,8 @@ public class LoadingQuest extends AbstractQuest {
 
 
 
-                            setNextQuest(new HallwayQuest());
 
+                            setNextQuest(new HallwayQuest());
 
                             endQuest();
                         } catch (IllegalAccessException e) {

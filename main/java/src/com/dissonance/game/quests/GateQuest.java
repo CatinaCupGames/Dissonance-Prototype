@@ -10,6 +10,7 @@ import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
+import com.dissonance.game.behaviors.WaypointLikeLeaderFollow;
 import com.dissonance.game.scenes.GateScene;
 import com.dissonance.game.w.CityEntrySquare;
 
@@ -106,12 +107,13 @@ public class GateQuest extends PauseQuest {
     }
 
     private void followFarrand() {
-        CityEntrySquare.guard1.setBehavior(new LeaderFollow(CityEntrySquare.guard1, CityEntrySquare.farrand, new Vector(0f, 32f)));
-        CityEntrySquare.guard2.setBehavior(new LeaderFollow(CityEntrySquare.guard2, CityEntrySquare.farrand, new Vector(32f, 32f)));
-        CityEntrySquare.guard3.setBehavior(new LeaderFollow(CityEntrySquare.guard3, CityEntrySquare.farrand, new Vector(32f, 0f)));
-        CityEntrySquare.guard4.setBehavior(new LeaderFollow(CityEntrySquare.guard4, CityEntrySquare.farrand, new Vector(32f, -32f)));
-        CityEntrySquare.guard5.setBehavior(new LeaderFollow(CityEntrySquare.guard5, CityEntrySquare.farrand, new Vector(0f, -32f)));
-        CityEntrySquare.jeremiah.setBehavior(new LeaderFollow(CityEntrySquare.jeremiah, CityEntrySquare.farrand, new Vector(0f, 16f)));
+        CityEntrySquare.guard1.setBehavior(new WaypointLikeLeaderFollow(CityEntrySquare.guard1, CityEntrySquare.farrand, new Vector(0f, 32f)));
+        CityEntrySquare.guard2.setBehavior(new WaypointLikeLeaderFollow(CityEntrySquare.guard2, CityEntrySquare.farrand, new Vector(32f, 32f)));
+        CityEntrySquare.guard3.setBehavior(new WaypointLikeLeaderFollow(CityEntrySquare.guard3, CityEntrySquare.farrand, new Vector(32f, 0f)));
+        CityEntrySquare.guard4.setBehavior(new WaypointLikeLeaderFollow(CityEntrySquare.guard4, CityEntrySquare.farrand, new Vector(32f, -32f)));
+        CityEntrySquare.guard5.setBehavior(new WaypointLikeLeaderFollow(CityEntrySquare.guard5, CityEntrySquare.farrand, new Vector(0f, -32f)));
+        if (Players.getPlayer(2) == null || Players.getPlayer(2).getSprite() == null)
+            CityEntrySquare.jeremiah.setBehavior(new WaypointLikeLeaderFollow(CityEntrySquare.jeremiah, CityEntrySquare.farrand, new Vector(0f, 16f)));
 
         CityEntrySquare.guard1.ignoreCollisionWith(CityEntrySquare.jeremiah, CityEntrySquare.guard2, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard5, CityEntrySquare.farrand);
         CityEntrySquare.guard2.ignoreCollisionWith(CityEntrySquare.jeremiah, CityEntrySquare.guard1, CityEntrySquare.guard3, CityEntrySquare.guard4, CityEntrySquare.guard5, CityEntrySquare.farrand);

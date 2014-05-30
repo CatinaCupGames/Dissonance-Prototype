@@ -73,7 +73,7 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
 
     @Override
     public double getDistanceRequired() {
-        return 65;
+        return 90;
     }
 
     private void _play(PlayableSprite sprite) throws InterruptedException {

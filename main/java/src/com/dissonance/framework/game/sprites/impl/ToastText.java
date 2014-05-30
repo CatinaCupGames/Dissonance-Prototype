@@ -23,6 +23,7 @@ public class ToastText extends UpdatableSprite {
         this.parent = parent;
         this.text = text;
         this.duration = duration;
+        this.layer = parent.getLayer();
 
         target = (parent.getHeight() / 2f) + 9f;
     }
@@ -79,6 +80,8 @@ public class ToastText extends UpdatableSprite {
         super.update();
         if (isUpdateCanceled())
             return;
+
+        this.layer = parent.getLayer();
 
         if (!fadeOut) {
             x = parent.getX() - (getWidth() / 4f);
