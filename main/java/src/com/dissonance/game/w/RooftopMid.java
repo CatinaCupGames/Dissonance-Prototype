@@ -1,6 +1,8 @@
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
+import com.dissonance.game.sprites.BlueGuard;
+import com.dissonance.game.sprites.RedGuard;
 import com.dissonance.game.sprites.RoofLight;
 import com.dissonance.game.sprites.office.OpenWindow;
 
@@ -9,6 +11,10 @@ public class RooftopMid extends DemoLevelWorldLoader {
     public static RoofLight[] lights = new RoofLight[16];
     private static final float BRIGHTNESS = 1.1f;
     private static final float RADIUS = 0.6f;
+
+    public static RedGuard[] gunGuards = new RedGuard[3];
+
+    public static BlueGuard[] meleeguards = new BlueGuard[5];
     @Override
     public void onLoad(World w) {
         super.onLoad(w);
@@ -86,6 +92,41 @@ public class RooftopMid extends DemoLevelWorldLoader {
         lights[15].setX(45*16);
         lights[15].setY(67*16);
         createLight(w, 44*16, 66*16, BRIGHTNESS, RADIUS, RADIUS, BRIGHTNESS);
+
+        for(int i = 0; i < gunGuards.length; i ++){
+            gunGuards[i] = new RedGuard();
+            w.loadAndAdd(gunGuards[i]);
+        }
+
+        gunGuards[0].setX(45*16);
+        gunGuards[0].setY(15*16);
+
+        gunGuards[1].setX(16*16);
+        gunGuards[1].setY(74*16);
+
+        gunGuards[2].setX(42*16);
+        gunGuards[2].setY(101*16);
+
+        for(int i = 0; i < meleeguards.length; i++){
+            meleeguards[i] = new BlueGuard();
+            w.loadAndAdd(meleeguards[i]);
+        }
+
+        meleeguards[0].setX(27*16);
+        meleeguards[0].setY(24*16);
+
+        meleeguards[1].setX(36*16);
+        meleeguards[1].setY(33*16);
+
+        meleeguards[2].setX(24*16);
+        meleeguards[2].setY(44*16);
+
+        meleeguards[3].setX(32*16);
+        meleeguards[3].setY(101*16);
+
+        meleeguards[4].setX(37*16);
+        meleeguards[4].setY(101*16);
+
     }
 
     @Override

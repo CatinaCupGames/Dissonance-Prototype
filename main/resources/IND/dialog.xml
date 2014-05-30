@@ -25,7 +25,7 @@
 
     <dialog dialog_id="found_key_jeremiah">
         <header>Jeremiah</header>
-        <message>it's a Keycard, must go to one of the doors around here.</message>
+        <message>It's a Keycard... Must go to one of the doors around here.</message>
     </dialog>
 
     <dialog dialog_id="ControlLockFarrand">
@@ -203,7 +203,7 @@
         <message>for violating its terms in the Ecological Preservation Contract.</message>
 
         <header>Waldomar</header>
-        <message>5000 hectares... That is truly a grand fine for breaking a law</message>
+        <message>2000 kilometers... That is truly a grand fine for breaking a law</message>
         <message type="append">I never knew existed.</message>
 
         <header>Farrand</header>
@@ -301,6 +301,13 @@
         <message>Unless you don't want to make it out of here, I'd suggest you stop now.</message>
         <header>Jeremiah</header>
         <message speed="500">...</message>
+    </dialog>
+
+    <dialog dialog_id="end scene">
+        <header>Jeremiah</header>
+        <message>Hey look, there's the gate!</message>
+        <header>Farrand</header>
+        <message>Wait a second. They're not going to let </message>
     </dialog>
 
 </game_dialog>

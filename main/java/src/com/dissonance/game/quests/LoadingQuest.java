@@ -66,7 +66,7 @@ public class LoadingQuest extends AbstractQuest {
                             Thread.sleep(2000);
 
 
-                            setNextQuest(new GameQuest());
+                            setNextQuest(new OfficeQuest());
 
                             endQuest();
                         } catch (IllegalAccessException e) {
