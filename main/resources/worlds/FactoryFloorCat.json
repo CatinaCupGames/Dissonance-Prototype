@@ -710,13 +710,13 @@
                  "name":"factory.ControlRoom",
                  "properties":
                     {
-
+                     "width":"-62"
                     },
                  "type":"sprite",
                  "visible":true,
                  "width":62,
-                 "x":32,
-                 "y":704
+                 "x":920,
+                 "y":1010
                 }, 
                 {
                  "height":54,

@@ -4,6 +4,7 @@ import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
+import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
@@ -81,17 +82,30 @@ public class ElevatorDoor extends AnimatedSprite implements Selectable, Collidab
         return false;
     }
 
+    private static boolean active = false;
     @Override
     public boolean onSelected(final PlayableSprite player) {
+        if (active) return false;
         double angle = angleTowards(player);
         if (angle > 227.0 && angle < 314.0) {
+            if (player.getWorld().getName().equals("officefloor2")) {
+                active = true;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Dialog.displayDialog("haxfix");
+                        active = false;
+                    }
+                }).start();
+                return true;
+            }
             player.freeze();
             player.ignoreCollisionWith(this);
 
             setAnimation("opening");
             reverseAnimation(false);
             playAnimation();
-
+            active = true;
             addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
                 @Override
                 public void onAnimationFinished(AnimatedSprite sprite) {
@@ -112,10 +126,18 @@ public class ElevatorDoor extends AnimatedSprite implements Selectable, Collidab
                                 player1.getSprite().freeze();
                                 player1.getSprite().disappear();
                             }
-
+                            int ol = getLayer();
                             player.setLayer(1);
                             player.setMovementSpeed(8f);
-                            player.setWaypoint(29f * 16f, 7f * 16f, WaypointType.SIMPLE);
+                            if (player.getWorld().getName().startsWith("Factory"))
+                                player.setWaypoint(29f * 16f, 7f * 16f, WaypointType.SIMPLE);
+                            else {
+                                setLayer(2);
+                                if (player.getWorld().getName().endsWith("2"))
+                                    player.setWaypoint(17f * 16f, 4f * 16f, WaypointType.SIMPLE);
+                                else
+                                    player.setWaypoint(47f * 16f, 4f * 16f, WaypointType.SIMPLE);
+                            }
                             try {
                                 player.waitForWaypointReached();
                                 Thread.sleep(1200);
@@ -131,7 +153,15 @@ public class ElevatorDoor extends AnimatedSprite implements Selectable, Collidab
 
                                 player.setUsePhysics(true);
 
-                                GameQuest.INSTANCE.changeToRooftopMid();
+                                setLayer(ol);
+
+                                if (player.getWorld().getName().startsWith("Factory"))
+                                    GameQuest.INSTANCE.changeToRooftopMid();
+                                else if (player.getWorld().getName().equals("OfficeFloor1"))
+                                    GameQuest.INSTANCE.changeToOffice2();
+                                else
+                                    GameQuest.INSTANCE.backToOffice1();
+                                active = false;
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }

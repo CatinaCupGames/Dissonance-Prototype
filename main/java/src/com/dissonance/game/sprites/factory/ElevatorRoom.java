@@ -11,6 +11,7 @@ public class ElevatorRoom extends ImageSprite {
     public void onLoad() {
         super.onLoad();
         setCutOffMargin(-80); //Never cut off
-        setY(getY() + 2f); //Just move it a smidge
+        setY(getY() - 2f); //Just move it a smidge
+        setX(getX() - 4f);
     }
 }

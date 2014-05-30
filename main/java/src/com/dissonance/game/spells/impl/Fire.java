@@ -3,10 +3,9 @@ package com.dissonance.game.spells.impl;
 import com.dissonance.framework.game.combat.spells.StatusEffect;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.sprites.impl.game.ParticleSprite;
-import com.dissonance.game.spells.BoltSpell;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.game.spells.ProjectileSpell;
 import com.dissonance.game.spells.statuseffects.Burn;
-import com.sun.org.apache.xml.internal.security.utils.resolver.implementations.ResolverAnonymous;
 
 import java.awt.*;
 import java.util.Random;
@@ -71,5 +70,11 @@ public class Fire extends ProjectileSpell {
     @Override
     public String getSpriteName() {
         return "fireball_spell";
+    }
+
+    @Override
+    public void castSpell(){
+        super.castSpell();
+        Sound.playSound("firespell");
     }
 }

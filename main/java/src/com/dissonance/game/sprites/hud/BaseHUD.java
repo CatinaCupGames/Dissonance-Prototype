@@ -25,6 +25,8 @@ public class BaseHUD extends AbstractUI {
     private MPText mpText;
     private StatusEffectBar seBar;
     private Glow glow;
+    private StaminaBar staminaBar;
+    private int oS;
 
     public BaseHUD(Player owner) {
         super();
@@ -36,6 +38,7 @@ public class BaseHUD extends AbstractUI {
         mpText = new MPText(this);
         seBar = new StatusEffectBar(this);
         glow = new Glow(this);
+        staminaBar = new StaminaBar(this);
     }
 
     @Override
@@ -71,10 +74,13 @@ public class BaseHUD extends AbstractUI {
             seBar.close();
         if (glow.isOpened())
             glow.close();
+        if (staminaBar.isOpened())
+            staminaBar.close();
 
         seBar.display(world);
         healthBar.display(world);
         mpBar.display(world);
+        staminaBar.display(world);
         mpText.display(world);
         healthText.display(world);
         levelText.display(world);
@@ -84,12 +90,22 @@ public class BaseHUD extends AbstractUI {
         mpText.scale(SCALE);
         mpBar.scale(SCALE);
         healthBar.scale(SCALE);
+        staminaBar.scale(SCALE);
         seBar.scale(SCALE);
         glow.scale(SCALE);
     }
 
     @Override
     protected void onClose() {
+        seBar.close();
+        healthBar.close();
+        mpBar.close();
+        staminaBar.close();
+        mpText.close();
+        healthText.close();
+        levelText.close();
+        glow.close();
+
     }
 
     private boolean overIt = true;
@@ -114,6 +130,11 @@ public class BaseHUD extends AbstractUI {
                 setMaxMP(owner.getSprite().getMaxMP());
                 setMP(owner.getSprite().getMP());
                 oMP = owner.getSprite().getMP();
+            }
+
+            if (oS != owner.getSprite().getStamina() || owner.getSprite().getStamina() != getStamina()) {
+                setStamina(owner.getSprite().getStamina(), owner.getSprite().getMaxStamina());
+                oS = owner.getSprite().getStamina();
             }
 
             for (StatusEffect effect : owner.getSprite().getStatusEffects()) {
@@ -155,6 +176,10 @@ public class BaseHUD extends AbstractUI {
             healthText.setAlpha(temp);
             levelText.setAlpha(temp);
         }*/
+    }
+
+    private void setStamina(int stamina, int maxStamina) {
+        staminaBar.setStamina((double)stamina, (double)maxStamina);
     }
 
     public void setHealth(double health, double max) {
@@ -211,5 +236,9 @@ public class BaseHUD extends AbstractUI {
 
     public Player getPlayer() {
         return owner;
+    }
+
+    public int getStamina() {
+        return (int) staminaBar.getStamina();
     }
 }

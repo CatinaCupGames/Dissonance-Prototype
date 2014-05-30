@@ -106,8 +106,8 @@ public class OutsideFighting extends DemoLevelWorldLoader {
     public void onDisplay(World w){
         super.onDisplay(w);
 
-        farrand.setX(27f * 16f);
-        farrand.setY(240f*16f);
+        farrand.setX(38f * 16f);
+        farrand.setY(131f*16f);
 
         jeremiah.setX(24f*16f);
         jeremiah.setY(240f*16f);

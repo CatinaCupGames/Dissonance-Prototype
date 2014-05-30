@@ -142,6 +142,22 @@ public abstract class ProjectileSpell extends AnimatedSprite implements Spell {
         return owner;
     }
 
+    @Override
+    public void setX(float x) {
+        if (x <= 0)
+            destory();
+        else
+            super.setX(x);
+    }
+
+    @Override
+    public void setY(float y) {
+        if (y <= 0)
+            destory();
+        else
+            super.setY(y);
+    }
+
     protected void moveOneFrame() {
         if (direction == Direction.NONE)
             return;

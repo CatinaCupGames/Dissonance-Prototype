@@ -43,7 +43,8 @@ public class Admin extends Enemy {
         setDefense(12);
         setSpeed(10);
         setVigor(10);
-        setStamina(10);
+        setStamina(100);
+        setMaxStamina(100);
         setMarksmanship(10);
         setMaxMP(270);
         setHP(270);
@@ -123,7 +124,7 @@ public class Admin extends Enemy {
         key.setY(getY());
         getWorld().loadAndAdd(key);
         key.setVisible(false);
-        Timer.delayedInvokeMethod(400, "blink", key);
+        key.blink();
 
         super.onDeath();
     }
@@ -213,7 +214,7 @@ public class Admin extends Enemy {
                     if (System.currentTimeMillis() - foundTime < FOUND_YOU_MS) return;
 
                     lastAttack = System.currentTimeMillis();
-                    getCurrentWeapon().use(new Integer(target.getLayer()));
+                    getCurrentWeapon().use(new Integer(getLayer()));
                     setBehavior(null);
                 } else {
                     if (bup) {
@@ -347,14 +348,12 @@ public class Admin extends Enemy {
             case UP:
             case DOWN:
                 float dif = Math.abs(getX() - target.getX());
-                System.out.println(dif);
                 if (dif <= 8.5)
                     return true;
                 break;
             case LEFT:
             case RIGHT:
                 dif = Math.abs(getY() - target.getY());
-                System.out.println(dif);
                 if (dif <= 8.5)
                     return true;
                 break;

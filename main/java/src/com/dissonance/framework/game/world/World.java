@@ -130,6 +130,10 @@ public final class World {
     }
 
     public void load(final String world) throws WorldLoadFailedException {
+        load(world, null);
+    }
+
+    public void load(final String world, WorldLoader toUse) throws WorldLoadFailedException {
         name = world;
         InputStream in = getClass().getClassLoader().getResourceAsStream("worlds/" + world + ".json");
         if (in != null) {
@@ -153,6 +157,8 @@ public final class World {
                 }
             }
         }
+        if (toUse != null) this.loader = toUse;
+
         if (loader == null) {
             System.out.println("Searching for loader..");
             if (tiledData != null && tiledData.getProperty("loader") != null) {
@@ -325,7 +331,11 @@ public final class World {
     public Iterator<Drawable> getSortedDrawables() {
         if (invalid) {
             if (Debug.isDebugging()) System.err.println("Sorting Drawables!");
-            Collections.sort(drawable);
+            try {
+                Collections.sort(drawable);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
             invalid = false;
         }
         return drawable.iterator();
@@ -546,6 +556,7 @@ public final class World {
             lightShader.clear();
             lightShader.setOverallBrightness(1f);
         }
+        showing = false;
     }
 
     public void onDispose() {
@@ -572,6 +583,7 @@ public final class World {
         }
 
         renderingService = null;
+        showing = false;
     }
 
     public void removeDrawable(final Drawable drawable) {

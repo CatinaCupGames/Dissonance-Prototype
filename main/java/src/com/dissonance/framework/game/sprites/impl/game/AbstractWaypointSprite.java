@@ -21,6 +21,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
     protected List<Position> waypointList;
     protected float movementSpeed = 10f;
     private Behavior behavior;
+    private Position startPos = null;
     private Vector steeringVelocity = new Vector(0, 0);
 
     /**
@@ -48,13 +49,16 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
             return;
 
         if (currentWaypoint != null && waypointList != null) {
-
-            if (!waypointMover.moveSpriteOneFrame(this)) {
+            if (startPos == null)
+                startPos = getPosition();
+            if (!waypointMover.moveSpriteOneFrame(this, startPos)) {
                 if (waypointList != null && waypointList.size() > 0) {
+                    startPos = null;
                     currentWaypoint = waypointList.get(0).expand(getWorld().getTiledData().getTileWidth(), getWorld().getTiledData().getTileHeight());
                     waypointList.remove(0);
                     _wakeup();
                 } else {
+                    startPos = null;
                     currentWaypoint = null;
                     _wakeup();
                     if (waypointReachedEvent != null) {

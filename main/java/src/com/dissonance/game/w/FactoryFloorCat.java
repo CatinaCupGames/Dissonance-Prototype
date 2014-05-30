@@ -1,18 +1,16 @@
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.ai.astar.NodeMap;
-import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.system.GameSettings;
+import com.dissonance.game.quests.GameQuest;
 import com.dissonance.game.sprites.Admin;
 import com.dissonance.game.sprites.BlueGuard;
-import com.dissonance.game.sprites.Farrand;
-import com.dissonance.game.sprites.Jeremiah;
+import com.dissonance.game.sprites.RedGuard;
 import com.dissonance.game.sprites.environment.BasicLight;
 import com.dissonance.game.sprites.factory.Key;
-import sun.text.resources.FormatData_ar_AE;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,6 +24,7 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
     public static NodeMap nongroundNodeMap;
     private static final float WALL_LIGHT_BRIGHTNESS = 1.4f;
     public static BlueGuard[] melees = new BlueGuard[5];
+    public static RedGuard[] gunGuards = new RedGuard[7];
     public static Admin miniboss;
 
     @Override
@@ -88,6 +87,42 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         for (BlueGuard melee : melees) {
             melee.setLayer(2);
         }
+
+        for (int i = 0; i < gunGuards.length; i++) {
+            gunGuards[i] = new RedGuard();
+        }
+
+        gunGuards[0].setX(45*16);
+        gunGuards[0].setY(155*16);
+        w.loadAndAdd(gunGuards[0]);
+
+        gunGuards[1].setX(8*16);
+        gunGuards[1].setY(144 * 16);
+        w.loadAndAdd(gunGuards[1]);
+
+        gunGuards[2].setX(34*16);
+        gunGuards[2].setY(107 * 16);
+        w.loadAndAdd(gunGuards[2]);
+
+        gunGuards[3].setX(33*16);
+        gunGuards[3].setY(94*16);
+        w.loadAndAdd(gunGuards[3]);
+
+        gunGuards[4].setX(28*16);
+        gunGuards[4].setY(49*16);
+        w.loadAndAdd(gunGuards[4]);
+
+        gunGuards[5].setX(7*16);
+        gunGuards[5].setY(38*16);
+        w.loadAndAdd(gunGuards[5]);
+
+        gunGuards[6].setX(40 * 16);
+        gunGuards[6].setY(38*16);
+        w.loadAndAdd(gunGuards[6]);
+
+        for(RedGuard gunGuard : gunGuards){
+            gunGuard.setLayer(6);
+        }
     }
 
     @Override
@@ -95,12 +130,6 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         super.onDisplay(w);
 
         w.setWorldBrightness(0.9f);
-
-        Key key = new Key();
-        key.setX(38f * 16f);
-        key.setY(72f * 16f);
-        key.setLayer(2);
-        w.loadAndAdd(key);
 
         farrand.setX(5f * 16f);
         farrand.setY(208f * 16f);
@@ -150,6 +179,8 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
             createLight(43*16, 32*16,  w);
             createLight(54*16, 24*16,  w);
         }
+
+
     }
 
     @Override
@@ -171,6 +202,8 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
         miniboss.setX(33f * 16f);
         miniboss.setY(27f * 16f);
         w.loadAndAdd(miniboss);
+
+        GameQuest.INSTANCE.unlockedControl = false;
 
         BlueGuard guard = new BlueGuard();
         guard.setX(28f * 16f);
@@ -205,6 +238,42 @@ public class FactoryFloorCat extends DemoLevelWorldLoader {
 
         for (BlueGuard melee : melees) {
             melee.setLayer(2);
+        }
+
+        for (int i = 0; i < gunGuards.length; i++) {
+            gunGuards[i] = new RedGuard();
+        }
+
+        gunGuards[0].setX(45*16);
+        gunGuards[0].setY(155*16);
+        w.loadAndAdd(gunGuards[0]);
+
+        gunGuards[1].setX(8*16);
+        gunGuards[1].setY(144 * 16);
+        w.loadAndAdd(gunGuards[1]);
+
+        gunGuards[2].setX(34*16);
+        gunGuards[2].setY(107 * 16);
+        w.loadAndAdd(gunGuards[2]);
+
+        gunGuards[3].setX(33*16);
+        gunGuards[3].setY(94*16);
+        w.loadAndAdd(gunGuards[3]);
+
+        gunGuards[4].setX(28*16);
+        gunGuards[4].setY(49*16);
+        w.loadAndAdd(gunGuards[4]);
+
+        gunGuards[5].setX(7*16);
+        gunGuards[5].setY(38*16);
+        w.loadAndAdd(gunGuards[5]);
+
+        gunGuards[6].setX(40 * 16);
+        gunGuards[6].setY(38*16);
+        w.loadAndAdd(gunGuards[6]);
+
+        for(RedGuard gunGuard : gunGuards){
+            gunGuard.setLayer(6);
         }
     }
 

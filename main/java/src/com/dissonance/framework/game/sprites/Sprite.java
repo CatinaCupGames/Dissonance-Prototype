@@ -241,6 +241,27 @@ public abstract class Sprite implements Drawable, Serializable {
         return (l.getProperty("ground") != null && l.getProperty("ground").equalsIgnoreCase("true"));
     }
 
+    protected void onBlink() {
+        for (int i = 0; i < 7; i++) {
+            setVisible(!isVisible());
+            try {
+                Thread.sleep(360 - (i * 50));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        setVisible(true);
+    }
+
+    public void blink() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                onBlink();
+            }
+        }).start();
+    }
+
     public float getX() {
         return x;
     }

@@ -30,6 +30,7 @@ public class EnterOffice extends AbstractTrigger {
 
                 p2.freeze();
             }
+            p2.setUsePhysics(false);
             player.freeze();
 
             p2.setWaypoint(player.getX() + 48, player.getY(), WaypointType.SIMPLE);
@@ -49,6 +50,7 @@ public class EnterOffice extends AbstractTrigger {
             player.setVisible(false);
             p2.setVisible(false);
         } else {
+            player.freeze();
             player.face(Direction.UP);
             Thread.sleep(500);
             Dialog.displayDialog("jump_into_office_coop"); //TODO Make single player version of dialog
