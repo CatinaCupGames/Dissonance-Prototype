@@ -61,6 +61,8 @@ public class AnimationFactory {
 
         synchronized (animate) {
             for (AnimatorData ad : animate) {
+                if (ad.animator.getWorld() != RenderService.INSTANCE.getCurrentDrawingWorld())
+                    continue;
                 long time = System.currentTimeMillis() - ad.last_tick;
                 if (time >= ad.animator.getAnimationSpeed()) {
                     ad.animator.onAnimate();

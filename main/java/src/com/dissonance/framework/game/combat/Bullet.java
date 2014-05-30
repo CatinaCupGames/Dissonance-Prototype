@@ -121,6 +121,22 @@ public class Bullet extends PhysicsSprite {
     }
 
     @Override
+    public void setX(float x) {
+        if (x <= 0)
+            explode();
+        else
+            super.setX(x);
+    }
+
+    @Override
+    public void setY(float y) {
+        if (y <= 0)
+            explode();
+        else
+            super.setY(y);
+    }
+
+    @Override
     public void onLoad() {
         super.onLoad();
         Direction direction = this.direction.simple();
@@ -179,7 +195,8 @@ public class Bullet extends PhysicsSprite {
             if (((TiledObject) hit).isSpawn() || ((TiledObject) hit).isTrigger()) return;
             //TODO: play wall hit sound
             explode();
-        }
+        } else if (hit != null)
+            explode();
     }
 
     @Override
@@ -192,7 +209,8 @@ public class Bullet extends PhysicsSprite {
             if (((TiledObject) hit).isSpawn()) return;
             //TODO: play wall hit sound
             explode();
-        }
+        } else if (hit != null)
+            explode();
     }
 
     @Override
