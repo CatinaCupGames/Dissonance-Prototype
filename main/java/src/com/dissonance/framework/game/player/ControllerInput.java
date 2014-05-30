@@ -7,7 +7,6 @@ import com.dissonance.framework.game.player.input.joypad.Joypad;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
-import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -149,6 +148,7 @@ public class ControllerInput implements Input {
                         next.setUsePhysics(false);
                         next.rawSetX(playableSprite.getX());
                         next.rawSetY(playableSprite.getY());
+                        next.setLayer(playableSprite.getLayer());
                         next.appear(new Runnable() {
                             @Override
                             public void run() {

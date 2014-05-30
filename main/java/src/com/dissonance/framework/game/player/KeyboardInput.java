@@ -130,6 +130,7 @@ public class KeyboardInput implements Input {
                         next.setUsePhysics(false);
                         next.rawSetX(playableSprite.getX());
                         next.rawSetY(playableSprite.getY());
+                        next.setLayer(playableSprite.getLayer());
                         next.appear(new Runnable() {
                             @Override
                             public void run() {

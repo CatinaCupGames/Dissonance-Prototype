@@ -23,12 +23,14 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
         pauseAnimation();
 
         setLayer(2);
+        setWidth(-getWidth());
     }
 
     @Override
     public boolean onSelected(final PlayableSprite player) {
         double angle = angleTowards(player);
-        if (angle > 248.0 && angle < 268.0) {
+        System.out.println(angle);
+        if (angle > 272.0) {
             if (!GameQuest.INSTANCE.unlockedControl) {
                 final String ind;
                 if (player instanceof Farrand)
@@ -78,6 +80,7 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
         sprite.setMovementSpeed(7);
         sprite.setLayer(1);
         sprite.setUsePhysics(false);
+        sprite.setIsInvincible(true);
         sprite.setWaypoint(getX(), sprite.getY() - 48f, WaypointType.SIMPLE);
         sprite.waitForWaypointReached();
         reverseAnimation(true);
@@ -97,6 +100,7 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
         sprite.setLayer(2);
         sprite.unfreeze();
         sprite.setUsePhysics(true);
+        sprite.setUsePhysics(false);
 
         reverseAnimation(true);
         playAnimation();

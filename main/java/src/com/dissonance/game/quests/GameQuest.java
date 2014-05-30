@@ -101,6 +101,9 @@ public class GameQuest  extends PauseQuest {
             RoofTopBeginning.farrand.unfreeze();
             RoofTopBeginning.jeremiah.unfreeze();
         }
+
+        Thread.sleep(300);
+        changeToFactory();
     }
 
     public void changeToRooftopMid() throws InterruptedException {
@@ -112,7 +115,8 @@ public class GameQuest  extends PauseQuest {
 
         RooftopMid.farrand.setLayer(1);
         RooftopMid.jeremiah.setLayer(1);
-
+        RooftopMid.farrand.setUsePhysics(false);
+        RooftopMid.jeremiah.setUsePhysics(false);
         RooftopMid.farrand.setX(8f * 16f);
         RooftopMid.farrand.setY(7f * 16f);
         RooftopMid.jeremiah.setX(7f * 16f);
@@ -121,6 +125,8 @@ public class GameQuest  extends PauseQuest {
         RooftopMid.jeremiah.face(Direction.RIGHT);
         RenderService.INSTANCE.fadeFromBlack(1300);
         RenderService.INSTANCE.waitForFade();
+        RooftopMid.jeremiah.setUsePhysics(true);
+        RooftopMid.farrand.setUsePhysics(true);
 
         RooftopMid.farrand.unfreeze();
         RooftopMid.jeremiah.unfreeze();
@@ -131,11 +137,11 @@ public class GameQuest  extends PauseQuest {
         GameCache.OutsideFighting.waitForWorldDisplayed();
 
         OutsideFighting.farrand.setX(27f * 16f);
-        OutsideFighting.farrand.setY(240f * 16f);
+        OutsideFighting.farrand.setY(135f * 16f);
         OutsideFighting.farrand.setIsInvincible(false);
 
         OutsideFighting.jeremiah.setX(24f * 16f);
-        OutsideFighting.jeremiah.setY(240f * 16f);
+        OutsideFighting.jeremiah.setY(135f * 16f);
         OutsideFighting.jeremiah.setIsInvincible(false);
 
         Player player1 = Players.getPlayer1();
