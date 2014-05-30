@@ -36,6 +36,4 @@ public class CityEntrySquare2 extends DemoLevelWorldLoader {
         farrand.setVisible(true);
         jeremiah.setVisible(true);
     }
-
-
 }
