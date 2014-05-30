@@ -25,6 +25,7 @@ public abstract class CombatSprite extends PhysicsSprite {
     private Spell spell2;
     private final ArrayList<StatusEffect> effects = new ArrayList<StatusEffect>();
     private int weaponIndex;
+    private CombatSpriteEvents listener;
 
 
     protected float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
@@ -50,6 +51,14 @@ public abstract class CombatSprite extends PhysicsSprite {
     private boolean isInvincible;
     private int stamina;
     private int maxStamina;
+
+    public void setCombatListener(CombatSpriteEvents listener) {
+        this.listener = listener;
+    }
+
+    public CombatSpriteEvents getCombatListener() {
+        return this.listener;
+    }
 
 
     public int getLevel() {
@@ -750,6 +759,9 @@ public abstract class CombatSprite extends PhysicsSprite {
     }
 
     protected void onDeath() {
+        if (listener != null)
+            listener.onDeath(this);
+
         getWorld().removeSprite(this);
     }
 
@@ -846,5 +858,9 @@ public abstract class CombatSprite extends PhysicsSprite {
          * privileged folks possess
          */
         MACHINE
+    }
+
+    public interface CombatSpriteEvents {
+        public void onDeath(CombatSprite sprite);
     }
 }

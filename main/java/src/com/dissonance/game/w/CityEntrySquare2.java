@@ -223,6 +223,4 @@ public class CityEntrySquare2 extends DemoLevelWorldLoader {
         admin3.setY(56 * 16);
         admin3.setHostile(false);
     }
-
-
 }
