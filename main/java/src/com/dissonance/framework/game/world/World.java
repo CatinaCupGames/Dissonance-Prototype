@@ -550,6 +550,7 @@ public final class World {
             lightShader.clear();
             lightShader.setOverallBrightness(1f);
         }
+        showing = false;
     }
 
     public void onDispose() {
@@ -576,6 +577,7 @@ public final class World {
         }
 
         renderingService = null;
+        showing = false;
     }
 
     public void removeDrawable(final Drawable drawable) {

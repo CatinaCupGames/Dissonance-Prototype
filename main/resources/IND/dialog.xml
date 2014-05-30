@@ -16,6 +16,11 @@
         <message type="append">lets go in here.</message>
     </dialog>
 
+    <dialog dialog_id="haxfix">
+        <header>Jeremiah</header>
+        <message>We don't have time for this shit, we need to get out of here.</message>
+    </dialog>
+
 
     <dialog dialog_id="found_key_farrand">
         <header>Farrand</header>

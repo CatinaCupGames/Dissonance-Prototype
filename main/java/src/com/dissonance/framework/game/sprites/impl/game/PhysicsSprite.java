@@ -80,66 +80,54 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
 
     @Override
     public void setX(float x) {
-        float oX = super.getX();
-        super.setX(x);
-
-        if (!physics)
-            return;
-        if (hb == null)
-            return;
-        for (HitBox hitBox : hb) {
-            if (hitBox.checkForCollision(this, ignore)) {
-                onCollideX(oX, x, hitBox.getLastCollide(), hitBox);
+        if (physics && hb != null) {
+            for (HitBox hitBox : hb) {
+                if (hitBox.checkForCollision(this, x, y, ignore)) {
+                    onCollideX(super.getX(), x, hitBox.getLastCollide(), hitBox);
+                    return;
+                }
             }
         }
+        super.setX(x);
     }
 
     @Override
     public void setY(float y) {
-        float oY = super.getY();
-        super.setY(y);
-
-        if (!physics)
-            return;
-        if (hb == null)
-            return;
-        for (HitBox hitBox : hb) {
-            if (hitBox.checkForCollision(this, ignore)) {
-                onCollideY(oY, y, hitBox.getLastCollide(), hitBox);
+        if (physics && hb != null) {
+            for (HitBox hitBox : hb) {
+                if (hitBox.checkForCollision(this, x, y, ignore)) {
+                    onCollideY(super.getY(), y, hitBox.getLastCollide(), hitBox);
+                    return;
+                }
             }
         }
+        super.setY(y);
     }
 
     @Override
     public void rawSetX(float x) {
-        float oX = super.getX();
-        super.rawSetX(x);
-
-        if (!physics)
-            return;
-        if (hb == null)
-            return;
-        for (HitBox hitBox : hb) {
-            if (hitBox.checkForCollision(this, ignore)) {
-                onCollideX(oX, x, hitBox.getLastCollide(), hitBox);
+        if (physics && hb != null) {
+            for (HitBox hitBox : hb) {
+                if (hitBox.checkForCollision(this, x, y, ignore)) {
+                    onCollideX(super.getX(), x, hitBox.getLastCollide(), hitBox);
+                    return;
+                }
             }
         }
+        super.rawSetX(x);
     }
 
     @Override
     public void rawSetY(float y) {
-        float oY = super.getY();
-        super.rawSetY(y);
-
-        if (!physics)
-            return;
-        if (hb == null)
-            return;
-        for (HitBox hitBox : hb) {
-            if (hitBox.checkForCollision(this, ignore)) {
-                onCollideY(oY, y, hitBox.getLastCollide(), hitBox);
+        if (physics && hb != null) {
+            for (HitBox hitBox : hb) {
+                if (hitBox.checkForCollision(this, x, y, ignore)) {
+                    onCollideY(super.getY(), y, hitBox.getLastCollide(), hitBox);
+                    return;
+                }
             }
         }
+        super.rawSetY(y);
     }
 
     protected void onCollideX(float oldX, float newX, Collidable hit, HitBox hb) {
@@ -150,15 +138,15 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             return;
         }
 
-        if (c instanceof PhysicsSprite) {
+        /*if (c instanceof PhysicsSprite) {
             if (ignore.contains(c))
                 return;
             super.rawSetX(oldX);
             float add = getX() - c.getX();
-            /*for (int i = 0; i < 1000 && hb.checkForCollision(this, ignore); i++) {
+            *//*for (int i = 0; i < 1000 && hb.checkForCollision(this, ignore); i++) {
                 super.rawSetX(super.getX() + (add < 0 ? -1 : 1));
-            }*/
-        } else if (c instanceof Tile) {
+            }*//*
+        } else */if (c instanceof Tile) {
             super.rawSetX(oldX);
             float add = getX() - c.getX();
             for (int i = 0; i < 1000 && hb.checkForCollision(this, ignore); i++) {
@@ -169,13 +157,13 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             if (to.isTrigger()) {
                 AbstractTrigger abstractTrigger = to.getTrigger();
                 abstractTrigger.onCollide(this);
-            } else if (to.isHitbox())
-                super.rawSetX(oldX);
-        } else {
+            } /*else if (to.isHitbox())
+                super.rawSetX(oldX);*/
+        } /*else {
             if (ignore.contains(c))
                 return;
             super.rawSetX(oldX);
-        }
+        }*/
     }
 
     protected void onCollideY(float oldY, float newY, Collidable hit, HitBox hb) {
@@ -186,16 +174,16 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             return;
         }
 
-        if (c instanceof PhysicsSprite) {
+        /*if (c instanceof PhysicsSprite) {
             if (ignore.contains(c))
                 return;
             super.rawSetY(oldY);
             float add = getY() - hb.getLastCollide().getY();
-            /*for (int i = 0; i < 1000 && hb.checkForCollision(this, ignore); i++) {
+            *//*for (int i = 0; i < 1000 && hb.checkForCollision(this, ignore); i++) {
                 super.rawSetY(super.getY() + (add < 0 ? -1 : 1));
-            }*/
-        } else if (c instanceof Tile) {
-            super.rawSetY(oldY);
+            }*//*
+        } else */if (c instanceof Tile) {
+            //super.rawSetY(oldY);
             float add = getY() - c.getY();
             for (int i = 0; i < 1000 && hb.checkForCollision(this, ignore); i++) {
                 super.rawSetY(super.getY() + (add < 0 ? -1 : 1));
@@ -205,13 +193,13 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             if (to.isTrigger()) {
                 AbstractTrigger abstractTrigger = to.getTrigger();
                 abstractTrigger.onCollide(this);
-            } else if (to.isHitbox())
-                super.rawSetY(oldY);
-        } else {
+            }/* else if (to.isHitbox())
+                super.rawSetY(oldY);*/
+        } /*else {
             if (ignore.contains(c))
                 return;
             super.rawSetY(oldY);
-        }
+        }*/
     }
 
     @Override

@@ -104,7 +104,7 @@ public class GameQuest  extends PauseQuest {
         }
 
         Thread.sleep(300);
-        changeToOffice1();
+        changeToOffice2();
     }
 
     public void changeToRooftopMid() throws InterruptedException {
@@ -128,6 +128,18 @@ public class GameQuest  extends PauseQuest {
         RenderService.INSTANCE.waitForFade();
         RooftopMid.jeremiah.setUsePhysics(true);
         RooftopMid.farrand.setUsePhysics(true);
+
+        Player player1 = Players.getPlayer1();
+        player1.getSprite().setVisible(true);
+        player1.getSprite().setUsePhysics(true);
+        Camera.followSprite(player1.getSprite());
+
+        Player player2 = Players.getPlayer(2);
+        if (player2 != null && player2.getSprite() != null) {
+            player2.getSprite().setVisible(true);
+            player2.getSprite().setUsePhysics(true);
+            Camera.followSprite(player2.getSprite());
+        }
 
         RooftopMid.farrand.unfreeze();
         RooftopMid.jeremiah.unfreeze();
@@ -482,7 +494,9 @@ public class GameQuest  extends PauseQuest {
 
         RenderService.INSTANCE.fadeFromBlack(1300);
         RenderService.INSTANCE.waitForFade();
-
+        player1.getSprite().setVisible(true);
+        if (player2 != null && player2.getSprite() != null)
+            player2.getSprite().setVisible(true);
         officefloor2.farrand.unfreeze();
         officefloor2.jeremiah.unfreeze();
     }
@@ -516,8 +530,36 @@ public class GameQuest  extends PauseQuest {
 
         RenderService.INSTANCE.fadeFromBlack(1300);
         RenderService.INSTANCE.waitForFade();
-
+        player1.getSprite().setVisible(true);
+        if (player2 != null && player2.getSprite() != null)
+            player2.getSprite().setVisible(true);
         OfficeFloor1.farrand.unfreeze();
         OfficeFloor1.jeremiah.unfreeze();
+    }
+
+    public void changeToRooftopMidAgain() throws InterruptedException {
+        setWorld(GameCache.RooftopMid);
+        GameCache.RooftopMid.waitForWorldDisplayed();
+
+        RooftopMid.farrand.freeze();
+        RooftopMid.jeremiah.freeze();
+
+        RooftopMid.farrand.setLayer(1);
+        RooftopMid.jeremiah.setLayer(1);
+        RooftopMid.farrand.setUsePhysics(false);
+        RooftopMid.jeremiah.setUsePhysics(false);
+        RooftopMid.farrand.setX(68f * 16f);
+        RooftopMid.farrand.setY(29f * 16f);
+        RooftopMid.jeremiah.setX(66f * 16f);
+        RooftopMid.jeremiah.setY(29f * 16f);
+        RooftopMid.farrand.face(Direction.UP);
+        RooftopMid.jeremiah.face(Direction.UP);
+        RenderService.INSTANCE.fadeFromBlack(1300);
+        RenderService.INSTANCE.waitForFade();
+        RooftopMid.jeremiah.setUsePhysics(true);
+        RooftopMid.farrand.setUsePhysics(true);
+
+        RooftopMid.farrand.unfreeze();
+        RooftopMid.jeremiah.unfreeze();
     }
 }

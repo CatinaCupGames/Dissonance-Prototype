@@ -4,6 +4,7 @@ import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
+import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
@@ -87,6 +88,17 @@ public class ElevatorDoor extends AnimatedSprite implements Selectable, Collidab
         if (active) return false;
         double angle = angleTowards(player);
         if (angle > 227.0 && angle < 314.0) {
+            if (player.getWorld().getName().equals("officefloor2")) {
+                active = true;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Dialog.displayDialog("haxfix");
+                        active = false;
+                    }
+                }).start();
+                return true;
+            }
             player.freeze();
             player.ignoreCollisionWith(this);
 
