@@ -270,6 +270,14 @@ public class WaldomarsMeetingRoom implements WorldLoader {
         guard4.setHostile(false);
         guard5.setHostile(false);
 
+        guard1.setUsePhysics(false);
+        guard2.setUsePhysics(false);
+        guard3.setUsePhysics(false);
+        guard4.setUsePhysics(false);
+        guard5.setUsePhysics(false);
+        farrand.setUsePhysics(false);
+        jeremiah.setUsePhysics(false);
+
       w.setWorldBrightness(0.5f);
         w.createLight(15f * 16, 2f * 16, 1.4f, 0.7f);
         //w.createLight(0f, 0f, 0.1f, 0.1f);
