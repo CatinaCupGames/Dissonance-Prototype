@@ -164,7 +164,7 @@ public class OfficeScene extends SimpleScene {
 
         WaldomarsMeetingRoom.farrand.setMovementSpeed(30f);
         Thread.sleep(300);
-        WaldomarsMeetingRoom.farrand.setWaypoint(WaldomarsMeetingRoom.farrand.getX(), 2f*16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.farrand.setWaypoint(WaldomarsMeetingRoom.farrand.getX() - 64, 2f*16, WaypointType.SIMPLE);
         WaldomarsMeetingRoom.farrand.waitForWaypointReached();
         WaldomarsMeetingRoom.farrand.setVisible(false);
         WaldomarsMeetingRoom.jeremiah.setMovementSpeed(20f);

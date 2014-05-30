@@ -14,5 +14,6 @@ public class Tree1 extends ImageSprite {
         TextureLoader.setFastRedraw(false);
         super.onLoad();
         TextureLoader.setFastRedraw(old);
+        setCutOffMargin(68f);
     }
 }
