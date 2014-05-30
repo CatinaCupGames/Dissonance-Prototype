@@ -26,29 +26,10 @@ public class Key extends ImageSprite {
         super.render();
     }
 
-    public void blink() {
-        try {
-            setVisible(true);
-            Thread.sleep(800);
-            setVisible(false);
-            Thread.sleep(800);
-            setVisible(true);
-            Thread.sleep(800);
-            setVisible(false);
-            setVisible(true);
-            Thread.sleep(800);
-            setVisible(false);
-            Thread.sleep(800);
-            Thread.sleep(700);
-            setVisible(true);
-            Thread.sleep(600);
-            setVisible(false);
-            Thread.sleep(300);
-            setVisible(true);
-            pickable = true;
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
+    @Override
+    protected void onBlink() {
+        super.onBlink();
+        pickable = true;
     }
 
     private void update() {

@@ -1,17 +1,15 @@
 package com.dissonance.game.quests;
 
-import com.dissonance.framework.game.ai.waypoint.WaypointType;
-import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.render.RenderService;
-import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.game.scenes.OfficeScene;
 import com.dissonance.game.w.WaldomarsMeetingRoom;
 
 public class OfficeQuest extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
+        WorldFactory.clearCache();
         World w = WorldFactory.getWorld("WaldomarsMeetingRoom");
         setWorld(w);
         w.waitForWorldDisplayed();

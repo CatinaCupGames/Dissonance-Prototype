@@ -30,7 +30,8 @@ public class RedGuard extends Enemy {
         setDefense(4);
         setSpeed(10);
         setVigor(6);
-        setStamina(8);
+        setStamina(80);
+        setMaxStamina(80);
         setMarksmanship(10);
 
         setCurrentWeapon(Weapon.getWeapon("guardgun").createItem(this));
@@ -159,7 +160,7 @@ public class RedGuard extends Enemy {
                     if (System.currentTimeMillis() - foundTime < FOUND_YOU_MS) return;
 
                     lastAttack = System.currentTimeMillis();
-                    getCurrentWeapon().use(new Integer(target.getLayer()));
+                    getCurrentWeapon().use(new Integer(getLayer()));
                     setBehavior(null);
                 } else {
                     if (bup) {
@@ -273,14 +274,12 @@ public class RedGuard extends Enemy {
             case UP:
             case DOWN:
                 float dif = Math.abs(getX() - target.getX());
-                System.out.println(dif);
                 if (dif <= 8.5)
                     return true;
                 break;
             case LEFT:
             case RIGHT:
                 dif = Math.abs(getY() - target.getY());
-                System.out.println(dif);
                 if (dif <= 8.5)
                     return true;
                 break;

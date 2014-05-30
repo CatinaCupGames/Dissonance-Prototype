@@ -24,7 +24,7 @@ public class StatusEffectBar extends AbstractUI {
     private ArrayList<StatusEffectImage> images = new ArrayList<>();
 
     private static final long ANIMATE_DURATION = 1400L;
-    private static final float OPEN_MARGIN = 5f;
+    private static final float OPEN_MARGIN = -1f;
     private static final float CLOSE_MARGIN = 18f;
     private boolean animate;
     private boolean lockCall = false;
@@ -62,7 +62,7 @@ public class StatusEffectBar extends AbstractUI {
 
         float start = x - bx;
         start += 18f;
-        y = getY() - 2f;
+        y = getY();
         for (int i = 0; i < images.size(); i++) {
             images.get(i).render(start + (i * 14f), y);
         }
@@ -90,7 +90,7 @@ public class StatusEffectBar extends AbstractUI {
 
         alignToTexture(texture);
 
-        marginLeft(48f);
+        marginLeft(53f);
         marginBottom(CLOSE_MARGIN);
         bringToBack();
     }

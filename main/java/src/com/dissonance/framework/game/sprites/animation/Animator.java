@@ -1,5 +1,7 @@
 package com.dissonance.framework.game.sprites.animation;
 
+import com.dissonance.framework.game.world.World;
+
 public interface Animator {
     /**
      * This method is called after {@link com.dissonance.framework.game.sprites.animation.Animator#getAnimationSpeed()} frame(s) is
@@ -19,4 +21,6 @@ public interface Animator {
     public void wakeUp();
 
     public int getFrameCount();
+
+    public World getWorld();
 }

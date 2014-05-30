@@ -39,6 +39,10 @@ public abstract class DemoLevelWorldLoader implements WorldLoader {
 
     @Override
     public void onDisplay(World w) {
+        if (w.getAllCombatSprites().contains(farrand))
+            w.removeSprite(farrand);
+        if (w.getAllCombatSprites().contains(jeremiah))
+            w.removeSprite(jeremiah);
         w.loadAndAdd(farrand);
         w.loadAndAdd(jeremiah);
 

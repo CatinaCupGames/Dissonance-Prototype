@@ -1,5 +1,6 @@
 package com.dissonance.framework.game;
 
+import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.scene.Scene;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldFactory;
@@ -34,8 +35,8 @@ public abstract class AbstractQuest {
         onResumeGame();
     }
 
-    public final void playerDied() {
-        onPlayerDeath();
+    public final void playerDied(PlayableSprite sprite) {
+        onPlayerDeath(sprite);
     }
 
     public boolean isPaused() {
@@ -51,7 +52,7 @@ public abstract class AbstractQuest {
 
     }
 
-    protected void onPlayerDeath() {
+    protected void onPlayerDeath(PlayableSprite sprite) {
 
     }
 

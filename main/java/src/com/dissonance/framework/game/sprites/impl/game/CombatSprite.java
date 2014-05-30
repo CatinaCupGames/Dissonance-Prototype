@@ -25,6 +25,7 @@ public abstract class CombatSprite extends PhysicsSprite {
     private Spell spell2;
     private final ArrayList<StatusEffect> effects = new ArrayList<StatusEffect>();
     private int weaponIndex;
+    private CombatSpriteEvents listener;
 
 
     protected float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
@@ -48,6 +49,17 @@ public abstract class CombatSprite extends PhysicsSprite {
     private double MP = 100;
     private boolean attacking;
     private boolean isInvincible;
+    private int stamina;
+    private int maxStamina;
+
+    public void setCombatListener(CombatSpriteEvents listener) {
+        this.listener = listener;
+    }
+
+    public CombatSpriteEvents getCombatListener() {
+        return this.listener;
+    }
+
 
     public int getLevel() {
         return level;
@@ -158,7 +170,17 @@ public abstract class CombatSprite extends PhysicsSprite {
      * @return
      *        The stamina stat, otherwise 0
      */
-    public abstract int getStamina();
+    public int getStamina() {
+        return stamina;
+    }
+
+    public int getMaxStamina() {
+        return maxStamina;
+    }
+
+    public void setMaxStamina(int value) {
+        this.maxStamina = value;
+    }
 
     /**
      * Determines the value magic attacks deal, as well as the
@@ -257,6 +279,8 @@ public abstract class CombatSprite extends PhysicsSprite {
     protected void dodge(Direction direction1, float speed) {
         if (!canDodge())
             return;
+        if (getStamina() - 20 < 0)
+            return;
         String ani;
         /*
 
@@ -338,15 +362,27 @@ public abstract class CombatSprite extends PhysicsSprite {
         dodgeStartTime = System.currentTimeMillis();
         dodgeStartX = getX();
         dodgeStartY = getY();
+        setStamina(getStamina() - 20);
+        System.out.println(getStamina());
         is_dodging = true;
         allow_dodge = false;
     }
 
+
+    private long lastGive;
     @Override
     public void update() {
         super.update();
         if (isUpdateCanceled())
             return;
+
+        if (System.currentTimeMillis() - lastGive >= 1000) {
+            lastGive = System.currentTimeMillis();
+            int add = 5;
+            while (stamina + add > maxStamina)
+                add--;
+            setStamina(getStamina() + add);
+        }
 
         checkDodge();
 
@@ -723,6 +759,9 @@ public abstract class CombatSprite extends PhysicsSprite {
     }
 
     protected void onDeath() {
+        if (listener != null)
+            listener.onDeath(this);
+
         getWorld().removeSprite(this);
     }
 
@@ -744,7 +783,9 @@ public abstract class CombatSprite extends PhysicsSprite {
 
     public abstract void setVigor(int vigor);
 
-    public abstract void setStamina(int stamina);
+    public void setStamina(int stamina) {
+        this.stamina = stamina;
+    }
 
     public abstract void setWillpower(int willpower);
 
@@ -817,5 +858,9 @@ public abstract class CombatSprite extends PhysicsSprite {
          * privileged folks possess
          */
         MACHINE
+    }
+
+    public interface CombatSpriteEvents {
+        public void onDeath(CombatSprite sprite);
     }
 }
