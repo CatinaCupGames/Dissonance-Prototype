@@ -173,6 +173,56 @@
          "width":74,
          "x":0,
          "y":0
+        }, 
+        {
+         "height":100,
+         "name":"Object Layer 2",
+         "objects":[
+                {
+                 "height":160,
+                 "name":"outside.SmallBuilding5",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":256,
+                 "x":784,
+                 "y":528
+                }, 
+                {
+                 "height":160,
+                 "name":"outside.SmallBuilding6",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":256,
+                 "x":480,
+                 "y":608
+                }, 
+                {
+                 "height":160,
+                 "name":"outside.SmallBuilding6",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":256,
+                 "x":208,
+                 "y":608
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":74,
+         "x":0,
+         "y":0
         }],
  "orientation":"orthogonal",
  "properties":
