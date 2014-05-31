@@ -41,7 +41,6 @@ public class CatCutLogo extends ImageSprite implements UpdatableDrawable {
     public void render() {
         glPushMatrix();
         glLoadIdentity();
-        glScalef(RenderService.ZOOM_SCALE, RenderService.ZOOM_SCALE, 1f);
         super.render();
         glPopMatrix();
     }

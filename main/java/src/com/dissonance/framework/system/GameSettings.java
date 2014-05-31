@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class GameSettings extends ReflectionConfig {
+    public static final String ENGINE_BUILD_STRING = "v0.1.0";
+    public static final int ENGINE_BUILD_NUMBER = Versions.TECH_DEMO_RC1;
 
     @ConfigItem
     protected int resolution_width = 1280;
