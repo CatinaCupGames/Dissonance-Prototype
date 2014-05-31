@@ -2,6 +2,7 @@ package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.game.quests.BossQuest;
 import com.dissonance.game.spells.impl.Earthquake;
 
 public final class Jeremiah extends PlayableSprite {
@@ -104,6 +105,13 @@ public final class Jeremiah extends PlayableSprite {
             playAnimation();
         }
 
+        if (BossQuest.END) {
+            setAnimation("walk_left");
+            super.setFrame(1);
+            pauseAnimation();
+            return;
+        }
+
         switch (direction) {
             case UP:
             case UP_LEFT:
@@ -126,6 +134,12 @@ public final class Jeremiah extends PlayableSprite {
 
     @Override
     public void onNoMovement() {
+        if (BossQuest.END) {
+            setAnimation("walk_left");
+            super.setFrame(1);
+            pauseAnimation();
+            return;
+        }
         if (isMoving() || ignore_movement) {
             return;
         }
@@ -138,7 +152,7 @@ public final class Jeremiah extends PlayableSprite {
         super.onLoad();
         pauseAnimation();
 
-        setAttack(16);
+        setAttack(1600);
         setDefense(8);
         setSpeed(6);
         setVigor(8);

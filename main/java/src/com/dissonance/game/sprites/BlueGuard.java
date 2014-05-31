@@ -17,6 +17,7 @@ import com.dissonance.game.GameCache;
 import com.dissonance.game.behaviors.Patrol;
 import com.dissonance.game.behaviors.Search;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
+import com.dissonance.game.quests.BossQuest;
 import com.dissonance.game.w.FactoryFloorCat;
 
 import java.awt.*;
@@ -32,6 +33,12 @@ public class BlueGuard extends Enemy {
 
     @Override
     public void onMovement(Direction direction) {
+        if (BossQuest.END) {
+            setAnimation("walk_right");
+            super.setFrame(1);
+            pauseAnimation();
+            return;
+        }
         if (isAttacking())
             return;
         if (isAnimationPaused()) {
@@ -61,6 +68,12 @@ public class BlueGuard extends Enemy {
 
     @Override
     public void onNoMovement() {
+        if (BossQuest.END) {
+            setAnimation("walk_right");
+            super.setFrame(1);
+            pauseAnimation();
+            return;
+        }
         if (isMoving() || isAttacking()) {
             return;
         }

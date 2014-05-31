@@ -12,6 +12,7 @@ import com.dissonance.game.GameCache;
 import com.dissonance.game.behaviors.Patrol;
 import com.dissonance.game.behaviors.Search;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
+import com.dissonance.game.quests.BossQuest;
 import com.dissonance.game.w.FactoryFloorCat;
 
 import java.util.Random;
@@ -39,6 +40,20 @@ public class RedGuard extends Enemy {
 
     @Override
     public void onMovement(Direction direction) {
+        if (BossQuest.END && !BossQuest.RAISE) {
+            setAnimation("walk_right");
+            super.setFrame(1);
+            pauseAnimation();
+            return;
+        }
+        if (BossQuest.RAISE) {
+            if (isAnimationPaused()) {
+                super.setFrame(1);
+                playAnimation();
+            }
+            setAnimation("bringup_right");
+            return;
+        }
         if (isAttacking() || urunning || drunning)
             return;
         if (isAnimationPaused()) {
@@ -68,6 +83,16 @@ public class RedGuard extends Enemy {
 
     @Override
     public void onNoMovement() {
+        if (BossQuest.END && !BossQuest.RAISE) {
+            setAnimation("walk_right");
+            super.setFrame(1);
+            pauseAnimation();
+            return;
+        }
+        if (BossQuest.RAISE) {
+            onMovement(Direction.NONE);
+            return;
+        }
         if (isMoving() || isAttacking() || drunning || urunning) {
             return;
         }

@@ -1,5 +1,6 @@
 package com.dissonance.game.sprites;
 
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.ai.behaviors.Flee;
@@ -21,6 +22,8 @@ import com.dissonance.game.behaviors.Patrol;
 import com.dissonance.game.behaviors.Search;
 import com.dissonance.game.behaviors.WaypointLikePathFollow;
 import com.dissonance.game.behaviors.WaypointLikeSeek;
+import com.dissonance.game.quests.BossQuest;
+import com.dissonance.game.quests.GameQuest;
 import com.dissonance.game.sprites.factory.Key;
 import com.dissonance.game.w.FactoryFloorCat;
 
@@ -54,6 +57,20 @@ public class Admin extends Enemy {
 
     @Override
     public void onMovement(Direction direction) {
+        if (BossQuest.END && !BossQuest.RAISE) {
+            setAnimation("walk_right");
+            super.setFrame(1);
+            pauseAnimation();
+            return;
+        }
+        if (BossQuest.RAISE) {
+            if (isAnimationPaused()) {
+                super.setFrame(1);
+                playAnimation();
+            }
+            setAnimation("bringup_right");
+            return;
+        }
         if (isAttacking() || urunning || drunning)
             return;
         if (isAnimationPaused()) {
@@ -83,6 +100,16 @@ public class Admin extends Enemy {
 
     @Override
     public void onNoMovement() {
+        if (BossQuest.END && !BossQuest.RAISE) {
+            setAnimation("walk_right");
+            super.setFrame(1);
+            pauseAnimation();
+            return;
+        }
+        if (BossQuest.RAISE) {
+            onMovement(Direction.NONE);
+            return;
+        }
         if (isMoving() || isAttacking() || drunning || urunning) {
             return;
         }
@@ -118,6 +145,11 @@ public class Admin extends Enemy {
 
     @Override
     public void onDeath() {
+        super.onDeath();
+
+        if (!(GameService.getCurrentQuest() instanceof GameQuest))
+            return;
+
         Key key = new Key();
         key.setLayer(getLayer());
         key.setX(getX());
@@ -125,8 +157,6 @@ public class Admin extends Enemy {
         getWorld().loadAndAdd(key);
         key.setVisible(false);
         key.blink();
-
-        super.onDeath();
     }
 
     public boolean isHostile() {

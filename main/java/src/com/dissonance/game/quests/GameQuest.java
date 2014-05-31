@@ -113,11 +113,16 @@ public class GameQuest  extends PauseQuest {
         RoofTopBeginning.farrand.unfreeze();
         RoofTopBeginning.jeremiah.unfreeze();
 
-        try {
-            bossBattle();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    bossBattle();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     public void changeToRooftopMid() throws InterruptedException {
@@ -199,20 +204,17 @@ public class GameQuest  extends PauseQuest {
     @Override
     public void setWorld(World world) {
         super.setWorld(world);
-
-        if (world.equals(GameCache.OutsideFighting)) {
-            if (!spawns.containsKey(world)) {
-                ArrayList<TiledObject> temp = new ArrayList<>();
-                Layer[] layers = world.getLayers(LayerType.OBJECT_LAYER);
-                for (Layer l : layers) {
-                    for (TiledObject obj : l.getObjectGroupData()) {
-                        if (obj.getRawType().equals("espawn"))
-                            temp.add(obj);
-                    }
+        if (!spawns.containsKey(world)) {
+            ArrayList<TiledObject> temp = new ArrayList<>();
+            Layer[] layers = world.getLayers(LayerType.OBJECT_LAYER);
+            for (Layer l : layers) {
+                for (TiledObject obj : l.getObjectGroupData()) {
+                    if (obj.getRawType().equals("espawn"))
+                        temp.add(obj);
                 }
-
-                spawns.put(world, temp.toArray(new TiledObject[temp.size()]));
             }
+
+            spawns.put(world, temp.toArray(new TiledObject[temp.size()]));
         }
     }
 

@@ -17,25 +17,19 @@ public class CityEntrySquare2 extends DemoLevelWorldLoader {
     public void onLoad(World w){
         super.onLoad(w);
 
-        farrand.setX(47*16);
-        farrand.setY(28*16);
-
-        jeremiah.setX(49*16);
-        jeremiah.setY(29*16);
-
         admin1 = new Admin();
-        admin1.setX(43*16);
+        admin1.setX(67*16);
         admin1.setY(56*16);
         admin1.setHostile(false);
 
         admin2 = new Admin();
-        admin2.setX(57*16);
+        admin2.setX(84*16);
         admin2.setY(56*16);
         admin2.setHostile(false);
 
         admin3 = new Admin();
-        admin3.setX(43 * 16);
-        admin3.setY(56 * 16);
+        admin3.setX(84 * 16);
+        admin3.setY(45 * 16);
         admin3.setHostile(false);
 
         w.loadAndAdd(admin1, admin2, admin3);
@@ -44,6 +38,12 @@ public class CityEntrySquare2 extends DemoLevelWorldLoader {
     @Override
     public void onDisplay(World w){
         super.onDisplay(w);
+
+        farrand.setX(53*16);
+        farrand.setY(28*16);
+
+        jeremiah.setX(55*16);
+        jeremiah.setY(28*16);
         farrand.setVisible(true);
         jeremiah.setVisible(true);
     }
@@ -198,28 +198,26 @@ public class CityEntrySquare2 extends DemoLevelWorldLoader {
     public void onRespawn(World w){
         super.onRespawn(w);
 
-        farrand.setX(47*16);
+        farrand.setX(53*16);
         farrand.setY(28*16);
+        farrand.setVisible(true);
 
-        jeremiah.setX(49*16);
-        jeremiah.setY(29*16);
+        jeremiah.setX(55*16);
+        jeremiah.setY(28*16);
+        jeremiah.setVisible(true);
 
         admin1 = new Admin();
-        w.loadAndAdd(admin1);
-        admin1.setX(43*16);
+        admin1.setX(67*16);
         admin1.setY(56*16);
-        admin1.setHostile(false);
 
         admin2 = new Admin();
-        w.loadAndAdd(admin2);
-        admin2.setX(57 * 16);
+        admin2.setX(84*16);
         admin2.setY(56*16);
-        admin2.setHostile(false);
 
         admin3 = new Admin();
-        w.loadAndAdd(admin3);
-        admin3.setX(43 * 16);
-        admin3.setY(56 * 16);
-        admin3.setHostile(false);
+        admin3.setX(84 * 16);
+        admin3.setY(45 * 16);
+
+        w.loadAndAdd(admin1, admin2, admin3);
     }
 }
