@@ -22,6 +22,8 @@ import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.Service;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.MovementType;
+import com.dissonance.framework.system.utils.physics.HitBox;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.sprites.menu.Background;
@@ -53,8 +55,13 @@ public class GameQuest  extends PauseQuest {
     @Override
     public void startQuest() throws Exception {
         INSTANCE = this;
-        setWorld(GameCache.RoofTopBeginning);
+        setWorld(GameCache.RoofTopBeginning, false);
         GameCache.RoofTopBeginning.waitForWorldDisplayed();
+
+        RoofTopBeginning.farrand.setMovementType(MovementType.RUNNING);
+        RoofTopBeginning.jeremiah.setMovementType(MovementType.RUNNING);
+        HitBox.registerSprite(RoofTopBeginning.farrand);
+        HitBox.registerSprite(RoofTopBeginning.jeremiah);
 
         Camera.stopFollowing();
 
@@ -83,8 +90,10 @@ public class GameQuest  extends PauseQuest {
 
         Thread.sleep(700);
 
-        RoofTopBeginning.farrand.face(Direction.RIGHT);
-        RoofTopBeginning.jeremiah.face(Direction.LEFT);
+        Direction direction1 = RoofTopBeginning.farrand.directionTowards(RoofTopBeginning.jeremiah);
+
+        RoofTopBeginning.farrand.face(direction1);
+        RoofTopBeginning.jeremiah.face(direction1.opposite());
 
         Dialog.displayDialog("LevelStart");
 
@@ -111,7 +120,7 @@ public class GameQuest  extends PauseQuest {
     }
 
     public void changeToRooftopMid() throws InterruptedException {
-        setWorld(GameCache.RooftopMid);
+        setWorld(GameCache.RooftopMid, false);
         GameCache.RooftopMid.waitForWorldDisplayed();
 
         RooftopMid.farrand.freeze();
@@ -144,12 +153,15 @@ public class GameQuest  extends PauseQuest {
             Camera.followSprite(player2.getSprite());
         }
 
+        RooftopMid.farrand.setIsInvincible(false);
+        RooftopMid.jeremiah.setIsInvincible(false);
+
         RooftopMid.farrand.unfreeze();
         RooftopMid.jeremiah.unfreeze();
     }
 
     public void changeToOutside1() throws InterruptedException {
-        setWorld(GameCache.OutsideFighting);
+        setWorld(GameCache.OutsideFighting, false);
         GameCache.OutsideFighting.waitForWorldDisplayed();
 
         OutsideFighting.farrand.setX(27f * 16f);
@@ -187,8 +199,8 @@ public class GameQuest  extends PauseQuest {
     }
 
     @Override
-    public void setWorld(World world) {
-        super.setWorld(world);
+    public void setWorld(World world, boolean cache) {
+        super.setWorld(world, cache);
         if (!spawns.containsKey(world)) {
             ArrayList<TiledObject> temp = new ArrayList<>();
             Layer[] layers = world.getLayers(LayerType.OBJECT_LAYER);
@@ -413,7 +425,7 @@ public class GameQuest  extends PauseQuest {
         Camera.stopFollowing();
         if (runnable != null) { runnable.kill(); runnable = null; }
 
-        setWorld(GameCache.FactoryFloor);
+        setWorld(GameCache.FactoryFloor, false);
         GameCache.FactoryFloor.waitForWorldDisplayed();
         TileObject.setTileAnimationSpeed(Long.MAX_VALUE); //Stop the animation...I think?
 
@@ -446,13 +458,16 @@ public class GameQuest  extends PauseQuest {
         if (player2 != null && player2.getSprite() != null)
             player2.getSprite().waitForWaypointReached();
 
+        FactoryFloorCat.jeremiah.setIsInvincible(false);
+        FactoryFloorCat.jeremiah.setIsInvincible(false);
+
         FactoryFloorCat.farrand.unfreeze();
         FactoryFloorCat.jeremiah.unfreeze();
     }
 
     public void changeToOffice1() throws InterruptedException {
         Camera.stopFollowing();
-        setWorld(GameCache.OfficeFloor1);
+        setWorld(GameCache.OfficeFloor1, false);
         GameCache.OfficeFloor1.waitForWorldDisplayed();
 
         OfficeFloor1.farrand.setX(26f * 16f);
@@ -480,7 +495,7 @@ public class GameQuest  extends PauseQuest {
 
     public void changeToOffice2() throws InterruptedException {
         Camera.stopFollowing();
-        setWorld(GameCache.OfficeFloor2);
+        setWorld(GameCache.OfficeFloor2, false);
         GameCache.OfficeFloor2.waitForWorldDisplayed();
 
         officefloor2.farrand.setUsePhysics(false);
@@ -516,7 +531,7 @@ public class GameQuest  extends PauseQuest {
 
     public void backToOffice1() throws InterruptedException {
         Camera.stopFollowing();
-        setWorld(GameCache.OfficeFloor1);
+        setWorld(GameCache.OfficeFloor1, false);
         GameCache.OfficeFloor1.waitForWorldDisplayed();
 
         OfficeFloor1.farrand.setUsePhysics(false);
@@ -551,7 +566,7 @@ public class GameQuest  extends PauseQuest {
     }
 
     public void changeToRooftopMidAgain() throws InterruptedException {
-        setWorld(GameCache.RooftopMid);
+        setWorld(GameCache.RooftopMid, false);
         GameCache.RooftopMid.waitForWorldDisplayed();
 
         RooftopMid.farrand.freeze();

@@ -331,13 +331,11 @@ public class HitBox {
     }
 
     public static void registerSprite(Collidable collidable) {
-        if (!cache.contains(collidable))
-            cache.add(collidable);
+        cache.add(collidable);
     }
 
     public static void unregisterSprite(Collidable collidable) {
-        if (cache.contains(collidable))
-            cache.remove(collidable);
+        cache.remove(collidable);
     }
 
     public static ArrayList<Collidable> getCollidables() {

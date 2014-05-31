@@ -54,7 +54,7 @@ public class RedGuard extends Enemy {
             setAnimation("bringup_right");
             return;
         }
-        if (isAttacking() || urunning || drunning)
+        if (isAttacking() || urunning || drunning || isDieing || isDodging())
             return;
         if (isAnimationPaused()) {
             super.setFrame(1);
@@ -93,11 +93,40 @@ public class RedGuard extends Enemy {
             onMovement(Direction.NONE);
             return;
         }
-        if (isMoving() || isAttacking() || drunning || urunning) {
+        if (isMoving() || isAttacking() || drunning || urunning || isDieing || isDodging()) {
             return;
         }
         super.setFrame(1);
         pauseAnimation();
+    }
+
+    private boolean isDieing = false;
+    @Override
+    public void onDeath() {
+        isDieing = true;
+        setInvincible(true);
+        setHostile(false);
+        Direction direction1 = getFacingDirection();
+        if (direction1 == Direction.UP || direction1 == Direction.DOWN || direction1 == Direction.RIGHT)
+            setAnimation("die_right");
+        else
+            setAnimation("die_left");
+        addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+            @Override
+            public void onAnimationFinished(AnimatedSprite sprite) {
+                blink();
+                removeAnimationFinishedListener(this);
+            }
+        });
+        playAnimation();
+    }
+
+    @Override
+    public void onBlink() {
+        super.onBlink();
+        if (isInvincible()) {
+            super.onDeath();
+        }
     }
 
     @Override

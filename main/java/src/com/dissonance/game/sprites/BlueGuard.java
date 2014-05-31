@@ -117,7 +117,8 @@ public class BlueGuard extends Enemy {
         setDefense(8);
         setSpeed(4);
         setVigor(8);
-        setStamina(4);
+        setStamina(60);
+        setMaxStamina(60);
         setMarksmanship(8);
         setMovementSpeed(1f);
     }

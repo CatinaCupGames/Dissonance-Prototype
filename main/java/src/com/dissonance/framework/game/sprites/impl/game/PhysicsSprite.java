@@ -138,7 +138,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             return;
         }
 
-        if (c instanceof PhysicsSprite) {
+        /*if (c instanceof PhysicsSprite) {
             if (ignore.contains(c))
                 return;
             super.rawSetX(oldX);
@@ -146,7 +146,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             for (int i = 0; i < 1000 && hb.checkForCollision(this, ignore); i++) {
                 super.rawSetX(super.getX() + (add < 0 ? -1 : 1));
             }
-        } else if (c instanceof Tile) {
+        } else */if (c instanceof Tile) {
             super.rawSetX(oldX);
             float add = getX() - c.getX();
             for (int i = 0; i < 1000 && hb.checkForCollision(this, ignore); i++) {
@@ -174,7 +174,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             return;
         }
 
-        if (c instanceof PhysicsSprite) {
+        /*if (c instanceof PhysicsSprite) {
             if (ignore.contains(c))
                 return;
             //super.rawSetY(oldY);
@@ -184,7 +184,7 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
             for (int i = 0; i < 1000 && hb.checkForCollision(this, ignore); i++) {
                 super.rawSetY(super.getY() + (add < 0 ? -8 : 8));
             }
-        } else if (c instanceof Tile) {
+        } else */if (c instanceof Tile) {
             //super.rawSetY(oldY);
             float add = getY() - c.getY();
             for (int i = 0; i < 1000 && hb.checkForCollision(this, ignore); i++) {

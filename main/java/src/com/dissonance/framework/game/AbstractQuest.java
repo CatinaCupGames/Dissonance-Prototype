@@ -82,6 +82,22 @@ public abstract class AbstractQuest {
         this.world = world;
     }
 
+    public void setWorld(World world, boolean cache) {
+        if (getWorld() != null && getWorld().equals(world))
+            return;
+        if (RenderService.INSTANCE == null) {
+            try {
+                world.waitForWorldLoaded();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        RenderService.INSTANCE.provideData(false, RenderService.ENABLE_CROSS_FADE);
+        WorldFactory.swapView(world, false, cache);
+        System.out.println("New world swapped to " + world.getID());
+        this.world = world;
+    }
+
     public World displayWorld(String world) {
         return displayWorld(world, true);
     }

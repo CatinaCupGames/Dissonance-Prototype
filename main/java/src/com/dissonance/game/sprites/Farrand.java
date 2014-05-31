@@ -179,7 +179,7 @@ public final class Farrand extends PlayableSprite {
 
         setAttack(6);
         setDefense(12);
-        setSpeed(5);
+        setSpeed(3);
         setVigor(10);
         setStamina(60);
         setMaxStamina(60);

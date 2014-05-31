@@ -179,7 +179,7 @@ public final class Jeremiah extends PlayableSprite {
 
         setAttack(16);
         setDefense(8);
-        setSpeed(8);
+        setSpeed(6);
         setVigor(8);
         setStamina(120);
         setMaxStamina(120);

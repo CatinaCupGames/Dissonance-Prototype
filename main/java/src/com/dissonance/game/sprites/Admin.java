@@ -71,7 +71,7 @@ public class Admin extends Enemy {
             setAnimation("bringup_right");
             return;
         }
-        if (isAttacking() || urunning || drunning)
+        if (isAttacking() || urunning || drunning || isDodging() || isDieing)
             return;
         if (isAnimationPaused()) {
             super.setFrame(1);
@@ -110,7 +110,7 @@ public class Admin extends Enemy {
             onMovement(Direction.NONE);
             return;
         }
-        if (isMoving() || isAttacking() || drunning || urunning) {
+        if (isMoving() || isAttacking() || drunning || urunning || isDodging() || isDieing) {
             return;
         }
         super.setFrame(1);
@@ -138,25 +138,52 @@ public class Admin extends Enemy {
         getWorld().setActiveNodeMap(getWorld().getDefaultNodeMap());
     }
 
+
+
     @Override
     public boolean isAlly(CombatSprite sprite) {
         return sprite instanceof BlueGuard || sprite instanceof RedGuard;
     }
 
+    private boolean isDieing = false;
+
+    @Override
+    public void onBlink() {
+        super.onBlink();
+        if (isInvincible()) {
+            super.onDeath();
+
+            if (!(GameService.getCurrentQuest() instanceof GameQuest))
+                return;
+
+            Key key = new Key();
+            key.setLayer(getLayer());
+            key.setX(getX());
+            key.setY(getY());
+            getWorld().loadAndAdd(key);
+            key.setVisible(false);
+            key.blink();
+        }
+    }
+
     @Override
     public void onDeath() {
-        super.onDeath();
-
-        if (!(GameService.getCurrentQuest() instanceof GameQuest))
-            return;
-
-        Key key = new Key();
-        key.setLayer(getLayer());
-        key.setX(getX());
-        key.setY(getY());
-        getWorld().loadAndAdd(key);
-        key.setVisible(false);
-        key.blink();
+        isDieing = true;
+        setInvincible(true);
+        setHostile(false);
+        Direction direction1 = getFacingDirection();
+        if (direction1 == Direction.UP || direction1 == Direction.DOWN || direction1 == Direction.RIGHT)
+            setAnimation("die_right");
+        else
+            setAnimation("die_left");
+        addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+            @Override
+            public void onAnimationFinished(AnimatedSprite sprite) {
+                blink();
+                removeAnimationFinishedListener(this);
+            }
+        });
+        playAnimation();
     }
 
     public boolean isHostile() {

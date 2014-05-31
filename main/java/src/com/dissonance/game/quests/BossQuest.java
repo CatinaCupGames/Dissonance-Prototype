@@ -19,6 +19,7 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.Service;
+import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.scenes.EndScene;
 import com.dissonance.game.scenes.FinalFightScene;
@@ -49,8 +50,8 @@ public class BossQuest extends PauseQuest {
     public void startQuest() throws Exception {
         Camera.stopFollowing();
         WorldFactory.clearCache();
-        World world = WorldFactory.getWorld("CityEntrySquare2");
-        setWorld(world);
+        World world = WorldFactory.getWorld("CityEntrySquare2", false);
+        setWorld(world, false);
         world.waitForWorldDisplayed();
         Sound.stopSound("bossfight");
         CityEntrySquare2.farrand.refillHP();
@@ -63,8 +64,11 @@ public class BossQuest extends PauseQuest {
         CityEntrySquare2.farrand.setUsePhysics(false);
         CityEntrySquare2.jeremiah.setUsePhysics(false);
 
-        CityEntrySquare2.farrand.setX(53*16);
-        CityEntrySquare2.farrand.setY(28*16);
+        CityEntrySquare2.farrand.face(Direction.DOWN);
+        CityEntrySquare2.jeremiah.face(Direction.DOWN);
+
+        CityEntrySquare2.farrand.setX(53 * 16);
+        CityEntrySquare2.farrand.setY(28 * 16);
         CityEntrySquare2.farrand.setVisible(true);
 
         CityEntrySquare2.jeremiah.setX(55*16);
