@@ -239,6 +239,13 @@ public class BossQuest extends PauseQuest {
         playSceneAndWait(EndScene.class);
 
         RenderService.INSTANCE.fadeToBlack(1f);
+
+        setNextQuest(new MenuQuest());
+        try {
+            endQuest();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
