@@ -18,6 +18,7 @@ public class RooftopMid extends DemoLevelWorldLoader {
     @Override
     public void onLoad(World w) {
         super.onLoad(w);
+        w.setWorldBrightness(0.89f);
 
         OpenWindow window = new OpenWindow();
         window.setX(60.5f * 16f);

@@ -21,16 +21,12 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.Service;
-import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.sprites.BlueGuard;
-import com.dissonance.game.sprites.Farrand;
-import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.menu.Background;
 import com.dissonance.game.sprites.menu.Static;
 import com.dissonance.game.sprites.menu.tutorial.Tutorial;
-import com.dissonance.game.sprites.outside.Factory;
 import com.dissonance.game.w.*;
 
 import java.util.ArrayList;
@@ -117,7 +113,7 @@ public class GameQuest  extends PauseQuest {
             @Override
             public void run() {
                 try {
-                    bossBattle();
+                    changeToRooftopMid();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
