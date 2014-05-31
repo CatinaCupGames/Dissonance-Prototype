@@ -24,8 +24,6 @@ public class JumpToBoss extends AbstractTrigger {
         RooftopMid.jeremiah.setWaypoint(RooftopMid.jeremiah.getX(), 104 * 16, WaypointType.SIMPLE);
 
         RenderService.INSTANCE.fadeToBlack(1500);
-
-
     }
 
     @Override
