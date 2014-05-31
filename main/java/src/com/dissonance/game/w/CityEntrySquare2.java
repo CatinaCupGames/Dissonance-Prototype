@@ -16,6 +16,8 @@ public class CityEntrySquare2 extends DemoLevelWorldLoader {
     @Override
     public void onLoad(World w){
         super.onLoad(w);
+        w.setWorldBrightness(0.4f);
+        w.createLight(0, 0, 0.1f, 0.1f);
 
         admin1 = new Admin();
         admin1.setX(67*16);

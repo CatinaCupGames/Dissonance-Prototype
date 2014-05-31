@@ -17,6 +17,7 @@ import com.dissonance.framework.game.world.tiled.impl.TileObject;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
+import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.Service;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.scenes.EndScene;
@@ -24,7 +25,6 @@ import com.dissonance.game.scenes.FinalFightScene;
 import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.sprites.menu.Background;
 import com.dissonance.game.sprites.menu.Static;
-import com.dissonance.game.w.CityEntrySquare;
 import com.dissonance.game.w.CityEntrySquare2;
 import com.dissonance.game.w.DemoLevelWorldLoader;
 
@@ -52,6 +52,11 @@ public class BossQuest extends PauseQuest {
         World world = WorldFactory.getWorld("CityEntrySquare2");
         setWorld(world);
         world.waitForWorldDisplayed();
+        Sound.stopSound("bossfight");
+        CityEntrySquare2.farrand.refillHP();
+        CityEntrySquare2.farrand.refillMP();
+        CityEntrySquare2.jeremiah.refillHP();
+        CityEntrySquare2.farrand.refillMP();
         CityEntrySquare2.farrand.freeze(true, BossQuest.class);
         CityEntrySquare2.jeremiah.freeze(true, BossQuest.class);
 
@@ -68,6 +73,7 @@ public class BossQuest extends PauseQuest {
         CityEntrySquare2.jeremiah.appear();
 
         playSceneAndWait(FinalFightScene.class);
+        Sound.playSound("breakbeat");
 
         CityEntrySquare2.farrand.setUsePhysics(true);
         CityEntrySquare2.jeremiah.setUsePhysics(true);
@@ -225,6 +231,7 @@ public class BossQuest extends PauseQuest {
                 CityEntrySquare2.farrand.appear();
             }
         }
+        Sound.stopSound("breakbeat");
         playSceneAndWait(EndScene.class);
 
         RenderService.INSTANCE.fadeToBlack(1f);

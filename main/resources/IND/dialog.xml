@@ -62,7 +62,9 @@
         <message type="append">No other way...</message>
     </dialog>
 
-    <dialog dialog_id="GarbageChuteJeremiah">
+    <dialog dialog_id="jumpoff">
+        <header>Farrand</header>
+        <message>No other way... Ready for one last jump?</message>
         <header>Jeremiah</header>
         <message>The things I do for this job...</message>
     </dialog>
