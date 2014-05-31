@@ -209,21 +209,21 @@ public abstract class AbstractUI implements UI {
 
     private float getParentWidth() {
         if (parent == null)
-            return GameSettings.Display.window_width;
+            return GameSettings.Display.game_width;
         else
             return parent.getWidth() * 2f;
     }
 
     private float getParentHeight() {
         if (parent == null)
-            return GameSettings.Display.window_height;
+            return GameSettings.Display.game_height;
         else
             return parent.getHeight() * 2f;
     }
 
     private float getRightOfParent() {
         if (parent == null)
-            return (GameSettings.Display.window_width / 2f) + alignment[3];
+            return (GameSettings.Display.game_width / 2f) + alignment[3];
         else
             return (parent.getX() + (parent.getWidth() / 2f)) + alignment[3];
     }
@@ -237,7 +237,7 @@ public abstract class AbstractUI implements UI {
 
     private float getBottomOfParent() {
         if (parent == null)
-            return (GameSettings.Display.window_height / 2f) + alignment[2];
+            return (GameSettings.Display.game_height / 2f) + alignment[2];
         else
             return (parent.getY() + (parent.getHeight() / 2f)) + alignment[2];
     }

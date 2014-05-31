@@ -30,6 +30,9 @@ public abstract class Button extends AbstractUI {
         float mx = Mouse.getX();
         float my = Mouse.getY();
         my = GameSettings.Display.window_height - my;
+        float[] translate = GameSettings.Display.toGameSpace(mx, my);
+        mx = translate[0];
+        my = translate[1];
         if (!hover) {
             if (mx >= getX() &&
                     mx <= getX() + getWidth() &&

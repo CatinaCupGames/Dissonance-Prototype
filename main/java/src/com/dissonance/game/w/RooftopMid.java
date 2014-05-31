@@ -1,6 +1,8 @@
 package com.dissonance.game.w;
 
+import com.dissonance.framework.game.GameService;
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.system.GameSettings;
 import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.sprites.RedGuard;
 import com.dissonance.game.sprites.RoofLight;
@@ -18,7 +20,13 @@ public class RooftopMid extends DemoLevelWorldLoader {
     @Override
     public void onLoad(World w) {
         super.onLoad(w);
-        w.setWorldBrightness(0.89f);
+        if (GameSettings.Graphics.qualityLights)
+            w.setWorldBrightness(0.89f);
+        else {
+            w.setWorldBrightness(0.8f);
+            w.createLight(-200, -200, 0.4f, 0.1f); //Lights for brightness
+            w.createLight(-200, -200, 0.4f, 0.1f); //Lights for brightness
+        }
 
         OpenWindow window = new OpenWindow();
         window.setX(60.5f * 16f);
