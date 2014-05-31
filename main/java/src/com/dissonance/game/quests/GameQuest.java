@@ -113,7 +113,7 @@ public class GameQuest  extends PauseQuest {
             @Override
             public void run() {
                 try {
-                    changeToRooftopMid();
+                    bossBattle();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
