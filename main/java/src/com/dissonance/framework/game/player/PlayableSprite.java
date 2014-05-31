@@ -34,7 +34,6 @@ public abstract class PlayableSprite extends CombatSprite {
     private Input input;
 
     private boolean isPlaying = false;
-    private MovementType mType = MovementType.RUNNING;
     private boolean frozen;
 
     boolean controller_extend;
@@ -276,10 +275,7 @@ public abstract class PlayableSprite extends CombatSprite {
         this.deselectedEvent = deselectedListener;
     }
 
-    public MovementType getMovementType() {
-        return mType;
-    }
-
+    @Override
     public void setMovementType(MovementType type) {
         if (type == MovementType.FROZEN) {
             oMType = this.mType;

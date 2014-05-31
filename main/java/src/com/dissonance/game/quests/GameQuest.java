@@ -112,17 +112,6 @@ public class GameQuest  extends PauseQuest {
 
         RoofTopBeginning.farrand.unfreeze();
         RoofTopBeginning.jeremiah.unfreeze();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    bossBattle();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 
     public void changeToRooftopMid() throws InterruptedException {

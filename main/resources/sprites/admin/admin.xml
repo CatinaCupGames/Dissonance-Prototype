@@ -103,5 +103,18 @@
             frames="4"
             row="15"
             default_speed="0ms" />
+    <animation
+            name="die_right"
+            loop="false"
+            frames="3"
+            row="16"
+            default_speed="200" />
+
+    <animation
+            name="die_left"
+            loop="false"
+            frames="3"
+            row="17"
+            default_speed="200" />
 
 </animations>

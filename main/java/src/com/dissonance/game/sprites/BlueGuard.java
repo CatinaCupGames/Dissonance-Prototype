@@ -8,10 +8,12 @@ import com.dissonance.framework.game.item.impl.WeaponItem;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.sprites.Sprite;
+import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.framework.system.utils.Timer;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.behaviors.Patrol;
@@ -39,29 +41,33 @@ public class BlueGuard extends Enemy {
             pauseAnimation();
             return;
         }
-        if (isAttacking())
+        if (isAttacking() || isDieing)
             return;
         if (isAnimationPaused()) {
             super.setFrame(2);
             playAnimation();
         }
 
+        String type = "walk";
+        if (getMovementType() == MovementType.RUNNING)
+            type = "run";
+
         switch (direction) {
             case UP:
             case UP_LEFT:
             case UP_RIGHT:
-                setAnimation("walk_back");
+                setAnimation(type + "_back");
                 break;
             case DOWN:
             case DOWN_LEFT:
             case DOWN_RIGHT:
-                setAnimation("walk_front");
+                setAnimation(type + "_front");
                 break;
             case LEFT:
-                setAnimation("walk_left");
+                setAnimation(type + "_left");
                 break;
             case RIGHT:
-                setAnimation("walk_right");
+                setAnimation(type + "_right");
                 break;
         }
     }
@@ -74,8 +80,28 @@ public class BlueGuard extends Enemy {
             pauseAnimation();
             return;
         }
-        if (isMoving() || isAttacking()) {
+        if (isMoving() || isAttacking() || isDieing) {
             return;
+        }
+        if (getMovementType() == MovementType.RUNNING) {
+            switch (direction) {
+                case UP:
+                case UP_LEFT:
+                case UP_RIGHT:
+                    setAnimation("walk_back");
+                    break;
+                case DOWN:
+                case DOWN_LEFT:
+                case DOWN_RIGHT:
+                    setAnimation("walk_front");
+                    break;
+                case LEFT:
+                    setAnimation("walk_left");
+                    break;
+                case RIGHT:
+                    setAnimation("walk_right");
+                    break;
+            }
         }
         super.setFrame(1);
         pauseAnimation();
@@ -94,7 +120,35 @@ public class BlueGuard extends Enemy {
         setStamina(4);
         setMarksmanship(8);
         setMovementSpeed(1f);
+    }
 
+    private boolean isDieing = false;
+    @Override
+    public void onDeath() {
+        isDieing = true;
+        setInvincible(true);
+        setHostile(false);
+        Direction direction1 = getFacingDirection();
+        if (direction1 == Direction.UP || direction1 == Direction.DOWN || direction1 == Direction.RIGHT)
+            setAnimation("die_right");
+        else
+            setAnimation("die_left");
+        addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+            @Override
+            public void onAnimationFinished(AnimatedSprite sprite) {
+                blink();
+                removeAnimationFinishedListener(this);
+            }
+        });
+        playAnimation();
+    }
+
+    @Override
+    public void onBlink() {
+        super.onBlink();
+        if (isInvincible()) {
+            super.onDeath();
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
+import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.game.sprites.BlueGuard;
 import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.Jeremiah;
@@ -22,36 +23,43 @@ public class WaldoHallway implements WorldLoader {
        w.loadAndAdd(guard1);
        guard1.setX(39*16);
        guard1.setY(5*16);
+       guard1.setMovementType(MovementType.WALKING);
 
        guard2 = new BlueGuard();
        w.loadAndAdd(guard2);
        guard2.setX(39*16);
        guard2.setY(9*16);
+       guard2.setMovementType(MovementType.WALKING);
 
       farrand = new Farrand();
       w.loadAndAdd(farrand);
       farrand.setX(41*16);
       farrand.setY(7*16);
+       farrand.setMovementType(MovementType.WALKING);
 
        guard3 = new BlueGuard();
        w.loadAndAdd(guard3);
        guard3.setX(42*16);
        guard3.setY(5*16);
+       guard3.setMovementType(MovementType.WALKING);
 
        guard4 = new BlueGuard();
        w.loadAndAdd(guard4);
        guard4.setX(42*16);
        guard4.setY(9*16);
+       guard4.setMovementType(MovementType.WALKING);
 
        jeremiah = new Jeremiah();
        w.loadAndAdd(jeremiah);
        jeremiah.setX(44*16);
        jeremiah.setY(7*16);
+       jeremiah.setMovementType(MovementType.WALKING);
 
        guard5 = new BlueGuard();
        w.loadAndAdd(guard5);
        guard5.setX(46*16);
        guard5.setY(7*16);
+       guard5.setMovementType(MovementType.WALKING);
 
        guard1.setHostile(false);
        guard2.setHostile(false);

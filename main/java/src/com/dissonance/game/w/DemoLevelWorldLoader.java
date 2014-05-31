@@ -6,6 +6,7 @@ import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.framework.system.GameSettings;
+import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.environment.BasicLight;
@@ -35,6 +36,9 @@ public abstract class DemoLevelWorldLoader implements WorldLoader {
 
         if (!jeremiah.isAlly(farrand))
             jeremiah.joinParty(farrand);
+
+        farrand.setMovementType(MovementType.RUNNING);
+        jeremiah.setMovementType(MovementType.RUNNING);
     }
 
     @Override
