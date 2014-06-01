@@ -77,7 +77,7 @@ public class OfficeScene extends SimpleScene {
 
         Thread.sleep(500);
         WaldomarsMeetingRoom.farrand.setMovementSpeed(4f);
-        WaldomarsMeetingRoom.farrand.setWaypoint(6.5f*16, 8f*16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.farrand.setWaypoint(6.5f*16, 6f*16, WaypointType.SIMPLE);
         WaldomarsMeetingRoom.farrand.waitForWaypointReached();
         WaldomarsMeetingRoom.farrand.face(Direction.DOWN);
 
@@ -113,7 +113,7 @@ public class OfficeScene extends SimpleScene {
         WaldomarsMeetingRoom.waldomar.useSpell(new Fire(WaldomarsMeetingRoom.waldomar));
 
         WaldomarsMeetingRoom.farrand.setMovementSpeed(20f);
-        WaldomarsMeetingRoom.farrand.setWaypoint(12.5f*16, 8f*16,WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.farrand.setWaypoint(12.5f*16, 6f*16,WaypointType.SIMPLE);
         Thread.sleep(300);
         WaldomarsMeetingRoom.waldomar.useSpell(new Fire(WaldomarsMeetingRoom.waldomar));
         Thread.sleep(300);
