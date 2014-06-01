@@ -693,8 +693,8 @@
                     },
                  "type":"trigger",
                  "visible":true,
-                 "width":448,
-                 "x":1536,
+                 "width":368,
+                 "x":1584,
                  "y":800
                 }],
          "opacity":1,

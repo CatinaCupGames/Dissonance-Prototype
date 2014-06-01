@@ -10,6 +10,7 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.texture.Texture;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.framework.system.utils.Validator;
 
 import java.io.IOException;
@@ -26,6 +27,8 @@ public abstract class CombatSprite extends PhysicsSprite {
     private final ArrayList<StatusEffect> effects = new ArrayList<StatusEffect>();
     private int weaponIndex;
     private CombatSpriteEvents listener;
+
+    protected MovementType mType = MovementType.RUNNING;
 
 
     protected float dodgeX, dodgeY, dodgeStartX, dodgeStartY, totalDodgeTime;
@@ -110,6 +113,14 @@ public abstract class CombatSprite extends PhysicsSprite {
         lockedOnColor.add(colors);
         lockOnRotation.add(0f);
         lockers.add(sprite);
+    }
+
+    public MovementType getMovementType() {
+        return mType;
+    }
+
+    public void setMovementType(MovementType type) {
+        this.mType = type;
     }
 
     public void removeLock(PlayableSprite sprite) {

@@ -2,6 +2,7 @@ package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.game.quests.BossQuest;
 import com.dissonance.game.spells.impl.Earthquake;
 
@@ -112,22 +113,26 @@ public final class Jeremiah extends PlayableSprite {
             return;
         }
 
+        String type = "walk";
+        if (getMovementType() == MovementType.RUNNING)
+            type = "run";
+
         switch (direction) {
             case UP:
             case UP_LEFT:
             case UP_RIGHT:
-                setAnimation("walk_back");
+                setAnimation(type + "_back");
                 break;
             case DOWN:
             case DOWN_LEFT:
             case DOWN_RIGHT:
-                setAnimation("walk_front");
+                setAnimation(type + "_front");
                 break;
             case LEFT:
-                setAnimation("walk_left");
+                setAnimation(type + "_left");
                 break;
             case RIGHT:
-                setAnimation("walk_right");
+                setAnimation(type + "_right");
                 break;
         }
     }
@@ -143,6 +148,26 @@ public final class Jeremiah extends PlayableSprite {
         if (isMoving() || ignore_movement) {
             return;
         }
+        if (getMovementType() == MovementType.RUNNING) {
+            switch (direction) {
+                case UP:
+                case UP_LEFT:
+                case UP_RIGHT:
+                    setAnimation("walk_back");
+                    break;
+                case DOWN:
+                case DOWN_LEFT:
+                case DOWN_RIGHT:
+                    setAnimation("walk_front");
+                    break;
+                case LEFT:
+                    setAnimation("walk_left");
+                    break;
+                case RIGHT:
+                    setAnimation("walk_right");
+                    break;
+            }
+        }
         super.setFrame(1);
         pauseAnimation();
     }
@@ -152,7 +177,7 @@ public final class Jeremiah extends PlayableSprite {
         super.onLoad();
         pauseAnimation();
 
-        setAttack(1600);
+        setAttack(16);
         setDefense(8);
         setSpeed(6);
         setVigor(8);

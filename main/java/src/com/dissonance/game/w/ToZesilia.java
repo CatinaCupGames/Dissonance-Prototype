@@ -3,6 +3,7 @@ package com.dissonance.game.w;
 import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
+import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.game.sprites.Farrand;
 import com.dissonance.game.sprites.Jeremiah;
 import com.dissonance.game.sprites.StreetLamp;
@@ -27,11 +28,13 @@ public class ToZesilia implements WorldLoader {
         w.loadAndAdd(farrand);
         farrand.setX(2808.0275f);
         farrand.setY(338.1298f);
+        farrand.setMovementType(MovementType.WALKING);
 
         jeremiah = new Jeremiah();
         w.loadAndAdd(jeremiah);
         jeremiah.setX(2856.2601f);
         jeremiah.setY(353.97f);
+        jeremiah.setMovementType(MovementType.WALKING);
 
 
 
