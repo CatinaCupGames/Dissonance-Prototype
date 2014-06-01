@@ -8,6 +8,7 @@ import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.behaviors.Patrol;
 import com.dissonance.game.behaviors.Search;
@@ -188,12 +189,14 @@ public class RedGuard extends Enemy {
                     face(((Search)getBehavior()).getOrginalDirection());
                 }
                 if (!idle) {
+                    setMovementType(MovementType.WALKING);
                     setMovementSpeed(movementSpeed() / 4f);
                     idle = true;
                     Patrol patrol = new Patrol(this);
                     setBehavior(patrol);
                 }
             } else {
+                setMovementType(MovementType.RUNNING);
                 Direction towards = directionTowards(target);
                 setMovementSpeed(movementSpeed() / 1.5f);
                 idle = false;

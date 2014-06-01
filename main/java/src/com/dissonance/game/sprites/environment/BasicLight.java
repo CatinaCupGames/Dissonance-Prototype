@@ -36,4 +36,9 @@ public class BasicLight extends ImageSprite implements UI {
 
     @Override
     public void update() { }
+
+    @Override
+    public void close() {
+
+    }
 }

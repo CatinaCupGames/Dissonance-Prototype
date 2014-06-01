@@ -40,8 +40,6 @@ public class JumpToBoss extends AbstractTrigger {
 
         Dialog.displayDialog("jumpoff");
 
-        Thread.sleep(1000);
-
         RenderService.INSTANCE.fadeToBlack(1500);
         RenderService.INSTANCE.waitForFade();
 

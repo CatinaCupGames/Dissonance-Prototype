@@ -565,6 +565,10 @@ public final class World {
             if (d instanceof Sprite)
                 ((Sprite)d).onUnload();
         }
+        UI[] uis = uiElements.toArray(new UI[uiElements.size()]);
+        for (UI u : uis) {
+            u.close();
+        }
 
         drawable.clear();
         unsorted.clear();

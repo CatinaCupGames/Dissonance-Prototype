@@ -250,6 +250,7 @@ public class BossQuest extends PauseQuest {
 
     @Override
     public void onPlayerDeath(PlayableSprite sprite) {
+        death = 0;
         Camera.stopFollowing();
 
         RenderService.INSTANCE.provideData(4400f, RenderService.CROSS_FADE_DURATION);
@@ -321,6 +322,10 @@ public class BossQuest extends PauseQuest {
                     player2.getSprite().playAnimation();
                     Camera.followSprite(player2.getSprite());
                 }
+
+                CityEntrySquare2.admin1.setCombatListener(LISTENER);
+                CityEntrySquare2.admin2.setCombatListener(LISTENER);
+                CityEntrySquare2.admin3.setCombatListener(LISTENER);
 
                 try {
                     start = RenderService.getTime();

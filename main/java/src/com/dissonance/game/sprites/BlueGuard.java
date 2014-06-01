@@ -242,10 +242,12 @@ public class BlueGuard extends Enemy {
                 if (!idle) {
                     setMovementSpeed(movementSpeed() / 4f);
                     idle = true;
+                    setMovementType(MovementType.WALKING);
                     Patrol patrol = new Patrol(this);
                     setBehavior(patrol);
                 }
             } else {
+                setMovementType(MovementType.RUNNING);
                 if (!saw && !isPlayerSeen(target)) {
                     if (getBehavior() == null || !(getBehavior() instanceof Search)) {
                         Search search = new Search(this);

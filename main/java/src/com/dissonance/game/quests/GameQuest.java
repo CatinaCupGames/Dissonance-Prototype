@@ -12,6 +12,7 @@ import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.ToastText;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
@@ -54,6 +55,7 @@ public class GameQuest  extends PauseQuest {
 
     @Override
     public void startQuest() throws Exception {
+        WorldFactory.clearCache();
         INSTANCE = this;
         setWorld(GameCache.RoofTopBeginning, false);
         GameCache.RoofTopBeginning.waitForWorldDisplayed();
@@ -117,6 +119,17 @@ public class GameQuest  extends PauseQuest {
 
         RoofTopBeginning.farrand.unfreeze();
         RoofTopBeginning.jeremiah.unfreeze();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    changeToFactory();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     public void changeToRooftopMid() throws InterruptedException {
@@ -572,6 +585,11 @@ public class GameQuest  extends PauseQuest {
         RooftopMid.farrand.freeze();
         RooftopMid.jeremiah.freeze();
 
+        if (!RooftopMid.farrand.isLoaded())
+            RooftopMid.farrand.onLoad();
+        if (!RooftopMid.jeremiah.isLoaded())
+            RooftopMid.jeremiah.onLoad();
+
         RooftopMid.farrand.setLayer(1);
         RooftopMid.jeremiah.setLayer(1);
         RooftopMid.farrand.setUsePhysics(false);
@@ -582,8 +600,6 @@ public class GameQuest  extends PauseQuest {
         RooftopMid.jeremiah.setY(29f * 16f);
         RooftopMid.farrand.face(Direction.UP);
         RooftopMid.jeremiah.face(Direction.UP);
-        RenderService.INSTANCE.fadeFromBlack(1300);
-        RenderService.INSTANCE.waitForFade();
         RooftopMid.jeremiah.setUsePhysics(true);
         RooftopMid.farrand.setUsePhysics(true);
 

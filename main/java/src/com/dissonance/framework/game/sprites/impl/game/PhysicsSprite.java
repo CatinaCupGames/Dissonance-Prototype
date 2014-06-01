@@ -271,6 +271,8 @@ public abstract class PhysicsSprite extends AbstractWaypointSprite implements Co
     @Override
     public void onUnload() {
         HitBox.unregisterSprite(this);
+        hb = null;
+        ignore.clear();
     }
 
     public HitBox[] getHitBoxes() {

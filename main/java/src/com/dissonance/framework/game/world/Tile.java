@@ -49,8 +49,6 @@ public class Tile implements Collidable {
         }
 
         if (hasProperty("triggerclass", world)) {
-            if (world.getName().equals("FactoryFloorCat"))
-                System.out.println("hi");
             trigger_tile = true;
             String tmp = getProperty("triggerclass", world);
             if (instances.containsKey(containingLayer) && instances.get(containingLayer).containsKey(tmp)) {

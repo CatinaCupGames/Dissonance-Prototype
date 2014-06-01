@@ -61,10 +61,10 @@ public class WeaponItem extends Item {
             Direction direction = getOwner().getFacingDirection();
 
             Bullet bullet = new Bullet(this);
-            bullet.fire(direction);
             if (parameters.length > 0 && parameters[0] instanceof Integer) {
                 bullet.setLayer((Integer)parameters[0]);
             }
+            bullet.fire(direction);
 
             final String old_a = owner.getCurrentAnimation().getName();
             owner.setAttacking(true);

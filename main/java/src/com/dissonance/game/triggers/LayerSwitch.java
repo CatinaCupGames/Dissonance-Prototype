@@ -13,6 +13,7 @@ public class LayerSwitch extends AbstractTrigger {
 
     @Override
     protected void onTrigger(PhysicsSprite sprite) throws Throwable {
+        sprite.setMovementSpeed(10);
         if (sprite.getLayer() == 2) {
             climbers.add(sprite);
 

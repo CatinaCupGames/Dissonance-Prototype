@@ -1,6 +1,7 @@
 package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.GameService;
+import com.dissonance.framework.game.ai.astar.FastMath;
 import com.dissonance.framework.game.ai.astar.Position;
 import com.dissonance.framework.game.ai.behaviors.Behavior;
 import com.dissonance.framework.game.ai.behaviors.Flee;
@@ -12,10 +13,12 @@ import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.AbstractWaypointSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
+import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.framework.system.utils.Timer;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.behaviors.Patrol;
@@ -160,7 +163,7 @@ public class Admin extends Enemy {
             key.setLayer(getLayer());
             key.setX(getX());
             key.setY(getY());
-            getWorld().loadAndAdd(key);
+            GameService.getCurrentWorld().loadAndAdd(key);
             key.setVisible(false);
             key.blink();
         }
@@ -241,10 +244,12 @@ public class Admin extends Enemy {
                 if (!idle) {
                     setMovementSpeed(movementSpeed() / 4f);
                     idle = true;
+                    setMovementType(MovementType.WALKING);
                     Patrol patrol = new Patrol(this);
                     setBehavior(patrol);
                 }
             } else {
+                setMovementType(MovementType.RUNNING);
                 Direction towards = directionTowards(target);
                 setMovementSpeed(movementSpeed() / 1.5f);
                 idle = false;

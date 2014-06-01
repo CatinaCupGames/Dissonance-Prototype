@@ -17,12 +17,14 @@ public class ControllerTutorial extends ImageSprite {
     public ControllerTutorial() {
         super("sprites/menu/Menus/ControllerTutorial.png");
     }
+    private long start;
 
     @Override
     public void onLoad() {
         super.onLoad();
 
         setLayer(101);
+        start = System.currentTimeMillis();
     }
 
     @Override
@@ -34,6 +36,8 @@ public class ControllerTutorial extends ImageSprite {
     }
 
     private void update() {
+        if (System.currentTimeMillis() - start < 3000)
+            return;
         if (Players.isAnyPlayerPressingButton(InputKeys.SELECT) || Players.isAnyPlayerPressingButton(InputKeys.DODGE)) {
             if (GameService.getCurrentQuest().isPaused()) {
                 PauseMenu.INSTANCE.switchTo(PauseMenu.MAIN_MENU);

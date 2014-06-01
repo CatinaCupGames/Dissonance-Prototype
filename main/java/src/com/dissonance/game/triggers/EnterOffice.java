@@ -14,6 +14,7 @@ public class EnterOffice extends AbstractTrigger {
     @Override
     protected void onTrigger(PhysicsSprite sprite) throws Throwable {
         PlayableSprite player = (PlayableSprite)sprite;
+        player.setInvincible(true);
         player.setUsePhysics(false);
         Player player1 = Players.getPlayer1();
         Player player2 = Players.getPlayer(2);
@@ -31,6 +32,7 @@ public class EnterOffice extends AbstractTrigger {
                 p2.freeze();
             }
             p2.setUsePhysics(false);
+            p2.setInvincible(true);
             player.freeze();
 
             p2.setWaypoint(player.getX() + 48, player.getY(), WaypointType.SIMPLE);
@@ -49,6 +51,7 @@ public class EnterOffice extends AbstractTrigger {
             p2.waitForWaypointReached();
             player.setVisible(false);
             p2.setVisible(false);
+            p2.setInvincible(false);
         } else {
             player.freeze();
             player.face(Direction.UP);
@@ -62,6 +65,7 @@ public class EnterOffice extends AbstractTrigger {
             player.setVisible(false);
         }
 
+        player.setInvincible(false);
         GameQuest.INSTANCE.changeToOffice1();
     }
 

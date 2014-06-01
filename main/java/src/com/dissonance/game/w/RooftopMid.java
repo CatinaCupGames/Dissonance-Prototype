@@ -23,8 +23,7 @@ public class RooftopMid extends DemoLevelWorldLoader {
         if (GameSettings.Graphics.qualityLights)
             w.setWorldBrightness(0.89f);
         else {
-            w.setWorldBrightness(0.8f);
-            w.createLight(-200, -200, 0.4f, 0.1f); //Lights for brightness
+            w.setWorldBrightness(0.4f);
             w.createLight(-200, -200, 0.4f, 0.1f); //Lights for brightness
         }
 
