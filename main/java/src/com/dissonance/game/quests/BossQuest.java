@@ -78,6 +78,7 @@ public class BossQuest extends PauseQuest {
 
         playSceneAndWait(FinalFightScene.class);
         Sound.playSound("breakbeat");
+        Camera.stopFollowing();
 
         CityEntrySquare2.farrand.setUsePhysics(true);
         CityEntrySquare2.jeremiah.setUsePhysics(true);

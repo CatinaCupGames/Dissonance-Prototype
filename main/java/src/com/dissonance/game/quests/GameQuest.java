@@ -119,17 +119,6 @@ public class GameQuest  extends PauseQuest {
 
         RoofTopBeginning.farrand.unfreeze();
         RoofTopBeginning.jeremiah.unfreeze();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    changeToFactory();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 
     public void changeToRooftopMid() throws InterruptedException {
@@ -180,9 +169,6 @@ public class GameQuest  extends PauseQuest {
         setWorld(GameCache.OutsideFighting, false);
         GameCache.OutsideFighting.waitForWorldDisplayed();
 
-        RenderService.INSTANCE.fadeFromBlack(1000);
-        RenderService.INSTANCE.waitForFade();
-
         OutsideFighting.farrand.setX(27f * 16f);
         OutsideFighting.farrand.setY(135f * 16f);
         OutsideFighting.farrand.setIsInvincible(false);
@@ -202,6 +188,9 @@ public class GameQuest  extends PauseQuest {
             player2.getSprite().setUsePhysics(true);
             Camera.followSprite(player2.getSprite());
         }
+
+        RenderService.INSTANCE.fadeFromBlack(1000);
+        RenderService.INSTANCE.waitForFade();
 
         RoofTopBeginning.farrand.unfreeze();
         RoofTopBeginning.jeremiah.unfreeze();
