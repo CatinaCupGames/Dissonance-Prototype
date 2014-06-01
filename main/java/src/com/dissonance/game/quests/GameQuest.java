@@ -174,8 +174,14 @@ public class GameQuest  extends PauseQuest {
     }
 
     public void changeToOutside1() throws InterruptedException {
+        RenderService.INSTANCE.fadeToBlack(1000);
+        RenderService.INSTANCE.waitForFade();
+
         setWorld(GameCache.OutsideFighting, false);
         GameCache.OutsideFighting.waitForWorldDisplayed();
+
+        RenderService.INSTANCE.fadeFromBlack(1000);
+        RenderService.INSTANCE.waitForFade();
 
         OutsideFighting.farrand.setX(27f * 16f);
         OutsideFighting.farrand.setY(135f * 16f);

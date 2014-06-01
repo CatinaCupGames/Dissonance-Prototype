@@ -7,12 +7,15 @@ import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.quests.GameQuest;
 
 public class EnterOffice extends AbstractTrigger {
     @Override
     protected void onTrigger(PhysicsSprite sprite) throws Throwable {
+
+
         PlayableSprite player = (PlayableSprite)sprite;
         player.setInvincible(true);
         player.setUsePhysics(false);
@@ -66,7 +69,14 @@ public class EnterOffice extends AbstractTrigger {
         }
 
         player.setInvincible(false);
+
+        RenderService.INSTANCE.fadeToBlack(1000);
+        RenderService.INSTANCE.waitForFade();
+
         GameQuest.INSTANCE.changeToOffice1();
+
+        RenderService.INSTANCE.fadeFromBlack(1000);
+        RenderService.INSTANCE.waitForFade();
     }
 
     @Override
