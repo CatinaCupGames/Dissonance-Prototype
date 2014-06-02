@@ -16,7 +16,7 @@ public class Main {
         System.out.println("Starting MainQuest");
         GameSettings.Graphics.useFBO = false;
         //AJ IS A POOP
-        RenderService.ZOOM_SCALE = 2f;
+        RenderService.ZOOM_SCALE = 0.5f;
         GameService.beginQuest(new MainQuest());
     }
 

@@ -11,11 +11,18 @@ public class Billboard extends AnimatedSprite {
     @Override
     public void onLoad() {
         super.onLoad();
-        setAnimation("billboard1");
+        int property = getPropertyAsInt("type");
+        if (property == 0)
+            property = 1;
+
+        setAnimation("billboard" + property);
         playAnimation();
+
+        setLayer(2);
 
         BillboardBase base = new BillboardBase();
         base.setX(getX());
-        base.setY(getY() + getHeight() + 10f);
+        base.setY(getY() + getHeight() - 20f);
+        getWorld().loadAndAdd(base);
     }
 }

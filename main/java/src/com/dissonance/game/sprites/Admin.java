@@ -148,8 +148,6 @@ public class Admin extends Enemy {
         return sprite instanceof BlueGuard || sprite instanceof RedGuard;
     }
 
-    private boolean isDieing = false;
-
     @Override
     public void onBlink() {
         super.onBlink();
@@ -169,24 +167,38 @@ public class Admin extends Enemy {
         }
     }
 
-    @Override
-    public void onDeath() {
-        isDieing = true;
+    public void fallOver(final Runnable toRun) {
         setInvincible(true);
         setHostile(false);
         Direction direction1 = getFacingDirection();
-        if (direction1 == Direction.UP || direction1 == Direction.DOWN || direction1 == Direction.RIGHT)
+        if (direction1 == Direction.RIGHT)
             setAnimation("die_right");
-        else
+        else if (direction1 == Direction.LEFT)
             setAnimation("die_left");
-        addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+        else
+            setAnimation(random.nextBoolean() ? "die_right" : "die_left");
+        if (toRun != null) {
+            addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+                @Override
+                public void onAnimationFinished(AnimatedSprite sprite) {
+                    toRun.run();
+                    removeAnimationFinishedListener(this);
+                }
+            });
+        }
+        playAnimation();
+    }
+
+    private boolean isDieing = false;
+    @Override
+    public void onDeath() {
+        isDieing = true;
+        fallOver(new Runnable() {
             @Override
-            public void onAnimationFinished(AnimatedSprite sprite) {
+            public void run() {
                 blink();
-                removeAnimationFinishedListener(this);
             }
         });
-        playAnimation();
     }
 
     public boolean isHostile() {

@@ -142,7 +142,12 @@ public class OfficeScene extends SimpleScene {
         });
         //====WINDOW====
 
-        WaldomarsMeetingRoom.guard1.setMovementSpeed(30f);
+        WaldomarsMeetingRoom.guard1.fallOver(null);
+        WaldomarsMeetingRoom.guard2.fallOver(null);
+        WaldomarsMeetingRoom.guard3.fallOver(null);
+        WaldomarsMeetingRoom.guard4.fallOver(null);
+        WaldomarsMeetingRoom.guard5.fallOver(null);
+        /*WaldomarsMeetingRoom.guard1.setMovementSpeed(30f);
         WaldomarsMeetingRoom.guard1.setWaypoint(0, 11f * 16, WaypointType.SIMPLE);
 
         WaldomarsMeetingRoom.guard2.setMovementSpeed(30f);
@@ -153,7 +158,7 @@ public class OfficeScene extends SimpleScene {
 
 
         WaldomarsMeetingRoom.guard4.setMovementSpeed(30f);
-        WaldomarsMeetingRoom.guard4.setWaypoint(21*16, 17*16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.guard4.setWaypoint(21*16, 17*16, WaypointType.SIMPLE);*/
 
 
         Dialog.displayDialog("waldomeeting3");

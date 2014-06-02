@@ -5,6 +5,9 @@ import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.game.sprites.Admin;
+import com.dissonance.game.sprites.BlueGuard;
+import com.dissonance.game.sprites.RedGuard;
 
 import java.awt.*;
 import java.util.*;
@@ -20,28 +23,54 @@ public class Earthquake implements Spell {
         Camera.shake(Direction.DOWN, 4000L, 5, 0.5);
         Sound.playSound("earthquake");
 
-        float radius = 5f * 16f; //20 tiles
+        float radius = 20f * 16f; //20 tiles
 
         java.util.List<CombatSprite> combatSprites = owner.getWorld().getAllCombatSprites();
         for (CombatSprite c : combatSprites) {
             if (!c.isAlly(owner) && owner.distanceFrom(c) < radius) {
-                Direction pushDirection = owner.directionTowards(c).opposite();
-                switch (pushDirection) {
-                    case UP:
-                        c.rawSetY((float) (c.getY() - (((radius) - c.distanceFrom(owner)))));
-                        break;
-                    case DOWN:
-                        c.rawSetY((float) (c.getY() + (((radius) - c.distanceFrom(owner)))));
-                        break;
-                    case LEFT:
-                        c.rawSetX((float) (c.getX() - (((radius) - c.distanceFrom(owner)))));
-                        break;
-                    case RIGHT:
-                        c.rawSetX((float) (c.getX() + (((radius) - c.distanceFrom(owner)))));
-                        break;
+                if (c instanceof BlueGuard) {
+                    final BlueGuard blueGuard = (BlueGuard)c;
+                    blueGuard.fallOver(new Runnable() {
+                        @Override
+                        public void run() {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(3000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    blueGuard.fallOver = false;
+                                    blueGuard.setInvincible(false);
+                                    blueGuard.setHostile(true);
+                                }
+                            }).start();
+                        }
+                    });
+                    blueGuard.setInvincible(false);
+                } else if (c instanceof RedGuard) {
+                    final RedGuard blueGuard = (RedGuard)c;
+                    blueGuard.fallOver(new Runnable() {
+                        @Override
+                        public void run() {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(3000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    blueGuard.fallOver = false;
+                                    blueGuard.setInvincible(false);
+                                    blueGuard.setHostile(true);
+                                }
+                            }).start();
+                        }
+                    });
+                    blueGuard.setInvincible(false);
                 }
-
-                System.out.println(c.getX() + " : " + c.getY());
             }
         }
     }

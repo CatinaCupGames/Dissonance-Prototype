@@ -43,7 +43,9 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        player.setInvincible(true);
                         Dialog.displayDialog(ind);
+                        player.setInvincible(false);
                     }
                 }).start();
                 return true;

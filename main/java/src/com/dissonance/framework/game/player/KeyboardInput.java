@@ -117,7 +117,7 @@ public class KeyboardInput implements Input {
         if (playableSprite != null) {
             checkExtend(playableSprite);
 
-            if (!use_switch && playableSprite.party.size() > 0) {
+            if (!use_switch && playableSprite.party.size() > 0 && !GameService.coop_mode) {
                 if (InputKeys.checkKeyboard(InputKeys.SWITCH)) {
                     use_switch = true;
                     if (playableSprite.isPlayer1()) {

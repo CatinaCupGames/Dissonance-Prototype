@@ -236,6 +236,10 @@
              "28":
                 {
                  "triggerclass":"com.dissonance.game.triggers.TileFade"
+                },
+             "34":
+                {
+                 "passable":"false"
                 }
             },
          "tilewidth":16

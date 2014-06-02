@@ -59,6 +59,8 @@ public class FakeExitRoof extends AbstractTrigger {
 
             player1.getSprite().setIsInvincible(false);
             player2.getSprite().setIsInvincible(false);
+            player1.getSprite().setUsePhysics(true);
+            player2.getSprite().setUsePhysics(true);
             player1.getSprite().unfreeze();
             player2.getSprite().unfreeze();
         }

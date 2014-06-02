@@ -109,13 +109,13 @@
             loop="false"
             frames="3"
             row="16"
-            default_speed="200" />
+            default_speed="200ms" />
 
     <animation
             name="die_left"
             loop="false"
             frames="3"
             row="17"
-            default_speed="200" />
+            default_speed="200ms" />
 
 </animations>

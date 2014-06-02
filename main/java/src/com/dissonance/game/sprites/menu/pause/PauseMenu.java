@@ -247,6 +247,8 @@ public class PauseMenu extends AbstractUI  {
 
     @Override
     protected void onClose() {
+        if (type == TUTORIAL_MENU)
+            switchTo(MAIN_MENU);
         runnable.kill();
         for (Button button : MAIN_BUTTONS) {
             button.close();

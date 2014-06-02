@@ -3,6 +3,7 @@ package com.dissonance.game.triggers;
 import com.dissonance.framework.game.AbstractQuest;
 import com.dissonance.framework.game.sprites.Sprite;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
+import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.Tile;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTileTrigger;
 import com.dissonance.framework.render.RenderService;
@@ -17,6 +18,8 @@ public class ConveyorBelt extends AbstractTileTrigger {
 
     @Override
     public void onTrigger(AnimatedSprite sprite, Tile tile) {
+        if (sprite instanceof PhysicsSprite && !((PhysicsSprite)sprite).isUsingPhysics())
+            return;
         if (tile.isFlippedHorizontal() && !tile.isFlippedDiegonally() && !tile.isFlippedVertical()) { //Move right
             sprite.rawSetX(sprite.getX() + (RenderService.TIME_DELTA * SPEED));
         } else if (tile.isFlippedVertical() && !tile.isFlippedDiegonally() && !tile.isFlippedHorizontal()) { //Move left

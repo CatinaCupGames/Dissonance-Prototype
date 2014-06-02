@@ -145,12 +145,14 @@ public class GameQuest  extends PauseQuest {
 
         Player player1 = Players.getPlayer1();
         player1.getSprite().setVisible(true);
+        player1.getSprite().appear();
         player1.getSprite().setUsePhysics(true);
         Camera.followSprite(player1.getSprite());
 
         Player player2 = Players.getPlayer(2);
         if (player2 != null && player2.getSprite() != null) {
             player2.getSprite().setVisible(true);
+            player2.getSprite().appear();
             player2.getSprite().setUsePhysics(true);
             Camera.followSprite(player2.getSprite());
         }
@@ -400,6 +402,7 @@ public class GameQuest  extends PauseQuest {
                     player2.getSprite().setAttacking(false);
                     player2.getSprite().ignore_movement = false;
                     player2.getSprite().playAnimation();
+                    player2.getSprite().appear();
                     Camera.followSprite(player2.getSprite());
                 }
 
@@ -517,11 +520,13 @@ public class GameQuest  extends PauseQuest {
 
         Player player1 = Players.getPlayer1();
         player1.getSprite().setVisible(true);
+        player1.getSprite().appear();
         Camera.followSprite(player1.getSprite());
 
         Player player2 = Players.getPlayer(2);
         if (player2 != null && player2.getSprite() != null) {
             player2.getSprite().setVisible(true);
+            player2.getSprite().appear();
             Camera.followSprite(player2.getSprite());
         }
 
@@ -574,6 +579,7 @@ public class GameQuest  extends PauseQuest {
     }
 
     public void changeToRooftopMidAgain() throws InterruptedException {
+        Camera.stopFollowing();
         setWorld(GameCache.RooftopMid, false);
         GameCache.RooftopMid.waitForWorldDisplayed();
 
@@ -592,7 +598,7 @@ public class GameQuest  extends PauseQuest {
         RooftopMid.farrand.setX(68f * 16f);
         RooftopMid.farrand.setY(29f * 16f);
         RooftopMid.jeremiah.setX(66f * 16f);
-        RooftopMid.jeremiah.setY(29f * 16f);
+        RooftopMid.jeremiah.setY(31f * 16f);
         RooftopMid.farrand.face(Direction.UP);
         RooftopMid.jeremiah.face(Direction.UP);
         RooftopMid.jeremiah.setUsePhysics(true);
@@ -600,11 +606,13 @@ public class GameQuest  extends PauseQuest {
 
         Player player1 = Players.getPlayer1();
         player1.getSprite().setVisible(true);
+        player1.getSprite().appear();
         Camera.followSprite(player1.getSprite());
 
         Player player2 = Players.getPlayer(2);
         if (player2 != null && player2.getSprite() != null) {
             player2.getSprite().setVisible(true);
+            player1.getSprite().appear();
             Camera.followSprite(player2.getSprite());
         }
 

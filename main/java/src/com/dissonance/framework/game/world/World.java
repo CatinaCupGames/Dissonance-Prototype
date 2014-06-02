@@ -216,6 +216,7 @@ public final class World {
                             int ll = Integer.parseInt(l);
                             sprite.setLayer(ll);
                         }
+                        sprite.setProperties(obj.getProperties());
                         loadAndAdd(sprite);
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();

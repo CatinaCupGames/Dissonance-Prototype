@@ -212,4 +212,8 @@ public class TiledObject implements Collidable {
         result = 31 * result + (polygon != null ? Arrays.hashCode(polygon) : 0);
         return result;
     }
+
+    public HashMap<Object, Object> getProperties() {
+        return properties;
+    }
 }

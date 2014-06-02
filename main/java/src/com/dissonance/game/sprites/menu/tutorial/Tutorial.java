@@ -26,9 +26,9 @@ public class Tutorial {
 
         KeyboardTutorial tutorial = new KeyboardTutorial();
         tutorial.setX(GameSettings.Display.game_width / 4f);
-        tutorial.setX(tutorial.getX() + 32);
+        tutorial.setX(tutorial.getX() + 32f);
         tutorial.setY(GameSettings.Display.game_height / 4f);
-        tutorial.setY(tutorial.getY() + 128);
+        tutorial.setY(tutorial.getY() + 96f);
         array[2] = tutorial;
 
         return array;
@@ -52,7 +52,7 @@ public class Tutorial {
         tutorial.setX(GameSettings.Display.game_width / 4f);
         tutorial.setX(tutorial.getX() + 64f);
         tutorial.setY(GameSettings.Display.game_height / 4f);
-        tutorial.setY(tutorial.getY() + 32f);
+        tutorial.setY(tutorial.getY());
         array[2] = tutorial;
 
         return array;
@@ -76,14 +76,14 @@ public class Tutorial {
         tutorial.setX(GameSettings.Display.game_width / 4f);
         tutorial.setX(tutorial.getX() + 192f);
         tutorial.setY(GameSettings.Display.game_height / 4f);
-        tutorial.setY(tutorial.getY() + 32f);
+        tutorial.setY(tutorial.getY());
         array[2] = tutorial;
 
         KeyboardTutorial tutorial2 = new KeyboardTutorial();
         tutorial2.setX(GameSettings.Display.game_width / 4f);
         tutorial2.setX(135f);
         tutorial2.setY(GameSettings.Display.game_height / 4f);
-        tutorial2.setY(tutorial.getY() + 90);
+        tutorial2.setY(tutorial.getY() + 96f);
         array[3] = tutorial2;
 
         return array;
