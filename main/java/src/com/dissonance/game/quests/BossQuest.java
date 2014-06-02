@@ -19,6 +19,7 @@ import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.render.UpdatableDrawable;
 import com.dissonance.framework.sound.Sound;
 import com.dissonance.framework.system.Service;
+import com.dissonance.framework.system.exceptions.WorldLoadFailedException;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.scenes.EndScene;
@@ -37,6 +38,7 @@ import java.util.Random;
 public class BossQuest extends PauseQuest {
     public static boolean END;
     public static boolean RAISE;
+    public static BossQuest INSTANCE;
     private Service.ServiceRunnable runnable;
     private HashMap<World, TiledObject[]> spawns = new HashMap<World, TiledObject[]>();
     private HashMap<TiledObject, CombatSprite[]> children = new HashMap<TiledObject, CombatSprite[]>();
@@ -48,6 +50,7 @@ public class BossQuest extends PauseQuest {
     };
     @Override
     public void startQuest() throws Exception {
+        INSTANCE = this;
         Camera.stopFollowing();
         WorldFactory.clearCache();
         World world = WorldFactory.getWorld("CityEntrySquare2", false);
@@ -78,6 +81,7 @@ public class BossQuest extends PauseQuest {
 
         playSceneAndWait(FinalFightScene.class);
         Sound.playSound("breakbeat");
+        Camera.stopFollowing();
 
         CityEntrySquare2.farrand.setUsePhysics(true);
         CityEntrySquare2.jeremiah.setUsePhysics(true);
@@ -209,6 +213,17 @@ public class BossQuest extends PauseQuest {
         }
     }
 
+    public void toMenu() throws InterruptedException {
+        RenderService.INSTANCE.fadeToBlack(2500);
+        RenderService.INSTANCE.waitForFade();
+        setNextQuest(new MenuQuest());
+        try {
+            endQuest();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void endBoss() throws InterruptedException {
         CityEntrySquare2.farrand.freeze(true, BossQuest.class);
         CityEntrySquare2.jeremiah.freeze(true, BossQuest.class);
@@ -240,16 +255,23 @@ public class BossQuest extends PauseQuest {
 
         RenderService.INSTANCE.fadeToBlack(1f);
 
-        setNextQuest(new MenuQuest());
+        Thread.sleep(800);
+
         try {
-            endQuest();
-        } catch (IllegalAccessException e) {
+            Camera.setX(0f);
+            Camera.setY(0f);
+            World world = WorldFactory.getWorld("end", false);
+            setWorld(world, false);
+            world.waitForWorldDisplayed();
+            RenderService.INSTANCE.fadeFromBlack(2500);
+        } catch (WorldLoadFailedException e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public void onPlayerDeath(PlayableSprite sprite) {
+        death = 0;
         Camera.stopFollowing();
 
         RenderService.INSTANCE.provideData(4400f, RenderService.CROSS_FADE_DURATION);
@@ -321,6 +343,10 @@ public class BossQuest extends PauseQuest {
                     player2.getSprite().playAnimation();
                     Camera.followSprite(player2.getSprite());
                 }
+
+                CityEntrySquare2.admin1.setCombatListener(LISTENER);
+                CityEntrySquare2.admin2.setCombatListener(LISTENER);
+                CityEntrySquare2.admin3.setCombatListener(LISTENER);
 
                 try {
                     start = RenderService.getTime();

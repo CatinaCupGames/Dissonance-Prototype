@@ -4,9 +4,9 @@ import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.player.PlayableSprite;
 import com.dissonance.framework.game.player.Player;
 import com.dissonance.framework.game.player.Players;
-import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.quests.GameQuest;
 
@@ -63,7 +63,13 @@ public class RoofAgain extends AbstractTrigger {
             player.setVisible(false);
         }
 
+        RenderService.INSTANCE.fadeToBlack(1000);
+        RenderService.INSTANCE.waitForFade();
+
         GameQuest.INSTANCE.changeToRooftopMidAgain();
+
+        RenderService.INSTANCE.fadeFromBlack(1000);
+        RenderService.INSTANCE.waitForFade();
     }
 
     @Override

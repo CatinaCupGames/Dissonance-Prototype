@@ -329,7 +329,8 @@ public abstract class PlayableSprite extends CombatSprite {
             input.update();
 
             checkMovement();
-            input.checkKeys(this);
+            if (!frozen)
+                input.checkKeys(this);
         }
 
         if (appear) {

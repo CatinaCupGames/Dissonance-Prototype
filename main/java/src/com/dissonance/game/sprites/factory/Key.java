@@ -37,7 +37,11 @@ public class Key extends ImageSprite {
             return;
         PlayableSprite[] sprites = Players.getCurrentlyPlayingSprites();
         for (final PlayableSprite sprite : sprites) {
-            if (sprite.isPointInside(getX(), getY())) {
+            if (sprite.isPointInside(getX(), getY()) ||
+                    sprite.isPointInside(getX() + (getWidth()), getY()) ||
+                    sprite.isPointInside(getX() - getWidth(), getY()) ||
+                    sprite.isPointInside(getX(), getY() + getHeight()) ||
+                    sprite.isPointInside(getX(), getY() - getHeight())) {
                 GameQuest.INSTANCE.unlockedControl = true;
                 pickable = false;
                 getWorld().removeSprite(this);

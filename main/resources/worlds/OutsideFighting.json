@@ -26,7 +26,7 @@
              "ground":"true"
             },
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":250,
          "x":0,
          "y":0
@@ -385,23 +385,10 @@
                  "width":192,
                  "x":1728,
                  "y":560
-                }, 
-                {
-                 "height":64,
-                 "name":"FactoryEntry",
-                 "properties":
-                    {
-                     "triggerclass":"com.dissonance.game.triggers.FactoryEntry"
-                    },
-                 "type":"trigger",
-                 "visible":true,
-                 "width":144,
-                 "x":3680,
-                 "y":672
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "width":250,
          "x":0,
          "y":0
@@ -711,7 +698,7 @@
                 }],
          "opacity":0.899999976158142,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "width":250,
          "x":0,
          "y":0
@@ -769,7 +756,7 @@
                  "type":"sprite",
                  "visible":true,
                  "width":16,
-                 "x":1544,
+                 "x":1536,
                  "y":2112
                 }, 
                 {
@@ -782,7 +769,7 @@
                  "type":"sprite",
                  "visible":true,
                  "width":16,
-                 "x":1208,
+                 "x":1200,
                  "y":2112
                 }, 
                 {
@@ -795,7 +782,7 @@
                  "type":"sprite",
                  "visible":true,
                  "width":16,
-                 "x":840,
+                 "x":832,
                  "y":2112
                 }, 
                 {
@@ -808,7 +795,7 @@
                  "type":"sprite",
                  "visible":true,
                  "width":16,
-                 "x":840,
+                 "x":832,
                  "y":2272
                 }, 
                 {
@@ -821,7 +808,7 @@
                  "type":"sprite",
                  "visible":true,
                  "width":16,
-                 "x":1208,
+                 "x":1200,
                  "y":2272
                 }, 
                 {
@@ -834,7 +821,7 @@
                  "type":"sprite",
                  "visible":true,
                  "width":16,
-                 "x":1544,
+                 "x":1536,
                  "y":2272
                 }, 
                 {
@@ -992,6 +979,19 @@
                  "width":96,
                  "x":3501,
                  "y":305
+                }, 
+                {
+                 "height":35,
+                 "name":"roof.Garbagechute",
+                 "properties":
+                    {
+                     "layer":"4"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":40,
+                 "x":326,
+                 "y":2368
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1131,8 +1131,8 @@
                  "type":"sprite",
                  "visible":true,
                  "width":240,
-                 "x":144,
-                 "y":2496
+                 "x":136,
+                 "y":2323
                 }, 
                 {
                  "height":96,
@@ -1256,13 +1256,26 @@
                  "name":"outside.PoliceBarrierV",
                  "properties":
                     {
-                     "layer":"0"
+
                     },
                  "type":"sprite",
                  "visible":true,
                  "width":48,
                  "x":2272,
                  "y":1552
+                }, 
+                {
+                 "height":96,
+                 "name":"outside.PoliceBarrierV",
+                 "properties":
+                    {
+
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":48,
+                 "x":2272,
+                 "y":1472
                 }, 
                 {
                  "height":96,
@@ -1911,11 +1924,11 @@
                  "type":"espawn",
                  "visible":true,
                  "width":752,
-                 "x":640,
-                 "y":1504
+                 "x":816,
+                 "y":2112
                 }, 
                 {
-                 "height":1360,
+                 "height":1280,
                  "name":"",
                  "properties":
                     {
@@ -1923,9 +1936,87 @@
                     },
                  "type":"hitbox",
                  "visible":true,
-                 "width":96,
+                 "width":89,
                  "x":1781,
                  "y":320
+                }, 
+                {
+                 "height":32,
+                 "name":"",
+                 "properties":
+                    {
+                     "triggerclass":"com.dissonance.game.triggers.FactoryEntry"
+                    },
+                 "type":"trigger",
+                 "visible":true,
+                 "width":64,
+                 "x":3712,
+                 "y":672
+                }, 
+                {
+                 "height":48,
+                 "name":"Billboard",
+                 "properties":
+                    {
+                     "type":"5"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":64,
+                 "x":1184,
+                 "y":2016
+                }, 
+                {
+                 "height":48,
+                 "name":"Billboard",
+                 "properties":
+                    {
+                     "type":"1"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":64,
+                 "x":2080,
+                 "y":1728
+                }, 
+                {
+                 "height":48,
+                 "name":"Billboard",
+                 "properties":
+                    {
+                     "type":"2"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":64,
+                 "x":560,
+                 "y":2288
+                }, 
+                {
+                 "height":48,
+                 "name":"Billboard",
+                 "properties":
+                    {
+                     "type":"3"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":64,
+                 "x":2080,
+                 "y":800
+                }, 
+                {
+                 "height":48,
+                 "name":"Billboard",
+                 "properties":
+                    {
+                     "type":"4"
+                    },
+                 "type":"sprite",
+                 "visible":true,
+                 "width":64,
+                 "x":3376,
+                 "y":1056
                 }],
          "opacity":1,
          "type":"objectgroup",

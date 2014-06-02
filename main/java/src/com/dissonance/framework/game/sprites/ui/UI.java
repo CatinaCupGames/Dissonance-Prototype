@@ -13,4 +13,6 @@ public interface UI extends UpdatableDrawable {
     public void setX(float x);
 
     public void setY(float y);
+
+    public void close();
 }

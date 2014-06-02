@@ -2,14 +2,17 @@ package com.dissonance.game.sprites.factory;
 
 import com.dissonance.framework.game.ai.waypoint.WaypointType;
 import com.dissonance.framework.game.player.PlayableSprite;
+import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.Selectable;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.tiled.TiledObject;
 import com.dissonance.framework.game.world.tiled.impl.TileObject;
+import com.dissonance.framework.render.Camera;
 import com.dissonance.game.quests.GameQuest;
 import com.dissonance.game.sprites.Farrand;
+import org.lwjgl.util.vector.Vector2f;
 
 public class ControlRoom extends PhysicsSprite implements Selectable {
     @Override
@@ -40,7 +43,9 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        player.setInvincible(true);
                         Dialog.displayDialog(ind);
+                        player.setInvincible(false);
                     }
                 }).start();
                 return true;
@@ -86,9 +91,19 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
         reverseAnimation(true);
         playAnimation();
 
-        Thread.sleep(3700);
+        Thread.sleep(1700);
+        Camera.stopFollowing();
+        Vector2f oldPos = new Vector2f(Camera.getX(), Camera.getY());
+        Camera.easeMovement(new Vector2f(19f * 16f, 24f * 16f), 2400);
+        Camera.waitForEndOfMovement();
 
         GameQuest.INSTANCE.turnOnBelts();
+
+        Thread.sleep(3200);
+
+        Camera.easeMovement(oldPos, 2400);
+        Camera.waitForEndOfMovement();
+        Camera.followSprite(Players.getCurrentlyPlayingSprites());
 
         reverseAnimation(false);
         playAnimation();
@@ -100,7 +115,6 @@ public class ControlRoom extends PhysicsSprite implements Selectable {
         sprite.setLayer(2);
         sprite.unfreeze();
         sprite.setUsePhysics(true);
-        sprite.setUsePhysics(false);
 
         reverseAnimation(true);
         playAnimation();

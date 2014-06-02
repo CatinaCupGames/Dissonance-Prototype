@@ -8,6 +8,7 @@ import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.system.utils.Direction;
+import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.game.GameCache;
 import com.dissonance.game.behaviors.Patrol;
 import com.dissonance.game.behaviors.Search;
@@ -54,7 +55,7 @@ public class RedGuard extends Enemy {
             setAnimation("bringup_right");
             return;
         }
-        if (isAttacking() || urunning || drunning || isDieing || isDodging())
+        if (isAttacking() || urunning || drunning || isDieing || isDodging() || fallOver)
             return;
         if (isAnimationPaused()) {
             super.setFrame(1);
@@ -93,32 +94,47 @@ public class RedGuard extends Enemy {
             onMovement(Direction.NONE);
             return;
         }
-        if (isMoving() || isAttacking() || drunning || urunning || isDieing || isDodging()) {
+        if (isMoving() || isAttacking() || drunning || urunning || isDieing || isDodging() || fallOver) {
             return;
         }
         super.setFrame(1);
         pauseAnimation();
     }
 
-    private boolean isDieing = false;
-    @Override
-    public void onDeath() {
-        isDieing = true;
+    public void fallOver(final Runnable toRun) {
+        fallOver = true;
         setInvincible(true);
         setHostile(false);
         Direction direction1 = getFacingDirection();
-        if (direction1 == Direction.UP || direction1 == Direction.DOWN || direction1 == Direction.RIGHT)
+        if (direction1 == Direction.RIGHT)
             setAnimation("die_right");
-        else
+        else if (direction1 == Direction.LEFT)
             setAnimation("die_left");
-        addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+        else
+            setAnimation(random.nextBoolean() ? "die_right" : "die_left");
+        if (toRun != null) {
+            addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+                @Override
+                public void onAnimationFinished(AnimatedSprite sprite) {
+                    toRun.run();
+                    removeAnimationFinishedListener(this);
+                }
+            });
+        }
+        playAnimation();
+    }
+
+    private boolean isDieing = false;
+    public boolean fallOver;
+    @Override
+    public void onDeath() {
+        isDieing = true;
+        fallOver(new Runnable() {
             @Override
-            public void onAnimationFinished(AnimatedSprite sprite) {
+            public void run() {
                 blink();
-                removeAnimationFinishedListener(this);
             }
         });
-        playAnimation();
     }
 
     @Override
@@ -188,12 +204,14 @@ public class RedGuard extends Enemy {
                     face(((Search)getBehavior()).getOrginalDirection());
                 }
                 if (!idle) {
+                    setMovementType(MovementType.WALKING);
                     setMovementSpeed(movementSpeed() / 4f);
                     idle = true;
                     Patrol patrol = new Patrol(this);
                     setBehavior(patrol);
                 }
             } else {
+                setMovementType(MovementType.RUNNING);
                 Direction towards = directionTowards(target);
                 setMovementSpeed(movementSpeed() / 1.5f);
                 idle = false;

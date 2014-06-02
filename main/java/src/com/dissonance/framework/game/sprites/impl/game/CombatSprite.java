@@ -374,7 +374,6 @@ public abstract class CombatSprite extends PhysicsSprite {
         dodgeStartX = getX();
         dodgeStartY = getY();
         setStamina(getStamina() - 20);
-        System.out.println(getStamina());
         is_dodging = true;
         allow_dodge = false;
     }

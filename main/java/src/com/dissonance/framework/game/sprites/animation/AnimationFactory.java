@@ -60,7 +60,8 @@ public class AnimationFactory {
             return;
 
         synchronized (animate) {
-            for (AnimatorData ad : animate) {
+            AnimatorData[] animatorDatas = animate.toArray(new AnimatorData[animate.size()]);
+            for (AnimatorData ad : animatorDatas) {
                 if (ad.animator.getWorld() != RenderService.INSTANCE.getCurrentDrawingWorld())
                     continue;
                 long time = System.currentTimeMillis() - ad.last_tick;

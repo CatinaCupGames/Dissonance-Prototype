@@ -37,4 +37,9 @@ public class Overlay extends ImageSprite {
         glPopMatrix();
         ShaderFactory.executePreRender();
     }
+
+    @Override
+    public boolean neverClip() {
+        return true;
+    }
 }

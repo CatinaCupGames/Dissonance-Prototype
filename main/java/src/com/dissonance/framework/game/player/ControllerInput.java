@@ -135,7 +135,7 @@ public class ControllerInput implements Input {
             playableSprite.controller_extend = values.x > 0f || values.y > 0f || values.x < 0f || values.y < 0f;
 
 
-            if (!use_switch && playableSprite.party.size() > 0) {
+            if (!use_switch && playableSprite.party.size() > 0 && !GameService.coop_mode) {
                 if (controller.isButtonPressed(InputKeys.SWITCH)) {
                     use_switch = true;
                     if (playableSprite.isPlayer1()) {

@@ -77,7 +77,7 @@ public class OfficeScene extends SimpleScene {
 
         Thread.sleep(500);
         WaldomarsMeetingRoom.farrand.setMovementSpeed(4f);
-        WaldomarsMeetingRoom.farrand.setWaypoint(6.5f*16, 8f*16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.farrand.setWaypoint(6.5f*16, 6f*16, WaypointType.SIMPLE);
         WaldomarsMeetingRoom.farrand.waitForWaypointReached();
         WaldomarsMeetingRoom.farrand.face(Direction.DOWN);
 
@@ -113,7 +113,7 @@ public class OfficeScene extends SimpleScene {
         WaldomarsMeetingRoom.waldomar.useSpell(new Fire(WaldomarsMeetingRoom.waldomar));
 
         WaldomarsMeetingRoom.farrand.setMovementSpeed(20f);
-        WaldomarsMeetingRoom.farrand.setWaypoint(12.5f*16, 8f*16,WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.farrand.setWaypoint(12.5f*16, 6f*16,WaypointType.SIMPLE);
         Thread.sleep(300);
         WaldomarsMeetingRoom.waldomar.useSpell(new Fire(WaldomarsMeetingRoom.waldomar));
         Thread.sleep(300);
@@ -142,7 +142,12 @@ public class OfficeScene extends SimpleScene {
         });
         //====WINDOW====
 
-        WaldomarsMeetingRoom.guard1.setMovementSpeed(30f);
+        WaldomarsMeetingRoom.guard1.fallOver(null);
+        WaldomarsMeetingRoom.guard2.fallOver(null);
+        WaldomarsMeetingRoom.guard3.fallOver(null);
+        WaldomarsMeetingRoom.guard4.fallOver(null);
+        WaldomarsMeetingRoom.guard5.fallOver(null);
+        /*WaldomarsMeetingRoom.guard1.setMovementSpeed(30f);
         WaldomarsMeetingRoom.guard1.setWaypoint(0, 11f * 16, WaypointType.SIMPLE);
 
         WaldomarsMeetingRoom.guard2.setMovementSpeed(30f);
@@ -153,7 +158,7 @@ public class OfficeScene extends SimpleScene {
 
 
         WaldomarsMeetingRoom.guard4.setMovementSpeed(30f);
-        WaldomarsMeetingRoom.guard4.setWaypoint(21*16, 17*16, WaypointType.SIMPLE);
+        WaldomarsMeetingRoom.guard4.setWaypoint(21*16, 17*16, WaypointType.SIMPLE);*/
 
 
         Dialog.displayDialog("waldomeeting3");

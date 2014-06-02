@@ -216,6 +216,7 @@ public final class World {
                             int ll = Integer.parseInt(l);
                             sprite.setLayer(ll);
                         }
+                        sprite.setProperties(obj.getProperties());
                         loadAndAdd(sprite);
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
@@ -564,6 +565,10 @@ public final class World {
         for (Drawable d : drawables) {
             if (d instanceof Sprite)
                 ((Sprite)d).onUnload();
+        }
+        UI[] uis = uiElements.toArray(new UI[uiElements.size()]);
+        for (UI u : uis) {
+            u.close();
         }
 
         drawable.clear();

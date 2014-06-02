@@ -18,8 +18,8 @@ public class catworld implements WorldLoader {
         world.loadAndAdd(cover);
 
         logo = new CatCutLogo();
-        logo.setX(1024f / 2f);
-        logo.setY(512f / 2f);
+        logo.setX(2048f / 2f);
+        logo.setY(1024f / 2f);
         logo.setAlpha(0f);
         logo.setLayer(1);
         world.loadAndAdd(logo);

@@ -19,6 +19,7 @@ import org.lwjgl.util.vector.Vector2f;
 import java.awt.*;
 import java.io.Serializable;
 import java.security.InvalidParameterException;
+import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -39,6 +40,7 @@ public abstract class Sprite implements Drawable, Serializable {
     protected boolean isTeleporting;
     protected boolean glowing;
     protected float cutOffMargin;
+    private HashMap<Object, Object> properties;
 
     public static Sprite fromClass(Class<?> class_) {
         if (!Sprite.class.isAssignableFrom(class_))
@@ -557,6 +559,30 @@ public abstract class Sprite implements Drawable, Serializable {
 
     public double distanceFrom(Vector target) {
         return Math.sqrt(((getX() - target.x) * (getX() - target.x)) + ((getY() - target.y) * (getY() - target.y)));
+    }
+
+    public void setProperties(HashMap<Object, Object> properties) {
+        this.properties = properties;
+    }
+
+    public HashMap<Object, Object> getProperties() {
+        return properties;
+    }
+
+    public String getPropertyAsString(String key) {
+        return properties.get(key).toString();
+    }
+
+    public Object getProperty(String key) {
+        return properties.get(key);
+    }
+
+    public int getPropertyAsInt(String key) {
+        try {
+            return Integer.parseInt(properties.get(key).toString());
+        } catch (Throwable t) {
+            return 0;
+        }
     }
 
     public interface SpriteEvent {

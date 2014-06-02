@@ -10,20 +10,25 @@ Date: 2014/05/07 11:31:09
 package com.dissonance.game.w;
 
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.WorldLoader;
 import com.dissonance.framework.render.Camera;
 import com.dissonance.framework.system.utils.MovementType;
 import com.dissonance.game.sprites.BlueGuard;
+import com.dissonance.game.sprites.Farrand;
+import com.dissonance.game.sprites.Jeremiah;
 
-public class CityEntrySquare extends DemoLevelWorldLoader {
+public class CityEntrySquare implements WorldLoader {
     public static BlueGuard guard5;
     public static BlueGuard guard4;
     public static BlueGuard guard1;
     public static BlueGuard guard2;
     public static BlueGuard guard3;
+    public static Farrand farrand;
+    public static Jeremiah jeremiah;
     @Override
     public void onLoad(World w) {
-        super.onLoad(w);
-
+        farrand = new Farrand();
+        jeremiah = new Jeremiah();
         farrand.setX(985.60016f);
         farrand.setY(785.5205f);
         farrand.setMovementType(MovementType.WALKING);
@@ -32,6 +37,9 @@ public class CityEntrySquare extends DemoLevelWorldLoader {
         jeremiah.setX(1019.05994f);
         jeremiah.setY(760.96906f);
         jeremiah.setMovementType(MovementType.WALKING);
+        jeremiah.joinParty(farrand);
+
+        w.loadAndAdd(farrand, jeremiah);
 
         guard1 = new BlueGuard();
         w.loadAndAdd(guard1);
@@ -75,8 +83,6 @@ public class CityEntrySquare extends DemoLevelWorldLoader {
 
     @Override
     public void onDisplay(World world) {
-        super.onDisplay(world);
-
         farrand.setX(985.60016f);
         farrand.setY(785.5205f);
         Camera.setPos(Camera.translateToCameraCenter(farrand.getVector(), farrand.getHeight()));
@@ -84,10 +90,5 @@ public class CityEntrySquare extends DemoLevelWorldLoader {
         jeremiah.setX(1019.05994f);
         jeremiah.setY(760.96906f);
         jeremiah.setVisible(true);
-    }
-
-    @Override
-    public void onRespawn(World oldworld) {
-
     }
 }

@@ -41,7 +41,7 @@ public class BlueGuard extends Enemy {
             pauseAnimation();
             return;
         }
-        if (isAttacking() || isDieing)
+        if (isAttacking() || isDieing || fallOver)
             return;
         if (isAnimationPaused()) {
             super.setFrame(2);
@@ -80,7 +80,7 @@ public class BlueGuard extends Enemy {
             pauseAnimation();
             return;
         }
-        if (isMoving() || isAttacking() || isDieing) {
+        if (isMoving() || isAttacking() || isDieing || fallOver) {
             return;
         }
         if (getMovementType() == MovementType.RUNNING) {
@@ -123,25 +123,40 @@ public class BlueGuard extends Enemy {
         setMovementSpeed(1f);
     }
 
+    public boolean fallOver;
+    public void fallOver(final Runnable toRun) {
+        fallOver = true;
+        setInvincible(true);
+        setHostile(false);
+        Direction direction1 = getFacingDirection();
+        if (direction1 == Direction.RIGHT)
+            setAnimation("die_right");
+        else if (direction1 == Direction.LEFT)
+            setAnimation("die_left");
+        else
+            setAnimation(random.nextBoolean() ? "die_right" : "die_left");
+        if (toRun != null) {
+            addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+                @Override
+                public void onAnimationFinished(AnimatedSprite sprite) {
+                    toRun.run();
+                    removeAnimationFinishedListener(this);
+                }
+            });
+        }
+        playAnimation();
+    }
+
     private boolean isDieing = false;
     @Override
     public void onDeath() {
         isDieing = true;
-        setInvincible(true);
-        setHostile(false);
-        Direction direction1 = getFacingDirection();
-        if (direction1 == Direction.UP || direction1 == Direction.DOWN || direction1 == Direction.RIGHT)
-            setAnimation("die_right");
-        else
-            setAnimation("die_left");
-        addAnimationFinishedListener(new AnimatedSpriteEvent.OnAnimationFinished() {
+        fallOver(new Runnable() {
             @Override
-            public void onAnimationFinished(AnimatedSprite sprite) {
+            public void run() {
                 blink();
-                removeAnimationFinishedListener(this);
             }
         });
-        playAnimation();
     }
 
     @Override
@@ -242,10 +257,12 @@ public class BlueGuard extends Enemy {
                 if (!idle) {
                     setMovementSpeed(movementSpeed() / 4f);
                     idle = true;
+                    setMovementType(MovementType.WALKING);
                     Patrol patrol = new Patrol(this);
                     setBehavior(patrol);
                 }
             } else {
+                setMovementType(MovementType.RUNNING);
                 if (!saw && !isPlayerSeen(target)) {
                     if (getBehavior() == null || !(getBehavior() instanceof Search)) {
                         Search search = new Search(this);

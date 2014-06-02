@@ -13,6 +13,14 @@ public class SmallBuilding6 extends ImagePhysicsSprite {
     public String hitboxConfigPath() {
         return "sprites/buildings/smallbuilding6.txt";
     }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+
+        setCutOffMargin(getCutOffMargin() - 40);
+    }
+
     @Override
     public void render() {
         update();

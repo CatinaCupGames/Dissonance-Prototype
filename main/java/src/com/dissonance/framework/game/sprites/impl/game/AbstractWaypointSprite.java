@@ -108,6 +108,7 @@ public abstract class AbstractWaypointSprite extends AnimatedSprite implements W
         super.onUnload();
         waypointList.clear();
         waypointList = null;
+        setBehavior(null);
     }
 
     public void setWaypoint(Position position, WaypointType type) {

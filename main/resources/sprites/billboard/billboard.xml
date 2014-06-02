@@ -9,25 +9,25 @@
             row="0"
             default_speed="200ms"/>
     <animation
-            name="billboard1"
+            name="billboard2"
             loop="true"
             frames="13"
             row="1"
             default_speed="200ms"/>
     <animation
-            name="billboard1"
+            name="billboard3"
             loop="true"
             frames="13"
             row="2"
             default_speed="200ms"/>
     <animation
-            name="billboard1"
+            name="billboard4"
             loop="true"
             frames="13"
             row="3"
             default_speed="200ms"/>
     <animation
-            name="billboard1"
+            name="billboard5"
             loop="true"
             frames="13"
             row="4"

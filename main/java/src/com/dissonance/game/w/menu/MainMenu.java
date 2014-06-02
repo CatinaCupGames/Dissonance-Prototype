@@ -2,6 +2,7 @@ package com.dissonance.game.w.menu;
 
 import com.dissonance.framework.game.world.World;
 import com.dissonance.framework.game.world.WorldLoader;
+import com.dissonance.game.sprites.VersionString;
 import com.dissonance.game.sprites.menu.Background;
 import com.dissonance.game.sprites.menu.Banner;
 import com.dissonance.game.sprites.menu.buttons.CoopButton;
@@ -30,6 +31,9 @@ public class MainMenu implements WorldLoader {
         s.setY(360f / 2f);
         s.setLayer(2);
         world.loadAndAdd(s);
+
+        VersionString string = new VersionString();
+        string.display(world);
 
         PlayDemoButton button1 = new PlayDemoButton();
         button1.display(world);

@@ -12,6 +12,7 @@ import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
 import com.dissonance.framework.game.sprites.impl.ToastText;
 import com.dissonance.framework.game.sprites.impl.game.CombatSprite;
 import com.dissonance.framework.game.world.World;
+import com.dissonance.framework.game.world.WorldFactory;
 import com.dissonance.framework.game.world.tiled.Layer;
 import com.dissonance.framework.game.world.tiled.LayerType;
 import com.dissonance.framework.game.world.tiled.TiledObject;
@@ -54,6 +55,7 @@ public class GameQuest  extends PauseQuest {
 
     @Override
     public void startQuest() throws Exception {
+        WorldFactory.clearCache();
         INSTANCE = this;
         setWorld(GameCache.RoofTopBeginning, false);
         GameCache.RoofTopBeginning.waitForWorldDisplayed();
@@ -143,12 +145,14 @@ public class GameQuest  extends PauseQuest {
 
         Player player1 = Players.getPlayer1();
         player1.getSprite().setVisible(true);
+        player1.getSprite().appear();
         player1.getSprite().setUsePhysics(true);
         Camera.followSprite(player1.getSprite());
 
         Player player2 = Players.getPlayer(2);
         if (player2 != null && player2.getSprite() != null) {
             player2.getSprite().setVisible(true);
+            player2.getSprite().appear();
             player2.getSprite().setUsePhysics(true);
             Camera.followSprite(player2.getSprite());
         }
@@ -161,6 +165,9 @@ public class GameQuest  extends PauseQuest {
     }
 
     public void changeToOutside1() throws InterruptedException {
+        RenderService.INSTANCE.fadeToBlack(1000);
+        RenderService.INSTANCE.waitForFade();
+
         setWorld(GameCache.OutsideFighting, false);
         GameCache.OutsideFighting.waitForWorldDisplayed();
 
@@ -183,6 +190,9 @@ public class GameQuest  extends PauseQuest {
             player2.getSprite().setUsePhysics(true);
             Camera.followSprite(player2.getSprite());
         }
+
+        RenderService.INSTANCE.fadeFromBlack(1000);
+        RenderService.INSTANCE.waitForFade();
 
         RoofTopBeginning.farrand.unfreeze();
         RoofTopBeginning.jeremiah.unfreeze();
@@ -392,6 +402,7 @@ public class GameQuest  extends PauseQuest {
                     player2.getSprite().setAttacking(false);
                     player2.getSprite().ignore_movement = false;
                     player2.getSprite().playAnimation();
+                    player2.getSprite().appear();
                     Camera.followSprite(player2.getSprite());
                 }
 
@@ -509,11 +520,13 @@ public class GameQuest  extends PauseQuest {
 
         Player player1 = Players.getPlayer1();
         player1.getSprite().setVisible(true);
+        player1.getSprite().appear();
         Camera.followSprite(player1.getSprite());
 
         Player player2 = Players.getPlayer(2);
         if (player2 != null && player2.getSprite() != null) {
             player2.getSprite().setVisible(true);
+            player2.getSprite().appear();
             Camera.followSprite(player2.getSprite());
         }
 
@@ -566,11 +579,17 @@ public class GameQuest  extends PauseQuest {
     }
 
     public void changeToRooftopMidAgain() throws InterruptedException {
+        Camera.stopFollowing();
         setWorld(GameCache.RooftopMid, false);
         GameCache.RooftopMid.waitForWorldDisplayed();
 
         RooftopMid.farrand.freeze();
         RooftopMid.jeremiah.freeze();
+
+        if (!RooftopMid.farrand.isLoaded())
+            RooftopMid.farrand.onLoad();
+        if (!RooftopMid.jeremiah.isLoaded())
+            RooftopMid.jeremiah.onLoad();
 
         RooftopMid.farrand.setLayer(1);
         RooftopMid.jeremiah.setLayer(1);
@@ -579,21 +598,21 @@ public class GameQuest  extends PauseQuest {
         RooftopMid.farrand.setX(68f * 16f);
         RooftopMid.farrand.setY(29f * 16f);
         RooftopMid.jeremiah.setX(66f * 16f);
-        RooftopMid.jeremiah.setY(29f * 16f);
+        RooftopMid.jeremiah.setY(31f * 16f);
         RooftopMid.farrand.face(Direction.UP);
         RooftopMid.jeremiah.face(Direction.UP);
-        RenderService.INSTANCE.fadeFromBlack(1300);
-        RenderService.INSTANCE.waitForFade();
         RooftopMid.jeremiah.setUsePhysics(true);
         RooftopMid.farrand.setUsePhysics(true);
 
         Player player1 = Players.getPlayer1();
         player1.getSprite().setVisible(true);
+        player1.getSprite().appear();
         Camera.followSprite(player1.getSprite());
 
         Player player2 = Players.getPlayer(2);
         if (player2 != null && player2.getSprite() != null) {
             player2.getSprite().setVisible(true);
+            player1.getSprite().appear();
             Camera.followSprite(player2.getSprite());
         }
 

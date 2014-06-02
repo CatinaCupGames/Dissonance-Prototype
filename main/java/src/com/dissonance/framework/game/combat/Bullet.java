@@ -166,8 +166,6 @@ public class Bullet extends PhysicsSprite {
         explode();
 
         target.applyDamage(damage);
-
-        //TODO: animate victim
     }
 
     private void explode() {
@@ -189,6 +187,7 @@ public class Bullet extends PhysicsSprite {
 
     @Override
     protected void onCollideX(float oldX, float newX, Collidable hit, HitBox hb) {
+        x = newX;
         if (hit instanceof CombatSprite) {
             collide((CombatSprite) hit);
         } else if (hit instanceof TiledObject) {
@@ -201,6 +200,7 @@ public class Bullet extends PhysicsSprite {
 
     @Override
     protected void onCollideY(float oldY, float newY, Collidable hit, HitBox hb) {
+        y = newY;
         if (hit instanceof CombatSprite) {
             if (!(hit instanceof PlayableSprite)) {
                 collide((CombatSprite) hit);

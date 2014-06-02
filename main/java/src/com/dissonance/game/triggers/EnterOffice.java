@@ -7,13 +7,17 @@ import com.dissonance.framework.game.player.Players;
 import com.dissonance.framework.game.scene.dialog.Dialog;
 import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 import com.dissonance.framework.game.world.tiled.impl.AbstractTrigger;
+import com.dissonance.framework.render.RenderService;
 import com.dissonance.framework.system.utils.Direction;
 import com.dissonance.game.quests.GameQuest;
 
 public class EnterOffice extends AbstractTrigger {
     @Override
     protected void onTrigger(PhysicsSprite sprite) throws Throwable {
+
+
         PlayableSprite player = (PlayableSprite)sprite;
+        player.setInvincible(true);
         player.setUsePhysics(false);
         Player player1 = Players.getPlayer1();
         Player player2 = Players.getPlayer(2);
@@ -31,6 +35,7 @@ public class EnterOffice extends AbstractTrigger {
                 p2.freeze();
             }
             p2.setUsePhysics(false);
+            p2.setInvincible(true);
             player.freeze();
 
             p2.setWaypoint(player.getX() + 48, player.getY(), WaypointType.SIMPLE);
@@ -49,6 +54,7 @@ public class EnterOffice extends AbstractTrigger {
             p2.waitForWaypointReached();
             player.setVisible(false);
             p2.setVisible(false);
+            p2.setInvincible(false);
         } else {
             player.freeze();
             player.face(Direction.UP);
@@ -62,7 +68,15 @@ public class EnterOffice extends AbstractTrigger {
             player.setVisible(false);
         }
 
+        player.setInvincible(false);
+
+        RenderService.INSTANCE.fadeToBlack(1000);
+        RenderService.INSTANCE.waitForFade();
+
         GameQuest.INSTANCE.changeToOffice1();
+
+        RenderService.INSTANCE.fadeFromBlack(1000);
+        RenderService.INSTANCE.waitForFade();
     }
 
     @Override

@@ -1,8 +1,9 @@
 package com.dissonance.game.sprites;
 
 import com.dissonance.framework.game.sprites.impl.AnimatedSprite;
+import com.dissonance.framework.game.sprites.impl.game.PhysicsSprite;
 
-public class BillboardBase extends AnimatedSprite {
+public class BillboardBase extends PhysicsSprite {
     @Override
     public String getSpriteName() {
         return "billboardbase";
@@ -13,5 +14,7 @@ public class BillboardBase extends AnimatedSprite {
         super.onLoad();
         setAnimation("test");
         playAnimation();
+
+        setCutOffMargin(80);
     }
 }

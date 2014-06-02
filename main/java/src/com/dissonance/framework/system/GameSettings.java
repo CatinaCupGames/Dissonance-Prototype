@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class GameSettings extends ReflectionConfig {
+    public static final String ENGINE_BUILD_STRING = "v0.1.0";
+    public static final int ENGINE_BUILD_NUMBER = Versions.TECH_DEMO_RC1;
 
     @ConfigItem
     protected int resolution_width = 1280;
@@ -109,9 +111,6 @@ public class GameSettings extends ReflectionConfig {
         public static boolean fullscreen;
 
         static {
-            window_width = 1280;
-            window_height = 720;
-
             game_width = 1280;
             game_height = 720;
             resolution = new Resolution(game_width, game_height);
@@ -127,6 +126,10 @@ public class GameSettings extends ReflectionConfig {
                     e.printStackTrace();
                 }
             }
+        }
+
+        public static float[] toGameSpace(float windowx, float windowy) {
+            return new float[] { windowx * ((float)game_width / (float)window_width), windowy * ((float)game_height / (float)window_height) };
         }
     }
 
